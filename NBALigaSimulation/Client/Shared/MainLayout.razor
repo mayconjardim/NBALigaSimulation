@@ -1,11 +1,11 @@
 ﻿@inherits LayoutComponentBase
 
-<MudThemeProvider />
+<MudThemeProvider  Theme="myTheme"/>
 <MudDialogProvider />
 <MudSnackbarProvider />
 
 <MudLayout>
-    <MudAppBar Fixed="true">
+    <MudAppBar  Color="Color.Primary"  Fixed="true">
         <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" OnClick="@((e) => DrawerToggle())" />
         <h2>NBALIGA</h2> 
     </MudAppBar>
@@ -26,4 +26,19 @@
     {
         _drawerOpen = !_drawerOpen;
     }
+
+    private MudTheme myTheme = new()
+    {
+        Palette = new Palette
+        {
+            Primary = "#03234C",
+            Secondary = "#EA465F",
+            Info = "#001f3f",
+            Success = "#2ECC40",
+            Warning = "#FF851B",
+            Error = "#F012BE",
+            AppbarBackground = "#85144b",
+         
+        }
+    };
 }
