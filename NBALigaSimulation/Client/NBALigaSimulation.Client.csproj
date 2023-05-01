@@ -16,4 +16,8 @@
 		<ProjectReference Include="..\Shared\NBALigaSimulation.Shared.csproj" />
 	</ItemGroup>
 
+	<ItemGroup>
+	  <Folder Include="wwwroot\Images\Utils\" />
+	</ItemGroup>
+
 </Project>

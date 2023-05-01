@@ -5,10 +5,16 @@
 <MudSnackbarProvider />
 
 <MudLayout>
-     <NavMenu />
+    <MudAppBar Fixed="true">
+        <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" OnClick="@((e) => DrawerToggle())" />
+        <h2>NBALIGA</h2> 
+    </MudAppBar>
+    <MudDrawer @bind-Open="@_drawerOpen">
+        <NavMenu/>
+    </MudDrawer>
     <MudMainContent>
-        <MudContainer MaxWidth="MaxWidth.Large" Class="my-16 pt-16">
-            @Body
+        <MudContainer>
+        @Body
         </MudContainer>
     </MudMainContent>
 </MudLayout>

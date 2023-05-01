@@ -1,5 +1,44 @@
-﻿<MudAppBar Color="Color.Primary" Fixed="false">
-    <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" />
-    <MudSpacer />
-    <MudIconButton Icon="@Icons.Custom.Brands.GitHub" Color="Color.Inherit" />
-</MudAppBar>
+﻿<MudNavMenu>
+   
+   <img src="images/utils/logo.svg" width="45%" style="display:block; margin:15px auto; text-align:center;"/>
+
+
+    <MudNavLink Href="/" Icon="@Icons.Material.Filled.Dashboard" Match="NavLinkMatch.All">Home</MudNavLink>
+
+     <MudNavGroup Icon="@Icons.Material.Filled.EmojiEvents" Title="Liga" Expanded="false">
+        <MudNavLink Href="/transactions" Icon="@Icons.Material.Filled.SwapHorizontalCircle" Match="NavLinkMatch.Prefix">Transações</MudNavLink>
+        <MudNavLink Href="/picks" Icon="@Icons.Material.Filled.Elevator" Match="NavLinkMatch.Prefix">Draft Picks</MudNavLink>
+         <MudNavLink Href="/salarycap" Icon="@Icons.Material.Filled.AttachMoney"  Match="NavLinkMatch.Prefix">Salary Cap</MudNavLink>
+        <MudNavLink Href="/awards" Icon="@Icons.Material.Filled.MilitaryTech"  Match="NavLinkMatch.Prefix">Prêmios</MudNavLink>
+    </MudNavGroup>
+
+    <MudNavGroup Icon="@Icons.Material.Filled.Groups" Title="Times" Expanded="false">
+     <MudNavGroup Icon="@Icons.Material.Filled.East" Title="East" Expanded="false">
+        <MudNavLink Href="/teams/id" Icon="@Icons.Material.Filled.SwapHorizontalCircle" Match="NavLinkMatch.Prefix">Teams</MudNavLink>
+     </MudNavGroup>
+
+      <MudNavGroup Icon="@Icons.Material.Filled.West" Title="West" Expanded="false">
+        <MudNavLink Href="/teams/id" Icon="@Icons.Material.Filled.SwapHorizontalCircle" Match="NavLinkMatch.Prefix">Teams</MudNavLink>
+     </MudNavGroup>
+    </MudNavGroup>
+
+    <MudNavLink Href="/players" Icon="@Icons.Material.Filled.Person" Match="NavLinkMatch.Prefix">Jogadores</MudNavLink>
+
+    <MudNavGroup Icon="@Icons.Material.Filled.Percent" Title="Estatísticas" Expanded="false">
+        <MudNavLink Href="/stats/players" Icon="@Icons.Material.Filled.SwapHorizontalCircle" Match="NavLinkMatch.Prefix">Jogadores Stats</MudNavLink>
+        <MudNavLink Href="/stats/team" Icon="@Icons.Material.Filled.Elevator" Match="NavLinkMatch.Prefix">Times Stats</MudNavLink>
+    </MudNavGroup>
+
+  
+      <MudNavGroup Icon="@Icons.Material.Filled.AccountTree" Title="Playoffs" Expanded="false">
+        <MudNavLink Href="/stats/players" Icon="@Icons.Material.Filled.AccountTree" Match="NavLinkMatch.Prefix">Tabela</MudNavLink>
+        <MudNavLink Href="/stats/team" Icon="@Icons.Material.Filled.Percent" Match="NavLinkMatch.Prefix">Stats</MudNavLink>
+    </MudNavGroup>
+
+
+    <MudNavGroup Icon="@Icons.Material.Filled.BusinessCenter"Title="Pós-Temporada" Expanded="false">
+        <MudNavLink Href="/draft" Icon="@Icons.Material.Filled.Elevator" Match="NavLinkMatch.Prefix">Draft</MudNavLink>
+        <MudNavLink Href="/loteria" Icon="@Icons.Material.Filled.Dvr" Match="NavLinkMatch.Prefix">Draft Loteria</MudNavLink>
+    </MudNavGroup>
+
+</MudNavMenu>
