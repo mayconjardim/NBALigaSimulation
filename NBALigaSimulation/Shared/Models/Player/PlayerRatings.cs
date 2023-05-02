@@ -4,7 +4,7 @@ namespace NBALigaSimulation.Shared.Models
 {
     public class PlayerRatings
     {
-
+        public int Id { get; set; }
         [JsonIgnore]
         public Player Player { get; set; }
         public int PlayerId { get; set; }

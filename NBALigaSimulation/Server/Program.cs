@@ -1,7 +1,7 @@
 ﻿global using NBALigaSimulation.Shared.Models;
+global using NBALigaSimulation.Server.Data;
+global using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Hosting.StaticWebAssets;
-using Microsoft.EntityFrameworkCore;
-using NBALigaSimulation.Server.DataContext;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -9,8 +9,8 @@ StaticWebAssetsLoader.UseStaticWebAssets(builder.Environment, builder.Configurat
 
 // Add services to the container.
 
-builder.Services.AddDbContext<DataContext>(options => options.UseSqlite
-       (builder.Configuration.GetConnectionString("Data Source: NBALIGA.db")));
+builder.Services.AddDbContext<DataContext>(DbContextOptions =>
+          DbContextOptions.UseSqlite(builder.Configuration["ConnectionStrings:NbaligaDBConnectionString"]));
 
 builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();
