@@ -9,6 +9,7 @@
         public int BornYear { get; set; }
         public int Height { get; set; }
         public int Weight { get; set; }
+        public List<PlayerRatings> Ratings { get; set; }
 
     }
 }
