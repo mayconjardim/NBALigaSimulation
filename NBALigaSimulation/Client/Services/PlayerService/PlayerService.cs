@@ -1,8 +1,4 @@
-﻿using NBALigaSimulation.Shared.Dtos;
-using NBALigaSimulation.Shared.Models;
-using System.Net.Http.Json;
-
-namespace NBALigaSimulation.Client.Services.PlayerService
+﻿namespace NBALigaSimulation.Client.Services.PlayerService
 {
     public class PlayerService : IPlayerService
     {
@@ -15,7 +11,7 @@ namespace NBALigaSimulation.Client.Services.PlayerService
 
         public string Message { get; set; } = "Carregando Jogador...";
 
-        public async Task<ServiceResponse<PlayerCompleteDto>> GetProductById(int playerId)
+        public async Task<ServiceResponse<PlayerCompleteDto>> GetPlayerById(int playerId)
         {
             var result = await _http.GetFromJsonAsync<ServiceResponse<PlayerCompleteDto>>($"api/players/{playerId}");
             return result;
