@@ -1,11 +1,16 @@
 ﻿global using NBALigaSimulation.Shared.Models;
 using Microsoft.AspNetCore.Hosting.StaticWebAssets;
+using Microsoft.EntityFrameworkCore;
+using NBALigaSimulation.Server.DataContext;
 
 var builder = WebApplication.CreateBuilder(args);
 
 StaticWebAssetsLoader.UseStaticWebAssets(builder.Environment, builder.Configuration);
 
 // Add services to the container.
+
+builder.Services.AddDbContext<DataContext>(options => options.UseSqlite
+       (builder.Configuration.GetConnectionString("Data Source: NBALIGA.db")));
 
 builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();
