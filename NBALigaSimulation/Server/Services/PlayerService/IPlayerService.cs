@@ -3,7 +3,7 @@
     public interface IPlayerService
     {
 
-        Task<ServiceResponse<List<Player>>> GetAllPlayers();
+        Task<ServiceResponse<List<PlayerSimpleDto>>> GetAllPlayers();
         Task<ServiceResponse<Player>> GetPlayerById(int playerId);
 
     }

@@ -1,19 +1,24 @@
-﻿namespace NBALigaSimulation.Server.Services.PlayerService
+﻿using AutoMapper;
+
+namespace NBALigaSimulation.Server.Services.PlayerService
 {
     public class PlayerService : IPlayerService
     {
         private readonly DataContext _context;
+        private readonly IMapper _mapper;
 
-        public PlayerService(DataContext context)
+        public PlayerService(DataContext context, IMapper mapper)
         {
             _context = context;
+            _mapper = mapper;
         }
 
-        public async Task<ServiceResponse<List<Player>>> GetAllPlayers()
+        public async Task<ServiceResponse<List<PlayerSimpleDto>>> GetAllPlayers()
         {
-            var response = new ServiceResponse<List<Player>>
+            var players = await _context.Players.ToListAsync();
+            var response = new ServiceResponse<List<PlayerSimpleDto>>
             {
-                Data = await _context.Players.ToListAsync()
+                Data = _mapper.Map<List<PlayerSimpleDto>>(players)
             };
 
             return response;
