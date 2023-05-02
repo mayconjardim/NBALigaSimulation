@@ -1,6 +1,7 @@
 ﻿global using NBALigaSimulation.Shared.Models;
 global using NBALigaSimulation.Server.Data;
 global using Microsoft.EntityFrameworkCore;
+global using NBALigaSimulation.Server.Services.PlayerService;
 using Microsoft.AspNetCore.Hosting.StaticWebAssets;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -18,14 +19,18 @@ builder.Services.AddRazorPages();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+builder.Services.AddScoped<IPlayerService, PlayerService>();
+
 var app = builder.Build();
 
 app.UseSwaggerUI();
+
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseWebAssemblyDebugging();
+
 }
 else
 {
