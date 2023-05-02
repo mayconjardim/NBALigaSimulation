@@ -9,21 +9,21 @@ namespace NBALigaSimulation.Shared.Models
         public Player Player { get; set; }
         public int PlayerId { get; set; }
         public int Season { get; set; }
-        public int hgt { get; set; }
-        public int str { get; set; }
-        public int spd { get; set; }
-        public int jmp { get; set; }
-        public int end { get; set; }
-        public int ins { get; set; }
-        public int dnk { get; set; }
-        public int ft { get; set; }
-        public int fg { get; set; }
-        public int tp { get; set; }
-        public int blk { get; set; }
-        public int stl { get; set; }
-        public int drb { get; set; }
-        public int pss { get; set; }
-        public int reb { get; set; }
+        public int Hgt { get; set; }
+        public int Str { get; set; }
+        public int Spd { get; set; }
+        public int Jmp { get; set; }
+        public int End { get; set; }
+        public int Ins { get; set; }
+        public int Dnk { get; set; }
+        public int Ft { get; set; }
+        public int Fg { get; set; }
+        public int Tp { get; set; }
+        public int Blk { get; set; }
+        public int Stl { get; set; }
+        public int Drb { get; set; }
+        public int Pss { get; set; }
+        public int Reb { get; set; }
 
     }
 }
