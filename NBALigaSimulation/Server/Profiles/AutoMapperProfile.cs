@@ -8,6 +8,10 @@ namespace NBALigaSimulation.Server.Profiles
         public AutoMapperProfile()
         {
             CreateMap<Player, PlayerSimpleDto>();
+            CreateMap<Player, PlayerCompleteDto>();
+            CreateMap<PlayerRatings, PlayerRatingDto>();
+
+
         }
     }
 }

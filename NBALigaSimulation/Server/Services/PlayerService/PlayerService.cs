@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using NBALigaSimulation.Shared.Models;
 
 namespace NBALigaSimulation.Server.Services.PlayerService
 {
@@ -24,9 +25,9 @@ namespace NBALigaSimulation.Server.Services.PlayerService
             return response;
         }
 
-        public async Task<ServiceResponse<Player>> GetPlayerById(int playerId)
+        public async Task<ServiceResponse<PlayerCompleteDto>> GetPlayerById(int playerId)
         {
-            var response = new ServiceResponse<Player>();
+            var response = new ServiceResponse<PlayerCompleteDto>();
             var player = await _context.Players.Include(p => p.Ratings).FirstOrDefaultAsync(p => p.Id == playerId);
 
             if (player == null)
@@ -36,7 +37,7 @@ namespace NBALigaSimulation.Server.Services.PlayerService
             }
             else
             {
-                response.Data = player;
+                response.Data = _mapper.Map<PlayerCompleteDto>(player);
             }
 
             return response;

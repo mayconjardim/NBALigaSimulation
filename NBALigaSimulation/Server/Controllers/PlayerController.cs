@@ -30,7 +30,7 @@ namespace NBALigaSimulation.Server.Controllers
 
             if (!result.Success)
             {
-                return NotFound();
+                return NotFound(result);
             }
 
             return Ok(result);

@@ -4,7 +4,7 @@
     {
 
         Task<ServiceResponse<List<PlayerSimpleDto>>> GetAllPlayers();
-        Task<ServiceResponse<Player>> GetPlayerById(int playerId);
+        Task<ServiceResponse<PlayerCompleteDto>> GetPlayerById(int playerId);
 
     }
 }

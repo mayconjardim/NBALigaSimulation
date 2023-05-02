@@ -1,20 +1,18 @@
-﻿using System.Text.Json.Serialization;
-
-namespace NBALigaSimulation.Shared.Models
+﻿namespace NBALigaSimulation.Shared.Dtos
 {
-    public class Player
+    public class PlayerCompleteDto
     {
-        public int Id { get; set; }
         public string FirstName { get; set; } = string.Empty;
         public string LastName { get; set; } = string.Empty;
         public string ImgUrl { get; set; } = string.Empty;
         public int BornYear { get; set; }
         public int Height { get; set; }
         public int Weight { get; set; }
-        [JsonIgnore]
-        public Team Team { get; set; }
         public int TeamId { get; set; }
-        public List<PlayerRatings> Ratings { get; set; } = new List<PlayerRatings>();
-
+        public List<PlayerRatingDto> Ratings { get; set; } = new List<PlayerRatingDto>();
+        public string GetFullName()
+        {
+            return FirstName + " " + LastName;
+        }
     }
 }
