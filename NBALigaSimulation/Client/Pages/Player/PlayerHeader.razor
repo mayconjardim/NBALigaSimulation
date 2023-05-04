@@ -1,0 +1,67 @@
+﻿<div class="card @player.TeamAbrv">
+ <MudCardHeader>
+    <CardHeaderAvatar>
+        <MudAvatar Style="width: 120px; height: 100px; background: none"  Color="Color.Surface">
+            <img Src="@player.ImgUrl"/>
+        </MudAvatar>
+    </CardHeaderAvatar>
+
+    <CardHeaderContent>
+        <MudText Typo="Typo.h5">@player.FirstName</MudText>
+        <MudText Typo="Typo.h4">@player.LastName</MudText>
+        <MudText Typo="Typo.caption">
+         <MudAvatar Style="vertical-align: middle; background: none" Size="Size.Small" Image=@($"Images/logos/{player.TeamAbrv}.svg") 
+            Square="true" />
+                @player.TeamName - Guard
+        </MudText>
+    </CardHeaderContent>
+ </MudCardHeader>
+
+ <ul>
+    <li><MudIcon Icon="@Icons.Material.Filled.Scale" Style="font-size: 1rem; vertical-align: middle" />Height / Weight</li>
+    <li><span>@player.Height / @player.Weight</span> </li>
+    <li><MudIcon Icon="@Icons.Material.Filled.CalendarMonth" Style="font-size: 1rem; vertical-align: middle"  />Age</li>
+    <li><span>@player.BornYear</span></li>
+    <li><MudIcon Icon="@Icons.Material.Filled.Elevator" Style="font-size: 1rem; vertical-align: middle" />Draft</li>
+    <li><span>2018 - Round 1 (Pick 6) by ORL</span> </li>
+    <li><MudIcon Icon="@Icons.Material.Filled.Explicit" Style="font-size: 1rem; vertical-align: middle" />Experience</li>
+    <li><span>4 Years</span></li>
+ </ul> 
+   
+ <div class="ratings">
+    <p>Current Rating</p>
+    <MudRating SelectedValue="2" Size="Size.Small" ReadOnly="true" />
+    <p>Potential Rating</p>
+    <MudRating SelectedValue="5" Size="Size.Small" ReadOnly="true" />
+ </div>
+
+ <div class="stats">
+     
+     <div> 
+     <p>24.1</p>
+     <span>PPG</span>
+     </div>
+
+     <div> 
+     <p>6.1</p>
+     <span>RPG</span>
+     </div>
+
+     <div> 
+     <p>5.0</p>
+     <span>APG</span>
+     </div>
+
+     <div> 
+     <p>27.1</p>
+     <span>PER</span>
+     </div>
+
+     <div> 
+     <p>0.653</p>
+     <span>TS%</span>
+     </div>
+    
+ </div>
+   
+</div>
