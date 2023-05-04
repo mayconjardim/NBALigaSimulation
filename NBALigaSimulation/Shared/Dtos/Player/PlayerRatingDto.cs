@@ -1,4 +1,6 @@
-﻿namespace NBALigaSimulation.Shared.Dtos
+﻿using System.Net;
+
+namespace NBALigaSimulation.Shared.Dtos
 {
     public class PlayerRatingDto
     {
@@ -18,6 +20,8 @@
         public int Drb { get; set; }
         public int Pss { get; set; }
         public int Reb { get; set; }
+        public int Ovr => (int)Math.Round((4 * Hgt + Str + 4 * Spd + 2 * Jmp + 3 * End + 3 * Ins + 4 * Dnk + Ft + Fg
+            + 2 * Tp + Blk + Stl + Drb + 3 * Pss + Reb) / 32.0);
 
         public string Position
         {

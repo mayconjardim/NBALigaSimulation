@@ -9,10 +9,9 @@
         public int Height { get; set; }
         public int Weight { get; set; }
         public int TeamId { get; set; }
+        public string TeamName { get; set; } = string.Empty;
+        public string TeamAbrv { get; set; } = string.Empty;
         public List<PlayerRatingDto> Ratings { get; set; } = new List<PlayerRatingDto>();
-        public string GetFullName()
-        {
-            return FirstName + " " + LastName;
-        }
+        public string FullName => $"{FirstName} {LastName}";
     }
 }

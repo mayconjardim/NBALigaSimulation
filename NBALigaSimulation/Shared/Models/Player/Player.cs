@@ -1,6 +1,4 @@
-﻿using System.Text.Json.Serialization;
-
-namespace NBALigaSimulation.Shared.Models
+﻿namespace NBALigaSimulation.Shared.Models
 {
     public class Player
     {
@@ -11,7 +9,6 @@ namespace NBALigaSimulation.Shared.Models
         public int BornYear { get; set; }
         public int Height { get; set; }
         public int Weight { get; set; }
-        [JsonIgnore]
         public Team Team { get; set; }
         public int TeamId { get; set; }
         public List<PlayerRatings> Ratings { get; set; } = new List<PlayerRatings>();
