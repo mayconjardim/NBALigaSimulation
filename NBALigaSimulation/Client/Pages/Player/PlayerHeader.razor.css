@@ -1,27 +1,41 @@
 ﻿.card {
     display: flex;
-    margin: 10px;
-    width: 98%;
+    width: 100%;
     height: 160px;
+    align-items: center;
+    justify-content: space-around;
     background-repeat: no-repeat;
     background-position: center;
     background-size: cover;
     color: white;
 }
 
-ul {
-    margin: 3.5px 30px;
+    .card span {
+        font-size: 20px;
+        font-weight: 800;
+    }
+
+.info p {
+    font-size: 25px;
+    font-weight: 800;
+    text-align: center;
 }
 
-li {
+.bio ul {
+    margin: 3.5px 30px;
+    padding: 0;
+}
+
+.bio li {
     margin: 3.5px;
     font-size: 10px;
     font-weight: bold;
+    line-height: 10px;
 }
 
-span {
-    line-height: 10px;
+.bio span {
     font-weight: 100;
+    font-size: 10px;
 }
 
 img {
@@ -29,23 +43,24 @@ img {
     height: 100%;
 }
 
-.ratings {
+.overall-stats {
+    display: flex;
+    align-items: center;
+}
+
+.overall {
     display: flex;
     flex-direction: column;
-    margin-top: 40px;
     font-size: 10px;
+    padding: 0;
+    margin: 0;
 }
 
 .stats {
     display: flex;
-    justify-content: space-between;
     margin: 40px 50px;
     text-align: center;
 }
-
-    .stats p, span {
-        padding: 10px
-    }
 
     .stats p {
         font-size: 25px;
@@ -53,4 +68,41 @@ img {
 
     .stats span {
         font-weight: 800;
+        padding: 10px;
+        text-decoration: underline;
+        text-underline-position: under;
     }
+
+@media (max-width: 1052.98px) {
+    .card {
+        justify-content: space-around;
+    }
+
+    .info {
+        justify-content: center;
+    }
+
+    .bio {
+        display: none;
+    }
+
+    .overall-stats {
+        flex-direction: column;
+        justify-content: space-around;
+    }
+
+    .stats {
+        margin: 0;
+        padding: 0;
+    }
+
+        .stats p,
+        .stats span {
+            font-size: 10px;
+        }
+
+    .ts,
+    .per {
+        display: none;
+    }
+}
