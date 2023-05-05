@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using MudBlazor.Services;
 using NBALigaSimulation.Client;
+using pax.BlazorChartJs;
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
 
@@ -16,5 +17,12 @@ builder.Services.AddScoped<IPlayerService, PlayerService>();
 
 builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
 builder.Services.AddMudServices();
+
+builder.Services.AddChartJs(options =>
+{
+    // default
+    options.ChartJsLocation = "https://cdn.jsdelivr.net/npm/chart.js@3.0.0/dist/chart.min.js";
+    options.ChartJsPluginDatalabelsLocation = "https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0";
+});
 
 await builder.Build().RunAsync();

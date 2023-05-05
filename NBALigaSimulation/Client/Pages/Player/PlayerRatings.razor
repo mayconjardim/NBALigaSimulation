@@ -1,11 +1,17 @@
-﻿<MudContainer>
+﻿@using pax.BlazorChartJs
+
+<MudContainer>
+
 
 <div class="ratings">
     
+<div >
+    <ChartComponent @ref="chartComponent" ChartJsConfig="chartJsConfig"></ChartComponent>
+</div>
 
-
-
-
+<div >
+    <ChartComponent @ref="chartComponent2" ChartJsConfig="chartJsConfig2"></ChartComponent>
+</div>
 
 
 
