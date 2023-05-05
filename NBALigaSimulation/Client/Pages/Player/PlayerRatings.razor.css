@@ -1,2 +1,10 @@
-﻿body {
+﻿.ratings {
+    display: flex;
+    justify-content: space-around;
+    text-align: left;
 }
+
+    .ratings li {
+        display: flex;
+        flex-direction: column;
+    }

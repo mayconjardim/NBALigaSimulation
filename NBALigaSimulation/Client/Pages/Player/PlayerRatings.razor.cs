@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Components;
-using NBALigaSimulation.Shared.Models;
 
 namespace NBALigaSimulation.Client.Pages.Player
 {

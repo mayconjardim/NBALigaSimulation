@@ -1,2 +1,40 @@
-﻿<h3>@rating.Ovr</h3>
+﻿<MudContainer>
 
+<div class="ratings">
+
+  <ul>
+    <li><b>Physical</b></li>
+
+    <li><p>Height</p><span>@rating.Hgt</span><MudProgressLinear Color="Color.Secondary" Rounded="true" Size="Size.Small" Value="@rating.Hgt" /></li>
+    <li><p>Strength</p><span>@rating.Str</span><MudProgressLinear Color="Color.Info" Rounded="true" Size="Size.Small" Value="@rating.Str" /></li>
+    <li><p>Speed</p><span>@rating.Spd</span><MudProgressLinear Color="Color.Success" Rounded="true" Size="Size.Small" Value="@rating.Spd" /></li>
+    <li><p>Jumping</p><span>@rating.Jmp</span><MudProgressLinear Color="Color.Warning" Rounded="true" Size="Size.Small" Value="@rating.Jmp" /></li>
+    <li><p>Endurance</p><span>@rating.End</span><MudProgressLinear Color="Color.Error" Rounded="true" Size="Size.Small" Value="@rating.End" /></li>
+  </ul>
+
+  <ul>
+    <li><b>Shooting</b></li>
+
+    <li><p>Inside</p><span>@rating.Hgt</span><MudProgressLinear Color="Color.Error" Rounded="true" Size="Size.Small" Value="@rating.Hgt" /></li>
+    <li><p>Dunks/Layups</p><span>@rating.Str</span><MudProgressLinear Color="Color.Error" Rounded="true" Size="Size.Small" Value="@rating.Str" /></li>
+    <li><p>Free Throws</p><span>@rating.Spd</span><MudProgressLinear Color="Color.Error" Rounded="true" Size="Size.Small" Value="@rating.Spd" /></li>
+    <li><p>Mid Range</p><span>@rating.Jmp</span><MudProgressLinear Color="Color.Error" Rounded="true" Size="Size.Small" Value="@rating.Jmp" /></li>
+    <li><p>Three Pointers</p><span>@rating.End</span><MudProgressLinear Color="Color.Error" Rounded="true" Size="Size.Small" Value="@rating.End" /></li>
+  </ul>
+
+  <ul>
+    <li><b>Skill</b></li>
+
+    <li><p>Blocks</p><span>@rating.Hgt</span><MudProgressLinear Color="Color.Error" Rounded="true" Size="Size.Small" Value="@rating.Hgt" /></li>
+    <li><p>Steals</p><span>@rating.Str</span><MudProgressLinear Color="Color.Error" Rounded="true" Size="Size.Small" Value="@rating.Str" /></li>
+    <li><p>Dribbling</p><span>@rating.Spd</span><MudProgressLinear Color="Color.Error" Rounded="true" Size="Size.Small" Value="@rating.Spd" /></li>
+    <li><p>Passing</p><span>@rating.Jmp</span><MudProgressLinear Color="Color.Error" Rounded="true" Size="Size.Small" Value="@rating.Jmp" /></li>
+    <li><p>Rebounding</p><span>@rating.End</span><MudProgressLinear Color="Color.Error" Rounded="true" Size="Size.Small" Value="@rating.End" /></li>
+  </ul>
+
+  
+    
+
+
+</div>
+</MudContainer>

@@ -8,6 +8,7 @@
     background-position: center;
     background-size: cover;
     color: white;
+    text-transform: uppercase;
 }
 
     .card span {
@@ -16,9 +17,13 @@
     }
 
 .info p {
-    font-size: 25px;
+    font-size: 22px;
     font-weight: 800;
-    text-align: center;
+    text-align: left;
+}
+
+.info span {
+    text-align: left;
 }
 
 .bio ul {
@@ -98,11 +103,22 @@ img {
 
         .stats p,
         .stats span {
-            font-size: 10px;
+            font-size: 12px;
         }
 
     .ts,
     .per {
         display: none;
+    }
+}
+
+@media (max-width: 480px) {
+
+    .info span {
+        font-size: 12px;
+    }
+
+    .info p {
+        font-size: 12px;
     }
 }
