@@ -23,7 +23,7 @@ namespace NBALigaSimulation.Client.Pages.Player
             var Options = new ChartJsOptions()
             {
                 Responsive = true,
-                MaintainAspectRatio = true,
+                MaintainAspectRatio = false,
                 Plugins = new Plugins()
                 {
                     Legend = new Legend()
@@ -44,17 +44,17 @@ namespace NBALigaSimulation.Client.Pages.Player
                         BorderRadius = 10,
                         Padding = new Padding()
                         {
-                            Left = 5,
-                            Right = 5,
+                            Left = 2,
+                            Right = 2,
+                            Top = 2,
+                            Bottom = 2,
                         },
                         Font = new Font()
                         {
                             Size = 10,
                             Weight = "bold"
                         },
-
                     }
-
                 },
                 Scales = new ChartJsOptionsScales()
                 {
@@ -74,7 +74,6 @@ namespace NBALigaSimulation.Client.Pages.Player
                         {
                             // Color = "yellow"
                         },
-
                         SuggestedMin = 0,
                         SuggestedMax = 0
                     }
@@ -88,14 +87,14 @@ namespace NBALigaSimulation.Client.Pages.Player
                 {
                     Labels = new List<string>()
                     {
-                        "Inside2", "La232yups", "Free thr33ows", "Two poin3ters", "Three pointers", "Dribbling", "Passing"
+                      "Steals", "Rebounding", "Blocks", "Height", "Strength", "Speed", "Jumping", "Endurance"
                     },
                     Datasets = new List<ChartJsDataset>()
                     {
                         new RadarDataset()
                         {
                             Label = "",
-                            Data = new List<object>() { rating.Ins, rating.Dnk, rating.Ft, rating.Tp, rating.Fg, rating.Drb, rating.Pss },
+                            Data = new List<object>() { rating.Stl, rating.Reb, rating.Blk, rating.Hgt, rating.Str, rating.Spd, rating.Jmp, rating.End },
                             BackgroundColor = "rgba(3, 35, 76, 0.83)",
                             BorderColor = "#03234C",
                             BorderWidth = 3
@@ -134,9 +133,6 @@ namespace NBALigaSimulation.Client.Pages.Player
             };
 
             base.OnInitialized();
-
-
-
 
         }
 
