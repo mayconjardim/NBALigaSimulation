@@ -1,32 +1,46 @@
 ﻿@using pax.BlazorChartJs
 
-<div class="container">
-    <MudContainer>
-
-        <div class="ratings">
-  
-                <div class="chart"
-                     <ChartComponent @ref="chartComponent" ChartJsConfig="chartJsConfig"></ChartComponent>
+<MudContainer>
+    <div class="container">
+        
+            <div class="ratings">
+                <div class="chart">
+                    <ChartComponent @ref="chartComponent" ChartJsConfig="chartJsConfig"></ChartComponent>
                 </div>
-
-                 <div class="chart"
-                     <ChartComponent @ref="chartComponent2" ChartJsConfig="chartJsConfig2"></ChartComponent>
+                <div class="chart">
+                    <ChartComponent @ref="chartComponent2" ChartJsConfig="chartJsConfig2"></ChartComponent>
                 </div>
-        </div>
+            </div>
+             <div class="badges-container">
 
+                    <div>
+                    <MudAvatarGroup Max="4" Spacing="0">
+                        @foreach (var badge in badgesSkills)
+                        {
+                            bool playerHasBadge = rating.Skills.Contains(badge);
+                            <MudTooltip Arrow="true" Placement="Placement.Top" Text="@GetBadgeName(badge)">
+                                <div>
+                                    <img src=@($"Images/Badges/{badge}.png") class="@(playerHasBadge ? "" : "disabled-image")" />
+                                </div>
+                            </MudTooltip>
+                        }
+                    </MudAvatarGroup>
+                    </div>
 
-        <div class="badges">
-           
-         <MudAvatarGroup Max="4" Spacing="0" >
-            <MudAvatar Size="Size.Large" Variant="Variant.Outlined" Image="Images/Badges/Po.png" />
-            <MudAvatar Size="Size.Large" Variant="Variant.Outlined" Image="Images/Badges/3.png" />
-            <MudAvatar Size="Size.Large" Variant="Variant.Outlined" Image="Images/Badges/Ps.png" />
-            <MudAvatar Size="Size.Large" Variant="Variant.Outlined" Image="Images/Badges/B.png" />
-
-         </MudAvatarGroup>
-
-        </div>
-
-
-    </MudContainer>
-</div>
+                    <div>
+                    <MudAvatarGroup Max="4" Spacing="0">
+                        @foreach (var badge in badgesPhysical)
+                        {
+                            bool playerHasBadge = rating.Skills.Contains(badge);
+                            <MudTooltip Arrow="true" Placement="Placement.Top"  Text="@GetBadgeName(badge)">
+                                <div>
+                                    <img src=@($"Images/Badges/{badge}.png") class="@(playerHasBadge ? "" : "disabled-image")" />
+                                </div>
+                            </MudTooltip>
+                        }
+                    </MudAvatarGroup>
+                    </div>
+                    
+                </div>
+    </div>
+</MudContainer>

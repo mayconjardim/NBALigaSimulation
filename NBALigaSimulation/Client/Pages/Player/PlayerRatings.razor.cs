@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Components;
-using Microsoft.Extensions.Options;
 using pax.BlazorChartJs;
 
 namespace NBALigaSimulation.Client.Pages.Player
@@ -11,11 +10,38 @@ namespace NBALigaSimulation.Client.Pages.Player
 
         private PlayerRatingDto? rating => player.Ratings.LastOrDefault();
 
+        private List<string> badgesSkills = new List<string> { "Po", "3", "Ps", "B" };
+        private List<string> badgesPhysical = new List<string> { "Dp", "Di", "R", "A" };
+
+        public string GetBadgeName(string badge)
+        {
+            switch (badge)
+            {
+                case "Po":
+                    return "Post Scorer";
+                case "3":
+                    return "3-Point Shooter";
+                case "Ps":
+                    return "Passer";
+                case "B":
+                    return "Ball-Handler";
+                case "Dp":
+                    return "Perimeter Defender";
+                case "Di":
+                    return "Interior Defender";
+                case "R":
+                    return "Rebounder";
+                default:
+                    return "Athlete";
+            }
+        }
+
         ChartComponent? chartComponent;
         ChartJsConfig chartJsConfig = null!;
 
         ChartComponent? chartComponent2;
         ChartJsConfig chartJsConfig2 = null!;
+
 
         protected override void OnInitialized()
         {
@@ -87,7 +113,7 @@ namespace NBALigaSimulation.Client.Pages.Player
                 {
                     Labels = new List<string>()
                     {
-                      "Steals", "Rebounding", "Blocks", "Height", "Strength", "Speed", "Jumping", "Endurance"
+                      "STL", "REB", "BLK", "HGT", "STR", "SPD", "JMP", "END"
                     },
                     Datasets = new List<ChartJsDataset>()
                     {
@@ -113,7 +139,7 @@ namespace NBALigaSimulation.Client.Pages.Player
                 {
                     Labels = new List<string>()
                     {
-                        "Inside", "Layups", "Free throws", "Two pointers", "Three pointers", "Dribbling", "Passing"
+                        "INS", "DNK/LAY", "FT", "2P", "3P", "DRL", "PAS"
                     },
                     Datasets = new List<ChartJsDataset>()
                     {
