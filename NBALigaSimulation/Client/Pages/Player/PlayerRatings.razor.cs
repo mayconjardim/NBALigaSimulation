@@ -80,6 +80,10 @@ namespace NBALigaSimulation.Client.Pages.Player
                             Size = 10,
                             Weight = "bold"
                         },
+                    },
+                    Tooltip = new Tooltip()
+                    {
+                        Enabled = false
                     }
                 },
                 Scales = new ChartJsOptionsScales()
