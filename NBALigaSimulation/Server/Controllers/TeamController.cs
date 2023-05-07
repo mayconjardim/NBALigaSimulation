@@ -2,7 +2,7 @@
 
 namespace NBALigaSimulation.Server.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/teams")]
     [ApiController]
     public class TeamController : ControllerBase
     {
