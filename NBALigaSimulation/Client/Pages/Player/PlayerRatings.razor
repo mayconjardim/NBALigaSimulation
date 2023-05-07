@@ -20,7 +20,7 @@
                             bool playerHasBadge = rating.Skills.Contains(badge);
                             <MudTooltip Arrow="true" Placement="Placement.Top" Text="@GetBadgeName(badge)">
                                 <div>
-                                    <img src=@($"Images/Badges/{badge}.png") class="@(playerHasBadge ? "" : "disabled-image")" />
+                                    <img src=@($"Images/Badges/{badge}.svg") class=" @(playerHasBadge ? "" : "disabled-image")" />
                                 </div>
                             </MudTooltip>
                         }
@@ -34,7 +34,7 @@
                             bool playerHasBadge = rating.Skills.Contains(badge);
                             <MudTooltip Arrow="true" Placement="Placement.Top"  Text="@GetBadgeName(badge)">
                                 <div>
-                                    <img src=@($"Images/Badges/{badge}.png") class="@(playerHasBadge ? "" : "disabled-image")" />
+                                    <img src=@($"Images/Badges/{badge}.svg") class=" @(playerHasBadge ? "" : "disabled-image")" />
                                 </div>
                             </MudTooltip>
                         }
