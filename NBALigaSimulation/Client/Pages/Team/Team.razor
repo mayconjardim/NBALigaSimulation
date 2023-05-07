@@ -1,0 +1,32 @@
+﻿@page "/team/{id:int}"
+@inject ITeamService TeamService
+
+@if (team !=  null)
+{
+   <p>@team.Name</p>
+}
+
+@code {
+
+        private TeamCompleteDto? team = null;
+        private string message = string.Empty;
+
+        [Parameter]
+        public int Id { get; set; }
+
+        protected override async Task OnParametersSetAsync()
+        {
+            message = "Carregando Time...";
+
+            var result = await TeamService.GetTeamById(Id);
+            if (!result.Success)
+            {
+                message = result.Message;
+            }
+            else
+            {
+                team = result.Data;
+            }
+        }
+
+}
