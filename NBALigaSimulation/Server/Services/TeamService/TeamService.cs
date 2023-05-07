@@ -25,10 +25,10 @@ namespace NBALigaSimulation.Server.Services.TeamService
             return response;
         }
 
-        public async Task<ServiceResponse<TeamSimpleDto>> GetTeamById(int teamId)
+        public async Task<ServiceResponse<TeamCompleteDto>> GetTeamById(int teamId)
         {
-            var response = new ServiceResponse<TeamSimpleDto>();
-            var team = await _context.Teams.FirstOrDefaultAsync(p => p.Id == teamId);
+            var response = new ServiceResponse<TeamCompleteDto>();
+            var team = await _context.Teams.Include(t => t.Players).FirstOrDefaultAsync(p => p.Id == teamId);
 
             if (team == null)
             {
@@ -38,7 +38,7 @@ namespace NBALigaSimulation.Server.Services.TeamService
             else
             {
 
-                response.Data = _mapper.Map<TeamSimpleDto>(team);
+                response.Data = _mapper.Map<TeamCompleteDto>(team);
             }
 
             return response;
