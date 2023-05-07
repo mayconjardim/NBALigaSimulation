@@ -3,7 +3,28 @@
 
 @if (team !=  null)
 {
-   <TeamHeader team="@team" />
+   
+ <TeamHeader team="@team" />
+ <MudTabs Elevation="4"  Centered="true" Color="@Color.Primary">
+
+    <MudTabPanel Text="Roster" >
+       
+    </MudTabPanel>
+
+    <MudTabPanel Text="Contracts">
+        <MudText>Content Two</MudText>
+    </MudTabPanel>
+
+    <MudTabPanel Text="Schedule">
+        <MudText>Content Three</MudText>
+    </MudTabPanel>
+
+    <MudTabPanel Text="Draft Picks" >
+        <MudText>Content Disabled</MudText>
+    </MudTabPanel>
+
+ </MudTabs>
+
 }
 
 @code {
