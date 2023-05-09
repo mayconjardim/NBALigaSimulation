@@ -1,5 +1,36 @@
-﻿<h3>TeamRoster</h3>
+﻿<div class="container">
+    <MudContainer>
 
-@code {
+        @foreach (var player in team.Players)
+        {  
+        <div class="@team.Abrv card">
+                    <MudCardHeader Style="margin-bottom: 0; padding-bottom: 0">
+                        <CardHeaderAvatar>
+                            <MudAvatar Size="Size.Large" >
+                                <img src="@player.ImgUrl" class="@team.Abrv"/>
+                          </MudAvatar>
+                        </CardHeaderAvatar>
+                        <CardHeaderContent>
+                            <p>@player.FirstName</p>
+                            <span>@player.LastName</span>
+                        </CardHeaderContent>
+                    </MudCardHeader>
+                    <MudCardContent Style="background-color: #03234C; margin: 10px">     
+                       
+                        <div class="overall">
+                            <MudRating SelectedValue="2" Size="Size.Small" ReadOnly="true" />
+                       </div>
 
-}
+                       <p>Shooting Guard</p> 
+                       <p>3rd Season</p> 
+                       <p> 6'4, 213 lbs, 20 years</p> 
+                       <p> $ 6,243,665 (2)</p> 
+                       <p> 21.0 PPG - 4.4 APG - 3.6 RPG</p> 
+                    </MudCardContent>
+              
+
+           </div>
+        }
+         
+    </MudContainer>
+</div>

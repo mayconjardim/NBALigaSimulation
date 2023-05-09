@@ -1,2 +1,54 @@
-﻿body {
+﻿.container {
+    display: flex;
+    flex-direction: row;
+    text-transform: uppercase;
+}
+
+.card {
+    display: flex;
+    flex-wrap: wrap;
+    margin: 10px 0;
+    width: 190px
+}
+
+    .card img {
+        width: 100px;
+        background-image: none;
+    }
+
+    .card p, span {
+        color: white;
+    }
+
+    .card p {
+        font-size: 10px;
+    }
+
+    .card span {
+        font-weight: 800;
+        font-size: 11px;
+    }
+
+@media (max-width: 640px) {
+
+    .container {
+        flex-wrap: wrap;
+    }
+
+    .card {
+        width: 165px
+    }
+
+        .card p {
+            font-size: 8px;
+            padding: 0;
+            margin: 0;
+        }
+
+        .card span {
+            font-weight: 800;
+            font-size: 8px;
+            padding: 0;
+            margin: 0;
+        }
 }
