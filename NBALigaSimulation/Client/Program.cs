@@ -3,6 +3,7 @@ global using NBALigaSimulation.Shared.Models;
 global using NBALigaSimulation.Shared.Dtos;
 global using NBALigaSimulation.Client.Services.PlayerService;
 global using NBALigaSimulation.Client.Services.TeamService;
+global using NBALigaSimulation.Shared.Utils;
 
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;

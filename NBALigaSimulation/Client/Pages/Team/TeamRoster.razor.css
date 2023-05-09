@@ -1,14 +1,13 @@
 ﻿.container {
     display: flex;
-    flex-direction: row;
+    justify-content: space-evenly;
+    flex-wrap: wrap;
     text-transform: uppercase;
 }
 
 .card {
-    display: flex;
-    flex-wrap: wrap;
-    margin: 10px 0;
-    width: 190px
+    margin-top: 10px;
+    width: 190px;
 }
 
     .card img {
