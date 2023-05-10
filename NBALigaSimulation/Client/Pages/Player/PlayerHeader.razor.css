@@ -110,6 +110,10 @@ img {
             font-size: 12px
         }
 
+    .hide-divider {
+        display: none;
+    }
+
     .ts,
     .per {
         display: none;
@@ -122,7 +126,7 @@ img {
         font-size: 10px
     }
 
-    p.long {
+    p.lastname {
         font-size: 7px;
     }
 

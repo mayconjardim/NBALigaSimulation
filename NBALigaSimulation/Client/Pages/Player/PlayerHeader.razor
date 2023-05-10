@@ -13,7 +13,7 @@
 
     <CardHeaderContent>
         <span>@player.FirstName</span>
-         <p class="@(player.LastName.Length > 10 ? "long" : "")">@player.LastName</p>
+         <p class="@(player.LastName.Length > 10 ? "lastname" : "")">@player.LastName</p>
         <MudText Typo="Typo.caption">
          <MudAvatar Style="vertical-align: middle; background: none" Size="Size.Small" Image=@($"Images/logos/{player.TeamAbrv}.svg") Square="true" />
           Foward
@@ -48,44 +48,42 @@
      <div class="stats">
      
          <div class="ppg"> 
-         <span>24.1</span>
-         <p>PPG</p>
+             <span>24.1</span>
+             <p>PPG</p>
          </div>
      
          <MudDivider Vertical="true" FlexItem="true" Style="width: 0.5px"/>
 
 
          <div class="rpg"> 
-         <span>6.1</span>
-         <p>RPG</p>
+             <span>6.1</span>
+             <p>RPG</p>
          </div>
 
          <MudDivider Vertical="true" FlexItem="true" Style="width: 0.5px"/>
 
 
          <div class="apg"> 
-         <span>5.0</span>
-         <p>APG</p>
+             <span>5.0</span>
+             <p>APG</p>
          </div>
 
-      
+        <MudDivider Vertical="true" FlexItem="true" Style="width: 0.5px" />
 
          <div class="per"> 
-         <MudDivider Vertical="true" FlexItem="true" Style="width: 0.5px"/>
-         
-         <span>27.1</span>
-         <p>PER</p>
+             <span>27.1</span>
+             <p>PER</p>
          </div>
 
-
-         <div class="ts"> 
-         <MudDivider Vertical="true" FlexItem="true" Style="width: 0.5px"/>
-
-         <span>64.9</span>
-         <p>TS%</p>
-         </div>
+         <MudDivider Vertical="true" FlexItem="true" Style="width: 0.5px" class="hide-divider"/>
     
- </div>
+
+          <div class="ts"> 
+             <span>64.9</span>
+             <p>TS%</p>
+           </div>
+         
+    </div>
 
  </div>
 

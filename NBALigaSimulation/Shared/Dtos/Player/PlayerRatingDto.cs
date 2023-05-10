@@ -1,4 +1,5 @@
-﻿using System.Net;
+﻿using NBALigaSimulation.Shared.Models;
+using System.Net;
 
 namespace NBALigaSimulation.Shared.Dtos
 {
@@ -118,35 +119,35 @@ namespace NBALigaSimulation.Shared.Dtos
             {
                 List<string> skills = new();
 
-                if (hasSkill(new List<int> { Hgt, Tp }, new List<double> { 0.2, 1.0 }))
+                if (ConverterUtils.hasSkill(new List<int> { Hgt, Tp }, new List<double> { 0.2, 1.0 }))
                 {
                     skills.Add("3");
                 }
-                if (hasSkill(new List<int> { Str, Spd, Jmp, Hgt }, new List<double> { 1, 1, 1, 0.5 }))
+                if (ConverterUtils.hasSkill(new List<int> { Str, Spd, Jmp, Hgt }, new List<double> { 1, 1, 1, 0.5 }))
                 {
                     skills.Add("A");
                 }
-                if (hasSkill(new List<int> { Drb, Spd }, new List<double> { 1, 1 }))
+                if (ConverterUtils.hasSkill(new List<int> { Drb, Spd }, new List<double> { 1, 1 }))
                 {
                     skills.Add("B");
                 }
-                if (hasSkill(new List<int> { Hgt, Str, Spd, Jmp, Blk }, new List<double> { 2, 1, 0.5, 0.5, 1 }))
+                if (ConverterUtils.hasSkill(new List<int> { Hgt, Str, Spd, Jmp, Blk }, new List<double> { 2, 1, 0.5, 0.5, 1 }))
                 {
                     skills.Add("Di");
                 }
-                if (hasSkill(new List<int> { Hgt, Str, Spd, Jmp, Stl }, new List<double> { 1, 1, 2, 0.5, 1 }))
+                if (ConverterUtils.hasSkill(new List<int> { Hgt, Str, Spd, Jmp, Stl }, new List<double> { 1, 1, 2, 0.5, 1 }))
                 {
                     skills.Add("Dp");
                 }
-                if (hasSkill(new List<int> { Hgt, Str, Spd, Ins }, new List<double> { 1, 0.6, 0.2, 1 }))
+                if (ConverterUtils.hasSkill(new List<int> { Hgt, Str, Spd, Ins }, new List<double> { 1, 0.6, 0.2, 1 }))
                 {
                     skills.Add("Po");
                 }
-                if (hasSkill(new List<int> { Drb, Pss }, new List<double> { 0.4, 1 }))
+                if (ConverterUtils.hasSkill(new List<int> { Drb, Pss }, new List<double> { 0.4, 1 }))
                 {
                     skills.Add("Ps");
                 }
-                if (hasSkill(new List<int> { Hgt, Str, Jmp, Reb }, new List<double> { 1, 0.1, 0.1, 0.7 }))
+                if (ConverterUtils.hasSkill(new List<int> { Hgt, Str, Jmp, Reb }, new List<double> { 1, 0.1, 0.1, 0.7 }))
                 {
                     skills.Add("R");
                 }
@@ -155,28 +156,360 @@ namespace NBALigaSimulation.Shared.Dtos
             }
         }
 
-        private bool hasSkill(List<int> skills, List<double> weights)
+        public double GamePace
         {
-
-            double numerator = 0;
-            double denominator = 0;
-
-            for (int i = 0; i < skills.Count; i++)
+            get
             {
-                numerator += skills[i] * weights[i];
-                denominator += 100 * weights[i];
-            }
+                double pace = 0;
 
-            if (numerator / denominator > 0.75)
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
+                Dictionary<string, double> rating = new Dictionary<string, double>();
+                rating.Add("spd", Spd);
+                rating.Add("jmp", Jmp);
+                rating.Add("dnk", Dnk);
+                rating.Add("tp", Tp);
+                rating.Add("stl", Stl);
+                rating.Add("drb", Reb);
+                rating.Add("pss", Pss);
+                List<string> attributes = new List<string> { "spd", "jmp", "dnk", "tp", "stl", "drb", "pss" };
 
+                pace = ConverterUtils.Composite(rating, attributes);
+                return pace;
+            }
         }
+
+        public double GameUsage
+        {
+            get
+            {
+                double usage = 0;
+
+                Dictionary<string, double> rating = new Dictionary<string, double>();
+                rating.Add("ins", Ins);
+                rating.Add("dnk", Dnk);
+                rating.Add("fg", Fg);
+                rating.Add("tp", Tp);
+
+                List<string> attributes = new List<string> { "ins", "dnk", "fg", "tp" };
+
+                usage = ConverterUtils.Composite(rating, attributes);
+                return usage;
+            }
+        }
+
+        public double GameDribbling
+        {
+            get
+            {
+                double dribbling = 0;
+
+                Dictionary<string, double> rating = new Dictionary<string, double>();
+                rating.Add("drb", Drb);
+                rating.Add("spd", Spd);
+
+                List<string> attributes = new List<string> { "drb", "spd" };
+
+                dribbling = ConverterUtils.Composite(rating, attributes);
+                return dribbling;
+            }
+        }
+
+        public double GamePassing
+        {
+            get
+            {
+                double passing = 0;
+
+                Dictionary<string, double> rating = new Dictionary<string, double>();
+                rating.Add("drb", Drb);
+                rating.Add("pss", Pss);
+
+                List<string> attributes = new List<string> { "drb", "pss" };
+                List<double> weights = new List<double> { 0.4, 1 };
+
+                passing = ConverterUtils.Composite(rating, attributes, weights);
+                return passing;
+            }
+        }
+
+        public double GameTurnovers
+        {
+            get
+            {
+                double turnovers = 0;
+
+                Dictionary<string, double> rating = new Dictionary<string, double>();
+                rating.Add("drb", Drb);
+                rating.Add("pss", Pss);
+                rating.Add("spd", Spd);
+                rating.Add("hgt", Hgt);
+                rating.Add("ins", Ins);
+
+                List<string> attributes = new List<string> { "drb", "pss", "spd", "hgt", "ins" };
+                List<double> weights = new List<double> { 1, 1, -1, 1, 1 };
+
+                turnovers = ConverterUtils.Composite(rating, attributes, weights);
+                return turnovers;
+            }
+        }
+
+        public double GameShootingAtRim
+        {
+            get
+            {
+                double shootingAtRim = 0;
+
+                Dictionary<string, double> rating = new Dictionary<string, double>();
+                rating.Add("hgt", Hgt);
+                rating.Add("spd", Spd);
+                rating.Add("jmp", Jmp);
+                rating.Add("dnk", Dnk);
+
+                List<string> attributes = new List<string> { "hgt", "spd", "jmp", "dnk" };
+                List<double> weights = new List<double> { 1, 0.2, 0.6, 0.4 };
+
+                shootingAtRim = ConverterUtils.Composite(rating, attributes, weights);
+                return shootingAtRim;
+            }
+        }
+
+        public double GameShootingLowPost
+        {
+            get
+            {
+                double shootingLowPost = 0;
+
+                Dictionary<string, double> rating = new Dictionary<string, double>();
+                rating.Add("hgt", Hgt);
+                rating.Add("stre", Str);
+                rating.Add("spd", Spd);
+                rating.Add("ins", Ins);
+
+                List<string> attributes = new List<string> { "hgt", "stre", "spd", "ins" };
+                List<double> weights = new List<double> { 1, 0.6, 0.2, 1 };
+
+                shootingLowPost = ConverterUtils.Composite(rating, attributes, weights);
+                return shootingLowPost;
+            }
+        }
+
+        public double GameShootingMidRange
+        {
+            get
+            {
+                double shootingMidRange = 0;
+
+                Dictionary<string, double> rating = new Dictionary<string, double>();
+                rating.Add("hgt", Hgt);
+                rating.Add("fg", Fg);
+
+                List<string> attributes = new List<string> { "hgt", "fg" };
+                List<double> weights = new List<double> { 0.2, 1 };
+
+                shootingMidRange = ConverterUtils.Composite(rating, attributes, weights);
+                return shootingMidRange;
+            }
+        }
+
+        public double GameShootingThreePointer
+        {
+            get
+            {
+                double shootingThreePointer = 0;
+
+                Dictionary<string, double> rating = new Dictionary<string, double>();
+                rating.Add("hgt", Hgt);
+                rating.Add("tp", Tp);
+
+                List<string> attributes = new List<string> { "hgt", "tp" };
+                List<double> weights = new List<double> { 0.2, 1 };
+
+                shootingThreePointer = ConverterUtils.Composite(rating, attributes, weights);
+                return shootingThreePointer;
+            }
+        }
+
+        public double GameShootingFT
+        {
+            get
+            {
+                double shootingFT = 0;
+
+                Dictionary<string, double> rating = new Dictionary<string, double>();
+                rating.Add("ft", Ft);
+
+                List<string> attributes = new List<string> { "ft" };
+
+                shootingFT = ConverterUtils.Composite(rating, attributes);
+                return shootingFT;
+            }
+        }
+
+        public double GameRebounding
+        {
+            get
+            {
+                double rebounding = 0;
+
+                Dictionary<string, double> rating = new Dictionary<string, double>();
+                rating.Add("hgt", Hgt);
+                rating.Add("stre", Str);
+                rating.Add("jmp", Jmp);
+                rating.Add("reb", Reb);
+
+                List<string> attributes = new List<string> { "hgt", "stre", "jmp", "reb" };
+                List<double> weights = new List<double> { 1.5, 0.1, 0.1, 0.7 };
+
+                rebounding = ConverterUtils.Composite(rating, attributes, weights);
+                return rebounding;
+            }
+        }
+
+        public double GameStealing
+        {
+            get
+            {
+                double stealing = 0;
+
+                Dictionary<string, double> rating = new Dictionary<string, double>();
+                rating.Add("spd", Spd);
+                rating.Add("stl", Stl);
+
+                List<string> attributes = new List<string> { "spd", "stl" };
+
+
+                stealing = ConverterUtils.Composite(rating, attributes);
+                return stealing;
+            }
+        }
+
+        public double GameBlocking
+        {
+            get
+            {
+                double blocking = 0;
+
+                Dictionary<string, double> rating = new Dictionary<string, double>();
+                rating.Add("hgt", Hgt);
+                rating.Add("jmp", Jmp);
+                rating.Add("blk", Blk);
+
+                List<string> attributes = new List<string> { "hgt", "jmp", "blk" };
+                List<double> weights = new List<double> { 1.5, 0.5, 0.5 };
+
+
+                blocking = ConverterUtils.Composite(rating, attributes, weights);
+                return blocking;
+            }
+        }
+
+        public double GameFouling
+        {
+            get
+            {
+                double fouling = 0;
+
+                Dictionary<string, double> rating = new Dictionary<string, double>();
+                rating.Add("hgt", Hgt);
+                rating.Add("blk", Blk);
+                rating.Add("spd", Spd);
+
+                List<string> attributes = new List<string> { "hgt", "blk", "spd" };
+                List<double> weights = new List<double> { 1, 1, -1 };
+
+
+                fouling = ConverterUtils.Composite(rating, attributes, weights);
+                return fouling;
+            }
+        }
+
+        public double GameDefense
+        {
+            get
+            {
+                double defense = 0;
+
+                Dictionary<string, double> rating = new Dictionary<string, double>();
+                rating.Add("hgt", Hgt);
+                rating.Add("stre", Str);
+                rating.Add("spd", Spd);
+                rating.Add("jmp", Jmp);
+                rating.Add("blk", Blk);
+                rating.Add("stl", Stl);
+
+                List<string> attributes = new List<string> { "hgt", "stre", "spd", "jmp", "blk", "stl" };
+                List<double> weights = new List<double> { 1, 1, 1, 0.5, 1, 1 };
+
+
+                defense = ConverterUtils.Composite(rating, attributes, weights);
+                return defense;
+            }
+        }
+
+        public double GameDefenseInterior
+        {
+            get
+            {
+                double defenseInterior = 0;
+
+                Dictionary<string, double> rating = new Dictionary<string, double>();
+                rating.Add("hgt", Hgt);
+                rating.Add("stre", Str);
+                rating.Add("spd", Spd);
+                rating.Add("jmp", Jmp);
+                rating.Add("blk", Blk);
+
+                List<string> attributes = new List<string> { "hgt", "stre", "spd", "jmp", "blk" };
+                List<double> weights = new List<double> { 2, 1, 0.5, 0.5, 1 };
+
+
+                defenseInterior = ConverterUtils.Composite(rating, attributes, weights);
+                return defenseInterior;
+            }
+        }
+
+        public double GameDefensePerimeter
+        {
+            get
+            {
+                double defensePerimeter = 0;
+
+                Dictionary<string, double> rating = new Dictionary<string, double>();
+                rating.Add("hgt", Hgt);
+                rating.Add("stre", Str);
+                rating.Add("spd", Spd);
+                rating.Add("jmp", Jmp);
+                rating.Add("stl", Stl);
+
+                List<string> attributes = new List<string> { "hgt", "stre", "spd", "jmp", "stl" };
+                List<double> weights = new List<double> { 1, 1, 2, 0.5, 1 };
+
+
+                defensePerimeter = ConverterUtils.Composite(rating, attributes, weights);
+                return defensePerimeter;
+            }
+        }
+
+        public double GameEndurance
+        {
+            get
+            {
+                double endurance = 0;
+
+                Dictionary<string, double> rating = new Dictionary<string, double>();
+                rating.Add("endu", End);
+                rating.Add("hgt", Hgt);
+
+
+                List<string> attributes = new List<string> { "endu", "hgt" };
+                List<double> weights = new List<double> { 1, -0.1 };
+
+
+                endurance = ConverterUtils.Composite(rating, attributes, weights);
+                return endurance;
+            }
+        }
+
+
 
 
     }
