@@ -9,7 +9,7 @@ namespace NBALigaSimulation.Client.Pages.Team
         [Parameter]
         public TeamCompleteDto? team { get; set; }
 
-        private List<PlayerSimpleDto>? players => team.Players;
+        private List<PlayerCompleteDto>? players => team.Players;
 
         private void NavigateToPlayerPage(int playerId)
         {

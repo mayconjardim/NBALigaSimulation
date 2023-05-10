@@ -2,6 +2,7 @@
 {
     public class PlayerCompleteDto
     {
+        public int Id { get; set; }
         public string FirstName { get; set; } = string.Empty;
         public string LastName { get; set; } = string.Empty;
         public string ImgUrl { get; set; } = string.Empty;
