@@ -10,7 +10,6 @@ namespace NBALigaSimulation.Server.Data
         public DbSet<Team> Teams { get; set; }
         public DbSet<Player> Players { get; set; }
         public DbSet<PlayerRatings> Ratings { get; set; }
-
         public DbSet<Game> Games { get; set; }
 
 
@@ -40,6 +39,11 @@ namespace NBALigaSimulation.Server.Data
                     .HasForeignKey(e => e.AwayTeamId)
                     .OnDelete(DeleteBehavior.Restrict);
             });
+
+            modelBuilder.Entity<Game>()
+                     .HasMany(g => g.PlayByPlays)
+                     .WithOne()
+                     .HasForeignKey(p => p.GameId);
 
         }
 

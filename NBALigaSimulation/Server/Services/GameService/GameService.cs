@@ -17,6 +17,15 @@ namespace NBALigaSimulation.Server.Services.GameService
         public async Task<ServiceResponse<GameCompleteDto>> CreateGame(GameCompleteDto request)
         {
             var game = _mapper.Map<Game>(request);
+
+            if (request.PlayByPlay != null)
+            {
+                game.PlayByPlays = request.PlayByPlay.Select(p => new GamePlayByPlay
+                {
+                    Play = p
+                }).ToList();
+            }
+
             _context.Games.Add(game);
             await _context.SaveChangesAsync();
 

@@ -23,7 +23,6 @@ namespace NBALigaSimulation.Shared.Models
         public int AwayQ3 { get; set; }
         public int AwayQ4 { get; set; }
         public int AwayOT { get; set; }
-        public List<string> PlayByPlay { get; set; }
-
+        public ICollection<GamePlayByPlay> PlayByPlays { get; set; }
     }
 }
