@@ -36,11 +36,10 @@
     }
 
     .stats span {
+        font-size: 20px;
         font-weight: 800;
         padding: 10px;
     }
-
-
 
 
 @media (max-width:1052.98px) {

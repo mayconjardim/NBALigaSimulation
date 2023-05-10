@@ -1,8 +1,10 @@
-﻿<div class="card @player.TeamAbrv">
-@using Color = MudBlazor.Color
+﻿@using Color = MudBlazor.Color
 
+<div class="card @player.TeamAbrv">
  
- <div class="info"> <MudCardHeader>
+ <div class="info"> 
+ <MudCardHeader>
+
     <CardHeaderAvatar>
         <MudAvatar Style="width: 120px; height: 100px; background: none;"  Color="Color.Surface">
             <img src="@player.ImgUrl"/>
@@ -11,13 +13,13 @@
 
     <CardHeaderContent>
         <span>@player.FirstName</span>
-        <p>@player.LastName</p>
+         <p class="@(player.LastName.Length > 10 ? "long" : "")">@player.LastName</p>
         <MudText Typo="Typo.caption">
-         <MudAvatar Style="vertical-align: middle; background: none" Size="Size.Small" Image=@($"Images/logos/{player.TeamAbrv}.svg") 
-            Square="true" />
-                 - Guard
+         <MudAvatar Style="vertical-align: middle; background: none" Size="Size.Small" Image=@($"Images/logos/{player.TeamAbrv}.svg") Square="true" />
+          Foward
         </MudText>
     </CardHeaderContent>
+
  </MudCardHeader>
  </div>
 
@@ -37,38 +39,51 @@
  <div class="overall-stats">
    
      <div class="overall">
-     <p>Current Rating</p>
-    <MudRating SelectedValue="2" Size="Size.Small" ReadOnly="true" />
-    <p>Potential Rating</p>
-    <MudRating SelectedValue="5" Size="Size.Small" ReadOnly="true" />
+         <p>Current Rating</p>
+        <MudRating SelectedValue="2" Size="Size.Small" ReadOnly="true" />
+        <p>Potential Rating</p>
+        <MudRating SelectedValue="5" Size="Size.Small" ReadOnly="true" />
     </div>
 
      <div class="stats">
      
-     <div class="ppg"> 
-     <p>24.1</p>
-     <span>PPG</span>
-     </div>
+         <div class="ppg"> 
+         <span>24.1</span>
+         <p>PPG</p>
+         </div>
+     
+         <MudDivider Vertical="true" FlexItem="true" Style="width: 0.5px"/>
 
-     <div class="rpg"> 
-     <p>6.1</p>
-     <span>RPG</span>
-     </div>
 
-     <div class="apg"> 
-     <p>5.0</p>
-     <span>APG</span>
-     </div>
+         <div class="rpg"> 
+         <span>6.1</span>
+         <p>RPG</p>
+         </div>
 
-     <div class="per"> 
-     <p>27.1</p>
-     <span>PER</span>
-     </div>
+         <MudDivider Vertical="true" FlexItem="true" Style="width: 0.5px"/>
 
-     <div class="ts"> 
-     <p>64.9</p>
-     <span>TS%</span>
-     </div>
+
+         <div class="apg"> 
+         <span>5.0</span>
+         <p>APG</p>
+         </div>
+
+      
+
+         <div class="per"> 
+         <MudDivider Vertical="true" FlexItem="true" Style="width: 0.5px"/>
+         
+         <span>27.1</span>
+         <p>PER</p>
+         </div>
+
+
+         <div class="ts"> 
+         <MudDivider Vertical="true" FlexItem="true" Style="width: 0.5px"/>
+
+         <span>64.9</span>
+         <p>TS%</p>
+         </div>
     
  </div>
 

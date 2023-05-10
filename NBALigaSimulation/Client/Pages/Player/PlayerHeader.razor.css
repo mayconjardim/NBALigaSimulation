@@ -9,6 +9,8 @@
     background-size: cover;
     color: white;
     text-transform: uppercase;
+    margin: 0;
+    padding: 0;
 }
 
     .card span {
@@ -44,8 +46,8 @@
 }
 
 img {
-    width: 100%;
-    height: 100%;
+    width: 95%;
+    height: 95%;
 }
 
 .overall-stats {
@@ -63,19 +65,20 @@ img {
 
 .stats {
     display: flex;
+    justify-content: space-around;
     margin: 40px 50px;
-    text-align: center;
+    text-align: center
 }
 
     .stats p {
-        font-size: 25px;
+        font-size: 12px;
+        font-weight: 800;
+        margin: 3px 20px;
     }
 
     .stats span {
         font-weight: 800;
         padding: 10px;
-        text-decoration: underline;
-        text-underline-position: under;
     }
 
 @media (max-width: 1052.98px) {
@@ -87,6 +90,7 @@ img {
         justify-content: center;
     }
 
+
     .bio {
         display: none;
     }
@@ -97,13 +101,13 @@ img {
     }
 
     .stats {
+        justify-content: center;
         margin: 0;
         padding: 0;
     }
 
-        .stats p,
-        .stats span {
-            font-size: 12px;
+        .stats p, .stats span {
+            font-size: 12px
         }
 
     .ts,
@@ -114,11 +118,15 @@ img {
 
 @media (max-width: 640px) {
 
-    .info span {
-        font-size: 12px;
+    .info p, .info span {
+        font-size: 10px
     }
 
-    .info p {
-        font-size: 12px;
+    p.long {
+        font-size: 7px;
+    }
+
+    .stats p, .stats span {
+        font-size: 10px
     }
 }
