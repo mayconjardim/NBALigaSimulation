@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using NBALigaSimulation.Shared.Models;
 
 namespace NBALigaSimulation.Server.Services.GameService
 {
@@ -7,33 +8,49 @@ namespace NBALigaSimulation.Server.Services.GameService
 
         private readonly DataContext _context;
         private readonly IMapper _mapper;
+        private readonly ITeamService _teamService;
 
-        public GameService(DataContext context, IMapper mapper)
+        public GameService(DataContext context, IMapper mapper, ITeamService teamService)
         {
             _context = context;
             _mapper = mapper;
+            _teamService = teamService;
         }
 
-        public async Task<ServiceResponse<GameCompleteDto>> CreateGame(GameCompleteDto request)
+        public async Task<ServiceResponse<bool>> CreateGame(CreateGameDto request)
         {
-            var game = _mapper.Map<Game>(request);
+            ServiceResponse<bool> response = new ServiceResponse<bool>();
 
-            if (request.PlayByPlay != null)
-            {
-                game.PlayByPlays = request.PlayByPlay.Select(p => new GamePlayByPlay
-                {
-                    Play = p
-                }).ToList();
-            }
-
-            _context.Games.Add(game);
+            Game game = _mapper.Map<Game>(request);
+            _context.Add(game);
             await _context.SaveChangesAsync();
 
-            var response = new ServiceResponse<GameCompleteDto>
-            {
-                Data = _mapper.Map<GameCompleteDto>(game)
-            };
+            response.Success = true;
+            return response;
+        }
 
+        public async Task<ServiceResponse<bool>> UpdateGame(int gameId)
+        {
+            ServiceResponse<bool> response = new ServiceResponse<bool>();
+
+            Game game = await _context.Games
+                .Include(p => p.HomeTeam)
+                .Include(p => p.AwayTeam)
+                .FirstOrDefaultAsync(p => p.Id == gameId);
+
+            if (game == null)
+            {
+                response.Success = false;
+                response.Message = "Jogo não encontrado.";
+                return response;
+            }
+
+            game.GameSim();
+
+            await _context.SaveChangesAsync();
+
+            response.Success = true;
+            response.Data = true;
             return response;
         }
 
@@ -51,7 +68,7 @@ namespace NBALigaSimulation.Server.Services.GameService
         public async Task<ServiceResponse<GameCompleteDto>> GetGameById(int gameId)
         {
             var response = new ServiceResponse<GameCompleteDto>();
-            var game = await _context.Games.FirstOrDefaultAsync(p => p.Id == gameId);
+            var game = await _context.Games.Include(p => p.HomeTeam).Include(p => p.AwayTeam).FirstOrDefaultAsync(p => p.Id == gameId);
 
             if (game == null)
             {
@@ -66,5 +83,7 @@ namespace NBALigaSimulation.Server.Services.GameService
 
             return response;
         }
+
+
     }
 }

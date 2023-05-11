@@ -4,6 +4,8 @@ global using NBALigaSimulation.Server.Data;
 global using Microsoft.EntityFrameworkCore;
 global using NBALigaSimulation.Server.Services.PlayerService;
 global using NBALigaSimulation.Server.Services.TeamService;
+global using NBALigaSimulation.Server.Services.GameService;
+
 using Microsoft.AspNetCore.Hosting.StaticWebAssets;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -24,6 +26,8 @@ builder.Services.AddAutoMapper(typeof(Program).Assembly);
 
 builder.Services.AddScoped<IPlayerService, PlayerService>();
 builder.Services.AddScoped<ITeamService, TeamService>();
+builder.Services.AddScoped<IGameService, GameService>();
+
 
 
 var app = builder.Build();
