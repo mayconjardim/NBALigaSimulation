@@ -1,5 +1,6 @@
 ﻿global using NBALigaSimulation.Shared.Models;
 global using NBALigaSimulation.Shared.Dtos;
+global using NBALigaSimulation.Shared.Engine;
 global using NBALigaSimulation.Server.Data;
 global using Microsoft.EntityFrameworkCore;
 global using NBALigaSimulation.Server.Services.PlayerService;

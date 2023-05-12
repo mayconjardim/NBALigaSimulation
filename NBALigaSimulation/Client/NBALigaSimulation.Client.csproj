@@ -4,6 +4,7 @@
 		<TargetFramework>net6.0</TargetFramework>
 		<Nullable>enable</Nullable>
 		<ImplicitUsings>enable</ImplicitUsings>
+		<NoWarn>$(NoWarn);20504</NoWarn>
 	</PropertyGroup>
 
 	<ItemGroup>
@@ -18,7 +19,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Folder Include="wwwroot\Images\Utils\" />
+		<Folder Include="wwwroot\Images\Utils\" />
 	</ItemGroup>
 
 </Project>

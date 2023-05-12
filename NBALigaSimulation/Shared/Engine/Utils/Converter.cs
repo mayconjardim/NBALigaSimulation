@@ -1,6 +1,6 @@
-﻿namespace NBALigaSimulation.Server.Engine.Utils
+﻿namespace NBALigaSimulation.Shared.Engine
 {
-    public static class ConverterUtils
+    public static class Converter
     {
 
         public static double Composite(Dictionary<string, double> ratings, List<string> components, List<double>? weights = null)

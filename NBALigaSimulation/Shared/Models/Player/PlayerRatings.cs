@@ -1,4 +1,5 @@
-﻿using System.Text.Json.Serialization;
+﻿using NBALigaSimulation.Shared.Engine;
+using System.Text.Json.Serialization;
 
 namespace NBALigaSimulation.Shared.Models
 {
@@ -41,7 +42,7 @@ namespace NBALigaSimulation.Shared.Models
                 rating.Add("pss", Pss);
                 List<string> attributes = new List<string> { "spd", "jmp", "dnk", "tp", "stl", "drb", "pss" };
 
-                pace = ConverterUtils.Composite(rating, attributes);
+                pace = Converter.Composite(rating, attributes);
                 return pace;
             }
         }
@@ -60,7 +61,7 @@ namespace NBALigaSimulation.Shared.Models
 
                 List<string> attributes = new List<string> { "ins", "dnk", "fg", "tp" };
 
-                usage = ConverterUtils.Composite(rating, attributes);
+                usage = Converter.Composite(rating, attributes);
                 return usage;
             }
         }
@@ -77,7 +78,7 @@ namespace NBALigaSimulation.Shared.Models
 
                 List<string> attributes = new List<string> { "drb", "spd" };
 
-                dribbling = ConverterUtils.Composite(rating, attributes);
+                dribbling = Converter.Composite(rating, attributes);
                 return dribbling;
             }
         }
@@ -95,7 +96,7 @@ namespace NBALigaSimulation.Shared.Models
                 List<string> attributes = new List<string> { "drb", "pss" };
                 List<double> weights = new List<double> { 0.4, 1 };
 
-                passing = ConverterUtils.Composite(rating, attributes, weights);
+                passing = Converter.Composite(rating, attributes, weights);
                 return passing;
             }
         }
@@ -116,7 +117,7 @@ namespace NBALigaSimulation.Shared.Models
                 List<string> attributes = new List<string> { "drb", "pss", "spd", "hgt", "ins" };
                 List<double> weights = new List<double> { 1, 1, -1, 1, 1 };
 
-                turnovers = ConverterUtils.Composite(rating, attributes, weights);
+                turnovers = Converter.Composite(rating, attributes, weights);
                 return turnovers;
             }
         }
@@ -136,7 +137,7 @@ namespace NBALigaSimulation.Shared.Models
                 List<string> attributes = new List<string> { "hgt", "spd", "jmp", "dnk" };
                 List<double> weights = new List<double> { 1, 0.2, 0.6, 0.4 };
 
-                shootingAtRim = ConverterUtils.Composite(rating, attributes, weights);
+                shootingAtRim = Converter.Composite(rating, attributes, weights);
                 return shootingAtRim;
             }
         }
@@ -156,7 +157,7 @@ namespace NBALigaSimulation.Shared.Models
                 List<string> attributes = new List<string> { "hgt", "stre", "spd", "ins" };
                 List<double> weights = new List<double> { 1, 0.6, 0.2, 1 };
 
-                shootingLowPost = ConverterUtils.Composite(rating, attributes, weights);
+                shootingLowPost = Converter.Composite(rating, attributes, weights);
                 return shootingLowPost;
             }
         }
@@ -174,7 +175,7 @@ namespace NBALigaSimulation.Shared.Models
                 List<string> attributes = new List<string> { "hgt", "fg" };
                 List<double> weights = new List<double> { 0.2, 1 };
 
-                shootingMidRange = ConverterUtils.Composite(rating, attributes, weights);
+                shootingMidRange = Converter.Composite(rating, attributes, weights);
                 return shootingMidRange;
             }
         }
@@ -192,7 +193,7 @@ namespace NBALigaSimulation.Shared.Models
                 List<string> attributes = new List<string> { "hgt", "tp" };
                 List<double> weights = new List<double> { 0.2, 1 };
 
-                shootingThreePointer = ConverterUtils.Composite(rating, attributes, weights);
+                shootingThreePointer = Converter.Composite(rating, attributes, weights);
                 return shootingThreePointer;
             }
         }
@@ -208,7 +209,7 @@ namespace NBALigaSimulation.Shared.Models
 
                 List<string> attributes = new List<string> { "ft" };
 
-                shootingFT = ConverterUtils.Composite(rating, attributes);
+                shootingFT = Converter.Composite(rating, attributes);
                 return shootingFT;
             }
         }
@@ -228,7 +229,7 @@ namespace NBALigaSimulation.Shared.Models
                 List<string> attributes = new List<string> { "hgt", "stre", "jmp", "reb" };
                 List<double> weights = new List<double> { 1.5, 0.1, 0.1, 0.7 };
 
-                rebounding = ConverterUtils.Composite(rating, attributes, weights);
+                rebounding = Converter.Composite(rating, attributes, weights);
                 return rebounding;
             }
         }
@@ -246,7 +247,7 @@ namespace NBALigaSimulation.Shared.Models
                 List<string> attributes = new List<string> { "spd", "stl" };
 
 
-                stealing = ConverterUtils.Composite(rating, attributes);
+                stealing = Converter.Composite(rating, attributes);
                 return stealing;
             }
         }
@@ -266,7 +267,7 @@ namespace NBALigaSimulation.Shared.Models
                 List<double> weights = new List<double> { 1.5, 0.5, 0.5 };
 
 
-                blocking = ConverterUtils.Composite(rating, attributes, weights);
+                blocking = Converter.Composite(rating, attributes, weights);
                 return blocking;
             }
         }
@@ -286,7 +287,7 @@ namespace NBALigaSimulation.Shared.Models
                 List<double> weights = new List<double> { 1, 1, -1 };
 
 
-                fouling = ConverterUtils.Composite(rating, attributes, weights);
+                fouling = Converter.Composite(rating, attributes, weights);
                 return fouling;
             }
         }
@@ -309,7 +310,7 @@ namespace NBALigaSimulation.Shared.Models
                 List<double> weights = new List<double> { 1, 1, 1, 0.5, 1, 1 };
 
 
-                defense = ConverterUtils.Composite(rating, attributes, weights);
+                defense = Converter.Composite(rating, attributes, weights);
                 return defense;
             }
         }
@@ -331,7 +332,7 @@ namespace NBALigaSimulation.Shared.Models
                 List<double> weights = new List<double> { 2, 1, 0.5, 0.5, 1 };
 
 
-                defenseInterior = ConverterUtils.Composite(rating, attributes, weights);
+                defenseInterior = Converter.Composite(rating, attributes, weights);
                 return defenseInterior;
             }
         }
@@ -353,7 +354,7 @@ namespace NBALigaSimulation.Shared.Models
                 List<double> weights = new List<double> { 1, 1, 2, 0.5, 1 };
 
 
-                defensePerimeter = ConverterUtils.Composite(rating, attributes, weights);
+                defensePerimeter = Converter.Composite(rating, attributes, weights);
                 return defensePerimeter;
             }
         }
@@ -373,7 +374,7 @@ namespace NBALigaSimulation.Shared.Models
                 List<double> weights = new List<double> { 1, -0.1 };
 
 
-                endurance = ConverterUtils.Composite(rating, attributes, weights);
+                endurance = Converter.Composite(rating, attributes, weights);
                 return endurance;
             }
         }

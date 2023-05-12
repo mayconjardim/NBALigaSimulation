@@ -1,5 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-
+﻿
 namespace NBALigaSimulation.Server.Data
 {
     public class DataContext : DbContext
@@ -12,9 +11,9 @@ namespace NBALigaSimulation.Server.Data
         public DbSet<PlayerRatings> Ratings { get; set; }
         public DbSet<Game> Games { get; set; }
 
-
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+
             modelBuilder.Entity<Player>()
                 .HasOne(p => p.Team)
                 .WithMany(t => t.Players)
@@ -46,6 +45,5 @@ namespace NBALigaSimulation.Server.Data
                      .HasForeignKey(p => p.GameId);
 
         }
-
     }
 }

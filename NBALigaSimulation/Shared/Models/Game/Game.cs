@@ -1,8 +1,5 @@
-﻿using NBALigaSimulation.Shared.Dtos;
+﻿using NBALigaSimulation.Shared.Engine;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Drawing;
-using System.Reflection;
-using System.Reflection.Metadata.Ecma335;
 
 namespace NBALigaSimulation.Shared.Models
 {
@@ -57,14 +54,25 @@ namespace NBALigaSimulation.Shared.Models
             int numPossessions = (int)Math.Round(((98 + 101) / 2) * new Random().NextDouble() * 0.2 + 0.9 * (98 + 101) / 2);
             int[][] playersOnCourt = new int[2][] { HomeTeam.Players.Select(p => p.Id).ToArray(), AwayTeam.Players.Select(p => p.Id).ToArray() };
 
-            UpdateCompositeRating(teams);
+            CompositeHelper.UpdateCompositeRating(teams, playersOnCourt);
 
 
 
+            foreach (var kvp in teams[0].CompositeRating.Ratings)
+            {
+                string ratings = kvp.Key;
+                double value = kvp.Value;
+                Console.WriteLine($"{ratings}: {value}");
+            }
 
+            Console.WriteLine("--------------");
 
-
-
+            foreach (var kvp in teams[1].CompositeRating.Ratings)
+            {
+                string ratings = kvp.Key;
+                double value = kvp.Value;
+                Console.WriteLine($"{ratings}: {value}");
+            }
 
             /*
 
@@ -139,85 +147,8 @@ namespace NBALigaSimulation.Shared.Models
 
         }
 
-        public void UpdateCompositeRating(Team[] teams)
-        {
-            string[] toUpdate = { "GameDribbling", "GamePassing", "GameRebounding", "GameDefense", "GameDefensePerimeter", "GameBlocking" };
 
-            for (int i = 0; i < 2; i++)
-            {
-                for (int j = 0; j < 5; j++)
-                {
 
-                    var playerRatings = teams[i].Players[j].Ratings.LastOrDefault();
-                    double ratingValue = 0;
-
-                    foreach (string rating in toUpdate)
-                    {
-                        teams[i].CompositeRating.Ratings[rating] = 0;
-
-                        if (rating == "GameDribbling")
-                        {
-                            ratingValue = playerRatings.GameDribbling;
-                        }
-                        else if (rating == "GamePassing")
-                        {
-                            ratingValue = playerRatings.GamePassing;
-                        }
-                        else if (rating == "GameRebounding")
-                        {
-                            ratingValue = playerRatings.GameRebounding;
-                        }
-                        else if (rating == "GameDefense")
-                        {
-                            ratingValue = playerRatings.GameDefense;
-                        }
-                        else if (rating == "GameDefensePerimeter")
-                        {
-                            ratingValue = playerRatings.GameDefensePerimeter;
-                        }
-                        else if (rating == "GameBlocking")
-                        {
-                            ratingValue = playerRatings.GameBlocking;
-                        }
-
-                        teams[i].CompositeRating.Ratings[rating] += ratingValue;
-                    }
-                }
-            }
-
-            foreach (var kvp in teams[0].CompositeRating.Ratings)
-            {
-                string ratings = kvp.Key;
-                double value = kvp.Value;
-                Console.WriteLine($"{ratings}: {value}");
-            }
-
-            Console.WriteLine("--------------");
-
-            foreach (var kvp in teams[1].CompositeRating.Ratings)
-            {
-                string ratings = kvp.Key;
-                double value = kvp.Value;
-                Console.WriteLine($"{ratings}: {value}");
-            }
-        }
-
-        private double GetPlayerRating(Player player, string rating)
-        {
-            PropertyInfo ratingProperty = player.Ratings.GetType().GetProperty(rating);
-
-            if (ratingProperty != null)
-            {
-                object ratingValue = ratingProperty.GetValue(player.Ratings);
-
-                if (ratingValue != null && double.TryParse(ratingValue.ToString(), out double parsedRating))
-                {
-                    return parsedRating;
-                }
-            }
-
-            return 0; // Valor padrão caso não seja possível obter a pontuação do jogador
-        }
 
 
         public double ProbTov(Team[] teams)
@@ -270,7 +201,7 @@ namespace NBALigaSimulation.Shared.Models
             {
                 int p = playersOnCourt[t][i];
                 double playerRating = 0;
-                var method = typeof(PlayerRatingDto).GetMethod(methodName);
+                var method = typeof(PlayerRatings).GetMethod(methodName);
                 if (method != null)
                 {
                     var playerRatings = teams[t].Players[p].Ratings;

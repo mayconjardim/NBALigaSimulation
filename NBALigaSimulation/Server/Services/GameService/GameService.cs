@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using NBALigaSimulation.Shared.Models;
 
 namespace NBALigaSimulation.Server.Services.GameService
 {
@@ -34,11 +33,10 @@ namespace NBALigaSimulation.Server.Services.GameService
             ServiceResponse<bool> response = new ServiceResponse<bool>();
 
             Game game = await _context.Games
-            .Include(p => p.HomeTeam)
-                .ThenInclude(t => t.Players).ThenInclude(p => p.Ratings)
-            .Include(p => p.AwayTeam)
-                .ThenInclude(t => t.Players).ThenInclude(p => p.Ratings)
-            .FirstOrDefaultAsync(p => p.Id == gameId);
+              .Include(p => p.HomeTeam.Players).ThenInclude(p => p.Ratings)
+              .Include(p => p.AwayTeam.Players).ThenInclude(p => p.Ratings)
+              .FirstOrDefaultAsync(p => p.Id == gameId);
+
 
             if (game == null)
             {
@@ -53,8 +51,13 @@ namespace NBALigaSimulation.Server.Services.GameService
 
             response.Success = true;
             response.Data = true;
+
             return response;
         }
+
+
+
+
 
         public async Task<ServiceResponse<List<GameCompleteDto>>> GetAllGames()
         {

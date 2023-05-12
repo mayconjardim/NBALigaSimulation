@@ -1,4 +1,5 @@
-﻿using NBALigaSimulation.Shared.Models;
+﻿using NBALigaSimulation.Shared.Engine;
+using NBALigaSimulation.Shared.Models;
 using System.Net;
 
 namespace NBALigaSimulation.Shared.Dtos
@@ -119,35 +120,35 @@ namespace NBALigaSimulation.Shared.Dtos
             {
                 List<string> skills = new();
 
-                if (ConverterUtils.hasSkill(new List<int> { Hgt, Tp }, new List<double> { 0.2, 1.0 }))
+                if (Converter.hasSkill(new List<int> { Hgt, Tp }, new List<double> { 0.2, 1.0 }))
                 {
                     skills.Add("3");
                 }
-                if (ConverterUtils.hasSkill(new List<int> { Str, Spd, Jmp, Hgt }, new List<double> { 1, 1, 1, 0.5 }))
+                if (Converter.hasSkill(new List<int> { Str, Spd, Jmp, Hgt }, new List<double> { 1, 1, 1, 0.5 }))
                 {
                     skills.Add("A");
                 }
-                if (ConverterUtils.hasSkill(new List<int> { Drb, Spd }, new List<double> { 1, 1 }))
+                if (Converter.hasSkill(new List<int> { Drb, Spd }, new List<double> { 1, 1 }))
                 {
                     skills.Add("B");
                 }
-                if (ConverterUtils.hasSkill(new List<int> { Hgt, Str, Spd, Jmp, Blk }, new List<double> { 2, 1, 0.5, 0.5, 1 }))
+                if (Converter.hasSkill(new List<int> { Hgt, Str, Spd, Jmp, Blk }, new List<double> { 2, 1, 0.5, 0.5, 1 }))
                 {
                     skills.Add("Di");
                 }
-                if (ConverterUtils.hasSkill(new List<int> { Hgt, Str, Spd, Jmp, Stl }, new List<double> { 1, 1, 2, 0.5, 1 }))
+                if (Converter.hasSkill(new List<int> { Hgt, Str, Spd, Jmp, Stl }, new List<double> { 1, 1, 2, 0.5, 1 }))
                 {
                     skills.Add("Dp");
                 }
-                if (ConverterUtils.hasSkill(new List<int> { Hgt, Str, Spd, Ins }, new List<double> { 1, 0.6, 0.2, 1 }))
+                if (Converter.hasSkill(new List<int> { Hgt, Str, Spd, Ins }, new List<double> { 1, 0.6, 0.2, 1 }))
                 {
                     skills.Add("Po");
                 }
-                if (ConverterUtils.hasSkill(new List<int> { Drb, Pss }, new List<double> { 0.4, 1 }))
+                if (Converter.hasSkill(new List<int> { Drb, Pss }, new List<double> { 0.4, 1 }))
                 {
                     skills.Add("Ps");
                 }
-                if (ConverterUtils.hasSkill(new List<int> { Hgt, Str, Jmp, Reb }, new List<double> { 1, 0.1, 0.1, 0.7 }))
+                if (Converter.hasSkill(new List<int> { Hgt, Str, Jmp, Reb }, new List<double> { 1, 0.1, 0.1, 0.7 }))
                 {
                     skills.Add("R");
                 }
