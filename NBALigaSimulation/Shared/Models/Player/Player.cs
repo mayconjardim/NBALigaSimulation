@@ -1,4 +1,6 @@
-﻿namespace NBALigaSimulation.Shared.Models
+﻿using System.ComponentModel.DataAnnotations.Schema;
+
+namespace NBALigaSimulation.Shared.Models
 {
     public class Player
     {
@@ -12,6 +14,8 @@
         public Team Team { get; set; }
         public int TeamId { get; set; }
         public List<PlayerRatings> Ratings { get; set; } = new List<PlayerRatings>();
+        [NotMapped]
+        public string FullName => $"{FirstName} {LastName}";
 
     }
 }

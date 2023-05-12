@@ -53,5 +53,75 @@ namespace NBALigaSimulation.Shared.Engine
             }
         }
 
+
+        public static double GetRatingValue(string ratingName, PlayerRatings playerRatings)
+        {
+            double ratingValue = 0;
+
+            switch (ratingName)
+            {
+                case "GameEndurance":
+                    ratingValue = playerRatings.GameEndurance;
+                    break;
+                case "GameDefensePerimeter":
+                    ratingValue = playerRatings.GameDefensePerimeter;
+                    break;
+                case "GameDefenseInterior":
+                    ratingValue = playerRatings.GameDefenseInterior;
+                    break;
+                case "GameDefense":
+                    ratingValue = playerRatings.GameDefense;
+                    break;
+                case "GameFouling":
+                    ratingValue = playerRatings.GameFouling;
+                    break;
+                case "GameBlocking":
+                    ratingValue = playerRatings.GameBlocking;
+                    break;
+                case "GameStealing":
+                    ratingValue = playerRatings.GameStealing;
+                    break;
+                case "GameRebounding":
+                    ratingValue = playerRatings.GameRebounding;
+                    break;
+                case "GameShootingFT":
+                    ratingValue = playerRatings.GameShootingFT;
+                    break;
+                case "GameShootingThreePointer":
+                    ratingValue = playerRatings.GameShootingThreePointer;
+                    break;
+                case "GameShootingMidRange":
+                    ratingValue = playerRatings.GameShootingMidRange;
+                    break;
+                case "GameShootingLowPost":
+                    ratingValue = playerRatings.GameShootingLowPost;
+                    break;
+                case "GameShootingAtRim":
+                    ratingValue = playerRatings.GameShootingAtRim;
+                    break;
+                case "GameTurnovers":
+                    ratingValue = playerRatings.GameTurnovers;
+                    break;
+                case "GamePassing":
+                    ratingValue = playerRatings.GamePassing;
+                    break;
+                case "GameDribbling":
+                    ratingValue = playerRatings.GameDribbling;
+                    break;
+                case "GameUsage":
+                    ratingValue = playerRatings.GameUsage;
+                    break;
+                case "GamePace":
+                    ratingValue = playerRatings.GamePace;
+                    break;
+                default:
+                    // Caso o nome do rating não seja reconhecido, mantém o valor 0.
+                    break;
+            }
+
+            return ratingValue;
+        }
+
+
     }
 }
