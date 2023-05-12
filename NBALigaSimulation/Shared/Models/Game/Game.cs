@@ -53,6 +53,11 @@ namespace NBALigaSimulation.Shared.Models
 
             CompositeHelper.UpdateCompositeRating(teams, playersOnCourt);
 
+            this.PlayByPlays.Add(new GamePlayByPlay
+            {
+                Play = "Start the Game!"
+            });
+
             SimPossessions(numPossessions, teams, playersOnCourt);
 
         }
@@ -156,6 +161,11 @@ namespace NBALigaSimulation.Shared.Models
             {
                 double[] ratios = ArrayHelper.RatingArray(playersOnCourt, teams, "passing", o, 2);
                 passer = ArrayHelper.PickPlayer(ratios, shooter);
+
+                if (passer == shooter)
+                {
+                    passer = -1;
+                }
             }
 
             double r1, r2, r3;
@@ -237,6 +247,32 @@ namespace NBALigaSimulation.Shared.Models
                 }
                 return DoFt(shooter, 2, playersOnCourt, teams);  // fg, orb, or drb
             }
+
+            //Mis
+            p = playersOnCourt[this.o][shooter];
+            //RecordStat(O, p, "fga");
+
+            if (type == "atRim")
+            {
+                //RecordStat(O, p, "fgaAtRim");
+                RecordPlay("missAtRim", this.o, new string[] { teams[this.o].Players.Find(play => play.Id == p).FullName });
+            }
+            else if (type == "lowPost")
+            {
+                //RecordStat(O, p, "fgaLowPost");
+                RecordPlay("missLowPost", this.o, new string[] { teams[this.o].Players.Find(play => play.Id == p).FullName });
+            }
+            else if (type == "midRange")
+            {
+                //RecordStat(O, p, "fgaMidRange");
+                RecordPlay("missMidRange", this.o, new string[] { teams[this.o].Players.Find(play => play.Id == p).FullName });
+            }
+            else if (type == "threePointer")
+            {
+                //RecordStat(O, p, "tpa");
+                RecordPlay("missTp", this.o, new string[] { teams[this.o].Players.Find(play => play.Id == p).FullName });
+            }
+
 
             return DoReb(playersOnCourt, teams);
 
@@ -442,7 +478,7 @@ namespace NBALigaSimulation.Shared.Models
 
         public void RecordPlay(string type, int t, string[] names)
         {
-            /*
+
             string[] texts = new string[0];
 
             if (type == "injury")
@@ -460,34 +496,98 @@ namespace NBALigaSimulation.Shared.Models
             else if (type == "fgAtRim")
             {
                 texts = new string[] { "{0} made a dunk/layup" };
+                if (t == 0)
+                {
+                    AwayQ1 += 2;
+                }
+                else
+                {
+                    HomeQ1 += 2;
+                }
             }
             else if (type == "fgAtRimAndOne")
             {
                 texts = new string[] { "{0} made a dunk/layup and got fouled!" };
+                if (t == 0)
+                {
+                    AwayQ1 += 2;
+                }
+                else
+                {
+                    HomeQ1 += 2;
+                }
             }
             else if (type == "fgLowPost")
             {
                 texts = new string[] { "{0} made a low post shot" };
+                if (t == 0)
+                {
+                    AwayQ1 += 2;
+                }
+                else
+                {
+                    HomeQ1 += 2;
+                }
             }
             else if (type == "fgLowPostAndOne")
             {
                 texts = new string[] { "{0} made a low post shot and got fouled!" };
+                if (t == 0)
+                {
+                    AwayQ1 += 2;
+                }
+                else
+                {
+                    HomeQ1 += 2;
+                }
             }
             else if (type == "fgMidRange")
             {
                 texts = new string[] { "{0} made a mid-range shot" };
+                if (t == 0)
+                {
+                    AwayQ1 += 2;
+                }
+                else
+                {
+                    HomeQ1 += 2;
+                }
             }
             else if (type == "fgMidRangeAndOne")
             {
                 texts = new string[] { "{0} made a mid-range shot and got fouled!" };
+                if (t == 0)
+                {
+                    AwayQ1 += 2;
+                }
+                else
+                {
+                    HomeQ1 += 2;
+                }
             }
             else if (type == "tp")
             {
                 texts = new string[] { "{0} made a three pointer shot" };
+                if (t == 0)
+                {
+                    AwayQ1 += 3;
+                }
+                else
+                {
+                    HomeQ1 += 3;
+                }
             }
             else if (type == "tpAndOne")
             {
                 texts = new string[] { "{0} made a three pointer and got fouled!" };
+                if (t == 0)
+                {
+                    AwayQ1 += 3;
+                }
+                else
+                {
+                    HomeQ1 += 3;
+                }
             }
             else if (type == "blkAtRim")
             {
@@ -546,6 +646,16 @@ namespace NBALigaSimulation.Shared.Models
             else if (type == "ft")
             {
                 texts = new string[] { "{0} made a free throw" };
+
+                if (t == 0)
+                {
+                    AwayQ1 += 1;
+                }
+                else
+                {
+                    HomeQ1 += 1;
+                }
+
             }
             else if (type == "missFt")
             {
@@ -576,11 +686,11 @@ namespace NBALigaSimulation.Shared.Models
                     }
                 }
             }
-            */
+
 
             this.PlayByPlays.Add(new GamePlayByPlay
             {
-                Play = type
+                Play = text
             });
 
 
