@@ -1,19 +1,7 @@
-﻿namespace NBALigaSimulation.Shared.Models
+﻿namespace NBALigaSimulation.Server.Engine.Utils
 {
     public static class ConverterUtils
     {
-
-        public static int InchesToCm(double inches)
-        {
-            const double cmPerInch = 2.54;
-            return (int)(inches * cmPerInch);
-        }
-
-        public static int LbsToKg(double lbs)
-        {
-            const double kgPerLbs = 0.45359237;
-            return (int)(lbs * kgPerLbs);
-        }
 
         public static double Composite(Dictionary<string, double> ratings, List<string> components, List<double>? weights = null)
         {
