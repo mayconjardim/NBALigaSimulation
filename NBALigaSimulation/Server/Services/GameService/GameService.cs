@@ -34,9 +34,11 @@ namespace NBALigaSimulation.Server.Services.GameService
             ServiceResponse<bool> response = new ServiceResponse<bool>();
 
             Game game = await _context.Games
-                .Include(p => p.HomeTeam)
-                .Include(p => p.AwayTeam)
-                .FirstOrDefaultAsync(p => p.Id == gameId);
+            .Include(p => p.HomeTeam)
+                .ThenInclude(t => t.Players).ThenInclude(p => p.Ratings)
+            .Include(p => p.AwayTeam)
+                .ThenInclude(t => t.Players).ThenInclude(p => p.Ratings)
+            .FirstOrDefaultAsync(p => p.Id == gameId);
 
             if (game == null)
             {
@@ -68,7 +70,7 @@ namespace NBALigaSimulation.Server.Services.GameService
         public async Task<ServiceResponse<GameCompleteDto>> GetGameById(int gameId)
         {
             var response = new ServiceResponse<GameCompleteDto>();
-            var game = await _context.Games.Include(p => p.HomeTeam).Include(p => p.AwayTeam).FirstOrDefaultAsync(p => p.Id == gameId);
+            var game = await _context.Games.Include(p => p.PlayByPlays).Include(p => p.HomeTeam).Include(p => p.AwayTeam).FirstOrDefaultAsync(p => p.Id == gameId);
 
             if (game == null)
             {

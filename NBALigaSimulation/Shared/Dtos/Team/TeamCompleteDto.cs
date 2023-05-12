@@ -8,6 +8,5 @@ namespace NBALigaSimulation.Shared.Dtos
         public string Region { get; set; } = string.Empty;
         public string Abrv { get; set; } = string.Empty;
         public List<PlayerCompleteDto> Players { get; set; } = new List<PlayerCompleteDto>();
-        public TeamCompositeDto? CompositeRating { get; set; }
     }
 }

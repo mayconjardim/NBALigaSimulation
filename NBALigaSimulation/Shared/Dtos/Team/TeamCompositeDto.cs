@@ -1,6 +1,9 @@
 ﻿
+using System.ComponentModel.DataAnnotations.Schema;
+
 namespace NBALigaSimulation.Shared.Dtos
 {
+
     public class TeamCompositeDto
     {
 

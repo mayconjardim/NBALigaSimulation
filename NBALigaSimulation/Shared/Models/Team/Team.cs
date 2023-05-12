@@ -1,4 +1,6 @@
-﻿namespace NBALigaSimulation.Shared.Models
+﻿using System.ComponentModel.DataAnnotations.Schema;
+
+namespace NBALigaSimulation.Shared.Models
 {
     public class Team
     {
@@ -7,6 +9,11 @@
         public string Name { get; set; } = string.Empty;
         public string Region { get; set; } = string.Empty;
         public string Abrv { get; set; } = string.Empty;
-        public List<Player> Players { get; set; } = new List<Player>();                                                                      
+        public List<Player> Players { get; set; } = new List<Player>();
+        [NotMapped]
+        public TeamCompositeRating CompositeRating { get; set; }
+
     }
+
+
 }
