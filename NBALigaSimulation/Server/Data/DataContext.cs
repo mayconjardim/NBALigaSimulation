@@ -24,6 +24,14 @@ namespace NBALigaSimulation.Server.Data
                 .WithMany(d => d.Ratings)
                 .HasForeignKey(e => e.PlayerId);
 
+            modelBuilder.Entity<Player>(entity =>
+            {
+                entity.HasKey(p => p.Id);
+                entity.HasMany(p => p.Stats)
+                    .WithOne()
+                    .HasForeignKey(s => s.PlayerId);
+            });
+
             modelBuilder.Entity<Game>(entity =>
             {
                 entity.HasKey(e => e.Id);

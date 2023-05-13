@@ -89,15 +89,7 @@ namespace NBALigaSimulation.Shared.Models
             while (i < this.NumPossessions * 2)
             {
 
-                if ((i * this.Dt > 12 && teams[0].Stats.LastOrDefault().PtsQtrs.Count == 1) ||
-                    (i * this.Dt > 24 && teams[0].Stats.LastOrDefault().PtsQtrs.Count == 2) ||
-                    (i * this.Dt > 36 && teams[0].Stats.LastOrDefault().PtsQtrs.Count == 3))
-                {
-                    teams[0].Stats.LastOrDefault().PtsQtrs.Add(0);
-                    teams[1].Stats.LastOrDefault().PtsQtrs.Add(0);
-                    this.t = 12;
-                    //RecordPlay("quarter");
-                }
+
 
                 // Clock
                 this.t -= this.Dt;
@@ -105,6 +97,9 @@ namespace NBALigaSimulation.Shared.Models
                 {
                     this.t = 0;
                 }
+
+                Console.WriteLine(t);
+                Console.WriteLine(Dt);
 
                 // Possession change
                 this.o = (this.o == 1) ? 0 : 1;
@@ -539,98 +534,34 @@ namespace NBALigaSimulation.Shared.Models
             else if (type == "fgAtRim")
             {
                 texts = new string[] { "{0} made a dunk/layup" };
-                if (t == 0)
-                {
-                    AwayQ1 += 2;
-                }
-                else
-                {
-                    HomeQ1 += 2;
-                }
             }
             else if (type == "fgAtRimAndOne")
             {
                 texts = new string[] { "{0} made a dunk/layup and got fouled!" };
-                if (t == 0)
-                {
-                    AwayQ1 += 2;
-                }
-                else
-                {
-                    HomeQ1 += 2;
-                }
             }
             else if (type == "fgLowPost")
             {
                 texts = new string[] { "{0} made a low post shot" };
-                if (t == 0)
-                {
-                    AwayQ1 += 2;
-                }
-                else
-                {
-                    HomeQ1 += 2;
-                }
             }
             else if (type == "fgLowPostAndOne")
             {
                 texts = new string[] { "{0} made a low post shot and got fouled!" };
-                if (t == 0)
-                {
-                    AwayQ1 += 2;
-                }
-                else
-                {
-                    HomeQ1 += 2;
-                }
             }
             else if (type == "fgMidRange")
             {
                 texts = new string[] { "{0} made a mid-range shot" };
-                if (t == 0)
-                {
-                    AwayQ1 += 2;
-                }
-                else
-                {
-                    HomeQ1 += 2;
-                }
             }
             else if (type == "fgMidRangeAndOne")
             {
                 texts = new string[] { "{0} made a mid-range shot and got fouled!" };
-                if (t == 0)
-                {
-                    AwayQ1 += 2;
-                }
-                else
-                {
-                    HomeQ1 += 2;
-                }
             }
             else if (type == "tp")
             {
                 texts = new string[] { "{0} made a three pointer shot" };
-                if (t == 0)
-                {
-                    AwayQ1 += 3;
-                }
-                else
-                {
-                    HomeQ1 += 3;
-                }
             }
             else if (type == "tpAndOne")
             {
                 texts = new string[] { "{0} made a three pointer and got fouled!" };
-                if (t == 0)
-                {
-                    AwayQ1 += 3;
-                }
-                else
-                {
-                    HomeQ1 += 3;
-                }
             }
             else if (type == "blkAtRim")
             {
@@ -689,16 +620,6 @@ namespace NBALigaSimulation.Shared.Models
             else if (type == "ft")
             {
                 texts = new string[] { "{0} made a free throw" };
-
-                if (t == 0)
-                {
-                    AwayQ1 += 1;
-                }
-                else
-                {
-                    HomeQ1 += 1;
-                }
-
             }
             else if (type == "missFt")
             {
@@ -717,6 +638,7 @@ namespace NBALigaSimulation.Shared.Models
                 texts = new string[] { "Substitution: {0} for {1}" };
             }
 
+
             string text = "";
             if (texts != null && texts.Length > 0)
             {
@@ -732,6 +654,7 @@ namespace NBALigaSimulation.Shared.Models
 
             this.key += 1;
 
+            double sec = Math.Floor((double)this.t % 1 * 60);
             this.PlayByPlays.Add(new GamePlayByPlay
             {
                 Play = text + " " + key
@@ -741,6 +664,34 @@ namespace NBALigaSimulation.Shared.Models
 
         }
 
+        /*
+        public void RecordStat(int t, int p, string s, int amt = 1, Team[] teams, int[][] playersOnCourt)
+        {
+            amt = amt != default ? amt : 1;
+            teams[t].Players.Find(player => player.Id == p).Stats[s] += amt;
+            if (s != "gs" && s != "courtTime" && s != "benchTime" && s != "energy")
+            {
+                this.team[t].stat[s] += amt;
+                // Record quarter-by-quarter scoring too
+                if (s == "pts")
+                {
+                    this.team[t].stat.ptsQtrs[this.team[t].stat.ptsQtrs.Count - 1] += amt;
+                }
+                if (this.playByPlay != default)
+                {
+                    this.playByPlay.Add(new PlayByPlayEntry
+                    {
+                        Type = "stat",
+                        Qtr = this.team[t].stat.ptsQtrs.Count - 1,
+                        T = t,
+                        P = p,
+                        S = s,
+                        Amt = amt
+                    });
+                }
+            }
+        }
+        */
 
     }
 }
