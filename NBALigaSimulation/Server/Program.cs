@@ -7,6 +7,7 @@ global using NBALigaSimulation.Server.Services.PlayerService;
 global using NBALigaSimulation.Server.Services.TeamService;
 global using NBALigaSimulation.Server.Services.GameService;
 
+
 using Microsoft.AspNetCore.Hosting.StaticWebAssets;
 
 var builder = WebApplication.CreateBuilder(args);

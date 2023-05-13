@@ -37,20 +37,34 @@ namespace NBALigaSimulation.Shared.Models
         [NotMapped]
         int t = 12;
         [NotMapped]
+        int Dt = 12;
+        [NotMapped]
         int o;
         [NotMapped]
         int d;
-
+        [NotMapped]
+        int NumPossessions;
+        [NotMapped]
+        int key;
 
         public void GameSim()
         {
 
             Team[] teams = { HomeTeam, AwayTeam };
             teams[0].CompositeRating = new TeamCompositeRating();
-            teams[1].CompositeRating = new TeamCompositeRating();
-            int numPossessions = (int)Math.Round(((98 + 101) / 2) * new Random().NextDouble() * 0.2 + 0.9 * (98 + 101) / 2);
-            int[][] playersOnCourt = new int[2][] { HomeTeam.Players.Select(p => p.Id).ToArray(), AwayTeam.Players.Select(p => p.Id).ToArray() };
+            teams[0].Stats.Add(new TeamGameStats());
+            teams[0].Stats.LastOrDefault().Season = 2003;
+            teams[0].Stats.LastOrDefault().GameId = Id;
 
+            teams[1].CompositeRating = new TeamCompositeRating();
+            teams[1].Stats.Add(new TeamGameStats());
+            teams[1].Stats.LastOrDefault().Season = 2003;
+            teams[1].Stats.LastOrDefault().GameId = Id;
+
+
+            int[][] playersOnCourt = new int[2][] { HomeTeam.Players.Select(p => p.Id).ToArray(), AwayTeam.Players.Select(p => p.Id).ToArray() };
+            this.NumPossessions = (int)Math.Round(((98 + 101) / 2) * new Random().NextDouble() * 0.2 + 0.9 * (98 + 101) / 2);
+            this.Dt = 48 / (2 * this.NumPossessions);
             CompositeHelper.UpdateCompositeRating(teams, playersOnCourt);
 
             this.PlayByPlays.Add(new GamePlayByPlay
@@ -58,30 +72,47 @@ namespace NBALigaSimulation.Shared.Models
                 Play = "Start the Game!"
             });
 
-            SimPossessions(numPossessions, teams, playersOnCourt);
+            SimPossessions(teams, playersOnCourt);
 
         }
 
-        public void SimPossessions(int numPossessions, Team[] teams, int[][] playersOnCourt)
+        public void SimPossessions(Team[] teams, int[][] playersOnCourt)
         {
-            int i = 0;
-            while (i < numPossessions * 2)
+            int i;
+            string outcome;
+            bool substitutions;
+
+            this.o = 0;
+            this.d = 1;
+
+            i = 0;
+            while (i < this.NumPossessions * 2)
             {
+
+                if ((i * this.Dt > 12 && teams[0].Stats.LastOrDefault().PtsQtrs.Count == 1) ||
+                    (i * this.Dt > 24 && teams[0].Stats.LastOrDefault().PtsQtrs.Count == 2) ||
+                    (i * this.Dt > 36 && teams[0].Stats.LastOrDefault().PtsQtrs.Count == 3))
+                {
+                    teams[0].Stats.LastOrDefault().PtsQtrs.Add(0);
+                    teams[1].Stats.LastOrDefault().PtsQtrs.Add(0);
+                    this.t = 12;
+                    //RecordPlay("quarter");
+                }
+
+                // Clock
+                this.t -= this.Dt;
+                if (this.t < 0)
+                {
+                    this.t = 0;
+                }
+
+                // Possession change
                 this.o = (this.o == 1) ? 0 : 1;
                 this.d = (this.o == 1) ? 0 : 1;
 
-                //if (i % subsEveryN == 0)
-                //{
-                //    bool substitutions = UpdatePlayersOnCourt();
-                //    if (substitutions)
-                //    {
-                //        UpdateSynergy();
-                //    }
-                //}
+                //UpdateTeamCompositeRatings();
 
-                //UpdateTeamCompositeRatings(teams, playersOnCourt);
-
-                string outcome = SimPossession(teams, playersOnCourt);
+                outcome = SimPossession(teams, playersOnCourt);
 
                 // Swap o and d so that o will get another possession when they are swapped again at the beginning of the loop.
                 if (outcome == "orb")
@@ -90,9 +121,21 @@ namespace NBALigaSimulation.Shared.Models
                     this.d = (this.o == 1) ? 0 : 1;
                 }
 
-                //UpdatePlayingTime();
+                //this.updatePlayingTime();
 
-                //Injuries();
+                //this.injuries();
+
+                /*
+                if (i % this.subsEveryN == 0)
+                {
+                    substitutions = this.updatePlayersOnCourt();
+                    if (substitutions)
+                    {
+                        this.updateSynergy();
+                    }
+                }
+                */
+
 
                 i += 1;
             }
@@ -687,10 +730,11 @@ namespace NBALigaSimulation.Shared.Models
                 }
             }
 
+            this.key += 1;
 
             this.PlayByPlays.Add(new GamePlayByPlay
             {
-                Play = text
+                Play = text + " " + key
             });
 
 
