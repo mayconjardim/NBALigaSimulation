@@ -110,7 +110,7 @@ namespace NBALigaSimulation.Shared.Models
                 outcome = SimPossession(teams, playersOnCourt);
 
                 // Swap o and d so that o will get another possession when they are swapped again at the beginning of the loop.
-                if (outcome == "orb")
+                if (outcome == "Orb")
                 {
                     this.o = (this.o == 1) ? 0 : 1;
                     this.d = (this.o == 1) ? 0 : 1;
@@ -165,14 +165,14 @@ namespace NBALigaSimulation.Shared.Models
 
             ratios = ArrayHelper.RatingArray(playersOnCourt, teams, "GameTurnovers", o, 0.5);
             p = playersOnCourt[o][ArrayHelper.PickPlayer(ratios)];
-            // RecordStat(o, p, "tov");
+            RecordStat(o, p, "Tov", teams);
 
             if (DefenseHelper.ProbStl(teams) > random.NextDouble())
             {
                 return DoStl(playersOnCourt, teams); // "stl"
             }
 
-            return "tov";
+            return "Tov";
         }
 
         private string DoStl(int[][] playersOnCourt, Team[] teams)
@@ -181,9 +181,9 @@ namespace NBALigaSimulation.Shared.Models
 
             double[] ratios = ArrayHelper.RatingArray(playersOnCourt, teams, "GameStealing", d);
             int p = playersOnCourt[d][ArrayHelper.PickPlayer(ratios)];
-            //RecordStat(d, p, "stl");
+            RecordStat(d, p, "Stl", teams);
 
-            return "stl";
+            return "Stl";
         }
 
         public string DoShot(int shooter, int[][] playersOnCourt, Team[] teams)
@@ -192,12 +192,12 @@ namespace NBALigaSimulation.Shared.Models
 
             int p = playersOnCourt[this.o][shooter];
 
-            //double fatigue = Fatigue(team[o].player[p].stat.energy);
+            //double fatigue = Fatigue(team[o].player[p].stat.Energy);
 
             int passer = -1;
             if (ProbAst(teams) > random.NextDouble())
             {
-                double[] ratios = ArrayHelper.RatingArray(playersOnCourt, teams, "passing", o, 2);
+                double[] ratios = ArrayHelper.RatingArray(playersOnCourt, teams, "GamePassing", o, 2);
                 passer = ArrayHelper.PickPlayer(ratios, shooter);
 
                 if (passer == shooter)
@@ -214,7 +214,7 @@ namespace NBALigaSimulation.Shared.Models
                 < (0.35 * teams[this.o].Players.Find(play => play.Id == p).Ratings.LastOrDefault().GameShootingThreePointer))
             {
                 // Three pointer
-                type = "threePointer";
+                type = "ThreePointer";
                 probMissAndFoul = 0.02;
                 probMake = teams[this.o].Players.Find(play => play.Id == p).Ratings.LastOrDefault().GameShootingThreePointer * 0.68;
                 probAndOne = 0.01;
@@ -229,7 +229,7 @@ namespace NBALigaSimulation.Shared.Models
                 if (r1 > r2 && r1 > r3)
                 {
                     // Two point jumper
-                    type = "midRange";
+                    type = "MidRange";
                     probMissAndFoul = 0.07;
                     probMake = teams[this.o].Players.Find(play => play.Id == p).Ratings.LastOrDefault().GameShootingMidRange * 0.3 + 0.29;
                     probAndOne = 0.05;
@@ -237,7 +237,7 @@ namespace NBALigaSimulation.Shared.Models
                 else if (r2 > r3)
                 {
                     // Dunk, fast break or half court
-                    type = "atRim";
+                    type = "AtRim";
                     probMissAndFoul = 0.37;
                     probMake = teams[this.o].Players.Find(play => play.Id == p).Ratings.LastOrDefault().GameShootingAtRim * 0.3 + 0.52;
                     probAndOne = 0.25;
@@ -245,7 +245,7 @@ namespace NBALigaSimulation.Shared.Models
                 else
                 {
                     // Post up
-                    type = "lowPost";
+                    type = "LowPost";
                     probMissAndFoul = 0.33;
                     probMake = teams[this.o].Players.Find(play => play.Id == p).Ratings.LastOrDefault().GameShootingLowPost * 0.3 + 0.37;
                     probAndOne = 0.15;
@@ -279,7 +279,7 @@ namespace NBALigaSimulation.Shared.Models
             // Miss, but fouled
             if (probMissAndFoul > random.NextDouble())
             {
-                if (type == "threePointer")
+                if (type == "ThreePointer")
                 {
                     return DoFt(shooter, 3, playersOnCourt, teams);  // fg, orb, or drb
                 }
@@ -288,27 +288,27 @@ namespace NBALigaSimulation.Shared.Models
 
             //Mis
             p = playersOnCourt[this.o][shooter];
-            //RecordStat(O, p, "fga");
+            RecordStat(o, p, "Fga", teams);
 
-            if (type == "atRim")
+            if (type == "AtRim")
             {
-                //RecordStat(O, p, "fgaAtRim");
-                RecordPlay("missAtRim", this.o, new string[] { teams[this.o].Players.Find(play => play.Id == p).FullName });
+                RecordStat(o, p, "FgaAtRim", teams);
+                RecordPlay("MissAtRim", this.o, new string[] { teams[this.o].Players.Find(play => play.Id == p).FullName });
             }
-            else if (type == "lowPost")
+            else if (type == "LowPost")
             {
-                //RecordStat(O, p, "fgaLowPost");
-                RecordPlay("missLowPost", this.o, new string[] { teams[this.o].Players.Find(play => play.Id == p).FullName });
+                RecordStat(o, p, "FgaLowPost", teams);
+                RecordPlay("MissLowPost", this.o, new string[] { teams[this.o].Players.Find(play => play.Id == p).FullName });
             }
-            else if (type == "midRange")
+            else if (type == "MidRange")
             {
-                //RecordStat(O, p, "fgaMidRange");
-                RecordPlay("missMidRange", this.o, new string[] { teams[this.o].Players.Find(play => play.Id == p).FullName });
+                RecordStat(o, p, "FgaMidRange", teams);
+                RecordPlay("MissMidRange", this.o, new string[] { teams[this.o].Players.Find(play => play.Id == p).FullName });
             }
-            else if (type == "threePointer")
+            else if (type == "ThreePointer")
             {
-                //RecordStat(O, p, "tpa");
-                RecordPlay("missTp", this.o, new string[] { teams[this.o].Players.Find(play => play.Id == p).FullName });
+                RecordStat(o, p, "Tpa", teams);
+                RecordPlay("MissTp", this.o, new string[] { teams[this.o].Players.Find(play => play.Id == p).FullName });
             }
 
 
@@ -321,41 +321,41 @@ namespace NBALigaSimulation.Shared.Models
             int p;
 
             p = playersOnCourt[this.o][shooter];
-            // this.RecordStat(this.O, p, "fga");
-            //this.RecordStat(this.O, p, "fg");
-            //this.RecordStat(this.O, p, "pts", 2);  // 2 points for 2's
+            RecordStat(this.o, p, "Fga", teams);
+            RecordStat(this.o, p, "Fg", teams);
+            RecordStat(this.o, p, "Pts", teams, 2);  // 2 points for 2's
 
             if (type == "atRim")
             {
-                // this.RecordStat(this.O, p, "fgaAtRim");
-                //this.RecordStat(this.O, p, "fgAtRim");
-                this.RecordPlay("fgAtRim" + (andOne ? "AndOne" : ""), this.o, new string[] { teams[this.o].Players.Find(play => play.Id == p).FullName });
+                RecordStat(this.o, p, "FgaAtRim", teams);
+                RecordStat(this.o, p, "FgAtRim", teams);
+                this.RecordPlay("FgAtRim" + (andOne ? "AndOne" : ""), this.o, new string[] { teams[this.o].Players.Find(play => play.Id == p).FullName });
             }
-            else if (type == "lowPost")
+            else if (type == "LowPost")
             {
-                //this.RecordStat(this.O, p, "fgaLowPost");
-                //this.RecordStat(this.O, p, "fgLowPost");
-                this.RecordPlay("fgLowPost" + (andOne ? "AndOne" : ""), this.o, new string[] { teams[this.o].Players.Find(play => play.Id == p).FullName });
+                RecordStat(this.o, p, "FgaLowPost", teams);
+                RecordStat(this.o, p, "FgLowPost", teams);
+                this.RecordPlay("FgLowPost" + (andOne ? "AndOne" : ""), this.o, new string[] { teams[this.o].Players.Find(play => play.Id == p).FullName });
             }
-            else if (type == "midRange")
+            else if (type == "MidRange")
             {
-                // this.RecordStat(this.O, p, "fgaMidRange");
-                //this.RecordStat(this.O, p, "fgMidRange");
-                this.RecordPlay("fgMidRange" + (andOne ? "AndOne" : ""), this.o, new string[] { teams[this.o].Players.Find(play => play.Id == p).FullName });
+                RecordStat(this.o, p, "FgaMidRange", teams);
+                RecordStat(this.o, p, "FgMidRange", teams);
+                this.RecordPlay("FgMidRange" + (andOne ? "AndOne" : ""), this.o, new string[] { teams[this.o].Players.Find(play => play.Id == p).FullName });
             }
-            else if (type == "threePointer")
+            else if (type == "ThreePointer")
             {
-                // this.RecordStat(this.O, p, "pts");  // Extra point for 3's
-                //this.RecordStat(this.O, p, "tpa");
-                // this.RecordStat(this.O, p, "tp");
-                this.RecordPlay("tp" + (andOne ? "AndOne" : ""), this.o, new string[] { teams[this.o].Players.Find(play => play.Id == p).FullName });
+                RecordStat(this.o, p, "Pts", teams);  // Extra point for 3's
+                RecordStat(this.o, p, "Tpa", teams);
+                RecordStat(this.o, p, "Tp", teams);
+                RecordPlay("Tp" + (andOne ? "AndOne" : ""), this.o, new string[] { teams[this.o].Players.Find(play => play.Id == p).FullName });
             }
 
             if (passer >= 0)
             {
                 p = playersOnCourt[this.o][passer];
-                //  this.RecordStat(this.O, p, "ast");
-                this.RecordPlay("ast", this.o, new string[] { teams[this.o].Players.Find(play => play.Id == p).FullName });
+                RecordStat(this.o, p, "Ast", teams);
+                RecordPlay("Ast", this.o, new string[] { teams[this.o].Players.Find(play => play.Id == p).FullName });
             }
 
             if (andOne)
@@ -363,7 +363,7 @@ namespace NBALigaSimulation.Shared.Models
                 return DoFt(shooter, 1, playersOnCourt, teams);  // fg, orb, or drb
             }
 
-            return "fg";
+            return "Fg";
         }
 
         public string DoFt(int shooter, int amount, int[][] playersOnCourt, Team[] teams)
@@ -377,23 +377,23 @@ namespace NBALigaSimulation.Shared.Models
 
             for (i = 0; i < amount; i++)
             {
-                //  this.RecordStat(this.O, p, "fta");
+                RecordStat(this.o, p, "Fta", teams);
 
                 if (new Random().NextDouble() < teams[this.o].Players.Find(play => play.Id == p).Ratings.LastOrDefault().GameShootingFT * 0.3 + 0.6)  // Between 60% and 90%
                 {
-                    //this.RecordStat(this.O, p, "ft");
-                    //this.RecordStat(this.O, p, "pts");
-                    //this.RecordPlay("ft", this.O, new string[] { this.Team[this.O].Player[p].Name });
-                    outcome = "fg";
+                    RecordStat(this.o, p, "Ft", teams);
+                    RecordStat(this.o, p, "Pts", teams);
+                    RecordPlay("Ft", this.o, new string[] { teams[this.o].Players.Find(play => play.Id == p).FullName });
+                    outcome = "Fg";
                 }
                 else
                 {
-                    this.RecordPlay("missFt", this.o, new string[] { teams[this.o].Players.Find(play => play.Id == p).FullName });
+                    this.RecordPlay("MissFt", this.o, new string[] { teams[this.o].Players.Find(play => play.Id == p).FullName });
                     outcome = null;
                 }
             }
 
-            if (outcome != "fg")
+            if (outcome != "Fg")
             {
                 outcome = this.DoReb(playersOnCourt, teams);  // orb or drb
             }
@@ -406,10 +406,10 @@ namespace NBALigaSimulation.Shared.Models
             int p;
             double[] ratios;
 
-            ratios = ArrayHelper.RatingArray(playersOnCourt, teams, "fouling", t);
+            ratios = ArrayHelper.RatingArray(playersOnCourt, teams, "Fouling", t);
             p = playersOnCourt[t][ArrayHelper.PickPlayer(ratios)];
-            // RecordStat(D, p, "pf");
-            RecordPlay("pf", this.d, new string[] { teams[this.d].Players.Find(play => play.Id == p).FullName });
+            RecordStat(d, p, "Pf", teams);
+            RecordPlay("Pf", this.d, new string[] { teams[this.d].Players.Find(play => play.Id == p).FullName });
 
             // Foul out
             /*
@@ -429,47 +429,43 @@ namespace NBALigaSimulation.Shared.Models
         {
             var p = playersOnCourt[this.o][shooter];
 
-            /*
-             this.recordStat(this.o, p, "fga");
-             if (type == "atRim")
-             {
-                 this.recordStat(this.o, p, "fgaAtRim");
-             }
-             else if (type == "lowPost")
-             {
-                 this.recordStat(this.o, p, "fgaLowPost");
-             }
-             else if (type == "midRange")
-             {
-                 this.recordStat(this.o, p, "fgaMidRange");
-             }
-             else if (type == "threePointer")
-             {
-                 this.recordStat(this.o, p, "tpa");
-             }
+            RecordStat(this.o, p, "Fga", teams);
+            if (type == "AtRim")
+            {
+                RecordStat(this.o, p, "FgaAtRim", teams);
+            }
+            else if (type == "LowPost")
+            {
+                RecordStat(this.o, p, "FgaLowPost", teams);
+            }
+            else if (type == "MidRange")
+            {
+                RecordStat(this.o, p, "FgaMidRange", teams);
+            }
+            else if (type == "ThreePointer")
+            {
+                RecordStat(this.o, p, "Tpa", teams);
+            }
 
-
-             this.recordStat(this.d, p2, "blk");
-             */
-
-            var ratios = ArrayHelper.RatingArray(playersOnCourt, teams, "blocking", this.d, 4);
+            var ratios = ArrayHelper.RatingArray(playersOnCourt, teams, "GameBlocking", this.d, 4);
             var p2 = playersOnCourt[this.d][ArrayHelper.PickPlayer(ratios)];
+            RecordStat(this.d, p2, "Blk", teams);
 
-            if (type == "atRim")
+            if (type == "AtRim")
             {
-                RecordPlay("blkAtRim", this.d, new string[] { teams[this.d].Players.Find(pl => pl.Id == p2).FullName, teams[this.o].Players.Find(pl => pl.Id == p).FullName });
+                RecordPlay("BlkAtRim", this.d, new string[] { teams[this.d].Players.Find(pl => pl.Id == p2).FullName, teams[this.o].Players.Find(pl => pl.Id == p).FullName });
             }
-            else if (type == "lowPost")
+            else if (type == "LowPost")
             {
-                RecordPlay("blkLowPost", this.d, new string[] { teams[this.d].Players.Find(pl => pl.Id == p2).FullName, teams[this.o].Players.Find(pl => pl.Id == p).FullName });
+                RecordPlay("BlkLowPost", this.d, new string[] { teams[this.d].Players.Find(pl => pl.Id == p2).FullName, teams[this.o].Players.Find(pl => pl.Id == p).FullName });
             }
-            else if (type == "midRange")
+            else if (type == "MidRange")
             {
-                RecordPlay("blkMidRange", this.d, new string[] { teams[this.d].Players.Find(pl => pl.Id == p2).FullName, teams[this.o].Players.Find(pl => pl.Id == p).FullName });
+                RecordPlay("BlkMidRange", this.d, new string[] { teams[this.d].Players.Find(pl => pl.Id == p2).FullName, teams[this.o].Players.Find(pl => pl.Id == p).FullName });
             }
-            else if (type == "threePointer")
+            else if (type == "ThreePointer")
             {
-                RecordPlay("blkTp", this.d, new string[] { teams[this.d].Players.Find(pl => pl.Id == p2).FullName, teams[this.o].Players.Find(pl => pl.Id == p).FullName });
+                RecordPlay("BlkTp", this.d, new string[] { teams[this.d].Players.Find(pl => pl.Id == p2).FullName, teams[this.o].Players.Find(pl => pl.Id == p).FullName });
             }
 
             return DoReb(playersOnCourt, teams);  // orb or drb
@@ -490,18 +486,18 @@ namespace NBALigaSimulation.Shared.Models
             {
                 double[] ratios = ArrayHelper.RatingArray(playersOnCourt, teams, "GameRebounding", this.d);
                 int PlayerIndex = playersOnCourt[this.d][ArrayHelper.PickPlayer(ratios)];
-                //this.RecordStat(this.D, playerIndex, "drb");
-                this.RecordPlay("drb", this.d, new string[] { teams[this.d].Players.Find(play => play.Id == PlayerIndex).FullName });
+                RecordStat(this.d, PlayerIndex, "Drb", teams);
+                RecordPlay("Drb", this.d, new string[] { teams[this.d].Players.Find(play => play.Id == PlayerIndex).FullName });
 
-                return "drb";
+                return "Drb";
             }
 
             double[] opponentRatios = ArrayHelper.RatingArray(playersOnCourt, teams, "GameRebounding", this.o);
             int OPPlayerIndex = playersOnCourt[this.o][ArrayHelper.PickPlayer(opponentRatios)];
-            //this.RecordStat(this.O, opponentPlayerIndex, "orb");
-            this.RecordPlay("orb", this.o, new string[] { teams[this.o].Players.Find(play => play.Id == OPPlayerIndex).FullName });
+            RecordStat(this.o, OPPlayerIndex, "Orb", teams);
+            this.RecordPlay("Orb", this.o, new string[] { teams[this.o].Players.Find(play => play.Id == OPPlayerIndex).FullName });
 
-            return "orb";
+            return "Orb";
         }
 
         public double ProbAst(Team[] teams)
@@ -519,121 +515,121 @@ namespace NBALigaSimulation.Shared.Models
 
             string[] texts = new string[0];
 
-            if (type == "injury")
+            if (type == "Injury")
             {
                 texts = new string[] { "{0} was injured!" };
             }
-            else if (type == "tov")
+            else if (type == "Tov")
             {
                 texts = new string[] { "{0} turned the ball over" };
             }
-            else if (type == "stl")
+            else if (type == "Stl")
             {
                 texts = new string[] { "{0} stole the ball from {1}" };
             }
-            else if (type == "fgAtRim")
+            else if (type == "FgAtRim")
             {
                 texts = new string[] { "{0} made a dunk/layup" };
             }
-            else if (type == "fgAtRimAndOne")
+            else if (type == "FgAtRimAndOne")
             {
                 texts = new string[] { "{0} made a dunk/layup and got fouled!" };
             }
-            else if (type == "fgLowPost")
+            else if (type == "FgLowPost")
             {
                 texts = new string[] { "{0} made a low post shot" };
             }
-            else if (type == "fgLowPostAndOne")
+            else if (type == "FgLowPostAndOne")
             {
                 texts = new string[] { "{0} made a low post shot and got fouled!" };
             }
-            else if (type == "fgMidRange")
+            else if (type == "FgMidRange")
             {
                 texts = new string[] { "{0} made a mid-range shot" };
             }
-            else if (type == "fgMidRangeAndOne")
+            else if (type == "FgMidRangeAndOne")
             {
                 texts = new string[] { "{0} made a mid-range shot and got fouled!" };
             }
-            else if (type == "tp")
+            else if (type == "Tp")
             {
                 texts = new string[] { "{0} made a three pointer shot" };
             }
-            else if (type == "tpAndOne")
+            else if (type == "TpAndOne")
             {
                 texts = new string[] { "{0} made a three pointer and got fouled!" };
             }
-            else if (type == "blkAtRim")
+            else if (type == "BlkAtRim")
             {
                 texts = new string[] { "{0} blocked {1}'s dunk/layup" };
             }
-            else if (type == "blkLowPost")
+            else if (type == "BlkLowPost")
             {
                 texts = new string[] { "{0} blocked {1}'s low post shot" };
             }
-            else if (type == "blkMidRange")
+            else if (type == "BlkMidRange")
             {
                 texts = new string[] { "{0} blocked {1}'s mid-range shot" };
             }
-            else if (type == "blkTp")
+            else if (type == "BlkTp")
             {
                 texts = new string[] { "{0} blocked {1}'s three pointer" };
             }
-            else if (type == "missAtRim")
+            else if (type == "MissAtRim")
             {
                 texts = new string[] { "{0} missed a dunk/layup" };
             }
-            else if (type == "missLowPost")
+            else if (type == "MissLowPost")
             {
                 texts = new string[] { "{0} missed a low post shot" };
             }
-            else if (type == "missMidRange")
+            else if (type == "MissMidRange")
             {
                 texts = new string[] { "{0} missed a mid-range shot" };
             }
-            else if (type == "missTp")
+            else if (type == "MissTp")
             {
                 texts = new string[] { "{0} missed a three pointer" };
             }
-            else if (type == "orb")
+            else if (type == "Orb")
             {
                 texts = new string[] { "{0} grabbed the offensive rebound" };
             }
-            else if (type == "drb")
+            else if (type == "Drb")
             {
                 texts = new string[] { "{0} grabbed the defensive rebound" };
             }
-            else if (type == "ast")
+            else if (type == "Ast")
             {
                 texts = new string[] { "(assist: {0})" };
             }
-            else if (type == "quarter")
+            else if (type == "Quarter")
             {
                 //texts = new string[] { "<b>Start of " + helpers.ordinal(this.team[0].stat.ptsQtrs.length) + " quarter</b>" };
                 texts = new string[] { "<b>Start of quarter</b>" };
             }
-            else if (type == "overtime")
+            else if (type == "Overtime")
             {
                 //texts = new string[] { "<b>Start of " + helpers.ordinal(this.team[0].stat.ptsQtrs.length - 4) + " overtime period</b>" };
                 texts = new string[] { "<b>Start of overtime period</b>" };
             }
-            else if (type == "ft")
+            else if (type == "Ft")
             {
                 texts = new string[] { "{0} made a free throw" };
             }
-            else if (type == "missFt")
+            else if (type == "MissFt")
             {
                 texts = new string[] { "{0} missed a free throw" };
             }
-            else if (type == "pf")
+            else if (type == "Pf")
             {
                 texts = new string[] { "Foul on {0}" };
             }
-            else if (type == "foulOut")
+            else if (type == "FoulOut")
             {
                 texts = new string[] { "{0} fouled out" };
             }
-            else if (type == "sub")
+            else if (type == "Sub")
             {
                 texts = new string[] { "Substitution: {0} for {1}" };
             }
@@ -664,16 +660,18 @@ namespace NBALigaSimulation.Shared.Models
 
         }
 
-        /*
-        public void RecordStat(int t, int p, string s, int amt = 1, Team[] teams, int[][] playersOnCourt)
+
+        public void RecordStat(int t, int p, string s, Team[] teams, int amt = 1)
         {
             amt = amt != default ? amt : 1;
-            teams[t].Players.Find(player => player.Id == p).Stats[s] += amt;
-            if (s != "gs" && s != "courtTime" && s != "benchTime" && s != "energy")
+
+            RecordStatHelperPlayer(t, p, s, teams, amt);
+            if (s != "Gs" && s != "CourtTime" && s != "BenchTime" && s != "Energy")
             {
-                this.team[t].stat[s] += amt;
+                RecordStatHelperTeam(t, p, s, teams, amt);
                 // Record quarter-by-quarter scoring too
-                if (s == "pts")
+                /*
+                if (s == "Pts")
                 {
                     this.team[t].stat.ptsQtrs[this.team[t].stat.ptsQtrs.Count - 1] += amt;
                 }
@@ -689,9 +687,196 @@ namespace NBALigaSimulation.Shared.Models
                         Amt = amt
                     });
                 }
+                */
             }
         }
-        */
+
+        public void RecordStatHelperTeam(int t, int p, string s, Team[] teams, int amt = 1)
+        {
+
+            if (s == "Fg")
+            {
+                teams[t].Stats.LastOrDefault().Fg += amt;
+            }
+            else if (s == "Fga")
+            {
+                teams[t].Stats.LastOrDefault().Fga += amt;
+            }
+            else if (s == "FgAtRim")
+            {
+                teams[t].Stats.LastOrDefault().FgAtRim += amt;
+            }
+            else if (s == "FgaAtRim")
+            {
+                teams[t].Stats.LastOrDefault().FgaAtRim += amt;
+            }
+            else if (s == "FgLowPost")
+            {
+                teams[t].Stats.LastOrDefault().FgLowPost += amt;
+            }
+            else if (s == "FgaLowPost")
+            {
+                teams[t].Stats.LastOrDefault().FgaLowPost += amt;
+            }
+            else if (s == "FgMidRange")
+            {
+                teams[t].Stats.LastOrDefault().FgMidRange += amt;
+            }
+            else if (s == "FgaMidRange")
+            {
+                teams[t].Stats.LastOrDefault().FgaMidRange += amt;
+            }
+            else if (s == "Tp")
+            {
+                teams[t].Stats.LastOrDefault().Tp += amt;
+            }
+            else if (s == "Tpa")
+            {
+                teams[t].Stats.LastOrDefault().Tpa += amt;
+            }
+            else if (s == "Ft")
+            {
+                teams[t].Stats.LastOrDefault().Ft += amt;
+            }
+            else if (s == "Fta")
+            {
+                teams[t].Stats.LastOrDefault().Fta += amt;
+            }
+            else if (s == "Orb")
+            {
+                teams[t].Stats.LastOrDefault().Orb += amt;
+            }
+            else if (s == "Drb")
+            {
+                teams[t].Stats.LastOrDefault().Drb += amt;
+            }
+            else if (s == "Ast")
+            {
+                teams[t].Stats.LastOrDefault().Ast += amt;
+            }
+            else if (s == "Tov")
+            {
+                teams[t].Stats.LastOrDefault().Tov += amt;
+            }
+            else if (s == "Stl")
+            {
+                teams[t].Stats.LastOrDefault().Stl += amt;
+            }
+            else if (s == "Blk")
+            {
+                teams[t].Stats.LastOrDefault().Blk += amt;
+            }
+            else if (s == "Pf")
+            {
+                teams[t].Stats.LastOrDefault().Pf += amt;
+            }
+            else if (s == "Pts")
+            {
+                teams[t].Stats.LastOrDefault().Pts += amt;
+            }
+            else if (s == "Trb")
+            {
+                teams[t].Stats.LastOrDefault().Trb += amt;
+            }
+
+        }
+
+
+        public void RecordStatHelperPlayer(int t, int p, string s, Team[] teams, int amt = 1)
+        {
+
+            if (teams[t].Players.Find(player => player.Id == p).Stats.LastOrDefault() == null)
+            {
+                teams[t].Players.Find(player => player.Id == p).Stats.Add(new PlayerGameStats());
+            }
+
+
+            if (s == "Fg")
+            {
+                teams[t].Players.Find(player => player.Id == p).Stats.LastOrDefault().Fg += amt;
+            }
+            else if (s == "Fga")
+            {
+                teams[t].Players.Find(player => player.Id == p).Stats.LastOrDefault().Fga += amt;
+            }
+            else if (s == "FgAtRim")
+            {
+                teams[t].Players.Find(player => player.Id == p).Stats.LastOrDefault().FgAtRim += amt;
+            }
+            else if (s == "FgaAtRim")
+            {
+                teams[t].Players.Find(player => player.Id == p).Stats.LastOrDefault().FgaAtRim += amt;
+            }
+            else if (s == "FgLowPost")
+            {
+                teams[t].Players.Find(player => player.Id == p).Stats.LastOrDefault().FgLowPost += amt;
+            }
+            else if (s == "FgaLowPost")
+            {
+                teams[t].Players.Find(player => player.Id == p).Stats.LastOrDefault().FgaLowPost += amt;
+            }
+            else if (s == "FgMidRange")
+            {
+                teams[t].Players.Find(player => player.Id == p).Stats.LastOrDefault().FgMidRange += amt;
+            }
+            else if (s == "FgaMidRange")
+            {
+                teams[t].Players.Find(player => player.Id == p).Stats.LastOrDefault().FgaMidRange += amt;
+            }
+            else if (s == "Tp")
+            {
+                teams[t].Players.Find(player => player.Id == p).Stats.LastOrDefault().Tp += amt;
+            }
+            else if (s == "Tpa")
+            {
+                teams[t].Players.Find(player => player.Id == p).Stats.LastOrDefault().Tpa += amt;
+            }
+            else if (s == "Ft")
+            {
+                teams[t].Players.Find(player => player.Id == p).Stats.LastOrDefault().Ft += amt;
+            }
+            else if (s == "Fta")
+            {
+                teams[t].Players.Find(player => player.Id == p).Stats.LastOrDefault().Fta += amt;
+            }
+            else if (s == "Orb")
+            {
+                teams[t].Players.Find(player => player.Id == p).Stats.LastOrDefault().Orb += amt;
+            }
+            else if (s == "Drb")
+            {
+                teams[t].Players.Find(player => player.Id == p).Stats.LastOrDefault().Drb += amt;
+            }
+            else if (s == "Ast")
+            {
+                teams[t].Players.Find(player => player.Id == p).Stats.LastOrDefault().Ast += amt;
+            }
+            else if (s == "Tov")
+            {
+                teams[t].Players.Find(player => player.Id == p).Stats.LastOrDefault().Tov += amt;
+            }
+            else if (s == "Stl")
+            {
+                teams[t].Players.Find(player => player.Id == p).Stats.LastOrDefault().Stl += amt;
+            }
+            else if (s == "Blk")
+            {
+                teams[t].Players.Find(player => player.Id == p).Stats.LastOrDefault().Blk += amt;
+            }
+            else if (s == "Pf")
+            {
+                teams[t].Players.Find(player => player.Id == p).Stats.LastOrDefault().Pf += amt;
+            }
+            else if (s == "Pts")
+            {
+                teams[t].Players.Find(player => player.Id == p).Stats.LastOrDefault().Pts += amt;
+            }
+            else if (s == "Trb")
+            {
+                teams[t].Players.Find(player => player.Id == p).Stats.LastOrDefault().Trb += amt;
+            }
+
+        }
 
     }
 }

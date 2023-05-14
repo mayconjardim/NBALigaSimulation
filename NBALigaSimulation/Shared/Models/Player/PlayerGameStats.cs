@@ -1,4 +1,6 @@
-﻿namespace NBALigaSimulation.Shared.Models
+﻿using NBALigaSimulation.Shared.Models;
+
+namespace NBALigaSimulation.Shared.Models
 {
     public class PlayerGameStats
     {
@@ -35,3 +37,6 @@
 
     }
 }
+
+
+
