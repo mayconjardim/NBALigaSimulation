@@ -89,17 +89,12 @@ namespace NBALigaSimulation.Shared.Models
             while (i < this.NumPossessions * 2)
             {
 
-
-
                 // Clock
                 this.t -= this.Dt;
                 if (this.t < 0)
                 {
                     this.t = 0;
                 }
-
-                Console.WriteLine(t);
-                Console.WriteLine(Dt);
 
                 // Possession change
                 this.o = (this.o == 1) ? 0 : 1;
@@ -782,12 +777,14 @@ namespace NBALigaSimulation.Shared.Models
         }
 
 
-        public void RecordStatHelperPlayer(int t, int p, string s, Team[] teams, int amt = 1)
+        public void RecordStatHelperPlayer(int t, int p, string s, Team[] teams, int GameId, int amt = 1)
         {
 
             if (teams[t].Players.Find(player => player.Id == p).Stats.LastOrDefault() == null)
             {
                 teams[t].Players.Find(player => player.Id == p).Stats.Add(new PlayerGameStats());
+                teams[t].Players.Find(player => player.Id == p).Stats.LastOrDefault().GameId = GameId;
+
             }
 
 
