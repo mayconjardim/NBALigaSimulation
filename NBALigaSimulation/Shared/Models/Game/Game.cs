@@ -111,7 +111,7 @@ namespace NBALigaSimulation.Shared.Models
                     this.d = (this.o == 1) ? 0 : 1;
                 }
 
-                //this.updatePlayingTime();
+                UpdatePlayingTime(playersOnCourt, teams);
 
                 //this.injuries();
 
@@ -660,7 +660,7 @@ namespace NBALigaSimulation.Shared.Models
         {
             amt = amt != default ? amt : 1;
 
-            RecordStatHelperPlayer(t, p, s, teams, amt);
+            RecordStatHelperPlayer(t, p, s, teams, Id, amt);
             if (s != "Gs" && s != "CourtTime" && s != "BenchTime" && s != "Energy")
             {
                 RecordStatHelperTeam(t, p, s, teams, amt);
@@ -688,6 +688,27 @@ namespace NBALigaSimulation.Shared.Models
 
         public void RecordStatHelperTeam(int t, int p, string s, Team[] teams, int amt = 1)
         {
+            int k = 0;
+
+            if (s == "Gs")
+            {
+                k = 1;
+            }
+
+            if (s == "CourtTime")
+            {
+                k = 1;
+            }
+
+            if (s == "BenchTime")
+            {
+                k = 1;
+            }
+
+            if (s == "Energy")
+            {
+                k = 1;
+            }
 
             if (s == "Fg")
             {
@@ -873,6 +894,108 @@ namespace NBALigaSimulation.Shared.Models
                 teams[t].Players.Find(player => player.Id == p).Stats.LastOrDefault().Trb += amt;
             }
 
+        }
+
+        public void UpdatePlayingTime(int[][] playersOnCourt, Team[] teams)
+        {
+            int t;
+            int j;
+            int playerId;
+
+            this.Dt = (this.overtimes > 0 ? 5 : 48) / (2 * this.NumPossessions);
+
+            for (t = 0; t < 2; t++)
+            {
+
+                for (j = 0; j < 5; j++)
+                {
+
+                    playerId = playersOnCourt[t][j];
+
+                    if (teams[t].Players.Find(play => play.Id == playerId).Stats == null)
+                    {
+                        teams[t].Players.Find(play => play.Id == playerId).Stats = new List<PlayerGameStats>();
+                    }
+
+                    RecordStat(t, playerId, "Min", teams, this.Dt);
+                    RecordStat(t, playerId, "CourtTime", teams, this.Dt);
+                    RecordStat(t, playerId, "Energy", teams, (int)(-this.Dt * 0.04 * (1 - teams[t].Players.Find(play => play.Id == playerId).Ratings.LastOrDefault().GameEndurance)));
+
+                    if (teams[t].Players.Find(play => play.Id == playerId).Stats.LastOrDefault().Energy < 0)
+                    {
+                        teams[t].Players[playerId].Stats.LastOrDefault().Energy = 0;
+                    }
+
+
+                }
+
+
+
+            }
+
+
+
+
+
+
+
+
+
+
+            /*
+            for (t = 0; t < 2; t++)
+            {
+                for (p = 0; p < teams[t].Players.Count; p++)
+                {
+
+                    if (IsAnyPlayerOnCourt(t, playersOnCourt, teams))
+                    {
+
+                        if (teams[t].Players[p].Stats == null)
+                        {
+                            teams[t].Players[p].Stats = new List<PlayerGameStats>();
+                        }
+
+
+                        // Restante do código para atualizar o tempo de jogo e energia
+                        RecordStat(t, p, "Min", teams, this.Dt);
+                        RecordStat(t, p, "CourtTime", teams, this.Dt);
+                        RecordStat(t, p, "Energy", teams, (int)(-this.Dt * 0.04 * (1 - teams[t].Players[p].Ratings.LastOrDefault().GameEndurance)));
+
+                        if (teams[t].Players[p].Stats.LastOrDefault().Energy < 0)
+                        {
+                            teams[t].Players[p].Stats.LastOrDefault().Energy = 0;
+                        }
+                    }
+                    else
+                    {
+                        // Restante do código para jogadores no banco de reservas
+                        RecordStat(t, p, "BenchTime", teams, this.Dt);
+                        RecordStat(t, p, "Energy", teams, (int)(this.Dt * 0.1));
+
+                        if (teams[t].Players[p].Stats.LastOrDefault().Energy > 1)
+                        {
+                            teams[t].Players[p].Stats.LastOrDefault().Energy = 1;
+                        }
+                    }
+
+                }
+            }
+            */
+        }
+
+
+        public bool IsAnyPlayerOnCourt(int teamId, int[][] playersOnCourt, Team[] teams)
+        {
+            foreach (int playerId in playersOnCourt[teamId])
+            {
+                if (teams[teamId].Players.Any(player => player.Id == playerId))
+                {
+                    return true;
+                }
+            }
+
+            return false;
         }
 
     }
