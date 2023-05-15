@@ -9,6 +9,7 @@ global using NBALigaSimulation.Server.Services.GameService;
 
 
 using Microsoft.AspNetCore.Hosting.StaticWebAssets;
+using Microsoft.Extensions.DependencyInjection;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -16,8 +17,10 @@ StaticWebAssetsLoader.UseStaticWebAssets(builder.Environment, builder.Configurat
 
 // Add services to the container.
 
-builder.Services.AddDbContext<DataContext>(DbContextOptions =>
-          DbContextOptions.UseSqlite(builder.Configuration["ConnectionStrings:NbaligaDBConnectionString"]));
+builder.Services.AddDbContext<DataContext>(options =>
+    options.UseSqlite(builder.Configuration.GetConnectionString("NbaligaDBConnectionString"))
+           .EnableServiceProviderCaching(false));
+
 
 builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();
@@ -62,5 +65,14 @@ app.UseRouting();
 app.MapRazorPages();
 app.MapControllers();
 app.MapFallbackToFile("index.html");
+
+
+using (var scope = app.Services.CreateScope())
+{
+    var dbContext = scope.ServiceProvider.GetRequiredService<DataContext>();
+
+    dbContext.Database.EnsureCreated();
+    dbContext.Database.Migrate();
+}
 
 app.Run();
