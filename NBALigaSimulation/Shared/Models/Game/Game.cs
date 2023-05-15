@@ -1,4 +1,5 @@
-﻿using System;
+﻿using NBALigaSimulation.Shared.Engine;
+using System;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 
@@ -52,8 +53,6 @@ namespace NBALigaSimulation.Shared.Models
             // Simula o jogo até o fim (sem OT)
             SimPossessions(teams, playersOnCourt);
 
-
-
         }
 
         public void SimPossessions(Team[] teams, int[][] playersOnCourt)
@@ -81,7 +80,7 @@ namespace NBALigaSimulation.Shared.Models
                     }
                 }
 
-                //UpdateTeamCompositeRatings();
+                CompositeHelper.UpdateCompositeRating(teams, playersOnCourt);
 
                 // outcome = SimPossession();
                 outcome = "zeca";

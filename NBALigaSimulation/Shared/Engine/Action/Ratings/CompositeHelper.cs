@@ -11,6 +11,12 @@ namespace NBALigaSimulation.Shared.Engine
 
             for (int i = 0; i < 2; i++)
             {
+
+                if (teams[i].CompositeRating == null)
+                {
+                    teams[i].CompositeRating = new TeamCompositeRating();
+                }
+
                 for (int j = 0; j < 5; j++)
                 {
 
@@ -48,6 +54,7 @@ namespace NBALigaSimulation.Shared.Engine
                         }
 
                         teams[i].CompositeRating.Ratings[rating] += ratingValue;
+
                     }
                 }
             }
