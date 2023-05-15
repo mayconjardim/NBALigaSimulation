@@ -47,11 +47,6 @@ namespace NBALigaSimulation.Server.Data
                     .OnDelete(DeleteBehavior.Restrict);
             });
 
-            modelBuilder.Entity<Game>()
-                     .HasMany(g => g.PlayByPlays)
-                     .WithOne()
-                     .HasForeignKey(p => p.GameId);
-
             modelBuilder.Entity<Team>(entity =>
             {
                 entity.HasKey(t => t.Id);

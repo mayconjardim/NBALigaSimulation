@@ -26,6 +26,17 @@ namespace NBALigaSimulation.Shared.Models
         public int Pss { get; set; }
         public int Reb { get; set; }
 
+        public int Ovr
+        {
+            get
+            {
+                int ovr = 0;
+                ovr = (int)Math.Round((Hgt + Str + Spd + Jmp + End + Ins + Dnk + Ft + Fg + Tp + Blk + Stl + Drb
+                    + Pss + Reb) / 15.0);
+                return ovr;
+            }
+        }
+
         public double GamePace
         {
             get

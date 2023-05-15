@@ -18,8 +18,7 @@ namespace NBALigaSimulation.Server.Profiles
             CreateMap<Team, TeamSimpleDto>();
             CreateMap<Team, TeamCompleteDto>().ReverseMap();
 
-            CreateMap<Game, GameCompleteDto>()
-                .ForMember(dest => dest.PlayByPlay, opt => opt.MapFrom(src => src.PlayByPlays.Select(p => p.Play).ToList()));
+            CreateMap<Game, GameCompleteDto>();
             CreateMap<GameCompleteDto, Game>();
             CreateMap<CreateGameDto, GameCompleteDto>().ReverseMap();
             CreateMap<CreateGameDto, Game>().ReverseMap();
