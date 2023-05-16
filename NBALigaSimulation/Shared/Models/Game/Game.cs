@@ -39,8 +39,6 @@ namespace NBALigaSimulation.Shared.Models
         {
             //Atribui os times para simulação
             Team[] teams = { HomeTeam, AwayTeam };
-            teams[0].Stats.Add(new TeamGameStats());
-            teams[1].Stats.Add(new TeamGameStats());
 
             //Gerando a quantidade posses de bola tem uma partida *(98 + 101 substituir por pace dos times) 
             Random random = new Random();
@@ -165,7 +163,7 @@ namespace NBALigaSimulation.Shared.Models
 
             p = playersOnCourt[Offense][shooter];
 
-            fatigue = Fatigue(teams[Offense].Players.Find(player => player.Id == p).Stats.LastOrDefault().Energy);
+            fatigue = Fatigue(teams[Offense].Players.Find(player => player.Id == p).Stats.Find(s => s.GameId == Id).Energy);
 
             // Esta é uma tentativa "assistencia" (ou seja, uma assistência será registrada se for feita)
             passer = -1;
@@ -314,7 +312,7 @@ namespace NBALigaSimulation.Shared.Models
             RecordStat(Defense, p, "Pf", playersOnCourt, teams);
 
             // Foul out
-            if (teams[Defense].Players.Find(player => player.Id == p).Stats.LastOrDefault().Pf >= 6)
+            if (teams[Defense].Players.Find(player => player.Id == p).Stats.Find(s => s.GameId == Id).Pf >= 6)
             {
                 // Force substitutions now
                 UpdatePlayersOnCourt(teams, playersOnCourt);
@@ -426,7 +424,7 @@ namespace NBALigaSimulation.Shared.Models
                             player.Stats = new List<PlayerGameStats>();
                         }
 
-                        var lastStats = player.Stats.LastOrDefault();
+                        var lastStats = player.Stats.Find(s => s.GameId == Id);
 
                         if (lastStats == null || lastStats.GameId != Id)
                         {
@@ -434,14 +432,16 @@ namespace NBALigaSimulation.Shared.Models
                         }
                     }
 
+                    int playerId = teams[t].Players[p].Id;
+
                     // Jogadores lesionados ou com falta não podem jogar //teams[t].Players[p].injured
-                    if (teams[t].Players.Find(player => player.RosterOrder == p).Stats.LastOrDefault().Pf >= 6)
+                    if (teams[t].Players[p].Stats.Find(s => s.GameId == Id).Pf >= 6)
                     {
                         ovrs[p] = double.NegativeInfinity;
                     }
                     else
                     {
-                        ovrs[p] = teams[t].Players.Find(player => player.RosterOrder == p).Ratings.LastOrDefault().Ovr * Fatigue(teams[t].Players[p].Stats.LastOrDefault().Energy) * teams[t].Players[p].PtModifier * RandomUniform(0.9, 1.1);
+                        ovrs[p] = teams[t].Players[p].Ratings.LastOrDefault().Ovr * Fatigue(teams[t].Players[p].Stats.Find(s => s.GameId == Id).Energy) * teams[t].Players[p].PtModifier * RandomUniform(0.9, 1.1);
                     }
                 }
 
@@ -457,7 +457,11 @@ namespace NBALigaSimulation.Shared.Models
                     for (int b = 0; b < teams[t].Players.Count; b++)
                     {
 
-                        if (!playersOnCourt[t].Any(p => p == teams[t].Players[b].Id))
+                        if (
+                             ((teams[t].Players[p].Stats.Find(s => s.GameId == Id).CourtTime > 3
+                            && teams[t].Players[b].Stats.Find(s => s.GameId == Id).BenchTime > 3
+                            && ovrs[b] > ovrs[p]) || teams[t].Players[p].Stats.Find(s => s.GameId == Id).Pf >= 6)
+                            )
                         {
                             substitutions = true;
 
@@ -465,18 +469,36 @@ namespace NBALigaSimulation.Shared.Models
                             playersOnCourt[t][i] = teams[t].Players[b].Id;
                             p = b;
 
-                            teams[t].Players[b].Stats.LastOrDefault().CourtTime = RandomUniform(-2, 2);
-                            teams[t].Players[b].Stats.LastOrDefault().BenchTime = RandomUniform(-2, 2);
-                            teams[t].Players[p].Stats.LastOrDefault().CourtTime = RandomUniform(-2, 2);
-                            teams[t].Players[p].Stats.LastOrDefault().BenchTime = RandomUniform(-2, 2);
+                            teams[t].Players[b].Stats.Find(s => s.GameId == Id).CourtTime = RandomUniform(-2, 2);
+                            teams[t].Players[b].Stats.Find(s => s.GameId == Id).BenchTime = RandomUniform(-2, 2);
+                            teams[t].Players[p].Stats.Find(s => s.GameId == Id).CourtTime = RandomUniform(-2, 2);
+                            teams[t].Players[p].Stats.Find(s => s.GameId == Id).BenchTime = RandomUniform(-2, 2);
                         }
                     }
 
 
                     i += 1;
                 }
+                if (!StartersRecorded)
+                {
+                    for (int z = 0; z < 2; z++)
+                    {
+                        for (int p = 0; p < teams[z].Players.Count; p++)
+                        {
+                            int playerId = teams[z].Players[p].Id; // Armazena o ID do jogador em uma variável separada
+
+                            if (playersOnCourt[z].Any(play => play == playerId))
+                            {
+                                RecordStat(z, playerId, "Gs", playersOnCourt, teams);
+                            }
+                        }
+                    }
+                    StartersRecorded = true;
+                }
 
             }
+
+
 
             return substitutions;
         }
@@ -520,7 +542,7 @@ namespace NBALigaSimulation.Shared.Models
                     team.Stats = new List<TeamGameStats>();
                 }
 
-                var lastStats = team.Stats.LastOrDefault();
+                var lastStats = team.Stats.Find(s => s.GameId == Id);
 
                 if (lastStats == null || lastStats.GameId != GameId)
                 {
@@ -531,87 +553,87 @@ namespace NBALigaSimulation.Shared.Models
 
             if (s == "Fg")
             {
-                teams[t].Stats.LastOrDefault().Fg += amt;
+                teams[t].Stats.Find(s => s.GameId == Id).Fg += amt;
             }
             else if (s == "Fga")
             {
-                teams[t].Stats.LastOrDefault().Fga += amt;
+                teams[t].Stats.Find(s => s.GameId == Id).Fga += amt;
             }
             else if (s == "FgAtRim")
             {
-                teams[t].Stats.LastOrDefault().FgAtRim += amt;
+                teams[t].Stats.Find(s => s.GameId == Id).FgAtRim += amt;
             }
             else if (s == "FgaAtRim")
             {
-                teams[t].Stats.LastOrDefault().FgaAtRim += amt;
+                teams[t].Stats.Find(s => s.GameId == Id).FgaAtRim += amt;
             }
             else if (s == "FgLowPost")
             {
-                teams[t].Stats.LastOrDefault().FgLowPost += amt;
+                teams[t].Stats.Find(s => s.GameId == Id).FgLowPost += amt;
             }
             else if (s == "FgaLowPost")
             {
-                teams[t].Stats.LastOrDefault().FgaLowPost += amt;
+                teams[t].Stats.Find(s => s.GameId == Id).FgaLowPost += amt;
             }
             else if (s == "FgMidRange")
             {
-                teams[t].Stats.LastOrDefault().FgMidRange += amt;
+                teams[t].Stats.Find(s => s.GameId == Id).FgMidRange += amt;
             }
             else if (s == "FgaMidRange")
             {
-                teams[t].Stats.LastOrDefault().FgaMidRange += amt;
+                teams[t].Stats.Find(s => s.GameId == Id).FgaMidRange += amt;
             }
             else if (s == "Tp")
             {
-                teams[t].Stats.LastOrDefault().Tp += amt;
+                teams[t].Stats.Find(s => s.GameId == Id).Tp += amt;
             }
             else if (s == "Tpa")
             {
-                teams[t].Stats.LastOrDefault().Tpa += amt;
+                teams[t].Stats.Find(s => s.GameId == Id).Tpa += amt;
             }
             else if (s == "Ft")
             {
-                teams[t].Stats.LastOrDefault().Ft += amt;
+                teams[t].Stats.Find(s => s.GameId == Id).Ft += amt;
             }
             else if (s == "Fta")
             {
-                teams[t].Stats.LastOrDefault().Fta += amt;
+                teams[t].Stats.Find(s => s.GameId == Id).Fta += amt;
             }
             else if (s == "Orb")
             {
-                teams[t].Stats.LastOrDefault().Orb += amt;
+                teams[t].Stats.Find(s => s.GameId == Id).Orb += amt;
             }
             else if (s == "Drb")
             {
-                teams[t].Stats.LastOrDefault().Drb += amt;
+                teams[t].Stats.Find(s => s.GameId == Id).Drb += amt;
             }
             else if (s == "Ast")
             {
-                teams[t].Stats.LastOrDefault().Ast += amt;
+                teams[t].Stats.Find(s => s.GameId == Id).Ast += amt;
             }
             else if (s == "Tov")
             {
-                teams[t].Stats.LastOrDefault().Tov += amt;
+                teams[t].Stats.Find(s => s.GameId == Id).Tov += amt;
             }
             else if (s == "Stl")
             {
-                teams[t].Stats.LastOrDefault().Stl += amt;
+                teams[t].Stats.Find(s => s.GameId == Id).Stl += amt;
             }
             else if (s == "Blk")
             {
-                teams[t].Stats.LastOrDefault().Blk += amt;
+                teams[t].Stats.Find(s => s.GameId == Id).Blk += amt;
             }
             else if (s == "Pf")
             {
-                teams[t].Stats.LastOrDefault().Pf += amt;
+                teams[t].Stats.Find(s => s.GameId == Id).Pf += amt;
             }
             else if (s == "Pts")
             {
-                teams[t].Stats.LastOrDefault().Pts += amt;
+                teams[t].Stats.Find(s => s.GameId == Id).Pts += amt;
             }
             else if (s == "Trb")
             {
-                teams[t].Stats.LastOrDefault().Trb += amt;
+                teams[t].Stats.Find(s => s.GameId == Id).Trb += amt;
             }
 
         }
@@ -628,7 +650,7 @@ namespace NBALigaSimulation.Shared.Models
                     player.Stats = new List<PlayerGameStats>();
                 }
 
-                var lastStats = player.Stats.LastOrDefault();
+                var lastStats = player.Stats.Find(s => s.GameId == Id);
 
                 if (lastStats == null || lastStats.GameId != GameId)
                 {
@@ -638,107 +660,107 @@ namespace NBALigaSimulation.Shared.Models
 
             if (s == "Fg")
             {
-                teams[t].Players.Find(player => player.Id == p).Stats.LastOrDefault().Fg += amt;
+                teams[t].Players.Find(player => player.Id == p).Stats.Find(s => s.GameId == Id).Fg += amt;
             }
             else if (s == "Fga")
             {
-                teams[t].Players.Find(player => player.Id == p).Stats.LastOrDefault().Fga += amt;
+                teams[t].Players.Find(player => player.Id == p).Stats.Find(s => s.GameId == Id).Fga += amt;
             }
             else if (s == "FgAtRim")
             {
-                teams[t].Players.Find(player => player.Id == p).Stats.LastOrDefault().FgAtRim += amt;
+                teams[t].Players.Find(player => player.Id == p).Stats.Find(s => s.GameId == Id).FgAtRim += amt;
             }
             else if (s == "FgaAtRim")
             {
-                teams[t].Players.Find(player => player.Id == p).Stats.LastOrDefault().FgaAtRim += amt;
+                teams[t].Players.Find(player => player.Id == p).Stats.Find(s => s.GameId == Id).FgaAtRim += amt;
             }
             else if (s == "FgLowPost")
             {
-                teams[t].Players.Find(player => player.Id == p).Stats.LastOrDefault().FgLowPost += amt;
+                teams[t].Players.Find(player => player.Id == p).Stats.Find(s => s.GameId == Id).FgLowPost += amt;
             }
             else if (s == "FgaLowPost")
             {
-                teams[t].Players.Find(player => player.Id == p).Stats.LastOrDefault().FgaLowPost += amt;
+                teams[t].Players.Find(player => player.Id == p).Stats.Find(s => s.GameId == Id).FgaLowPost += amt;
             }
             else if (s == "FgMidRange")
             {
-                teams[t].Players.Find(player => player.Id == p).Stats.LastOrDefault().FgMidRange += amt;
+                teams[t].Players.Find(player => player.Id == p).Stats.Find(s => s.GameId == Id).FgMidRange += amt;
             }
             else if (s == "FgaMidRange")
             {
-                teams[t].Players.Find(player => player.Id == p).Stats.LastOrDefault().FgaMidRange += amt;
+                teams[t].Players.Find(player => player.Id == p).Stats.Find(s => s.GameId == Id).FgaMidRange += amt;
             }
             else if (s == "Tp")
             {
-                teams[t].Players.Find(player => player.Id == p).Stats.LastOrDefault().Tp += amt;
+                teams[t].Players.Find(player => player.Id == p).Stats.Find(s => s.GameId == Id).Tp += amt;
             }
             else if (s == "Tpa")
             {
-                teams[t].Players.Find(player => player.Id == p).Stats.LastOrDefault().Tpa += amt;
+                teams[t].Players.Find(player => player.Id == p).Stats.Find(s => s.GameId == Id).Tpa += amt;
             }
             else if (s == "Ft")
             {
-                teams[t].Players.Find(player => player.Id == p).Stats.LastOrDefault().Ft += amt;
+                teams[t].Players.Find(player => player.Id == p).Stats.Find(s => s.GameId == Id).Ft += amt;
             }
             else if (s == "Fta")
             {
-                teams[t].Players.Find(player => player.Id == p).Stats.LastOrDefault().Fta += amt;
+                teams[t].Players.Find(player => player.Id == p).Stats.Find(s => s.GameId == Id).Fta += amt;
             }
             else if (s == "Orb")
             {
-                teams[t].Players.Find(player => player.Id == p).Stats.LastOrDefault().Orb += amt;
+                teams[t].Players.Find(player => player.Id == p).Stats.Find(s => s.GameId == Id).Orb += amt;
             }
             else if (s == "Drb")
             {
-                teams[t].Players.Find(player => player.Id == p).Stats.LastOrDefault().Drb += amt;
+                teams[t].Players.Find(player => player.Id == p).Stats.Find(s => s.GameId == Id).Drb += amt;
             }
             else if (s == "Ast")
             {
-                teams[t].Players.Find(player => player.Id == p).Stats.LastOrDefault().Ast += amt;
+                teams[t].Players.Find(player => player.Id == p).Stats.Find(s => s.GameId == Id).Ast += amt;
             }
             else if (s == "Tov")
             {
-                teams[t].Players.Find(player => player.Id == p).Stats.LastOrDefault().Tov += amt;
+                teams[t].Players.Find(player => player.Id == p).Stats.Find(s => s.GameId == Id).Tov += amt;
             }
             else if (s == "Stl")
             {
-                teams[t].Players.Find(player => player.Id == p).Stats.LastOrDefault().Stl += amt;
+                teams[t].Players.Find(player => player.Id == p).Stats.Find(s => s.GameId == Id).Stl += amt;
             }
             else if (s == "Blk")
             {
-                teams[t].Players.Find(player => player.Id == p).Stats.LastOrDefault().Blk += amt;
+                teams[t].Players.Find(player => player.Id == p).Stats.Find(s => s.GameId == Id).Blk += amt;
             }
             else if (s == "Pf")
             {
-                teams[t].Players.Find(player => player.Id == p).Stats.LastOrDefault().Pf += amt;
+                teams[t].Players.Find(player => player.Id == p).Stats.Find(s => s.GameId == Id).Pf += amt;
             }
             else if (s == "Pts")
             {
-                teams[t].Players.Find(player => player.Id == p).Stats.LastOrDefault().Pts += amt;
+                teams[t].Players.Find(player => player.Id == p).Stats.Find(s => s.GameId == Id).Pts += amt;
             }
             else if (s == "Trb")
             {
-                teams[t].Players.Find(player => player.Id == p).Stats.LastOrDefault().Trb += amt;
+                teams[t].Players.Find(player => player.Id == p).Stats.Find(s => s.GameId == Id).Trb += amt;
             }
             else if (s == "Gs")
             {
-                teams[t].Players.Find(player => player.Id == p).Stats.LastOrDefault().Gs += amt;
+                teams[t].Players.Find(player => player.Id == p).Stats.Find(s => s.GameId == Id).Gs += amt;
             }
             else if (s == "CourtTime")
             {
-                teams[t].Players.Find(player => player.Id == p).Stats.LastOrDefault().CourtTime += amt;
+                teams[t].Players.Find(player => player.Id == p).Stats.Find(s => s.GameId == Id).CourtTime += amt;
             }
             else if (s == "BenchTime")
             {
-                teams[t].Players.Find(player => player.Id == p).Stats.LastOrDefault().BenchTime += amt;
+                teams[t].Players.Find(player => player.Id == p).Stats.Find(s => s.GameId == Id).BenchTime += amt;
             }
             else if (s == "Energy")
             {
-                teams[t].Players.Find(player => player.Id == p).Stats.LastOrDefault().Energy += amt;
+                teams[t].Players.Find(player => player.Id == p).Stats.Find(s => s.GameId == Id).Energy += amt;
             }
             else if (s == "Min")
             {
-                teams[t].Players.Find(player => player.Id == p).Stats.LastOrDefault().Min += amt;
+                teams[t].Players.Find(player => player.Id == p).Stats.Find(s => s.GameId == Id).Min += amt;
             }
 
 
@@ -766,9 +788,9 @@ namespace NBALigaSimulation.Shared.Models
                         RecordStat(t, playerId, "CourtTime", playersOnCourt, teams, dt);
                         RecordStat(t, playerId, "Energy", playersOnCourt, teams, (int)-(dt * 0.04 * (1 - teams[t].Players.Find(player => player.Id == playerId).Ratings.LastOrDefault().GameEndurance)));
 
-                        if (teams[t].Players.Find(player => player.Id == playerId).Stats.FirstOrDefault()?.Energy < 0)
+                        if (teams[t].Players.Find(player => player.Id == playerId).Stats.FirstOrDefault().Energy < 0)
                         {
-                            teams[t].Players.Find(player => player.Id == playerId).Stats.LastOrDefault().Energy = 0;
+                            teams[t].Players.Find(player => player.Id == playerId).Stats.Find(s => s.GameId == Id).Energy = 0;
                         }
                     }
                     else
@@ -776,9 +798,9 @@ namespace NBALigaSimulation.Shared.Models
                         RecordStat(t, playerId, "BenchTime", playersOnCourt, teams, dt);
                         RecordStat(t, playerId, "Energy", playersOnCourt, teams, (int)(dt * 0.1));
 
-                        if (teams[t].Players.Find(player => player.Id == playerId).Stats.LastOrDefault()?.Energy > 1)
+                        if (teams[t].Players.Find(player => player.Id == playerId).Stats.Find(s => s.GameId == Id).Energy > 1)
                         {
-                            teams[t].Players.Find(player => player.Id == playerId).Stats.LastOrDefault().Energy = 1;
+                            teams[t].Players.Find(player => player.Id == playerId).Stats.Find(s => s.GameId == Id).Energy = 1;
                         }
                     }
                 }
