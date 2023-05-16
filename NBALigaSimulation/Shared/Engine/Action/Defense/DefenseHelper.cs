@@ -28,5 +28,10 @@ namespace NBALigaSimulation.Shared.Engine
             return 0.55 * defensePerimeterRating / (0.5 * (dribblingRating + passingRating));
         }
 
+        public static double ProbBlk(Team[] teams, int defense)
+        {
+            return 0.1 * teams[defense].CompositeRating.Ratings["GameBlocking"];
+        }
+
     }
 }
