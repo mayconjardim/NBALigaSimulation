@@ -1,13 +1,7 @@
-﻿using Newtonsoft.Json;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.Text.Json.Serialization;
-using JsonIgnoreAttribute = System.Text.Json.Serialization.JsonIgnoreAttribute;
-
-namespace NBALigaSimulation.Shared.Models
+﻿namespace NBALigaSimulation.Shared.Dtos
 {
-    public class TeamGameStats
+    public class TeamGameStatsDto
     {
-
         public int Id { get; set; }
         public int GameId { get; set; }
         public int TeamId { get; set; }

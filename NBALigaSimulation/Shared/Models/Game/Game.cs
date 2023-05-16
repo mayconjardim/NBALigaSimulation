@@ -43,7 +43,7 @@ namespace NBALigaSimulation.Shared.Models
             //Gerando a quantidade posses de bola tem uma partida *(98 + 101 substituir por pace dos times) 
             Random random = new Random();
             double randomFactor = random.NextDouble() * (1.1 - 0.9) + 0.9;
-            NumPossessions = (int)Math.Round(92.7 + 92.7 / 2 * randomFactor);
+            NumPossessions = (int)Math.Round(92.7 + 98.7 / 2 * randomFactor);
             Console.WriteLine(NumPossessions);
             // Escalações iniciais, que serão redefinidas por updatePlayersOnCourt. Isso deve ser feito por causa dos jogadores lesionados no top 5.
             int[][] playersOnCourt = new int[][] { new int[] { 0, 1, 2, 3, 4 }, new int[] { 0, 1, 2, 3, 4 } };
@@ -761,7 +761,8 @@ namespace NBALigaSimulation.Shared.Models
                     }
                     else
                     {
-                        ovrs[p] = teams[t].Players[p].Ratings.LastOrDefault().Ovr * Fatigue(teams[t].Players[p].Stats.Find(s => s.GameId == Id).Energy) * teams[t].Players[p].PtModifier * RandomUniform(0.9, 1.1);
+                        ovrs[p] = teams[t].Players[p].Ratings.LastOrDefault().Ovr * Fatigue(teams[t].Players[p].Stats.Find(s => s.GameId == Id).Energy) *
+                            teams[t].Players[p].PtModifier * RandomUniform(0.9, 1.1);
                     }
                 }
 
@@ -793,8 +794,6 @@ namespace NBALigaSimulation.Shared.Models
 
                     i++;
                 }
-
-
 
                 if (!StartersRecorded)
                 {
