@@ -20,8 +20,8 @@ namespace NBALigaSimulation.Shared.Engine
                 for (int j = 0; j < 5; j++)
                 {
 
-                    int playerId = playersOnCourt[i][j];
-                    var playerRatings = teams[i].Players.Find(player => player.Id == playerId).Ratings.LastOrDefault();
+                    int playerRosterOrder = playersOnCourt[i][j];
+                    var playerRatings = teams[i].Players.Find(player => player.RosterOrder == playerRosterOrder).Ratings.LastOrDefault();
                     double ratingValue = 0;
 
                     foreach (string rating in toUpdate)

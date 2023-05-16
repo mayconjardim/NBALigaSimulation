@@ -48,7 +48,7 @@ namespace NBALigaSimulation.Shared.Engine
             for (int i = 0; i < 5; i++)
             {
                 int p = playersOnCourt[t][i];
-                var player = teams[t].Players.Find(player => player.Id == p);
+                var player = teams[t].Players.Find(player => player.RosterOrder == p);
 
 
                 if (player != null)
@@ -60,6 +60,7 @@ namespace NBALigaSimulation.Shared.Engine
 
             return array;
         }
+
 
 
     }
