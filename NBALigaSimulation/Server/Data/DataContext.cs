@@ -50,6 +50,11 @@ namespace NBALigaSimulation.Server.Data
 
             });
 
+            modelBuilder.Entity<PlayerGameStats>()
+            .HasOne(p => p.Game)
+            .WithMany(g => g.PlayerGameStats)
+            .HasForeignKey(p => p.GameId);
+
             modelBuilder.Entity<Team>(entity =>
             {
                 entity.HasKey(t => t.Id);

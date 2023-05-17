@@ -14,6 +14,7 @@ namespace NBALigaSimulation.Shared.Models
         [ForeignKey("AwayTeamId")]
         public Team AwayTeam { get; set; }
         public List<TeamGameStats> TeamGameStats { get; set; }
+        public List<PlayerGameStats> PlayerGameStats { get; set; }
         //Atributos Globais da Simulação
         [NotMapped]
         int NumPossessions; // Quantidade posses de uma partida
@@ -614,7 +615,7 @@ namespace NBALigaSimulation.Shared.Models
 
                 if (lastStats == null || lastStats.GameId != GameId)
                 {
-                    player.Stats.Add(new PlayerGameStats { GameId = GameId });
+                    player.Stats.Add(new PlayerGameStats { GameId = GameId, TeamId = teams[t].Id });
                 }
             }
 
@@ -749,7 +750,7 @@ namespace NBALigaSimulation.Shared.Models
 
                         if (lastStats == null || lastStats.GameId != Id)
                         {
-                            player.Stats.Add(new PlayerGameStats { GameId = Id });
+                            player.Stats.Add(new PlayerGameStats { GameId = Id, TeamId = teams[t].Id });
                         }
                     }
 

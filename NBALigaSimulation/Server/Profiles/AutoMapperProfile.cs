@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.Extensions.Configuration;
 
 namespace NBALigaSimulation.Server.Profiles
 {
@@ -20,10 +21,15 @@ namespace NBALigaSimulation.Server.Profiles
             CreateMap<Team, TeamCompleteDto>().ReverseMap();
 
             CreateMap<Game, GameCompleteDto>()
-                 .ForMember(dest => dest.HomeTeam, opt => opt.MapFrom(src => src.HomeTeam.Abrv))
-                 .ForMember(dest => dest.AwayTeam, opt => opt.MapFrom(src => src.AwayTeam.Abrv))
-                 .ForMember(dest => dest.HomeTeamScore, opt => opt.MapFrom(src => src.HomeTeam.Stats.FirstOrDefault(p => p.GameId == src.Id).Pts))
-                 .ForMember(dest => dest.AwayTeamScore, opt => opt.MapFrom(src => src.AwayTeam.Stats.FirstOrDefault(p => p.GameId == src.Id).Pts));
+              .ForMember(dest => dest.HomeTeam, opt => opt.MapFrom(src => src.HomeTeam.Abrv))
+              .ForMember(dest => dest.AwayTeam, opt => opt.MapFrom(src => src.AwayTeam.Abrv))
+              .ForMember(dest => dest.HomeTeamScore, opt => opt.MapFrom(src => src.HomeTeam.Stats.FirstOrDefault(p => p.GameId == src.Id).Pts))
+              .ForMember(dest => dest.AwayTeamScore, opt => opt.MapFrom(src => src.AwayTeam.Stats.FirstOrDefault(p => p.GameId == src.Id).Pts))
+              .ForMember(dest => dest.HomePlayerGameStats, opt => opt.MapFrom(src => src.PlayerGameStats.Where(p => p.TeamId == src.HomeTeam.Id).ToList()))
+              .ForMember(dest => dest.AwayPlayerGameStats, opt => opt.MapFrom(src => src.PlayerGameStats.Where(p => p.TeamId == src.AwayTeamId).ToList()));
+
+
+            CreateMap<PlayerGameStats, PlayerGameStatsDto>();
 
             CreateMap<GameCompleteDto, Game>();
             CreateMap<CreateGameDto, GameCompleteDto>().ReverseMap();

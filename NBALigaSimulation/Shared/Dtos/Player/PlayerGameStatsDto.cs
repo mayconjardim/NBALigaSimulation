@@ -1,15 +1,11 @@
-﻿using NBALigaSimulation.Shared.Models;
-
-namespace NBALigaSimulation.Shared.Models
+﻿namespace NBALigaSimulation.Shared.Dtos
 {
-    public class PlayerGameStats
+    public class PlayerGameStatsDto
     {
-
         public int Id { get; set; }
+        public string Name { get; set; } = string.Empty;
         public int PlayerId { get; set; }
-        public int TeamId { get; set; }
         public int GameId { get; set; }
-        public Game Game { get; set; }
         public int Gs { get; set; }
         public double Min { get; set; }
         public int Fg { get; set; }
@@ -36,9 +32,5 @@ namespace NBALigaSimulation.Shared.Models
         public double CourtTime { get; set; }
         public double BenchTime { get; set; }
         public int Energy { get; set; }
-
     }
 }
-
-
-

@@ -69,11 +69,12 @@ namespace NBALigaSimulation.Server.Services.GameService
         public async Task<ServiceResponse<GameCompleteDto>> GetGameById(int gameId)
         {
             var response = new ServiceResponse<GameCompleteDto>();
-            var game = await _context.Games.Include(p => p.HomeTeam)
-                .Include(p => p.AwayTeam)
-                .Include(p => p.AwayTeam)
-                .Include(p => p.TeamGameStats)
-                .FirstOrDefaultAsync(p => p.Id == gameId);
+            var game = await _context.Games
+            .Include(p => p.HomeTeam)
+            .Include(p => p.AwayTeam)
+            .Include(p => p.TeamGameStats)
+            .Include(p => p.PlayerGameStats)
+            .FirstOrDefaultAsync(p => p.Id == gameId);
 
             if (game == null)
             {
