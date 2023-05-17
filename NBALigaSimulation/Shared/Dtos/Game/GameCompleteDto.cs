@@ -9,7 +9,7 @@ namespace NBALigaSimulation.Shared.Dtos
         public string AwayTeam { get; set; }
         public int HomeTeamScore { get; set; }
         public int AwayTeamScore { get; set; }
-
+        public List<TeamGameStatsDto> TeamGameStats { get; set; }
 
     }
 }

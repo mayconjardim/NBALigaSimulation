@@ -13,7 +13,7 @@ namespace NBALigaSimulation.Shared.Models
         public int AwayTeamId { get; set; }
         [ForeignKey("AwayTeamId")]
         public Team AwayTeam { get; set; }
-
+        public List<TeamGameStats> TeamGameStats { get; set; }
         //Atributos Globais da Simulação
         [NotMapped]
         int NumPossessions; // Quantidade posses de uma partida

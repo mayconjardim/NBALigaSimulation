@@ -10,6 +10,8 @@ namespace NBALigaSimulation.Server.Data
         public DbSet<Player> Players { get; set; }
         public DbSet<PlayerRatings> Ratings { get; set; }
         public DbSet<Game> Games { get; set; }
+        public DbSet<TeamGameStats> TeamGameStats { get; set; }
+        public DbSet<PlayerGameStats> PlayerGameStats { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -45,6 +47,7 @@ namespace NBALigaSimulation.Server.Data
                     .WithMany()
                     .HasForeignKey(e => e.AwayTeamId)
                     .OnDelete(DeleteBehavior.Restrict);
+
             });
 
             modelBuilder.Entity<Team>(entity =>
