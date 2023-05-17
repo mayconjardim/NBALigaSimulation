@@ -1,7 +1,4 @@
-﻿
-using NBALigaSimulation.Shared.Models;
-
-namespace NBALigaSimulation.Shared.Dtos
+﻿namespace NBALigaSimulation.Shared.Dtos
 {
     public class GameCompleteDto
     {

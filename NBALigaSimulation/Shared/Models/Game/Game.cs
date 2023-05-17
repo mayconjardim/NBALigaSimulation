@@ -615,7 +615,7 @@ namespace NBALigaSimulation.Shared.Models
 
                 if (lastStats == null || lastStats.GameId != GameId)
                 {
-                    player.Stats.Add(new PlayerGameStats { GameId = GameId, TeamId = teams[t].Id });
+                    player.Stats.Add(new PlayerGameStats { GameId = GameId, TeamId = teams[t].Id, Name = player.FullName });
                 }
             }
 
@@ -750,7 +750,7 @@ namespace NBALigaSimulation.Shared.Models
 
                         if (lastStats == null || lastStats.GameId != Id)
                         {
-                            player.Stats.Add(new PlayerGameStats { GameId = Id, TeamId = teams[t].Id });
+                            player.Stats.Add(new PlayerGameStats { GameId = Id, TeamId = teams[t].Id, Name = player.FullName });
                         }
                     }
 

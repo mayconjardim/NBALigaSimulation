@@ -4,5 +4,6 @@
     {
         public int HomeTeamId { get; set; }
         public int AwayTeamId { get; set; }
+
     }
 }

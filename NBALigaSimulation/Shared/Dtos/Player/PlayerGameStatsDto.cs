@@ -5,6 +5,7 @@
         public int Id { get; set; }
         public string Name { get; set; } = string.Empty;
         public int PlayerId { get; set; }
+        public int TeamId { get; set; }
         public int GameId { get; set; }
         public int Gs { get; set; }
         public double Min { get; set; }
