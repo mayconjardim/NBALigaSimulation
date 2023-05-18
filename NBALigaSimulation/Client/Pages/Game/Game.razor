@@ -1,0 +1,115 @@
+﻿@page "/game/{id:int}"
+@inject IGameService GameService
+
+@if (game !=  null)
+{
+
+ <div class="@game.HomeTeam @game.AwayTeam header">
+
+     <MudAvatar Style="vertical-align: middle; background: none; margin: 5px" Size="Size.Large" Image=@($"Images/logos/{game.HomeTeam}.svg") Square="true" />
+     <h1>@game.HomeTeam</h1>
+     <h1>@game.HomeTeamScore,</h1>
+     <MudAvatar Style="vertical-align: middle; background: none; margin: 5px" Size="Size.Large" Image=@($"Images/logos/{game.AwayTeam}.svg") Square="true" />
+     <h1>@game.AwayTeam</h1>
+     <h1>@game.AwayTeamScore</h1>
+
+ </div>
+
+
+<MudTabs Elevation="4" Centered="true" Color="@Color.Primary">
+   <MudTabPanel Text="@game.HomeTeam" >
+      <MudContainer>
+         <div class="boxscore-teams">
+            <MudAvatar Style="vertical-align: middle; background: none; margin: 5px" Size="Size.Medium" Image=@($"Images/logos/{game.HomeTeam}.svg") Square="true" />
+
+            <MudSimpleTable Dense="true" Hover="false" Bordered="true" Striped="true" Style="overflow-x: auto;">
+               <thead>
+                  <tr>
+                     @foreach (var h in headings)
+                     {
+                     <th>@h</th>
+                     }
+                  </tr>
+               </thead>
+               <tbody>
+                  @foreach (var row in game.HomePlayerGameStats.Select((value, index) => new { Value = value, Index = index }))
+                  {
+                  <tr>
+                     <td>@NomeAbvr(@row.Value.Name)</td>
+                     <td>@row.Value.Min</td>
+                     <td>@row.Value.Fg-@row.Value.Fga</td>
+                     <td>@row.Value.Tp-@row.Value.Tpa</td>
+                     <td>@row.Value.Ft-@row.Value.Fta</td>
+                     <td>@row.Value.Orb</td>
+                     <td>@row.Value.Trb</td>
+                     <td>@row.Value.Ast</td>
+                     <td>@row.Value.Tov</td>
+                     <td>@row.Value.Stl</td>
+                     <td>@row.Value.Blk</td>
+                     <td>@row.Value.Pf</td>
+                     <td>@row.Value.Pts</td>
+                  </tr>
+                  @if (row.Index == 4)
+                  {
+                  <tr>
+                     <td colspan="14">
+                        <hr style="border-top: 1px solid #e0e0e0; margin: 0;">
+                     </td>
+                  </tr>
+                  }
+                  }
+               </tbody>
+            </MudSimpleTable>
+         </div>
+      </MudContainer>
+   </MudTabPanel>
+
+   <MudTabPanel Text="@game.AwayTeam">
+      <MudContainer>
+         <div class="boxscore-teams">
+
+            <MudAvatar Style="vertical-align: middle; background: none; margin: 5px" Size="Size.Medium" Image=@($"Images/logos/{game.AwayTeam}.svg") Square="true" />
+       
+            <MudSimpleTable Dense="true" Hover="false" Bordered="true" Striped="true" Style="overflow-x: auto;">
+               <thead>
+                  <tr>
+                     @foreach (var h in headings)
+                     {
+                     <th>@h</th>
+                     }
+                  </tr>
+               </thead>
+               <tbody>
+                  @foreach (var row in game.AwayPlayerGameStats.Select((value, index) => new { Value = value, Index = index }))
+                  {
+                  <tr>
+                     <td>@NomeAbvr(@row.Value.Name)</td>
+                     <td>@row.Value.Min</td>
+                     <td>@row.Value.Fg-@row.Value.Fga</td>
+                     <td>@row.Value.Tp-@row.Value.Tpa</td>
+                     <td>@row.Value.Ft-@row.Value.Fta</td>
+                     <td>@row.Value.Orb</td>
+                     <td>@row.Value.Trb</td>
+                     <td>@row.Value.Ast</td>
+                     <td>@row.Value.Tov</td>
+                     <td>@row.Value.Stl</td>
+                     <td>@row.Value.Blk</td>
+                     <td>@row.Value.Pf</td>
+                     <td>@row.Value.Pts</td>
+                  </tr>
+                  @if (row.Index == 4)
+                  {
+                  <tr>
+                     <td colspan="14">
+                        <hr style="border-top: 1px solid #e0e0e0; margin: 0;">
+                     </td>
+                  </tr>
+                  }
+                  }
+               </tbody>
+            </MudSimpleTable>
+         </div>
+      </MudContainer>
+   </MudTabPanel>
+</MudTabs>
+}

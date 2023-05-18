@@ -4,12 +4,13 @@ global using NBALigaSimulation.Shared.Dtos;
 global using NBALigaSimulation.Client.Utilities;
 global using NBALigaSimulation.Client.Services.PlayerService;
 global using NBALigaSimulation.Client.Services.TeamService;
+global using NBALigaSimulation.Client.Services.GameService;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using MudBlazor.Services;
 using NBALigaSimulation.Client;
 using pax.BlazorChartJs;
-using NBALigaSimulation.Client.Services.GameService;
+
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
 
