@@ -25,7 +25,7 @@ namespace NBALigaSimulation.Shared.Models
         [NotMapped]
         int Overtimes = 0; // Números de overtimes 
         [NotMapped]
-        double SynergyFactor = 0.05; //Qual a importância da sinergia?
+        double SynergyFactor = 0.1; //Qual a importância da sinergia?
         [NotMapped]
         int Offense; //Time que está atacando
         [NotMapped]

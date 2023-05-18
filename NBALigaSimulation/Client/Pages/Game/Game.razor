@@ -22,7 +22,7 @@
          <div class="boxscore-teams">
             <MudAvatar Style="vertical-align: middle; background: none; margin: 5px" Size="Size.Medium" Image=@($"Images/logos/{game.HomeTeam}.svg") Square="true" />
 
-            <MudSimpleTable Dense="true" Hover="false" Bordered="true" Striped="true" Style="overflow-x: auto;">
+            <MudSimpleTable Elevation="0" Outlined="true"  Dense="true" Hover="false" Bordered="true" Striped="true" Style="overflow-x: auto;">
                <thead>
                   <tr>
                      @foreach (var h in headings)
@@ -35,7 +35,7 @@
                   @foreach (var row in game.HomePlayerGameStats.Select((value, index) => new { Value = value, Index = index }))
                   {
                   <tr>
-                     <td>@NomeAbvr(@row.Value.Name)</td>
+                     <td><a href="player/@row.Value.PlayerId">@NomeAbvr(@row.Value.Name)</a></td>
                      <td>@row.Value.Min</td>
                      <td>@row.Value.Fg-@row.Value.Fga</td>
                      <td>@row.Value.Tp-@row.Value.Tpa</td>
@@ -70,7 +70,7 @@
 
             <MudAvatar Style="vertical-align: middle; background: none; margin: 5px" Size="Size.Medium" Image=@($"Images/logos/{game.AwayTeam}.svg") Square="true" />
        
-            <MudSimpleTable Dense="true" Hover="false" Bordered="true" Striped="true" Style="overflow-x: auto;">
+            <MudSimpleTable Elevation="0" Dense="true" Hover="false" Bordered="true" Striped="true" Style="overflow-x: auto;">
                <thead>
                   <tr>
                      @foreach (var h in headings)
@@ -83,7 +83,7 @@
                   @foreach (var row in game.AwayPlayerGameStats.Select((value, index) => new { Value = value, Index = index }))
                   {
                   <tr>
-                     <td>@NomeAbvr(@row.Value.Name)</td>
+                     <td><a href="player/@row.Value.PlayerId">@NomeAbvr(@row.Value.Name)</a></td>
                      <td>@row.Value.Min</td>
                      <td>@row.Value.Fg-@row.Value.Fga</td>
                      <td>@row.Value.Tp-@row.Value.Tpa</td>
