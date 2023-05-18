@@ -271,6 +271,34 @@ namespace NBALigaSimulation.Shared.Model
             }
         }
 
+        public void UpdateTeamCompositeRatings()
+        {
+            string[] toUpdate = { "dribbling", "passing", "rebounding", "defense", "defensePerimeter", "blocking" };
+
+            for (int t = 0; t < 2; t++)
+            {
+                foreach (string rating in toUpdate)
+                {
+                    team[t].compositeRating[rating] = 0;
+
+                    for (int i = 0; i < 5; i++)
+                    {
+                        int p = playersOnCourt[t][i];
+                        team[t].compositeRating[rating] += team[t].player[p].compositeRating[rating] * Fatigue(team[t].player[p].stat.energy);
+                    }
+
+                    team[t].compositeRating[rating] /= 5;
+                }
+
+                team[t].compositeRating.dribbling += synergyFactor * team[t].synergy.off;
+                team[t].compositeRating.passing += synergyFactor * team[t].synergy.off;
+                team[t].compositeRating.rebounding += synergyFactor * team[t].synergy.reb;
+                team[t].compositeRating.defense += synergyFactor * team[t].synergy.def;
+                team[t].compositeRating.defensePerimeter += synergyFactor * team[t].synergy.def;
+                team[t].compositeRating.blocking += synergyFactor * team[t].synergy.def;
+            }
+        }
+
 
     }
 }
