@@ -14,7 +14,8 @@ namespace NBALigaSimulation.Shared.Models
         public List<TeamGameStats> Stats { get; set; } = new List<TeamGameStats>();
         [NotMapped]
         public TeamCompositeRating CompositeRating { get; set; }
-
+        [NotMapped]
+        public TeamSynergy Synergy { get; set; }
     }
 
 }

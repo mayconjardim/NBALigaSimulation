@@ -1,4 +1,6 @@
 ﻿
+using NBALigaSimulation.Shared.Model;
+
 namespace NBALigaSimulation.Server.Data
 {
     public class DataContext : DbContext
@@ -13,7 +15,7 @@ namespace NBALigaSimulation.Server.Data
         public DbSet<TeamGameStats> TeamGameStats { get; set; }
         public DbSet<PtsQtr> PtsQtrs { get; set; }
         public DbSet<PlayerGameStats> PlayerGameStats { get; set; }
-
+        public DbSet<GamePlayByPlay> PlayByPlays { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
 
@@ -69,7 +71,10 @@ namespace NBALigaSimulation.Server.Data
               .WithOne(pts => pts.TeamGameStats)
               .HasForeignKey(pts => pts.TeamGameStatsId);
 
-
+            modelBuilder.Entity<Game>()
+              .HasMany(g => g.PlayByPlay)
+              .WithOne(p => p.Game)
+              .HasForeignKey(p => p.GameSimId);
         }
     }
 }

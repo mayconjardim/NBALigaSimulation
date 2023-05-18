@@ -15,6 +15,7 @@ namespace NBALigaSimulation.Shared.Models
         public Team AwayTeam { get; set; }
         public List<TeamGameStats> TeamGameStats { get; set; }
         public List<PlayerGameStats> PlayerGameStats { get; set; }
+        public List<GamePlayByPlay> PlayByPlay { get; set; }
         //Atributos Globais da Simulação
         [NotMapped]
         int NumPossessions; // Quantidade posses de uma partida

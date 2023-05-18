@@ -390,5 +390,27 @@ namespace NBALigaSimulation.Shared.Models
             }
         }
 
+        public double GameAthleticism
+        {
+            get
+            {
+                double athleticism = 0;
+
+                Dictionary<string, double> rating = new Dictionary<string, double>();
+                rating.Add("stre", Str);
+                rating.Add("spd", Spd);
+                rating.Add("jmp", Jmp);
+                rating.Add("hgt", Hgt);
+
+
+                List<string> attributes = new List<string> { "stre", "spd", "jmp", "hgt" };
+                List<double> weights = new List<double> { 1, 1, 1, 0.5 };
+
+
+                athleticism = Converter.Composite(rating, attributes, weights);
+                return athleticism;
+            }
+        }
+
     }
 }
