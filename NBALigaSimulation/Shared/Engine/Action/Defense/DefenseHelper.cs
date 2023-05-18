@@ -13,7 +13,7 @@ namespace NBALigaSimulation.Shared.Engine
             double dribblingRating = teams[o].CompositeRating.Ratings["GameDribbling"];
             double passingRating = teams[o].CompositeRating.Ratings["GamePassing"];
 
-            return 0.15 * (1 + defenseRating) / (1 + 0.5 * (dribblingRating + passingRating));
+            return 0.13 * (1 + defenseRating) / (1 + 0.5 * (dribblingRating + passingRating));
         }
 
         public static double ProbStl(Team[] teams)
