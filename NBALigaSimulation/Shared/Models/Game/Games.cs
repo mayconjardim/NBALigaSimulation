@@ -98,7 +98,7 @@ namespace NBALigaSimulation.Shared.Model
                 Offense = (Offense == 1) ? 0 : 1;
                 Defense = (Offense == 1) ? 0 : 1;
 
-                UpdateTeamCompositeRatings();
+                CompositeHelper.UpdateCompositeRating(Teams, PlayersOnCourt);
 
                 string outcome = SimPossession();
 
@@ -271,33 +271,38 @@ namespace NBALigaSimulation.Shared.Model
             }
         }
 
-        public void UpdateTeamCompositeRatings()
-        {
-            string[] toUpdate = { "dribbling", "passing", "rebounding", "defense", "defensePerimeter", "blocking" };
 
+        public void UpdatePlayingTime(Team[] Teams)
+        {
             for (int t = 0; t < 2; t++)
             {
-                foreach (string rating in toUpdate)
+                for (int p = 0; p < Teams[t].Players.Count; p++)
                 {
-                    team[t].compositeRating[rating] = 0;
-
-                    for (int i = 0; i < 5; i++)
+                    if (PlayersOnCourt[t].Contains(p))
                     {
-                        int p = playersOnCourt[t][i];
-                        team[t].compositeRating[rating] += team[t].player[p].compositeRating[rating] * Fatigue(team[t].player[p].stat.energy);
+                        RecordStat(t, p, "Min", Dt);
+                        RecordStat(t, p, "CourtTime", Dt);
+                        // This used to be 0.04. Increase more to lower PT
+                        RecordStat(t, p, "Energy", -Dt * 0.06 * (1 - Teams[t].Players[p].Ratings.Last().GameEndurance));
+                        if (Teams[t].Players[p].Stats.Find(s => s.GameId == Id)?.Energy < 0)
+                        {
+                            Teams[t].Players[p].Stats.Find(s => s.GameId == Id).Energy = 0;
+                        }
                     }
-
-                    team[t].compositeRating[rating] /= 5;
+                    else
+                    {
+                        RecordStat(t, p, "BenchTime", Dt);
+                        RecordStat(t, p, "Energy", Dt * 0.1);
+                        if (Teams[t].Players[p].Stats.Find(s => s.GameId == Id)?.Energy > 1)
+                        {
+                            Teams[t].Players[p].Stats.Find(s => s.GameId == Id).Energy = 1;
+                        }
+                    }
                 }
-
-                team[t].compositeRating.dribbling += synergyFactor * team[t].synergy.off;
-                team[t].compositeRating.passing += synergyFactor * team[t].synergy.off;
-                team[t].compositeRating.rebounding += synergyFactor * team[t].synergy.reb;
-                team[t].compositeRating.defense += synergyFactor * team[t].synergy.def;
-                team[t].compositeRating.defensePerimeter += synergyFactor * team[t].synergy.def;
-                team[t].compositeRating.blocking += synergyFactor * team[t].synergy.def;
             }
         }
+
+
 
 
     }
