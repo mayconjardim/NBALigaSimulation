@@ -36,7 +36,7 @@ namespace NBALigaSimulation.Shared.Models
         public int Trb { get; set; }
         public double CourtTime { get; set; }
         public double BenchTime { get; set; }
-        public int Energy { get; set; }
+        public double Energy { get; set; }
 
     }
 }

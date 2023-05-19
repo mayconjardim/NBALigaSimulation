@@ -1,8 +1,7 @@
 ﻿using NBALigaSimulation.Shared.Engine;
-using NBALigaSimulation.Shared.Models;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace NBALigaSimulation.Shared.Model
+namespace NBALigaSimulation.Shared.Models
 {
     public class Game
     {
@@ -14,8 +13,8 @@ namespace NBALigaSimulation.Shared.Model
         public int AwayTeamId { get; set; }
         [ForeignKey("AwayTeamId")]
         public Team? AwayTeam { get; set; }
-        public List<TeamGameStats>? TeamGameStats { get; set; }
-        public List<PlayerGameStats>? PlayerGameStats { get; set; }
+        public List<TeamGameStats> TeamGameStats { get; set; }
+        public List<PlayerGameStats> PlayerGameStats { get; set; } = new List<PlayerGameStats>();
         public List<GamePlayByPlay> PlayByPlay { get; set; }
 
         // Atributos Globais da Simulação
@@ -36,21 +35,30 @@ namespace NBALigaSimulation.Shared.Model
         [NotMapped]
         int T = 12; // Tempo por quarto
         [NotMapped]
-        int Dt;     // Tempo decorrido por posse
-
-        [NotMapped] // Jogadores em quadra
-        int[][] PlayersOnCourt = new int[][] { new int[] { 0, 1, 2, 3, 4 }, new int[] { 0, 1, 2, 3, 4 } };
+        double Dt = 0; // Tempo decorrido por posse
 
 
         public void GameSim()
         {
 
             Team[] Teams = { HomeTeam, AwayTeam };
-            NumPossessions = (int)Math.Round(92.7 + 98.7 / 2 * RandomUtils.RandomUniform(0.9, 1.1));
-            Dt = 48 / (2 * NumPossessions);
+            CompositeHelper.UpdatePace(Teams);
 
-            // Simula o jogo até o final da partida
-            SimPossessions(Teams);
+
+            double paceFactor = 97.3 / 100;
+            paceFactor += 0.025 * Math.Clamp((paceFactor - 1) / 0.2, -1, 1);
+            NumPossessions = Convert.ToInt32((((Teams[0].CompositeRating.Ratings["GamePace"] + Teams[1].CompositeRating.Ratings["GamePace"]) / 2) * 1.1 * paceFactor));
+            Console.WriteLine(NumPossessions);
+            Dt = 48.0 / (2 * NumPossessions);
+            Console.WriteLine(Dt);
+
+            int[][] PlayersOnCourt = new int[][] { new int[] { 0, 1, 2, 3, 4 }, new int[] { 0, 1, 2, 3, 4 } };
+
+            UpdatePlayersOnCourt(Teams, PlayersOnCourt);
+            UpdateSynergy(Teams, PlayersOnCourt);
+
+
+            SimPossessions(Teams, PlayersOnCourt);
 
             // Jogue períodos de prorrogação se necessário
             while (Teams[0].Stats.Find(s => s.GameId == Id)?.Pts == Teams[1].Stats.Find(s => s.GameId == Id)?.Pts)
@@ -58,7 +66,7 @@ namespace NBALigaSimulation.Shared.Model
                 if (Overtimes == 0)
                 {
                     NumPossessions = (int)Math.Round(NumPossessions * 5.0 / 48); // 5 minutos de posses
-                    Dt = (int)5.0 / (2 * NumPossessions);
+                    Dt = 5.0 / (2 * NumPossessions);
                 }
 
                 T = 5;
@@ -66,34 +74,28 @@ namespace NBALigaSimulation.Shared.Model
                 Teams[0].Stats.Find(s => s.GameId == Id)?.PtsQtrs.Add(new PtsQtr { Points = 0 });
                 Teams[1].Stats.Find(s => s.GameId == Id)?.PtsQtrs.Add(new PtsQtr { Points = 0 });
                 //RecordPlay("Overtime");
-                SimPossessions(Teams);
+                SimPossessions(Teams, PlayersOnCourt);
             }
 
         }
 
-        public void SimPossessions(Team[] Teams)
+        public void SimPossessions(Team[] Teams, int[][] PlayersOnCourt)
         {
+
             int i = 0;
             while (i < NumPossessions * 2)
             {
-                // Acompanha os quartos
-                /*
-                if ((i * Dt > 12 && Teams[0].Stats.Find(s => s.GameId == Id)?.PtsQtrs.Count == 1) ||
-                    (i * Dt > 24 && Teams[0].Stats.Find(s => s.GameId == Id)?.PtsQtrs.Count == 2) ||
-                    (i * Dt > 36 && Teams[0].Stats.Find(s => s.GameId == Id)?.PtsQtrs.Count == 3))
-                {
-                    Teams[0].Stats.Find(s => s.GameId == Id)?.PtsQtrs.Add(new PtsQtr { Points = 0 });
-                    Teams[1].Stats.Find(s => s.GameId == Id)?.PtsQtrs.Add(new PtsQtr { Points = 0 });
-                    T = 12;
-                    RecordPlay("Quarter", Teams);
-                }
 
-                */
+
 
                 // Clock
-                T -= Dt;
+                string decimalPart = (Dt % 1).ToString("F0");
+                double possessionTime = Gauss(int.Parse(decimalPart));
+                T -= (int)Dt;
+
                 if (T < 0)
                 {
+                    possessionTime += T;
                     T = 0;
                 }
 
@@ -101,9 +103,18 @@ namespace NBALigaSimulation.Shared.Model
                 Offense = (Offense == 1) ? 0 : 1;
                 Defense = (Offense == 1) ? 0 : 1;
 
+                if (i % SubsEveryN == 0)
+                {
+                    bool substitutions = UpdatePlayersOnCourt(Teams, PlayersOnCourt);
+                    if (substitutions)
+                    {
+                        UpdateSynergy(Teams, PlayersOnCourt);
+                    }
+                }
+
                 CompositeHelper.UpdateCompositeRating(Teams, PlayersOnCourt);
 
-                string outcome = SimPossession(Teams);
+                string outcome = SimPossession(Teams, PlayersOnCourt);
 
                 // Troca o e d para que o receba outra posse quando eles forem trocados novamente no início do loop.
                 if (outcome == "Orb")
@@ -112,35 +123,27 @@ namespace NBALigaSimulation.Shared.Model
                     Defense = (Offense == 1) ? 0 : 1;
                 }
 
-                UpdatePlayingTime(Teams);
+                UpdatePlayingTime(Teams, PlayersOnCourt, possessionTime);
 
                 //Injuries();
-
-                if (i % SubsEveryN == 0)
-                {
-                    bool substitutions = UpdatePlayersOnCourt(Teams);
-                    if (substitutions)
-                    {
-                        UpdateSynergy(Teams);
-                    }
-                }
 
                 i += 1;
             }
         }
 
-        public bool UpdatePlayersOnCourt(Team[] Teams)
+        public bool UpdatePlayersOnCourt(Team[] teams, int[][] PlayersOnCourt)
         {
             bool substitutions = false;
 
             for (int t = 0; t < 2; t++)
             {
-                // Valores gerais dimensionados por fadiga
-                List<double> ovrs = new List<double>();
-                for (int p = 0; p < Teams[t].Players.Count; p++)
+                // Overall ratings scaled by fatigue
+                double[] ovrs = new double[teams[t].Players.Count];
+
+                for (int p = 0; p < teams[t].Players.Count; p++)
                 {
 
-                    var player = Teams[t].Players.Find(player => player.RosterOrder == p);
+                    var player = teams[t].Players.Find(player => player.RosterOrder == p);
                     if (player != null)
                     {
                         if (player.Stats == null)
@@ -152,79 +155,83 @@ namespace NBALigaSimulation.Shared.Model
 
                         if (lastStats == null || lastStats.GameId != Id)
                         {
-                            player.Stats.Add(new PlayerGameStats { GameId = Id, TeamId = Teams[t].Id, Name = player.FullName });
+                            player.Stats.Add(new PlayerGameStats { GameId = Id, TeamId = teams[t].Id, Name = player.FullName });
                         }
                     }
 
-                    // Jogadores com falta não podem jogar
-                    if (Teams[t].Players[p].Stats.Find(s => s.GameId == Id)?.Pf >= 6)
+                    // Injured or fouled out players can't play
+                    if (teams[t].Players[p].Stats.Find(s => s.GameId == Id).Pf >= 6)
                     {
                         ovrs[p] = double.NegativeInfinity;
                     }
                     else
                     {
-                        ovrs[p] = Teams[t].Players[p].Ratings.Last().Ovr * Fatigue(Teams[t].Players[p].Stats.Find(s => s.GameId == Id).Energy)
-                            * Teams[t].Players[p].PtModifier * RandomUtils.RandomUniform(0.9, 1.1);
+                        ovrs[p] = teams[t].Players[p].Ratings.LastOrDefault().Ovr * Fatigue(teams[t].Players[p].Stats.Find(s => s.GameId == Id).Energy) *
+                            teams[t].Players[p].PtModifier * RandomUtils.RandomUniform(0.9, 1.1);
                     }
                 }
 
+                // Loop through players on court (in inverse order of current roster position)
                 int i = 0;
                 for (int pp = 0; pp < PlayersOnCourt[t].Length; pp++)
                 {
                     int p = PlayersOnCourt[t][pp];
                     PlayersOnCourt[t][i] = p;
 
-                    for (int b = 0; b < Teams[t].Players.Count; b++)
+                    // Loop through bench players (in order of current roster position) to see if any should be subbed in
+                    for (int b = 0; b < teams[t].Players.Count; b++)
                     {
-                        if (!PlayersOnCourt[t].Contains(b)
-                            && ((Teams[t].Players[p].Stats.Find(s => s.GameId == Id)?.CourtTime > 3
-                            && Teams[t].Players[b].Stats.Find(s => s.GameId == Id)?.BenchTime > 3
-                            && ovrs[b] > ovrs[p]) || Teams[t].Players[p].Stats.Find(s => s.GameId == Id)?.Pf >= 6)
-                            && (Teams[t].Players[b].Stats.Find(s => s.GameId == Id)?.Pf < 6))
+                        if (!PlayersOnCourt[t].Contains(b) && ((teams[t].Players[p].Stats.Find(s => s.GameId == Id).CourtTime > 3
+                            && teams[t].Players[b].Stats.Find(s => s.GameId == Id).BenchTime > 3
+                            && ovrs[b] > ovrs[p]) || teams[t].Players[p].Stats.Find(s => s.GameId == Id).Pf >= 6))
                         {
                             substitutions = true;
 
+                            // Substitute player
                             PlayersOnCourt[t][i] = b;
-                            Teams[t].Players[b].Stats.Find(s => s.GameId == Id).CourtTime = RandomUtils.RandomUniform(-2, 2);
-                            Teams[t].Players[b].Stats.Find(s => s.GameId == Id).BenchTime = RandomUtils.RandomUniform(-2, 2);
-                            Teams[t].Players[p].Stats.Find(s => s.GameId == Id).CourtTime = RandomUtils.RandomUniform(-2, 2);
-                            Teams[t].Players[p].Stats.Find(s => s.GameId == Id).BenchTime = RandomUtils.RandomUniform(-2, 2);
-
-
-
-                            if (StartersRecorded)
-                            {
-                                RecordPlay("Sub", t, new string[] { Teams[t].Players[b].FullName, Teams[t].Players[p].FullName }, Teams);
-                            }
-                            break;
+                            p = b;
+                            teams[t].Players[b].Stats.Find(s => s.GameId == Id).CourtTime = RandomUtils.RandomUniform(-2, 2);
+                            teams[t].Players[b].Stats.Find(s => s.GameId == Id).BenchTime = RandomUtils.RandomUniform(-2, 2);
+                            teams[t].Players[p].Stats.Find(s => s.GameId == Id).CourtTime = RandomUtils.RandomUniform(-2, 2);
+                            teams[t].Players[p].Stats.Find(s => s.GameId == Id).BenchTime = RandomUtils.RandomUniform(-2, 2);
                         }
                     }
-                    i += 1;
-                }
-            }
 
-            if (!StartersRecorded)
-            {
-                for (int t = 0; t < 2; t++)
+                    i++;
+                }
+
+                if (!StartersRecorded)
                 {
-                    for (int p = 0; p < Teams[t].Players.Count; p++)
+                    for (int z = 0; z < 2; z++)
                     {
-                        if (PlayersOnCourt[t].Contains(p))
+                        for (int p = 0; p < teams[z].Players.Count; p++)
                         {
-                            RecordStat(t, p, "Gs", Teams);
+                            int playerRosterOrder = teams[z].Players[p].RosterOrder; // Armazena o ID do jogador em uma variável separada
+
+                            if (PlayersOnCourt[z].Any(play => play == playerRosterOrder))
+                            {
+                                RecordStat(z, playerRosterOrder, "Gs", teams);
+                            }
                         }
                     }
+                    StartersRecorded = true;
                 }
-                StartersRecorded = true;
+
             }
 
             return substitutions;
         }
 
-        public void UpdateSynergy(Team[] Teams)
+        public void UpdateSynergy(Team[] Teams, int[][] PlayersOnCourt)
         {
             for (int t = 0; t < 2; t++)
             {
+
+                if (Teams[t].Synergy == null)
+                {
+                    Teams[t].Synergy = new TeamSynergy();
+                }
+
                 // Conta todas as habilidades *fracionárias* dos jogadores ativos em uma equipe (incluindo duplicatas)
                 Dictionary<string, double> skillsCount = new Dictionary<string, double>
                 {
@@ -281,18 +288,19 @@ namespace NBALigaSimulation.Shared.Model
         }
 
 
-        public void UpdatePlayingTime(Team[] Teams)
+        public void UpdatePlayingTime(Team[] Teams, int[][] PlayersOnCourt, double possessionTime)
         {
+
             for (int t = 0; t < 2; t++)
             {
                 for (int p = 0; p < Teams[t].Players.Count; p++)
                 {
                     if (PlayersOnCourt[t].Contains(p))
                     {
-                        RecordStat(t, p, "Min", Teams, Dt);
-                        RecordStat(t, p, "CourtTime", Teams, Dt);
+                        RecordStat(t, p, "Min", Teams, 1, Dt);
+                        RecordStat(t, p, "CourtTime", Teams, 1, Dt);
                         // Isso costumava ser 0,04. Aumente mais para diminuir o PT
-                        RecordStat(t, p, "Energy", Teams, (int)(-Dt * 0.06 * (1 - Teams[t].Players[p].Ratings.Last().GameEndurance)));
+                        RecordStat(t, p, "Energy", Teams, 1, (-Dt * 0.06 * (1 - Teams[t].Players[p].Ratings.Last().GameEndurance)));
                         if (Teams[t].Players[p].Stats.Find(s => s.GameId == Id)?.Energy < 0)
                         {
                             Teams[t].Players[p].Stats.Find(s => s.GameId == Id).Energy = 0;
@@ -300,8 +308,8 @@ namespace NBALigaSimulation.Shared.Model
                     }
                     else
                     {
-                        RecordStat(t, p, "BenchTime", Teams, Dt);
-                        RecordStat(t, p, "Energy", Teams, (int)(Dt * 0.1));
+                        RecordStat(t, p, "BenchTime", Teams, 1, Dt);
+                        RecordStat(t, p, "Energy", Teams, 1, (Dt * 0.1));
                         if (Teams[t].Players[p].Stats.Find(s => s.GameId == Id)?.Energy > 1)
                         {
                             Teams[t].Players[p].Stats.Find(s => s.GameId == Id).Energy = 1;
@@ -311,7 +319,7 @@ namespace NBALigaSimulation.Shared.Model
             }
         }
 
-        public string SimPossession(Team[] Teams)
+        public string SimPossession(Team[] Teams, int[][] PlayersOnCourt)
         {
             double[] ratios;
             int shooter;
@@ -319,27 +327,27 @@ namespace NBALigaSimulation.Shared.Model
             // Turnover?
             if (DefenseHelper.ProbTov(Teams) > new Random().NextDouble())
             {
-                return DoTov(Teams);
+                return DoTov(Teams, PlayersOnCourt);
             }
 
             // Shot if there is no turnover
-            ratios = RatingArray(Teams, "GameUsage", Offense);
+            ratios = RatingArray(Teams, "GameUsage", Offense, PlayersOnCourt);
             shooter = ArrayHelper.PickPlayer(ratios);
 
-            return DoShot(shooter, Teams); // fg, orb, or drb
+            return DoShot(shooter, Teams, PlayersOnCourt); // fg, orb, or drb
         }
 
-        public string DoTov(Team[] Teams)
+        public string DoTov(Team[] Teams, int[][] PlayersOnCourt)
         {
             double[] ratios;
             int p;
 
-            ratios = RatingArray(Teams, "GameTurnovers", Offense, 0.5);
+            ratios = RatingArray(Teams, "GameTurnovers", Offense, PlayersOnCourt, 0.5);
             p = PlayersOnCourt[Offense][ArrayHelper.PickPlayer(ratios)];
             RecordStat(Offense, p, "Tov", Teams);
             if (DefenseHelper.ProbStl(Teams) > new Random().NextDouble())
             {
-                return DoStl(p, Teams); // "stl"
+                return DoStl(p, Teams, PlayersOnCourt); // "stl"
             }
             else
             {
@@ -349,12 +357,12 @@ namespace NBALigaSimulation.Shared.Model
             return "Tov";
         }
 
-        public string DoStl(int pStoleFrom, Team[] Teams)
+        public string DoStl(int pStoleFrom, Team[] Teams, int[][] PlayersOnCourt)
         {
             double[] ratios;
             int p;
 
-            ratios = RatingArray(Teams, "GameStealing", Defense);
+            ratios = RatingArray(Teams, "GameStealing", Defense, PlayersOnCourt);
             p = PlayersOnCourt[Defense][ArrayHelper.PickPlayer(ratios)];
             RecordStat(Defense, p, "Stl", Teams);
             RecordPlay("Stl", Defense, new string[] { Teams[Defense].Players[p].FullName, Teams[Offense].Players[pStoleFrom].FullName }, Teams);
@@ -362,7 +370,7 @@ namespace NBALigaSimulation.Shared.Model
             return "Stl";
         }
 
-        public string DoShot(int shooter, Team[] Teams)
+        public string DoShot(int shooter, Team[] Teams, int[][] PlayersOnCourt)
         {
             double fatigue, probMake, probAndOne, probMissAndFoul, r1, r2, r3;
             int p, passer;
@@ -376,7 +384,7 @@ namespace NBALigaSimulation.Shared.Model
             passer = -1;
             if (OffenseHelper.ProbAst(Teams, Offense, Defense) > new Random().NextDouble())
             {
-                double[] ratios = RatingArray(Teams, "GamePassing", Offense, 2);
+                double[] ratios = RatingArray(Teams, "GamePassing", Offense, PlayersOnCourt, 2);
                 passer = ArrayHelper.PickPlayer(ratios, shooter);
             }
 
@@ -434,7 +442,7 @@ namespace NBALigaSimulation.Shared.Model
 
             if (DefenseHelper.ProbBlk(Teams, Defense) > new Random().NextDouble())
             {
-                return DoBlk(shooter, type, Teams); // orb or drb
+                return DoBlk(shooter, type, Teams, PlayersOnCourt); // orb or drb
             }
 
             // Make
@@ -443,9 +451,9 @@ namespace NBALigaSimulation.Shared.Model
                 // And 1
                 if (probAndOne > new Random().NextDouble())
                 {
-                    return DoFg(shooter, passer, type, true, Teams); // fg, orb, or drb
+                    return DoFg(shooter, passer, type, true, Teams, PlayersOnCourt); // fg, orb, or drb
                 }
-                return DoFg(shooter, passer, type, false, Teams); // fg
+                return DoFg(shooter, passer, type, false, Teams, PlayersOnCourt); // fg
             }
 
             // Miss, but fouled
@@ -453,9 +461,9 @@ namespace NBALigaSimulation.Shared.Model
             {
                 if (type == "ThreePointer")
                 {
-                    return DoFt(shooter, 3, Teams); // fg, orb, or drb
+                    return DoFt(shooter, 3, Teams, PlayersOnCourt); // fg, orb, or drb
                 }
-                return DoFt(shooter, 2, Teams); // fg, orb, or drb
+                return DoFt(shooter, 2, Teams, PlayersOnCourt); // fg, orb, or drb
             }
 
             // Miss
@@ -482,10 +490,10 @@ namespace NBALigaSimulation.Shared.Model
                 RecordPlay("MissTp", Offense, new string[] { Teams[Offense].Players[p].FullName }, Teams);
             }
 
-            return DoReb(Teams); // o
+            return DoReb(Teams, PlayersOnCourt); // o
         }
 
-        private string DoBlk(int shooter, string type, Team[] Teams)
+        private string DoBlk(int shooter, string type, Team[] Teams, int[][] PlayersOnCourt)
         {
             int p, p2;
             string[] playArgs;
@@ -508,7 +516,7 @@ namespace NBALigaSimulation.Shared.Model
                 RecordStat(Offense, p, "Tpa", Teams);
             }
 
-            double[] ratios = RatingArray(Teams, "GameBlocking", Defense, 4);
+            double[] ratios = RatingArray(Teams, "GameBlocking", Defense, PlayersOnCourt, 4);
             p2 = PlayersOnCourt[Defense][ArrayHelper.PickPlayer(ratios)];
             RecordStat(Defense, p2, "Blk", Teams);
 
@@ -533,10 +541,10 @@ namespace NBALigaSimulation.Shared.Model
                 RecordPlay("BlkTp", Defense, playArgs, Teams);
             }
 
-            return DoReb(Teams); // orb or drb
+            return DoReb(Teams, PlayersOnCourt); // orb or drb
         }
 
-        private string DoFg(int shooter, int passer, string type, bool andOne, Team[] Teams)
+        private string DoFg(int shooter, int passer, string type, bool andOne, Team[] Teams, int[][] PlayersOnCourt)
         {
             int p;
             p = PlayersOnCourt[Offense][shooter];
@@ -579,19 +587,19 @@ namespace NBALigaSimulation.Shared.Model
 
             if (andOne)
             {
-                return DoFt(shooter, 1, Teams);  // fg, orb, or drb
+                return DoFt(shooter, 1, Teams, PlayersOnCourt);  // fg, orb, or drb
             }
             return "Fg";
         }
 
-        private string DoFt(int shooter, int amount, Team[] Teams)
+        private string DoFt(int shooter, int amount, Team[] Teams, int[][] PlayersOnCourt)
         {
             Random random = new Random();
 
             int i, p;
             string outcome = null;
 
-            DoPf(Defense, Teams);
+            DoPf(Defense, Teams, PlayersOnCourt);
             p = PlayersOnCourt[Offense][shooter];
 
             for (i = 0; i < amount; i++)
@@ -612,18 +620,18 @@ namespace NBALigaSimulation.Shared.Model
 
             if (outcome != "Fg")
             {
-                outcome = DoReb(Teams);  // orb or drb
+                outcome = DoReb(Teams, PlayersOnCourt);  // orb or drb
             }
 
             return outcome;
         }
 
-        private void DoPf(int t, Team[] Teams)
+        private void DoPf(int t, Team[] Teams, int[][] PlayersOnCourt)
         {
             int p;
             double[] ratios;
 
-            ratios = RatingArray(Teams, "GameFouling", t);
+            ratios = RatingArray(Teams, "GameFouling", t, PlayersOnCourt);
             p = PlayersOnCourt[t][ArrayHelper.PickPlayer(ratios)];
             RecordStat(Defense, p, "Pf", Teams);
             RecordPlay("Pf", Defense, new string[] { Teams[Defense].Players[p].FullName }, Teams);
@@ -633,12 +641,12 @@ namespace NBALigaSimulation.Shared.Model
             {
                 RecordPlay("FoulOut", Defense, new string[] { Teams[Defense].Players[p].FullName }, Teams);
                 // Force substitutions now
-                UpdatePlayersOnCourt(Teams);
-                UpdateSynergy(Teams);
+                UpdatePlayersOnCourt(Teams, PlayersOnCourt);
+                UpdateSynergy(Teams, PlayersOnCourt);
             }
         }
 
-        private string DoReb(Team[] Teams)
+        private string DoReb(Team[] Teams, int[][] PlayersOnCourt)
         {
             int p;
             double[] ratios;
@@ -653,7 +661,7 @@ namespace NBALigaSimulation.Shared.Model
             if (0.75 * (2 + Teams[Defense].CompositeRating.Ratings["GameRebounding"]) / (2 + Teams[Offense].CompositeRating.Ratings["GameRebounding"])
                 > random.NextDouble())
             {
-                ratios = RatingArray(Teams, "GameRebounding", Defense);
+                ratios = RatingArray(Teams, "GameRebounding", Defense, PlayersOnCourt);
                 p = PlayersOnCourt[Defense][ArrayHelper.PickPlayer(ratios)];
                 RecordStat(Defense, p, "Drb", Teams);
                 RecordPlay("Drb", Defense, new string[] { Teams[Defense].Players[p].FullName }, Teams);
@@ -661,7 +669,7 @@ namespace NBALigaSimulation.Shared.Model
                 return "Drb";
             }
 
-            ratios = RatingArray(Teams, "GameRebounding", Offense);
+            ratios = RatingArray(Teams, "GameRebounding", Offense, PlayersOnCourt);
             p = PlayersOnCourt[Offense][ArrayHelper.PickPlayer(ratios)];
             RecordStat(Offense, p, "Orb", Teams);
             RecordPlay("Orb", Offense, new string[] { Teams[Offense].Players[p].FullName }, Teams);
@@ -669,7 +677,7 @@ namespace NBALigaSimulation.Shared.Model
             return "Orb";
         }
 
-        public double[] RatingArray(Team[] Teams, string rating, int t, double power = 1)
+        public double[] RatingArray(Team[] Teams, string rating, int t, int[][] PlayersOnCourt, double power = 1)
         {
             double[] array = new double[5];
 
@@ -678,9 +686,9 @@ namespace NBALigaSimulation.Shared.Model
                 int p = PlayersOnCourt[t][i];
                 var player = Teams[t].Players.Find(player => player.RosterOrder == p);
 
-                double energy = Fatigue(Teams[t].Players[p].Stats.Find(s => s.GameId == Id).Energy);
+                double energy = Fatigue(Teams[t].Players[p].Stats.Find(s => s.GameId == Id)?.Energy ?? 0);
 
-                if (player != null)
+                if (player != null && player.Ratings?.LastOrDefault() != null)
                 {
                     var playerRatings = player.Ratings.LastOrDefault();
                     array[i] = Math.Pow(CompositeHelper.GetRatingValue(rating, playerRatings) * energy, power);
@@ -690,14 +698,20 @@ namespace NBALigaSimulation.Shared.Model
             return array;
         }
 
-        public void RecordStat(int t, int p, string s, Team[] teams, int amount = 1)
+
+        public void RecordStat(int t, int p, string s, Team[] teams, int amount = 1, double amntDouble = 1.0)
         {
             amount = amount != 0 ? amount : 1;
-            RecordHelper.RecordStatHelperPlayer(t, p, s, Id, teams, amount);
+            RecordHelper.RecordStatHelperPlayer(t, p, s, Id, teams, amount, amntDouble);
             if (s != "Gs" && s != "CourtTime" && s != "BenchTime" && s != "Energy")
             {
                 RecordHelper.RecordStatHelperTeam(t, p, s, Id, teams, amount);
             }
+        }
+
+        public void RecordStatMinutes(int t, int p, string s, Team[] teams, double amount = 1.0)
+        {
+            RecordHelper.RecordStatHelperPlayerMinutes(t, p, s, Id, teams, amount);
         }
 
         public double Fatigue(double energy)
@@ -715,131 +729,127 @@ namespace NBALigaSimulation.Shared.Model
         {
             int i;
             int qtr;
-            int sec;
             string sect = "";
-            string text;
+            string text = "";
             string[] texts = null;
 
-
-            if (PlayByPlay != null)
+            if (type == "Injury")
             {
-                if (type == "Injury")
-                {
-                    texts = new string[] { "{0} was injured!" };
-                }
-                else if (type == "Tov")
-                {
-                    texts = new string[] { "{0} turned the ball over" };
-                }
-                else if (type == "Stl")
-                {
-                    texts = new string[] { "{0} stole the ball from {1}" };
-                }
-                else if (type == "FgAtRim")
-                {
-                    texts = new string[] { "{0} made a dunk/layup" };
-                }
-                else if (type == "FgAtRimAndOne")
-                {
-                    texts = new string[] { "{0} made a dunk/layup and got fouled!" };
-                }
-                else if (type == "FgLowPost")
-                {
-                    texts = new string[] { "{0} made a low post shot" };
-                }
-                else if (type == "FgLowPostAndOne")
-                {
-                    texts = new string[] { "{0} made a low post shot and got fouled!" };
-                }
-                else if (type == "FgMidRange")
-                {
-                    texts = new string[] { "{0} made a mid-range shot" };
-                }
-                else if (type == "FgMidRangeAndOne")
-                {
-                    texts = new string[] { "{0} made a mid-range shot and got fouled!" };
-                }
-                else if (type == "Tp")
-                {
-                    texts = new string[] { "{0} made a three pointer shot" };
-                }
-                else if (type == "TpAndOne")
-                {
-                    texts = new string[] { "{0} made a three pointer and got fouled!" };
-                }
-                else if (type == "BlkAtRim")
-                {
-                    texts = new string[] { "{0} blocked {1}'s dunk/layup" };
-                }
-                else if (type == "BlkLowPost")
-                {
-                    texts = new string[] { "{0} blocked {1}'s low post shot" };
-                }
-                else if (type == "BlkMidRange")
-                {
-                    texts = new string[] { "{0} blocked {1}'s mid-range shot" };
-                }
-                else if (type == "BlkTp")
-                {
-                    texts = new string[] { "{0} blocked {1}'s three pointer" };
-                }
-                else if (type == "MissAtRim")
-                {
-                    texts = new string[] { "{0} missed a dunk/layup" };
-                }
-                else if (type == "MissLowPost")
-                {
-                    texts = new string[] { "{0} missed a low post shot" };
-                }
-                else if (type == "MissMidRange")
-                {
-                    texts = new string[] { "{0} missed a mid-range shot" };
-                }
-                else if (type == "MissTp")
-                {
-                    texts = new string[] { "{0} missed a three pointer" };
-                }
-                else if (type == "Orb")
-                {
-                    texts = new string[] { "{0} grabbed the offensive rebound" };
-                }
-                else if (type == "Drb")
-                {
-                    texts = new string[] { "{0} grabbed the defensive rebound" };
-                }
-                else if (type == "Ast")
-                {
-                    texts = new string[] { "(assist: {0})" };
-                }
-                else if (type == "Quarter")
-                {
-                    texts = new string[] { "<b>Start of " + RandomUtils.Ordinal(Teams[0].Stats.Find(s => s.GameId == Id).PtsQtrs.Count) + " quarter</b>" };
-                }
-                else if (type == "Overtime")
-                {
-                    texts = new string[] { "<b>Start of " + RandomUtils.Ordinal(Teams[0].Stats.Find(s => s.GameId == Id).PtsQtrs.Count - 4) + " overtime period</b>" };
-                }
-                else if (type == "Ft")
-                {
-                    texts = new string[] { "{0} made a free throw" };
-                }
-                else if (type == "MissFt")
-                {
-                    texts = new string[] { "{0} missed a free throw" };
-                }
-                else if (type == "Pf")
-                {
-                    texts = new string[] { "Foul on {0}" };
-                }
-                else if (type == "FoulOut")
-                {
-                    texts = new string[] { "{0} fouled out" };
-                }
-                else if (type == "Sub")
-                {
-                    texts = new string[] { "Substitution: {0} for {1}" };
-                }
+                texts = new string[] { "{0} was injured!" };
             }
+            else if (type == "Tov")
+            {
+                texts = new string[] { "{0} turned the ball over" };
+            }
+            else if (type == "Stl")
+            {
+                texts = new string[] { "{0} stole the ball from {1}" };
+            }
+            else if (type == "FgAtRim")
+            {
+                texts = new string[] { "{0} made a dunk/layup" };
+            }
+            else if (type == "FgAtRimAndOne")
+            {
+                texts = new string[] { "{0} made a dunk/layup and got fouled!" };
+            }
+            else if (type == "FgLowPost")
+            {
+                texts = new string[] { "{0} made a low post shot" };
+            }
+            else if (type == "FgLowPostAndOne")
+            {
+                texts = new string[] { "{0} made a low post shot and got fouled!" };
+            }
+            else if (type == "FgMidRange")
+            {
+                texts = new string[] { "{0} made a mid-range shot" };
+            }
+            else if (type == "FgMidRangeAndOne")
+            {
+                texts = new string[] { "{0} made a mid-range shot and got fouled!" };
+            }
+            else if (type == "Tp")
+            {
+                texts = new string[] { "{0} made a three pointer shot" };
+            }
+            else if (type == "TpAndOne")
+            {
+                texts = new string[] { "{0} made a three pointer and got fouled!" };
+            }
+            else if (type == "BlkAtRim")
+            {
+                texts = new string[] { "{0} blocked {1}'s dunk/layup" };
+            }
+            else if (type == "BlkLowPost")
+            {
+                texts = new string[] { "{0} blocked {1}'s low post shot" };
+            }
+            else if (type == "BlkMidRange")
+            {
+                texts = new string[] { "{0} blocked {1}'s mid-range shot" };
+            }
+            else if (type == "BlkTp")
+            {
+                texts = new string[] { "{0} blocked {1}'s three pointer" };
+            }
+            else if (type == "MissAtRim")
+            {
+                texts = new string[] { "{0} missed a dunk/layup" };
+            }
+            else if (type == "MissLowPost")
+            {
+                texts = new string[] { "{0} missed a low post shot" };
+            }
+            else if (type == "MissMidRange")
+            {
+                texts = new string[] { "{0} missed a mid-range shot" };
+            }
+            else if (type == "MissTp")
+            {
+                texts = new string[] { "{0} missed a three pointer" };
+            }
+            else if (type == "Orb")
+            {
+                texts = new string[] { "{0} grabbed the offensive rebound" };
+            }
+            else if (type == "Drb")
+            {
+                texts = new string[] { "{0} grabbed the defensive rebound" };
+            }
+            else if (type == "Ast")
+            {
+                texts = new string[] { "(assist: {0})" };
+            }
+            else if (type == "Quarter")
+            {
+                texts = new string[] { "<b>Start of " + RandomUtils.Ordinal(Teams[0].Stats.Find(s => s.GameId == Id).PtsQtrs.Count) + " quarter</b>" };
+            }
+            else if (type == "Overtime")
+            {
+                texts = new string[] { "<b>Start of " + RandomUtils.Ordinal(Teams[0].Stats.Find(s => s.GameId == Id).PtsQtrs.Count - 4) + " overtime period</b>" };
+            }
+            else if (type == "Ft")
+            {
+                texts = new string[] { "{0} made a free throw" };
+            }
+            else if (type == "MissFt")
+            {
+                texts = new string[] { "{0} missed a free throw" };
+            }
+            else if (type == "Pf")
+            {
+                texts = new string[] { "Foul on {0}" };
+            }
+            else if (type == "FoulOut")
+            {
+                texts = new string[] { "{0} fouled out" };
+            }
+            else if (type == "Sub")
+            {
+                texts = new string[] { "Substitution: {0} for {1}" };
+            }
+
 
             if (texts != null)
             {
@@ -848,41 +858,45 @@ namespace NBALigaSimulation.Shared.Model
                 {
                     for (i = 0; i < names.Length; i++)
                     {
-                        text = text.Replace("{" + i + "}", names[i]);
-                    }
-                }
-
-                if (type == "Ast")
-                {
-                    for (i = PlayByPlay.Count - 1; i >= 0; i--)
-                    {
-                        if (PlayByPlay[i].Type == "text")
+                        if (names[i] != null)
                         {
-                            PlayByPlay[i].Text += " " + text;
-                            break;
+                            text = text.Replace("{" + i + "}", names[i]);
                         }
                     }
                 }
-                else
-                {
-                    sec = (int)(t % 1 * 60);
-                    if (sec < 10)
-                    {
-                        sect = "0" + sec;
-                    }
-                    PlayByPlay.Add(new GamePlayByPlay
-                    {
-                        Type = "text",
-                        Text = text,
-                        T = t,
-                        Time = Math.Floor(t) + ":" + sect
-                    });
-                }
             }
-            else
+
+            decimal sec = Math.Floor(T % 1m * 60);
+            if (sec < 10)
             {
-                Console.WriteLine("No text for " + type);
+                sect = "0" + sec;
             }
+
+
+            PlayByPlay.Add(new GamePlayByPlay
+            {
+                Type = "text",
+                Text = text,
+                T = t,
+                Time = Math.Floor(t) + ":" + sect
+            });
+
+
+
+        }
+
+        public double Gauss(double mu = 0, double sigma = 1)
+        {
+            Random random = new Random();
+            double result = (
+                (random.NextDouble() * 2 - 1 +
+                (random.NextDouble() * 2 - 1) +
+                (random.NextDouble() * 2 - 1)) *
+                sigma +
+                mu
+            );
+
+            return result;
         }
 
 

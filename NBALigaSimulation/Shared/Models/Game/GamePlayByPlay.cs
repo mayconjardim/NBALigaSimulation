@@ -2,7 +2,6 @@
 {
     public class GamePlayByPlay
     {
-
         public int Id { get; set; }
         public int GameSimId { get; set; }
         public Game Game { get; set; }

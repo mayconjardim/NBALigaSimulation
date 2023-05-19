@@ -112,7 +112,7 @@ namespace NBALigaSimulation.Shared.Engine
 
         }
 
-        public static void RecordStatHelperPlayer(int t, int p, string s, int Id, Team[] teams, int amt = 1)
+        public static void RecordStatHelperPlayer(int t, int p, string s, int Id, Team[] teams, int amt = 1, double amntDouble = 1.0)
         {
 
             var player = teams[t].Players.Find(player => player.RosterOrder == p);
@@ -221,6 +221,27 @@ namespace NBALigaSimulation.Shared.Engine
             }
             else if (s == "CourtTime")
             {
+                teams[t].Players.Find(player => player.RosterOrder == p).Stats.Find(s => s.GameId == Id).CourtTime += amntDouble;
+            }
+            else if (s == "BenchTime")
+            {
+                teams[t].Players.Find(player => player.RosterOrder == p).Stats.Find(s => s.GameId == Id).BenchTime += amntDouble;
+            }
+            else if (s == "Energy")
+            {
+                teams[t].Players.Find(player => player.RosterOrder == p).Stats.Find(s => s.GameId == Id).Energy += amntDouble;
+            }
+            else if (s == "Min")
+            {
+                teams[t].Players.Find(player => player.RosterOrder == p).Stats.Find(s => s.GameId == Id).Min += amntDouble;
+            }
+
+        }
+
+        public static void RecordStatHelperPlayerMinutes(int t, int p, string s, int Id, Team[] teams, double amt = 1.0)
+        {
+            if (s == "CourtTime")
+            {
                 teams[t].Players.Find(player => player.RosterOrder == p).Stats.Find(s => s.GameId == Id).CourtTime += amt;
             }
             else if (s == "BenchTime")
@@ -235,7 +256,6 @@ namespace NBALigaSimulation.Shared.Engine
             {
                 teams[t].Players.Find(player => player.RosterOrder == p).Stats.Find(s => s.GameId == Id).Min += amt;
             }
-
         }
 
 

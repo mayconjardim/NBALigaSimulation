@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Components;
+using System.Globalization;
 
 namespace NBALigaSimulation.Client.Pages.Game
 {
@@ -43,6 +44,13 @@ namespace NBALigaSimulation.Client.Pages.Game
 
             return $"{primeiraLetra}. {sobrenome}";
         }
+
+        public string Format(double numero)
+        {
+            string numeroFormatado = numero.ToString("0.0", CultureInfo.InvariantCulture);
+            return numeroFormatado;
+        }
+
 
     }
 }

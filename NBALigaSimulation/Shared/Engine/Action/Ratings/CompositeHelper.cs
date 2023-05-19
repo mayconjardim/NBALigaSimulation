@@ -7,7 +7,7 @@ namespace NBALigaSimulation.Shared.Engine
 
         public static void UpdateCompositeRating(Team[] teams, int[][] playersOnCourt)
         {
-            string[] toUpdate = { "GameDribbling", "GamePassing", "GameRebounding", "GameDefense", "GameDefensePerimeter", "GameBlocking" };
+            string[] toUpdate = { "GameDribbling", "GamePassing", "GameRebounding", "GameDefense", "GameDefensePerimeter", "GameBlocking", "GamePace" };
 
             for (int i = 0; i < 2; i++)
             {
@@ -68,6 +68,32 @@ namespace NBALigaSimulation.Shared.Engine
             }
         }
 
+        public static void UpdatePace(Team[] teams)
+        {
+            for (int t = 0; t < 2; t++)
+            {
+                if (teams[t].CompositeRating == null)
+                {
+                    teams[t].CompositeRating = new TeamCompositeRating();
+                }
+
+                teams[t].CompositeRating.Ratings["GamePace"] = 0;
+
+                int numPlayers = teams[t].Players.Count;
+                if (numPlayers > 7)
+                {
+                    numPlayers = 7;
+                }
+
+                for (int i = 0; i < numPlayers; i++)
+                {
+                    teams[t].CompositeRating.Ratings["GamePace"] += teams[t].Players.Find(p => p.RosterOrder == i).Ratings.Last().GamePace;
+                }
+
+                teams[t].CompositeRating.Ratings["GamePace"] /= numPlayers;
+                teams[t].CompositeRating.Ratings["GamePace"] = teams[t].CompositeRating.Ratings["GamePace"] * 15 + 100;
+            }
+        }
 
         public static double GetRatingValue(string ratingName, PlayerRatings playerRatings)
         {

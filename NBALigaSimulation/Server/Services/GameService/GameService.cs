@@ -45,7 +45,7 @@ namespace NBALigaSimulation.Server.Services.GameService
                 return response;
             }
 
-            game.GameSim();
+            game.GameSim(); //Simula o jogo <----------
 
             await _context.SaveChangesAsync();
 
