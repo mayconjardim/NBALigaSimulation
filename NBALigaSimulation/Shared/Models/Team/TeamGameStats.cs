@@ -30,16 +30,6 @@ namespace NBALigaSimulation.Shared.Models
         public int Blk { get; set; }
         public int Pf { get; set; }
         public int Pts { get; set; }
-        public ICollection<PtsQtr> PtsQtrs { get; set; }
-    }
-
-    public class PtsQtr
-    {
-        public int Id { get; set; }
-        public int TeamGameStatsId { get; set; }
-        public TeamGameStats TeamGameStats { get; set; }
-        public int QuarterNumber { get; set; }
-        public int Points { get; set; }
     }
 
 }

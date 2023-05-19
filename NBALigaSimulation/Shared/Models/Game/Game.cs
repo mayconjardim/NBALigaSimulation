@@ -13,9 +13,9 @@ namespace NBALigaSimulation.Shared.Models
         public int AwayTeamId { get; set; }
         [ForeignKey("AwayTeamId")]
         public Team? AwayTeam { get; set; }
-        public List<TeamGameStats> TeamGameStats { get; set; }
+        public List<TeamGameStats> TeamGameStats { get; set; } = new List<TeamGameStats>();
         public List<PlayerGameStats> PlayerGameStats { get; set; } = new List<PlayerGameStats>();
-        public List<GamePlayByPlay> PlayByPlay { get; set; }
+        public List<GamePlayByPlay> PlayByPlay { get; set; } = new List<GamePlayByPlay>();
 
         // Atributos Globais da Simulação
         [NotMapped]
@@ -33,7 +33,7 @@ namespace NBALigaSimulation.Shared.Models
         [NotMapped]
         int Defense; // Time que está defendendo
         [NotMapped]
-        int T = 12; // Tempo por quarto
+        double T = 12.00; // Tempo por quarto
         [NotMapped]
         double Dt = 0; // Tempo decorrido por posse
 
@@ -48,9 +48,7 @@ namespace NBALigaSimulation.Shared.Models
             double paceFactor = 97.3 / 100;
             paceFactor += 0.025 * Math.Clamp((paceFactor - 1) / 0.2, -1, 1);
             NumPossessions = Convert.ToInt32((((Teams[0].CompositeRating.Ratings["GamePace"] + Teams[1].CompositeRating.Ratings["GamePace"]) / 2) * 1.1 * paceFactor));
-            Console.WriteLine(NumPossessions);
             Dt = 48.0 / (2 * NumPossessions);
-            Console.WriteLine(Dt);
 
             int[][] PlayersOnCourt = new int[][] { new int[] { 0, 1, 2, 3, 4 }, new int[] { 0, 1, 2, 3, 4 } };
 
@@ -69,10 +67,10 @@ namespace NBALigaSimulation.Shared.Models
                     Dt = 5.0 / (2 * NumPossessions);
                 }
 
-                T = 5;
+                T = 5.0;
                 Overtimes++;
-                Teams[0].Stats.Find(s => s.GameId == Id)?.PtsQtrs.Add(new PtsQtr { Points = 0 });
-                Teams[1].Stats.Find(s => s.GameId == Id)?.PtsQtrs.Add(new PtsQtr { Points = 0 });
+                // Teams[0].Stats.Find(s => s.GameId == Id)?.PtsQtrs.Add(new PtsQtr { Points = 0 });
+                //Teams[1].Stats.Find(s => s.GameId == Id)?.PtsQtrs.Add(new PtsQtr { Points = 0 });
                 //RecordPlay("Overtime");
                 SimPossessions(Teams, PlayersOnCourt);
             }
@@ -82,20 +80,25 @@ namespace NBALigaSimulation.Shared.Models
         public void SimPossessions(Team[] Teams, int[][] PlayersOnCourt)
         {
 
+            Offense = 0;
+            Defense = 1;
+
+
             int i = 0;
             while (i < NumPossessions * 2)
             {
 
+                if ((i * Dt > 12))
+                {
+                    T = 12.0;
+                    //RecordPlay("quarter");
+                }
 
 
                 // Clock
-                string decimalPart = (Dt % 1).ToString("F0");
-                double possessionTime = Gauss(int.Parse(decimalPart));
-                T -= (int)Dt;
-
+                T -= Dt;
                 if (T < 0)
                 {
-                    possessionTime += T;
                     T = 0;
                 }
 
@@ -103,14 +106,6 @@ namespace NBALigaSimulation.Shared.Models
                 Offense = (Offense == 1) ? 0 : 1;
                 Defense = (Offense == 1) ? 0 : 1;
 
-                if (i % SubsEveryN == 0)
-                {
-                    bool substitutions = UpdatePlayersOnCourt(Teams, PlayersOnCourt);
-                    if (substitutions)
-                    {
-                        UpdateSynergy(Teams, PlayersOnCourt);
-                    }
-                }
 
                 CompositeHelper.UpdateCompositeRating(Teams, PlayersOnCourt);
 
@@ -123,9 +118,18 @@ namespace NBALigaSimulation.Shared.Models
                     Defense = (Offense == 1) ? 0 : 1;
                 }
 
-                UpdatePlayingTime(Teams, PlayersOnCourt, possessionTime);
+                UpdatePlayingTime(Teams, PlayersOnCourt);
 
                 //Injuries();
+
+                if (i % SubsEveryN == 0)
+                {
+                    bool substitutions = UpdatePlayersOnCourt(Teams, PlayersOnCourt);
+                    if (substitutions)
+                    {
+                        UpdateSynergy(Teams, PlayersOnCourt);
+                    }
+                }
 
                 i += 1;
             }
@@ -288,7 +292,7 @@ namespace NBALigaSimulation.Shared.Models
         }
 
 
-        public void UpdatePlayingTime(Team[] Teams, int[][] PlayersOnCourt, double possessionTime)
+        public void UpdatePlayingTime(Team[] Teams, int[][] PlayersOnCourt)
         {
 
             for (int t = 0; t < 2; t++)
@@ -731,7 +735,7 @@ namespace NBALigaSimulation.Shared.Models
             int qtr;
             string sect = "";
             string text = "";
-            string[] texts = null;
+            string[] texts = new string[] { };
 
             if (type == "Injury")
             {
@@ -823,11 +827,11 @@ namespace NBALigaSimulation.Shared.Models
             }
             else if (type == "Quarter")
             {
-                texts = new string[] { "<b>Start of " + RandomUtils.Ordinal(Teams[0].Stats.Find(s => s.GameId == Id).PtsQtrs.Count) + " quarter</b>" };
+                //texts = new string[] { "<b>Start of " + RandomUtils.Ordinal(Teams[0].Stats.Find(s => s.GameId == Id).PtsQtrs.Count) + " quarter</b>" };
             }
             else if (type == "Overtime")
             {
-                texts = new string[] { "<b>Start of " + RandomUtils.Ordinal(Teams[0].Stats.Find(s => s.GameId == Id).PtsQtrs.Count - 4) + " overtime period</b>" };
+                //texts = new string[] { "<b>Start of " + RandomUtils.Ordinal(Teams[0].Stats.Find(s => s.GameId == Id).PtsQtrs.Count - 4) + " overtime period</b>" };
             }
             else if (type == "Ft")
             {
@@ -850,36 +854,49 @@ namespace NBALigaSimulation.Shared.Models
                 texts = new string[] { "Substitution: {0} for {1}" };
             }
 
-
-            if (texts != null)
+            if (texts != null && texts.Length > 0)
             {
                 text = texts[0];
                 if (names != null)
                 {
-                    for (i = 0; i < names.Length; i++)
+                    for (int z = 0; z < names.Length; z++)
                     {
-                        if (names[i] != null)
+                        text = text.Replace("{" + z + "}", names[z]);
+                    }
+                }
+
+                if (type == "Ast")
+                {
+
+                    for (int z = PlayByPlay.Count - 1; z >= 0; z--)
+                    {
+                        if (PlayByPlay[z].Type == "text")
                         {
-                            text = text.Replace("{" + i + "}", names[i]);
+                            PlayByPlay[z].Text += " " + text;
+                            break;
                         }
                     }
                 }
+                else
+                {
+                    int sec = (int)(T % 1 * 60);
+                    if (sec < 10)
+                    {
+                        sect = "0" + sec;
+                    }
+                    PlayByPlay.Add(new GamePlayByPlay
+                    {
+                        Type = "Text",
+                        Text = text,
+                        T = T,
+                        Time = Math.Floor((double)T) + ":" + sect
+                    });
+                }
             }
-
-            decimal sec = Math.Floor(T % 1m * 60);
-            if (sec < 10)
+            else
             {
-                sect = "0" + sec;
+                Console.WriteLine("No text for " + type);
             }
-
-
-            PlayByPlay.Add(new GamePlayByPlay
-            {
-                Type = "text",
-                Text = text,
-                T = t,
-                Time = Math.Floor(t) + ":" + sect
-            });
 
 
 
