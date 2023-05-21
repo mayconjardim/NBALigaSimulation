@@ -34,8 +34,6 @@ namespace NBALigaSimulation.Server.Controllers
             return Ok(response);
         }
 
-
-
         [HttpGet]
         public async Task<ActionResult<ServiceResponse<List<GameCompleteDto>>>> GetAllGames()
         {

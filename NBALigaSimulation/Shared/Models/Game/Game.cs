@@ -69,15 +69,14 @@ namespace NBALigaSimulation.Shared.Models
 
                 T = 5.0;
                 Overtimes++;
-                // Teams[0].Stats.Find(s => s.GameId == Id)?.PtsQtrs.Add(new PtsQtr { Points = 0 });
-                //Teams[1].Stats.Find(s => s.GameId == Id)?.PtsQtrs.Add(new PtsQtr { Points = 0 });
                 //RecordPlay("Overtime");
                 SimPossessions(Teams, PlayersOnCourt);
             }
 
+
         }
 
-        public void SimPossessions(Team[] Teams, int[][] PlayersOnCourt)
+        public async void SimPossessions(Team[] Teams, int[][] PlayersOnCourt)
         {
 
             Offense = 0;
@@ -87,11 +86,10 @@ namespace NBALigaSimulation.Shared.Models
             int i = 0;
             while (i < NumPossessions * 2)
             {
-
-                if ((i * Dt > 12))
+                if ((i * Dt > 12) || (i * Dt > 24) || (i * Dt > 36))
                 {
-                    T = 12.0;
-                    //RecordPlay("quarter");
+                    T = 12;
+                    //recordPlay("quarter");
                 }
 
 
@@ -392,19 +390,26 @@ namespace NBALigaSimulation.Shared.Models
                 passer = ArrayHelper.PickPlayer(ratios, shooter);
             }
 
+            double shootingThreePointerScaled = Teams[Offense].Players[p].Ratings.LastOrDefault().GameShootingThreePointer;
+            if (shootingThreePointerScaled > 0.55)
+            {
+                shootingThreePointerScaled =
+                    0.55 + (shootingThreePointerScaled - 0.55) * (0.3 / 0.45);
+            }
+
             // Escolhe o tipo de chute e armazene a taxa de sucesso (sem defesa) em probMake e a probabilidade de AndOne
-            if (Teams[Offense].Players[p].Ratings.Last().GameShootingThreePointer > 0.5 && new Random().NextDouble() <
-                (0.35 * Teams[Offense].Players[p].Ratings.Last().GameShootingThreePointer))
+            if (Teams[Offense].Players[p].Ratings.Last().GameShootingThreePointer > 0.35 &&
+               new Random().NextDouble() < 0.67 * shootingThreePointerScaled)
             {
                 // Three pointer
                 type = "ThreePointer";
                 probMissAndFoul = 0.02;
-                probMake = Teams[Offense].Players[p].Ratings.Last().GameShootingThreePointer * 0.35 + 0.24;
+                probMake = shootingThreePointerScaled * 0.3 + 0.36;
                 probAndOne = 0.01;
             }
             else
             {
-                r1 = new Random().NextDouble() * Teams[Offense].Players[p].Ratings.Last().GameShootingMidRange;
+                r1 = 0.8 * new Random().NextDouble() * Teams[Offense].Players[p].Ratings.Last().GameShootingMidRange;
                 r2 = new Random().NextDouble() * (Teams[Offense].Players[p].Ratings.Last().GameShootingAtRim + SynergyFactor *
                     (Teams[Offense].Synergy.Off - Teams[Defense].Synergy.Def));  // A sinergia torna os tiros fáceis mais prováveis ou menos prováveis
                 r3 = new Random().NextDouble() * (Teams[Offense].Players[p].Ratings.Last().GameShootingLowPost + SynergyFactor *
@@ -414,7 +419,7 @@ namespace NBALigaSimulation.Shared.Models
                     // Two point jumper
                     type = "MidRange";
                     probMissAndFoul = 0.07;
-                    probMake = Teams[Offense].Players[p].Ratings.Last().GameShootingMidRange * 0.3 + 0.29;
+                    probMake = Teams[Offense].Players[p].Ratings.Last().GameShootingMidRange * 0.32 + 0.32;
                     probAndOne = 0.05;
                 }
                 else if (r2 > r3)
@@ -422,7 +427,7 @@ namespace NBALigaSimulation.Shared.Models
                     // Dunk, fast break or half court
                     type = "AtRim";
                     probMissAndFoul = 0.37;
-                    probMake = Teams[Offense].Players[p].Ratings.Last().GameShootingAtRim * 0.3 + 0.52;
+                    probMake = Teams[Offense].Players[p].Ratings.Last().GameShootingAtRim * 0.32 + 0.52;
                     probAndOne = 0.25;
                 }
                 else
@@ -430,7 +435,7 @@ namespace NBALigaSimulation.Shared.Models
                     // Post up
                     type = "LowPost";
                     probMissAndFoul = 0.33;
-                    probMake = Teams[Offense].Players[p].Ratings.Last().GameShootingLowPost * 0.3 + 0.37;
+                    probMake = Teams[Offense].Players[p].Ratings.Last().GameShootingLowPost * 0.32 + 0.37;
                     probAndOne = 0.15;
                 }
             }
@@ -710,6 +715,7 @@ namespace NBALigaSimulation.Shared.Models
             if (s != "Gs" && s != "CourtTime" && s != "BenchTime" && s != "Energy")
             {
                 RecordHelper.RecordStatHelperTeam(t, p, s, Id, teams, amount);
+
             }
         }
 
