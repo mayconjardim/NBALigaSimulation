@@ -1,0 +1,110 @@
+﻿@inject ITeamService TeamService
+
+
+ <div class="teams">
+      <MudSelect Style="width: 150px; margin: 10px;" Dense="true" T="int" Label="Times 1" Variant="Variant.Text" 
+        ValueChanged="value => OnHomeTeamSelected(value)">
+            @foreach (var team in teams)
+            {
+                <MudSelectItem Value="@(team.Id)">@team.Name</MudSelectItem>
+            }
+      </MudSelect>
+      
+      <MudSelect Style="width: 150px; margin: 10px;" Dense="true" T="int" Label="Times 2" Variant="Variant.Text" 
+           ValueChanged="value => OnAwayTeamSelected(value)">
+            @foreach (var team in teams)
+            {
+                <MudSelectItem Value="@(team.Id)" >@team.Name</MudSelectItem>
+            }
+      </MudSelect>
+
+</div>
+
+<div class="player">
+
+      <div class="players-home">
+            @if (homeTeam != null)
+            {
+                foreach (var player in homeTeam.Players)
+                {
+                  
+                }
+            }
+            else
+            {
+                <MudProgressCircular Color="Color.Default" Indeterminate="true" />
+            }
+      </div>
+
+      <div class="players-away">
+            @if (awayTeam != null)
+            {
+                foreach (var player in awayTeam.Players)
+                {
+                    <p>@player.FullName</p>
+                }
+            }
+            else
+            {
+                <MudProgressCircular Color="Color.Default" Indeterminate="true" />
+            }
+      </div>
+
+</div>
+
+
+@code {
+    private List<TeamSimpleDto> teams = new List<TeamSimpleDto>();
+
+    private TeamCompleteDto? homeTeam;
+    private TeamCompleteDto? awayTeam;
+
+
+    private string message = string.Empty;
+
+      protected override async Task OnParametersSetAsync()
+      {
+            message = "Carregando Times...";
+
+            var result = await TeamService.GetAllTeams();
+            if (!result.Success)
+            {
+                message = result.Message;
+            }
+            else
+            {
+                teams = result.Data.ToList();
+            }
+      }
+
+      private async Task OnAwayTeamSelected(int value)
+      {
+             message = "Carregando Time...";
+             var result = await TeamService.GetTeamById(value);
+             if (!result.Success)
+             {
+                message = result.Message;
+             }
+             else
+             {
+                awayTeam = result.Data;
+             }
+      }
+
+      private async Task OnHomeTeamSelected(int value)
+      {
+             message = "Carregando Time...";
+             var result = await TeamService.GetTeamById(value);
+             if (!result.Success)
+             {
+                message = result.Message;
+             }
+             else
+             {
+                homeTeam = result.Data;
+             }
+      }
+
+
+  }
+

@@ -1,0 +1,14 @@
+﻿.teams {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.select-container {
+    margin: 10px;
+}
+
+.player {
+    display: flex;
+    justify-content: space-around;
+}
