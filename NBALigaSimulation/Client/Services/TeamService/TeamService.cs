@@ -12,6 +12,12 @@
 
         public string Message { get; set; } = "Carregando Time...";
 
+        public async Task<ServiceResponse<List<TeamSimpleDto>>> GetAllTeams()
+        {
+            var result = await _http.GetFromJsonAsync<ServiceResponse<List<TeamSimpleDto>>>($"api/teams");
+            return result;
+        }
+
         public async Task<ServiceResponse<TeamCompleteDto>> GetTeamById(int teamId)
         {
             var result = await _http.GetFromJsonAsync<ServiceResponse<TeamCompleteDto>>($"api/teams/{teamId}");
