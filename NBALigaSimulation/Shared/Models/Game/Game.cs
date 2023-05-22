@@ -860,6 +860,8 @@ namespace NBALigaSimulation.Shared.Models
                 texts = new string[] { "Substitution: {0} for {1}" };
             }
 
+
+            /*
             if (texts != null && texts.Length > 0)
             {
                 text = texts[0];
@@ -904,7 +906,7 @@ namespace NBALigaSimulation.Shared.Models
                 Console.WriteLine("No text for " + type);
             }
 
-
+            */
 
         }
 

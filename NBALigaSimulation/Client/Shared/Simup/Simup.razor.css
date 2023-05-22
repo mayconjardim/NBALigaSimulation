@@ -12,3 +12,47 @@
     display: flex;
     justify-content: space-around;
 }
+
+.info p {
+    font-weight: 800;
+}
+
+.info a {
+    color: blue;
+    font-weight: 800;
+}
+
+    .info a:hover {
+        text-decoration: underline;
+    }
+
+
+.info span {
+    color: red;
+}
+
+tbody {
+    white-space: nowrap;
+}
+
+.score {
+    display: flex;
+    justify-content: center;
+}
+
+    .score p {
+        font-size: 20px;
+        font-weight: 800;
+    }
+
+
+
+@media (max-width: 640px) {
+    .player {
+        flex-direction: column;
+    }
+
+    .players-home, .players-away {
+        margin: 10px;
+    }
+}

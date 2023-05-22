@@ -16,7 +16,7 @@ namespace NBALigaSimulation.Server.Controllers
 
 
         [HttpPost]
-        public async Task<ActionResult<ServiceResponse<bool>>> CreateGame(CreateGameDto request)
+        public async Task<ActionResult<ServiceResponse<GameCompleteDto>>> CreateGame(CreateGameDto request)
         {
             return Ok(await _gameService.CreateGame(request));
         }

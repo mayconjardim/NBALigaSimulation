@@ -28,7 +28,10 @@ namespace NBALigaSimulation.Server.Services.TeamService
         public async Task<ServiceResponse<TeamCompleteDto>> GetTeamById(int teamId)
         {
             var response = new ServiceResponse<TeamCompleteDto>();
-            var team = await _context.Teams.Include(t => t.Players).FirstOrDefaultAsync(p => p.Id == teamId);
+            var team = await _context.Teams
+                 .Include(t => t.Players)
+                     .ThenInclude(p => p.Ratings)
+                 .FirstOrDefaultAsync(p => p.Id == teamId);
 
             if (team == null)
             {

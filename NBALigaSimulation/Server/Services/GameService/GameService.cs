@@ -16,15 +16,17 @@ namespace NBALigaSimulation.Server.Services.GameService
             _teamService = teamService;
         }
 
-        public async Task<ServiceResponse<bool>> CreateGame(CreateGameDto request)
+        public async Task<ServiceResponse<GameCompleteDto>> CreateGame(CreateGameDto request)
         {
-            ServiceResponse<bool> response = new ServiceResponse<bool>();
+            ServiceResponse<GameCompleteDto> response = new ServiceResponse<GameCompleteDto>();
 
             Game game = _mapper.Map<Game>(request);
+
             _context.Add(game);
             await _context.SaveChangesAsync();
 
             response.Success = true;
+            response.Data = _mapper.Map<GameCompleteDto>(game);
             return response;
         }
 
