@@ -118,6 +118,17 @@
     background-color: #1d428a;
 }
 
+.OKC {
+    background: linear-gradient(rgba(29, 66, 138, 0.8), rgba(29, 66, 138, 3)), url("../Images/Logos/OKC.svg");
+    background-color: #1d428a;
+}
+
+.CLE {
+    background: linear-gradient(rgba(134, 0, 56, 0.8), rgba(134, 0, 56,3)), url("../Images/Logos/CLE.svg");
+    background-color: #1d428a;
+}
+
+
 .Draft {
     background: linear-gradient(rgba(29, 66, 138, 0.8), rgba(29, 66, 138, 3)), url("../Images/Logos/DRAFT.svg");
     background-color: #1d428a;
