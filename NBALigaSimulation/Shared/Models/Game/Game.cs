@@ -673,6 +673,7 @@ namespace NBALigaSimulation.Shared.Models
                 ratios = RatingArray(Teams, "GameRebounding", Defense, PlayersOnCourt);
                 p = PlayersOnCourt[Defense][ArrayHelper.PickPlayer(ratios)];
                 RecordStat(Defense, p, "Drb", Teams);
+                RecordStat(Defense, p, "Trb", Teams);
                 RecordPlay("Drb", Defense, new string[] { Teams[Defense].Players[p].FullName }, Teams);
 
                 return "Drb";
@@ -681,6 +682,7 @@ namespace NBALigaSimulation.Shared.Models
             ratios = RatingArray(Teams, "GameRebounding", Offense, PlayersOnCourt);
             p = PlayersOnCourt[Offense][ArrayHelper.PickPlayer(ratios)];
             RecordStat(Offense, p, "Orb", Teams);
+            RecordStat(Offense, p, "Trb", Teams);
             RecordPlay("Orb", Offense, new string[] { Teams[Offense].Players[p].FullName }, Teams);
 
             return "Orb";
