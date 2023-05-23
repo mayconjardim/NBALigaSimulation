@@ -45,7 +45,7 @@ namespace NBALigaSimulation.Shared.Models
             CompositeHelper.UpdatePace(Teams);
 
 
-            double paceFactor = 97.3 / 100;
+            double paceFactor = 105.8 / 100;
             paceFactor += 0.025 * Math.Clamp((paceFactor - 1) / 0.2, -1, 1);
             NumPossessions = Convert.ToInt32((((Teams[0].CompositeRating.Ratings["GamePace"] + Teams[1].CompositeRating.Ratings["GamePace"]) / 2) * 1.1 * paceFactor));
             Dt = 48.0 / (2 * NumPossessions);
