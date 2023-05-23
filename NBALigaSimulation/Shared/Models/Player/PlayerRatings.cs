@@ -25,6 +25,7 @@ namespace NBALigaSimulation.Shared.Models
         public int Drb { get; set; }
         public int Pss { get; set; }
         public int Reb { get; set; }
+        public int Pot { get; set; }
 
         public int Ovr
         {
