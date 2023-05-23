@@ -16,7 +16,7 @@ namespace NBALigaSimulation.Server.Services.TeamService
 
         public async Task<ServiceResponse<List<TeamSimpleDto>>> GetAllTeams()
         {
-            var teams = await _context.Teams.ToListAsync();
+            var teams = await _context.Teams.Where(p => p.Players.Count > 0).ToListAsync();
             var response = new ServiceResponse<List<TeamSimpleDto>>
             {
                 Data = _mapper.Map<List<TeamSimpleDto>>(teams)

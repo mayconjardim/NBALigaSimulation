@@ -46,6 +46,13 @@ tbody {
     }
 
 
+a {
+    color: blue;
+}
+
+    a:hover {
+        text-decoration: underline;
+    }
 
 @media (max-width: 640px) {
     .player {
