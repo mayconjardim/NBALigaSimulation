@@ -60,7 +60,7 @@
                 {
                     <div class="info">
                         <a href="player/@player.Id" style="display: inline-block; margin-right: 10px;">@player.FullName</a>
-                        <span style="display: inline-block; margin-right: 10px;">OVR: @player.Ratings.Last().Ovr</span>
+                        <span style="display: inline-block; margin-right: 10px;">OVR: @player.Ratings.Last().Ovr | @player.</span>
                         <p style="display: inline-block; margin-bottom: 0;">
                             Skills:
                             @foreach (string skills in @player.Ratings.Last().Skills)
