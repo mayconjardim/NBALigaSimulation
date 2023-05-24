@@ -721,11 +721,6 @@ namespace NBALigaSimulation.Shared.Models
             }
         }
 
-        public void RecordStatMinutes(int t, int p, string s, Team[] teams, double amount = 1.0)
-        {
-            RecordHelper.RecordStatHelperPlayerMinutes(t, p, s, Id, teams, amount);
-        }
-
         public double Fatigue(double energy)
         {
             energy += 0.05;
