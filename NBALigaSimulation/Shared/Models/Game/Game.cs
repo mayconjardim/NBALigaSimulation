@@ -38,6 +38,11 @@ namespace NBALigaSimulation.Shared.Models
         double Dt = 0; // Tempo decorrido por posse
 
 
+        [NotMapped]
+        List<List<int>> PtsQtrs = new List<List<int>>();
+
+
+
         public void GameSim()
         {
 
