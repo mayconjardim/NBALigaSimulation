@@ -4,7 +4,8 @@
     {
 
         public int Id { get; set; }
-        public int SeasonYear { get; set; }
+        public int Year { get; set; }
+        public List<Game> Games { get; set; }
 
     }
 }
