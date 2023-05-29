@@ -11,7 +11,6 @@ namespace NBALigaSimulation.Shared.Models
         public int PlayerId { get; set; }
         public int Season { get; set; }
         public int Hgt { get; set; }
-        public int Str { get; set; }
         public int Spd { get; set; }
         public int Jmp { get; set; }
         public int End { get; set; }
