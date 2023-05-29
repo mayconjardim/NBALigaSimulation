@@ -37,8 +37,6 @@ namespace NBALigaSimulation.Shared.Models
         double T = 12.00; // Tempo por quarto
         [NotMapped]
         double Dt = 0; // Tempo decorrido por posse
-
-
         [NotMapped]
         List<List<int>> PtsQtrs = new List<List<int>>();
 
@@ -53,7 +51,8 @@ namespace NBALigaSimulation.Shared.Models
 
             double paceFactor = 105.8 / 100;
             paceFactor += 0.025 * Math.Clamp((paceFactor - 1) / 0.2, -1, 1);
-            NumPossessions = Convert.ToInt32((((Teams[0].CompositeRating.Ratings["GamePace"] + Teams[1].CompositeRating.Ratings["GamePace"]) / 2) * 1.1 * paceFactor));
+            NumPossessions = Convert.ToInt32((((Teams[0].CompositeRating.Ratings["GamePace"]
+                + Teams[1].CompositeRating.Ratings["GamePace"]) / 2) * 1.1 * paceFactor));
             Dt = 48.0 / (2 * NumPossessions);
 
             int[][] PlayersOnCourt = new int[][] { new int[] { 0, 1, 2, 3, 4 }, new int[] { 0, 1, 2, 3, 4 } };
