@@ -31,8 +31,7 @@ builder.Services.AddAutoMapper(typeof(Program).Assembly);
 builder.Services.AddScoped<IPlayerService, PlayerService>();
 builder.Services.AddScoped<ITeamService, TeamService>();
 builder.Services.AddScoped<IGameService, GameService>();
-
-
+builder.Services.AddScoped<ISeasonService, SeasonService>();
 
 var app = builder.Build();
 
