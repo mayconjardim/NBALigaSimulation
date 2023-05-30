@@ -56,6 +56,7 @@
                 }
             }
 
+            //Geranto jogos entre conferencias.
             foreach (Team homeTeam in teams)
             {
                 List<Team> opponents = teams.Where(t => t.Conference != homeTeam.Conference && t != homeTeam).ToList();

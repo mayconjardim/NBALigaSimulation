@@ -31,12 +31,11 @@ namespace NBALigaSimulation.Shared.Models
         {
             get
             {
-                int ovr = 0;
-                ovr = (int)Math.Round((Hgt + Str + Spd + Jmp + End + Ins + Dnk + Ft + Fg + Tp + Blk + Stl + Drb
-                    + Pss + Reb) / 15.0);
+                int ovr = (int)Math.Round((4 * Hgt + Str + 4 * Spd + 2 * Jmp + 3 * End + 3 * Ins + 4 * Dnk + Ft + Fg + 2 * Tp + Blk + Stl + Drb + 3 * Pss + Reb) / 32.0);
                 return ovr;
             }
         }
+
 
         public double GamePace
         {
