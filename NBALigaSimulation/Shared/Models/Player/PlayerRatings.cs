@@ -36,7 +36,6 @@ namespace NBALigaSimulation.Shared.Models
             }
         }
 
-
         public double GamePace
         {
             get
