@@ -7,80 +7,77 @@
         public int Year { get; set; }
         public List<Game> Games { get; set; }
 
-        public List<Game> GenerateSchedule(List<Team> teams)
+        public void NewSchedule(List<Team> teams)
         {
             List<Game> games = new List<Game>();
-            Random random = new Random();
 
-            DateTime startDate = DateTime.Today.AddDays(1); // Próximo dia
-            DateTime endDate = startDate.AddDays(13); // Duração de 13 dias
+            List<Team> eastConferenceTeams = teams.Where(t => t.Conference == "East").ToList();
+            List<Team> westConferenceTeams = teams.Where(t => t.Conference == "West").ToList();
 
-            DateTime currentDate = startDate;
-            int gameCounter = 0;
-
-            while (currentDate <= endDate)
+            //Gerando jogos do East
+            foreach (Team homeTeam in eastConferenceTeams)
             {
-                // Verifica se é um dia em que devem ocorrer jogos
-                if (gameCounter % 2 == 0)
+                foreach (Team awayTeam in eastConferenceTeams.Where(t => t != homeTeam))
                 {
-                    // Gera os jogos para o dia atual
-                    foreach (Team team in teams)
+                    for (int i = 0; i < 3; i++)
                     {
-                        List<Team> conferenceTeams = teams.Where(t => t.Conference == team.Conference && t != team).ToList();
-                        List<Team> nonConferenceTeams = teams.Where(t => t.Conference != team.Conference).ToList();
+                        DateTime gameDate = DateTime.Now;
 
-                        // Gera 6 jogos contra times da mesma conferência (3 em casa, 3 fora)
-                        List<Team> conferenceOpponents = conferenceTeams.OrderBy(t => random.Next(0, 100)).Take(6).ToList();
-                        foreach (Team opponent in conferenceOpponents)
+                        Game game = new Game
                         {
-                            Game homeGame = new Game
-                            {
-                                HomeTeam = team,
-                                AwayTeam = opponent,
-                                GameDate = currentDate.AddHours(20) // 8 PM no horário de Brasília
-                            };
+                            HomeTeam = homeTeam,
+                            AwayTeam = awayTeam,
+                            GameDate = gameDate
+                        };
 
-                            Game awayGame = new Game
-                            {
-                                HomeTeam = opponent,
-                                AwayTeam = team,
-                                GameDate = currentDate.AddHours(20) // 8 PM no horário de Brasília
-                            };
-
-                            games.Add(homeGame);
-                            games.Add(awayGame);
-                        }
-
-                        // Gera 2 jogos contra times da outra conferência (1 em casa, 1 fora)
-                        List<Team> nonConferenceOpponents = nonConferenceTeams.OrderBy(t => random.Next(0, 100)).Take(2).ToList();
-                        foreach (Team opponent in nonConferenceOpponents)
-                        {
-                            Game homeGame = new Game
-                            {
-                                HomeTeam = team,
-                                AwayTeam = opponent,
-                                GameDate = currentDate.AddHours(20) // 8 PM no horário de Brasília
-                            };
-
-                            Game awayGame = new Game
-                            {
-                                HomeTeam = opponent,
-                                AwayTeam = team,
-                                GameDate = currentDate.AddHours(20) // 8 PM no horário de Brasília
-                            };
-
-                            games.Add(homeGame);
-                            games.Add(awayGame);
-                        }
+                        games.Add(game);
                     }
                 }
-
-                gameCounter++;
-                currentDate = currentDate.AddDays(1); // Próximo dia
             }
 
-            return games;
+            //Gerando jogos do West
+            foreach (Team homeTeam in westConferenceTeams)
+            {
+                foreach (Team awayTeam in westConferenceTeams.Where(t => t != homeTeam))
+                {
+                    for (int i = 0; i < 3; i++)
+                    {
+                        DateTime gameDate = DateTime.Now;
+
+                        Game game = new Game
+                        {
+                            HomeTeam = homeTeam,
+                            AwayTeam = awayTeam,
+                            GameDate = gameDate
+                        };
+
+                        games.Add(game);
+                    }
+                }
+            }
+
+            foreach (Team homeTeam in teams)
+            {
+                List<Team> opponents = teams.Where(t => t.Conference != homeTeam.Conference && t != homeTeam).ToList();
+
+                foreach (Team awayTeam in opponents)
+                {
+                    DateTime gameDate = DateTime.Now;
+
+                    Game game = new Game
+                    {
+                        HomeTeam = homeTeam,
+                        AwayTeam = awayTeam,
+                        GameDate = gameDate
+                    };
+
+                    games.Add(game);
+                }
+            }
+
+            Games = games;
         }
+
 
 
 

@@ -10,8 +10,10 @@ namespace NBALigaSimulation.Shared.Models
         public int SeasonId { get; set; }
         public Season Season { get; set; }
         public int HomeTeamId { get; set; }
-        public Team HomeTeam { get; set; }
+        [ForeignKey("HomeTeamId")]
+        public Team? HomeTeam { get; set; }
         public int AwayTeamId { get; set; }
+        [ForeignKey("AwayTeamId")]
         public Team AwayTeam { get; set; }
         public DateTime GameDate { get; set; }
         public List<TeamGameStats> TeamGameStats { get; set; } = new List<TeamGameStats>();
@@ -40,14 +42,11 @@ namespace NBALigaSimulation.Shared.Models
         [NotMapped]
         List<List<int>> PtsQtrs = new List<List<int>>();
 
-
-
         public void GameSim()
         {
 
             Team[] Teams = { HomeTeam, AwayTeam };
             CompositeHelper.UpdatePace(Teams);
-
 
             double paceFactor = 105.8 / 100;
             paceFactor += 0.025 * Math.Clamp((paceFactor - 1) / 0.2, -1, 1);
@@ -86,7 +85,6 @@ namespace NBALigaSimulation.Shared.Models
 
             Offense = 0;
             Defense = 1;
-
 
             int i = 0;
             while (i < NumPossessions * 2)

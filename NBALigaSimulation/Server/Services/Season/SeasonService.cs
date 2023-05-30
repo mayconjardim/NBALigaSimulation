@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 
 namespace NBALigaSimulation.Server.Services.SeasonService
 {
@@ -26,6 +27,34 @@ namespace NBALigaSimulation.Server.Services.SeasonService
             response.Data = _mapper.Map<CompleteSeasonDto>(season);
             return response;
         }
+
+        public async Task<ServiceResponse<CompleteSeasonDto>> UpdateSeason(int seasonId)
+        {
+            ServiceResponse<CompleteSeasonDto> response = new ServiceResponse<CompleteSeasonDto>();
+
+            Season season = await _context.Seasons
+                .Include(s => s.Games)
+                .FirstOrDefaultAsync(p => p.Id == seasonId);
+
+            if (season == null)
+            {
+                response.Success = false;
+                response.Message = "Season not found.";
+                return response;
+            }
+
+            List<Team> teams = await _context.Teams.ToListAsync();
+
+            season.NewSchedule(teams); // Gera os jogos
+
+            await _context.SaveChangesAsync();
+
+            response.Success = true;
+            response.Data = _mapper.Map<CompleteSeasonDto>(season);
+
+            return response;
+        }
+
 
     }
 }

@@ -21,6 +21,8 @@ namespace NBALigaSimulation.Server.Services.GameService
             ServiceResponse<GameCompleteDto> response = new ServiceResponse<GameCompleteDto>();
 
             Game game = _mapper.Map<Game>(request);
+            Season season = _context.Seasons.OrderBy(s => s.Id).LastOrDefault();
+            game.Season = season;
 
             _context.Add(game);
             await _context.SaveChangesAsync();
@@ -85,7 +87,6 @@ namespace NBALigaSimulation.Server.Services.GameService
             }
             else
             {
-
                 response.Data = _mapper.Map<GameCompleteDto>(game);
             }
 

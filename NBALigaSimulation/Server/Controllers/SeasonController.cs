@@ -22,5 +22,18 @@ namespace NBALigaSimulation.Server.Controllers
             return Ok(await _seasonService.CreateSeason(request));
         }
 
+        [HttpPut("update/{seasonId}")]
+        public async Task<ActionResult<ServiceResponse<CompleteSeasonDto>>> UpdateGame(int seasonId)
+        {
+            ServiceResponse<CompleteSeasonDto> response = await _seasonService.UpdateSeason(seasonId);
+
+            if (!response.Success)
+            {
+                return BadRequest(response);
+            }
+
+            return Ok(response);
+        }
+
     }
 }
