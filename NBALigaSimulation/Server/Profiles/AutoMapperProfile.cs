@@ -37,6 +37,9 @@ namespace NBALigaSimulation.Server.Profiles
 
             CreateMap<TeamGameStats, TeamGameStatsDto>();
 
+            CreateMap<CreateSeasonDto, Season>().ReverseMap();
+            CreateMap<Season, CompleteSeasonDto>().ReverseMap();
+
         }
     }
 }

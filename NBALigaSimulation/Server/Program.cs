@@ -6,6 +6,8 @@ global using Microsoft.EntityFrameworkCore;
 global using NBALigaSimulation.Server.Services.PlayerService;
 global using NBALigaSimulation.Server.Services.TeamService;
 global using NBALigaSimulation.Server.Services.GameService;
+global using NBALigaSimulation.Server.Services.SeasonService;
+
 
 
 using Microsoft.AspNetCore.Hosting.StaticWebAssets;
