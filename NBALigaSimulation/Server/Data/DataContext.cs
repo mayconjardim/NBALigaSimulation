@@ -14,8 +14,14 @@ namespace NBALigaSimulation.Server.Data
         public DbSet<TeamGameStats> TeamGameStats { get; set; }
         public DbSet<PlayerGameStats> PlayerGameStats { get; set; }
         public DbSet<GamePlayByPlay> PlayByPlays { get; set; }
+        public DbSet<Season> Seasons { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+
+            modelBuilder.Entity<Season>()
+              .HasMany(s => s.Games)
+              .WithOne(g => g.Season)
+              .HasForeignKey(g => g.SeasonId);
 
             modelBuilder.Entity<Player>()
                 .HasOne(p => p.Team)
