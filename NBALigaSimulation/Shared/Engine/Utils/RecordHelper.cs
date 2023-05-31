@@ -127,7 +127,7 @@ namespace NBALigaSimulation.Shared.Engine
 
                 if (lastStats == null || lastStats.GameId != Id)
                 {
-                    player.Stats.Add(new PlayerGameStats { GameId = Id, TeamId = teams[t].Id, Name = player.FullName });
+                    player.Stats.Add(new PlayerGameStats { GameId = Id, TeamId = teams[t].Id, Name = player.Name });
                 }
             }
 

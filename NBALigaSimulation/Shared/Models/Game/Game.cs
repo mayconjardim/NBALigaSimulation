@@ -160,7 +160,7 @@ namespace NBALigaSimulation.Shared.Models
 
                         if (lastStats == null || lastStats.GameId != Id)
                         {
-                            player.Stats.Add(new PlayerGameStats { GameId = Id, TeamId = teams[t].Id, Name = player.FullName });
+                            player.Stats.Add(new PlayerGameStats { GameId = Id, TeamId = teams[t].Id, Name = player.Name });
                         }
                     }
 
@@ -356,7 +356,7 @@ namespace NBALigaSimulation.Shared.Models
             }
             else
             {
-                RecordPlay("Tov", Offense, new string[] { Teams[Offense].Players[p].FullName }, Teams);
+                RecordPlay("Tov", Offense, new string[] { Teams[Offense].Players[p].Name }, Teams);
             }
 
             return "Tov";
@@ -370,7 +370,7 @@ namespace NBALigaSimulation.Shared.Models
             ratios = RatingArray(Teams, "GameStealing", Defense, PlayersOnCourt);
             p = PlayersOnCourt[Defense][ArrayHelper.PickPlayer(ratios)];
             RecordStat(Defense, p, "Stl", Teams);
-            RecordPlay("Stl", Defense, new string[] { Teams[Defense].Players[p].FullName, Teams[Offense].Players[pStoleFrom].FullName }, Teams);
+            RecordPlay("Stl", Defense, new string[] { Teams[Defense].Players[p].Name, Teams[Offense].Players[pStoleFrom].Name }, Teams);
 
             return "Stl";
         }
@@ -484,22 +484,22 @@ namespace NBALigaSimulation.Shared.Models
             if (type == "AtRim")
             {
                 RecordStat(Offense, p, "FgaAtRim", Teams);
-                RecordPlay("MissAtRim", Offense, new string[] { Teams[Offense].Players[p].FullName }, Teams);
+                RecordPlay("MissAtRim", Offense, new string[] { Teams[Offense].Players[p].Name }, Teams);
             }
             else if (type == "LowPost")
             {
                 RecordStat(Offense, p, "FgaLowPost", Teams);
-                RecordPlay("MissLowPost", Offense, new string[] { Teams[Offense].Players[p].FullName }, Teams);
+                RecordPlay("MissLowPost", Offense, new string[] { Teams[Offense].Players[p].Name }, Teams);
             }
             else if (type == "MidRange")
             {
                 RecordStat(Offense, p, "FgaMidRange", Teams);
-                RecordPlay("MissMidRange", Offense, new string[] { Teams[Offense].Players[p].FullName }, Teams);
+                RecordPlay("MissMidRange", Offense, new string[] { Teams[Offense].Players[p].Name }, Teams);
             }
             else if (type == "ThreePointer")
             {
                 RecordStat(Offense, p, "Tpa", Teams);
-                RecordPlay("MissTp", Offense, new string[] { Teams[Offense].Players[p].FullName }, Teams);
+                RecordPlay("MissTp", Offense, new string[] { Teams[Offense].Players[p].Name }, Teams);
             }
 
             return DoReb(Teams, PlayersOnCourt); // o
@@ -534,22 +534,22 @@ namespace NBALigaSimulation.Shared.Models
 
             if (type == "AtRim")
             {
-                playArgs = new string[] { Teams[Defense].Players[p2].FullName, Teams[Offense].Players[p].FullName };
+                playArgs = new string[] { Teams[Defense].Players[p2].Name, Teams[Offense].Players[p].Name };
                 RecordPlay("BlkAtRim", Defense, playArgs, Teams);
             }
             else if (type == "LowPost")
             {
-                playArgs = new string[] { Teams[Defense].Players[p2].FullName, Teams[Offense].Players[p].FullName };
+                playArgs = new string[] { Teams[Defense].Players[p2].Name, Teams[Offense].Players[p].Name };
                 RecordPlay("BlkLowPost", Defense, playArgs, Teams);
             }
             else if (type == "MidRange")
             {
-                playArgs = new string[] { Teams[Defense].Players[p2].FullName, Teams[Offense].Players[p].FullName };
+                playArgs = new string[] { Teams[Defense].Players[p2].Name, Teams[Offense].Players[p].Name };
                 RecordPlay("BlkMidRange", Defense, playArgs, Teams);
             }
             else if (type == "ThreePointer")
             {
-                playArgs = new string[] { Teams[Defense].Players[p2].FullName, Teams[Offense].Players[p].FullName };
+                playArgs = new string[] { Teams[Defense].Players[p2].Name, Teams[Offense].Players[p].Name };
                 RecordPlay("BlkTp", Defense, playArgs, Teams);
             }
 
@@ -568,33 +568,33 @@ namespace NBALigaSimulation.Shared.Models
             {
                 RecordStat(Offense, p, "FgaAtRim", Teams);
                 RecordStat(Offense, p, "FgAtRim", Teams);
-                RecordPlay("FgAtRim" + (andOne ? "AndOne" : ""), Offense, new string[] { Teams[Offense].Players[p].FullName }, Teams);
+                RecordPlay("FgAtRim" + (andOne ? "AndOne" : ""), Offense, new string[] { Teams[Offense].Players[p].Name }, Teams);
             }
             else if (type == "LowPost")
             {
                 RecordStat(Offense, p, "FgaLowPost", Teams);
                 RecordStat(Offense, p, "FgLowPost", Teams);
-                RecordPlay("FgLowPost" + (andOne ? "AndOne" : ""), Offense, new string[] { Teams[Offense].Players[p].FullName }, Teams);
+                RecordPlay("FgLowPost" + (andOne ? "AndOne" : ""), Offense, new string[] { Teams[Offense].Players[p].Name }, Teams);
             }
             else if (type == "MidRange")
             {
                 RecordStat(Offense, p, "FgaMidRange", Teams);
                 RecordStat(Offense, p, "FgMidRange", Teams);
-                RecordPlay("FgMidRange" + (andOne ? "AndOne" : ""), Offense, new string[] { Teams[Offense].Players[p].FullName }, Teams);
+                RecordPlay("FgMidRange" + (andOne ? "AndOne" : ""), Offense, new string[] { Teams[Offense].Players[p].Name }, Teams);
             }
             else if (type == "ThreePointer")
             {
                 RecordStat(Offense, p, "Pts", Teams);  // Extra point for 3's
                 RecordStat(Offense, p, "Tpa", Teams);
                 RecordStat(Offense, p, "Tp", Teams);
-                RecordPlay("Tp" + (andOne ? "AndOne" : ""), Offense, new string[] { Teams[Offense].Players[p].FullName }, Teams);
+                RecordPlay("Tp" + (andOne ? "AndOne" : ""), Offense, new string[] { Teams[Offense].Players[p].Name }, Teams);
             }
 
             if (passer >= 0)
             {
                 p = PlayersOnCourt[Offense][passer];
                 RecordStat(Offense, p, "Ast", Teams);
-                RecordPlay("Ast", Offense, new string[] { Teams[Offense].Players[p].FullName }, Teams);
+                RecordPlay("Ast", Offense, new string[] { Teams[Offense].Players[p].Name }, Teams);
             }
 
             if (andOne)
@@ -621,12 +621,12 @@ namespace NBALigaSimulation.Shared.Models
                 {
                     RecordStat(Offense, p, "Ft", Teams);
                     RecordStat(Offense, p, "Pts", Teams);
-                    RecordPlay("Ft", Offense, new string[] { Teams[Offense].Players[p].FullName }, Teams);
+                    RecordPlay("Ft", Offense, new string[] { Teams[Offense].Players[p].Name }, Teams);
                     outcome = "Fg";
                 }
                 else
                 {
-                    RecordPlay("MissFt", Offense, new string[] { Teams[Offense].Players[p].FullName }, Teams);
+                    RecordPlay("MissFt", Offense, new string[] { Teams[Offense].Players[p].Name }, Teams);
                 }
             }
 
@@ -646,12 +646,12 @@ namespace NBALigaSimulation.Shared.Models
             ratios = RatingArray(Teams, "GameFouling", t, PlayersOnCourt);
             p = PlayersOnCourt[t][ArrayHelper.PickPlayer(ratios)];
             RecordStat(Defense, p, "Pf", Teams);
-            RecordPlay("Pf", Defense, new string[] { Teams[Defense].Players[p].FullName }, Teams);
+            RecordPlay("Pf", Defense, new string[] { Teams[Defense].Players[p].Name }, Teams);
 
             // Foul out
             if (Teams[Defense].Players[p].Stats.Find(s => s.GameId == Id).Pf >= 6)
             {
-                RecordPlay("FoulOut", Defense, new string[] { Teams[Defense].Players[p].FullName }, Teams);
+                RecordPlay("FoulOut", Defense, new string[] { Teams[Defense].Players[p].Name }, Teams);
                 // Force substitutions now
                 UpdatePlayersOnCourt(Teams, PlayersOnCourt);
                 UpdateSynergy(Teams, PlayersOnCourt);
@@ -678,7 +678,7 @@ namespace NBALigaSimulation.Shared.Models
                 p = PlayersOnCourt[Defense][ArrayHelper.PickPlayer(ratios)];
                 RecordStat(Defense, p, "Drb", Teams);
                 RecordStat(Defense, p, "Trb", Teams);
-                RecordPlay("Drb", Defense, new string[] { Teams[Defense].Players[p].FullName }, Teams);
+                RecordPlay("Drb", Defense, new string[] { Teams[Defense].Players[p].Name }, Teams);
 
                 return "Drb";
             }
@@ -687,7 +687,7 @@ namespace NBALigaSimulation.Shared.Models
             p = PlayersOnCourt[Offense][ArrayHelper.PickPlayer(ratios)];
             RecordStat(Offense, p, "Orb", Teams);
             RecordStat(Offense, p, "Trb", Teams);
-            RecordPlay("Orb", Offense, new string[] { Teams[Offense].Players[p].FullName }, Teams);
+            RecordPlay("Orb", Offense, new string[] { Teams[Offense].Players[p].Name }, Teams);
 
             return "Orb";
         }
