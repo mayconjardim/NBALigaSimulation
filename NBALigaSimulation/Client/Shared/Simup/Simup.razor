@@ -35,7 +35,7 @@
             @foreach (var player in homeTeam.Players)
             {
                <div class="info">
-                    <a href="player/@player.Id" style="display: inline-block; margin-right: 10px;">@player.FullName</a>
+                    <a href="player/@player.Id" style="display: inline-block; margin-right: 10px;">@player.Name</a>
                     <span style="display: inline-block; margin-right: 10px;">OVR: @player.Ratings.Last().Ovr | POT: @player.Ratings.Last().Pot</span>
                     <p style="display: inline-block; margin-bottom: 0;">
                         Skills:
@@ -59,7 +59,7 @@
                 foreach (var player in awayTeam.Players)
                 {
                     <div class="info">
-                        <a href="player/@player.Id" style="display: inline-block; margin-right: 10px;">@player.FullName</a>
+                        <a href="player/@player.Id" style="display: inline-block; margin-right: 10px;">@player.Name</a>
                         <span style="display: inline-block; margin-right: 10px;">OVR: @player.Ratings.Last().Ovr | POT: @player.Ratings.Last().Pot</span>
                         <p style="display: inline-block; margin-bottom: 0;">
                             Skills:

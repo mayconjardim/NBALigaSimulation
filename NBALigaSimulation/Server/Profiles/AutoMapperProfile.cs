@@ -10,12 +10,12 @@ namespace NBALigaSimulation.Server.Profiles
         {
             CreateMap<Player, PlayerSimpleDto>();
             CreateMap<Player, PlayerCompleteDto>()
+                .ForMember(dest => dest.Ratings, opt => opt.MapFrom(src => src.Ratings))
                 .ForMember(dest => dest.TeamName, opt => opt.MapFrom(src => src.Team.Name))
                 .ForMember(dest => dest.TeamAbrv, opt => opt.MapFrom(src => src.Team.Abrv));
 
             CreateMap<PlayerCompleteDto, Player>();
 
-            CreateMap<PlayerRatings, PlayerRatingDto>();
 
             CreateMap<Team, TeamSimpleDto>();
             CreateMap<Team, TeamCompleteDto>().ReverseMap();
@@ -28,7 +28,7 @@ namespace NBALigaSimulation.Server.Profiles
               .ForMember(dest => dest.AwayTeamScore, opt => opt.MapFrom(src => src.AwayTeam.Stats.FirstOrDefault(p => p.GameId == src.Id).Pts))
               .ForMember(dest => dest.HomePlayerGameStats, opt => opt.MapFrom(src => src.PlayerGameStats.Where(p => p.TeamId == src.HomeTeam.Id).ToList()))
               .ForMember(dest => dest.AwayPlayerGameStats, opt => opt.MapFrom(src => src.PlayerGameStats.Where(p => p.TeamId == src.AwayTeamId).ToList()));
-              
+
 
 
             CreateMap<PlayerGameStats, PlayerGameStatsDto>();
@@ -36,6 +36,17 @@ namespace NBALigaSimulation.Server.Profiles
             CreateMap<GameCompleteDto, Game>();
             CreateMap<CreateGameDto, GameCompleteDto>().ReverseMap();
             CreateMap<CreateGameDto, Game>().ReverseMap();
+
+            CreateMap<CreatePlayerDto, Player>()
+            .ForMember(dest => dest.Ratings, opt => opt.MapFrom(src => src.Ratings));
+
+            CreateMap<CreatePlayerDto, Player>()
+           .ForMember(dest => dest.Ratings, opt => opt.MapFrom(src => src.Ratings));
+
+            CreateMap<PlayerRatingDto, PlayerRatings>()
+                .ForMember(dest => dest.PlayerId, opt => opt.MapFrom(src => src.PlayerId));
+
+            CreateMap<PlayerRatings, PlayerRatingDto>();
 
             CreateMap<TeamGameStats, TeamGameStatsDto>();
 

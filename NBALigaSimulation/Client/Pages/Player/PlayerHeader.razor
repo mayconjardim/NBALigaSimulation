@@ -12,8 +12,8 @@
     </CardHeaderAvatar>
 
     <CardHeaderContent>
-        <span>@player.FirstName</span>
-         <p class="@(player.LastName.Length > 10 ? "lastname" : "")">@player.LastName</p>
+        <span>@player.Name</span>
+         <p class="@(player.Name.Length > 10 ? "lastname" : "")">@player.Name</p>
         <MudText Typo="Typo.caption">
          <MudAvatar Style="vertical-align: middle; background: none" Size="Size.Small" Image=@($"Images/logos/{player.TeamAbrv}.svg") Square="true" />
           Foward
@@ -26,9 +26,9 @@
  <div class="bio"> 
   <ul>
     <li><MudIcon Icon="@Icons.Material.Filled.Scale" Style="font-size: 1rem; vertical-align: middle" />Height / Weight</li>
-    <li><span>@Util.InchesToCm(player.Height)CM / @Util.LbsToKg(player.Weight)KG</span> </li>
+    <li><span>@Util.InchesToCm(player.Hgt)CM / @Util.LbsToKg(player.Weight)KG</span> </li>
     <li><MudIcon Icon="@Icons.Material.Filled.CalendarMonth" Style="font-size: 1rem; vertical-align: middle"  />Age</li>
-    <li><span>@player.BornYear</span></li>
+    <li><span>@player.Born.Year</span></li>
     <li><MudIcon Icon="@Icons.Material.Filled.Elevator" Style="font-size: 1rem; vertical-align: middle" />Draft</li>
     <li><span>2018 - R1 (Pick 6) by ORL</span> </li>
     <li><MudIcon Icon="@Icons.Material.Filled.Explicit" Style="font-size: 1rem; vertical-align: middle" />Experience</li>

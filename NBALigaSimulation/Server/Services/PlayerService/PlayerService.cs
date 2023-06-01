@@ -14,6 +14,38 @@ namespace NBALigaSimulation.Server.Services.PlayerService
             _mapper = mapper;
         }
 
+        public async Task<ServiceResponse<PlayerCompleteDto>> CreatePlayer(CreatePlayerDto request)
+        {
+
+            ServiceResponse<PlayerCompleteDto> response = new ServiceResponse<PlayerCompleteDto>();
+
+            Player player = _mapper.Map<Player>(request);
+
+            _context.Add(player);
+
+            await _context.SaveChangesAsync();
+
+            response.Success = true;
+            response.Data = _mapper.Map<PlayerCompleteDto>(player);
+            return response;
+        }
+
+        public async Task<ServiceResponse<List<PlayerCompleteDto>>> CreatePlayers(List<CreatePlayerDto> requests)
+        {
+            ServiceResponse<List<PlayerCompleteDto>> response = new ServiceResponse<List<PlayerCompleteDto>>();
+
+            List<Player> players = _mapper.Map<List<Player>>(requests);
+
+            _context.AddRange(players);
+
+            await _context.SaveChangesAsync();
+
+            response.Success = true;
+            response.Data = _mapper.Map<List<PlayerCompleteDto>>(players);
+            return response;
+        }
+
+
         public async Task<ServiceResponse<List<PlayerSimpleDto>>> GetAllPlayers()
         {
             var players = await _context.Players.ToListAsync();

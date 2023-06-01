@@ -23,7 +23,7 @@ namespace NBALigaSimulation.Server.Controllers
         }
 
         [HttpGet("{playerId}")]
-        public async Task<ActionResult<ServiceResponse<Player>>> GetPlayerById(int playerId)
+        public async Task<ActionResult<ServiceResponse<PlayerCompleteDto>>> GetPlayerById(int playerId)
         {
 
             var result = await _playerService.GetPlayerById(playerId);
@@ -35,6 +35,18 @@ namespace NBALigaSimulation.Server.Controllers
 
             return Ok(result);
 
+        }
+
+        [HttpPost]
+        public async Task<ActionResult<ServiceResponse<PlayerCompleteDto>>> CreatePlayer(CreatePlayerDto request)
+        {
+            return Ok(await _playerService.CreatePlayer(request));
+        }
+
+        [HttpPost("multi")]
+        public async Task<ActionResult<ServiceResponse<PlayerCompleteDto>>> CreatePlayers(List<CreatePlayerDto> requests)
+        {
+            return Ok(await _playerService.CreatePlayers(requests));
         }
 
     }
