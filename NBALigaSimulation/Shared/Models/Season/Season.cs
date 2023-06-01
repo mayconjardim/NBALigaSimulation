@@ -1,4 +1,6 @@
-﻿namespace NBALigaSimulation.Shared.Models
+﻿using System;
+
+namespace NBALigaSimulation.Shared.Models
 {
     public class Season
     {
@@ -11,8 +13,11 @@
         {
             List<Game> games = new List<Game>();
 
+            Random random = new Random();
+
             List<Team> eastConferenceTeams = teams.Where(t => t.Conference == "East").ToList();
             List<Team> westConferenceTeams = teams.Where(t => t.Conference == "West").ToList();
+
 
             //Gerando jogos do East
             foreach (Team homeTeam in eastConferenceTeams)
@@ -21,13 +26,11 @@
                 {
                     for (int i = 0; i < 3; i++)
                     {
-                        DateTime gameDate = DateTime.Now;
 
                         Game game = new Game
                         {
                             HomeTeam = homeTeam,
                             AwayTeam = awayTeam,
-                            GameDate = gameDate
                         };
 
                         games.Add(game);
@@ -42,13 +45,12 @@
                 {
                     for (int i = 0; i < 3; i++)
                     {
-                        DateTime gameDate = DateTime.Now;
 
                         Game game = new Game
                         {
                             HomeTeam = homeTeam,
                             AwayTeam = awayTeam,
-                            GameDate = gameDate
+
                         };
 
                         games.Add(game);
@@ -63,20 +65,21 @@
 
                 foreach (Team awayTeam in opponents)
                 {
-                    DateTime gameDate = DateTime.Now;
+
 
                     Game game = new Game
                     {
                         HomeTeam = homeTeam,
                         AwayTeam = awayTeam,
-                        GameDate = gameDate
                     };
 
                     games.Add(game);
                 }
             }
 
+            games = games.OrderBy(x => random.Next()).ToList();
             Games = games;
+
         }
 
     }
