@@ -7,5 +7,7 @@
         Task<ServiceResponse<GameCompleteDto>> GetGameById(int gameId);
         Task<ServiceResponse<GameCompleteDto>> CreateGame(CreateGameDto request);
         Task<ServiceResponse<bool>> UpdateGame(int GameId);
+        Task<ServiceResponse<bool>> UpdateGames();
+
     }
 }

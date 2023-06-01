@@ -79,8 +79,5 @@
             Games = games;
         }
 
-
-
-
     }
 }

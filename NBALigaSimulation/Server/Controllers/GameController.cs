@@ -34,6 +34,19 @@ namespace NBALigaSimulation.Server.Controllers
             return Ok(response);
         }
 
+        [HttpPut("update/sim")]
+        public async Task<IActionResult> UpdateGames()
+        {
+            ServiceResponse<bool> response = await _gameService.UpdateGames();
+
+            if (!response.Success)
+            {
+                return BadRequest(response);
+            }
+
+            return Ok(response);
+        }
+
         [HttpGet]
         public async Task<ActionResult<ServiceResponse<List<GameCompleteDto>>>> GetAllGames()
         {

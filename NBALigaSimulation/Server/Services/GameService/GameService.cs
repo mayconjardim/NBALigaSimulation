@@ -37,8 +37,8 @@ namespace NBALigaSimulation.Server.Services.GameService
             ServiceResponse<bool> response = new ServiceResponse<bool>();
 
             Game game = await _context.Games
-              .Include(p => p.HomeTeam.Players.OrderBy(p => p.RosterOrder)).ThenInclude(p => p.Ratings)
-              .Include(p => p.AwayTeam.Players.OrderBy(p => p.RosterOrder)).ThenInclude(p => p.Ratings)
+              .Include(p => p.HomeTeam.Players.OrderBy(p => p.RosterOrder)).ThenInclude(p => p.Ratings.Last())
+              .Include(p => p.AwayTeam.Players.OrderBy(p => p.RosterOrder)).ThenInclude(p => p.Ratings.Last())
               .FirstOrDefaultAsync(p => p.Id == gameId);
 
 
@@ -52,6 +52,38 @@ namespace NBALigaSimulation.Server.Services.GameService
             game.GameSim(); //Simula o jogo <----------
 
             await _context.SaveChangesAsync();
+
+            response.Success = true;
+            response.Data = true;
+
+            return response;
+        }
+
+        public async Task<ServiceResponse<bool>> UpdateGames()
+        {
+            ServiceResponse<bool> response = new ServiceResponse<bool>();
+
+            List<int> gameIds = await _context.Seasons.OrderByDescending(s => s.Id).SelectMany(s => s.Games)
+                .Select(g => g.Id).ToListAsync();
+
+            foreach (int gameId in gameIds)
+            {
+                Game game = await _context.Games
+                  .Include(p => p.HomeTeam.Players.OrderBy(p => p.RosterOrder)).ThenInclude(p => p.Ratings)
+                  .Include(p => p.AwayTeam.Players.OrderBy(p => p.RosterOrder)).ThenInclude(p => p.Ratings)
+                  .FirstOrDefaultAsync(p => p.Id == gameId);
+
+                if (game == null)
+                {
+                    response.Success = false;
+                    response.Message = $"Jogo com ID {gameId} não encontrado.";
+                    return response;
+                }
+
+                game.GameSim(); // Simula o jogo
+
+                await _context.SaveChangesAsync();
+            }
 
             response.Success = true;
             response.Data = true;
@@ -92,7 +124,6 @@ namespace NBALigaSimulation.Server.Services.GameService
 
             return response;
         }
-
 
     }
 }

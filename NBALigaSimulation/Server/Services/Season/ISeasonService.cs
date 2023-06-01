@@ -4,5 +4,6 @@
     {
         Task<ServiceResponse<CompleteSeasonDto>> CreateSeason(CreateSeasonDto request);
         Task<ServiceResponse<CompleteSeasonDto>> UpdateSeason(int seasonId);
+
     }
 }

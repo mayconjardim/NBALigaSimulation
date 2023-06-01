@@ -55,6 +55,5 @@ namespace NBALigaSimulation.Server.Services.SeasonService
             return response;
         }
 
-
     }
 }

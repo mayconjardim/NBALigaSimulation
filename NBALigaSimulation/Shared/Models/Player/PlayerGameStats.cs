@@ -10,6 +10,7 @@ namespace NBALigaSimulation.Shared.Models
         public int PlayerId { get; set; }
         public int TeamId { get; set; }
         public int GameId { get; set; }
+        public int Season { get; set; }
         public Game Game { get; set; }
         public int Gs { get; set; }
         public double Min { get; set; }

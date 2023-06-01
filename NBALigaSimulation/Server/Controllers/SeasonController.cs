@@ -1,6 +1,4 @@
-﻿
-
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 
 namespace NBALigaSimulation.Server.Controllers
 {
@@ -23,7 +21,7 @@ namespace NBALigaSimulation.Server.Controllers
         }
 
         [HttpPut("update/{seasonId}")]
-        public async Task<ActionResult<ServiceResponse<CompleteSeasonDto>>> UpdateGame(int seasonId)
+        public async Task<ActionResult<ServiceResponse<CompleteSeasonDto>>> UpdateSeason(int seasonId)
         {
             ServiceResponse<CompleteSeasonDto> response = await _seasonService.UpdateSeason(seasonId);
 
