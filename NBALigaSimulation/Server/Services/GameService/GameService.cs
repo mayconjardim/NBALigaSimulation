@@ -41,6 +41,8 @@ namespace NBALigaSimulation.Server.Services.GameService
               .Include(p => p.AwayTeam.Players.OrderBy(p => p.RosterOrder)).ThenInclude(p => p.Ratings)
               .FirstOrDefaultAsync(p => p.Id == gameId);
 
+            game.Season = await _context.Seasons.OrderBy(s => s.Id).LastOrDefaultAsync();
+
 
             if (game == null)
             {

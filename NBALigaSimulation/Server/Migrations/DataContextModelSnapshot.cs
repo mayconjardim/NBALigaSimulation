@@ -196,9 +196,6 @@ namespace NBALigaSimulation.Server.Migrations
                     b.Property<int>("Pts")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("Season")
-                        .HasColumnType("INTEGER");
-
                     b.Property<int>("Stl")
                         .HasColumnType("INTEGER");
 
