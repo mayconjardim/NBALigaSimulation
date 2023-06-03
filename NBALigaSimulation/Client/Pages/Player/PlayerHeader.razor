@@ -12,8 +12,7 @@
     </CardHeaderAvatar>
 
     <CardHeaderContent>
-        <span>@player.Name</span>
-         <p class="@(player.Name.Length > 10 ? "lastname" : "")">@player.Name</p>
+         <p class="lastname">@player.Name</p>
         <MudText Typo="Typo.caption">
          <MudAvatar Style="vertical-align: middle; background: none" Size="Size.Small" Image=@($"Images/logos/{player.TeamAbrv}.svg") Square="true" />
           Foward
@@ -23,27 +22,7 @@
  </MudCardHeader>
  </div>
 
- <div class="bio"> 
-  <ul>
-    <li><MudIcon Icon="@Icons.Material.Filled.Scale" Style="font-size: 1rem; vertical-align: middle" />Height / Weight</li>
-    <li><span>@Util.InchesToCm(player.Hgt)CM / @Util.LbsToKg(player.Weight)KG</span> </li>
-    <li><MudIcon Icon="@Icons.Material.Filled.CalendarMonth" Style="font-size: 1rem; vertical-align: middle"  />Age</li>
-    <li><span>@player.Born.Year</span></li>
-    <li><MudIcon Icon="@Icons.Material.Filled.Elevator" Style="font-size: 1rem; vertical-align: middle" />Draft</li>
-    <li><span>2018 - R1 (Pick 6) by ORL</span> </li>
-    <li><MudIcon Icon="@Icons.Material.Filled.Explicit" Style="font-size: 1rem; vertical-align: middle" />Experience</li>
-    <li><span>4 Years</span></li>
-  </ul> 
- </div>
-
  <div class="overall-stats">
-   
-     <div class="overall">
-         <p>Current Rating</p>
-        <MudRating SelectedValue="2" Size="Size.Small" ReadOnly="true" />
-        <p>Potential Rating</p>
-        <MudRating SelectedValue="5" Size="Size.Small" ReadOnly="true" />
-    </div>
 
      <div class="stats">
      
@@ -54,7 +33,6 @@
      
          <MudDivider Vertical="true" FlexItem="true" Style="width: 0.5px"/>
 
-
          <div class="rpg"> 
              <span>6.1</span>
              <p>RPG</p>
@@ -62,27 +40,18 @@
 
          <MudDivider Vertical="true" FlexItem="true" Style="width: 0.5px"/>
 
-
          <div class="apg"> 
              <span>5.0</span>
              <p>APG</p>
          </div>
 
-        <MudDivider Vertical="true" FlexItem="true" Style="width: 0.5px" />
+         <MudDivider Vertical="true" FlexItem="true" Style="width: 0.5px"/>
 
-         <div class="per"> 
-             <span>27.1</span>
-             <p>PER</p>
+          <div class="fg"> 
+             <span>44.1</span>
+             <p>FG%</p>
          </div>
 
-         <MudDivider Vertical="true" FlexItem="true" Style="width: 0.5px" class="hide-divider"/>
-    
-
-          <div class="ts"> 
-             <span>64.9</span>
-             <p>TS%</p>
-           </div>
-         
     </div>
 
  </div>
