@@ -104,4 +104,8 @@
         margin: 2px;
         width: 30px;
     }
+
+    .card-info {
+        flex-direction: column;
+    }
 }

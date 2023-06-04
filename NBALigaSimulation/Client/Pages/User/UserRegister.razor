@@ -1,0 +1,30 @@
+﻿@page "/register"
+
+<PageTitle>Registrar</PageTitle>
+
+
+<MudContainer >
+    <MudGrid  Class="d-flex justify-center" Style="margin-top: 100px;">
+        <MudItem xs="6" sm="6">
+            <MudPaper Class="pa-4">
+                <MudForm  Model="user">
+                    <MudTextField T="string" Label="Usuário" Required="true" @bind-Value="user.Username" RequiredError="Nome de usuário é requerido!" />
+                        
+                        <MudTextField T="string" Label="Senha"  @bind-Value="user.Password" 
+                                      InputType="InputType.Password"
+                                      Required="true"
+                                      RequiredError="Senha requerida!"/>
+                        <MudTextField T="string"
+                                      Label="Senha" HelperText="Repita a senha" InputType="InputType.Password"
+                                      @bind-Value="user.ConfirmPassword"
+                                    />
+
+                        <div class="d-flex align-center justify-space-between">
+                            <MudButton Variant="Variant.Filled" Color="Color.Primary"  Class="ml-auto">Registrar-se</MudButton>
+                        </div>
+                </MudForm>   
+            </MudPaper>
+        </MudItem>
+
+    </MudGrid>
+</MudContainer>
