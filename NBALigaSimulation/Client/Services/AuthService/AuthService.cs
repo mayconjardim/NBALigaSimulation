@@ -12,7 +12,7 @@ namespace NBALigaSimulation.Client.Services.AuthService
             _http = http;
         }
 
-        public async Task<ServiceResponse<int>> Register(UserRegister request)
+        public async Task<ServiceResponse<int>> Register(UserRegistration request)
         {
             var result = await _http.PostAsJsonAsync("api/auth/register", request);
             return await result.Content.ReadFromJsonAsync<ServiceResponse<int>>();

@@ -5,12 +5,12 @@ global using NBALigaSimulation.Client.Utilities;
 global using NBALigaSimulation.Client.Services.PlayerService;
 global using NBALigaSimulation.Client.Services.TeamService;
 global using NBALigaSimulation.Client.Services.GameService;
+global using NBALigaSimulation.Client.Services.AuthService;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using MudBlazor.Services;
 using NBALigaSimulation.Client;
 using pax.BlazorChartJs;
-
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
 
@@ -20,6 +20,8 @@ builder.RootComponents.Add<HeadOutlet>("head::after");
 builder.Services.AddScoped<IPlayerService, PlayerService>();
 builder.Services.AddScoped<ITeamService, TeamService>();
 builder.Services.AddScoped<IGameService, GameService>();
+builder.Services.AddScoped<IAuthService, AuthService>();
+
 
 
 
