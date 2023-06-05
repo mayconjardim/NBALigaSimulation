@@ -1,5 +1,7 @@
 ﻿
 
+using NBALigaSimulation.Shared.Models.User;
+
 namespace NBALigaSimulation.Server.Data
 {
     public class DataContext : DbContext
@@ -17,6 +19,11 @@ namespace NBALigaSimulation.Server.Data
         public DbSet<Season> Seasons { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+
+            modelBuilder.Entity<User>()
+             .HasOne(u => u.Team)
+             .WithOne()
+             .HasForeignKey<User>(u => u.TeamId);
 
             modelBuilder.Entity<Season>()
               .HasMany(s => s.Games)
