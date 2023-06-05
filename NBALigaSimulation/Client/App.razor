@@ -1,7 +1,12 @@
 ﻿﻿<CascadingAuthenticationState>
 <Router AppAssembly="@typeof(App).Assembly">
     <Found Context="routeData">
-        <AuthorizeRouteView  RouteData="@routeData" DefaultLayout="@typeof(MainLayout)" />
+        <AuthorizeRouteView  RouteData="@routeData" DefaultLayout="@typeof(MainLayout)" > 
+              <NotAuthorized>
+                <h3>Opa, Você não esta autorizado a ver essa pagina.</h3>
+                <h5>Por favor <a href="login">Logar</a> ou <a href="register">Registre-se</a></h5>
+            </NotAuthorized>
+        </AuthorizeRouteView>
     </Found>
     <NotFound>
         <PageTitle>Not found</PageTitle>

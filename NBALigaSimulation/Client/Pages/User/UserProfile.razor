@@ -1,0 +1,10 @@
+﻿﻿
+@page "/profile"
+@attribute [Authorize]
+@inject IAuthService AuthService
+
+
+<AuthorizeView>
+    <h3>Você esta logado como: <i>@context.User.Identity.Name</i>.</h3>
+</AuthorizeView>
+
