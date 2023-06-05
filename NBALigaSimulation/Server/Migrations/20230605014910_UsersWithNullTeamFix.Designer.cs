@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using NBALigaSimulation.Server.Data;
 
@@ -10,9 +11,11 @@ using NBALigaSimulation.Server.Data;
 namespace NBALigaSimulation.Server.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20230605014910_UsersWithNullTeamFix")]
+    partial class UsersWithNullTeamFix
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "7.0.5");
@@ -290,7 +293,7 @@ namespace NBALigaSimulation.Server.Migrations
 
                     b.HasIndex("PlayerId");
 
-                    b.ToTable("PlayerRatings");
+                    b.ToTable("Ratings");
                 });
 
             modelBuilder.Entity("NBALigaSimulation.Shared.Models.Season", b =>
@@ -442,6 +445,7 @@ namespace NBALigaSimulation.Server.Migrations
                         .HasColumnType("BLOB");
 
                     b.Property<int?>("TeamId")
+                        .IsRequired()
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Username")
@@ -577,7 +581,9 @@ namespace NBALigaSimulation.Server.Migrations
                 {
                     b.HasOne("NBALigaSimulation.Shared.Models.Team", "Team")
                         .WithOne()
-                        .HasForeignKey("NBALigaSimulation.Shared.Models.User", "TeamId");
+                        .HasForeignKey("NBALigaSimulation.Shared.Models.User", "TeamId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Team");
                 });

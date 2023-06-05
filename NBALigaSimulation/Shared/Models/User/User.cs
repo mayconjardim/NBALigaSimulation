@@ -8,7 +8,7 @@
         public byte[] PasswordHash { get; set; }
         public byte[] PasswordSalt { get; set; }
         public DateTime DataCreated { get; set; }
-        public int TeamId { get; set; }
-        public Team Team { get; set; }
+        public int? TeamId { get; set; }
+        public Team? Team { get; set; }
     }
 }

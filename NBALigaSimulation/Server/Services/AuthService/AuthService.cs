@@ -25,6 +25,7 @@ namespace NBALigaSimulation.Server.Services.AuthService
 
             user.PasswordHash = passwordHash;
             user.PasswordSalt = passwordSalt;
+            user.TeamId = null;
 
             _context.Users.Add(user);
             await _context.SaveChangesAsync();

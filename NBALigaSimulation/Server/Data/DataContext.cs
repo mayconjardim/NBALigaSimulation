@@ -1,8 +1,4 @@
-﻿
-
-using NBALigaSimulation.Shared.Models.User;
-
-namespace NBALigaSimulation.Server.Data
+﻿namespace NBALigaSimulation.Server.Data
 {
     public class DataContext : DbContext
     {
@@ -11,7 +7,6 @@ namespace NBALigaSimulation.Server.Data
 
         public DbSet<Team> Teams { get; set; }
         public DbSet<Player> Players { get; set; }
-        public DbSet<PlayerRatings> Ratings { get; set; }
         public DbSet<Game> Games { get; set; }
         public DbSet<TeamGameStats> TeamGameStats { get; set; }
         public DbSet<PlayerGameStats> PlayerGameStats { get; set; }
@@ -22,9 +17,10 @@ namespace NBALigaSimulation.Server.Data
         {
 
             modelBuilder.Entity<User>()
-             .HasOne(u => u.Team)
-             .WithOne()
-             .HasForeignKey<User>(u => u.TeamId);
+            .HasOne(u => u.Team)
+            .WithOne()
+            .HasForeignKey<User>(u => u.TeamId)
+            .IsRequired(false);
 
             modelBuilder.Entity<Season>()
               .HasMany(s => s.Games)
@@ -85,6 +81,7 @@ namespace NBALigaSimulation.Server.Data
               .HasMany(g => g.PlayByPlay)
               .WithOne(p => p.Game)
               .HasForeignKey(p => p.GameSimId);
+
         }
     }
 }
