@@ -1,4 +1,4 @@
-﻿namespace NBALigaSimulation.Shared.Models.User
+﻿namespace NBALigaSimulation.Shared.Models
 {
     public class User
     {
