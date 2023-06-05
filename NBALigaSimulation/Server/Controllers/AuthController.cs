@@ -1,0 +1,34 @@
+﻿using Microsoft.AspNetCore.Mvc;
+
+namespace NBALigaSimulation.Server.Controllers
+{
+    [Route("api/[controller]")]
+    [ApiController]
+    public class AuthController : ControllerBase
+    {
+        private readonly IAuthService _authService;
+
+        public AuthController(IAuthService authService)
+        {
+            _authService = authService;
+        }
+
+        [HttpPost("register")]
+        public async Task<ActionResult<ServiceResponse<int>>> Register(UserRegistration request)
+        {
+            var response = await _authService.Register(
+                new User
+                {
+                    Username = request.Username,
+                },
+            request.Password);
+
+            if (!response.Success)
+            {
+                return BadRequest(response);
+            }
+
+            return Ok(response);
+        }
+    }
+}
