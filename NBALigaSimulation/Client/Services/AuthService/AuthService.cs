@@ -1,6 +1,4 @@
-﻿using NBALigaSimulation.Client.Pages.User;
-
-namespace NBALigaSimulation.Client.Services.AuthService
+﻿namespace NBALigaSimulation.Client.Services.AuthService
 {
     public class AuthService : IAuthService
     {
@@ -16,6 +14,12 @@ namespace NBALigaSimulation.Client.Services.AuthService
         {
             var result = await _http.PostAsJsonAsync("api/auth/register", request);
             return await result.Content.ReadFromJsonAsync<ServiceResponse<int>>();
+        }
+
+        public async Task<ServiceResponse<string>> Login(UserLogin request)
+        {
+            var result = await _http.PostAsJsonAsync("api/auth/login", request);
+            return await result.Content.ReadFromJsonAsync<ServiceResponse<string>>();
         }
 
     }

@@ -8,14 +8,23 @@ namespace NBALigaSimulation.Client.Pages.User
 
         private string errorMessage = string.Empty;
 
-        private string returnUrl = string.Empty;
-
         private UserLogin user = new();
 
 
-        async Task HandleLogin()
+        private async Task HandleLogin()
         {
-            await Console.Out.WriteLineAsync("VASCO");
+            var result = await AuthService.Login(user);
+            if (result.Success)
+            {
+                errorMessage = string.Empty;
+
+                await LocalStorage.SetItemAsync("authToken", result.Data);
+                NavigationManager.NavigateTo("");
+            }
+            else
+            {
+                errorMessage = result.Message;
+            }
         }
     }
 }

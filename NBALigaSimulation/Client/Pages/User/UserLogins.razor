@@ -1,10 +1,10 @@
 ﻿@page "/login"
-@inject IAuthService AuthService;
+@inject IAuthService AuthService
+@inject ILocalStorageService LocalStorage
+@inject NavigationManager NavigationManager
 @inject ISnackbar Snackbar
 
-
 <PageTitle>Lgoin</PageTitle>
-
 
 <MudContainer>
     <MudGrid Class="d-flex justify-center" Style="margin-top: 100px;">
