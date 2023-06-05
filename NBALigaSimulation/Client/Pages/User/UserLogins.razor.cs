@@ -11,6 +11,7 @@ namespace NBALigaSimulation.Client.Pages.User
         private UserLogin user = new();
 
 
+
         private async Task HandleLogin()
         {
             var result = await AuthService.Login(user);
@@ -19,6 +20,7 @@ namespace NBALigaSimulation.Client.Pages.User
                 errorMessage = string.Empty;
 
                 await LocalStorage.SetItemAsync("authToken", result.Data);
+                await AuthenticationStateProvider.GetAuthenticationStateAsync();
                 NavigationManager.NavigateTo("");
             }
             else

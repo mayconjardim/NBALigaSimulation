@@ -1,4 +1,9 @@
-﻿<MudNavMenu>
+﻿﻿
+@inject ILocalStorageService LocalStorage
+@inject AuthenticationStateProvider AuthenticationStateProvider
+@inject NavigationManager NavigationManager
+
+<MudNavMenu>
    
    <img src="images/utils/logo.svg" width="45%" style="display:block; margin:15px auto; text-align:center;"/>
 
@@ -41,6 +46,41 @@
         <MudNavLink Href="/loteria" Icon="@Icons.Material.Filled.Dvr" Match="NavLinkMatch.Prefix">Draft Loteria</MudNavLink>
     </MudNavGroup>
 
-    <MudNavLink Href="/login" Icon="@Icons.Material.Filled.Login" Match="NavLinkMatch.Prefix" >Login</MudNavLink>
+     <AuthorizeView>
+            <Authorized>
+                <MudNavLink href="profile" Icon="@Icons.Material.Filled.Dashboard" Match="NavLinkMatch.Prefix">Dashboard</MudNavLink>
+                <hr />
+                 <MudNavLink  @onclick="Logout" Icon="@Icons.Material.Filled.Logout" Match="NavLinkMatch.Prefix">Logout</MudNavLink>
+            </Authorized>
+            <NotAuthorized>
+               <MudNavLink Href="/login" Icon="@Icons.Material.Filled.Login" Match="NavLinkMatch.Prefix" >Login</MudNavLink>
+            </NotAuthorized>
+     </AuthorizeView>
+
+   
 
 </MudNavMenu>
+
+    @code {
+    private bool showUserMenu = false;
+
+    private string UserMenuCssClass => showUserMenu ? "show-menu" : null;
+
+    private void ToggleUserMenu()
+    {
+        showUserMenu = !showUserMenu;
+    }
+
+    private async Task HideUserMenu()
+    {
+        await Task.Delay(200);
+        showUserMenu = false;
+    }
+
+    private async Task Logout()
+    {
+        await LocalStorage.RemoveItemAsync("authToken");
+        await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        NavigationManager.NavigateTo("");
+    }
+}

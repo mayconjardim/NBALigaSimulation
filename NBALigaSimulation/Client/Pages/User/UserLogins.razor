@@ -2,6 +2,7 @@
 @inject IAuthService AuthService
 @inject ILocalStorageService LocalStorage
 @inject NavigationManager NavigationManager
+@inject AuthenticationStateProvider AuthenticationStateProvider
 @inject ISnackbar Snackbar
 
 <PageTitle>Lgoin</PageTitle>
@@ -19,7 +20,7 @@
                     <ValidationMessage For="@(() => user.Password)" />
 
                     <div class="d-flex align-center justify-space-between">
-                        <MudButton Variant="Variant.Filled" Color="Color.Primary" ButtonType="ButtonType.Submit" Class="ml-auto">Logar-se</MudButton>
+                        <MudButton Style="margin: 10px;" Variant="Variant.Filled" Color="Color.Primary" ButtonType="ButtonType.Submit" Class="ml-auto">Logar-se</MudButton>
                     </div>
                 </EditForm>
             </MudPaper>
