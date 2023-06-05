@@ -17,6 +17,7 @@ namespace NBALigaSimulation.Server.Data
         public DbSet<PlayerGameStats> PlayerGameStats { get; set; }
         public DbSet<GamePlayByPlay> PlayByPlays { get; set; }
         public DbSet<Season> Seasons { get; set; }
+        public DbSet<User> Users { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
 
