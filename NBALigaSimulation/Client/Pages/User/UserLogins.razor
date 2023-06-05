@@ -1,0 +1,29 @@
+﻿@page "/login"
+@inject IAuthService AuthService;
+@inject ISnackbar Snackbar
+
+
+<PageTitle>Lgoin</PageTitle>
+
+
+<MudContainer>
+    <MudGrid Class="d-flex justify-center" Style="margin-top: 100px;">
+        <MudItem xs="6" sm="6">
+            <MudPaper Class="pa-4">
+                <EditForm Model="user" OnValidSubmit="HandleLogin">
+                    <DataAnnotationsValidator />
+                    <MudTextField T="string" Label="Usuário" Required="true" @bind-Value="user.Username" RequiredError="Nome de usuário é requerido!" />
+                    <ValidationMessage For="@(() => user.Username)" />
+                        
+                    <MudTextField T="string" Label="Senha" @bind-Value="user.Password" InputType="InputType.Password" Required="true" RequiredError="Senha requerida!" />
+                    <ValidationMessage For="@(() => user.Password)" />
+
+                    <div class="d-flex align-center justify-space-between">
+                        <MudButton Variant="Variant.Filled" Color="Color.Primary" ButtonType="ButtonType.Submit" Class="ml-auto">Logar-se</MudButton>
+                    </div>
+                </EditForm>
+            </MudPaper>
+        </MudItem>
+    </MudGrid>
+</MudContainer>
+
