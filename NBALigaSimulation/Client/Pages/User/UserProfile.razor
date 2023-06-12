@@ -2,21 +2,31 @@
 @page "/profile"
 @attribute [Authorize]
 @inject IAuthService AuthService
+@inject ITeamService TeamService
 
 
-<AuthorizeView>
+@if (team == null)
+{
+ @message
+} else
+{
+
+ <AuthorizeView>
   <MudContainer>
-    <h3>Você esta logado como: <i>@context.User.Identity.Name</i>.</h3>
-    <MudGrid Class="d-flex justify-center" Style="margin-top: 20px;">
-   <MudButtonGroup Color="Color.Primary" Variant="Variant.Outlined">
-    <MudButton StartIcon="@Icons.Material.Filled.CompareArrows" IconColor="Color.Primary">Trade Center</MudButton>
-    <MudButton StartIcon="@Icons.Material.Filled.BusinessCenter" IconColor="Color.Primary">FA Center</MudButton>
-    <MudButton StartIcon="@Icons.Material.Filled.Password" IconColor="Color.Primary">Trocar Senha</MudButton>
-   </MudButtonGroup>
-   </MudGrid>
+    <div class="card @team.Abrv">
+        <h1>@team.Region @team.Name</h1>
+    </div>
+  
+    <MudGrid Class="d-flex justify-center" Style="margin-top: 10px;">
+     <MudButtonGroup Color="Color.Primary" Variant="Variant.Outlined">
+       <MudButton StartIcon="@Icons.Material.Filled.CompareArrows" IconColor="Color.Primary">Trade Center</MudButton>
+       <MudButton StartIcon="@Icons.Material.Filled.BusinessCenter" IconColor="Color.Primary">FA Center</MudButton>
+       <MudButton Href="/change-password"  StartIcon="@Icons.Material.Filled.Password" IconColor="Color.Primary">Trocar Senha</MudButton>
+     </MudButtonGroup>
+    </MudGrid>
   </MudContainer>
-    
-    
+ </AuthorizeView>
 
-</AuthorizeView>
+
+}
 

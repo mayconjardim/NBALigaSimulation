@@ -24,5 +24,10 @@
             return result;
         }
 
+        public async Task<ServiceResponse<TeamCompleteDto>> GetUserTeam()
+        {
+            var result = await _http.GetFromJsonAsync<ServiceResponse<TeamCompleteDto>>($"api/teams/profile");
+            return result;
+        }
     }
 }

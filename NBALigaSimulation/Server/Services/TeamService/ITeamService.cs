@@ -5,6 +5,8 @@
 
         Task<ServiceResponse<List<TeamSimpleDto>>> GetAllTeams();
         Task<ServiceResponse<TeamCompleteDto>> GetTeamById(int teamId);
+        Task<ServiceResponse<TeamCompleteDto>> GetTeamByUser();
+
 
     }
 }

@@ -62,6 +62,7 @@ namespace NBALigaSimulation.Server.Services.AuthService
             {
                 response.Data = CreateToken(user);
                 response.Message = "Logado com sucesso!";
+
             }
 
             return response;
@@ -137,7 +138,6 @@ namespace NBALigaSimulation.Server.Services.AuthService
             return new ServiceResponse<bool> { Data = true, Message = "A senha foi alterada!" };
 
         }
-
 
     }
 }

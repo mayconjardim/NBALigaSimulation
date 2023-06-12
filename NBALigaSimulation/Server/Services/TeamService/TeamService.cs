@@ -7,11 +7,13 @@ namespace NBALigaSimulation.Server.Services.TeamService
 
         private readonly DataContext _context;
         private readonly IMapper _mapper;
+        private readonly IAuthService _authService;
 
-        public TeamService(DataContext context, IMapper mapper)
+        public TeamService(DataContext context, IMapper mapper, IAuthService authService)
         {
             _context = context;
             _mapper = mapper;
+            _authService = authService;
         }
 
         public async Task<ServiceResponse<List<TeamSimpleDto>>> GetAllTeams()
@@ -40,10 +42,50 @@ namespace NBALigaSimulation.Server.Services.TeamService
             }
             else
             {
-
                 response.Data = _mapper.Map<TeamCompleteDto>(team);
             }
 
+            return response;
+        }
+
+        public async Task<ServiceResponse<TeamCompleteDto>> GetTeamByUser()
+        {
+
+            var response = new ServiceResponse<TeamCompleteDto>();
+            var userId = _authService.GetUserId();
+
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == userId);
+
+            if (user == null)
+            {
+                response.Success = false;
+                response.Message = "Usuário não encontrado!";
+                return response;
+            }
+
+            var teamId = user.TeamId;
+
+            if (teamId == null)
+            {
+                response.Success = false;
+                response.Message = "Usuário não está associado a um time!";
+                return response;
+            }
+
+            var team = await _context.Teams
+                .Include(t => t.Players)
+                    .ThenInclude(p => p.Ratings)
+                .FirstOrDefaultAsync(t => t.Id == teamId);
+
+            if (team == null)
+            {
+                response.Success = false;
+                response.Message = $"O Time com o Id {teamId} não existe!";
+                return response;
+            }
+
+            response.Data = _mapper.Map<TeamCompleteDto>(team);
+            response.Success = true;
             return response;
         }
 

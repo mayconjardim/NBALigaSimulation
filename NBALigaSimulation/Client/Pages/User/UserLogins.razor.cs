@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Components;
-using NBALigaSimulation.Shared.Models;
 
 namespace NBALigaSimulation.Client.Pages.User
 {
@@ -9,8 +8,6 @@ namespace NBALigaSimulation.Client.Pages.User
         private string errorMessage = string.Empty;
 
         private UserLogin user = new();
-
-
 
         private async Task HandleLogin()
         {
