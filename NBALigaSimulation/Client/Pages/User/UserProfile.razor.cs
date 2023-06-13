@@ -41,7 +41,7 @@ namespace NBALigaSimulation.Client.Pages.User
         public void OnReplacedItemDrop(PlayerCompleteDto item)
         {
             int index = team.Players.FindIndex(p => p.Id == item.Id);
-            UpdatedPlayerList = new List<PlayerCompleteDto>(team.Players); // Guarda a lista atualizada
+            UpdatedPlayerList = new List<PlayerCompleteDto>(team.Players);
             StateHasChanged();
         }
 
@@ -49,7 +49,6 @@ namespace NBALigaSimulation.Client.Pages.User
         {
             return age - season;
         }
-
 
 
     }
