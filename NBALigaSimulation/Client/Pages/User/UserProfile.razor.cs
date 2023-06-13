@@ -50,6 +50,8 @@ namespace NBALigaSimulation.Client.Pages.User
             return age - season;
         }
 
+
+
     }
 }
 

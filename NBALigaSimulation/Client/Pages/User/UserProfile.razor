@@ -26,10 +26,14 @@
      </MudButtonGroup>
     </MudGrid>
 
+     <h1 class="d-flex justify-center">DEPTH CHART & GAMEPLAN</h1> 
+
 <div class="container">
-     <div class="parent">
+    
+     <div class="parent border" >
 
        <div class="div1"> 
+
          <div class="roster-order">&nbsp;</div>
          <div class="roster-player">
               <span style="width: 150px">NAME</span>
@@ -63,7 +67,64 @@
        </div>
      </div>
 
-     <div class="gameplan">
+     <div class="gameplan border">
+        
+        <div class="offense">
+         
+              <MudPaper Width="300px">
+                    <MudList Clickable="true">
+                       
+                        <MudListItem Icon="@Icons.Material.Filled.Speed" >
+
+                            <MudSelect Margin="Margin.Dense" T="string" Label="Pace" Variant="Variant.Text">
+                                <MudSelectItem Value="@("Slow")" />
+                                <MudSelectItem Value="@("Medium")" />
+                                <MudSelectItem Value="@("High")" />
+                            </MudSelect>
+
+                        </MudListItem> 
+
+                        <MudListItem Icon="@Icons.Material.Filled.SwitchLeft" >
+
+                            <MudSelect Margin="Margin.Dense" T="string" Label="Motion" Variant="Variant.Text">
+                                <MudSelectItem Value="@("Slow")" />
+                                <MudSelectItem Value="@("Medium")" />
+                                <MudSelectItem Value="@("High")" />
+                            </MudSelect>
+
+                        </MudListItem> 
+
+                        <MudListItem Icon="@Icons.Material.Filled.CenterFocusStrong" >
+
+                            <MudSelect Margin="Margin.Dense" T="string" Label="Focus" Variant="Variant.Text">
+                           <MudSelectItem Value="@("Inside")" />
+                                <MudSelectItem Value="@("Balanced")" />
+                                <MudSelectItem Value="@("Outside")" />
+                            </MudSelect>
+
+                        </MudListItem> 
+
+                        <MudListItem Icon="@Icons.Material.Filled.Shield" >
+
+                            <MudSelect Margin="Margin.Dense" T="string" Label="Defense" Variant="Variant.Text">
+                                <MudSelectItem Value="@("Man")" />
+                                <MudSelectItem Value="@("Help")" />
+                                <MudSelectItem Value="@("Zone")" />
+                                <MudSelectItem Value="@("Switch")" />
+                            </MudSelect>
+
+                        </MudListItem> 
+
+
+                        <MudDivider />
+             
+
+                    </MudList>
+              </MudPaper>
+
+
+        </div>
+
 
 
 
