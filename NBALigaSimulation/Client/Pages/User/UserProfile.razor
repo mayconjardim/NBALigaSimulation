@@ -20,30 +20,57 @@
   
     <MudGrid Class="d-flex justify-center" Style="margin-top: 10px;">
      <MudButtonGroup Color="Color.Primary" Variant="Variant.Outlined">
-       <MudButton StartIcon="@Icons.Material.Filled.CompareArrows" IconColor="Color.Primary">Trade Center</MudButton>
-       <MudButton StartIcon="@Icons.Material.Filled.BusinessCenter" IconColor="Color.Primary">FA Center</MudButton>
-       <MudButton Href="/change-password"  StartIcon="@Icons.Material.Filled.Password" IconColor="Color.Primary">Trocar Senha</MudButton>
+       <MudButton Size="Size.Small" StartIcon="@Icons.Material.Filled.CompareArrows" IconColor="Color.Primary">Trade HQ</MudButton>
+       <MudButton Size="Size.Small" StartIcon="@Icons.Material.Filled.BusinessCenter" IconColor="Color.Primary">FA HQ</MudButton>
+       <MudButton Size="Size.Small" Href="/change-password"  StartIcon="@Icons.Material.Filled.Password" IconColor="Color.Primary">Trocar Senha</MudButton>
      </MudButtonGroup>
     </MudGrid>
 
-    <div class="row">
-        <b class="col-12">
-            DropedItem vasco:@DropedItem
-        </b>
-        <br />
-        <b class="col-12">
-            ReplacedItem:@replacedItem
-        </b>
-    </div>
-    <hr />
+<div class="container">
+     <div class="parent">
 
-    <div class="grid-container">
-        <Dropzone Context="data" Items="Items" InstantReplace="true" TItem="string" OnItemDrop="@((p)=>OnItemDrop(p))" OnReplacedItemDrop="@((p)=>OnReplacedItemDrop(p))">
-            <div>
-                <div class="grid-item">@data</div>
+       <div class="div1"> 
+         <div class="roster-order">&nbsp;</div>
+         <div class="roster-player">
+              <span style="width: 150px">NAME</span>
+              <span style="width: 40px">POS</span>
+              <span style="width: 40px">AGE</span>
+              <span style="width: 40px">OVR</span>
+         </div>    
+   
+       </div>
+
+      <div class="div2"> 
+
+           @for (int i = 0; i < team.Players.Count; i++)
+            {
+                <div class="roster-order @(i < 5 ? "starter" : "bench")">&nbsp;</div>              
+            }
+
+      </div>
+
+      <div class="div3"> 
+        <Dropzone Context="data" Items="team.Players" InstantReplace="true" TItem="PlayerCompleteDto" OnItemDrop="@((p)=>OnItemDrop(p))" OnReplacedItemDrop="@((p)=>OnReplacedItemDrop(p))">
+       
+            <div class="roster-player">
+              <span style="width: 150px">@data.Name</span>
+              <span style="width: 40px">@data.Pos</span>
+              <span style="width: 40px">@Age(@data.Born.Year, @data.Ratings.Last().Season)</span>
+              <span style="width: 40px">@data.Ratings.Last().Ovr</span>
             </div>
+
         </Dropzone>
-    </div>
+       </div>
+     </div>
+
+     <div class="gameplan">
+
+
+
+     </div>
+
+
+ </div>
 
 
  </MudContainer>

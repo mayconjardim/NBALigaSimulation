@@ -8,6 +8,8 @@ namespace NBALigaSimulation.Client.Pages.User
     partial class UserProfile
     {
 
+        string[] headings = { "", "Name", "Pos" };
+
         private TeamCompleteDto? team = null;
         private string message = string.Empty;
 
@@ -30,30 +32,24 @@ namespace NBALigaSimulation.Client.Pages.User
             }
         }
 
-        private string DropedItem = "";
-        private string replacedItem = "";
-        public List<string> Items = new List<string>()
-{
-        "1",
-        "2",
-        "3",
-        "4",
-        "5",
-        "6",
-        "7",
-        "8",
-        "9",
-    };
-        public void OnItemDrop(string item)
+        private List<PlayerCompleteDto> UpdatedPlayerList = new List<PlayerCompleteDto>();
+
+        public void OnItemDrop(PlayerCompleteDto item)
         {
-            DropedItem = item;
             StateHasChanged();
         }
-        public void OnReplacedItemDrop(string item)
+        public void OnReplacedItemDrop(PlayerCompleteDto item)
         {
-            replacedItem = item;
+            int index = team.Players.FindIndex(p => p.Id == item.Id);
+            UpdatedPlayerList = new List<PlayerCompleteDto>(team.Players); // Guarda a lista atualizada
             StateHasChanged();
         }
+
+        public int Age(int season, int age)
+        {
+            return age - season;
+        }
+
     }
 }
 
