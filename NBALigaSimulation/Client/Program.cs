@@ -13,6 +13,7 @@ using MudBlazor.Services;
 using NBALigaSimulation.Client;
 using pax.BlazorChartJs;
 using Blazored.LocalStorage;
+using Plk.Blazor.DragDrop;
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
 
@@ -29,9 +30,9 @@ builder.Services.AddScoped<AuthenticationStateProvider, CustomAuthStateProvider>
 
 builder.Services.AddBlazoredLocalStorage();
 
-
 builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
 builder.Services.AddMudServices();
+builder.Services.AddBlazorDragDrop();
 
 builder.Services.AddChartJs(options =>
 {

@@ -1,4 +1,7 @@
 ﻿using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Web;
+using Microsoft.JSInterop;
+using MudBlazor;
 
 namespace NBALigaSimulation.Client.Pages.User
 {
@@ -18,6 +21,7 @@ namespace NBALigaSimulation.Client.Pages.User
             var result = await TeamService.GetUserTeam();
             if (!result.Success)
             {
+
                 message = result.Message;
             }
             else
@@ -26,5 +30,31 @@ namespace NBALigaSimulation.Client.Pages.User
             }
         }
 
+        private string DropedItem = "";
+        private string replacedItem = "";
+        public List<string> Items = new List<string>()
+{
+        "1",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6",
+        "7",
+        "8",
+        "9",
+    };
+        public void OnItemDrop(string item)
+        {
+            DropedItem = item;
+            StateHasChanged();
+        }
+        public void OnReplacedItemDrop(string item)
+        {
+            replacedItem = item;
+            StateHasChanged();
+        }
     }
 }
+
+

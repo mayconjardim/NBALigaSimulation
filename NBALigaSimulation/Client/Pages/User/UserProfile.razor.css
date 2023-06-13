@@ -11,3 +11,14 @@
     color: #fff;
     text-transform: uppercase
 }
+
+.grid-container {
+    margin: 20px;
+}
+
+.grid-item {
+    border: 1px solid black;
+    width: 40px;
+    text-align: center;
+    margin: 10px;
+}

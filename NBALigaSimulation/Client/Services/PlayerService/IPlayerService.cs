@@ -1,8 +1,9 @@
 ﻿namespace NBALigaSimulation.Client.Services.PlayerService
 {
-    public interface IPlayerService
-    {
-        Task<ServiceResponse<PlayerCompleteDto>> GetPlayerById(int productId);
+	public interface IPlayerService
+	{
+		Task<ServiceResponse<PlayerCompleteDto>> GetPlayerById(int productId);
+		Task UpdatePlayerRosterOrder(int playerId, int newRosterOrder);
 
-    }
+	}
 }

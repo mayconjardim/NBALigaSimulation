@@ -3,6 +3,7 @@
 @attribute [Authorize]
 @inject IAuthService AuthService
 @inject ITeamService TeamService
+@inject IPlayerService PlayerService
 
 
 @if (team == null)
@@ -24,7 +25,28 @@
        <MudButton Href="/change-password"  StartIcon="@Icons.Material.Filled.Password" IconColor="Color.Primary">Trocar Senha</MudButton>
      </MudButtonGroup>
     </MudGrid>
-  </MudContainer>
+
+    <div class="row">
+        <b class="col-12">
+            DropedItem vasco:@DropedItem
+        </b>
+        <br />
+        <b class="col-12">
+            ReplacedItem:@replacedItem
+        </b>
+    </div>
+    <hr />
+
+    <div class="grid-container">
+        <Dropzone Context="data" Items="Items" InstantReplace="true" TItem="string" OnItemDrop="@((p)=>OnItemDrop(p))" OnReplacedItemDrop="@((p)=>OnReplacedItemDrop(p))">
+            <div>
+                <div class="grid-item">@data</div>
+            </div>
+        </Dropzone>
+    </div>
+
+
+ </MudContainer>
  </AuthorizeView>
 
 
