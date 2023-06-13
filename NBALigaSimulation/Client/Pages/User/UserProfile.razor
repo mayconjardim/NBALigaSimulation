@@ -4,6 +4,8 @@
 @inject IAuthService AuthService
 @inject ITeamService TeamService
 @inject IPlayerService PlayerService
+@inject NavigationManager NavigationManager
+
 
 
 @if (team == null)
@@ -66,24 +68,11 @@
         </Dropzone>
        </div>
 
-       <div class="player-list">
-    @if (UpdatedPlayerList.Count > 0)
-    {
-        foreach (var player in UpdatedPlayerList)
-        {
-            <div class="player-item">
-                <span>@player.Name</span>
-                <span>Roster Order: @player.RosterOrder</span>
-            </div>
-        }
-    }
-    else
-    {
-        <p>Nenhuma lista atualizada.</p>
-    }
-</div>
 
      </div>
+
+ 
+
 
      <div class="gameplan border">
         
@@ -143,18 +132,15 @@
 
         </div>
 
-
-
-
      </div>
 
-
+   
  </div>
 
+       <MudButton Variant="Variant.Outlined" disabled="@(UpdatedPlayerList.Count <= 0)" OnClick="UpdateRoster">Simular</MudButton>
 
  </MudContainer>
  </AuthorizeView>
 
 
 }
-

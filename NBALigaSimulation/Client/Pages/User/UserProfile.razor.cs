@@ -1,7 +1,5 @@
 ﻿using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.Components.Web;
-using Microsoft.JSInterop;
-using MudBlazor;
+
 
 namespace NBALigaSimulation.Client.Pages.User
 {
@@ -49,6 +47,17 @@ namespace NBALigaSimulation.Client.Pages.User
         {
             return age - season;
         }
+
+        private async Task UpdateRoster()
+        {
+            if (UpdatedPlayerList.Count > 0)
+            {
+                var result = await PlayerService.UpdateRosterOrder(UpdatedPlayerList);
+                UpdatedPlayerList.Clear();
+            }
+
+        }
+
 
 
     }
