@@ -4,7 +4,7 @@
     {
         Task<ServiceResponse<PlayerCompleteDto>> GetPlayerById(int productId);
         Task<ServiceResponse<bool>> UpdateRosterOrder(List<PlayerCompleteDto> updatedPlayerList);
-
+        Task<ServiceResponse<bool>> UpdatePlayerPtModifier(int playerId, double newPtModifier);
 
     }
 }

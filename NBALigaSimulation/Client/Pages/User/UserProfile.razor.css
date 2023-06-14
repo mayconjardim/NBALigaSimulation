@@ -28,9 +28,7 @@ h1 {
     grid-column-gap: 0px;
     grid-row-gap: 0px;
     justify-content: flex-start;
-    margin-top: 20px;
 }
-
 
 .div1 {
     display: flex;
@@ -87,7 +85,26 @@ h1 {
     box-shadow: rgba(9, 30, 66, 0.25) 0px 4px 8px -2px, rgba(9, 30, 66, 0.08) 0px 0px 0px 1px;
 }
 
-@media (max-width: 640px) {
+.custom-select {
+    width: 40px;
+    height: 40px;
+}
+
+@media (max-width: 780px) {
+
+    .container {
+        flex-direction: column;
+    }
+
+    h1 {
+        font-size: 15px;
+    }
+
+    .roster-order {
+        width: 25px;
+        height: 40px;
+        margin: 5px;
+    }
 
     .mobile {
         display: none;

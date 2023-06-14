@@ -29,6 +29,11 @@
     </MudGrid>
 
      <h1 class="d-flex justify-center">DEPTH CHART & GAMEPLAN</h1> 
+     <div class="d-flex justify-center">
+     <MudButton Style="margin: 10px" Variant="Variant.Outlined" disabled="@(UpdatedPlayerList.Count <= 0)" OnClick="UpdateRoster">Save Depth</MudButton>
+     <MudButton Style="margin: 10px" Variant="Variant.Outlined" disabled="@(UpdatedPlayerList.Count <= 0)" >Save Gameplan</MudButton>
+
+     </div>
 
 <div class="container">
     
@@ -42,6 +47,22 @@
               <span style="width: 40px">POS</span>
               <span style="width: 40px">AGE</span>
               <span style="width: 40px">OVR</span>
+              <span style="width: 60px">PT 
+                  <MudTooltip Style="width: 150px">
+                    <ChildContent>
+                        <MudIconButton Icon="@Icons.Material.Filled.Help" Size="Size.Small"  />
+                    </ChildContent>
+                    <TooltipContent>
+                        <MudText Typo="Typo.body2">Seu treinador dividirá o tempo de jogo com base na habilidade e resistência. <br> 
+                            Se você deseja influenciar o julgamento dele, suas opções são:<br> 
+                            0 : Sem tempo de jogo<br> 
+                            - : Menos tempo de jogo<br> 
+                             Vazio :   Deixe o treinador decidir<br> 
+                            + : Mais tempo de jogo<br> 
+                            ++ : Ainda mais tempo de jogo</MudText>
+                    </TooltipContent>
+                  </MudTooltip>
+              </span>
          </div>    
    
        </div>
@@ -55,6 +76,8 @@
 
       </div>
 
+
+
       <div class="div3"> 
         <Dropzone Context="data" Items="team.Players" InstantReplace="true" TItem="PlayerCompleteDto" OnItemDrop="@((p)=>OnItemDrop(p))" OnReplacedItemDrop="@((p)=>OnReplacedItemDrop(p))">
        
@@ -63,6 +86,14 @@
               <span style="width: 40px">@data.Pos</span>
               <span style="width: 40px">@Age(@data.Born.Year, @data.Ratings.Last().Season)</span>
               <span style="width: 40px">@data.Ratings.Last().Ovr</span>
+              <span style="width: 60px">
+                    <select value="@data.PtModifier" @oninput="@(e => UpdatePtModifier(e, data.Id))">
+                        @foreach (var option in PtOptions)
+                        {
+                            <option value="@option">@GetOptionLabel(option)</option>
+                        }
+                    </select>
+              </span>
             </div>
 
         </Dropzone>
@@ -70,9 +101,6 @@
 
 
      </div>
-
- 
-
 
      <div class="gameplan border">
         
@@ -94,7 +122,7 @@
                         <MudListItem Icon="@Icons.Material.Filled.SwitchLeft" >
 
                             <MudSelect Margin="Margin.Dense" T="string" Label="Motion" Variant="Variant.Text">
-                                <MudSelectItem Value="@("Slow")" />
+                                <MudSelectItem Value="@("Low")" />
                                 <MudSelectItem Value="@("Medium")" />
                                 <MudSelectItem Value="@("High")" />
                             </MudSelect>
@@ -137,7 +165,6 @@
    
  </div>
 
-       <MudButton Variant="Variant.Outlined" disabled="@(UpdatedPlayerList.Count <= 0)" OnClick="UpdateRoster">Simular</MudButton>
 
  </MudContainer>
  </AuthorizeView>

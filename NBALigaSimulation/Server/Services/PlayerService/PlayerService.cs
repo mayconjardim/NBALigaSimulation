@@ -95,9 +95,12 @@ namespace NBALigaSimulation.Server.Services.PlayerService
                     return response;
 
                 }
+                else
+                {
+                    int rosterOrder = updatedPlayerList.IndexOf(player);
+                    playerDb.RosterOrder = rosterOrder;
+                }
 
-                int rosterOrder = updatedPlayerList.IndexOf(player);
-                playerDb.RosterOrder = rosterOrder;
             }
 
             await _context.SaveChangesAsync();
@@ -106,6 +109,31 @@ namespace NBALigaSimulation.Server.Services.PlayerService
 
             return response;
         }
+
+        public async Task<ServiceResponse<bool>> UpdatePlayerPtModifier(int playerId, double newPtModifier)
+        {
+            var response = new ServiceResponse<bool>();
+
+            var player = await _context.Players.Include(t => t.Team).FirstOrDefaultAsync(p => p.Id == playerId);
+
+            if (player == null)
+            {
+                response.Success = false;
+                response.Message = $"O Player com o Id {playerId} não existe!";
+                return response;
+            }
+            else
+            {
+                player.PtModifier = newPtModifier;
+            }
+
+            await _context.SaveChangesAsync();
+            response.Success = true;
+            response.Message = "PtModifier updated successfully.";
+
+            return response;
+        }
+
 
     }
 }

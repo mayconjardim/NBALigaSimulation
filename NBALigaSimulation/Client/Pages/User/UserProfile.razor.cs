@@ -50,6 +50,7 @@ namespace NBALigaSimulation.Client.Pages.User
 
         private async Task UpdateRoster()
         {
+
             if (UpdatedPlayerList.Count > 0)
             {
                 var result = await PlayerService.UpdateRosterOrder(UpdatedPlayerList);
@@ -59,8 +60,35 @@ namespace NBALigaSimulation.Client.Pages.User
         }
 
 
+        List<double> PtOptions = new List<double> { 0.0, 0.75, 1.0, 1.25, 1.75 };
+
+        string GetOptionLabel(double value)
+        {
+
+            switch (value)
+            {
+                case 0.0:
+                    return "0";
+                case 0.75:
+                    return "-";
+                case 1.0:
+                    return "";
+                case 1.25:
+                    return "+";
+                default:
+                    return "++";
+            }
+        }
+
+        private async Task UpdatePtModifier(ChangeEventArgs e, int playerId)
+        {
+            double newPtModifier = Convert.ToDouble(e.Value);
+
+            await PlayerService.UpdatePlayerPtModifier(playerId, newPtModifier);
+        }
 
     }
+
 }
 
 

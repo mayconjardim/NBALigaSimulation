@@ -21,7 +21,7 @@ namespace NBALigaSimulation.Client.Services.PlayerService
 
         public async Task<ServiceResponse<bool>> UpdateRosterOrder(List<PlayerCompleteDto> updatedPlayerList)
         {
-            var result = await _http.PostAsJsonAsync("api/players/rosterorder", updatedPlayerList);
+            var result = await _http.PutAsJsonAsync("api/players/rosterorder", updatedPlayerList);
             bool success = result.IsSuccessStatusCode;
             var response = new ServiceResponse<bool>
             {
@@ -32,5 +32,23 @@ namespace NBALigaSimulation.Client.Services.PlayerService
 
             return response;
         }
+
+        public async Task<ServiceResponse<bool>> UpdatePlayerPtModifier(int playerId, double newPtModifier)
+        {
+
+            var result = await _http.PutAsJsonAsync($"api/players/{playerId}/ptmodifier", newPtModifier);
+
+            bool success = result.IsSuccessStatusCode;
+
+            var response = new ServiceResponse<bool>
+            {
+                Success = success,
+                Data = success,
+                Message = success ? "Player updated successfully." : "Failed to update player."
+            };
+
+            return response;
+        }
+
     }
 }

@@ -50,7 +50,7 @@ namespace NBALigaSimulation.Server.Controllers
         }
 
 
-        [HttpPost("rosterorder")]
+        [HttpPut("rosterorder")]
         public async Task<ActionResult> UpdateRosterOrder(List<PlayerCompleteDto> updatedPlayerList)
         {
             var response = await _playerService.UpdateRosterOrder(updatedPlayerList);
@@ -62,6 +62,20 @@ namespace NBALigaSimulation.Server.Controllers
 
             return Ok(response);
         }
+
+        [HttpPut("{playerId}/ptmodifier")]
+        public async Task<ActionResult> UpdatePlayerPtModifier(int playerId, [FromBody] double newPtModifier)
+        {
+            var response = await _playerService.UpdatePlayerPtModifier(playerId, newPtModifier);
+
+            if (!response.Success)
+            {
+                return BadRequest(response);
+            }
+
+            return Ok(response);
+        }
+
 
     }
 }
