@@ -8,6 +8,5 @@ namespace NBALigaSimulation.Client.Pages.Player
         [Parameter]
         public PlayerCompleteDto? player { get; set; }
 
-        bool hideDivider = false;
     }
 }

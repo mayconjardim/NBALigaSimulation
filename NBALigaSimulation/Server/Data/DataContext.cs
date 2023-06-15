@@ -9,6 +9,7 @@
         public DbSet<Player> Players { get; set; }
         public DbSet<Game> Games { get; set; }
         public DbSet<TeamGameStats> TeamGameStats { get; set; }
+        public DbSet<TeamGameplan> TeamGameplans { get; set; }
         public DbSet<PlayerGameStats> PlayerGameStats { get; set; }
         public DbSet<GamePlayByPlay> PlayByPlays { get; set; }
         public DbSet<Season> Seasons { get; set; }
@@ -76,6 +77,11 @@
                     .WithOne()
                     .HasForeignKey(s => s.TeamId);
             });
+
+            modelBuilder.Entity<Team>()
+            .HasOne(p => p.Gameplan)
+            .WithOne(g => g.Team)
+            .HasForeignKey<TeamGameplan>(g => g.TeamId);
 
             modelBuilder.Entity<Game>()
               .HasMany(g => g.PlayByPlay)

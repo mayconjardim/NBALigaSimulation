@@ -13,6 +13,8 @@ namespace NBALigaSimulation.Shared.Models
         public string Conference { get; set; } = string.Empty;
         public List<Player> Players { get; set; } = new List<Player>();
         public List<TeamGameStats> Stats { get; set; } = new List<TeamGameStats>();
+        public TeamGameplan Gameplan { get; set; }
+
         [NotMapped]
         public TeamCompositeRating CompositeRating { get; set; }
         [NotMapped]
