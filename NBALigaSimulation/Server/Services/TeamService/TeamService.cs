@@ -89,28 +89,34 @@ namespace NBALigaSimulation.Server.Services.TeamService
             return response;
         }
 
-        public async Task<ServiceResponse<bool>> UpdateTeamGameplan(TeamGameplanDto teamGameplanDto)
+        public async Task<ServiceResponse<bool>> UpdateTeamGameplan(int teamId, TeamGameplanDto teamGameplanDto)
         {
             ServiceResponse<bool> response = new ServiceResponse<bool>();
 
-            var teamGamePlan = await _context.TeamGameplans.FirstOrDefaultAsync(t => t.Id == teamGameplanDto.Id && t.TeamId == teamGameplanDto.TeamId);
+            var team = await _context.Teams.Include(t => t.Gameplan).FirstOrDefaultAsync(t => t.Id == teamId);
 
-            if (teamGamePlan == null)
+            if (team == null)
             {
-                teamGamePlan = new TeamGameplan();
-                _mapper.Map(teamGameplanDto, teamGamePlan);
-                _context.Add(teamGamePlan);
-            }
-            else
-            {
-                _mapper.Map(teamGameplanDto, teamGamePlan);
-                _context.Update(teamGamePlan);
+                response.Message = "Team not found.";
+                return response;
             }
 
-            await _context.SaveChangesAsync();
+            team.Gameplan.Pace = teamGameplanDto.Pace;
+            team.Gameplan.Motion = teamGameplanDto.Motion;
+            team.Gameplan.Focus = teamGameplanDto.Focus;
+            team.Gameplan.Defense = teamGameplanDto.Defense;
 
-            response.Success = true;
-            response.Message = "TeamGameplan updated successfully.";
+            _context.Update(team);
+
+            try
+            {
+                await _context.SaveChangesAsync();
+                response.Success = true;
+            }
+            catch (Exception ex)
+            {
+                response.Message = $"Error updating team gameplan: {ex.Message}";
+            }
 
             return response;
         }

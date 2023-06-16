@@ -53,5 +53,18 @@ namespace NBALigaSimulation.Server.Controllers
 
         }
 
+        [HttpPut("{teamId}/gameplan")]
+        public async Task<IActionResult> UpdateTeamGameplan(int teamId, TeamGameplanDto teamGameplanDto)
+        {
+            var response = await _teamService.UpdateTeamGameplan(teamId, teamGameplanDto);
+
+            if (!response.Success)
+            {
+                return BadRequest(response.Message);
+            }
+
+            return Ok();
+        }
+
     }
 }
