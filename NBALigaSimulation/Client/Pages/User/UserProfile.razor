@@ -109,16 +109,16 @@
         <div class="offense">
          
 
-            <EditForm Context="Model" Model="@teamGameplan" OnSubmit="UpdateGameplan">
+            <EditForm Context="gameplan" Model="teamGameplan" OnSubmit="UpdateGameplan">
             <MudPaper Width="300px">
                 <MudList Clickable="true">
                     <MudListItem Icon="@Icons.Material.Filled.Speed">
                         <div class="gameplan-select">
                             <p>Pace</p>
-                            <select value="@teamGameplan.Pace" class="mud-input mud-select-input" @onchange="HandleEventChanged">
+                            <select @bind="teamGameplan.Pace" class="mud-input mud-select-input" @oninput="HandleEventChanged">
                                 @foreach (var option in GPOptions)
                                 {
-                                    <option value="@option">@GetGP(option)</option>
+                                    <option  value="@option">@GetGP(option)</option>
                                 }
                             </select>
                         </div>
@@ -127,7 +127,7 @@
                     <MudListItem Icon="@Icons.Material.Filled.SwitchLeft">
                         <div class="gameplan-select">
                             <p>Motion</p>
-                            <select value="@teamGameplan.Motion" class="mud-input mud-select-input" @onchange="HandleEventChanged">
+                            <select @bind="teamGameplan.Motion" class="mud-input mud-select-input" @oninput="HandleEventChanged">
                                 @foreach (var option in GPOptions)
                                 {
                                     <option value="@option">@GetGP(option)</option>
@@ -139,7 +139,7 @@
                     <MudListItem Icon="@Icons.Material.Filled.CenterFocusStrong">
                         <div class="gameplan-select">
                             <p>Focus</p>
-                            <select value="@teamGameplan.Focus" class="mud-input mud-select-input" @onchange="HandleEventChanged">
+                            <select @bind="teamGameplan.Focus" class="mud-input mud-select-input" @oninput="HandleEventChanged">
                                 @foreach (var option in GPOptions)
                                 {
                                     <option value="@option">@GetGP(option)</option>
@@ -151,7 +151,7 @@
                     <MudListItem Icon="@Icons.Material.Filled.Shield">
                         <div class="gameplan-select">
                             <p>Defense</p>
-                            <select value="@teamGameplan.Defense" class="mud-input mud-select-input" @onchange="HandleEventChanged">
+                            <select @bind="teamGameplan.Defense" class="mud-input mud-select-input" @oninput="HandleEventChanged">
                                 @foreach (var option in DefenseOptions)
                                 {
                                     <option value="@option">@GetDefense(option)</option>
@@ -163,7 +163,8 @@
             </MudPaper>
 
                 <div class="d-flex justify-center">
-                    <MudButton Style="margin: 10px" Variant="Variant.Outlined" Type="submit" disabled="@(!isDirty)">Save Gameplan</MudButton>
+                    <MudButton Style="margin: 10px" Variant="Variant.Outlined" disabled="@(!isDirty)" ButtonType="ButtonType.Submit">Save Gameplan</MudButton>
+
                  </div>
 
         </EditForm>

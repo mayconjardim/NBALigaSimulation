@@ -1,4 +1,6 @@
-﻿namespace NBALigaSimulation.Client.Services.TeamService
+﻿using System.Net.Http;
+
+namespace NBALigaSimulation.Client.Services.TeamService
 {
     public class TeamService : ITeamService
     {
@@ -28,6 +30,19 @@
         {
             var result = await _http.GetFromJsonAsync<ServiceResponse<TeamCompleteDto>>($"api/teams/profile");
             return result;
+        }
+
+        public async Task<ServiceResponse<bool>> UpdateTeamGameplan(int teamId, TeamGameplanDto teamGameplanDto)
+        {
+            var response = await _http.PutAsJsonAsync($"api/teams/{teamId}/gameplan", teamGameplanDto);
+
+            if (!response.IsSuccessStatusCode)
+            {
+                var errorMessage = await response.Content.ReadAsStringAsync();
+                return new ServiceResponse<bool> { Success = false, Message = errorMessage };
+            }
+
+            return new ServiceResponse<bool> { Success = true };
         }
     }
 }

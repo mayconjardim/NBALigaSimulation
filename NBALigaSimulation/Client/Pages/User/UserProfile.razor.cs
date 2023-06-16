@@ -137,10 +137,19 @@ namespace NBALigaSimulation.Client.Pages.User
             StateHasChanged();
         }
 
-        private void UpdateGameplan()
+        private async Task UpdateGameplan()
         {
-            isDirty = false;
-            StateHasChanged();
+            var response = await TeamService.UpdateTeamGameplan(team.Id, teamGameplan);
+
+            if (response.Success)
+            {
+                isDirty = false;
+                StateHasChanged();
+            }
+            else
+            {
+                message = response.Message;
+            }
         }
 
     }

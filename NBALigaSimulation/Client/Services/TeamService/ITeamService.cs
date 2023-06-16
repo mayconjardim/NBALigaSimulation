@@ -6,6 +6,7 @@
         Task<ServiceResponse<TeamCompleteDto>> GetTeamById(int teamId);
         Task<ServiceResponse<TeamCompleteDto>> GetUserTeam();
         Task<ServiceResponse<List<TeamSimpleDto>>> GetAllTeams();
+        Task<ServiceResponse<bool>> UpdateTeamGameplan(int teamId, TeamGameplanDto teamGameplanDto);
 
     }
 }
