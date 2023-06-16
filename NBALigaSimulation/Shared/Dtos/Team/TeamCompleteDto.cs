@@ -1,4 +1,6 @@
 ﻿
+using NBALigaSimulation.Shared.Models;
+
 namespace NBALigaSimulation.Shared.Dtos
 {
     public class TeamCompleteDto
@@ -8,5 +10,6 @@ namespace NBALigaSimulation.Shared.Dtos
         public string Region { get; set; } = string.Empty;
         public string Abrv { get; set; } = string.Empty;
         public List<PlayerCompleteDto> Players { get; set; } = new List<PlayerCompleteDto>();
+        public TeamGameplanDto Gameplan { get; set; }
     }
 }

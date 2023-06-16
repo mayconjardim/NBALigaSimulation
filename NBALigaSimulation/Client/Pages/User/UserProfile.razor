@@ -13,9 +13,11 @@
  @message
 } else
 {
-
+ <MudContainer>
+<CascadingAuthenticationState>
  <AuthorizeView>
-  <MudContainer>
+
+ 
     <div class="card @team.Abrv">
         <h1>@team.Region @team.Name</h1>
     </div>
@@ -29,11 +31,7 @@
     </MudGrid>
 
      <h1 class="d-flex justify-center">DEPTH CHART & GAMEPLAN</h1> 
-     <div class="d-flex justify-center">
-     <MudButton Style="margin: 10px" Variant="Variant.Outlined" disabled="@(UpdatedPlayerList.Count <= 0)" OnClick="UpdateRoster">Save Depth</MudButton>
-     <MudButton Style="margin: 10px" Variant="Variant.Outlined" disabled="@(UpdatedPlayerList.Count <= 0)" >Save Gameplan</MudButton>
-
-     </div>
+   
 
 <div class="container">
     
@@ -97,6 +95,10 @@
             </div>
 
         </Dropzone>
+          <div class="d-flex justify-center">
+     <MudButton Style="margin: 10px" Variant="Variant.Outlined" disabled="@(UpdatedPlayerList.Count <= 0)" OnClick="UpdateRoster">Save Depth</MudButton>
+
+     </div>
        </div>
 
 
@@ -106,57 +108,65 @@
         
         <div class="offense">
          
-              <MudPaper Width="300px">
-                    <MudList Clickable="true">
-                       
-                        <MudListItem Icon="@Icons.Material.Filled.Speed" >
 
-                            <MudSelect Margin="Margin.Dense" T="string" Label="Pace" Variant="Variant.Text">
-                                <MudSelectItem Value="@("Slow")" />
-                                <MudSelectItem Value="@("Medium")" />
-                                <MudSelectItem Value="@("High")" />
-                            </MudSelect>
+            <EditForm Context="Model" Model="@teamGameplan" OnSubmit="UpdateGameplan">
+            <MudPaper Width="300px">
+                <MudList Clickable="true">
+                    <MudListItem Icon="@Icons.Material.Filled.Speed">
+                        <div class="gameplan-select">
+                            <p>Pace</p>
+                            <select value="@teamGameplan.Pace" class="mud-input mud-select-input" @onchange="HandleEventChanged">
+                                @foreach (var option in GPOptions)
+                                {
+                                    <option value="@option">@GetGP(option)</option>
+                                }
+                            </select>
+                        </div>
+                    </MudListItem>
 
-                        </MudListItem> 
+                    <MudListItem Icon="@Icons.Material.Filled.SwitchLeft">
+                        <div class="gameplan-select">
+                            <p>Motion</p>
+                            <select value="@teamGameplan.Motion" class="mud-input mud-select-input" @onchange="HandleEventChanged">
+                                @foreach (var option in GPOptions)
+                                {
+                                    <option value="@option">@GetGP(option)</option>
+                                }
+                            </select>
+                        </div>
+                    </MudListItem>
 
-                        <MudListItem Icon="@Icons.Material.Filled.SwitchLeft" >
+                    <MudListItem Icon="@Icons.Material.Filled.CenterFocusStrong">
+                        <div class="gameplan-select">
+                            <p>Focus</p>
+                            <select value="@teamGameplan.Focus" class="mud-input mud-select-input" @onchange="HandleEventChanged">
+                                @foreach (var option in GPOptions)
+                                {
+                                    <option value="@option">@GetGP(option)</option>
+                                }
+                            </select>
+                        </div>
+                    </MudListItem>
 
-                            <MudSelect Margin="Margin.Dense" T="string" Label="Motion" Variant="Variant.Text">
-                                <MudSelectItem Value="@("Low")" />
-                                <MudSelectItem Value="@("Medium")" />
-                                <MudSelectItem Value="@("High")" />
-                            </MudSelect>
+                    <MudListItem Icon="@Icons.Material.Filled.Shield">
+                        <div class="gameplan-select">
+                            <p>Defense</p>
+                            <select value="@teamGameplan.Defense" class="mud-input mud-select-input" @onchange="HandleEventChanged">
+                                @foreach (var option in DefenseOptions)
+                                {
+                                    <option value="@option">@GetDefense(option)</option>
+                                }
+                            </select>
+                        </div>
+                    </MudListItem>
+                </MudList>
+            </MudPaper>
 
-                        </MudListItem> 
+                <div class="d-flex justify-center">
+                    <MudButton Style="margin: 10px" Variant="Variant.Outlined" Type="submit" disabled="@(!isDirty)">Save Gameplan</MudButton>
+                 </div>
 
-                        <MudListItem Icon="@Icons.Material.Filled.CenterFocusStrong" >
-
-                            <MudSelect Margin="Margin.Dense" T="string" Label="Focus" Variant="Variant.Text">
-                           <MudSelectItem Value="@("Inside")" />
-                                <MudSelectItem Value="@("Balanced")" />
-                                <MudSelectItem Value="@("Outside")" />
-                            </MudSelect>
-
-                        </MudListItem> 
-
-                        <MudListItem Icon="@Icons.Material.Filled.Shield" >
-
-                            <MudSelect Margin="Margin.Dense" T="string" Label="Defense" Variant="Variant.Text">
-                                <MudSelectItem Value="@("Man")" />
-                                <MudSelectItem Value="@("Help")" />
-                                <MudSelectItem Value="@("Zone")" />
-                                <MudSelectItem Value="@("Switch")" />
-                            </MudSelect>
-
-                        </MudListItem> 
-
-
-                        <MudDivider />
-             
-
-                    </MudList>
-              </MudPaper>
-
+        </EditForm>
 
         </div>
 
@@ -166,8 +176,9 @@
  </div>
 
 
- </MudContainer>
+ 
  </AuthorizeView>
-
+ </CascadingAuthenticationState>
+ </MudContainer>
 
 }

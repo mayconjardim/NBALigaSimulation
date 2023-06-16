@@ -1,11 +1,9 @@
 ﻿namespace NBALigaSimulation.Shared.Models
 {
-    public class TeamGameplan
+    public class TeamGameplanDto
     {
-
         public int Id { get; set; }
         public int TeamId { get; set; }
-        public Team Team { get; set; }
         public int Pace { get; set; }
         public int Focus { get; set; }
         public int Motion { get; set; }
