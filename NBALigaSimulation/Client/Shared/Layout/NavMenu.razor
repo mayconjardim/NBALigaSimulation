@@ -2,6 +2,7 @@
 @inject ILocalStorageService LocalStorage
 @inject AuthenticationStateProvider AuthenticationStateProvider
 @inject NavigationManager NavigationManager
+@inject ITeamService TeamService
 
 <MudNavMenu>
    
@@ -18,13 +19,28 @@
     </MudNavGroup>
 
     <MudNavGroup Icon="@Icons.Material.Filled.Groups" Title="Times" Expanded="false">
+
      <MudNavGroup Icon="@Icons.Material.Filled.East" Title="East" Expanded="false">
-        <MudNavLink Href="/teams/id" Icon="@Icons.Material.Filled.SwapHorizontalCircle" Match="NavLinkMatch.Prefix">Teams</MudNavLink>
+        @foreach (var team in East)
+            {
+                <MudNavLink Href="@string.Format("/teams/{0}", team.Id)"  Match="NavLinkMatch.Prefix">
+                     <MudAvatar Style="vertical-align: middle; background: none" Size="Size.Small" Image=@($"Images/logos/{team.Abrv}.svg") Square="true" />
+                    @team.Name</MudNavLink>
+            }
      </MudNavGroup>
 
       <MudNavGroup Icon="@Icons.Material.Filled.West" Title="West" Expanded="false">
-        <MudNavLink Href="/teams/id" Icon="@Icons.Material.Filled.SwapHorizontalCircle" Match="NavLinkMatch.Prefix">Teams</MudNavLink>
+
+        @foreach (var team in West)
+            {
+                <MudNavLink Href="@string.Format("/teams/{0}", team.Id)"  Match="NavLinkMatch.Prefix">
+                     <MudAvatar Style="vertical-align: middle; background: none" Size="Size.Small" Image=@($"Images/logos/{team.Abrv}.svg") Square="true" />
+                    @team.Name</MudNavLink>
+            }
+
+
      </MudNavGroup>
+
     </MudNavGroup>
 
     <MudNavLink Href="/players" Icon="@Icons.Material.Filled.Person" Match="NavLinkMatch.Prefix">Jogadores</MudNavLink>
@@ -62,9 +78,29 @@
 </MudNavMenu>
 
     @code {
+    string message = "";
+    private List<TeamSimpleDto> East = new List<TeamSimpleDto>();
+    private List<TeamSimpleDto> West = new List<TeamSimpleDto>();
+
     private bool showUserMenu = false;
 
     private string UserMenuCssClass => showUserMenu ? "show-menu" : null;
+
+    protected override async Task OnInitializedAsync()
+    {
+ 
+        var result = await TeamService.GetAllTeams();
+        if (!result.Success)
+        {
+            message = result.Message;
+        }
+        else
+        {
+            East = result.Data.Where(t => t.Conference == "East").ToList();
+            West = result.Data.Where(t => t.Conference == "West").ToList();
+        }
+    }
+
 
     private void ToggleUserMenu()
     {

@@ -18,7 +18,7 @@ namespace NBALigaSimulation.Client.Pages.User
 
                 await LocalStorage.SetItemAsync("authToken", result.Data);
                 await AuthenticationStateProvider.GetAuthenticationStateAsync();
-                NavigationManager.NavigateTo("");
+                NavigationManager.NavigateTo("/profile");
             }
             else
             {

@@ -7,6 +7,7 @@
         public string Name { get; set; } = string.Empty;
         public string Region { get; set; } = string.Empty;
         public string Abrv { get; set; } = string.Empty;
+        public string Conference { get; set; } = string.Empty;
 
     }
 }
