@@ -89,5 +89,31 @@ namespace NBALigaSimulation.Server.Services.TeamService
             return response;
         }
 
+        public async Task<ServiceResponse<bool>> UpdateTeamGameplan(TeamGameplanDto teamGameplanDto)
+        {
+            ServiceResponse<bool> response = new ServiceResponse<bool>();
+
+            var teamGamePlan = await _context.TeamGameplans.FirstOrDefaultAsync(t => t.Id == teamGameplanDto.Id && t.TeamId == teamGameplanDto.TeamId);
+
+            if (teamGamePlan == null)
+            {
+                teamGamePlan = new TeamGameplan();
+                _mapper.Map(teamGameplanDto, teamGamePlan);
+                _context.Add(teamGamePlan);
+            }
+            else
+            {
+                _mapper.Map(teamGameplanDto, teamGamePlan);
+                _context.Update(teamGamePlan);
+            }
+
+            await _context.SaveChangesAsync();
+
+            response.Success = true;
+            response.Message = "TeamGameplan updated successfully.";
+
+            return response;
+        }
+
     }
 }

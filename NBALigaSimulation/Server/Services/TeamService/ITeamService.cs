@@ -1,4 +1,6 @@
-﻿namespace NBALigaSimulation.Server.Services.TeamService
+﻿using NBALigaSimulation.Shared.Models;
+
+namespace NBALigaSimulation.Server.Services.TeamService
 {
     public interface ITeamService
     {
@@ -6,7 +8,7 @@
         Task<ServiceResponse<List<TeamSimpleDto>>> GetAllTeams();
         Task<ServiceResponse<TeamCompleteDto>> GetTeamById(int teamId);
         Task<ServiceResponse<TeamCompleteDto>> GetTeamByUser();
-
+        Task<ServiceResponse<bool>> UpdateTeamGameplan(TeamGameplanDto teamGameplan);
 
     }
 }
