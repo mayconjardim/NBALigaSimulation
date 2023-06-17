@@ -1,12 +1,12 @@
 ﻿.container {
     display: flex;
-    justify-content: space-evenly;
+    justify-content: center;
     flex-wrap: wrap;
     text-transform: uppercase;
 }
 
 .card {
-    margin-top: 10px;
+    margin: 10px;
     width: 190px;
 }
 

@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Components;
+using System.Collections.Generic;
 using static MudBlazor.Colors;
 
 
@@ -82,11 +83,12 @@ namespace NBALigaSimulation.Client.Pages.User
                 default:
                     return "++";
             }
+
         }
 
-        private async Task UpdatePtModifier(ChangeEventArgs e, int playerId)
+        private async Task UpdatePtModifier(IEnumerable<double> v, int playerId)
         {
-            double newPtModifier = Convert.ToDouble(e.Value);
+            double newPtModifier = v.LastOrDefault();
 
             await PlayerService.UpdatePlayerPtModifier(playerId, newPtModifier);
         }

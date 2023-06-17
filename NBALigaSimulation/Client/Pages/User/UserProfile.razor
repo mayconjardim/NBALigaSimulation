@@ -36,31 +36,16 @@
 <div class="container">
     
      <div class="parent border" >
-
+         
        <div class="div1"> 
 
          <div class="roster-order">&nbsp;</div>
          <div class="roster-player">
               <span style="width: 150px">NAME</span>
-              <span style="width: 40px">POS</span>
-              <span style="width: 40px">AGE</span>
-              <span style="width: 40px">OVR</span>
-              <span style="width: 60px">PT 
-                  <MudTooltip Style="width: 150px">
-                    <ChildContent>
-                        <MudIconButton Icon="@Icons.Material.Filled.Help" Size="Size.Small"  />
-                    </ChildContent>
-                    <TooltipContent>
-                        <MudText Typo="Typo.body2">Seu treinador dividirá o tempo de jogo com base na habilidade e resistência. <br> 
-                            Se você deseja influenciar o julgamento dele, suas opções são:<br> 
-                            0 : Sem tempo de jogo<br> 
-                            - : Menos tempo de jogo<br> 
-                             Vazio :   Deixe o treinador decidir<br> 
-                            + : Mais tempo de jogo<br> 
-                            ++ : Ainda mais tempo de jogo</MudText>
-                    </TooltipContent>
-                  </MudTooltip>
-              </span>
+              <span class="drag40">POS</span>
+              <span class="drag40">AGE</span>
+              <span class="drag40">OVR</span>
+              <span style="width: 100px">PT</span>
          </div>    
    
        </div>
@@ -81,22 +66,20 @@
        
             <div class="roster-player">
               <span style="width: 150px">@data.Name</span>
-              <span style="width: 40px">@data.Pos</span>
-              <span style="width: 40px">@Age(@data.Born.Year, @data.Ratings.Last().Season)</span>
-              <span style="width: 40px">@data.Ratings.Last().Ovr</span>
-              <span style="width: 60px">
-                    <select value="@data.PtModifier" @oninput="@(e => UpdatePtModifier(e, data.Id))">
-                        @foreach (var option in PtOptions)
-                        {
-                            <option value="@option">@GetOptionLabel(option)</option>
-                        }
-                    </select>
-              </span>
-            </div>
+              <span  class="drag40">@data.Pos</span>
+              <span  class="drag40">@Age(@data.Born.Year, @data.Ratings.Last().Season)</span>
+              <span  class="drag40">@data.Ratings.Last().Ovr</span>
+              <MudSelect Style="width: 100px;" Dense="true" @bind-Value="@data.PtModifier" Margin="Margin.Dense" T="double" SelectedValuesChanged="@(v => UpdatePtModifier(v, data.Id))">
+                    @foreach (var pt in PtOptions)
+                    {
+                        <MudSelectItem T="double" Value="@pt">@GetOptionLabel(pt)</MudSelectItem>
+                    }
+              </MudSelect>
+             </div>
 
         </Dropzone>
           <div class="d-flex justify-center">
-     <MudButton Style="margin: 10px" Variant="Variant.Outlined" disabled="@(UpdatedPlayerList.Count <= 0)" OnClick="UpdateRoster">Save Depth</MudButton>
+        <MudButton Style="margin: 10px" Variant="Variant.Outlined" disabled="@(UpdatedPlayerList.Count <= 0)" OnClick="UpdateRoster">Save Depth</MudButton>
 
      </div>
        </div>
@@ -108,7 +91,6 @@
         
         <div class="offense">
          
-
             <EditForm Context="gameplan" Model="teamGameplan" OnSubmit="UpdateGameplan">
             <MudPaper Width="300px">
                 <MudList Clickable="true">
@@ -183,3 +165,4 @@
  </MudContainer>
 
 }
+s
