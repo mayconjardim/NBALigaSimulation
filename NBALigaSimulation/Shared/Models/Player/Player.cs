@@ -16,6 +16,7 @@ namespace NBALigaSimulation.Shared.Models
         public int TeamId { get; set; }
         public double PtModifier { get; set; }
         public int RosterOrder { get; set; }
+        public PlayerContract Contract { get; set; }
         public List<PlayerRatings> Ratings { get; set; } = new List<PlayerRatings>();
         public List<PlayerGameStats> Stats { get; set; } = new List<PlayerGameStats>();
 
