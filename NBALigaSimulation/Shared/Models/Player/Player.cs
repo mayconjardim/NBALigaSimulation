@@ -19,5 +19,6 @@ namespace NBALigaSimulation.Shared.Models
         public List<PlayerRatings> Ratings { get; set; } = new List<PlayerRatings>();
         public List<PlayerGameStats> Stats { get; set; } = new List<PlayerGameStats>();
 
+
     }
 }
