@@ -64,7 +64,7 @@ namespace NBALigaSimulation.Server.Services.PlayerService
         public async Task<ServiceResponse<PlayerCompleteDto>> GetPlayerById(int playerId)
         {
             var response = new ServiceResponse<PlayerCompleteDto>();
-            var player = await _context.Players.Include(t => t.Team).Include(p => p.Ratings).FirstOrDefaultAsync(p => p.Id == playerId);
+            var player = await _context.Players.Include(t => t.Team).Include(p => p.Ratings).Include(p => p.Contract).FirstOrDefaultAsync(p => p.Id == playerId);
 
             if (player == null)
             {
@@ -134,6 +134,26 @@ namespace NBALigaSimulation.Server.Services.PlayerService
             return response;
         }
 
+        public async Task<ServiceResponse<bool>> GenerateContracts()
+        {
+            var response = new ServiceResponse<bool>();
+
+            List<Player> players = await _context.Players.OrderBy(p => p.Id).Include(p => p.Ratings).ToListAsync();
+
+            Season season = await _context.Seasons.OrderBy(s => s.Id).LastOrDefaultAsync();
+
+            foreach (Player player in players)
+            {
+                var contract = ArrayHelper.GenContract(player, season, true, true, false);
+                player.Contract = contract;
+            }
+
+            await _context.SaveChangesAsync();
+            response.Success = true;
+            response.Message = "Contracts generated successfully.";
+
+            return response;
+        }
 
     }
 }

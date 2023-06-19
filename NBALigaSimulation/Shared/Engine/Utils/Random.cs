@@ -10,7 +10,6 @@
             return random.NextDouble() * (b - a) + a;
         }
 
-
         public static double Sigmoid(double x, double a, double b)
         {
             return 1 / (1 + Math.Exp(-(a * (x - b))));
@@ -54,6 +53,28 @@
             return x.ToString() + suffix;
         }
 
+        public static T Bound<T>(T x, T min, T max) where T : IComparable<T>
+        {
+            if (x.CompareTo(min) < 0)
+            {
+                return min;
+            }
+            if (x.CompareTo(max) > 0)
+            {
+                return max;
+            }
+            return x;
+        }
+
+        public static double Gauss(double mu = 0, double sigma = 1)
+        {
+            double u1 = 1.0 - random.NextDouble();
+            double u2 = 1.0 - random.NextDouble();
+            double randStdNormal = Math.Sqrt(-2.0 * Math.Log(u1)) * Math.Sin(2.0 * Math.PI * u2);
+            double randNormal = mu + sigma * randStdNormal;
+            return randNormal;
+        }
 
     }
+
 }

@@ -76,6 +76,18 @@ namespace NBALigaSimulation.Server.Controllers
             return Ok(response);
         }
 
+        [HttpPost("contracts")]
+        public async Task<ActionResult> GenerateContracts()
+        {
+            var response = await _playerService.GenerateContracts();
+
+            if (!response.Success)
+            {
+                return BadRequest(response);
+            }
+
+            return Ok(response);
+        }
 
     }
 }

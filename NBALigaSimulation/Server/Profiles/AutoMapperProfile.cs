@@ -16,6 +16,9 @@ namespace NBALigaSimulation.Server.Profiles
 
             CreateMap<PlayerCompleteDto, Player>();
 
+            CreateMap<PlayerContract, PlayerContractDto>().ReverseMap();
+
+
 
             CreateMap<Team, TeamSimpleDto>();
             CreateMap<Team, TeamCompleteDto>().ReverseMap();
