@@ -1,6 +1,4 @@
 ﻿using Microsoft.AspNetCore.Components;
-using System.Collections.Generic;
-using static MudBlazor.Colors;
 
 
 namespace NBALigaSimulation.Client.Pages.User
@@ -14,9 +12,6 @@ namespace NBALigaSimulation.Client.Pages.User
         private TeamGameplanDto? teamGameplan = null;
 
         private string message = string.Empty;
-
-        [Parameter]
-        public int Id { get; set; }
 
         protected override async Task OnParametersSetAsync()
         {

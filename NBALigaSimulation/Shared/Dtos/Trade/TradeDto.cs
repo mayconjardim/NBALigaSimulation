@@ -8,8 +8,10 @@ namespace NBALigaSimulation.Shared.Dtos
         public int Id { get; set; }
         public DateTime DateCreated { get; set; }
         public int TeamOneId { get; set; }
+        public string TeamOneName { get; set; }
 
         public int TeamTwoId { get; set; }
+        public string TeamTwoName { get; set; }
 
         public List<TradePlayer> TradePlayers { get; set; }
 

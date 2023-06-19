@@ -1,6 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using NBALigaSimulation.Server.Services.TradeService;
+﻿using Microsoft.AspNetCore.Mvc;
 
 namespace NBALigaSimulation.Server.Controllers
 {
@@ -25,11 +23,11 @@ namespace NBALigaSimulation.Server.Controllers
 
         }
 
-        [HttpGet("{teamId}")]
-        public async Task<ActionResult<ServiceResponse<TradeDto>>> GetTradeByTeamId(int teamId)
+        [HttpGet("teams")]
+        public async Task<ActionResult<ServiceResponse<TradeDto>>> GetTradeByTeamId()
         {
 
-            var result = await _tradeService.GetTradeByTeamId(teamId);
+            var result = await _tradeService.GetTradeByTeamId();
 
             if (!result.Success)
             {

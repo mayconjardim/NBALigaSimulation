@@ -35,7 +35,6 @@ namespace NBALigaSimulation.Server.Profiles
               .ForMember(dest => dest.AwayPlayerGameStats, opt => opt.MapFrom(src => src.PlayerGameStats.Where(p => p.TeamId == src.AwayTeamId).ToList()));
 
 
-
             CreateMap<PlayerGameStats, PlayerGameStatsDto>();
 
             CreateMap<GameCompleteDto, Game>();
@@ -58,9 +57,12 @@ namespace NBALigaSimulation.Server.Profiles
             CreateMap<CreateSeasonDto, Season>().ReverseMap();
             CreateMap<Season, CompleteSeasonDto>().ReverseMap();
 
-            CreateMap<Trade, TradeDto>().ReverseMap();
 
+            CreateMap<Trade, TradeDto>()
+               .ForMember(dest => dest.TeamOneName, opt => opt.MapFrom(src => src.TeamOne.Abrv))
+               .ForMember(dest => dest.TeamTwoName, opt => opt.MapFrom(src => src.TeamTwo.Abrv));
 
+            CreateMap<TradeDto, Trade>();
         }
     }
 }

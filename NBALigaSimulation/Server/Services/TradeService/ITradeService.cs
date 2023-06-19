@@ -3,7 +3,7 @@
     public interface ITradeService
     {
 
-        Task<ServiceResponse<TradeDto>> GetTradeByTeamId(int teamId);
+        Task<ServiceResponse<List<TradeDto>>> GetTradeByTeamId();
         Task<ServiceResponse<List<TradeDto>>> GetAllTrades();
 
     }

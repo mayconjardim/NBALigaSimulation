@@ -18,10 +18,11 @@
             return result;
         }
 
-        public async Task<ServiceResponse<TradeDto>> GetTradeByTeamId(int teamId)
+        public async Task<ServiceResponse<List<TradeDto>>> GetTradeByTeamId()
         {
-            var result = await _http.GetFromJsonAsync<ServiceResponse<TradeDto>>($"api/trades/{teamId}");
+            var result = await _http.GetFromJsonAsync<ServiceResponse<List<TradeDto>>>($"api/trades/teams");
             return result;
         }
+
     }
 }
