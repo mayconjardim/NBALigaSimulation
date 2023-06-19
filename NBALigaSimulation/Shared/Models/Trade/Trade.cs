@@ -5,7 +5,6 @@
 
         public int Id { get; set; }
         public DateTime DateCreated { get; set; } = DateTime.Now;
-
         public int TeamOneId { get; set; }
         public Team TeamOne { get; set; }
 
@@ -14,6 +13,8 @@
 
         public List<TradePlayer> TradePlayers { get; set; }
 
+        public bool? Response { get; set; } = null;
+        public DateTime LastModified { get; set; } = DateTime.Now;
 
     }
 }

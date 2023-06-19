@@ -2,6 +2,7 @@
 {
     public class TradePlayer
     {
+
         public int PlayerId { get; set; }
         public Player Player { get; set; }
 
