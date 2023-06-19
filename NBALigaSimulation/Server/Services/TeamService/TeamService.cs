@@ -32,7 +32,8 @@ namespace NBALigaSimulation.Server.Services.TeamService
             var response = new ServiceResponse<TeamCompleteDto>();
             var team = await _context.Teams
                  .Include(t => t.Players)
-                     .ThenInclude(p => p.Ratings).Include(t => t.Gameplan)
+                 .ThenInclude(p => p.Ratings)
+                 .Include(p => p.Players).ThenInclude(p => p.Contract)
                  .FirstOrDefaultAsync(p => p.Id == teamId);
 
             if (team == null)

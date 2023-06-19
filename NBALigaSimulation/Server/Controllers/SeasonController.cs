@@ -14,6 +14,22 @@ namespace NBALigaSimulation.Server.Controllers
             _seasonService = seasonService;
         }
 
+
+        [HttpGet]
+        public async Task<ActionResult<ServiceResponse<CompleteSeasonDto>>> GetLastSeason()
+        {
+
+            var result = await _seasonService.GetLastSeason();
+
+            if (!result.Success)
+            {
+                return NotFound(result);
+            }
+
+            return Ok(result);
+
+        }
+
         [HttpPost]
         public async Task<ActionResult<ServiceResponse<CompleteSeasonDto>>> CreateSeason(CreateSeasonDto request)
         {

@@ -13,7 +13,6 @@
                       </MudAvatar>
                    </CardHeaderAvatar>
                    <CardHeaderContent>
-                      <p>@player.Name</p>
                        <span>@player.Name</span>
                     </CardHeaderContent>
                 </MudCardHeader>
@@ -21,11 +20,11 @@
                        
                      <div class="info">
                         <MudRating SelectedValue="2" Size="Size.Small" ReadOnly="true" />
-                        <p>Shooting Guard</p> 
-                        <p>3rd Season</p> 
-                        <p> @Util.InchesToCm(player.Hgt)cm, @Util.LbsToKg(player.Weight)kg, 20 years</p> 
-                        <p> $ 6,243,665 (2)</p> 
-                        <p> 21.0 PPG - 4.4 APG - 3.6 RPG</p> 
+                        <p>@Position(player.Pos)</p> 
+                        <p>@player.Ratings.Count Season</p> 
+                        <p>@Util.InchesToCm(player.Hgt)cm, @Util.LbsToKg(player.Weight)kg, years</p> 
+                        <p>$ @player.Contract.Amount.ToString("N0")</p> 
+                        <p>21.0 PPG - 4.4 APG - 3.6 RPG</p> 
                      </div>
                     </MudCardContent>
 

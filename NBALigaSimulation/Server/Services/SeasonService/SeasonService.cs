@@ -28,6 +28,26 @@ namespace NBALigaSimulation.Server.Services.SeasonService
             return response;
         }
 
+
+        public async Task<ServiceResponse<CompleteSeasonDto>> GetLastSeason()
+        {
+            var response = new ServiceResponse<CompleteSeasonDto>();
+            var season = await _context.Seasons.OrderBy(s => s.Year).LastOrDefaultAsync();
+
+            if (season == null)
+            {
+                response.Success = false;
+                response.Message = $"Season não econtrada!";
+            }
+            else
+            {
+                response.Data = _mapper.Map<CompleteSeasonDto>(season);
+            }
+
+            return response;
+        }
+
+
         public async Task<ServiceResponse<CompleteSeasonDto>> UpdateSeason(int seasonId)
         {
             ServiceResponse<CompleteSeasonDto> response = new ServiceResponse<CompleteSeasonDto>();
