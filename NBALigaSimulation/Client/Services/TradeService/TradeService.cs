@@ -24,5 +24,11 @@
             return result;
         }
 
+        public async Task<ServiceResponse<TradeDto>> GetTradeById(int tradeId)
+        {
+            var result = await _http.GetFromJsonAsync<ServiceResponse<TradeDto>>($"api/trades/{tradeId}");
+            return result;
+        }
+
     }
 }

@@ -27,7 +27,7 @@ namespace NBALigaSimulation.Server.Controllers
         public async Task<ActionResult<ServiceResponse<TradeDto>>> GetTradeByTeamId()
         {
 
-            var result = await _tradeService.GetTradeByTeamId();
+            var result = await _tradeService.GetTradesByTeamId();
 
             if (!result.Success)
             {
@@ -36,6 +36,34 @@ namespace NBALigaSimulation.Server.Controllers
 
             return Ok(result);
 
+        }
+
+        [HttpGet("{tradeId}")]
+        public async Task<ActionResult<ServiceResponse<TradeDto>>> GetTradeById(int tradeId)
+        {
+
+            var result = await _tradeService.GetTradeById(tradeId);
+
+            if (!result.Success)
+            {
+                return NotFound(result);
+            }
+
+            return Ok(result);
+
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> CreateTrade(TradeDto tradeDto)
+        {
+            var response = await _tradeService.CreateTrade(tradeDto);
+
+            if (!response.Success)
+            {
+                return BadRequest(response.Message);
+            }
+
+            return Ok(response.Data);
         }
 
     }

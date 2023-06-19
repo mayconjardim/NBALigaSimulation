@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 
 namespace NBALigaSimulation.Server.Services.TradeService
 {
@@ -27,7 +28,7 @@ namespace NBALigaSimulation.Server.Services.TradeService
             return response;
         }
 
-        public async Task<ServiceResponse<List<TradeDto>>> GetTradeByTeamId()
+        public async Task<ServiceResponse<List<TradeDto>>> GetTradesByTeamId()
         {
             var response = new ServiceResponse<List<TradeDto>>();
 
@@ -53,6 +54,60 @@ namespace NBALigaSimulation.Server.Services.TradeService
             else
             {
                 response.Data = _mapper.Map<List<TradeDto>>(trades);
+            }
+
+            return response;
+        }
+
+        public async Task<ServiceResponse<TradeDto>> GetTradeById(int tradeId)
+        {
+            var response = new ServiceResponse<TradeDto>();
+
+            var trade = await _context.Trades
+                .Include(t => t.TeamOne)
+                .Include(t => t.TeamTwo)
+                .FirstOrDefaultAsync(t => t.Id == tradeId);
+
+            if (trade == null)
+            {
+                response.Success = false;
+                response.Message = $"A trade com Id {tradeId} não existe!";
+            }
+            else
+            {
+                response.Data = _mapper.Map<TradeDto>(trade);
+            }
+
+            return response;
+        }
+
+        public async Task<ServiceResponse<TradeDto>> CreateTrade(TradeDto tradeDto)
+        {
+            var response = new ServiceResponse<TradeDto>();
+
+            try
+            {
+                var teamOne = await _context.Teams.FindAsync(tradeDto.TeamOneId);
+                var teamTwo = await _context.Teams.FindAsync(tradeDto.TeamTwoId);
+
+                if (teamOne == null || teamTwo == null)
+                {
+                    response.Success = false;
+                    response.Message = "Uma ou ambas as equipes não existem.";
+                    return response;
+                }
+
+                Trade trade = _mapper.Map<Trade>(tradeDto);
+
+                _context.Trades.Add(trade);
+                await _context.SaveChangesAsync();
+
+                response.Data = _mapper.Map<TradeDto>(trade);
+            }
+            catch (Exception ex)
+            {
+                response.Success = false;
+                response.Message = "Ocorreu um erro ao criar a trade: " + ex.Message;
             }
 
             return response;

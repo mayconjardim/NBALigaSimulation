@@ -31,35 +31,35 @@
                 </tr>
             </thead>
             <tbody>
-                    <tr>
-                        @foreach (var trade in trades)
-                        {
-                            <td><MudAvatar Style="vertical-align: middle; background: none" Image=@($"Images/logos/{trade.TeamOneName}.svg")/></td>
-                            <td><MudAvatar Style="vertical-align: middle; background: none" Image=@($"Images/logos/{trade.TeamTwoName}.svg")/></td>
-                            <td>
-                               @if (trade.Response == null)
-                               {
-                                 <MudAvatar Style="vertical-align: middle; background: none" >
-                                 <MudIconButton Href="@string.Format("/tradeoffer/{0}", trade.Id)"  Color="Color.Primary" Icon="@Icons.Material.TwoTone.HourglassBottom" Size="Size.Medium" />
-                                 </MudAvatar>
-                               } else if (trade.Response == true)
-                               {
-                                 <MudAvatar Style="vertical-align: middle; background: none">
-                                 <MudIconButton Href="@string.Format("/tradeoffer/{0}", trade.Id)"  Color="Color.Success" Icon="@Icons.Material.Filled.Check" Size="Size.Medium" />
-                                 </MudAvatar>
-                               } else
-                               {
-                                 <MudAvatar Style="vertical-align: middle; background: none">
-                                 <MudIconButton Href="@string.Format("/tradeoffer/{0}", trade.Id)"  Color="Color.Error" Icon="@Icons.Material.Filled.Clear" Size="Size.Medium" />
-                                 </MudAvatar>
-                               }
-                            </td>
-                            <td><MudAvatar Style="vertical-align: middle; background: none">
-                                 <MudIconButton  Color="Color.Error" Icon="@Icons.Material.Filled.Delete" Size="Size.Medium" />
-                                 </MudAvatar>
-                            </td> 
-                        }
-                    </tr>
+                @foreach (var trade in trades)
+                {
+                        <tr>
+                                <td><MudAvatar Style="vertical-align: middle; background: none" Image=@($"Images/logos/{trade.TeamOneName}.svg")/></td>
+                                <td><MudAvatar Style="vertical-align: middle; background: none" Image=@($"Images/logos/{trade.TeamTwoName}.svg")/></td>
+                                <td>
+                                   @if (trade.Response == null)
+                                   {
+                                     <MudAvatar Style="vertical-align: middle; background: none" >
+                                     <MudIconButton Href="@string.Format("/tradeoffer/{0}", trade.Id)"  Color="Color.Primary" Icon="@Icons.Material.TwoTone.HourglassBottom" Size="Size.Medium" />
+                                     </MudAvatar>
+                                   } else if (trade.Response == true)
+                                   {
+                                     <MudAvatar Style="vertical-align: middle; background: none">
+                                     <MudIconButton Href="@string.Format("/tradeoffer/{0}", trade.Id)"  Color="Color.Success" Icon="@Icons.Material.Filled.Check" Size="Size.Medium" />
+                                     </MudAvatar>
+                                   } else
+                                   {
+                                     <MudAvatar Style="vertical-align: middle; background: none">
+                                     <MudIconButton Href="@string.Format("/tradeoffer/{0}", trade.Id)"  Color="Color.Error" Icon="@Icons.Material.Filled.Clear" Size="Size.Medium" />
+                                     </MudAvatar>
+                                   }
+                                </td>
+                                <td><MudAvatar Style="vertical-align: middle; background: none">
+                                     <MudIconButton  Color="Color.Error" Icon="@Icons.Material.Filled.Delete" Size="Size.Medium" />
+                                     </MudAvatar>
+                                </td> 
+                        </tr>
+                 }
             </tbody>
       </MudSimpleTable>
      </div>

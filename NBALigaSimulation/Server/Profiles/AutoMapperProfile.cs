@@ -44,9 +44,6 @@ namespace NBALigaSimulation.Server.Profiles
             CreateMap<CreatePlayerDto, Player>()
             .ForMember(dest => dest.Ratings, opt => opt.MapFrom(src => src.Ratings));
 
-            CreateMap<CreatePlayerDto, Player>()
-           .ForMember(dest => dest.Ratings, opt => opt.MapFrom(src => src.Ratings));
-
             CreateMap<PlayerRatingDto, PlayerRatings>()
                 .ForMember(dest => dest.PlayerId, opt => opt.MapFrom(src => src.PlayerId));
 

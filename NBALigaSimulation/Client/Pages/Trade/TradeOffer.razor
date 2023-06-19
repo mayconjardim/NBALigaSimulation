@@ -1,0 +1,41 @@
+﻿@page "/tradeoffer/{id:int}"
+@inject ITradeService TradeService
+
+
+<MudContainer>
+<CascadingAuthenticationState>
+<AuthorizeView>
+
+@if (trade !=  null)
+{
+    <div class="teams">
+
+        <div class="team1">
+
+            <div>
+                <MudAvatar Style="vertical-align: middle; background: none;height:100px; width:100px; font-size:2rem;" Image=@($"Images/logos/{trade.TeamOneName}.svg")/>
+            </div>
+
+            <div>
+
+            </div>
+
+        </div>
+
+        <div class="team2">
+
+            <div>
+                <MudAvatar Style="vertical-align: middle; background: none;height:100px; width:100px; font-size:2rem;" Image=@($"Images/logos/{trade.TeamTwoName}.svg")/>
+            </div>
+
+            <div>
+            </div>
+
+        </div>
+
+    </div>
+}
+
+</AuthorizeView>
+</CascadingAuthenticationState>
+</MudContainer>

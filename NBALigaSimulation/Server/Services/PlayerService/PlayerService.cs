@@ -1,8 +1,4 @@
 ﻿using AutoMapper;
-using Microsoft.EntityFrameworkCore;
-using NBALigaSimulation.Client.Pages.Player;
-using NBALigaSimulation.Shared.Models;
-using static MudBlazor.CategoryTypes;
 using Player = NBALigaSimulation.Shared.Models.Player;
 
 namespace NBALigaSimulation.Server.Services.PlayerService

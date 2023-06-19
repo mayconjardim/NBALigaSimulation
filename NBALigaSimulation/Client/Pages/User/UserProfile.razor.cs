@@ -6,7 +6,6 @@ namespace NBALigaSimulation.Client.Pages.User
     partial class UserProfile
     {
 
-        string[] headings = { "", "Name", "Pos" };
 
         private TeamCompleteDto? team = null;
         private TeamGameplanDto? teamGameplan = null;

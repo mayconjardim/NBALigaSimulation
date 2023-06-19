@@ -25,18 +25,18 @@
             {
                 <MudNavLink Href="@string.Format("/team/{0}", team.Id)"  Match="NavLinkMatch.Prefix">
                      <MudAvatar Style="vertical-align: middle; background: none" Size="Size.Small" Image=@($"Images/logos/{team.Abrv}.svg") Square="true" />
-                    @team.Name</MudNavLink>
+                @team.Name</MudNavLink>
             }
      </MudNavGroup>
 
       <MudNavGroup Icon="@Icons.Material.Filled.West" Title="West" Expanded="false">
 
         @foreach (var team in West)
-            {
+        {
                 <MudNavLink Href="@string.Format("/team/{0}", team.Id)"  Match="NavLinkMatch.Prefix">
                      <MudAvatar Style="vertical-align: middle; background: none" Size="Size.Small" Image=@($"Images/logos/{team.Abrv}.svg") Square="true" />
-                    @team.Name</MudNavLink>
-            }
+                @team.Name</MudNavLink>
+        }
 
 
      </MudNavGroup>
