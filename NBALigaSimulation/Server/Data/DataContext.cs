@@ -15,6 +15,9 @@
         public DbSet<GamePlayByPlay> PlayByPlays { get; set; }
         public DbSet<Season> Seasons { get; set; }
         public DbSet<User> Users { get; set; }
+        public DbSet<Trade> Trades { get; set; }
+
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
 
@@ -89,11 +92,36 @@
             .WithOne(g => g.Team)
             .HasForeignKey<TeamGameplan>(g => g.TeamId);
 
-            modelBuilder.Entity<Game>()
-              .HasMany(g => g.PlayByPlay)
-              .WithOne(p => p.Game)
-              .HasForeignKey(p => p.GameSimId);
+            modelBuilder.Entity<Trade>(entity =>
+           {
+               entity.HasKey(t => t.Id);
+               entity.Property(t => t.DateCreated).HasDefaultValueSql("GETDATE()");
 
+               entity.HasOne(t => t.TeamOne)
+                   .WithMany()
+                   .HasForeignKey(t => t.TeamOneId)
+                   .OnDelete(DeleteBehavior.Restrict);
+
+               entity.HasOne(t => t.TeamTwo)
+                   .WithMany()
+                   .HasForeignKey(t => t.TeamTwoId)
+                   .OnDelete(DeleteBehavior.Restrict);
+           });
+
+            modelBuilder.Entity<TradePlayer>(entity =>
+            {
+                entity.HasKey(tp => new { tp.PlayerId, tp.TradePlayerId });
+
+                entity.HasOne(tp => tp.Player)
+                    .WithMany()
+                    .HasForeignKey(tp => tp.PlayerId)
+                    .OnDelete(DeleteBehavior.Cascade);
+
+                entity.HasOne(tp => tp.Trade)
+                    .WithMany(t => t.TradePlayers)
+                    .HasForeignKey(tp => tp.TradePlayerId)
+                    .OnDelete(DeleteBehavior.Cascade);
+            });
         }
     }
 }

@@ -1,4 +1,4 @@
-﻿namespace NBALigaSimulation.Shared.Models.Trade
+﻿namespace NBALigaSimulation.Shared.Models
 {
     public class Trade
     {
@@ -12,8 +12,8 @@
         public int TeamTwoId { get; set; }
         public Team TeamTwo { get; set; }
 
-        public List<Player> PlayersTeamOne { get; set; }
-        public List<Player> PlayersTeamTwo { get; set; }
+        public List<TradePlayer> TradePlayers { get; set; }
+
 
     }
 }
