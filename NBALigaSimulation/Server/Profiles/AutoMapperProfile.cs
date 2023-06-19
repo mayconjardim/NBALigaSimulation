@@ -58,6 +58,9 @@ namespace NBALigaSimulation.Server.Profiles
             CreateMap<CreateSeasonDto, Season>().ReverseMap();
             CreateMap<Season, CompleteSeasonDto>().ReverseMap();
 
+            CreateMap<Trade, TradeDto>().ReverseMap();
+
+
         }
     }
 }
