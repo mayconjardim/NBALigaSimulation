@@ -1,4 +1,6 @@
-﻿namespace NBALigaSimulation.Client.Services.TradeService
+﻿using System.Net.Http;
+
+namespace NBALigaSimulation.Client.Services.TradeService
 {
     public class TradeService : ITradeService
     {
@@ -27,6 +29,13 @@
         public async Task<ServiceResponse<TradeDto>> GetTradeById(int tradeId)
         {
             var result = await _http.GetFromJsonAsync<ServiceResponse<TradeDto>>($"api/trades/{tradeId}");
+            return result;
+        }
+
+        public async Task<ServiceResponse<TradeDto>> CreateTrade(TradeDto tradeDto)
+        {
+            var response = await _http.PostAsJsonAsync("api/trades", tradeDto);
+            var result = await response.Content.ReadFromJsonAsync<ServiceResponse<TradeDto>>();
             return result;
         }
 

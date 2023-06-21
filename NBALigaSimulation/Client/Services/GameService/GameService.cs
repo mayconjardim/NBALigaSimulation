@@ -1,6 +1,4 @@
 ﻿
-using System.Net.Http.Json;
-
 namespace NBALigaSimulation.Client.Services.GameService
 {
     public class GameService : IGameService
