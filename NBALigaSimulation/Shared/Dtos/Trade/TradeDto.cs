@@ -13,7 +13,7 @@ namespace NBALigaSimulation.Shared.Dtos
         public int TeamTwoId { get; set; }
         public string TeamTwoName { get; set; }
 
-        public List<TradePlayer> TradePlayers { get; set; }
+        public List<TradePlayerDto> TradePlayers { get; set; }
 
         public bool? Response { get; set; } = null;
         public DateTime LastModified { get; set; }

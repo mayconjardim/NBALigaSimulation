@@ -66,6 +66,7 @@ namespace NBALigaSimulation.Server.Services.TradeService
             var trade = await _context.Trades
                 .Include(t => t.TeamOne)
                 .Include(t => t.TeamTwo)
+                .Include(t => t.TradePlayers)
                 .FirstOrDefaultAsync(t => t.Id == tradeId);
 
             if (trade == null)
@@ -81,27 +82,18 @@ namespace NBALigaSimulation.Server.Services.TradeService
             return response;
         }
 
-        public async Task<ServiceResponse<TradeDto>> CreateTrade(TradeDto tradeDto)
+        public async Task<ServiceResponse<TradeDto>> CreateTrade(TradeCreateDto tradeDto)
         {
             var response = new ServiceResponse<TradeDto>();
 
             try
             {
-                var teamOne = await _context.Teams.FindAsync(tradeDto.TeamOneId);
-                var teamTwo = await _context.Teams.FindAsync(tradeDto.TeamTwoId);
-
-                if (teamOne == null || teamTwo == null)
-                {
-                    response.Success = false;
-                    response.Message = "Uma ou ambas as equipes não existem.";
-                    return response;
-                }
 
                 Trade trade = _mapper.Map<Trade>(tradeDto);
 
                 _context.Trades.Add(trade);
                 await _context.SaveChangesAsync();
-
+                response.Success = true;
                 response.Data = _mapper.Map<TradeDto>(trade);
             }
             catch (Exception ex)
@@ -112,6 +104,43 @@ namespace NBALigaSimulation.Server.Services.TradeService
 
             return response;
         }
+
+        public async Task<ServiceResponse<bool>> UpdateTrade(TradeDto dto)
+        {
+            ServiceResponse<bool> response = new ServiceResponse<bool>();
+
+            Trade trade = await _context.Trades.Include(t => t.TradePlayers)
+                .FirstOrDefaultAsync(p => p.Id == dto.Id);
+
+            if (trade == null)
+            {
+                response.Success = false;
+                response.Message = "Trade não encontrado.";
+                return response;
+            }
+
+            trade.TradePlayers.Clear(); // Limpa os jogadores existentes da negociação
+
+            List<TradePlayer> tradePlayers = _mapper.Map<List<TradePlayer>>(dto.TradePlayers);
+            trade.TradePlayers.AddRange(tradePlayers); // Adiciona os jogadores mapeados
+
+            _mapper.Map(dto, trade);
+
+            try
+            {
+                await _context.SaveChangesAsync();
+                response.Success = true;
+                response.Data = true;
+            }
+            catch (Exception ex)
+            {
+                response.Success = false;
+                response.Message = "Erro ao atualizar o Trade.";
+            }
+
+            return response;
+        }
+
 
     }
 }

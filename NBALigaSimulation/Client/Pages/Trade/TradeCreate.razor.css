@@ -60,6 +60,11 @@
     margin-right: 30px;
 }
 
+.pp {
+    display: flex;
+    justify-content: space-around;
+}
+
 @media (max-width: 767px) {
     .teams {
         flex-direction: column;

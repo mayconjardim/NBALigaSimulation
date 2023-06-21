@@ -54,7 +54,7 @@ namespace NBALigaSimulation.Server.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult> CreateTrade(TradeDto tradeDto)
+        public async Task<ActionResult> CreateTrade(TradeCreateDto tradeDto)
         {
             var response = await _tradeService.CreateTrade(tradeDto);
 
@@ -66,5 +66,17 @@ namespace NBALigaSimulation.Server.Controllers
             return Ok(response.Data);
         }
 
+        [HttpPut("update")]
+        public async Task<IActionResult> UpdateTrade(TradeDto dto)
+        {
+            ServiceResponse<bool> response = await _tradeService.UpdateTrade(dto);
+
+            if (!response.Success)
+            {
+                return BadRequest(response);
+            }
+
+            return Ok(response);
+        }
     }
 }

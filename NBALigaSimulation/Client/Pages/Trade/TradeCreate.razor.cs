@@ -1,6 +1,4 @@
-﻿using NBALigaSimulation.Shared.Models;
-
-namespace NBALigaSimulation.Client.Pages.Trade
+﻿namespace NBALigaSimulation.Client.Pages.Trade
 {
     partial class TradeCreate
     {
@@ -11,11 +9,8 @@ namespace NBALigaSimulation.Client.Pages.Trade
         private TeamCompleteDto? teamTwo = null;
         private List<TeamSimpleDto> teams = new List<TeamSimpleDto>();
         private string message = string.Empty;
-
         private List<PlayerCompleteDto> teamOneSend = new List<PlayerCompleteDto>();
         private List<PlayerCompleteDto> teamTwoSend = new List<PlayerCompleteDto>();
-
-        public bool Basic_CheckBox1 { get; set; } = false;
 
         string[] headings = { "", "NAME", "POS", "AGE", "OVR", "POT", "CONTRACT" };
 
@@ -61,16 +56,17 @@ namespace NBALigaSimulation.Client.Pages.Trade
             else
             {
                 teamTwo = result.Data;
+                teamOneSend.Clear();
                 teamTwoSend.Clear();
             }
         }
 
-        bool IsPlayerSelectedTeamOne(int playerId)
+        private bool IsPlayerSelectedTeamOne(int playerId)
         {
             return teamOneSend.Any(p => p.Id == playerId);
         }
 
-        void TogglePlayerSelectionTeamOne(int playerId)
+        private void TogglePlayerSelectionTeamOne(int playerId)
         {
             if (teamOneSend.Any(p => p.Id == playerId))
             {
@@ -84,17 +80,17 @@ namespace NBALigaSimulation.Client.Pages.Trade
             }
         }
 
-        decimal GetTeamOneTotalSalary()
+        private decimal GetTeamOneTotalSalary()
         {
             return teamOneSend.Sum(p => p.Contract.Amount);
         }
 
-        bool IsPlayerSelectedTeamTwo(int playerId)
+        private bool IsPlayerSelectedTeamTwo(int playerId)
         {
             return teamTwoSend.Any(p => p.Id == playerId);
         }
 
-        void TogglePlayerSelectionTeamTwo(int playerId)
+        private void TogglePlayerSelectionTeamTwo(int playerId)
         {
             if (teamTwoSend.Any(p => p.Id == playerId))
             {
@@ -108,11 +104,56 @@ namespace NBALigaSimulation.Client.Pages.Trade
             }
         }
 
-        decimal GetTeamTwoSendTotalSalary()
+        private decimal GetTeamTwoSendTotalSalary()
         {
             return teamTwoSend.Sum(p => p.Contract.Amount);
         }
 
+        private async Task SendTradeOffer()
+        {
+            var tradeOffer = new TradeCreateDto
+            {
+                TeamOneId = teamOne.Id,
+                TeamTwoId = teamTwo.Id,
+            };
+
+            var tradeResponse = await TradeService.CreateTrade(tradeOffer);
+
+            if (tradeResponse.Success)
+            {
+                TradeDto trade = tradeResponse.Data;
+
+                trade.TradePlayers = new List<TradePlayerDto>();
+
+                foreach (var player in teamOneSend)
+                {
+                    TradePlayerDto tradePlayer = new TradePlayerDto
+                    {
+                        TradePlayerId = trade.Id,
+                        PlayerId = player.Id
+                    };
+                    trade.TradePlayers.Add(tradePlayer);
+                }
+
+                foreach (var player in teamTwoSend)
+                {
+                    TradePlayerDto tradePlayer = new TradePlayerDto
+                    {
+                        TradePlayerId = trade.Id,
+                        PlayerId = player.Id
+                    };
+                    trade.TradePlayers.Add(tradePlayer);
+                }
+
+                foreach (var player in trade.TradePlayers)
+                {
+                    await Console.Out.WriteLineAsync(player.PlayerId.ToString());
+                }
+
+
+            }
+
+        }
 
     }
 }

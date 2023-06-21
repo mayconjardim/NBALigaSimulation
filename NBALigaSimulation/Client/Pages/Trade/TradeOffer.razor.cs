@@ -6,6 +6,8 @@ namespace NBALigaSimulation.Client.Pages.Trade
     partial class TradeOffer
     {
 
+        string[] headings = { "", "NAME", "POS", "AGE", "OVR", "POT", "CONTRACT" };
+
         private TradeDto? trade = null;
         private string message = string.Empty;
 

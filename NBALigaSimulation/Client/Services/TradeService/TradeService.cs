@@ -1,4 +1,5 @@
-﻿using System.Net.Http;
+﻿using NBALigaSimulation.Shared.Dtos;
+using System.Net.Http;
 
 namespace NBALigaSimulation.Client.Services.TradeService
 {
@@ -32,12 +33,29 @@ namespace NBALigaSimulation.Client.Services.TradeService
             return result;
         }
 
-        public async Task<ServiceResponse<TradeDto>> CreateTrade(TradeDto tradeDto)
+        public async Task<ServiceResponse<TradeDto>> CreateTrade(TradeCreateDto tradeDto)
         {
-            var response = await _http.PostAsJsonAsync("api/trades", tradeDto);
-            var result = await response.Content.ReadFromJsonAsync<ServiceResponse<TradeDto>>();
-            return result;
+            var result = await _http.PostAsJsonAsync("api/trades", tradeDto);
+
+            var response = await result.Content.ReadFromJsonAsync<ServiceResponse<TradeDto>>();
+
+            return response;
         }
+
+        public async Task<ServiceResponse<bool>> UpdateTrade(TradeDto dto)
+        {
+            var result = await _http.PutAsJsonAsync($"api/trades/update/", dto);
+            bool success = result.IsSuccessStatusCode;
+            var response = new ServiceResponse<bool>
+            {
+                Success = success,
+                Data = success,
+                Message = success ? "Trade updated successfully." : "Failed to update trade."
+            };
+
+            return response;
+        }
+
 
     }
 }
