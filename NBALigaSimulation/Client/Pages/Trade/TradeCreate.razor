@@ -16,20 +16,7 @@
             <MudSelectItem Value="@(teamOne.Id)">@teamOne.Name</MudSelectItem>
         </MudSelect>
 
-        @if (teamTwo != null)
-        {
-         <div class="capspace d-flex justify-center">
-            <p>My Salaries: </p>
-             @if (teamOneSend != null)
-             {
-              <span> $@GetTeamOneTotalSalary()</span>
-             }
-             else
-             {
-              <span> $0</span>
-             }
-         </div>
-        }
+      
 
     </div>
 
@@ -41,10 +28,44 @@
             }
         </MudSelect>
 
-        @if (teamTwo != null)
+      
+
+    </div>
+    </div>
+    @if (teamTwo != null){
+    <div class="parent-container">
+        <div class="send">
+        <MudButton Variant="Variant.Filled" Color="Color.Primary">ENVIAR TRADE</MudButton>
+        </div>
+     <div class="finances">
+
+           @if (teamTwo != null)
         {
-         <div class="capspace d-flex justify-center">
-            <p>@teamTwo.Name Salaries: </p>
+         <div class="capspace">
+            <p>My Salaries </p>
+             @if (teamOneSend != null)
+             {
+              <span> $@GetTeamOneTotalSalary()</span>
+             }
+             else
+             {
+              <span> $0</span>
+             }
+         </div>
+        }
+
+         @if (teamTwo != null)
+        {
+         <div  class="capspace">
+            <p>Salary Match </p>
+            <span> $25,369,588</span>
+         </div>
+        }
+        
+           @if (teamTwo != null)
+        {
+         <div  class="capspace">
+            <p>@teamTwo.Name Salaries </p>
             @if (teamTwoSend != null)
              {
               <span> $@GetTeamTwoSendTotalSalary()</span>
@@ -56,18 +77,10 @@
          </div>
         }
 
-    </div>
-    </div>
+     </div>
+     </div>
+     }
 
-
-      @if (teamTwo != null)
-        {
-         <div class="capspace d-flex justify-center">
-            <p>Salary Match: </p>
-            <span> $25,369,588</span>
-         </div>
-        }
-     
      <div class="teams">
 
          <div class="team-players"> 
@@ -93,7 +106,7 @@
                                 <tr>
                                     <td><input type="checkbox" checked="@IsPlayerSelectedTeamOne(player.Id)" @onchange="() => TogglePlayerSelectionTeamOne(player.Id)" /></td>
                                     <td style="white-space: nowrap; width: 150px;">
-                                        <MudAvatar Style="background: none;height:25px;width:25px;vertical-align:middle" Image=@($"Images/logos/{teamOne.Abrv}.svg") />@player.Name
+                                        <MudAvatar Style="background: none;height:25px;width:25px;vertical-align:middle;margin-right: 2px" Image=@($"Images/logos/{teamOne.Abrv}.svg") />@player.Name
                                     </td>
                                     <td>@player.Pos</td>
                                     <td>@player.Born.Year</td>
@@ -138,7 +151,7 @@
                                         <tr>
                                             <td><input type="checkbox" checked="@IsPlayerSelectedTeamTwo(player.Id)" @onchange="() => TogglePlayerSelectionTeamTwo(player.Id)" /></td>
                                             <td style="white-space: nowrap; width: 150px;">
-                                                <MudAvatar Style="background: none;height:25px;width:25px;vertical-align:middle" Image=@($"Images/logos/{teamTwo.Abrv}.svg") />@player.Name
+                                                <MudAvatar Style="background: none;height:25px;width:25px;vertical-align:middle;margin-right: 2px" Image=@($"Images/logos/{teamTwo.Abrv}.svg") /> @player.Name
                                             </td>
                                             <td>@player.Pos</td>
                                             <td>@player.Born.Year</td>

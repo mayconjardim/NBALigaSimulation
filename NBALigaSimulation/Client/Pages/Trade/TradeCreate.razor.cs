@@ -61,6 +61,7 @@ namespace NBALigaSimulation.Client.Pages.Trade
             else
             {
                 teamTwo = result.Data;
+                teamTwoSend.Clear();
             }
         }
 
