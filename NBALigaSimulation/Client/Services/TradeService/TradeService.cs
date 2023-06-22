@@ -1,4 +1,5 @@
 ﻿using NBALigaSimulation.Shared.Dtos;
+using System.Collections.Generic;
 using System.Net.Http;
 
 namespace NBALigaSimulation.Client.Services.TradeService
@@ -35,12 +36,35 @@ namespace NBALigaSimulation.Client.Services.TradeService
 
         public async Task<ServiceResponse<TradeDto>> CreateTrade(TradeCreateDto tradeDto)
         {
+            var response = new ServiceResponse<TradeDto>();
+
             var result = await _http.PostAsJsonAsync("api/trades", tradeDto);
 
-            var response = await result.Content.ReadFromJsonAsync<ServiceResponse<TradeDto>>();
+            if (result.IsSuccessStatusCode)
+            {
+                var tradeResponse = await result.Content.ReadFromJsonAsync<ServiceResponse<TradeDto>>();
+
+                if (tradeResponse.Success)
+                {
+                    response.Success = true;
+                    response.Data = tradeResponse.Data;
+                    response.Message = "Trade created successfully.";
+                }
+                else
+                {
+                    response.Success = false;
+                    response.Message = tradeResponse.Message;
+                }
+            }
+            else
+            {
+                response.Success = false;
+                response.Message = "Failed to create trade. HTTP status code: " + result.StatusCode;
+            }
 
             return response;
         }
+
 
         public async Task<ServiceResponse<bool>> UpdateTrade(TradeDto dto)
         {

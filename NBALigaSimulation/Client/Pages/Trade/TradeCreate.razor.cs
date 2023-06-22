@@ -1,4 +1,7 @@
-﻿namespace NBALigaSimulation.Client.Pages.Trade
+﻿using Microsoft.AspNetCore.Components;
+using MudBlazor;
+
+namespace NBALigaSimulation.Client.Pages.Trade
 {
     partial class TradeCreate
     {
@@ -8,11 +11,15 @@
         private TeamCompleteDto? teamOne = null;
         private TeamCompleteDto? teamTwo = null;
         private List<TeamSimpleDto> teams = new List<TeamSimpleDto>();
+
         private string message = string.Empty;
+        string messageCssClass = string.Empty;
+
         private List<PlayerCompleteDto> teamOneSend = new List<PlayerCompleteDto>();
         private List<PlayerCompleteDto> teamTwoSend = new List<PlayerCompleteDto>();
 
         string[] headings = { "", "NAME", "POS", "AGE", "OVR", "POT", "CONTRACT" };
+
 
         protected override async Task OnInitializedAsync()
         {
@@ -115,45 +122,38 @@
             {
                 TeamOneId = teamOne.Id,
                 TeamTwoId = teamTwo.Id,
+                TradePlayers = new List<TradePlayerDto>(),
+                Players = new List<PlayerCompleteDto>()
             };
+
+            foreach (var player in teamOneSend)
+            {
+                tradeOffer.Players.Add(player);
+            }
+
+            foreach (var player in teamTwoSend)
+            {
+                tradeOffer.Players.Add(player);
+            }
 
             var tradeResponse = await TradeService.CreateTrade(tradeOffer);
 
             if (tradeResponse.Success)
             {
-                TradeDto trade = tradeResponse.Data;
-
-                trade.TradePlayers = new List<TradePlayerDto>();
-
-                foreach (var player in teamOneSend)
-                {
-                    TradePlayerDto tradePlayer = new TradePlayerDto
-                    {
-                        TradePlayerId = trade.Id,
-                        PlayerId = player.Id
-                    };
-                    trade.TradePlayers.Add(tradePlayer);
-                }
-
-                foreach (var player in teamTwoSend)
-                {
-                    TradePlayerDto tradePlayer = new TradePlayerDto
-                    {
-                        TradePlayerId = trade.Id,
-                        PlayerId = player.Id
-                    };
-                    trade.TradePlayers.Add(tradePlayer);
-                }
-
-                foreach (var player in trade.TradePlayers)
-                {
-                    await Console.Out.WriteLineAsync(player.PlayerId.ToString());
-                }
-
+                messageCssClass = "success";
+                Snackbar.Add("Proposta enviada com sucesso!", Severity.Success);
+                NavigationManager.NavigateTo("/trades");
+            }
+            else
+            {
+                messageCssClass = "error";
+                Snackbar.Add("Proposta não foi enviada!", Severity.Success);
 
             }
 
         }
 
     }
+
 }
+

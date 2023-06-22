@@ -91,6 +91,15 @@ namespace NBALigaSimulation.Server.Services.TradeService
 
                 Trade trade = _mapper.Map<Trade>(tradeDto);
 
+                foreach (var player in tradeDto.Players)
+                {
+                    trade.TradePlayers.Add(new TradePlayer
+                    {
+                        PlayerId = player.Id,
+                        TradePlayerId = trade.Id
+                    });
+                }
+
                 _context.Trades.Add(trade);
                 await _context.SaveChangesAsync();
                 response.Success = true;

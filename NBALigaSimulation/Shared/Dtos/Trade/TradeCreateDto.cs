@@ -1,6 +1,4 @@
-﻿using NBALigaSimulation.Shared.Models;
-
-namespace NBALigaSimulation.Shared.Dtos
+﻿namespace NBALigaSimulation.Shared.Dtos
 {
     public class TradeCreateDto
     {
@@ -11,7 +9,8 @@ namespace NBALigaSimulation.Shared.Dtos
 
         public int TeamTwoId { get; set; }
 
-        public List<TradePlayerDto>? TradePlayers { get; set; }
+        public List<TradePlayerDto> TradePlayers { get; set; }
+        public List<PlayerCompleteDto> Players { get; set; }
 
         public bool? Response { get; set; } = null;
         public DateTime LastModified { get; set; } = DateTime.Now;
