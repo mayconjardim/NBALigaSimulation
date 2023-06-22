@@ -76,11 +76,26 @@ namespace NBALigaSimulation.Server.Services.TradeService
             }
             else
             {
-                response.Data = _mapper.Map<TradeDto>(trade);
+                var tradeWithPlayers = _mapper.Map<TradeDto>(trade);
+                tradeWithPlayers.Players = new List<PlayerCompleteDto>();
+
+                if (trade.TradePlayers != null)
+                {
+                    foreach (var t in trade.TradePlayers)
+                    {
+                        var player = await _context.Players.Include(p => p.Ratings).Include(p => p.Contract).FirstOrDefaultAsync(p => p.Id == t.PlayerId);
+                        var playerDto = _mapper.Map<PlayerCompleteDto>(player);
+                        tradeWithPlayers.Players.Add(playerDto);
+                    }
+                }
+
+                response.Data = tradeWithPlayers;
             }
 
             return response;
         }
+
+
 
         public async Task<ServiceResponse<TradeDto>> CreateTrade(TradeCreateDto tradeDto)
         {
@@ -121,6 +136,7 @@ namespace NBALigaSimulation.Server.Services.TradeService
             Trade trade = await _context.Trades.Include(t => t.TradePlayers)
                 .FirstOrDefaultAsync(p => p.Id == dto.Id);
 
+
             if (trade == null)
             {
                 response.Success = false;
@@ -128,12 +144,15 @@ namespace NBALigaSimulation.Server.Services.TradeService
                 return response;
             }
 
-            trade.TradePlayers.Clear(); // Limpa os jogadores existentes da negociação
+            if (dto.Response == true)
+            {
+                trade.Response = true;
+            }
 
-            List<TradePlayer> tradePlayers = _mapper.Map<List<TradePlayer>>(dto.TradePlayers);
-            trade.TradePlayers.AddRange(tradePlayers); // Adiciona os jogadores mapeados
-
-            _mapper.Map(dto, trade);
+            if (dto.Response == false)
+            {
+                trade.Response = false;
+            }
 
             try
             {

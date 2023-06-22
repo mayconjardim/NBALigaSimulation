@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Components;
-
+using MudBlazor;
 
 namespace NBALigaSimulation.Client.Pages.User
 {
@@ -26,7 +26,7 @@ namespace NBALigaSimulation.Client.Pages.User
             {
                 team = result.Data;
                 teamGameplan = team.Gameplan;
-                await LocalStorage.SetItemAsync("team,", result.Data.Abrv);
+                await LocalStorage.SetItemAsync("team", result.Data.Abrv);
             }
         }
 
@@ -55,6 +55,8 @@ namespace NBALigaSimulation.Client.Pages.User
             {
                 var result = await PlayerService.UpdateRosterOrder(UpdatedPlayerList);
                 UpdatedPlayerList.Clear();
+                Snackbar.Add("DEPTH CHART ATUALIIZADO COM SUCESSO", Severity.Success);
+
             }
 
         }
@@ -141,6 +143,8 @@ namespace NBALigaSimulation.Client.Pages.User
             {
                 isDirty = false;
                 StateHasChanged();
+                Snackbar.Add("GAMEPLAN ATUALIIZADO COM SUCESSO", Severity.Success);
+
             }
             else
             {

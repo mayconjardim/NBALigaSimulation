@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Components;
-
+using MudBlazor;
 
 namespace NBALigaSimulation.Client.Pages.Trade
 {
@@ -10,6 +10,10 @@ namespace NBALigaSimulation.Client.Pages.Trade
 
         private TradeDto? trade = null;
         private string message = string.Empty;
+        string messageCssClass = string.Empty;
+        private string userTeam { get; set; } = string.Empty;
+        private List<PlayerCompleteDto> teamOnePlayers = new List<PlayerCompleteDto>();
+        private List<PlayerCompleteDto> teamTwoPlayers = new List<PlayerCompleteDto>();
 
         [Parameter]
         public int Id { get; set; }
@@ -25,8 +29,74 @@ namespace NBALigaSimulation.Client.Pages.Trade
             }
             else
             {
+
+                userTeam = await LocalStorage.GetItemAsync<string>("team");
                 trade = result.Data;
+
+                foreach (var player in trade.Players)
+                {
+
+                    if (player.TeamId == trade.TeamOneId)
+                    {
+                        teamOnePlayers.Add(player);
+                    }
+
+                    if (player.TeamId == trade.TeamTwoId)
+                    {
+                        teamTwoPlayers.Add(player);
+                    }
+                }
             }
+        }
+
+        private decimal GetTeamOneTotalSalary()
+        {
+            return teamOnePlayers.Sum(p => p.Contract.Amount);
+        }
+
+        private decimal GetTeamTwoTotalSalary()
+        {
+            return teamTwoPlayers.Sum(p => p.Contract.Amount);
+        }
+
+        private async Task AcceptTrade()
+        {
+            trade.Response = true;
+            var sucesss = await TradeService.UpdateTrade(trade);
+
+            if (sucesss.Success)
+            {
+                messageCssClass = "success";
+                Snackbar.Add("Proposta respondida com sucesso!", Severity.Success);
+                NavigationManager.NavigateTo("/trades");
+            }
+            else
+            {
+                messageCssClass = "error";
+                Snackbar.Add("Proposta não foi enviada!", Severity.Success);
+
+            }
+
+        }
+
+        private async Task DeclineTrade()
+        {
+            trade.Response = false;
+            var sucesss = await TradeService.UpdateTrade(trade);
+
+            if (sucesss.Success)
+            {
+                messageCssClass = "success";
+                Snackbar.Add("Proposta respondida com sucesso!", Severity.Success);
+                NavigationManager.NavigateTo("/trades");
+            }
+            else
+            {
+                messageCssClass = "error";
+                Snackbar.Add("Proposta não foi enviada!", Severity.Success);
+
+            }
+
         }
 
     }

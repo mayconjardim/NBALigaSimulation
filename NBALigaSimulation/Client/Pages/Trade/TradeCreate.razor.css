@@ -56,8 +56,7 @@
 
 .send {
     display: flex;
-    justify-content: center;
-    margin-right: 30px;
+    justify-content: space-around;
 }
 
 .pp {
