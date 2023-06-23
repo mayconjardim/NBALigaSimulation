@@ -1,5 +1,8 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Mvc.Formatters;
 using Microsoft.EntityFrameworkCore;
+using NBALigaSimulation.Client.Pages.Player;
+using NBALigaSimulation.Shared.Models;
 
 namespace NBALigaSimulation.Server.Services.TradeService
 {
@@ -41,7 +44,7 @@ namespace NBALigaSimulation.Server.Services.TradeService
                 teamId = user.TeamId;
             }
 
-            List<Trade> trades = await _context.Trades
+            List<Trade> trades = await _context.Trades.OrderByDescending(o => o.DateCreated)
                     .Where(p => p.TeamOneId == teamId || p.TeamTwoId == teamId).Include(t => t.TeamOne).Include(t => t.TeamTwo)
                     .ToListAsync();
 
@@ -95,8 +98,6 @@ namespace NBALigaSimulation.Server.Services.TradeService
             return response;
         }
 
-
-
         public async Task<ServiceResponse<TradeDto>> CreateTrade(TradeCreateDto tradeDto)
         {
             var response = new ServiceResponse<TradeDto>();
@@ -136,6 +137,8 @@ namespace NBALigaSimulation.Server.Services.TradeService
             Trade trade = await _context.Trades.Include(t => t.TradePlayers)
                 .FirstOrDefaultAsync(p => p.Id == dto.Id);
 
+            var TeamOne = await _context.Teams.Include(t => t.Players).FirstOrDefaultAsync(t => t.Id == dto.TeamOneId);
+            var TeamTwo = await _context.Teams.Include(t => t.Players).FirstOrDefaultAsync(t => t.Id == dto.TeamTwoId);
 
             if (trade == null)
             {
@@ -147,6 +150,41 @@ namespace NBALigaSimulation.Server.Services.TradeService
             if (dto.Response == true)
             {
                 trade.Response = true;
+
+                foreach (var player in trade.TradePlayers)
+                {
+
+                    var playerDb = await _context.Players.FirstOrDefaultAsync(p => p.Id == player.PlayerId);
+                    if (playerDb.TeamId == trade.TeamOneId)
+                    {
+                        playerDb.TeamId = trade.TeamTwoId;
+                        playerDb.PtModifier = 1;
+                        playerDb.RosterOrder = TeamTwo.Players.Count + 1;
+
+                    }
+                    else if (playerDb.TeamId == trade.TeamTwoId)
+                    {
+                        playerDb.TeamId = trade.TeamOneId;
+                        playerDb.PtModifier = 1;
+                        playerDb.RosterOrder = TeamOne.Players.Count + 1;
+                    }
+
+                }
+
+                foreach (var player in TeamOne.Players.OrderBy(p => p.RosterOrder))
+                {
+                    var playerDb = await _context.Players.FirstOrDefaultAsync(p => p.Id == player.Id);
+                    int rosterOrder = TeamOne.Players.OrderBy(p => p.RosterOrder).ToList().IndexOf(player);
+                    playerDb.RosterOrder = rosterOrder;
+                }
+
+                foreach (var player in TeamTwo.Players.OrderBy(p => p.RosterOrder))
+                {
+                    var playerDb = await _context.Players.FirstOrDefaultAsync(p => p.Id == player.Id);
+                    int rosterOrder = TeamTwo.Players.OrderBy(p => p.RosterOrder).ToList().IndexOf(player);
+                    playerDb.RosterOrder = rosterOrder;
+                }
+
             }
 
             if (dto.Response == false)
