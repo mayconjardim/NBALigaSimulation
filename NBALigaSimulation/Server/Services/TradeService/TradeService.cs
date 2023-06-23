@@ -48,7 +48,6 @@ namespace NBALigaSimulation.Server.Services.TradeService
                     .Where(p => p.TeamOneId == teamId || p.TeamTwoId == teamId).Include(t => t.TeamOne).Include(t => t.TeamTwo)
                     .ToListAsync();
 
-
             if (trades == null)
             {
                 response.Success = false;
