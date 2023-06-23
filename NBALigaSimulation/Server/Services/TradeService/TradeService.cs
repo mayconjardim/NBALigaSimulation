@@ -153,36 +153,23 @@ namespace NBALigaSimulation.Server.Services.TradeService
 
                 foreach (var player in trade.TradePlayers)
                 {
-
+                    Random random = new Random();
+                    int randomNumber = random.Next(15, 1000);
                     var playerDb = await _context.Players.FirstOrDefaultAsync(p => p.Id == player.PlayerId);
                     if (playerDb.TeamId == trade.TeamOneId)
                     {
                         playerDb.TeamId = trade.TeamTwoId;
                         playerDb.PtModifier = 1;
-                        playerDb.RosterOrder = TeamTwo.Players.Count + 1;
+                        playerDb.RosterOrder = TeamTwo.Players.Count + randomNumber;
 
                     }
                     else if (playerDb.TeamId == trade.TeamTwoId)
                     {
                         playerDb.TeamId = trade.TeamOneId;
                         playerDb.PtModifier = 1;
-                        playerDb.RosterOrder = TeamOne.Players.Count + 1;
+                        playerDb.RosterOrder = TeamOne.Players.Count + randomNumber;
                     }
 
-                }
-
-                foreach (var player in TeamOne.Players.OrderBy(p => p.RosterOrder))
-                {
-                    var playerDb = await _context.Players.FirstOrDefaultAsync(p => p.Id == player.Id);
-                    int rosterOrder = TeamOne.Players.OrderBy(p => p.RosterOrder).ToList().IndexOf(player);
-                    playerDb.RosterOrder = rosterOrder;
-                }
-
-                foreach (var player in TeamTwo.Players.OrderBy(p => p.RosterOrder))
-                {
-                    var playerDb = await _context.Players.FirstOrDefaultAsync(p => p.Id == player.Id);
-                    int rosterOrder = TeamTwo.Players.OrderBy(p => p.RosterOrder).ToList().IndexOf(player);
-                    playerDb.RosterOrder = rosterOrder;
                 }
 
             }
@@ -195,6 +182,7 @@ namespace NBALigaSimulation.Server.Services.TradeService
             try
             {
                 await _context.SaveChangesAsync();
+                UpdateRosterOrderAfterTrade(TeamOne.Id, TeamTwo.Id);
                 response.Success = true;
                 response.Data = true;
             }
@@ -207,6 +195,59 @@ namespace NBALigaSimulation.Server.Services.TradeService
             return response;
         }
 
+
+        public async Task<ServiceResponse<bool>> UpdateRosterOrderAfterTrade(int teamOneId, int teamTwoId)
+        {
+            var response = new ServiceResponse<bool>();
+
+            var teamOneList = await _context.Players.OrderBy(p => p.RosterOrder).Where(p => p.TeamId == teamOneId).ToListAsync();
+            var teamTwoList = await _context.Players.OrderBy(p => p.RosterOrder).Where(p => p.TeamId == teamTwoId).ToListAsync();
+
+
+            foreach (var player in teamOneList)
+            {
+                var playerDb = await _context.Players.FirstOrDefaultAsync(p => p.Id == player.Id);
+
+                if (playerDb == null)
+                {
+                    response.Success = false;
+                    response.Message = $"O Player com o Id {player.Id} não existe!";
+                    return response;
+
+                }
+                else
+                {
+                    int rosterOrder = teamOneList.IndexOf(player);
+                    playerDb.RosterOrder = rosterOrder;
+                }
+
+            }
+
+            foreach (var player in teamTwoList)
+            {
+                var playerDb = await _context.Players.FirstOrDefaultAsync(p => p.Id == player.Id);
+
+                if (playerDb == null)
+                {
+                    response.Success = false;
+                    response.Message = $"O Player com o Id {player.Id} não existe!";
+                    return response;
+
+                }
+                else
+                {
+                    int rosterOrder = teamTwoList.IndexOf(player);
+                    playerDb.RosterOrder = rosterOrder;
+                }
+
+            }
+
+            await _context.SaveChangesAsync();
+            response.Success = true;
+            response.Message = "Roster order updated successfully.";
+
+            return response;
+        }
 
     }
 }
