@@ -1,0 +1,11 @@
+﻿@inject IGameService GameService
+
+@if (games != null )
+{
+    
+
+@foreach(var game in games)
+{
+    <h1>@game.HomeTeam x @game.AwayTeam</h1>
+}
+}

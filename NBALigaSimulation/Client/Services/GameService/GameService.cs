@@ -41,5 +41,11 @@ namespace NBALigaSimulation.Client.Services.GameService
 
             return response;
         }
+
+        public async Task<ServiceResponse<List<GameCompleteDto>>> GetGamesByTeamId(int teamId)
+        {
+            var result = await _http.GetFromJsonAsync<ServiceResponse<List<GameCompleteDto>>>($"api/games/teams/{teamId}");
+            return result;
+        }
     }
 }
