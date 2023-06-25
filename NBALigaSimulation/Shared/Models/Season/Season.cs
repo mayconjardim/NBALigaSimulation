@@ -1,4 +1,6 @@
-﻿using System;
+﻿using NBALigaSimulation.Shared.Engine;
+using System;
+using System.Linq;
 
 namespace NBALigaSimulation.Shared.Models
 {
@@ -69,70 +71,60 @@ namespace NBALigaSimulation.Shared.Models
                 }
             }
 
-            List<Game> Week1 = new List<Game>();
-            List<Game> Week2 = new List<Game>();
-            List<Game> Week3 = new List<Game>();
-            List<Game> Week4 = new List<Game>();
-            List<Game> Week5 = new List<Game>();
-            List<Game> Week6 = new List<Game>();
-            List<Game> Week7 = new List<Game>();
-            List<Game> Week8 = new List<Game>();
-            List<Game> Week9 = new List<Game>();
-            List<Game> Week10 = new List<Game>();
-            List<Game> Week11 = new List<Game>();
-            List<Game> Week12 = new List<Game>();
-            List<Game> Week13 = new List<Game>();
+            // Embaralhar a lista de jogos antes de distribuir nas rodadas (opcional)
+            Shuffle(games);
 
+            // Definir o número de rodadas
+            int numRodadas = 3;
 
-            // Lista de semanas
-            List<List<Game>> weeks = new List<List<Game>>
+            // Definir o número de jogos por time em cada rodada
+            int jogosPorTimePorRodada = games.Count / (numRodadas * teams.Count);
+
+            // Lista de rodadas
+            List<List<Game>> rodadas = new List<List<Game>>();
+
+            // Distribuir jogos em rodadas
+            for (int rodada = 0; rodada < numRodadas; rodada++)
             {
-                Week1, Week2, Week3, Week4, Week5, Week6, Week7, Week8, Week9, Week10, Week11, Week12, Week13
-            };
+                List<Game> rodadaAtual = new List<Game>();
 
-            int gamesPerWeek = games.Count / weeks.Count; // Número de jogos por semana (aproximadamente)
-
-            // Distribuir os jogos nas semanas
-            int currentIndex = 0;
-            foreach (var week in weeks)
-            {
-                for (int i = 0; i < gamesPerWeek; i++)
+                // Distribuir jogos para cada time
+                foreach (Team time in teams)
                 {
-                    if (currentIndex >= games.Count)
-                        break;
+                    List<Game> jogosCasa = games.Where(g => g.HomeTeam == time).Take(jogosPorTimePorRodada).ToList();
+                    List<Game> jogosFora = games.Where(g => g.AwayTeam == time).Take(jogosPorTimePorRodada).ToList();
 
-                    week.Add(games[currentIndex]);
-                    currentIndex++;
+                    // Adicionar jogos da rodada atual
+                    rodadaAtual.AddRange(jogosCasa);
+                    rodadaAtual.AddRange(jogosFora);
+
+                    // Remover jogos adicionados da lista geral de jogos
+                    games.RemoveAll(g => jogosCasa.Contains(g) || jogosFora.Contains(g));
                 }
+
+                // Adicionar a rodada atual à lista de rodadas
+                rodadas.Add(rodadaAtual);
             }
 
-            // Se houver jogos restantes, adicionar à última semana
-            while (currentIndex < games.Count)
-            {
-                Week13.Add(games[currentIndex]);
-                currentIndex++;
-            }
-
-            // Juntar os jogos de todas as semanas em uma única lista
-            List<Game> allGames = Week1.Concat(Week2)
-                                      .Concat(Week3)
-                                      .Concat(Week4)
-                                      .Concat(Week5)
-                                      .Concat(Week6)
-                                      .Concat(Week7)
-                                      .Concat(Week8)
-                                      .Concat(Week9)
-                                      .Concat(Week10)
-                                      .Concat(Week11)
-                                      .Concat(Week12)
-                                      .Concat(Week13)
-                                      .ToList();
-
-            // Ordenar os jogos pela semana
-            List<Game> sortedGames = allGames.OrderBy(game => game.Week).ToList();
-
-            // Utilize a lista sortedGames conforme desejado
+            Games = games;
         }
+
+        static void Shuffle<T>(List<T> list)
+        {
+            Random random = new Random();
+
+            int n = list.Count;
+            while (n > 1)
+            {
+                n--;
+                int k = random.Next(n + 1);
+                T value = list[k];
+                list[k] = list[n];
+                list[n] = value;
+            }
+        }
+
+
 
 
     }
