@@ -14,6 +14,8 @@ namespace NBALigaSimulation.Shared.Models
         public void NewSchedule(List<Team> teams)
         {
             List<Game> games = new List<Game>();
+            List<Game> gamesFinal = new List<Game>();
+
 
             List<Team> eastConferenceTeams = teams.Where(t => t.Conference == "East").ToList();
             List<Team> westConferenceTeams = teams.Where(t => t.Conference == "West").ToList();
@@ -71,43 +73,49 @@ namespace NBALigaSimulation.Shared.Models
                 }
             }
 
-            // Embaralhar a lista de jogos antes de distribuir nas rodadas (opcional)
             Shuffle(games);
+            int numRodadas = 74;
+            int jogosPorTimePorRodada = 1;
 
-            // Definir o número de rodadas
-            int numRodadas = 3;
+            List<DateTime> datasRodadas = new List<DateTime>();
+            DateTime dataInicial = DateTime.Now;
 
-            // Definir o número de jogos por time em cada rodada
-            int jogosPorTimePorRodada = games.Count / (numRodadas * teams.Count);
-
-            // Lista de rodadas
-            List<List<Game>> rodadas = new List<List<Game>>();
-
-            // Distribuir jogos em rodadas
             for (int rodada = 0; rodada < numRodadas; rodada++)
             {
-                List<Game> rodadaAtual = new List<Game>();
+                datasRodadas.Add(dataInicial);
+                dataInicial = dataInicial.AddDays(1);
+            }
 
-                // Distribuir jogos para cada time
+            for (int rodada = 0; rodada < numRodadas; rodada++)
+            {
+
                 foreach (Team time in teams)
                 {
                     List<Game> jogosCasa = games.Where(g => g.HomeTeam == time).Take(jogosPorTimePorRodada).ToList();
                     List<Game> jogosFora = games.Where(g => g.AwayTeam == time).Take(jogosPorTimePorRodada).ToList();
 
-                    // Adicionar jogos da rodada atual
-                    rodadaAtual.AddRange(jogosCasa);
-                    rodadaAtual.AddRange(jogosFora);
+                     DateTime dataRodadaAtual = datasRodadas[rodada];
+                    foreach (Game jogo in jogosCasa)
+                    {
+                        jogo.GameDate = dataRodadaAtual;
+                    }
+                     foreach (Game jogo in jogosFora)
+                    {
+                        jogo.GameDate = dataRodadaAtual;
+                    }
 
-                    // Remover jogos adicionados da lista geral de jogos
-                    games.RemoveAll(g => jogosCasa.Contains(g) || jogosFora.Contains(g));
+                    gamesFinal.AddRange(jogosCasa);
+                    gamesFinal.AddRange(jogosFora);
+
+                    games.RemoveAll(g => jogosCasa.Contains(g));
+                    games.RemoveAll(g => jogosFora.Contains(g));
                 }
 
-                // Adicionar a rodada atual à lista de rodadas
-                rodadas.Add(rodadaAtual);
             }
 
-            Games = games;
+            Games = gamesFinal;
         }
+
 
         static void Shuffle<T>(List<T> list)
         {
