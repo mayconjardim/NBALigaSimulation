@@ -65,7 +65,7 @@ namespace NBALigaSimulation.Server.Services.SeasonService
 
             List<Team> teams = await _context.Teams.ToListAsync();
 
-            season.NewSchedule(teams); // Gera os jogos
+            season.NewSchedule(teams);
 
             await _context.SaveChangesAsync();
 

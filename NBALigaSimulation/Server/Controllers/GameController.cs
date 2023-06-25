@@ -71,5 +71,19 @@ namespace NBALigaSimulation.Server.Controllers
 
         }
 
+        [HttpGet("teams/{teamId}")]
+        public async Task<ActionResult<ServiceResponse<GameCompleteDto>>> GetGamesByTeamId(int teamId)
+        {
+
+            var result = await _gameService.GetGamesByTeamId(teamId);
+
+            if (!result.Success)
+            {
+                return NotFound(result);
+            }
+
+            return Ok(result);
+        }
+
     }
 }

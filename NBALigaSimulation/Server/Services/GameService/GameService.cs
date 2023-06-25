@@ -127,5 +127,20 @@ namespace NBALigaSimulation.Server.Services.GameService
             return response;
         }
 
+        public async Task<ServiceResponse<List<GameCompleteDto>>> GetGamesByTeamId(int teamId)
+        {
+
+            var games = await _context.Games
+            .Include(p => p.HomeTeam)
+            .Include(p => p.AwayTeam)
+            .Where(g => g.HomeTeamId == teamId || g.AwayTeamId == teamId).ToListAsync();
+
+            var response = new ServiceResponse<List<GameCompleteDto>>
+            {
+                Data = _mapper.Map<List<GameCompleteDto>>(games)
+            };
+
+            return response;
+        }
     }
 }
