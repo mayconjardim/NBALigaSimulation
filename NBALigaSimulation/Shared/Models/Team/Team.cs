@@ -11,6 +11,7 @@ namespace NBALigaSimulation.Shared.Models
         public string Region { get; set; } = string.Empty;
         public string Abrv { get; set; } = string.Empty;
         public string Conference { get; set; } = string.Empty;
+        public bool IsHuman { get; set; } = true;
         public List<Player> Players { get; set; } = new List<Player>();
         public List<TeamGameStats> Stats { get; set; } = new List<TeamGameStats>();
         public TeamGameplan Gameplan { get; set; }

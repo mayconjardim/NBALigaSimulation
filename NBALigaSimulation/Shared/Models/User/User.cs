@@ -10,5 +10,7 @@
         public DateTime DataCreated { get; set; }
         public int? TeamId { get; set; }
         public Team? Team { get; set; }
+        public bool? IsAdmin { get; set; } = false;
+
     }
 }

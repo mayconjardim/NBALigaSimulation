@@ -75,7 +75,7 @@ namespace NBALigaSimulation.Shared.Models
 
             Shuffle(games);
             int numRodadas = 74;
-            int jogosPorTimePorRodada = 1;
+            int jogosPorTimePorRodada = 2;
 
             List<DateTime> datasRodadas = new List<DateTime>();
             DateTime dataInicial = DateTime.Now;
@@ -83,7 +83,7 @@ namespace NBALigaSimulation.Shared.Models
             for (int rodada = 0; rodada < numRodadas; rodada++)
             {
                 datasRodadas.Add(dataInicial);
-                dataInicial = dataInicial.AddDays(1);
+                dataInicial = dataInicial.AddDays(2);
             }
 
             for (int rodada = 0; rodada < numRodadas; rodada++)
@@ -94,12 +94,12 @@ namespace NBALigaSimulation.Shared.Models
                     List<Game> jogosCasa = games.Where(g => g.HomeTeam == time).Take(jogosPorTimePorRodada).ToList();
                     List<Game> jogosFora = games.Where(g => g.AwayTeam == time).Take(jogosPorTimePorRodada).ToList();
 
-                     DateTime dataRodadaAtual = datasRodadas[rodada];
+                    DateTime dataRodadaAtual = datasRodadas[rodada];
                     foreach (Game jogo in jogosCasa)
                     {
                         jogo.GameDate = dataRodadaAtual;
                     }
-                     foreach (Game jogo in jogosFora)
+                    foreach (Game jogo in jogosFora)
                     {
                         jogo.GameDate = dataRodadaAtual;
                     }
