@@ -1,11 +1,45 @@
 ﻿@inject IGameService GameService
+ 
+<MudContainer>
+<div class="container">
+    @if (games != null )
+    {
 
-@if (games != null )
-{
-    
+        <MudSimpleTable Hover="true" Dense="true" >
+            <thead>
+                <tr>
+                    @foreach (var h in headings)
+                    {
+                        <th>@h</th>
+                    }
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var (index, game) in games.Select((g, i) => (i, g)))
+                {
+                    <tr>
+                       <td><a href="team/@game.HomeTeamId"><MudAvatar Style="vertical-align: middle; background: none" Size="Size.Medium" Image=@($"Images/logos/{game.HomeTeam}.svg") Square="true" /></a> </td>
+                       <td><a href="team/@game.AwayTeamId"><MudAvatar Style="vertical-align: middle; background: none" Size="Size.Medium" Image=@($"Images/logos/{game.AwayTeam}.svg") Square="true" /></a> </td>
+                       @if(@game.HomeTeamScore > 0)
+                       {
+                        <td>
+                          <span class="@GetScoreClass(game.HomeTeamScore, game.AwayTeamScore)">
+                            @game.HomeTeamScore
+                          </span>
+                          : 
+                          <span class="@GetScoreClass(game.AwayTeamScore, game.HomeTeamScore)">
+                            @game.AwayTeamScore
+                          </span>
+                        </td>
+                       }else
+                       {
+                         <td>@game.GameDate</td>      
+                       }
+                    </tr>
+                }
+            </tbody>
+        </MudSimpleTable>
 
-@foreach(var game in games)
-{
-    <h1>@game.HomeTeam x @game.AwayTeam</h1>
-}
-}
+    }
+</div>
+ </MudContainer>

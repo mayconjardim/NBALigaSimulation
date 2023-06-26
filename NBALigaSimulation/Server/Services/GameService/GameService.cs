@@ -133,6 +133,7 @@ namespace NBALigaSimulation.Server.Services.GameService
             var games = await _context.Games.OrderBy(g => g.GameDate)
             .Include(p => p.HomeTeam)
             .Include(p => p.AwayTeam)
+            .Include(p => p.TeamGameStats)
             .Where(g => g.HomeTeamId == teamId || g.AwayTeamId == teamId).ToListAsync();
 
             var response = new ServiceResponse<List<GameCompleteDto>>
