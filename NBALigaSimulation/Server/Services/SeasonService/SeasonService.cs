@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using Microsoft.EntityFrameworkCore;
 
 namespace NBALigaSimulation.Server.Services.SeasonService
 {
@@ -23,11 +22,34 @@ namespace NBALigaSimulation.Server.Services.SeasonService
             _context.Add(season);
             await _context.SaveChangesAsync();
 
+            List<Team> teams = await _context.Teams.Where(t => t.IsHuman == true).ToListAsync();
+
+            foreach (Team team in teams)
+            {
+                List<TeamDraftPicks> draftPicks = new List<TeamDraftPicks>();
+
+                for (int round = 1; round <= 2; round++)
+                {
+                    TeamDraftPicks draftPick = new TeamDraftPicks
+                    {
+                        TeamId = team.Id,
+                        Original = team.Abrv,
+                        Year = season.Year,
+                        Round = round
+                    };
+
+                    draftPicks.Add(draftPick);
+                }
+
+                _context.AddRange(draftPicks);
+            }
+
+            await _context.SaveChangesAsync();
+
             response.Success = true;
             response.Data = _mapper.Map<CompleteSeasonDto>(season);
             return response;
         }
-
 
         public async Task<ServiceResponse<CompleteSeasonDto>> GetLastSeason()
         {

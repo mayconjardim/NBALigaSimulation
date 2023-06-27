@@ -14,6 +14,7 @@ namespace NBALigaSimulation.Shared.Models
         public bool IsHuman { get; set; } = true;
         public List<Player> Players { get; set; } = new List<Player>();
         public List<TeamGameStats> Stats { get; set; } = new List<TeamGameStats>();
+        public List<TeamDraftPicks> DraftPicks { get; set; } = new List<TeamDraftPicks>();
         public TeamGameplan Gameplan { get; set; }
 
         [NotMapped]

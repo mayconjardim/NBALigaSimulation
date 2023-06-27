@@ -62,6 +62,7 @@ namespace NBALigaSimulation.Server.Profiles
             CreateMap<TradePlayer, TradePlayerDto>().ReverseMap();
             CreateMap<TradeCreateDto, Trade>().ReverseMap();
 
+            CreateMap<TeamDraftPicks, TeamDraftPickDto>().ReverseMap();
 
         }
     }

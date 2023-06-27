@@ -10,13 +10,13 @@
         public DbSet<Game> Games { get; set; }
         public DbSet<TeamGameStats> TeamGameStats { get; set; }
         public DbSet<TeamGameplan> TeamGameplans { get; set; }
+        public DbSet<TeamDraftPicks> DraftPicks { get; set; }
         public DbSet<PlayerGameStats> PlayerGameStats { get; set; }
         public DbSet<PlayerContract> PlayerContracts { get; set; }
         public DbSet<GamePlayByPlay> PlayByPlays { get; set; }
         public DbSet<Season> Seasons { get; set; }
         public DbSet<User> Users { get; set; }
         public DbSet<Trade> Trades { get; set; }
-
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -122,6 +122,11 @@
                     .HasForeignKey(tp => tp.TradePlayerId)
                     .OnDelete(DeleteBehavior.Cascade);
             });
+
+            modelBuilder.Entity<TeamDraftPicks>()
+             .HasOne(p => p.Team)
+             .WithMany(g => g.DraftPicks)
+             .HasForeignKey(p => p.TeamId);
         }
     }
 }
