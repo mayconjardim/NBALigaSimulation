@@ -8,6 +8,11 @@
     background-color: #00471b;
 }
 
+.BKN {
+    background: linear-gradient(rgba(206, 17, 65, 0.8), rgba(206, 17, 65, 3)), url("../Images/Logos/CHI.svg");
+    background-color: #ce1141;
+}
+
 .CHI {
     background: linear-gradient(rgba(206, 17, 65, 0.8), rgba(206, 17, 65, 3)), url("../Images/Logos/CHI.svg");
     background-color: #ce1141;
@@ -63,11 +68,6 @@
     background-color: #00538c;
 }
 
-.NJN {
-    background: linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 3)), url("../Images/Logos/NJN.svg");
-    background-color: #000000;
-}
-
 .IND {
     background: linear-gradient(rgba(0, 45, 98, 0.8), rgba(0, 45, 98, 3)), url("../Images/Logos/IND.svg");
     background-color: #002d62;
@@ -98,7 +98,7 @@
     background-color: #808080;
 }
 
-.SEA {
+.OKC {
     background: linear-gradient(rgba(0, 125, 195, 0.8), rgba(0, 125, 195, 3)), url("../Images/Logos/SEA.svg");
     background-color: #007ac1;
 }
@@ -128,6 +128,10 @@
     background-color: #1d428a;
 }
 
+.NJN {
+    background: linear-gradient(rgba(134, 0, 56, 0.8), rgba(134, 0, 56,3)), url("../Images/Logos/NJN.svg");
+    background-color: #1d428a;
+}
 
 .Draft {
     background: linear-gradient(rgba(29, 66, 138, 0.8), rgba(29, 66, 138, 3)), url("../Images/Logos/DRAFT.svg");

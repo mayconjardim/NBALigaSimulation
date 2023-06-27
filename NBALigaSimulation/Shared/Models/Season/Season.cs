@@ -1,8 +1,4 @@
-﻿using NBALigaSimulation.Shared.Engine;
-using System;
-using System.Linq;
-
-namespace NBALigaSimulation.Shared.Models
+﻿namespace NBALigaSimulation.Shared.Models
 {
     public class Season
     {
@@ -17,13 +13,13 @@ namespace NBALigaSimulation.Shared.Models
             List<Game> gamesFinal = new List<Game>();
 
 
-            List<Team> eastConferenceTeams = teams.Where(t => t.Conference == "East").ToList();
-            List<Team> westConferenceTeams = teams.Where(t => t.Conference == "West").ToList();
+            List<Team> eastConferenceTeams = teams.Where(t => t.Conference == "East" && t.IsHuman == true).ToList();
+            List<Team> westConferenceTeams = teams.Where(t => t.Conference == "West" && t.IsHuman == true).ToList();
 
             // Gerando jogos do East
             foreach (Team homeTeam in eastConferenceTeams)
             {
-                foreach (Team awayTeam in eastConferenceTeams.Where(t => t != homeTeam))
+                foreach (Team awayTeam in eastConferenceTeams.Where(t => t != homeTeam && t.IsHuman == true))
                 {
                     for (int i = 0; i < 3; i++)
                     {
@@ -41,7 +37,7 @@ namespace NBALigaSimulation.Shared.Models
             // Gerando jogos do West
             foreach (Team homeTeam in westConferenceTeams)
             {
-                foreach (Team awayTeam in westConferenceTeams.Where(t => t != homeTeam))
+                foreach (Team awayTeam in westConferenceTeams.Where(t => t != homeTeam && t.IsHuman == true))
                 {
                     for (int i = 0; i < 3; i++)
                     {
@@ -59,7 +55,7 @@ namespace NBALigaSimulation.Shared.Models
             // Gerando jogos entre conferências
             foreach (Team homeTeam in teams)
             {
-                List<Team> opponents = teams.Where(t => t.Conference != homeTeam.Conference && t != homeTeam).ToList();
+                List<Team> opponents = teams.Where(t => t.Conference != homeTeam.Conference && t != homeTeam && t.IsHuman == true).ToList();
 
                 foreach (Team awayTeam in opponents)
                 {
@@ -78,7 +74,11 @@ namespace NBALigaSimulation.Shared.Models
             int jogosPorTimePorRodada = 2;
 
             List<DateTime> datasRodadas = new List<DateTime>();
-            DateTime dataInicial = DateTime.Now;
+
+            DateTime dataInicial = DateTime.UtcNow;
+            TimeZoneInfo tzBrasilia = TimeZoneInfo.FindSystemTimeZoneById("E. South America Standard Time");
+            dataInicial = new DateTime(dataInicial.Year, dataInicial.Month, dataInicial.Day, 23, 0, 0);
+            dataInicial = TimeZoneInfo.ConvertTimeFromUtc(dataInicial, tzBrasilia);
 
             for (int rodada = 0; rodada < numRodadas; rodada++)
             {

@@ -63,7 +63,7 @@ namespace NBALigaSimulation.Server.Services.SeasonService
                 return response;
             }
 
-            List<Team> teams = await _context.Teams.ToListAsync();
+            List<Team> teams = await _context.Teams.Where(t => t.IsHuman == true).ToListAsync();
 
             season.NewSchedule(teams);
 
