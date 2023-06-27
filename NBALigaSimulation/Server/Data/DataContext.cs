@@ -123,6 +123,23 @@
                     .OnDelete(DeleteBehavior.Cascade);
             });
 
+
+            modelBuilder.Entity<TradePicks>(entity =>
+         {
+             entity.HasKey(tp => new { tp.DraftPickId, tp.TradePickId });
+
+             entity.HasOne(tp => tp.DraftPick)
+                 .WithMany()
+                 .HasForeignKey(tp => tp.DraftPickId)
+                 .OnDelete(DeleteBehavior.Cascade);
+
+             entity.HasOne(tp => tp.Trade)
+                 .WithMany(t => t.TradePicks)
+                 .HasForeignKey(tp => tp.TradePickId)
+                 .OnDelete(DeleteBehavior.Cascade);
+         });
+
+
             modelBuilder.Entity<TeamDraftPicks>()
              .HasOne(p => p.Team)
              .WithMany(g => g.DraftPicks)

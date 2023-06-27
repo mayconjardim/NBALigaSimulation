@@ -12,6 +12,7 @@
         public Team TeamTwo { get; set; }
 
         public List<TradePlayer> TradePlayers { get; set; }
+        public List<TradePicks> TradePicks { get; set; }
 
         public bool? Response { get; set; } = null;
         public DateTime LastModified { get; set; } = DateTime.Now;
