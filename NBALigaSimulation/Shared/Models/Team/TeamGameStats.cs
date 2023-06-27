@@ -33,5 +33,4 @@ namespace NBALigaSimulation.Shared.Models
         public int Pts { get; set; }
         
     }
-
 }
