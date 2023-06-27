@@ -10,8 +10,8 @@ namespace NBALigaSimulation.Shared.Dtos
         public string Region { get; set; } = string.Empty;
         public string Abrv { get; set; } = string.Empty;
         public string Conference { get; set; } = string.Empty;
-
         public List<PlayerCompleteDto> Players { get; set; } = new List<PlayerCompleteDto>();
+        public List<TeamDraftPickDto> DraftPicks { get; set; } = new List<TeamDraftPickDto>();
         public TeamGameplanDto Gameplan { get; set; }
     }
 }

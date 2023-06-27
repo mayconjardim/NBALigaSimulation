@@ -1,9 +1,4 @@
-﻿using NBALigaSimulation.Shared.Engine;
-using System;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.Diagnostics.Contracts;
-
-namespace NBALigaSimulation.Shared.Models
+﻿namespace NBALigaSimulation.Shared.Models
 {
     public class Player
     {

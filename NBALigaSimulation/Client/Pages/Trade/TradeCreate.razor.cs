@@ -18,6 +18,9 @@ namespace NBALigaSimulation.Client.Pages.Trade
         private List<PlayerCompleteDto> teamOneSend = new List<PlayerCompleteDto>();
         private List<PlayerCompleteDto> teamTwoSend = new List<PlayerCompleteDto>();
 
+        private List<TeamDraftPickDto> teamOneSendPicks = new List<TeamDraftPickDto>();
+        private List<TeamDraftPickDto> teamTwoSendPicks = new List<TeamDraftPickDto>();
+
         string[] headings = { "", "NAME", "POS", "AGE", "OVR", "POT", "CONTRACT" };
 
 

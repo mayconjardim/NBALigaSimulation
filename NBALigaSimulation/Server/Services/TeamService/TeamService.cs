@@ -31,10 +31,12 @@ namespace NBALigaSimulation.Server.Services.TeamService
         {
             var response = new ServiceResponse<TeamCompleteDto>();
             var team = await _context.Teams
-                 .Include(t => t.Players)
+             .Include(t => t.Players)
                  .ThenInclude(p => p.Ratings)
-                 .Include(p => p.Players).ThenInclude(p => p.Contract)
-                 .FirstOrDefaultAsync(p => p.Id == teamId);
+             .Include(p => p.Players)
+                 .ThenInclude(p => p.Contract)
+             .Include(t => t.DraftPicks)
+             .FirstOrDefaultAsync(t => t.Id == teamId);
 
             if (team == null)
             {
@@ -77,6 +79,7 @@ namespace NBALigaSimulation.Server.Services.TeamService
             .Include(t => t.Players.OrderBy(p => p.RosterOrder))
                 .ThenInclude(p => p.Ratings).Include(t => t.Gameplan)
                 .Include(p => p.Players).ThenInclude(p => p.Contract)
+                .Include(t => t.DraftPicks)
             .FirstOrDefaultAsync(t => t.Id == teamId);
 
             if (team == null)

@@ -41,6 +41,7 @@
 
 .mud-table {
     border-collapse: collapse;
+    margin: 10px 0;
 }
 
     .mud-table th, .mud-table td {
@@ -63,6 +64,7 @@
     display: flex;
     justify-content: space-around;
 }
+
 
 @media (max-width: 767px) {
     .teams {

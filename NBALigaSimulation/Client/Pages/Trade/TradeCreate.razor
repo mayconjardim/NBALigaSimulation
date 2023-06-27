@@ -79,7 +79,7 @@
 
      </div>
      </div>
-     }
+    }
 
      <div class="teams">
 
@@ -117,15 +117,40 @@
                             }
                         </tbody>
                     </table>
+
+
+                    <table class="mud-table border" style="margin: 10px auto;"> 
+                        <thead>
+                        <tr>
+                        <th></th>
+                        <th>YEAR</th>
+                        <th>ROUND</th>
+                        <th>TEAM</th>
+                        <th>ORIGINAL</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                       
+                        @foreach (var pick in teamOne.DraftPicks)
+                        {
+                               <tr>
+                               <td><input type="checkbox"/></td>
+                               <td>@pick.Year</td>
+                               <td>@pick.Round</td>
+                               <td>@pick.TeamName</td>
+                               <td>@pick.Original</td>
+                               </tr>
+                         }
+                     
+                        </tbody>
+                    </table>
             </div>
-
       </div>  
-
 
       <div class="team-players"> 
      
                @if (teamTwo != null)
-                {
+               {
                        <div style="overflow-x: auto;">
 
                             <h5>CAP SPACE: $45,369,588</h5>
@@ -160,13 +185,35 @@
                                     }
                                 </tbody>
                             </table>
-                   </div>
-                }  
 
+                            <table class="mud-table border" style="margin: 10px auto;"> 
+                               
+                              <thead>
+                                <tr>
+                                    <th></th>
+                                    <th>YEAR</th>
+                                    <th>ROUND</th>
+                                    <th>TEAM</th>
+                                    <th>ORIGINAL</th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                @foreach (var pick in teamTwo.DraftPicks)
+                                {
+                                  <tr>
+                                  <td><input type="checkbox"/></td>
+                                  <td>@pick.Year</td>
+                                  <td>@pick.Round</td>
+                                  <td>@pick.TeamName</td>
+                                  <td>@pick.Original</td>
+                                  </tr>
+                                }
+                              </tbody>
+                            </table>
+                   </div>
+               }  
          </div>
      </div> 
-
-   
 }
 </AuthorizeView>
 </CascadingAuthenticationState>

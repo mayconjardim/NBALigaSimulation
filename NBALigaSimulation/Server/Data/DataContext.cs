@@ -10,7 +10,7 @@
         public DbSet<Game> Games { get; set; }
         public DbSet<TeamGameStats> TeamGameStats { get; set; }
         public DbSet<TeamGameplan> TeamGameplans { get; set; }
-        public DbSet<TeamDraftPicks> DraftPicks { get; set; }
+        public DbSet<TeamDraftPicks> TeamDraftPicks { get; set; }
         public DbSet<PlayerGameStats> PlayerGameStats { get; set; }
         public DbSet<PlayerContract> PlayerContracts { get; set; }
         public DbSet<GamePlayByPlay> PlayByPlays { get; set; }
@@ -88,6 +88,11 @@
             });
 
             modelBuilder.Entity<Team>()
+            .HasMany(t => t.DraftPicks)
+            .WithOne(dp => dp.Team)
+            .HasForeignKey(dp => dp.TeamId);
+
+            modelBuilder.Entity<Team>()
             .HasOne(p => p.Gameplan)
             .WithOne(g => g.Team)
             .HasForeignKey<TeamGameplan>(g => g.TeamId);
@@ -108,6 +113,7 @@
                    .OnDelete(DeleteBehavior.Restrict);
            });
 
+
             modelBuilder.Entity<TradePlayer>(entity =>
             {
                 entity.HasKey(tp => new { tp.PlayerId, tp.TradePlayerId });
@@ -123,27 +129,23 @@
                     .OnDelete(DeleteBehavior.Cascade);
             });
 
-
             modelBuilder.Entity<TradePicks>(entity =>
-         {
-             entity.HasKey(tp => new { tp.DraftPickId, tp.TradePickId });
+            {
+                entity.HasKey(tp => new { tp.DraftPickId, tp.TradePickId });
 
-             entity.HasOne(tp => tp.DraftPick)
-                 .WithMany()
-                 .HasForeignKey(tp => tp.DraftPickId)
-                 .OnDelete(DeleteBehavior.Cascade);
+                entity.HasOne(tp => tp.DraftPick)
+                    .WithMany()
+                    .HasForeignKey(tp => tp.DraftPickId)
+                    .OnDelete(DeleteBehavior.Cascade);
 
-             entity.HasOne(tp => tp.Trade)
-                 .WithMany(t => t.TradePicks)
-                 .HasForeignKey(tp => tp.TradePickId)
-                 .OnDelete(DeleteBehavior.Cascade);
-         });
+                entity.HasOne(tp => tp.Trade)
+                    .WithMany(t => t.TradePicks)
+                    .HasForeignKey(tp => tp.TradePickId)
+                    .OnDelete(DeleteBehavior.Cascade);
+            });
 
 
-            modelBuilder.Entity<TeamDraftPicks>()
-             .HasOne(p => p.Team)
-             .WithMany(g => g.DraftPicks)
-             .HasForeignKey(p => p.TeamId);
+
         }
     }
 }
