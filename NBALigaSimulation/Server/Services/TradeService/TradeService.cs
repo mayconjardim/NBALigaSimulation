@@ -1,8 +1,5 @@
 ﻿using AutoMapper;
-using Microsoft.AspNetCore.Mvc.Formatters;
-using Microsoft.EntityFrameworkCore;
-using NBALigaSimulation.Client.Pages.Player;
-using NBALigaSimulation.Shared.Models;
+using NBALigaSimulation.Shared.Dtos;
 
 namespace NBALigaSimulation.Server.Services.TradeService
 {
@@ -69,6 +66,7 @@ namespace NBALigaSimulation.Server.Services.TradeService
                 .Include(t => t.TeamOne)
                 .Include(t => t.TeamTwo)
                 .Include(t => t.TradePlayers)
+                .Include(t => t.TradePicks)
                 .FirstOrDefaultAsync(t => t.Id == tradeId);
 
             if (trade == null)
@@ -80,14 +78,29 @@ namespace NBALigaSimulation.Server.Services.TradeService
             {
                 var tradeWithPlayers = _mapper.Map<TradeDto>(trade);
                 tradeWithPlayers.Players = new List<PlayerCompleteDto>();
+                tradeWithPlayers.DraftPicks = new List<TeamDraftPickDto>();
 
                 if (trade.TradePlayers != null)
                 {
                     foreach (var t in trade.TradePlayers)
                     {
-                        var player = await _context.Players.Include(p => p.Ratings).Include(p => p.Contract).FirstOrDefaultAsync(p => p.Id == t.PlayerId);
+                        var player = await _context.Players
+                            .Include(p => p.Ratings)
+                            .Include(p => p.Contract)
+                            .FirstOrDefaultAsync(p => p.Id == t.PlayerId);
                         var playerDto = _mapper.Map<PlayerCompleteDto>(player);
                         tradeWithPlayers.Players.Add(playerDto);
+                    }
+                }
+
+                if (trade.TradePicks != null)
+                {
+                    foreach (var t in trade.TradePicks)
+                    {
+                        var pick = await _context.TeamDraftPicks
+                            .FirstOrDefaultAsync(p => p.Id == t.DraftPickId);
+                        var pickDto = _mapper.Map<TeamDraftPickDto>(pick);
+                        tradeWithPlayers.DraftPicks.Add(pickDto);
                     }
                 }
 
@@ -113,6 +126,11 @@ namespace NBALigaSimulation.Server.Services.TradeService
                         PlayerId = player.Id,
                         TradePlayerId = trade.Id
                     });
+                }
+
+                if (trade.TradePicks == null)
+                {
+                    trade.TradePicks = new List<TradePicks>();
                 }
 
                 foreach (var picks in tradeDto.DraftPicks)
@@ -142,7 +160,9 @@ namespace NBALigaSimulation.Server.Services.TradeService
         {
             ServiceResponse<bool> response = new ServiceResponse<bool>();
 
-            Trade trade = await _context.Trades.Include(t => t.TradePlayers)
+            Trade trade = await _context.Trades
+                .Include(t => t.TradePlayers)
+                .Include(t => t.TradePicks)
                 .FirstOrDefaultAsync(p => p.Id == dto.Id);
 
             var TeamOne = await _context.Teams.Include(t => t.Players).FirstOrDefaultAsync(t => t.Id == dto.TeamOneId);
@@ -176,6 +196,22 @@ namespace NBALigaSimulation.Server.Services.TradeService
                         playerDb.TeamId = trade.TeamOneId;
                         playerDb.PtModifier = 1;
                         playerDb.RosterOrder = TeamOne.Players.Count + randomNumber;
+                    }
+
+                }
+
+                foreach (var pick in trade.TradePicks)
+                {
+
+                    var pickDb = await _context.TeamDraftPicks.FirstOrDefaultAsync(p => p.Id == pick.DraftPickId);
+                    if (pickDb.TeamId == trade.TeamOneId)
+                    {
+                        pickDb.TeamId = trade.TeamTwoId;
+
+                    }
+                    else if (pickDb.TeamId == trade.TeamTwoId)
+                    {
+                        pickDb.TeamId = trade.TeamOneId;
                     }
 
                 }

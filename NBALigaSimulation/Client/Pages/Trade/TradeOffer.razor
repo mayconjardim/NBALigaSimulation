@@ -120,6 +120,34 @@
                             }
                         </tbody>
                     </table>
+
+                    <table class="mud-table border" style="margin: 10px auto;"> 
+                        <thead>
+                        <tr>
+                        <th></th>
+                        <th>YEAR</th>
+                        <th>ROUND</th>
+                        <th>TEAM</th>
+                        <th>ORIGINAL</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                       
+                        @foreach (var pick in teamOnePicks)
+                        {
+                               <tr>
+                               <td><input type="checkbox" disabled /></td>
+                               <td>@pick.Year</td>
+                               <td>@pick.Round</td>
+                               <td><MudAvatar Style="background: none;height:25px;width:25px;vertical-align:middle;margin-right: 2px" Image=@($"Images/logos/{pick.TeamName}.svg") /></td>
+                               <td><MudAvatar Style="background: none;height:25px;width:25px;vertical-align:middle;margin-right: 2px" Image=@($"Images/logos/{pick.Original}.svg") /></td>
+                               </tr>
+                        }
+                     
+                        </tbody>
+                    </table>
+
+
             </div>
           }
       </div>  
@@ -163,6 +191,34 @@
                                     }
                                 </tbody>
                          </table>
+
+                          <table class="mud-table border" style="margin: 10px auto;"> 
+                        <thead>
+                        <tr>
+                        <th></th>
+                        <th>YEAR</th>
+                        <th>ROUND</th>
+                        <th>TEAM</th>
+                        <th>ORIGINAL</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                       
+                        @foreach (var pick in teamTwoPicks)
+                        {
+                               <tr>
+                                <td><input type="checkbox" disabled /></td>
+                               <td>@pick.Year</td>
+                               <td>@pick.Round</td>
+                               <td><MudAvatar Style="background: none;height:25px;width:25px;vertical-align:middle;margin-right: 2px" Image=@($"Images/logos/{pick.TeamName}.svg") /></td>
+                               <td><MudAvatar Style="background: none;height:25px;width:25px;vertical-align:middle;margin-right: 2px" Image=@($"Images/logos/{pick.Original}.svg") /></td>
+                               </tr>
+                         }
+                     
+                        </tbody>
+                    </table>
+
+
                    </div>
                }  
          </div>

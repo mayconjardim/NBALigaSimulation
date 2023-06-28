@@ -43,7 +43,7 @@ namespace NBALigaSimulation.Server.Migrations
 
                     b.HasIndex("SeasonId");
 
-                    b.ToTable("Games");
+                    b.ToTable("Games", (string)null);
                 });
 
             modelBuilder.Entity("NBALigaSimulation.Shared.Models.GamePlayByPlay", b =>
@@ -77,7 +77,7 @@ namespace NBALigaSimulation.Server.Migrations
 
                     b.HasIndex("GameId");
 
-                    b.ToTable("PlayByPlays");
+                    b.ToTable("PlayByPlays", (string)null);
                 });
 
             modelBuilder.Entity("NBALigaSimulation.Shared.Models.Player", b =>
@@ -117,7 +117,7 @@ namespace NBALigaSimulation.Server.Migrations
 
                     b.HasIndex("TeamId");
 
-                    b.ToTable("Players");
+                    b.ToTable("Players", (string)null);
                 });
 
             modelBuilder.Entity("NBALigaSimulation.Shared.Models.PlayerContract", b =>
@@ -140,7 +140,7 @@ namespace NBALigaSimulation.Server.Migrations
                     b.HasIndex("PlayerId")
                         .IsUnique();
 
-                    b.ToTable("PlayerContracts");
+                    b.ToTable("PlayerContracts", (string)null);
                 });
 
             modelBuilder.Entity("NBALigaSimulation.Shared.Models.PlayerGameStats", b =>
@@ -249,7 +249,7 @@ namespace NBALigaSimulation.Server.Migrations
 
                     b.HasIndex("PlayerId");
 
-                    b.ToTable("PlayerGameStats");
+                    b.ToTable("PlayerGameStats", (string)null);
                 });
 
             modelBuilder.Entity("NBALigaSimulation.Shared.Models.PlayerRatings", b =>
@@ -316,7 +316,7 @@ namespace NBALigaSimulation.Server.Migrations
 
                     b.HasIndex("PlayerId");
 
-                    b.ToTable("PlayerRatings");
+                    b.ToTable("PlayerRatings", (string)null);
                 });
 
             modelBuilder.Entity("NBALigaSimulation.Shared.Models.Season", b =>
@@ -330,7 +330,7 @@ namespace NBALigaSimulation.Server.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Seasons");
+                    b.ToTable("Seasons", (string)null);
                 });
 
             modelBuilder.Entity("NBALigaSimulation.Shared.Models.Team", b =>
@@ -360,7 +360,7 @@ namespace NBALigaSimulation.Server.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Teams");
+                    b.ToTable("Teams", (string)null);
                 });
 
             modelBuilder.Entity("NBALigaSimulation.Shared.Models.TeamDraftPicks", b =>
@@ -386,7 +386,7 @@ namespace NBALigaSimulation.Server.Migrations
 
                     b.HasIndex("TeamId");
 
-                    b.ToTable("TeamDraftPicks");
+                    b.ToTable("TeamDraftPicks", (string)null);
                 });
 
             modelBuilder.Entity("NBALigaSimulation.Shared.Models.TeamGameStats", b =>
@@ -476,7 +476,7 @@ namespace NBALigaSimulation.Server.Migrations
 
                     b.HasIndex("TeamId");
 
-                    b.ToTable("TeamGameStats");
+                    b.ToTable("TeamGameStats", (string)null);
                 });
 
             modelBuilder.Entity("NBALigaSimulation.Shared.Models.TeamGameplan", b =>
@@ -505,7 +505,7 @@ namespace NBALigaSimulation.Server.Migrations
                     b.HasIndex("TeamId")
                         .IsUnique();
 
-                    b.ToTable("TeamGameplans");
+                    b.ToTable("TeamGameplans", (string)null);
                 });
 
             modelBuilder.Entity("NBALigaSimulation.Shared.Models.Trade", b =>
@@ -537,7 +537,7 @@ namespace NBALigaSimulation.Server.Migrations
 
                     b.HasIndex("TeamTwoId");
 
-                    b.ToTable("Trades");
+                    b.ToTable("Trades", (string)null);
                 });
 
             modelBuilder.Entity("NBALigaSimulation.Shared.Models.TradePicks", b =>
@@ -552,7 +552,7 @@ namespace NBALigaSimulation.Server.Migrations
 
                     b.HasIndex("TradePickId");
 
-                    b.ToTable("TradePicks");
+                    b.ToTable("TradePicks", (string)null);
                 });
 
             modelBuilder.Entity("NBALigaSimulation.Shared.Models.TradePlayer", b =>
@@ -567,7 +567,7 @@ namespace NBALigaSimulation.Server.Migrations
 
                     b.HasIndex("TradePlayerId");
 
-                    b.ToTable("TradePlayer");
+                    b.ToTable("TradePlayer", (string)null);
                 });
 
             modelBuilder.Entity("NBALigaSimulation.Shared.Models.User", b =>
@@ -602,7 +602,7 @@ namespace NBALigaSimulation.Server.Migrations
                     b.HasIndex("TeamId")
                         .IsUnique();
 
-                    b.ToTable("Users");
+                    b.ToTable("Users", (string)null);
                 });
 
             modelBuilder.Entity("NBALigaSimulation.Shared.Models.Game", b =>
@@ -651,7 +651,7 @@ namespace NBALigaSimulation.Server.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.OwnsOne("NBALigaSimulation.Shared.Models.Born", "Born", b1 =>
+                    b.OwnsOne("NBALigaSimulation.Shared.Models.Player.Born#NBALigaSimulation.Shared.Models.Born", "Born", b1 =>
                         {
                             b1.Property<int>("PlayerId")
                                 .HasColumnType("INTEGER");
@@ -665,7 +665,7 @@ namespace NBALigaSimulation.Server.Migrations
 
                             b1.HasKey("PlayerId");
 
-                            b1.ToTable("Players");
+                            b1.ToTable("Players", (string)null);
 
                             b1.WithOwner()
                                 .HasForeignKey("PlayerId");

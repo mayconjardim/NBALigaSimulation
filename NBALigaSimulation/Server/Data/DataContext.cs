@@ -17,6 +17,7 @@
         public DbSet<Season> Seasons { get; set; }
         public DbSet<User> Users { get; set; }
         public DbSet<Trade> Trades { get; set; }
+        public DbSet<TradePicks> TradePicks { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -129,6 +130,7 @@
                     .OnDelete(DeleteBehavior.Cascade);
             });
 
+
             modelBuilder.Entity<TradePicks>(entity =>
             {
                 entity.HasKey(tp => new { tp.DraftPickId, tp.TradePickId });
@@ -143,6 +145,7 @@
                     .HasForeignKey(tp => tp.TradePickId)
                     .OnDelete(DeleteBehavior.Cascade);
             });
+
 
 
 

@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Components;
 using MudBlazor;
+using NBALigaSimulation.Shared.Dtos;
 
 namespace NBALigaSimulation.Client.Pages.Trade
 {
@@ -13,7 +14,11 @@ namespace NBALigaSimulation.Client.Pages.Trade
         string messageCssClass = string.Empty;
         private string userTeam { get; set; } = string.Empty;
         private List<PlayerCompleteDto> teamOnePlayers = new List<PlayerCompleteDto>();
+        private List<TeamDraftPickDto> teamOnePicks = new List<TeamDraftPickDto>();
+
         private List<PlayerCompleteDto> teamTwoPlayers = new List<PlayerCompleteDto>();
+        private List<TeamDraftPickDto> teamTwoPicks = new List<TeamDraftPickDto>();
+
 
         [Parameter]
         public int Id { get; set; }
@@ -46,6 +51,21 @@ namespace NBALigaSimulation.Client.Pages.Trade
                         teamTwoPlayers.Add(player);
                     }
                 }
+
+                foreach (var pick in trade.DraftPicks)
+                {
+
+                    if (pick.TeamId == trade.TeamOneId)
+                    {
+                        teamOnePicks.Add(pick);
+                    }
+
+                    if (pick.TeamId == trade.TeamTwoId)
+                    {
+                        teamTwoPicks.Add(pick);
+                    }
+                }
+
             }
         }
 
@@ -73,7 +93,7 @@ namespace NBALigaSimulation.Client.Pages.Trade
             else
             {
                 messageCssClass = "error";
-                Snackbar.Add("Proposta não foi enviada!", Severity.Success);
+                Snackbar.Add("Proposta não foi enviada!", Severity.Error);
 
             }
 
@@ -93,7 +113,7 @@ namespace NBALigaSimulation.Client.Pages.Trade
             else
             {
                 messageCssClass = "error";
-                Snackbar.Add("Proposta não foi enviada!", Severity.Success);
+                Snackbar.Add("Proposta não foi enviada!", Severity.Error);
 
             }
 

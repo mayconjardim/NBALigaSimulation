@@ -134,11 +134,11 @@
                         @foreach (var pick in teamOne.DraftPicks)
                         {
                                <tr>
-                                <td><input type="checkbox" checked="@IsPickSelectedTeamOne(pick.Id)" @onchange="() => TogglePickSelectionTeamOne(pick.Id)" /></td>
+                               <td><input type="checkbox" checked="@IsPickSelectedTeamOne(pick.Id)" @onchange="() => TogglePickSelectionTeamOne(pick.Id)" /></td>
                                <td>@pick.Year</td>
                                <td>@pick.Round</td>
-                               <td>@pick.TeamName</td>
-                               <td>@pick.Original</td>
+                               <td><MudAvatar Style="background: none;height:25px;width:25px;vertical-align:middle;margin-right: 2px" Image=@($"Images/logos/{pick.TeamName}.svg") /></td>
+                               <td><MudAvatar Style="background: none;height:25px;width:25px;vertical-align:middle;margin-right: 2px" Image=@($"Images/logos/{pick.Original}.svg") /></td>
                                </tr>
                          }
                      
@@ -204,8 +204,8 @@
                                   <td><input type="checkbox" checked="@IsPickSelectedTeamTwo(pick.Id)" @onchange="() => TogglePickSelectionTeamTwo(pick.Id)" /></td>
                                   <td>@pick.Year</td>
                                   <td>@pick.Round</td>
-                                  <td>@pick.TeamName</td>
-                                  <td>@pick.Original</td>
+                                  <td><MudAvatar Style="background: none;height:25px;width:25px;vertical-align:middle;margin-right: 2px" Image=@($"Images/logos/{pick.TeamName}.svg") /></td>
+                                  <td><MudAvatar Style="background: none;height:25px;width:25px;vertical-align:middle;margin-right: 2px" Image=@($"Images/logos/{pick.Original}.svg") /></td>
                                   </tr>
                                 }
                               </tbody>
