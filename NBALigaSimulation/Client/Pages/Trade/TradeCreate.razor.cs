@@ -67,13 +67,20 @@ namespace NBALigaSimulation.Client.Pages.Trade
             {
                 teamTwo = result.Data;
                 teamOneSend.Clear();
+                teamOneSendPicks.Clear();
                 teamTwoSend.Clear();
+                teamTwoSendPicks.Clear();
             }
         }
 
         private bool IsPlayerSelectedTeamOne(int playerId)
         {
             return teamOneSend.Any(p => p.Id == playerId);
+        }
+
+        private bool IsPickSelectedTeamOne(int pickId)
+        {
+            return teamOneSendPicks.Any(p => p.Id == pickId);
         }
 
         private void TogglePlayerSelectionTeamOne(int playerId)
@@ -90,6 +97,21 @@ namespace NBALigaSimulation.Client.Pages.Trade
             }
         }
 
+        private void TogglePickSelectionTeamOne(int pickId)
+        {
+            if (teamOneSendPicks.Any(p => p.Id == pickId))
+            {
+                var pick = teamOneSendPicks.Find(Pick => Pick.Id == pickId);
+                teamOneSendPicks.Remove(pick);
+            }
+            else
+            {
+                var pick = teamOne.DraftPicks.Find(Pick => Pick.Id == pickId);
+                teamOneSendPicks.Add(pick);
+            }
+        }
+
+
         private decimal GetTeamOneTotalSalary()
         {
             return teamOneSend.Sum(p => p.Contract.Amount);
@@ -98,6 +120,11 @@ namespace NBALigaSimulation.Client.Pages.Trade
         private bool IsPlayerSelectedTeamTwo(int playerId)
         {
             return teamTwoSend.Any(p => p.Id == playerId);
+        }
+
+        private bool IsPickSelectedTeamTwo(int pickId)
+        {
+            return teamTwoSendPicks.Any(p => p.Id == pickId);
         }
 
         private void TogglePlayerSelectionTeamTwo(int playerId)
@@ -114,6 +141,20 @@ namespace NBALigaSimulation.Client.Pages.Trade
             }
         }
 
+        private void TogglePickSelectionTeamTwo(int pickId)
+        {
+            if (teamTwoSendPicks.Any(p => p.Id == pickId))
+            {
+                var pick = teamTwoSendPicks.Find(Player => Player.Id == pickId);
+                teamTwoSendPicks.Remove(pick);
+            }
+            else
+            {
+                var pick = teamTwo.DraftPicks.Find(picks => picks.Id == pickId);
+                teamTwoSendPicks.Add(pick);
+            }
+        }
+
         private decimal GetTeamTwoSendTotalSalary()
         {
             return teamTwoSend.Sum(p => p.Contract.Amount);
@@ -126,7 +167,8 @@ namespace NBALigaSimulation.Client.Pages.Trade
                 TeamOneId = teamOne.Id,
                 TeamTwoId = teamTwo.Id,
                 TradePlayers = new List<TradePlayerDto>(),
-                Players = new List<PlayerCompleteDto>()
+                Players = new List<PlayerCompleteDto>(),
+                DraftPicks = new List<TeamDraftPickDto>()
             };
 
             foreach (var player in teamOneSend)
@@ -137,6 +179,16 @@ namespace NBALigaSimulation.Client.Pages.Trade
             foreach (var player in teamTwoSend)
             {
                 tradeOffer.Players.Add(player);
+            }
+
+            foreach (var picks in teamOneSendPicks)
+            {
+                tradeOffer.DraftPicks.Add(picks);
+            }
+
+            foreach (var picks in teamTwoSendPicks)
+            {
+                tradeOffer.DraftPicks.Add(picks);
             }
 
             var tradeResponse = await TradeService.CreateTrade(tradeOffer);

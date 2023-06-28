@@ -115,6 +115,15 @@ namespace NBALigaSimulation.Server.Services.TradeService
                     });
                 }
 
+                foreach (var picks in tradeDto.DraftPicks)
+                {
+                    trade.TradePicks.Add(new TradePicks
+                    {
+                        DraftPickId = picks.Id,
+                        TradePickId = trade.Id
+                    });
+                }
+
                 _context.Trades.Add(trade);
                 await _context.SaveChangesAsync();
                 response.Success = true;

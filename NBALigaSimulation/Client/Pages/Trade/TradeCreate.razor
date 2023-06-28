@@ -37,7 +37,7 @@
         <MudButton OnClick="SendTradeOffer" Disabled="@((teamOneSend.Count == 0 && teamTwoSend.Count == 0) || (teamOneSend.Count == 0 || teamTwoSend.Count == 0))"
         Variant="Variant.Filled" Color="Color.Primary">ENVIAR TRADE</MudButton>
         </div>
-     <div class="finances">
+     <div class="finances">-
 
            @if (teamTwo != null)
         {
@@ -134,7 +134,7 @@
                         @foreach (var pick in teamOne.DraftPicks)
                         {
                                <tr>
-                               <td><input type="checkbox"/></td>
+                                <td><input type="checkbox" checked="@IsPickSelectedTeamOne(pick.Id)" @onchange="() => TogglePickSelectionTeamOne(pick.Id)" /></td>
                                <td>@pick.Year</td>
                                <td>@pick.Round</td>
                                <td>@pick.TeamName</td>
@@ -201,7 +201,7 @@
                                 @foreach (var pick in teamTwo.DraftPicks)
                                 {
                                   <tr>
-                                  <td><input type="checkbox"/></td>
+                                  <td><input type="checkbox" checked="@IsPickSelectedTeamTwo(pick.Id)" @onchange="() => TogglePickSelectionTeamTwo(pick.Id)" /></td>
                                   <td>@pick.Year</td>
                                   <td>@pick.Round</td>
                                   <td>@pick.TeamName</td>

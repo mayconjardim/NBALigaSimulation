@@ -13,7 +13,7 @@
 
         public List<TradePlayerDto> TradePlayers { get; set; }
         public List<PlayerCompleteDto> Players { get; set; }
-        public List<TeamDraftPickDto> Picks { get; set; }
+        public List<TeamDraftPickDto> DraftPicks { get; set; }
 
 
         public bool? Response { get; set; } = null;

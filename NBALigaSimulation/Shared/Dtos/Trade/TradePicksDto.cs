@@ -1,4 +1,6 @@
-﻿namespace NBALigaSimulation.Shared.Dtos
+﻿using NBALigaSimulation.Shared.Models;
+
+namespace NBALigaSimulation.Shared.Dtos
 {
     public class TradePicksDto
     {
