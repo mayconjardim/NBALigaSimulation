@@ -18,6 +18,7 @@
         public DbSet<User> Users { get; set; }
         public DbSet<Trade> Trades { get; set; }
         public DbSet<TradePicks> TradePicks { get; set; }
+        public DbSet<FAOffer> FAOffers { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -146,8 +147,10 @@
                     .OnDelete(DeleteBehavior.Cascade);
             });
 
-
-
+            modelBuilder.Entity<FAOffer>()
+           .HasOne(f => f.Player)
+           .WithMany()
+           .HasForeignKey(f => f.PlayerId);
 
         }
     }
