@@ -27,6 +27,8 @@ namespace NBALigaSimulation.Client.Pages.User
                 team = result.Data;
                 teamGameplan = team.Gameplan;
                 await LocalStorage.SetItemAsync("team", result.Data.Abrv);
+                await LocalStorage.SetItemAsync("teamId", result.Data.Id);
+
             }
         }
 

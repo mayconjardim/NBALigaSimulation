@@ -15,6 +15,7 @@ namespace NBALigaSimulation.Shared.Models
         public int AwayTeamId { get; set; }
         [ForeignKey("AwayTeamId")]
         public Team AwayTeam { get; set; }
+        public bool Happened { get; set; } = false;
         public DateTime GameDate { get; set; }
         public List<TeamGameStats> TeamGameStats { get; set; } = new List<TeamGameStats>();
         public List<PlayerGameStats> PlayerGameStats { get; set; } = new List<PlayerGameStats>();
