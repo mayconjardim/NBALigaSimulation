@@ -1,5 +1,7 @@
 ﻿@inherits LayoutComponentBase
 @using Color = MudBlazor.Color
+@inject ILocalStorageService LocalStorage
+@inject ISeasonService SeasonService
 
 <MudThemeProvider  Theme="myTheme"/>
 <MudDialogProvider />
@@ -23,6 +25,20 @@
 
 @code {
     public string Search { get; set;}
+
+    protected override async Task OnInitializedAsync()
+    {
+
+            var result = await SeasonService.GetLastSeason();
+            if (!result.Success)
+            {
+            }
+            else
+            {
+                await LocalStorage.SetItemAsync("season", result.Data.Year.ToString());
+            }
+
+    }
 
     bool _drawerOpen = true;
 
