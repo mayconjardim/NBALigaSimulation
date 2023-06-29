@@ -1,0 +1,59 @@
+﻿@page "/faoffer/{id:int}"
+@attribute [Authorize]
+@inject IPlayerService PlayerService
+@inject ITeamService TeamService
+
+
+<MudContainer>
+<CascadingAuthenticationState>
+ <AuthorizeView>
+ @if (player != null)
+ {
+     <div class="d-flex justify-center">
+     <MudButton Href="/freeagency" Style="margin: 20px 0;" Variant="Variant.Filled" Color="Color.Primary">FREE AGENCY HQ</MudButton>
+     </div>
+
+     <div class="fa">
+
+         <div class="fa-name">
+            <p>OFERTA PARA FREE AGENT : <a href="@("player/" + player.Id)">@player.Name</a></p> 
+         </div>
+
+         <div class="fa-pic">
+
+             <MudAvatar Style="margin: 10px;width: 120px; height: 100px; background: none;"  Variant="Variant.Outlined" Color="Color.Primary">
+                   <img src="@player.ImgUrl"/>
+             </MudAvatar>
+           
+             <div>
+                 <span>OVR: @player.Ratings.Last().Ovr</span>
+                 <span>POT: @player.Ratings.Last().Pot</span>
+
+             </div>
+
+         </div>
+
+         <div class="fa-cap">
+
+             <span>SALARY CAP: <span style="font-weight: 800">$@capSpace.ToString("N0")</span></span>
+             <span>TIME: <span style="font-weight: 800">$@GetTeamTotalSalary().ToString("N0")</span></span>
+             <span>SPACE:<span style="font-weight: 800; color: green"> $@((capSpace - GetTeamTotalSalary() ).ToString("N0"))</span></span>
+
+         </div>
+
+     </div>
+
+ }
+ else
+ {
+     <div class="d-flex justify-center">
+     <MudButton Href="/freeagency" Style="margin: 20px 0;" Variant="Variant.Filled" Color="Color.Primary">FREE AGENCY HQ</MudButton>
+     </div>
+
+     <div class="d-flex justify-center">
+     <h3 style="margin: 20px 0;">@message</h3>
+     </div>      
+ }
+</AuthorizeView>
+ </CascadingAuthenticationState>
+ </MudContainer>

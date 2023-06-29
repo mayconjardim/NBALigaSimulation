@@ -1,0 +1,52 @@
+﻿.fa {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.fa-name {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 10px;
+    font-size: 18px;
+}
+
+    .fa-name p {
+        background: #616161;
+        border-radius: 4px;
+        padding: 4px 100px;
+        color: black;
+    }
+
+    .fa-name a {
+        color: #03234C;
+    }
+
+.fa-pic {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin: 10px;
+}
+
+    .fa-pic img {
+        width: 95%;
+        height: 95%;
+    }
+
+    .fa-pic span {
+        font-weight: 800;
+    }
+
+.fa-cap {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 10px;
+}
+
+    .fa-cap span {
+        margin: 0 10px;
+    }

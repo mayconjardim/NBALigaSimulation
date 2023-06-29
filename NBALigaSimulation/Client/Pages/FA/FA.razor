@@ -7,19 +7,18 @@
  <AuthorizeView>
  @if (players != null)
  {
-
-<MudSelect Style="margin: 10px" Margin="Margin.Dense" T="string" Label="Filter" Variant="Variant.Outlined"  ValueChanged="@HandlePositionChanged">
-    <MudSelectItem Value="@("ALL")" />
-    <MudSelectItem Value="@("PG")" />
-    <MudSelectItem Value="@("SG")" />
-    <MudSelectItem Value="@("G")" />
-    <MudSelectItem Value="@("GF")" />
-    <MudSelectItem Value="@("SF")" />
-    <MudSelectItem Value="@("PF")" />
-    <MudSelectItem Value="@("F")" />
-    <MudSelectItem Value="@("FC")" />
-    <MudSelectItem Value="@("C")" />
-</MudSelect>
+  <MudSelect Style="margin: 10px" Margin="Margin.Dense" T="string" Label="Filter" Variant="Variant.Outlined"  ValueChanged="@HandlePositionChanged">
+        <MudSelectItem Value="@("ALL")" />
+        <MudSelectItem Value="@("PG")" />
+        <MudSelectItem Value="@("SG")" />
+        <MudSelectItem Value="@("G")" />
+        <MudSelectItem Value="@("GF")" />
+        <MudSelectItem Value="@("SF")" />
+        <MudSelectItem Value="@("PF")" />
+        <MudSelectItem Value="@("F")" />
+        <MudSelectItem Value="@("FC")" />
+        <MudSelectItem Value="@("C")" />
+  </MudSelect>
       
   <MudTable Style="margin: 10px"  Items="@filteredPlayers" Breakpoint="Breakpoint.None" HorizontalScrollbar="true">
     <HeaderContent>
@@ -36,13 +35,21 @@
         <MudTh><MudTableSortLabel SortBy="new Func<PlayerCompleteDto, object>(x=>x.Ratings.Last().Tp)">3P</MudTableSortLabel></MudTh>
         <MudTh><MudTableSortLabel SortBy="new Func<PlayerCompleteDto, object>(x=>x.Ratings.Last().Drb)">DRB</MudTableSortLabel></MudTh>
         <MudTh><MudTableSortLabel SortBy="new Func<PlayerCompleteDto, object>(x=>x.Ratings.Last().Pss)">PAS</MudTableSortLabel></MudTh>
+        <MudTh><MudTableSortLabel SortBy="new Func<PlayerCompleteDto, object>(x=>x.Ratings.Last().Stl)">STL</MudTableSortLabel></MudTh>
+        <MudTh><MudTableSortLabel SortBy="new Func<PlayerCompleteDto, object>(x=>x.Ratings.Last().Reb)">REB</MudTableSortLabel></MudTh>
+        <MudTh><MudTableSortLabel SortBy="new Func<PlayerCompleteDto, object>(x=>x.Ratings.Last().Blk)">BLK</MudTableSortLabel></MudTh>
+        <MudTh><MudTableSortLabel SortBy="new Func<PlayerCompleteDto, object>(x=>x.Ratings.Last().Hgt)">HGT</MudTableSortLabel></MudTh>
+        <MudTh><MudTableSortLabel SortBy="new Func<PlayerCompleteDto, object>(x=>x.Ratings.Last().Str)">STR</MudTableSortLabel></MudTh>
+        <MudTh><MudTableSortLabel SortBy="new Func<PlayerCompleteDto, object>(x=>x.Ratings.Last().Spd)">SPD</MudTableSortLabel></MudTh>
+        <MudTh><MudTableSortLabel SortBy="new Func<PlayerCompleteDto, object>(x=>x.Ratings.Last().Jmp)">JMP</MudTableSortLabel></MudTh>
+        <MudTh><MudTableSortLabel SortBy="new Func<PlayerCompleteDto, object>(x=>x.Ratings.Last().End)">END</MudTableSortLabel></MudTh>
 
     </HeaderContent>
     <RowTemplate Context="data">
-        <MudTd><MudIconButton Icon="@Icons.Material.Filled.AddCircle" Variant="Variant.Filled" Color="Color.Primary" Size="Size.Small" /></MudTd>
+        <MudTd><MudIconButton Href="@("faoffer/" + data.Id)" Icon="@Icons.Material.Filled.AddCircle" Variant="Variant.Filled" Color="Color.Primary" Size="Size.Small" /></MudTd>
         <MudTd DataLabel="NAME">@data.Name</MudTd>
         <MudTd DataLabel="AGE">@data.Born.Year</MudTd>
-         <MudTd DataLabel="OVR">@data.Pos</MudTd>
+        <MudTd DataLabel="OVR">@data.Pos</MudTd>
         <MudTd DataLabel="OVR">@data.Ratings.Last().Ovr</MudTd>
         <MudTd DataLabel="POT">@data.Ratings.Last().Pot</MudTd>
         <MudTd DataLabel="INS">@data.Ratings.Last().Ins</MudTd>
@@ -52,12 +59,16 @@
         <MudTd DataLabel="3P">@data.Ratings.Last().Tp</MudTd>
         <MudTd DataLabel="DRB">@data.Ratings.Last().Drb</MudTd>
         <MudTd DataLabel="PAS">@data.Ratings.Last().Pss</MudTd>
+        <MudTd DataLabel="STL">@data.Ratings.Last().Stl</MudTd>
+        <MudTd DataLabel="REB">@data.Ratings.Last().Reb</MudTd>
+        <MudTd DataLabel="BLK">@data.Ratings.Last().Blk</MudTd>
+        <MudTd DataLabel="HGT">@data.Ratings.Last().Hgt</MudTd>
+        <MudTd DataLabel="STR">@data.Ratings.Last().Str</MudTd>
+        <MudTd DataLabel="SPD">@data.Ratings.Last().Spd</MudTd>
+        <MudTd DataLabel="JMP">@data.Ratings.Last().Jmp</MudTd>
+        <MudTd DataLabel="END">@data.Ratings.Last().End</MudTd>
     </RowTemplate>
-    <PagerContent>
-        <MudTablePager PageSizeOptions="new int[]{50, 100}" />
-    </PagerContent>
   </MudTable>
-
  }
  </AuthorizeView>
  </CascadingAuthenticationState>
