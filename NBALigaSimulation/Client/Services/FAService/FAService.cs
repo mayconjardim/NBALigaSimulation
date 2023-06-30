@@ -49,5 +49,26 @@ namespace NBALigaSimulation.Client.Services.FAService
             return result;
         }
 
+        public async Task<ServiceResponse<bool>> DeleteOffer(int offerId)
+        {
+            var response = new ServiceResponse<bool>();
+
+            var result = await _http.DeleteAsync($"api/fa/{offerId}");
+
+            if (result.IsSuccessStatusCode)
+            {
+                response.Success = true;
+                response.Data = true;
+                response.Message = "Offer deleted successfully.";
+            }
+            else
+            {
+                response.Success = false;
+                response.Message = "Offer to delete trade. HTTP status code: " + result.StatusCode;
+            }
+
+            return response;
+        }
+
     }
 }

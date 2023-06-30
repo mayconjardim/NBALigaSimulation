@@ -72,5 +72,36 @@ namespace NBALigaSimulation.Server.Services.FAService
             return response;
         }
 
+        public async Task<ServiceResponse<bool>> DeleteOffer(int offerId)
+        {
+            var response = new ServiceResponse<bool>();
+
+            try
+            {
+                var offer = await _context.FAOffers.FindAsync(offerId);
+
+                if (offer == null)
+                {
+                    response.Success = false;
+                    response.Message = "A oferta não foi encontrada.";
+                    return response;
+                }
+
+                _context.FAOffers.Remove(offer);
+                await _context.SaveChangesAsync();
+
+                response.Success = true;
+                response.Data = true;
+                response.Message = "A oferta foi excluída com sucesso.";
+            }
+            catch (Exception ex)
+            {
+                response.Success = false;
+                response.Message = "Ocorreu um erro ao excluir a oferta: " + ex.Message;
+            }
+
+            return response;
+        }
+
     }
 }

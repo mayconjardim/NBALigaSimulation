@@ -43,6 +43,18 @@ namespace NBALigaSimulation.Server.Controllers
 
         }
 
+        [HttpDelete("{offerId}")]
+        public async Task<ActionResult> DeleteOffer(int offerId)
+        {
+            var response = await _faService.DeleteOffer(offerId);
+
+            if (!response.Success)
+            {
+                return BadRequest(response.Message);
+            }
+
+            return Ok();
+        }
     }
 
 }

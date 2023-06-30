@@ -106,7 +106,6 @@
             {
                 messageCssClass = "success";
                 Snackbar.Add("Proposta deletade com sucesso!", Severity.Success);
-                NavigationManager.NavigateTo("/trades");
 
                  trades.RemoveAll(t => t.Id == tradeId);
                  StateHasChanged();

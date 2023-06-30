@@ -1,4 +1,7 @@
-﻿namespace NBALigaSimulation.Client.Pages.FA
+﻿using Microsoft.AspNetCore.Components;
+using MudBlazor;
+
+namespace NBALigaSimulation.Client.Pages.FA
 {
     partial class FA
     {
@@ -7,6 +10,7 @@
         private List<FAOfferDto> faOffers = new List<FAOfferDto>();
 
         private string message = string.Empty;
+        private string messageCssClass = string.Empty;
         private string selectedPosition { get; set; } = string.Empty;
         private int season { get; set; }
 
@@ -57,6 +61,27 @@
                     return players;
 
                 return players.Where(p => p.Pos == selectedPosition).ToList();
+            }
+        }
+
+        private async Task DeleteOffer(int offerId)
+        {
+
+            var tradeResponse = await FAService.DeleteOffer(offerId);
+
+            if (tradeResponse.Success)
+            {
+                messageCssClass = "success";
+                Snackbar.Add("Proposta deletade com sucesso!", Severity.Success);
+
+                faOffers.RemoveAll(t => t.Id == offerId);
+                StateHasChanged();
+            }
+            else
+            {
+                messageCssClass = "error";
+                Snackbar.Add("Proposta não foi deleta!", Severity.Error);
+
             }
         }
 

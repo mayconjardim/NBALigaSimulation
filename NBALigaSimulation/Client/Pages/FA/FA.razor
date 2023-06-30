@@ -3,6 +3,7 @@
 @inject IPlayerService PlayerService
 @inject IFAService FAService
 @inject ILocalStorageService LocalStorage
+@inject ISnackbar Snackbar
 
 <MudContainer>
 <CascadingAuthenticationState>
@@ -27,7 +28,12 @@
                
                     <td><a href="@("player/" + offer.PlayerId)">@offer.PlayerName</a></td>
                     <td>@offer.Amount.ToString("N0")/@offer.Years yr(s)</td>
-                    <td><MudIconButton Icon="@Icons.Material.Filled.Delete"  Color="Color.Error" aria-label="delete" Size="Size.Small" /></td>
+                    <td>
+                        <MudAvatar Style="vertical-align: middle; background: none">
+                         <MudIconButton @onclick="() => DeleteOffer(offer.Id)"  Color="Color.Error" Icon="@Icons.Material.Filled.Delete" Size="Size.Medium">
+                         </MudIconButton>
+                        </MudAvatar>
+                    </td>
             </tr>
          }
     </tbody>
