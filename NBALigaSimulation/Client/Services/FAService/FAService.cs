@@ -43,5 +43,11 @@ namespace NBALigaSimulation.Client.Services.FAService
             return response;
         }
 
+        public async Task<ServiceResponse<List<FAOfferDto>>> GetOffersByTeamId()
+        {
+            var result = await _http.GetFromJsonAsync<ServiceResponse<List<FAOfferDto>>>($"api/fa/teams");
+            return result;
+        }
+
     }
 }

@@ -1,6 +1,7 @@
 ﻿@page "/freeagency"
 @attribute [Authorize]
 @inject IPlayerService PlayerService
+@inject IFAService FAService
 @inject ILocalStorageService LocalStorage
 
 <MudContainer>
@@ -9,12 +10,31 @@
 
 @if (faOffers.Count > 0)
 {
-            
-    
+  <div class="ofertas">
+   <MudSimpleTable Hover="true" Dense="true" FixedHeader="true" Style="margin: 10px">
+    <thead>
+        <tr>
+            @foreach (var h in headings)
+            {
+                <th>@h</th>
+            }
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var offer in faOffers)
+        {
+            <tr>
+               
+                    <td><a href="@("player/" + offer.PlayerId)">@offer.PlayerName</a></td>
+                    <td>@offer.Amount.ToString("N0")/@offer.Years yr(s)</td>
+                    <td><MudIconButton Icon="@Icons.Material.Filled.Delete"  Color="Color.Error" aria-label="delete" Size="Size.Small" /></td>
+            </tr>
+         }
+    </tbody>
+    </MudSimpleTable>
+  </div>
 
-
-
-}
+ }
  @if (players != null)
  {
   <MudSelect Style="margin: 10px" Margin="Margin.Dense" T="string" Label="Filter" Variant="Variant.Outlined"  ValueChanged="@HandlePositionChanged">

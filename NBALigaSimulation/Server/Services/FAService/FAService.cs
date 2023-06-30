@@ -53,9 +53,11 @@ namespace NBALigaSimulation.Server.Services.FAService
                 teamId = user.TeamId;
             }
 
-            List<FAOffer> offers = await _context.FAOffers.OrderByDescending(o => o.DateCreated)
-                    .Where(o => o.TeamId == teamId)
-                    .ToListAsync();
+            List<FAOffer> offers = await _context.FAOffers
+                .Include(p => p.Player)
+                .OrderByDescending(o => o.DateCreated)
+                .Where(o => o.TeamId == teamId)
+                .ToListAsync();
 
             if (offers == null)
             {

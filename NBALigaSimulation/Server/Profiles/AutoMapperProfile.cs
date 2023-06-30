@@ -65,8 +65,11 @@ namespace NBALigaSimulation.Server.Profiles
             CreateMap<TeamDraftPickDto, TeamDraftPicks>();
 
             CreateMap<TradePicks, TradePicksDto>().ReverseMap();
-            CreateMap<FAOffer, FAOfferDto>().ReverseMap();
 
+            CreateMap<FAOffer, FAOfferDto>()
+                .ForMember(dest => dest.PlayerName, opt => opt.MapFrom(src => src.Player.Name));
+
+            CreateMap<FAOfferDto, FAOffer>();
 
 
         }

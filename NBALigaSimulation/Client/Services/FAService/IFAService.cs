@@ -4,6 +4,8 @@
     {
 
         Task<ServiceResponse<FAOfferDto>> CreateOffer(FAOfferDto offerDto);
+        Task<ServiceResponse<List<FAOfferDto>>> GetOffersByTeamId();
+
 
     }
 }
