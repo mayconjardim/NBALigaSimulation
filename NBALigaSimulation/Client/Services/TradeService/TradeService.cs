@@ -65,6 +65,28 @@ namespace NBALigaSimulation.Client.Services.TradeService
             return response;
         }
 
+        public async Task<ServiceResponse<bool>> DeleteTrade(int tradeId)
+        {
+            var response = new ServiceResponse<bool>();
+
+            var result = await _http.DeleteAsync($"api/trades/{tradeId}");
+
+            if (result.IsSuccessStatusCode)
+            {
+                response.Success = true;
+                response.Data = true;
+                response.Message = "Trade deleted successfully.";
+            }
+            else
+            {
+                response.Success = false;
+                response.Message = "Failed to delete trade. HTTP status code: " + result.StatusCode;
+            }
+
+            return response;
+        }
+
+
 
         public async Task<ServiceResponse<bool>> UpdateTrade(TradeDto dto)
         {

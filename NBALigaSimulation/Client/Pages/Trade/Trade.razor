@@ -2,6 +2,8 @@
 @attribute [Authorize]
 @inject IAuthService AuthService
 @inject ITradeService TradeService
+@inject ISnackbar Snackbar
+@inject NavigationManager NavigationManager
 
 
  <MudContainer>
@@ -55,7 +57,8 @@
                                    }
                                 </td>
                                 <td><MudAvatar Style="vertical-align: middle; background: none">
-                                     <MudIconButton  Color="Color.Error" Icon="@Icons.Material.Filled.Delete" Size="Size.Medium" />
+                                      <MudIconButton @onclick="() => DeleteTradeOffer(trade.Id)"  Color="Color.Error" Icon="@Icons.Material.Filled.Delete" Size="Size.Medium">
+                                     </MudIconButton>
                                      </MudAvatar>
                                 </td> 
                         </tr>
@@ -77,9 +80,10 @@
       private List<TradeDto> trades = new List<TradeDto>();
 
       private string message = string.Empty;
-
-         protected override async Task OnInitializedAsync()
-         {
+      string messageCssClass = string.Empty;
+      
+      protected override async Task OnInitializedAsync()
+      {
                 message = "Carregando Trocas...";
 
                 var result = await TradeService.GetTradeByTeamId();
@@ -91,7 +95,30 @@
                 {
                     trades = result.Data;
                 }
-         }
+      }
+
+      private async Task DeleteTradeOffer(int tradeId)
+      {
+           
+            var tradeResponse = await TradeService.DeleteTrade(tradeId);
+
+            if (tradeResponse.Success)
+            {
+                messageCssClass = "success";
+                Snackbar.Add("Proposta deletade com sucesso!", Severity.Success);
+                NavigationManager.NavigateTo("/trades");
+
+                 trades.RemoveAll(t => t.Id == tradeId);
+                 StateHasChanged();
+            }
+            else
+            {
+                messageCssClass = "error";
+                Snackbar.Add("Proposta não foi deleta!", Severity.Error);
+
+            }
+      }
+
 
 
 }

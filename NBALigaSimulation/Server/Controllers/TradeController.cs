@@ -66,6 +66,20 @@ namespace NBALigaSimulation.Server.Controllers
             return Ok(response.Data);
         }
 
+        [HttpDelete("{id}")]
+        public async Task<ActionResult> DeleteTrade(int id)
+        {
+            var response = await _tradeService.DeleteTrade(id);
+
+            if (!response.Success)
+            {
+                return BadRequest(response.Message);
+            }
+
+            return Ok();
+        }
+
+
         [HttpPut("update")]
         public async Task<IActionResult> UpdateTrade(TradeDto dto)
         {

@@ -10,6 +10,6 @@ namespace NBALigaSimulation.Server.Services.TradeService
         Task<ServiceResponse<List<TradeDto>>> GetAllTrades();
         Task<ServiceResponse<TradeDto>> CreateTrade(TradeCreateDto tradeDto);
         Task<ServiceResponse<bool>> UpdateTrade(TradeDto dto);
-
+        Task<ServiceResponse<bool>> DeleteTrade(int tradeId);
     }
 }

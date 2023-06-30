@@ -239,6 +239,35 @@ namespace NBALigaSimulation.Server.Services.TradeService
             return response;
         }
 
+        public async Task<ServiceResponse<bool>> DeleteTrade(int tradeId)
+        {
+            var response = new ServiceResponse<bool>();
+
+            try
+            {
+                var trade = await _context.Trades.FindAsync(tradeId);
+
+                if (trade == null)
+                {
+                    response.Success = false;
+                    response.Message = "A trade não foi encontrada.";
+                    return response;
+                }
+
+                _context.Trades.Remove(trade);
+                await _context.SaveChangesAsync();
+
+                response.Success = true;
+                response.Data = true;
+            }
+            catch (Exception ex)
+            {
+                response.Success = false;
+                response.Message = "Ocorreu um erro ao excluir a trade: " + ex.Message;
+            }
+
+            return response;
+        }
 
         public async Task<ServiceResponse<bool>> UpdateRosterOrderAfterTrade(int teamOneId, int teamTwoId)
         {
