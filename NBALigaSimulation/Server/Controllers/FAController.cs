@@ -28,6 +28,21 @@ namespace NBALigaSimulation.Server.Controllers
             return Ok(response.Data);
         }
 
+        [HttpGet("teams")]
+        public async Task<ActionResult<ServiceResponse<TradeDto>>> GetOffersByTeamId()
+        {
+
+            var result = await _faService.GetOffersByTeamId();
+
+            if (!result.Success)
+            {
+                return NotFound(result);
+            }
+
+            return Ok(result);
+
+        }
+
     }
 
 }

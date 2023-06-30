@@ -6,6 +6,15 @@
 <MudContainer>
 <CascadingAuthenticationState>
  <AuthorizeView>
+
+@if (faOffers.Count > 0)
+{
+            
+    
+
+
+
+}
  @if (players != null)
  {
   <MudSelect Style="margin: 10px" Margin="Margin.Dense" T="string" Label="Filter" Variant="Variant.Outlined"  ValueChanged="@HandlePositionChanged">
@@ -47,7 +56,7 @@
     </HeaderContent>
     <RowTemplate Context="data">
         <MudTd><MudIconButton Href="@("faoffer/" + data.Id)" Icon="@Icons.Material.Filled.AddCircle" Variant="Variant.Filled" Color="Color.Primary" Size="Size.Small" /></MudTd>
-        <MudTd DataLabel="NAME">@data.Name</MudTd>
+        <MudTd Style="white-space: nowrap;" DataLabel="NAME">@data.Name</MudTd>
         <MudTd DataLabel="AGE">@(season - data.Born.Year)</MudTd>
         <MudTd DataLabel="OVR">@data.Pos</MudTd>
         <MudTd DataLabel="OVR">@data.Ratings.Last().Ovr</MudTd>

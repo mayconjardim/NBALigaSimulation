@@ -4,6 +4,7 @@
     {
 
         private List<PlayerCompleteDto> players = new List<PlayerCompleteDto>();
+        private List<FAOfferDto> faOffers = new List<FAOfferDto>();
 
         private string message = string.Empty;
         private string selectedPosition { get; set; } = string.Empty;

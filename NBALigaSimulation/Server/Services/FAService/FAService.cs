@@ -39,5 +39,36 @@ namespace NBALigaSimulation.Server.Services.FAService
 
             return response;
         }
+
+        public async Task<ServiceResponse<List<FAOfferDto>>> GetOffersByTeamId()
+        {
+            var response = new ServiceResponse<List<FAOfferDto>>();
+
+            var userId = _authService.GetUserId();
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == userId);
+            int? teamId = null;
+
+            if (user != null)
+            {
+                teamId = user.TeamId;
+            }
+
+            List<FAOffer> offers = await _context.FAOffers.OrderByDescending(o => o.DateCreated)
+                    .Where(o => o.TeamId == teamId)
+                    .ToListAsync();
+
+            if (offers == null)
+            {
+                response.Success = false;
+                response.Message = $"As ofertas com time de Id {teamId} não existem!";
+            }
+            else
+            {
+                response.Data = _mapper.Map<List<FAOfferDto>>(offers);
+            }
+
+            return response;
+        }
+
     }
 }
