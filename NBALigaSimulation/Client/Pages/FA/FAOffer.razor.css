@@ -9,7 +9,9 @@
     justify-content: center;
     align-items: center;
     margin: 10px;
-    font-size: 18px;
+    font-size: 16px;
+    white-space: nowrap;
+    font-weight: 800;
 }
 
     .fa-name p {
@@ -50,3 +52,67 @@
     .fa-cap span {
         margin: 0 10px;
     }
+
+.fa-contract {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+    margin: 20px;
+}
+
+.contracts {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    margin: 10px;
+}
+
+.btns {
+    display: flex;
+    width: 300px;
+}
+
+.mud-table {
+    border-collapse: collapse;
+    margin: 10px 0;
+}
+
+    .mud-table th, .mud-table td {
+        border: 1px solid #ccc;
+        padding: 8px;
+    }
+
+.border {
+    border-radius: 4px;
+    border: 0.5px solid rgba(0,0,0,0.1);
+    box-shadow: rgba(9, 30, 66, 0.25) 0px 4px 8px -2px, rgba(9, 30, 66, 0.08) 0px 0px 0px 1px;
+}
+
+@media (max-width: 640px) {
+
+    .fa-name {
+        font-size: 10px;
+    }
+
+    .fa-cap span {
+        margin: 0 3px;
+        font-size: 9px;
+    }
+
+    .fa-contract {
+        font-size: 10px;
+    }
+
+  
+
+    .contracts p {
+        margin: 10px 50px;
+    }
+
+    .btns {
+        display: flex;
+        justify-content: space-between;
+        width: 400px;
+    }
+}

@@ -1,6 +1,7 @@
 ﻿@page "/freeagency"
 @attribute [Authorize]
 @inject IPlayerService PlayerService
+@inject ILocalStorageService LocalStorage
 
 <MudContainer>
 <CascadingAuthenticationState>
@@ -43,20 +44,19 @@
         <MudTh><MudTableSortLabel SortBy="new Func<PlayerCompleteDto, object>(x=>x.Ratings.Last().Spd)">SPD</MudTableSortLabel></MudTh>
         <MudTh><MudTableSortLabel SortBy="new Func<PlayerCompleteDto, object>(x=>x.Ratings.Last().Jmp)">JMP</MudTableSortLabel></MudTh>
         <MudTh><MudTableSortLabel SortBy="new Func<PlayerCompleteDto, object>(x=>x.Ratings.Last().End)">END</MudTableSortLabel></MudTh>
-
     </HeaderContent>
     <RowTemplate Context="data">
         <MudTd><MudIconButton Href="@("faoffer/" + data.Id)" Icon="@Icons.Material.Filled.AddCircle" Variant="Variant.Filled" Color="Color.Primary" Size="Size.Small" /></MudTd>
         <MudTd DataLabel="NAME">@data.Name</MudTd>
-        <MudTd DataLabel="AGE">@data.Born.Year</MudTd>
+        <MudTd DataLabel="AGE">@(season - data.Born.Year)</MudTd>
         <MudTd DataLabel="OVR">@data.Pos</MudTd>
         <MudTd DataLabel="OVR">@data.Ratings.Last().Ovr</MudTd>
         <MudTd DataLabel="POT">@data.Ratings.Last().Pot</MudTd>
         <MudTd DataLabel="INS">@data.Ratings.Last().Ins</MudTd>
         <MudTd DataLabel="DNK">@data.Ratings.Last().Dnk</MudTd>
-        <MudTd DataLabel="FT">@data.Ratings.Last().Ft</MudTd>
-        <MudTd DataLabel="2P">@data.Ratings.Last().Fg</MudTd>
-        <MudTd DataLabel="3P">@data.Ratings.Last().Tp</MudTd>
+        <MudTd DataLabel="FT"> @data.Ratings.Last().Ft</MudTd>
+        <MudTd DataLabel="2P"> @data.Ratings.Last().Fg</MudTd>
+        <MudTd DataLabel="3P"> @data.Ratings.Last().Tp</MudTd>
         <MudTd DataLabel="DRB">@data.Ratings.Last().Drb</MudTd>
         <MudTd DataLabel="PAS">@data.Ratings.Last().Pss</MudTd>
         <MudTd DataLabel="STL">@data.Ratings.Last().Stl</MudTd>

@@ -7,7 +7,7 @@
 
         private string message = string.Empty;
         private string selectedPosition { get; set; } = string.Empty;
-
+        private int season { get; set; }
         protected override async Task OnInitializedAsync()
         {
             message = "Carregando Trocas...";
@@ -20,6 +20,7 @@
             else
             {
                 players = result.Data;
+                season = int.Parse(await LocalStorage.GetItemAsync<string>("season"));
             }
         }
 

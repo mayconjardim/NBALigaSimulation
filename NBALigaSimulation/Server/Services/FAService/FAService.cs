@@ -1,0 +1,43 @@
+﻿using AutoMapper;
+
+namespace NBALigaSimulation.Server.Services.FAService
+{
+    public class FAService : IFAService
+    {
+
+        private readonly DataContext _context;
+        private readonly IMapper _mapper;
+        private readonly IAuthService _authService;
+
+        public FAService(DataContext context, IMapper mapper, IAuthService authService)
+        {
+            _context = context;
+            _mapper = mapper;
+            _authService = authService;
+        }
+
+        public async Task<ServiceResponse<FAOfferDto>> CreateOffer(FAOfferDto offerDto)
+        {
+            var response = new ServiceResponse<FAOfferDto>();
+
+            try
+            {
+
+                FAOffer offer = _mapper.Map<FAOffer>(offerDto);
+
+                _context.FAOffers.Add(offer);
+                await _context.SaveChangesAsync();
+                response.Success = true;
+                response.Data = _mapper.Map<FAOfferDto>(offer);
+
+            }
+            catch (Exception ex)
+            {
+                response.Success = false;
+                response.Message = "Ocorreu um erro ao criar uma oferta: " + ex.Message;
+            }
+
+            return response;
+        }
+    }
+}
