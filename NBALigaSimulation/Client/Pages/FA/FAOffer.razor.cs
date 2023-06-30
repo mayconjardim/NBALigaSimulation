@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Components;
+using MudBlazor;
 using NBALigaSimulation.Shared.Models;
 
 namespace NBALigaSimulation.Client.Pages.FA
@@ -6,10 +7,13 @@ namespace NBALigaSimulation.Client.Pages.FA
     partial class FAOffer
     {
 
-        private string message = string.Empty;
         private int capSpace = 100000000;
         private int contract = 0;
         private int years = 1;
+
+        private string message = string.Empty;
+        string messageCssClass = string.Empty;
+
         private int season { get; set; }
 
         [Parameter]
@@ -82,6 +86,7 @@ namespace NBALigaSimulation.Client.Pages.FA
             }
         }
 
+
         private bool HasCap(int contract)
         {
 
@@ -93,7 +98,58 @@ namespace NBALigaSimulation.Client.Pages.FA
             return false;
         }
 
+        public async Task MinContractAsync()
+        {
+            int minContract = GetMinContract((season - player.Born.Year));
+            years = 1;
+            contract = minContract;
+            await SendFAOffer();
+        }
 
+        public async Task MaxContractAsync()
+        {
+            int maxContract = GetMaxContract((season - player.Born.Year));
+            years = 4;
+            contract = maxContract;
+            await SendFAOffer();
+        }
+
+        public async Task PersonalizedContractAsync()
+        {
+            if (contract > 0 && years >= 1)
+            {
+                await SendFAOffer();
+            }
+        }
+
+        private async Task SendFAOffer()
+        {
+            var faOffer = new FAOfferDto
+            {
+                TeamId = team.Id,
+                PlayerId = player.Id,
+                Amount = contract,
+                Years = years,
+                Season = season
+            };
+
+
+            var faResponse = await FAService.CreateOffer(faOffer);
+
+            if (faResponse.Success)
+            {
+                messageCssClass = "success";
+                Snackbar.Add("Proposta enviada com sucesso!", Severity.Success);
+                NavigationManager.NavigateTo("/freeagency");
+            }
+            else
+            {
+                messageCssClass = "error";
+                Snackbar.Add("Proposta não foi enviada!", Severity.Success);
+
+            }
+
+        }
 
 
     }

@@ -7,7 +7,6 @@ namespace NBALigaSimulation.Client.Pages.Trade
     {
 
         private int capSpace = 100000;
-        private TradeDto trade = null;
         private TeamCompleteDto? teamOne = null;
         private TeamCompleteDto? teamTwo = null;
         private List<TeamSimpleDto> teams = new List<TeamSimpleDto>();

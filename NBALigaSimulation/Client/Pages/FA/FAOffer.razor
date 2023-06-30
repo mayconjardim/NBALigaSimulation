@@ -2,7 +2,10 @@
 @attribute [Authorize]
 @inject IPlayerService PlayerService
 @inject ITeamService TeamService
+@inject IFAService FAService
 @inject ILocalStorageService LocalStorage
+@inject ISnackbar Snackbar
+@inject NavigationManager NavigationManager
 
 
 <MudContainer>
@@ -55,19 +58,19 @@
             </thead>
             <tbody>
                 <tr>
-                    <td colspan="4"><MudButton Style="font-size: 10px" Size="Size.Small" Href="/freeagency"  Disabled="HasCap(GetMinContract((season - player.Born.Year)))"  Variant="Variant.Filled" Color="Color.Primary">OFERECER MIN</MudButton></td>
+                    <td colspan="4"><MudButton OnClick="MinContractAsync" Style="font-size: 10px" Size="Size.Small" Disabled="HasCap(GetMinContract((season - player.Born.Year)))"  Variant="Variant.Filled" Color="Color.Primary">OFERECER MIN</MudButton></td>
                     <td>$@GetMinContract((season - player.Born.Year)).ToString("N0")</td>
                     <td>1</td>
                     <td>$@GetMinContract((season - player.Born.Year)).ToString("N0")</td>
                 </tr>
                 <tr>
-                    <td colspan="4"><MudButton Style="font-size: 10px" Size="Size.Small"  Href="/freeagency"  Disabled="HasCap(GetMaxContract((season - player.Born.Year)))"  Variant="Variant.Filled" Color="Color.Primary">OFERECER MAX</MudButton></td>
+                    <td colspan="4"><MudButton OnClick="MaxContractAsync"  Style="font-size: 10px" Size="Size.Small" Disabled="HasCap(GetMaxContract((season - player.Born.Year)))"  Variant="Variant.Filled" Color="Color.Primary">OFERECER MAX</MudButton></td>
                     <td>$@GetMaxContract((season - player.Born.Year)).ToString("N0")</td>
                     <td>4</td>
                     <td>$@((GetMaxContract((season - player.Born.Year)) * 4).ToString("N0"))</td>
                 </tr>
                 <tr>
-                    <td colspan="4"><MudButton Style="font-size: 10px" Size="Size.Small" Href="/freeagency"  Disabled="HasCap(GetMinContract((season - player.Born.Year)))"  Variant="Variant.Filled" Color="Color.Primary">ENVIAR OFERTA</MudButton></td>
+                    <td colspan="4"><MudButton Style="font-size: 10px" Size="Size.Small" OnClick="PersonalizedContractAsync" Disabled="HasCap(GetMinContract((season - player.Born.Year)))"  Variant="Variant.Filled" Color="Color.Primary">ENVIAR OFERTA</MudButton></td>
                     <td><input  style="width: 80%;" type="text" @bind="contract" id="salary" name="salary" placeholder="Digite o Salário"></td>
                     <td>
                         <select name="years" id="years" @bind="years">
