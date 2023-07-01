@@ -226,7 +226,7 @@ namespace NBALigaSimulation.Server.Services.TradeService
             try
             {
                 await _context.SaveChangesAsync();
-                UpdateRosterOrderAfterTrade(TeamOne.Id, TeamTwo.Id);
+                await UpdateRosterOrderAfterTrade(TeamOne.Id, TeamTwo.Id);
                 response.Success = true;
                 response.Data = true;
             }

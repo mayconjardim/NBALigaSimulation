@@ -51,7 +51,19 @@ namespace NBALigaSimulation.Server.Services.GameService
                 return response;
             }
 
-            game.GameSim(); //Simula o jogo <----------
+            if (!ArePlayersInCorrectOrder(game.HomeTeam.Players))
+            {
+                AdjustRosterOrder(game.HomeTeam.Players);
+            }
+
+            if (!ArePlayersInCorrectOrder(game.AwayTeam.Players))
+            {
+                AdjustRosterOrder(game.AwayTeam.Players);
+            }
+
+            await _context.SaveChangesAsync();
+
+            game.GameSim();
 
             await _context.SaveChangesAsync();
 
@@ -143,5 +155,86 @@ namespace NBALigaSimulation.Server.Services.GameService
 
             return response;
         }
+
+        public async Task<ServiceResponse<bool>> SimGameByDate()
+        {
+            ServiceResponse<bool> response = new ServiceResponse<bool>();
+
+            DateTime? firstUnsimulatedDate = await _context.Games
+                .Where(g => !g.Happened)
+                .OrderBy(g => g.GameDate)
+                .Select(g => g.GameDate)
+                .FirstOrDefaultAsync();
+
+            if (!firstUnsimulatedDate.HasValue)
+            {
+                response.Success = false;
+                response.Message = "Não há datas não simuladas disponíveis.";
+                return response;
+            }
+
+            List<Game> games = await _context.Games
+                .Include(p => p.HomeTeam.Players.OrderBy(p => p.RosterOrder)).ThenInclude(p => p.Ratings)
+                .Include(p => p.AwayTeam.Players.OrderBy(p => p.RosterOrder)).ThenInclude(p => p.Ratings)
+                .Where(g => g.GameDate == firstUnsimulatedDate && !g.Happened)
+                .ToListAsync();
+
+            foreach (Game game in games)
+            {
+                game.Season = await _context.Seasons.OrderBy(s => s.Id).LastOrDefaultAsync();
+
+                if (ArePlayersInCorrectOrder(game.HomeTeam.Players))
+                {
+                    AdjustRosterOrder(game.HomeTeam.Players);
+                }
+
+                if (ArePlayersInCorrectOrder(game.AwayTeam.Players))
+                {
+                    AdjustRosterOrder(game.AwayTeam.Players);
+                }
+
+                await _context.SaveChangesAsync();
+
+                game.GameSim();
+
+                try
+                {
+                    await _context.SaveChangesAsync();
+                }
+                catch (Exception ex)
+                {
+                    response.Success = false;
+                    response.Message = $"Erro ao salvar alterações para o jogo com ID {game.Id}: {ex.Message}";
+                    return response;
+                }
+            }
+
+            response.Success = true;
+            response.Data = true;
+
+            return response;
+        }
+
+        public bool ArePlayersInCorrectOrder(List<Player> Players)
+        {
+            for (int i = 0; i < Players.Count; i++)
+            {
+                if (Players[i].RosterOrder != i)
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        public void AdjustRosterOrder(List<Player> Players)
+        {
+            for (int i = 0; i < Players.Count; i++)
+            {
+                Players[i].RosterOrder = i;
+            }
+        }
+
     }
 }

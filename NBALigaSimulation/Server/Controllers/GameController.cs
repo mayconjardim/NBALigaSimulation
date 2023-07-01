@@ -85,5 +85,17 @@ namespace NBALigaSimulation.Server.Controllers
             return Ok(result);
         }
 
+        [HttpPut("update/date")]
+        public async Task<ActionResult<ServiceResponse<bool>>> SimGameByDate()
+        {
+            ServiceResponse<bool> response = await _gameService.SimGameByDate();
+
+            if (!response.Success)
+            {
+                return BadRequest(response);
+            }
+
+            return Ok(response);
+        }
     }
 }
