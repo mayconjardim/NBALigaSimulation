@@ -61,7 +61,7 @@ namespace NBALigaSimulation.Server.Services.SeasonService
             if (season == null)
             {
                 response.Success = false;
-                response.Message = $"Season não econtrada!";
+                response.Message = $"Temporada não econtrada!";
             }
             else
             {
@@ -72,18 +72,25 @@ namespace NBALigaSimulation.Server.Services.SeasonService
         }
 
 
-        public async Task<ServiceResponse<CompleteSeasonDto>> GenerateSchedule(int seasonId)
+        public async Task<ServiceResponse<CompleteSeasonDto>> GenerateSchedule()
         {
             ServiceResponse<CompleteSeasonDto> response = new ServiceResponse<CompleteSeasonDto>();
 
-            Season season = await _context.Seasons
-                .Include(s => s.Games)
-                .FirstOrDefaultAsync(p => p.Id == seasonId);
+            Season season = await _context.Seasons.OrderBy(s => s.Year).LastOrDefaultAsync();
 
             if (season == null)
             {
                 response.Success = false;
-                response.Message = "Season not found.";
+                response.Message = "Temporada não encontrada.";
+                return response;
+            }
+
+            List<Game> games = await _context.Games.Where(s => s.SeasonId == season.Id).ToListAsync();
+
+            if (games.Count > 0)
+            {
+                response.Success = false;
+                response.Message = "Já existe um jogos pra essa temporada.";
                 return response;
             }
 

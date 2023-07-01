@@ -36,10 +36,10 @@ namespace NBALigaSimulation.Server.Controllers
             return Ok(await _seasonService.CreateSeason(request));
         }
 
-        [HttpPut("schedule/{seasonId}")]
-        public async Task<ActionResult<ServiceResponse<CompleteSeasonDto>>> GenerateSchedule(int seasonId)
+        [HttpPut("schedule")]
+        public async Task<ActionResult<ServiceResponse<CompleteSeasonDto>>> GenerateSchedule()
         {
-            ServiceResponse<CompleteSeasonDto> response = await _seasonService.GenerateSchedule(seasonId);
+            ServiceResponse<CompleteSeasonDto> response = await _seasonService.GenerateSchedule();
 
             if (!response.Success)
             {
