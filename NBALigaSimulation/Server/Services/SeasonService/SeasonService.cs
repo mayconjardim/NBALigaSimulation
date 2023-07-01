@@ -1,4 +1,6 @@
 ﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
+using static MudBlazor.CategoryTypes;
 
 namespace NBALigaSimulation.Server.Services.SeasonService
 {
@@ -70,7 +72,7 @@ namespace NBALigaSimulation.Server.Services.SeasonService
         }
 
 
-        public async Task<ServiceResponse<CompleteSeasonDto>> UpdateSeason(int seasonId)
+        public async Task<ServiceResponse<CompleteSeasonDto>> GenerateSchedule(int seasonId)
         {
             ServiceResponse<CompleteSeasonDto> response = new ServiceResponse<CompleteSeasonDto>();
 
@@ -96,6 +98,38 @@ namespace NBALigaSimulation.Server.Services.SeasonService
 
             return response;
         }
+
+        public async Task<ServiceResponse<CompleteSeasonDto>> GenerateTrainingCamp()
+        {
+            ServiceResponse<CompleteSeasonDto> response = new ServiceResponse<CompleteSeasonDto>();
+
+            Season season = await _context.Seasons.OrderBy(s => s.Id).LastOrDefaultAsync();
+
+            if (season == null)
+            {
+                response.Success = false;
+                response.Message = "Temporada não encontrada.";
+                return response;
+            }
+
+            List<Player> players = await _context.Players.Include(p => p.Ratings).ToListAsync();
+
+            foreach (Player player in players)
+            {
+                var newRatings = player.TrainingCamp(season);
+
+                player.Ratings.Add(newRatings);
+            }
+
+            await _context.SaveChangesAsync();
+
+            response.Success = true;
+            response.Data = _mapper.Map<CompleteSeasonDto>(season);
+
+            return response;
+        }
+
+
 
     }
 }

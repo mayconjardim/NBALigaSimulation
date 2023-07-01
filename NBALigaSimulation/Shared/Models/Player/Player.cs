@@ -30,7 +30,32 @@ namespace NBALigaSimulation.Shared.Models
             double coachingRank = 15.5;
             int years = 1;
             int age = season.Year - Born.Year;
-            var ratings = Ratings.Last();
+
+            var lastRatings = Ratings.Last();
+            var ratings = new PlayerRatings
+            {
+
+                Hgt = lastRatings.Hgt,
+                Str = lastRatings.Str,
+                Spd = lastRatings.Spd,
+                Jmp = lastRatings.Jmp,
+                End = lastRatings.End,
+                Ins = lastRatings.Ins,
+                Dnk = lastRatings.Dnk,
+                Ft = lastRatings.Ft,
+
+                Fg = lastRatings.Fg,
+                Tp = lastRatings.Tp,
+                Blk = lastRatings.Blk,
+                Stl = lastRatings.Stl,
+                Drb = lastRatings.Drb,
+                Pss = lastRatings.Pss,
+                Reb = lastRatings.Reb,
+                Pot = lastRatings.Pot,
+            };
+
+            ratings.Season = season.Year;
+
 
             for (int i = 0; i < years; i++)
             {
