@@ -133,6 +133,88 @@ namespace NBALigaSimulation.Shared.Engine
             return new PlayerContract { PlayerId = p.Id, Amount = amount, Exp = expiration };
         }
 
+        public static double CalcBaseChange(int age, int potentialDifference)
+        {
+
+            Random random = new Random();
+
+            double val;
+
+            // Average rating change if there is no potential difference
+            if (age <= 21)
+            {
+                val = 0;
+            }
+            else if (age <= 25)
+            {
+                val = 0;
+            }
+            else if (age <= 29)
+            {
+                val = -1;
+            }
+            else if (age <= 31)
+            {
+                val = -2;
+            }
+            else
+            {
+                val = -3;
+            }
+
+
+            if (age <= 21)
+            {
+                if (random.NextDouble() < 0.75)
+                {
+                    val += potentialDifference * RandomUtils.RandomUniform(0.2, 0.9);
+                }
+                else
+                {
+                    val += potentialDifference * RandomUtils.RandomUniform(0.1, 0.3);
+                }
+            }
+            else if (age <= 25)
+            {
+                if (random.NextDouble() < 0.25)
+                {
+                    val += potentialDifference * RandomUtils.RandomUniform(0.2, 0.9);
+                }
+                else
+                {
+                    val += potentialDifference * RandomUtils.RandomUniform(0.1, 0.3);
+                }
+            }
+            else
+            {
+                val += potentialDifference * RandomUtils.RandomUniform(0, 0.1);
+            }
+
+            // Noise
+            if (age <= 25)
+            {
+                val += RandomUtils.Bound(RandomUtils.Gauss(0, 5), -4, 10);
+            }
+            else
+            {
+                val += RandomUtils.Bound(RandomUtils.Gauss(0, 3), -2, 10);
+            }
+
+            return val;
+        }
+
+        public static int LimitRating(double rating)
+        {
+            if (rating > 100)
+            {
+                return 100;
+            }
+            if (rating < 0)
+            {
+                return 0;
+            }
+            return (int)Math.Floor(rating);
+        }
 
 
     }

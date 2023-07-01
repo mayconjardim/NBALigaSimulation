@@ -411,5 +411,94 @@ namespace NBALigaSimulation.Shared.Models
             }
         }
 
+        public string Pos
+        {
+            get
+            {
+                bool c = false, g = false, pf = false, pg = false, sf = false, sg = false;
+                string position;
+
+                if (Reb >= 50)
+                {
+                    position = "GF";
+                }
+                else
+                {
+                    position = "F";
+                }
+
+                if (Hgt <= 30 || Spd >= 85)
+                {
+                    g = true;
+                    if ((Pss + Reb) >= 100)
+                    {
+                        pg = true;
+                    }
+                    if (Hgt >= 30)
+                    {
+                        sg = true;
+                    }
+                }
+
+                if (Hgt >= 50 && Hgt <= 65 && Spd >= 40)
+                {
+                    sf = true;
+                }
+
+                if (Hgt >= 70)
+                {
+                    pf = true;
+                }
+
+                if ((Hgt + Str) >= 130)
+                {
+                    c = true;
+                }
+
+                if (pg && !sg && !sf && !pf && !c)
+                {
+                    position = "PG";
+                }
+                else if (!pg && (g || sg) && !sf && !pf && !c)
+                {
+                    position = "SG";
+                }
+                else if (!pg && !sg && sf && !pf && !c)
+                {
+                    position = "SF";
+                }
+                else if (!pg && !sg && !sf && pf && !c)
+                {
+                    position = "PF";
+                }
+                else if (!pg && !sg && !sf && !pf && c)
+                {
+                    position = "C";
+                }
+
+
+                if ((pf || sf) && g)
+                {
+                    position = "GF";
+                }
+                else if (c && (pf || sf))
+                {
+                    position = "FC";
+                }
+                else if (pg && sg)
+                {
+                    position = "G";
+                }
+
+                if (position == "F" && Reb <= 20)
+                {
+                    position = "PF";
+                }
+
+                return position;
+
+            }
+        }
+
     }
 }

@@ -19,13 +19,12 @@ namespace NBALigaSimulation.Client.Pages.User
             {
                 messageCssClass = "success";
                 Snackbar.Add("Registrado com sucesso!", Severity.Success);
-
+                NavigationManager.NavigateTo("/");
             }
             else
             {
                 messageCssClass = "error";
                 Snackbar.Add($"{Message}", Severity.Error);
-
             }
 
         }
