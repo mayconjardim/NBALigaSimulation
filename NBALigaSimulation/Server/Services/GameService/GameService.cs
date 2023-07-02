@@ -221,7 +221,9 @@ namespace NBALigaSimulation.Server.Services.GameService
                 }
                 catch (Exception ex)
                 {
-
+                    response.Success = false;
+                    response.Message = $"Erro ao salvar alterações para o jogo com ID {game.Id}: {ex.Message}";
+                    return response;
                 }
 
             }
