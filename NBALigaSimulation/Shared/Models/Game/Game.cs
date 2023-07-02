@@ -719,10 +719,10 @@ namespace NBALigaSimulation.Shared.Models
         public void RecordStat(int t, int p, string s, Team[] teams, int amount = 1, double amntDouble = 1.0)
         {
             amount = amount != 0 ? amount : 1;
-            RecordHelper.RecordStatHelperPlayer(t, p, s, Id, teams, amount, amntDouble);
+            RecordHelper.RecordStatHelperPlayer(t, p, s, Id, teams, Season.Year, amount, amntDouble);
             if (s != "Gs" && s != "CourtTime" && s != "BenchTime" && s != "Energy")
             {
-                RecordHelper.RecordStatHelperTeam(t, p, s, Id, teams, amount);
+                RecordHelper.RecordStatHelperTeam(t, p, s, Id, teams, Season.Year, amount);
 
             }
         }

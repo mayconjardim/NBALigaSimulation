@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using NBALigaSimulation.Shared.Engine.Utils;
 
 namespace NBALigaSimulation.Server.Services.GameService
 {
@@ -176,6 +177,8 @@ namespace NBALigaSimulation.Server.Services.GameService
             List<Game> games = await _context.Games
                 .Include(p => p.HomeTeam.Players.OrderBy(p => p.RosterOrder)).ThenInclude(p => p.Ratings)
                 .Include(p => p.AwayTeam.Players.OrderBy(p => p.RosterOrder)).ThenInclude(p => p.Ratings)
+                .Include(p => p.HomeTeam.TeamRegularStats)
+                .Include(p => p.AwayTeam.TeamRegularStats)
                 .Where(g => g.GameDate == firstUnsimulatedDate && !g.Happened)
                 .ToListAsync();
 
@@ -197,6 +200,7 @@ namespace NBALigaSimulation.Server.Services.GameService
                 await _context.SaveChangesAsync();
 
                 game.GameSim();
+
                 game.Happened = true;
 
                 try
@@ -209,6 +213,17 @@ namespace NBALigaSimulation.Server.Services.GameService
                     response.Message = $"Erro ao salvar alterações para o jogo com ID {game.Id}: {ex.Message}";
                     return response;
                 }
+
+                try
+                {
+                    RegularStatUtil.TeamStatHelper(game);
+                    await _context.SaveChangesAsync();
+                }
+                catch (Exception ex)
+                {
+
+                }
+
             }
 
             response.Success = true;

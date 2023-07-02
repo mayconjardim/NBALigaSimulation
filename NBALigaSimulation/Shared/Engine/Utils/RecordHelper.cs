@@ -5,7 +5,7 @@ namespace NBALigaSimulation.Shared.Engine
     public static class RecordHelper
     {
 
-        public static void RecordStatHelperTeam(int t, int p, string s, int Id, Team[] teams, int amt = 1)
+        public static void RecordStatHelperTeam(int t, int p, string s, int Id, Team[] teams, int season, int amt = 1)
         {
 
             var team = teams[t];
@@ -20,7 +20,7 @@ namespace NBALigaSimulation.Shared.Engine
 
                 if (lastStats == null || lastStats.GameId != Id)
                 {
-                    team.Stats.Add(new TeamGameStats { GameId = Id });
+                    team.Stats.Add(new TeamGameStats { GameId = Id, Season = season });
                 }
             }
 
@@ -112,7 +112,7 @@ namespace NBALigaSimulation.Shared.Engine
 
         }
 
-        public static void RecordStatHelperPlayer(int t, int p, string s, int Id, Team[] teams, int amt = 1, double amntDouble = 1.0)
+        public static void RecordStatHelperPlayer(int t, int p, string s, int Id, Team[] teams, int season, int amt = 1, double amntDouble = 1.0)
         {
 
             var player = teams[t].Players.Find(player => player.RosterOrder == p);
@@ -127,7 +127,7 @@ namespace NBALigaSimulation.Shared.Engine
 
                 if (lastStats == null || lastStats.GameId != Id)
                 {
-                    player.Stats.Add(new PlayerGameStats { GameId = Id, TeamId = teams[t].Id, Name = player.Name });
+                    player.Stats.Add(new PlayerGameStats { GameId = Id, TeamId = teams[t].Id, Name = player.Name, Season = season });
                 }
             }
 
