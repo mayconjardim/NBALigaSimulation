@@ -26,7 +26,8 @@
                         Game game = new Game
                         {
                             HomeTeam = homeTeam,
-                            AwayTeam = awayTeam
+                            AwayTeam = awayTeam,
+                            Type = 0
                         };
 
                         games.Add(game);
@@ -44,7 +45,8 @@
                         Game game = new Game
                         {
                             HomeTeam = homeTeam,
-                            AwayTeam = awayTeam
+                            AwayTeam = awayTeam,
+                            Type = 0
                         };
 
                         games.Add(game);
@@ -62,7 +64,8 @@
                     Game game = new Game
                     {
                         HomeTeam = homeTeam,
-                        AwayTeam = awayTeam
+                        AwayTeam = awayTeam,
+                        Type = 0
                     };
 
                     games.Add(game);
