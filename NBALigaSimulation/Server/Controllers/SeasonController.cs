@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Swashbuckle.AspNetCore.Annotations;
 
 namespace NBALigaSimulation.Server.Controllers
 {
@@ -14,8 +15,16 @@ namespace NBALigaSimulation.Server.Controllers
             _seasonService = seasonService;
         }
 
+        [HttpPost]
+        [SwaggerOperation(Summary = "CreateSeason", Description = "Cria uma nova temporada.")]
+
+        public async Task<ActionResult<ServiceResponse<CompleteSeasonDto>>> CreateSeason(CreateSeasonDto request)
+        {
+            return Ok(await _seasonService.CreateSeason(request));
+        }
 
         [HttpGet]
+        [SwaggerOperation(Summary = "GetLastSeason", Description = "Retorna a temporada atual.")]
         public async Task<ActionResult<ServiceResponse<CompleteSeasonDto>>> GetLastSeason()
         {
 
@@ -30,13 +39,8 @@ namespace NBALigaSimulation.Server.Controllers
 
         }
 
-        [HttpPost]
-        public async Task<ActionResult<ServiceResponse<CompleteSeasonDto>>> CreateSeason(CreateSeasonDto request)
-        {
-            return Ok(await _seasonService.CreateSeason(request));
-        }
-
         [HttpPut("schedule")]
+        [SwaggerOperation(Summary = "GenerateSchedule", Description = "Gera os jogos da temporada regular.")]
         public async Task<ActionResult<ServiceResponse<CompleteSeasonDto>>> GenerateSchedule()
         {
             ServiceResponse<CompleteSeasonDto> response = await _seasonService.GenerateSchedule();
@@ -50,6 +54,7 @@ namespace NBALigaSimulation.Server.Controllers
         }
 
         [HttpPost("tc")]
+        [SwaggerOperation(Summary = "GenerateTrainingCamp", Description = "Realiza a evolução/regressão dos jogadores.")]
         public async Task<ActionResult<ServiceResponse<CompleteSeasonDto>>> GenerateTrainingCamp()
         {
             ServiceResponse<CompleteSeasonDto> response = await _seasonService.GenerateTrainingCamp();
