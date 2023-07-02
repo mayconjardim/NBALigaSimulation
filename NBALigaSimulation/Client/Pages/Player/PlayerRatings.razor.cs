@@ -150,7 +150,7 @@ namespace NBALigaSimulation.Client.Pages.Player
                         new RadarDataset()
                         {
                             Label = "",
-                            Data = new List<object>() { rating.Ins, rating.Dnk, rating.Ft, rating.Tp, rating.Fg, rating.Drb, rating.Pss },
+                            Data = new List<object>() { rating.Ins, rating.Dnk, rating.Ft, rating.Fg, rating.Tp, rating.Drb, rating.Pss },
                             BackgroundColor = "rgba(3, 35, 76, 0.83)",
                             BorderColor = "#03234C",
                             BorderWidth = 3
