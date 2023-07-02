@@ -11,6 +11,7 @@
         public DbSet<TeamGameStats> TeamGameStats { get; set; }
         public DbSet<TeamGameplan> TeamGameplans { get; set; }
         public DbSet<TeamDraftPicks> TeamDraftPicks { get; set; }
+        public DbSet<TeamRegularStats> TeamRegularStats { get; set; }
         public DbSet<PlayerGameStats> PlayerGameStats { get; set; }
         public DbSet<PlayerContract> PlayerContracts { get; set; }
         public DbSet<GamePlayByPlay> PlayByPlays { get; set; }
@@ -98,6 +99,11 @@
             .HasOne(p => p.Gameplan)
             .WithOne(g => g.Team)
             .HasForeignKey<TeamGameplan>(g => g.TeamId);
+
+            modelBuilder.Entity<Team>()
+           .HasOne(p => p.TeamRegularStats)
+           .WithOne(g => g.Team)
+           .HasForeignKey<TeamRegularStats>(g => g.TeamId);
 
             modelBuilder.Entity<Trade>(entity =>
            {
