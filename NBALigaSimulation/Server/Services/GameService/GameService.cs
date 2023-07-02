@@ -193,9 +193,11 @@ namespace NBALigaSimulation.Server.Services.GameService
                     AdjustRosterOrder(game.AwayTeam.Players);
                 }
 
+
                 await _context.SaveChangesAsync();
 
                 game.GameSim();
+                game.Happened = true;
 
                 try
                 {

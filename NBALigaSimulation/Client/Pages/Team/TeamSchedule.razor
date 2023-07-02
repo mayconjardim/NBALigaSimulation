@@ -23,13 +23,15 @@
                        @if(@game.HomeTeamScore > 0)
                        {
                         <td>
+                          <a href="game/@game.Id">
                           <span class="@GetScoreClass(game.HomeTeamScore, game.AwayTeamScore)">
-                            @game.HomeTeamScore
+                          @game.HomeTeamScore
                           </span>
                           : 
                           <span class="@GetScoreClass(game.AwayTeamScore, game.HomeTeamScore)">
-                            @game.AwayTeamScore
+                          @game.AwayTeamScore
                           </span>
+                          </a>
                         </td>
                        }else
                        {

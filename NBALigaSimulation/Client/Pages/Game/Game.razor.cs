@@ -9,6 +9,9 @@ namespace NBALigaSimulation.Client.Pages.Game
 
         private GameCompleteDto? game = null;
         private string message = string.Empty;
+        private TeamGameStatsDto? homeTeamStat = null;
+        private TeamGameStatsDto? awayTeamStat = null;
+
 
         [Parameter]
         public int Id { get; set; }
@@ -25,6 +28,19 @@ namespace NBALigaSimulation.Client.Pages.Game
             else
             {
                 game = result.Data;
+
+                foreach (var gameStat in game.TeamGameStats)
+                {
+                    if (game.HomeTeamId == gameStat.TeamId)
+                    {
+                        homeTeamStat = gameStat;
+                    }
+                    else if (game.AwayTeamId == gameStat.TeamId)
+                    {
+                        awayTeamStat = gameStat;
+                    }
+                }
+
             }
         }
 

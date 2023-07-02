@@ -4,7 +4,7 @@
 @if (game !=  null)
 {
 
- <div class="@game.HomeTeam @game.AwayTeam header">
+ <div class="@game.HomeTeam  header">
 
      <MudAvatar Style="vertical-align: middle; background: none; margin: 5px" Size="Size.Large" Image=@($"Images/logos/{game.HomeTeam}.svg") Square="true" />
      <h1>@game.HomeTeam</h1>
@@ -59,6 +59,23 @@
                   }
                   }
                </tbody>
+                <tfoot>
+                <tr>
+                     <td></td>
+                     <td>240</td>
+                     <td>@homeTeamStat.Fg-@homeTeamStat.Fga</td>
+                     <td>@homeTeamStat.Tp-@homeTeamStat.Tpa</td>
+                     <td>@homeTeamStat.Ft-@homeTeamStat.Fta</td>
+                     <td>@homeTeamStat.Orb</td>
+                     <td>@homeTeamStat.Trb</td>
+                     <td>@homeTeamStat.Ast</td>
+                     <td>@homeTeamStat.Tov</td>
+                     <td>@homeTeamStat.Stl</td>
+                     <td>@homeTeamStat.Blk</td>
+                     <td>@homeTeamStat.Pf</td>
+                     <td>@homeTeamStat.Pts</td>
+                </tr>
+              </tfoot>
             </MudSimpleTable>
          </div>
       </MudContainer>
@@ -70,7 +87,7 @@
 
             <MudAvatar Style="vertical-align: middle; background: none; margin: 5px" Size="Size.Medium" Image=@($"Images/logos/{game.AwayTeam}.svg") Square="true" />
        
-            <MudSimpleTable Elevation="0" Dense="true" Hover="false" Bordered="true" Striped="true" Style="overflow-x: auto;">
+           <MudSimpleTable Elevation="0" Outlined="true"  Dense="true" Hover="false" Bordered="true" Striped="true" Style="overflow-x: auto;">
                <thead>
                   <tr>
                      @foreach (var h in headings)
@@ -107,6 +124,23 @@
                   }
                   }
                </tbody>
+                <tfoot>
+                <tr>
+                     <td></td>
+                     <td>240</td>
+                     <td>@awayTeamStat.Fg-@awayTeamStat.Fga</td>
+                     <td>@awayTeamStat.Tp-@awayTeamStat.Tpa</td>
+                     <td>@awayTeamStat.Ft-@awayTeamStat.Fta</td>
+                     <td>@awayTeamStat.Orb</td>
+                     <td>@awayTeamStat.Trb</td>
+                     <td>@awayTeamStat.Ast</td>
+                     <td>@awayTeamStat.Tov</td>
+                     <td>@awayTeamStat.Stl</td>
+                     <td>@awayTeamStat.Blk</td>
+                     <td>@awayTeamStat.Pf</td>
+                     <td>@awayTeamStat.Pts</td>
+                </tr>
+              </tfoot>
             </MudSimpleTable>
          </div>
       </MudContainer>
