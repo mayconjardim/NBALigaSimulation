@@ -1,4 +1,7 @@
-﻿namespace NBALigaSimulation.Shared.Dtos
+﻿using System.Globalization;
+using System.Net;
+
+namespace NBALigaSimulation.Shared.Dtos
 {
     public class TeamRegularStatsDto
     {
@@ -54,7 +57,61 @@
         public int AllowedFTM { get; set; }
         public int AllowedFTA { get; set; }
 
+        public int Wins
+        {
+            get
+            {
+                return (HomeWins + RoadWins);
+            }
+        }
 
+        public int Losses
+        {
+            get
+            {
+                return (HomeLosses + RoadLosses);
+            }
+        }
+
+        public string WinPct
+        {
+            get
+            {
+                int games = (HomeWins + HomeLosses + RoadWins + RoadLosses);
+                double winPct = (double)(HomeWins + RoadWins) / games;
+                return winPct.ToString("0.000", CultureInfo.InvariantCulture);
+            }
+        }
+
+        public string PF
+        {
+            get
+            {
+                int games = HomeWins + HomeLosses + RoadWins + RoadLosses;
+                double pf = (double)Points / games;
+                return pf.ToString("0.0", CultureInfo.InvariantCulture);
+            }
+        }
+
+        public string PA
+        {
+            get
+            {
+                int games = HomeWins + HomeLosses + RoadWins + RoadLosses;
+                double pa = (double)AllowedPoints / games;
+                return pa.ToString("0.0", CultureInfo.InvariantCulture);
+            }
+        }
+
+        public string DIFF
+        {
+            get
+            {
+                int games = HomeWins + HomeLosses + RoadWins + RoadLosses;
+                double diff = (double)(Points - AllowedPoints) / games;
+                return diff.ToString("0.0", CultureInfo.InvariantCulture);
+            }
+        }
 
     }
 }

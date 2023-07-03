@@ -8,11 +8,6 @@
     background-color: #00471b;
 }
 
-.BKN {
-    background: linear-gradient(rgba(206, 17, 65, 0.8), rgba(206, 17, 65, 3)), url("../Images/Logos/CHI.svg");
-    background-color: #ce1141;
-}
-
 .CHI {
     background: linear-gradient(rgba(206, 17, 65, 0.8), rgba(206, 17, 65, 3)), url("../Images/Logos/CHI.svg");
     background-color: #ce1141;
@@ -129,8 +124,8 @@
 }
 
 .NJN {
-    background: linear-gradient(rgba(134, 0, 56, 0.8), rgba(134, 0, 56,3)), url("../Images/Logos/NJN.svg");
-    background-color: #1d428a;
+    background: linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 3)), url("../Images/Logos/NJN.svg");
+    background-color: #000000;
 }
 
 .Draft {

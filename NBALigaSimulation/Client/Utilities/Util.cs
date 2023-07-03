@@ -13,6 +13,6 @@
             const double kgPerLbs = 0.45359237;
             return (int)(lbs * kgPerLbs);
         }
-
     }
+
 }

@@ -1,0 +1,13 @@
+﻿.standings {
+    display: flex;
+    flex-direction: column;
+    margin: 10px 0;
+}
+
+.standings-table {
+    margin: 10px 0;
+}
+
+a :hover {
+    text-decoration: underline;
+}
