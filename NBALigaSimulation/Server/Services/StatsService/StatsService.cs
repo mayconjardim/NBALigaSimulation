@@ -16,7 +16,7 @@ namespace NBALigaSimulation.Server.Services.StatsService
 
         public async Task<ServiceResponse<List<TeamRegularStatsDto>>> GetAllTeamRegularStats()
         {
-            var teams = await _context.TeamRegularStats.ToListAsync();
+            var teams = await _context.TeamRegularStats.Include(t => t.Team).ToListAsync();
             var response = new ServiceResponse<List<TeamRegularStatsDto>>
             {
                 Data = _mapper.Map<List<TeamRegularStatsDto>>(teams)

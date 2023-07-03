@@ -5,6 +5,10 @@
 
         public int Id { get; set; }
         public int TeamId { get; set; }
+        public string TeamName { get; set; }
+        public string TeamRegion { get; set; }
+        public string TeamAbrv { get; set; }
+        public string TeamConference { get; set; }
         public int Season { get; set; }
         public int ConfRank { get; set; }
 
