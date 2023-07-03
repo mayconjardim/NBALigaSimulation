@@ -18,7 +18,7 @@
                 @foreach (var team in statsEast)
                 {
                     <tr>
-                       <td style="width: 350px"><MudAvatar Style="vertical-align: middle; background: none; margin-right: 15px"  Size="Size.Small" Image=@($"Images/logos/{team.TeamAbrv}.svg") Square="true" /><a style="color: #0000EE" href="team/@team.TeamId">@team.TeamRegion @team.TeamName</a></td>
+                       <td style="width: 300px"><MudAvatar Style="vertical-align: middle; background: none; margin-right: 15px"  Size="Size.Small" Image=@($"Images/logos/{team.TeamAbrv}.svg") Square="true" /><a style="color: #0000EE" href="team/@team.TeamId">@team.TeamRegion @team.TeamName</a></td>
                        <td>@team.Wins-@team.Losses</td>
                        <td>@team.WinPct</td>
                        <td></td>
@@ -46,10 +46,9 @@
                 @foreach (var team in statsWest)
                 {
                     <tr>
-                       <td style="width: 350px"><MudAvatar Style="vertical-align: middle; background: none; margin-right: 15px" Size="Size.Small" Image=@($"Images/logos/{team.TeamAbrv}.svg") Square="true" /><a style="color: #0000EE" href="team/@team.TeamId">@team.TeamRegion @team.TeamName</a></td>
+                       <td style="width: 300px"><MudAvatar Style="vertical-align: middle; background: none; margin-right: 15px" Size="Size.Small" Image=@($"Images/logos/{team.TeamAbrv}.svg") Square="true" /><a style="color: #0000EE" href="team/@team.TeamId">@team.TeamRegion @team.TeamName</a></td>
                        <td>@team.Wins-@team.Losses</td>
                        <td>@team.WinPct</td>
-                       <td></td>
                        <td>@team.PF</td>
                        <td>@team.PA</td>
                        <td><span style="@GetDiffStyle(team.DIFF)">@GetFormattedDiff(team.DIFF)</span></td>

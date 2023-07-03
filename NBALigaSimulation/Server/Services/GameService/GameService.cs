@@ -216,7 +216,7 @@ namespace NBALigaSimulation.Server.Services.GameService
 
                 try
                 {
-                    RegularStatUtil.TeamStatHelper(game);
+                    RegularStatUtil.UpdateTeamRegularStats(game);
                     await _context.SaveChangesAsync();
                 }
                 catch (Exception ex)

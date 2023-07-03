@@ -6,110 +6,119 @@ namespace NBALigaSimulation.Shared.Engine.Utils
     {
 
 
-        public static void TeamStatHelper(Game game)
+        public static void UpdateTeamRegularStats(Game game)
         {
 
-            Team HomeTeam = game.HomeTeam;
-            Team AwayTeam = game.AwayTeam;
+            int season = game.Season.Year;
 
-            TeamGameStats HomeGameStat = game.TeamGameStats.Find(g => g.TeamId == HomeTeam.Id);
-            TeamGameStats AwayGameStat = game.TeamGameStats.Find(g => g.TeamId == AwayTeam.Id);
+            Team homeTeam = game.HomeTeam;
+            Team awayTeam = game.AwayTeam;
 
-            if (HomeTeam.TeamRegularStats == null)
+            TeamGameStats HomeGameStat = game.TeamGameStats.Find(g => g.TeamId == homeTeam.Id);
+            TeamGameStats AwayGameStat = game.TeamGameStats.Find(g => g.TeamId == awayTeam.Id);
+
+
+            TeamRegularStats HomeGame = homeTeam.TeamRegularStats.Find(t => t.Season == season);
+            TeamRegularStats AwayGame = awayTeam.TeamRegularStats.Find(t => t.Season == season);
+
+            if (HomeGame == null)
             {
-                HomeTeam.TeamRegularStats = new TeamRegularStats();
+                HomeGame = new TeamRegularStats
+                {
+                    Season = season
+                };
+                homeTeam.TeamRegularStats.Add(HomeGame);
             }
 
-            if (AwayTeam.TeamRegularStats == null)
+            if (AwayGame == null)
             {
-                AwayTeam.TeamRegularStats = new TeamRegularStats();
+                AwayGame = new TeamRegularStats
+                {
+                    Season = season
+                };
+                awayTeam.TeamRegularStats.Add(AwayGame);
             }
-
-            HomeTeam.TeamRegularStats.Season = game.Season.Year;
-            HomeTeam.TeamRegularStats.Season = game.Season.Year;
 
             if (HomeGameStat.Pts > AwayGameStat.Pts)
             {
-                HomeTeam.TeamRegularStats.HomeWins += 1;
-                AwayTeam.TeamRegularStats.RoadLosses += 1;
+                HomeGame.HomeWins += 1;
+                AwayGame.RoadLosses += 1;
             }
             else
             {
-                HomeTeam.TeamRegularStats.HomeLosses += 1;
-                AwayTeam.TeamRegularStats.RoadWins += 1;
+                HomeGame.HomeLosses += 1;
+                AwayGame.RoadWins += 1;
 
             }
 
             //HomeTeam
-            HomeTeam.TeamRegularStats.Points += HomeGameStat.Pts;
-            HomeTeam.TeamRegularStats.AllowedPoints += AwayGameStat.Pts;
+            HomeGame.Points += HomeGameStat.Pts;
+            HomeGame.AllowedPoints += AwayGameStat.Pts;
 
-            HomeTeam.TeamRegularStats.Steals += HomeGameStat.Stl;
-            HomeTeam.TeamRegularStats.AllowedStealS += AwayGameStat.Stl;
+            HomeGame.Steals += HomeGameStat.Stl;
+            HomeGame.AllowedStealS += AwayGameStat.Stl;
 
-            HomeTeam.TeamRegularStats.Rebounds += HomeGameStat.Trb;
-            HomeTeam.TeamRegularStats.AllowedRebounds += AwayGameStat.Trb;
+            HomeGame.Rebounds += HomeGameStat.Trb;
+            HomeGame.AllowedRebounds += AwayGameStat.Trb;
 
-            HomeTeam.TeamRegularStats.Assists += HomeGameStat.Ast;
-            HomeTeam.TeamRegularStats.AllowedAssists += AwayGameStat.Ast;
+            HomeGame.Assists += HomeGameStat.Ast;
+            HomeGame.AllowedAssists += AwayGameStat.Ast;
 
-            HomeTeam.TeamRegularStats.Blocks += HomeGameStat.Blk;
-            HomeTeam.TeamRegularStats.AllowedBlocks += AwayGameStat.Blk;
+            HomeGame.Blocks += HomeGameStat.Blk;
+            HomeGame.AllowedBlocks += AwayGameStat.Blk;
 
-            HomeTeam.TeamRegularStats.Turnovers += HomeGameStat.Tov;
-            HomeTeam.TeamRegularStats.AllowedTurnovers += AwayGameStat.Tov;
+            HomeGame.Turnovers += HomeGameStat.Tov;
+            HomeGame.AllowedTurnovers += AwayGameStat.Tov;
 
-            HomeTeam.TeamRegularStats.FGA += HomeGameStat.Fga;
-            HomeTeam.TeamRegularStats.FGM += HomeGameStat.Fg;
-            HomeTeam.TeamRegularStats.AllowedFGA += AwayGameStat.Fga;
-            HomeTeam.TeamRegularStats.AllowedFGM += AwayGameStat.Fg;
+            HomeGame.FGA += HomeGameStat.Fga;
+            HomeGame.FGM += HomeGameStat.Fg;
+            HomeGame.AllowedFGA += AwayGameStat.Fga;
+            HomeGame.AllowedFGM += AwayGameStat.Fg;
 
-            HomeTeam.TeamRegularStats.TPA += HomeGameStat.Tpa;
-            HomeTeam.TeamRegularStats.TPM += HomeGameStat.Tp;
-            HomeTeam.TeamRegularStats.Allowed3PA += AwayGameStat.Tpa;
-            HomeTeam.TeamRegularStats.Allowed3PM += AwayGameStat.Tp;
+            HomeGame.TPA += HomeGameStat.Tpa;
+            HomeGame.TPM += HomeGameStat.Tp;
+            HomeGame.Allowed3PA += AwayGameStat.Tpa;
+            HomeGame.Allowed3PM += AwayGameStat.Tp;
 
-            HomeTeam.TeamRegularStats.FTM += HomeGameStat.Ft;
-            HomeTeam.TeamRegularStats.FTA += HomeGameStat.Fta;
-            HomeTeam.TeamRegularStats.AllowedFTM += AwayGameStat.Ft;
-            HomeTeam.TeamRegularStats.AllowedFTA += AwayGameStat.Fta;
+            HomeGame.FTM += HomeGameStat.Ft;
+            HomeGame.FTA += HomeGameStat.Fta;
+            HomeGame.AllowedFTM += AwayGameStat.Ft;
+            HomeGame.AllowedFTA += AwayGameStat.Fta;
 
             //AwayTeam
-            AwayTeam.TeamRegularStats.Points += AwayGameStat.Pts;
-            AwayTeam.TeamRegularStats.AllowedPoints += HomeGameStat.Pts;
+            AwayGame.Points += AwayGameStat.Pts;
+            AwayGame.AllowedPoints += HomeGameStat.Pts;
 
-            AwayTeam.TeamRegularStats.Steals += AwayGameStat.Stl;
-            AwayTeam.TeamRegularStats.AllowedStealS += HomeGameStat.Stl;
+            AwayGame.Steals += AwayGameStat.Stl;
+            AwayGame.AllowedStealS += HomeGameStat.Stl;
 
-            AwayTeam.TeamRegularStats.Rebounds += AwayGameStat.Trb;
-            AwayTeam.TeamRegularStats.AllowedRebounds += HomeGameStat.Trb;
+            AwayGame.Rebounds += AwayGameStat.Trb;
+            AwayGame.AllowedRebounds += HomeGameStat.Trb;
 
-            AwayTeam.TeamRegularStats.Assists += AwayGameStat.Ast;
-            AwayTeam.TeamRegularStats.AllowedAssists += HomeGameStat.Ast;
+            AwayGame.Assists += AwayGameStat.Ast;
+            AwayGame.AllowedAssists += HomeGameStat.Ast;
 
-            AwayTeam.TeamRegularStats.Blocks += AwayGameStat.Blk;
-            AwayTeam.TeamRegularStats.AllowedBlocks += HomeGameStat.Blk;
+            AwayGame.Blocks += AwayGameStat.Blk;
+            AwayGame.AllowedBlocks += HomeGameStat.Blk;
 
-            AwayTeam.TeamRegularStats.Turnovers += AwayGameStat.Tov;
-            AwayTeam.TeamRegularStats.AllowedTurnovers += HomeGameStat.Tov;
+            AwayGame.Turnovers += AwayGameStat.Tov;
+            AwayGame.AllowedTurnovers += HomeGameStat.Tov;
 
-            AwayTeam.TeamRegularStats.FGA += AwayGameStat.Fga;
-            AwayTeam.TeamRegularStats.FGM += AwayGameStat.Fg;
-            AwayTeam.TeamRegularStats.AllowedFGA += HomeGameStat.Fga;
-            AwayTeam.TeamRegularStats.AllowedFGM += HomeGameStat.Fg;
+            AwayGame.FGA += AwayGameStat.Fga;
+            AwayGame.FGM += AwayGameStat.Fg;
+            AwayGame.AllowedFGA += HomeGameStat.Fga;
+            AwayGame.AllowedFGM += HomeGameStat.Fg;
 
-            AwayTeam.TeamRegularStats.TPA += AwayGameStat.Tpa;
-            AwayTeam.TeamRegularStats.TPM += AwayGameStat.Tp;
-            AwayTeam.TeamRegularStats.Allowed3PA += HomeGameStat.Tpa;
-            AwayTeam.TeamRegularStats.Allowed3PM += HomeGameStat.Tp;
+            AwayGame.TPA += AwayGameStat.Tpa;
+            AwayGame.TPM += AwayGameStat.Tp;
+            AwayGame.Allowed3PA += HomeGameStat.Tpa;
+            AwayGame.Allowed3PM += HomeGameStat.Tp;
 
-            AwayTeam.TeamRegularStats.FTM += AwayGameStat.Ft;
-            AwayTeam.TeamRegularStats.FTA += AwayGameStat.Fta;
-            AwayTeam.TeamRegularStats.AllowedFTM += HomeGameStat.Ft;
-            AwayTeam.TeamRegularStats.AllowedFTA += HomeGameStat.Fta;
-
+            AwayGame.FTM += AwayGameStat.Ft;
+            AwayGame.FTA += AwayGameStat.Fta;
+            AwayGame.AllowedFTM += HomeGameStat.Ft;
+            AwayGame.AllowedFTA += HomeGameStat.Fta;
         }
-
 
     }
 }

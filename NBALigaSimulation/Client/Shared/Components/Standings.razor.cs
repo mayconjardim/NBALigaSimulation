@@ -10,7 +10,7 @@ namespace NBALigaSimulation.Client.Shared.Components
 
         private string message = string.Empty;
 
-        string[] headings = { "TEAM", "W-L", "PCT", "GB", "PF", "PA", "DIFF", "STRK" };
+        string[] headings = { "TEAM", "W-L", "PCT", "PF", "PA", "DIFF", "STRK" };
 
         protected override async Task OnInitializedAsync()
         {
@@ -23,8 +23,8 @@ namespace NBALigaSimulation.Client.Shared.Components
             }
             else
             {
-                statsEast = result.Data.OrderByDescending(t => t.WinPct).Where(t => t.TeamConference == "East").ToList();
-                statsWest = result.Data.OrderByDescending(t => t.WinPct).Where(t => t.TeamConference == "West").ToList();
+                statsEast = result.Data.OrderByDescending(t => t.Wins).Where(t => t.TeamConference == "East").ToList();
+                statsWest = result.Data.OrderByDescending(t => t.Wins).Where(t => t.TeamConference == "West").ToList();
             }
 
         }

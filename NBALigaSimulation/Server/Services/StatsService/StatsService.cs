@@ -16,13 +16,21 @@ namespace NBALigaSimulation.Server.Services.StatsService
 
         public async Task<ServiceResponse<List<TeamRegularStatsDto>>> GetAllTeamRegularStats()
         {
-            var teams = await _context.TeamRegularStats.Include(t => t.Team).ToListAsync();
+
+            var season = _context.Seasons.OrderBy(s => s.Year).Last();
+
+            var teamRegularStatsList = await _context.TeamRegularStats
+                .Where(t => t.Season == season.Year)
+                .Include(t => t.Team)
+                .ToListAsync();
+
             var response = new ServiceResponse<List<TeamRegularStatsDto>>
             {
-                Data = _mapper.Map<List<TeamRegularStatsDto>>(teams)
+                Data = _mapper.Map<List<TeamRegularStatsDto>>(teamRegularStatsList)
             };
 
             return response;
         }
+
     }
 }

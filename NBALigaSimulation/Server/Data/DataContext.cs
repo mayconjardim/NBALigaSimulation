@@ -101,9 +101,9 @@
             .HasForeignKey<TeamGameplan>(g => g.TeamId);
 
             modelBuilder.Entity<Team>()
-           .HasOne(p => p.TeamRegularStats)
-           .WithOne(g => g.Team)
-           .HasForeignKey<TeamRegularStats>(g => g.TeamId);
+             .HasMany(p => p.TeamRegularStats)
+             .WithOne(g => g.Team)
+             .HasForeignKey(g => g.TeamId);
 
             modelBuilder.Entity<Trade>(entity =>
            {
