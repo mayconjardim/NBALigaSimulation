@@ -79,7 +79,7 @@ namespace NBALigaSimulation.Shared.Dtos
             {
                 int games = (HomeWins + HomeLosses + RoadWins + RoadLosses);
                 double winPct = (double)(HomeWins + RoadWins) / games;
-                return winPct.ToString("0.000", CultureInfo.InvariantCulture);
+                return winPct.ToString(".000", CultureInfo.InvariantCulture);
             }
         }
 

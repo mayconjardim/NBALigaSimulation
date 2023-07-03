@@ -1,11 +1,11 @@
 ﻿@inject IStatsService StatsService
 
 
-<MudContainer>
+
  <div class="standings">
     
      <div class="standings-table">
-        <MudSimpleTable Hover="true" Dense="true" Striped="true" Style="width: 800px" >
+       <MudSimpleTable Hover="true" Dense="true" Striped="true"  Style="overflow-x: auto">
             <thead>
                 <tr>
                     @foreach (var h in headings)
@@ -15,49 +15,74 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach (var team in statsEast)
+                @foreach (var (team, index) in statsEast.Select((value, index) => (Value: value, Index: index)))
                 {
                     <tr>
-                       <td style="width: 300px"><MudAvatar Style="vertical-align: middle; background: none; margin-right: 15px"  Size="Size.Small" Image=@($"Images/logos/{team.TeamAbrv}.svg") Square="true" /><a style="color: #0000EE" href="team/@team.TeamId">@team.TeamRegion @team.TeamName</a></td>
-                       <td>@team.Wins-@team.Losses</td>
-                       <td>@team.WinPct</td>
-                       <td></td>
-                       <td>@team.PF</td>
-                       <td>@team.PA</td>
-                       <td><span style="@GetDiffStyle(team.DIFF)">@GetFormattedDiff(team.DIFF)</span></td>
-                       <td></td>
+                        <td>
+                            <MudAvatar Style="vertical-align: middle; background: none" Size="Size.Small" Image=@($"Images/logos/{team.TeamAbrv}.svg") Square="true" />
+                            <a  style="color: #0000EE" href="team/@team.TeamId">@team.TeamRegion @team.TeamName</a>
+                        </td>
+                        <td>@team.Wins-@team.Losses</td>
+                        <td>@team.WinPct</td>
+                        <td>@team.PF</td>
+                        <td>@team.PA</td>
+                        <td><span style="@GetDiffStyle(team.DIFF)">@GetFormattedDiff(team.DIFF)</span></td>
+                        <td></td>
                     </tr>
+
+                    @if (index == 7) // 8th team
+                    {
+                        <tr>
+                            <td colspan="14">
+                                <hr style="border-top: 1px solid #e0e0e0; margin: 0;">
+                            </td>
+                        </tr>
+                    }
+                }
+            </tbody>
+       </MudSimpleTable>
+
+        </div>
+
+        <div class="standings-table">
+        <MudSimpleTable Hover="true" Dense="true" Striped="true" Style="overflow-x: auto">
+            <thead>
+                <tr>
+                    @foreach (var h in headings)
+                    {
+                        <th>@h</th>
+                    }
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var (team, index) in statsWest.Select((value, index) => (Value: value, Index: index)))
+                {
+                    <tr>
+                        <td>
+                           <MudAvatar Style="vertical-align: middle; background: none" Size="Size.Small" Image=@($"Images/logos/{team.TeamAbrv}.svg") Square="true" />
+                           <a  style="color: #0000EE" href="team/@team.TeamId">@team.TeamRegion @team.TeamName</a>
+                        </td>
+                        <td>@team.Wins-@team.Losses</td>
+                        <td>@team.WinPct</td>
+                        <td>@team.PF</td>
+                        <td>@team.PA</td>
+                        <td><span style="@GetDiffStyle(team.DIFF)">@GetFormattedDiff(team.DIFF)</span></td>
+                        <td></td>
+                    </tr>
+
+                    @if (index == 7) // 8th team
+                    {
+                        <tr>
+                            <td colspan="14">
+                                <hr style="border-top: 0.5px solid #e0e0e0; margin: 0;">
+                            </td>
+                        </tr>
+                    }
                 }
             </tbody>
         </MudSimpleTable>
         </div>
 
-        <div class="standings-table">
-        <MudSimpleTable Hover="true" Dense="true" Striped="true"  Style="width: 800px"  >
-            <thead>
-                <tr>
-                    @foreach (var h in headings)
-                    {
-                        <th>@h</th>
-                    }
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var team in statsWest)
-                {
-                    <tr>
-                       <td style="width: 300px"><MudAvatar Style="vertical-align: middle; background: none; margin-right: 15px" Size="Size.Small" Image=@($"Images/logos/{team.TeamAbrv}.svg") Square="true" /><a style="color: #0000EE" href="team/@team.TeamId">@team.TeamRegion @team.TeamName</a></td>
-                       <td>@team.Wins-@team.Losses</td>
-                       <td>@team.WinPct</td>
-                       <td>@team.PF</td>
-                       <td>@team.PA</td>
-                       <td><span style="@GetDiffStyle(team.DIFF)">@GetFormattedDiff(team.DIFF)</span></td>
-                       <td></td>
-                    </tr>
-                }
-            </tbody>
-        </MudSimpleTable>
-        </div>
  </div>
-</MudContainer>
+
 
