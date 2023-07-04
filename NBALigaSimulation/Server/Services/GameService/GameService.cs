@@ -179,6 +179,8 @@ namespace NBALigaSimulation.Server.Services.GameService
                 .Include(p => p.AwayTeam.Players.OrderBy(p => p.RosterOrder)).ThenInclude(p => p.Ratings)
                 .Include(p => p.HomeTeam.TeamRegularStats)
                 .Include(p => p.AwayTeam.TeamRegularStats)
+                .Include(p => p.HomeTeam.Players.OrderBy(p => p.RosterOrder)).ThenInclude(p => p.RegularStats)
+                .Include(p => p.AwayTeam.Players.OrderBy(p => p.RosterOrder)).ThenInclude(p => p.RegularStats)
                 .Where(g => g.GameDate == firstUnsimulatedDate && !g.Happened)
                 .ToListAsync();
 
@@ -217,6 +219,7 @@ namespace NBALigaSimulation.Server.Services.GameService
                 try
                 {
                     RegularStatUtil.UpdateTeamRegularStats(game);
+                    RegularStatUtil.UpdatePlayerGames(game);
                     await _context.SaveChangesAsync();
                 }
                 catch (Exception ex)

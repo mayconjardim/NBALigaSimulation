@@ -406,6 +406,9 @@ namespace NBALigaSimulation.Server.Migrations
                     b.Property<int>("Fta")
                         .HasColumnType("INTEGER");
 
+                    b.Property<int>("Games")
+                        .HasColumnType("INTEGER");
+
                     b.Property<int>("Gs")
                         .HasColumnType("INTEGER");
 

@@ -9,6 +9,7 @@
         public Player Player { get; set; }
         public int TeamId { get; set; }
         public int Season { get; set; }
+        public int Games { get; set; }
         public int Gs { get; set; }
         public double Min { get; set; }
         public int Fg { get; set; }

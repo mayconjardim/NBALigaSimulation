@@ -1,4 +1,5 @@
 ﻿using NBALigaSimulation.Shared.Models;
+using System.Security.Cryptography.X509Certificates;
 
 namespace NBALigaSimulation.Shared.Engine.Utils
 {
@@ -118,6 +119,31 @@ namespace NBALigaSimulation.Shared.Engine.Utils
             AwayGame.FTA += AwayGameStat.Fta;
             AwayGame.AllowedFTM += HomeGameStat.Ft;
             AwayGame.AllowedFTA += HomeGameStat.Fta;
+        }
+
+        public static void UpdatePlayerGames(Game game)
+        {
+            Team homeTeam = game.HomeTeam;
+            Team awayTeam = game.AwayTeam;
+            int season = game.Season.Year;
+
+            foreach (var player in homeTeam.Players)
+            {
+                var regularStats = player.RegularStats.Find(s => s.Season == season);
+                if (regularStats != null && player.Stats.Find(p => p.GameId == game.Id).Min > 0)
+                {
+                    regularStats.Games += 1;
+                }
+            }
+
+            foreach (var player in awayTeam.Players)
+            {
+                var regularStats = player.RegularStats.Find(s => s.Season == season);
+                if (regularStats != null && player.Stats.Find(p => p.GameId == game.Id).Min > 0)
+                {
+                    regularStats.Games += 1;
+                }
+            }
         }
 
     }
