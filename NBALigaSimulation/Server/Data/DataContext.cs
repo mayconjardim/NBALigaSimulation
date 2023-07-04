@@ -13,6 +13,7 @@
         public DbSet<TeamDraftPicks> TeamDraftPicks { get; set; }
         public DbSet<TeamRegularStats> TeamRegularStats { get; set; }
         public DbSet<PlayerGameStats> PlayerGameStats { get; set; }
+        public DbSet<PlayerRegularStats> PlayerRegularStats { get; set; }
         public DbSet<PlayerContract> PlayerContracts { get; set; }
         public DbSet<GamePlayByPlay> PlayByPlays { get; set; }
         public DbSet<Season> Seasons { get; set; }
@@ -81,6 +82,11 @@
             .HasOne(p => p.Game)
             .WithMany(g => g.PlayerGameStats)
             .HasForeignKey(p => p.GameId);
+
+            modelBuilder.Entity<Player>()
+           .HasMany(p => p.RegularStats)
+           .WithOne(g => g.Player)
+           .HasForeignKey(g => g.PlayerId);
 
             modelBuilder.Entity<Team>(entity =>
             {

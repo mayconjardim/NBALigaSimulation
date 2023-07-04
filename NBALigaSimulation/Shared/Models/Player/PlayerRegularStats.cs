@@ -1,4 +1,4 @@
-﻿namespace NBALigaSimulation.Shared.Models.Player
+﻿namespace NBALigaSimulation.Shared.Models
 {
     public class PlayerRegularStats
     {

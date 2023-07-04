@@ -19,6 +19,8 @@ namespace NBALigaSimulation.Shared.Models
         public PlayerContract? Contract { get; set; }
         public List<PlayerRatings> Ratings { get; set; } = new List<PlayerRatings>();
         public List<PlayerGameStats> Stats { get; set; } = new List<PlayerGameStats>();
+        public List<PlayerRegularStats> RegularStats { get; set; } = new List<PlayerRegularStats>();
+
 
 
         private static Random random = new Random();
