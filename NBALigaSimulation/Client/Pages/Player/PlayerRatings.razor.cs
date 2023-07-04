@@ -1,8 +1,6 @@
 ﻿using Microsoft.AspNetCore.Components;
-using NBALigaSimulation.Client.Pages.Team;
-using NBALigaSimulation.Shared.Models;
 using pax.BlazorChartJs;
-using System.Security.Cryptography.X509Certificates;
+
 
 namespace NBALigaSimulation.Client.Pages.Player
 {

@@ -8,13 +8,12 @@
 
    <MudTabs Elevation="4"  Centered="true" Color="@Color.Primary">
 
-    
     <MudTabPanel Text="Player Bio" >
          <PlayerRatings player="@player" />
     </MudTabPanel>
 
     <MudTabPanel Text="Player Stats">
-        <MudText>Content Two</MudText>
+        <PlayerStats player="@player"></PlayerStats> 
     </MudTabPanel>
 
     <MudTabPanel Text="Game Logs">

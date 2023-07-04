@@ -1,0 +1,57 @@
+﻿
+    <div class="stats">
+
+        <h2 >Regular Season</h2>
+
+          <MudSimpleTable Hover="true" Dense="true" Striped="true"  Style="overflow-x: auto">
+            <thead>
+                <tr>
+                    <th colspan="5" style="text-align: center"></th>
+                    <th colspan="3"  style="text-align: center; border-left: 1px solid #e0e0e0">FG</th>
+                    <th colspan="3"  style="text-align: center; border-left: 1px solid #e0e0e0">3PT</th>
+                    <th colspan="3"  style="text-align: center; border-left: 1px solid #e0e0e0">FT</th>
+                    <th colspan="3"  style="text-align: center; border-left: 1px solid #e0e0e0;border-right: 1px solid #e0e0e0">Reb</th>
+                    <th colspan="8"  style="text-align: center"></th>
+                </tr>
+                <tr>
+                    @foreach (var h in headings)
+                    {
+                        <th>@h</th>
+                    }
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var stats in player.RegularStats)
+                {
+                    <tr>
+                        <td>@stats.Season</td>
+                        <td>@stats.TeamId</td>
+                        <td>@stats.Games</td>
+                        <td>@stats.Gs</td>
+                        <td>@stats.MinPG</td>
+                        <td>@stats.FgPG</td>
+                        <td>@stats.FgaPG</td>
+                        <td>@stats.FgPct</td>
+                        <td>@stats.TpPG</td>
+                        <td>@stats.TpaPG</td>
+                        <td>@stats.TpPct</td>
+                        <td>@stats.FtPG</td>
+                        <td>@stats.FtaPG</td>
+                        <td>@stats.FtPct</td>
+                        <td>@stats.ORebPG</td>
+                        <td>@stats.DRebPG</td>
+                        <td>@stats.TRebPG</td>
+                        <td>@stats.AstPG</td>
+                        <td>@stats.TovPG</td>
+                        <td>@stats.StlPG</td>
+                        <td>@stats.BlkPG</td>
+                        <td>@stats.PfPG</td>
+                        <td>@stats.PtsPG</td>
+                        <td>@stats.PER</td>
+                    </tr>
+                }
+            </tbody>
+        </MudSimpleTable>
+
+    </div>
+
