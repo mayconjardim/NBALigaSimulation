@@ -35,6 +35,8 @@ namespace NBALigaSimulation.Server.Services.TeamService
                  .ThenInclude(p => p.Ratings)
              .Include(p => p.Players)
                  .ThenInclude(p => p.Contract)
+             .Include(p => p.Players)
+                 .ThenInclude(p => p.RegularStats)
              .Include(t => t.DraftPicks)
              .FirstOrDefaultAsync(t => t.Id == teamId);
 

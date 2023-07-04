@@ -1,4 +1,5 @@
 ﻿@using pax.BlazorChartJs
+@inject ILocalStorageService LocalStorage
 
 <MudContainer>
     <div class="card-ratings border">
@@ -55,7 +56,7 @@
            <p>Height / Weight</p><span>@Util.InchesToCm(player.Hgt)CM / @Util.LbsToKg(player.Weight)KG</span>
         </MudListItem>
         <MudListItem Icon="@Icons.Material.Filled.CalendarMonth">
-            <p>Age</p><span>@player.Born.Year</span>
+            <p>Age</p><span>@(season - player.Born.Year)</span>
         </MudListItem>
         <MudListItem Icon="@Icons.Material.Filled.Elevator">
             <p>Draft</p><span>2018 - R1 (Pick 6) by ORL</span>
@@ -71,18 +72,11 @@
         <MudListSubheader>
             Contract
         </MudListSubheader>
-        <MudListItem Icon="@Icons.Material.Filled.Height">
-           <p>Height / Weight</p><span>@Util.InchesToCm(player.Hgt)CM / @Util.LbsToKg(player.Weight)KG</span>
-        </MudListItem>
-        <MudListItem Icon="@Icons.Material.Filled.CalendarMonth">
-            <p>Age</p><span>@player.Born.Year</span>
-        </MudListItem>
-        <MudListItem Icon="@Icons.Material.Filled.Elevator">
-            <p>Draft</p><span>2018 - R1 (Pick 6) by ORL</span>
-        </MudListItem>
-        <MudListItem Icon="@Icons.Material.Filled.Work">
-           <p>Experience</p><span>4 Years</span>
-        </MudListItem>
+      
+           <MudListItem Icon="@Icons.Material.Filled.AttachMoney">
+          <p>Season / Amount</p>
+          <span>@player.Contract.Amount</span>
+           </MudListItem>
       </MudList>
      </div>
 
@@ -92,19 +86,15 @@
             Awards
         </MudListSubheader>
         <MudListItem Icon="@Icons.Material.Filled.Send">
-           <p>Height / Weight</p><span>@Util.InchesToCm(player.Hgt)CM / @Util.LbsToKg(player.Weight)KG</span>
+           <p>Season / Amount</p><span>Nome</span>
         </MudListItem>
-        <MudListItem Icon="@Icons.Material.Filled.Drafts">
-            <p>Age</p><span>@player.Born.Year</span>
-        </MudListItem>
-        <MudListItem Icon="@Icons.Material.Filled.Drafts">
-            <p>Draft</p><span>2018 - R1 (Pick 6) by ORL</span>
-        </MudListItem>
-        <MudListItem Icon="@Icons.Material.Filled.Drafts">
-           <p>Experience</p><span>4 Years</span>
-        </MudListItem>
+   
       </MudList>
      </div>
 
     </div>
+
+    
 </MudContainer>
+
+        

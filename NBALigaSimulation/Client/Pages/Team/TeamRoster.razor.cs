@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Components;
 using MudBlazor;
+using NBALigaSimulation.Shared.Models;
 using System.Linq.Expressions;
 
 namespace NBALigaSimulation.Client.Pages.Team
@@ -11,37 +12,16 @@ namespace NBALigaSimulation.Client.Pages.Team
         public TeamCompleteDto? team { get; set; }
 
         private List<PlayerCompleteDto>? players => team.Players;
+        private int season = 0;
 
         private void NavigateToPlayerPage(int playerId)
         {
             NavigationManager.NavigateTo($"/player/{playerId}");
         }
 
-        private string Position(string pos)
+        protected override async Task OnParametersSetAsync()
         {
-            switch (pos)
-            {
-                case "PG":
-                    return "Point Guard";
-                case "SG":
-                    return "Shooting Guard";
-                case "SF":
-                    return "Small Forward";
-                case "PF":
-                    return "Power Forward";
-                case "C":
-                    return "Center";
-                case "G":
-                    return "Guard";
-                case "GF":
-                    return "Guard/Forward";
-                case "F":
-                    return "Forward";
-                case "FC":
-                    return "Forward/Center";
-                default:
-                    return string.Empty;
-            }
+            season = int.Parse(await LocalStorage.GetItemAsync<string>("season"));
         }
 
     }
