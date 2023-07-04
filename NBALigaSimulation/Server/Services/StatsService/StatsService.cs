@@ -32,5 +32,20 @@ namespace NBALigaSimulation.Server.Services.StatsService
             return response;
         }
 
+        public async Task<ServiceResponse<List<PlayerRegularStatsDto>>> GetAllRegularStatsByPlayerId(int playerId)
+        {
+
+            var season = _context.Seasons.OrderBy(s => s.Year).Last();
+
+            var playerRegularStatsList = await _context.PlayerRegularStats.Where(p => p.PlayerId == playerId).ToListAsync();
+
+            var response = new ServiceResponse<List<PlayerRegularStatsDto>>
+            {
+                Data = _mapper.Map<List<PlayerRegularStatsDto>>(playerRegularStatsList)
+            };
+
+            return response;
+        }
+
     }
 }

@@ -4,6 +4,7 @@
     {
 
         Task<ServiceResponse<List<TeamRegularStatsDto>>> GetAllTeamRegularStats();
+        Task<ServiceResponse<List<PlayerRegularStatsDto>>> GetAllRegularStatsByPlayerId(int playerId);
 
     }
 }

@@ -1,6 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using NBALigaSimulation.Server.Services.StatsService;
+﻿using Microsoft.AspNetCore.Mvc;
 
 namespace NBALigaSimulation.Server.Controllers
 {
@@ -20,6 +18,13 @@ namespace NBALigaSimulation.Server.Controllers
         public async Task<ActionResult<ServiceResponse<List<TeamRegularStatsDto>>>> GetAllTeamRegularStats()
         {
             var result = await _statsService.GetAllTeamRegularStats();
+            return Ok(result);
+        }
+
+        [HttpGet("players/{playerId}")]
+        public async Task<ActionResult<ServiceResponse<List<TeamRegularStatsDto>>>> GetAllRegularStatsByPlayerId(int playerId)
+        {
+            var result = await _statsService.GetAllRegularStatsByPlayerId(playerId);
             return Ok(result);
         }
 
