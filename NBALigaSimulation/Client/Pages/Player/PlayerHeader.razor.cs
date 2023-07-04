@@ -8,5 +8,17 @@ namespace NBALigaSimulation.Client.Pages.Player
         [Parameter]
         public PlayerCompleteDto? player { get; set; }
 
+        private PlayerRegularStatsDto stats = null;
+
+        protected override void OnInitialized()
+        {
+            stats = player.RegularStats.Last();
+        }
+
+
+
+
     }
 }
+
+

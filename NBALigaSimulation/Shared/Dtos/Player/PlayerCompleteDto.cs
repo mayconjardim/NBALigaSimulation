@@ -17,6 +17,7 @@ namespace NBALigaSimulation.Shared.Dtos
         public double PtModifier { get; set; }
         public int RosterOrder { get; set; }
         public List<PlayerRatingDto> Ratings { get; set; } = new List<PlayerRatingDto>();
+        public List<PlayerRegularStatsDto> RegularStats { get; set; } = new List<PlayerRegularStatsDto>();
         public PlayerContractDto Contract { get; set; }
 
     }

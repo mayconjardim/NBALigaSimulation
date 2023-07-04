@@ -1,4 +1,5 @@
-﻿using System.Runtime.Intrinsics.X86;
+﻿using System.Globalization;
+using System.Runtime.Intrinsics.X86;
 
 namespace NBALigaSimulation.Shared.Dtos
 {
@@ -35,203 +36,220 @@ namespace NBALigaSimulation.Shared.Dtos
         public int Pts { get; set; }
         public int Trb { get; set; }
 
-        public double MinPG
+        public string MinPG
         {
             get
             {
-                return (double)(Min / Games);
+                double min = (double)Min / Games;
+                return min.ToString("0.0", CultureInfo.InvariantCulture);
             }
         }
 
-        //FG
-        public double FgPG
+        // FG
+        public string FgPG
         {
             get
             {
-                return (double)(Fg / Games);
+                double fg = (double)Fg / Games;
+                return fg.ToString("0.0", CultureInfo.InvariantCulture);
             }
         }
 
-        public double FgaPG
+        public string FgaPG
         {
             get
             {
-                return (double)(Fga / Games);
+                double fga = (double)Fga / Games;
+                return fga.ToString("0.0", CultureInfo.InvariantCulture);
             }
         }
 
-        public double FgPct
+        public string FgPct
         {
             get
             {
                 if (Fga == 0)
                 {
-                    return 0.0;
+                    return "0.0";
                 }
 
                 double percentage = (double)Fg / Fga * 100;
-                return percentage;
+                return percentage.ToString("0.0", CultureInfo.InvariantCulture);
             }
         }
 
-        //3PT
-        public double TpPG
+        // 3PT
+        public string TpPG
         {
             get
             {
-                return (double)(Tp / Games);
+                double tpPg = (double)Tp / Games;
+                return tpPg.ToString("0.0", CultureInfo.InvariantCulture);
             }
         }
 
-        public double TpaPG
+        public string TpaPG
         {
             get
             {
-                return (double)(Tpa / Games);
+                double tpaPg = (double)Tpa / Games;
+                return tpaPg.ToString("0.0", CultureInfo.InvariantCulture);
             }
         }
 
-        public double TpPct
+        public string TpPct
         {
             get
             {
                 if (Tpa == 0)
                 {
-                    return 0.0;
+                    return "0.0";
                 }
 
                 double percentage = (double)Tp / Tpa * 100;
-                return percentage;
+                return percentage.ToString("0.0", CultureInfo.InvariantCulture);
             }
         }
 
-        //FT
-        public double FtPG
+        // FT
+        public string FtPG
         {
             get
             {
-                return (double)(Ft / Games);
+                double ftPg = (double)Ft / Games;
+                return ftPg.ToString("0.0", CultureInfo.InvariantCulture);
             }
         }
 
-        public double FtaPG
+        public string FtaPG
         {
             get
             {
-                return (double)(Fta / Games);
+                double FtaPg = (double)Fta / Games;
+                return FtaPg.ToString("0.0", CultureInfo.InvariantCulture);
             }
         }
 
-        public double FtPct
+        public string FtPct
         {
             get
             {
                 if (Fta == 0)
                 {
-                    return 0.0;
+                    return "0.0";
                 }
 
                 double percentage = (double)Ft / Fta * 100;
-                return percentage;
+                return percentage.ToString("0.0", CultureInfo.InvariantCulture);
             }
         }
 
-        //Reb
-        public double ORebPG
+        // Reb
+        public string ORebPG
         {
             get
             {
-                return (double)(Orb / Games);
+                double OrebPg = (double)Orb / Games;
+                return OrebPg.ToString("0.0", CultureInfo.InvariantCulture);
             }
         }
 
-        public double DRebPG
+        public string DRebPG
         {
             get
             {
-                return (double)(Drb / Games);
+                double DrebPg = (double)Drb / Games;
+                return DrebPg.ToString("0.0", CultureInfo.InvariantCulture);
             }
         }
 
-        public double TRebPG
+        public string TRebPG
         {
             get
             {
-                return (double)(Trb / Games);
+                double TRebpg = (double)Trb / Games;
+                return TRebpg.ToString("0.0", CultureInfo.InvariantCulture);
             }
         }
 
-        //Ast
-        public double AstPG
+        // Ast
+        public string AstPG
         {
             get
             {
-                return (double)(Ast / Games);
+                double astPg = (double)Ast / Games;
+                return astPg.ToString("0.0", CultureInfo.InvariantCulture);
             }
         }
 
-        //TO
-        public double TovPG
+        // TO
+        public string TovPG
         {
             get
             {
-                return (double)(Tov / Games);
+                double tovPg = (double)Tov / Games;
+                return tovPg.ToString("0.0", CultureInfo.InvariantCulture);
             }
         }
 
-        //Steal
-        public double StlPG
+        // Steal
+        public string StlPG
         {
             get
             {
-                return (double)(Stl / Games);
+                double stlPg = (double)Stl / Games;
+                return stlPg.ToString("0.0", CultureInfo.InvariantCulture);
             }
         }
 
-        //Block
-        public double BlkPG
+        // Block
+        public string BlkPG
         {
             get
             {
-                return (double)(Blk / Games);
+                double blkPg = (double)Blk / Games;
+                return blkPg.ToString("0.0", CultureInfo.InvariantCulture);
             }
         }
 
-        //Fouls
-        public double PfPG
+        // Fouls
+        public string PfPG
         {
             get
             {
-                return (double)(Pf / Games);
+                double pfPg = (double)Pf / Games;
+                return pfPg.ToString("0.0", CultureInfo.InvariantCulture);
             }
         }
+
 
         //Points
-        public double PtsPG
+        public string PtsPG
         {
             get
             {
-                return (double)(Pts / Games);
+                double PtsPg = (double)Pts / Games;
+                return PtsPg.ToString("0.0", CultureInfo.InvariantCulture);
 
             }
         }
 
-        public double PER
+        public string PER
         {
             get
             {
                 double per = (1.0 / Min) * ((Pts * 85.910) + (Trb * 53.840) + (Ast * 34.677) + (Stl * 53.840) + (Blk * 53.840) - (Fga * 39.190) - (Fta * 20.091) - (Tov * 53.840) - (Pf * 17.201));
-                return per;
+                return per.ToString("0.0", CultureInfo.InvariantCulture);
             }
         }
 
-        public double TrueShooting
+        public string TrueShooting
         {
             get
             {
                 double tsa = (double)(Pts + (0.44 * Fta));
                 double ts = (double)(Pts / (2 * tsa));
-                return ts;
+                return ts.ToString("00.0", CultureInfo.InvariantCulture);
             }
         }
 
