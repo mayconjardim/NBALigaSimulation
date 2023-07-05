@@ -131,7 +131,7 @@ namespace NBALigaSimulation.Shared.Engine
 
                 if (lastStats == null || lastStats.GameId != Id)
                 {
-                    lastStats = new PlayerGameStats { GameId = Id, TeamId = teams[t].Id, Name = player.Name, Season = season, OppAbrev = teams[opp].Abrv };
+                    lastStats = new PlayerGameStats { GameId = Id, TeamId = teams[t].Id, Name = player.Name, Season = season, OppAbrev = teams[opp].Abrv, GameDate = gameDate };
                     player.Stats.Add(lastStats);
                 }
 
@@ -144,6 +144,7 @@ namespace NBALigaSimulation.Shared.Engine
                 }
 
                 lastStats.OppAbrev = teams[opp].Abrv;
+                lastStats.GameDate = gameDate;
 
                 if (s == "Fg")
                 {
