@@ -127,6 +127,7 @@ namespace NBALigaSimulation.Client.Pages.FA
             var faOffer = new FAOfferDto
             {
                 TeamId = team.Id,
+                PlayerName = player.Name,
                 PlayerId = player.Id,
                 Amount = contract,
                 Years = years,
