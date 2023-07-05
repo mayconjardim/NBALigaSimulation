@@ -8,9 +8,10 @@ namespace NBALigaSimulation.Client.Pages.Player
         [Parameter]
         public PlayerCompleteDto? player { get; set; }
 
-        string[] headings = { "YEAR", "TEAM", "GP", "GS" ,"MIN", "M" , "A", "%", "M", "A" , "%", "M" , "A", "%" ,
+        string[] stats = { "YEAR", "TEAM", "GP", "GS" ,"MIN", "M" , "A", "%", "M", "A" , "%", "M" , "A", "%" ,
             "OFF", "DEF" , "TOT", "AST", "TO", "STL",  "BLK", "PF" , "PTS", "PER"};
 
+        string[] locations = { "YEAR", "TEAM", "GP", "GS" ,"MIN", "M" , "A", "%", "M" , "A", "%", "M" , "A", "%", "M" , "A", "%",};
 
     }
 }

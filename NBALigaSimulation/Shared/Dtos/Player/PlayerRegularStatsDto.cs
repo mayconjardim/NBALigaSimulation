@@ -1,5 +1,4 @@
 ﻿using System.Globalization;
-using System.Runtime.Intrinsics.X86;
 
 namespace NBALigaSimulation.Shared.Dtos
 {
@@ -10,6 +9,7 @@ namespace NBALigaSimulation.Shared.Dtos
         public string Name { get; set; } = string.Empty;
         public int PlayerId { get; set; }
         public int TeamId { get; set; }
+        public string TeamAbrv { get; set; }
         public int Season { get; set; }
         public int Games { get; set; }
         public int Gs { get; set; }
@@ -221,6 +221,52 @@ namespace NBALigaSimulation.Shared.Dtos
                 return pfPg.ToString("0.0", CultureInfo.InvariantCulture);
             }
         }
+
+        //FgAtRimPct
+        public string FgAtRimPct
+        {
+            get
+            {
+                if (FgaAtRim == 0)
+                {
+                    return "0.0";
+                }
+
+                double percentage = (double)FgAtRim / FgaAtRim * 100;
+                return percentage.ToString("0.0", CultureInfo.InvariantCulture);
+            }
+        }
+
+        //FgLowPostPct
+        public string FgLowPostPct
+        {
+            get
+            {
+                if (FgaLowPost == 0)
+                {
+                    return "0.0";
+                }
+
+                double percentage = (double)FgLowPost / FgaLowPost * 100;
+                return percentage.ToString("0.0", CultureInfo.InvariantCulture);
+            }
+        }
+
+        //FgMidRangePct
+        public string FgMidRangePct
+        {
+            get
+            {
+                if (FgaMidRange == 0)
+                {
+                    return "0.0";
+                }
+
+                double percentage = (double)FgMidRange / FgaMidRange * 100;
+                return percentage.ToString("0.0", CultureInfo.InvariantCulture);
+            }
+        }
+
 
 
         //Points

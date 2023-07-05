@@ -134,7 +134,7 @@ namespace NBALigaSimulation.Shared.Engine
 
                 if (regularStats == null)
                 {
-                    regularStats = new PlayerRegularStats { TeamId = teams[t].Id, Name = player.Name, Season = season };
+                    regularStats = new PlayerRegularStats { TeamId = teams[t].Id, Name = player.Name, Season = season, TeamAbrv = teams[t].Abrv};
                     player.RegularStats.Add(regularStats);
                 }
 

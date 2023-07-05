@@ -3,12 +3,11 @@
 
 
  <div class="standings">
-    
      <div class="standings-table">
-       <MudSimpleTable Hover="true" Dense="true" Striped="true"  Style="overflow-x: auto">
+       <table >
             <thead>
                 <tr>
-                    @foreach (var h in headings)
+                    @foreach (var h in east)
                     {
                         <th>@h</th>
                     }
@@ -40,15 +39,15 @@
                     }
                 }
             </tbody>
-       </MudSimpleTable>
+       </table>
 
         </div>
 
         <div class="standings-table">
-        <MudSimpleTable Hover="true" Dense="true" Striped="true" Style="overflow-x: auto">
+        <table>
             <thead>
                 <tr>
-                    @foreach (var h in headings)
+                    @foreach (var h in west)
                     {
                         <th>@h</th>
                     }
@@ -80,7 +79,7 @@
                     }
                 }
             </tbody>
-        </MudSimpleTable>
+        </table>
         </div>
 
  </div>

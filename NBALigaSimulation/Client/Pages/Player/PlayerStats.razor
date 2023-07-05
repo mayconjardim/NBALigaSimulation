@@ -1,20 +1,20 @@
-﻿
-    <div class="stats">
+﻿   <h3>REGULAR SEASON</h3>    
 
-        <h2 >Regular Season</h2>
+   <div class="stats">
 
-          <MudSimpleTable Hover="true" Dense="true" Striped="true"  Style="overflow-x: auto">
+
+        <table>
             <thead>
                 <tr>
                     <th colspan="5" style="text-align: center"></th>
-                    <th colspan="3"  style="text-align: center; border-left: 1px solid #e0e0e0">FG</th>
-                    <th colspan="3"  style="text-align: center; border-left: 1px solid #e0e0e0">3PT</th>
-                    <th colspan="3"  style="text-align: center; border-left: 1px solid #e0e0e0">FT</th>
-                    <th colspan="3"  style="text-align: center; border-left: 1px solid #e0e0e0;border-right: 1px solid #e0e0e0">Reb</th>
+                    <th colspan="3"  style="text-align: center">FG</th>
+                    <th colspan="3"  style="text-align: center">3PT</th>
+                    <th colspan="3"  style="text-align: center">FT</th>
+                    <th colspan="3"  style="text-align: center">REB</th>
                     <th colspan="8"  style="text-align: center"></th>
                 </tr>
                 <tr>
-                    @foreach (var h in headings)
+                    @foreach (var h in stats)
                     {
                         <th>@h</th>
                     }
@@ -51,7 +51,54 @@
                     </tr>
                 }
             </tbody>
-        </MudSimpleTable>
+        </table>
+    </div>
+    <h3>SHOT LOCATIONS</h3>
+
+    <div class="stats">
+       
+
+        <table>
+            <thead>
+                <tr>
+                    <th colspan="5" style="text-align: center"></th>
+                    <th colspan="3"  style="text-align: center">AT RIM</th>
+                    <th colspan="3"  style="text-align: center">LOW POST</th>
+                    <th colspan="3"  style="text-align: center">MID-RANGE</th>
+                    <th colspan="3"  style="text-align: center">3PT</th>
+                </tr>
+                <tr>
+                    @foreach (var h in locations)
+                    {
+                        <th>@h</th>
+                    }
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var stats in player.RegularStats)
+                {
+                    <tr>
+                        <td>@stats.Season</td>
+                        <td>@stats.TeamId</td>
+                        <td>@stats.Games</td>
+                        <td>@stats.Gs</td>
+                        <td>@stats.MinPG</td>
+                        <td>@stats.FgAtRim</td>
+                        <td>@stats.FgaAtRim</td>
+                        <td>@stats.FgAtRimPct</td>
+                        <td>@stats.FgLowPost</td>
+                        <td>@stats.FgaLowPost</td>
+                        <td>@stats.FgLowPostPct</td>
+                        <td>@stats.FgMidRange</td>
+                        <td>@stats.FgaMidRange</td>
+                        <td>@stats.FgMidRangePct</td>
+                        <td>@stats.Tp</td>
+                        <td>@stats.Tpa</td>
+                        <td>@stats.TpPct</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
 
     </div>
 
