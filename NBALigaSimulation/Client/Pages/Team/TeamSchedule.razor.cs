@@ -10,7 +10,7 @@ namespace NBALigaSimulation.Client.Pages.Team
         List<GameCompleteDto> games { get; set; }
         private string message = string.Empty;
 
-        string[] headings = { "HOME", "AWAY", "RESULT" };
+        string[] headings = { "HOME", "AWAY", "DATE", "RESULT" };
 
         protected override async Task OnParametersSetAsync()
         {

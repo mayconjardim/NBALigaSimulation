@@ -1,19 +1,21 @@
 ﻿.logs {
     margin: 10px;
     overflow-x: auto;
+    box-shadow: rgba(9, 30, 66, 0.25) 0px 4px 8px -2px, rgba(9, 30, 66, 0.08) 0px 0px 0px 1px;
 }
 
 
 table {
     width: 100%;
     border-collapse: collapse;
-    box-shadow: rgba(9, 30, 66, 0.25) 0px 4px 8px -2px, rgba(9, 30, 66, 0.08) 0px 0px 0px 1px;
+    white-space: nowrap !important;
 }
 
 th,
 td {
     padding: 6px;
     text-align: center;
+    border: 1px solid #ddd;
 }
 
 th {

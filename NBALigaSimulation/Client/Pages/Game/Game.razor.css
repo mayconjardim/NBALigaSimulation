@@ -24,6 +24,7 @@ a {
 
 .boxscore-teams {
     margin: 15px;
+    overflow-x: auto;
 }
 
 tbody {

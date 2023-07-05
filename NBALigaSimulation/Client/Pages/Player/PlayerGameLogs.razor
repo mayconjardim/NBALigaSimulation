@@ -13,7 +13,7 @@
                   @foreach (var stat in logs)
                   {
                       <tr>
-                         <td>@stat.GameDate</td>
+                         <td>@stat.GameDate.ToShortDateString()</td>
                          <td><MudAvatar Style="vertical-align: middle; background: none" Size="Size.Small" Image=@($"Images/logos/{stat.OppAbrev}.svg") Square="true" /></td>
                          <td>@Format(@stat.Min)</td>
                          <td>@stat.Fg-@stat.Fga</td>

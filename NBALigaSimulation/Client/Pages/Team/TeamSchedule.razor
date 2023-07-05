@@ -20,6 +20,7 @@
                     <tr>
                        <td><a href="team/@game.HomeTeamId"><MudAvatar Style="vertical-align: middle; background: none" Size="Size.Medium" Image=@($"Images/logos/{game.HomeTeam}.svg") Square="true" /></a> </td>
                        <td><a href="team/@game.AwayTeamId"><MudAvatar Style="vertical-align: middle; background: none" Size="Size.Medium" Image=@($"Images/logos/{game.AwayTeam}.svg") Square="true" /></a> </td>
+                       <td>@game.GameDate.ToShortDateString()</td>
                        @if(@game.HomeTeamScore > 0)
                        {
                         <td>
@@ -35,7 +36,7 @@
                         </td>
                        }else
                        {
-                         <td>@game.GameDate</td>      
+                         <td>TBD</td>      
                        }
                     </tr>
                 }
