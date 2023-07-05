@@ -7,6 +7,7 @@
         public int PlayerId { get; set; }
         public int TeamId { get; set; }
         public int GameId { get; set; }
+        public string OppAbrev { get; set; }
         public int Gs { get; set; }
         public double Min { get; set; }
         public int Fg { get; set; }

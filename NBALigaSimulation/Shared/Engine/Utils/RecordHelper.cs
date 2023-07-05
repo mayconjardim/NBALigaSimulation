@@ -113,6 +113,15 @@ namespace NBALigaSimulation.Shared.Engine
 
         public static void RecordStatHelperPlayer(int t, int p, string s, int Id, Team[] teams, int season, int amt = 1, double amntDouble = 1.0)
         {
+            int opp;
+            if (t == 0)
+            {
+                opp = 1;
+            }
+            else
+            {
+                opp = 0;
+            }
 
             var player = teams[t].Players.Find(player => player.RosterOrder == p);
             if (player != null)
@@ -126,7 +135,7 @@ namespace NBALigaSimulation.Shared.Engine
 
                 if (lastStats == null || lastStats.GameId != Id)
                 {
-                    lastStats = new PlayerGameStats { GameId = Id, TeamId = teams[t].Id, Name = player.Name, Season = season };
+                    lastStats = new PlayerGameStats { GameId = Id, TeamId = teams[t].Id, Name = player.Name, Season = season, OppAbrev = teams[opp].Abrv };
                     player.Stats.Add(lastStats);
                 }
 
@@ -134,7 +143,7 @@ namespace NBALigaSimulation.Shared.Engine
 
                 if (regularStats == null)
                 {
-                    regularStats = new PlayerRegularStats { TeamId = teams[t].Id, Name = player.Name, Season = season, TeamAbrv = teams[t].Abrv};
+                    regularStats = new PlayerRegularStats { TeamId = teams[t].Id, Name = player.Name, Season = season, TeamAbrv = teams[t].Abrv };
                     player.RegularStats.Add(regularStats);
                 }
 

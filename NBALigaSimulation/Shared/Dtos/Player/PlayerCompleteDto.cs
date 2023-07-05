@@ -18,6 +18,7 @@ namespace NBALigaSimulation.Shared.Dtos
         public int RosterOrder { get; set; }
         public List<PlayerRatingDto> Ratings { get; set; } = new List<PlayerRatingDto>();
         public List<PlayerRegularStatsDto> RegularStats { get; set; } = new List<PlayerRegularStatsDto>();
+        public List<PlayerGameStatsDto> Stats { get; set; } = new List<PlayerGameStatsDto>();
         public PlayerContractDto Contract { get; set; }
 
     }

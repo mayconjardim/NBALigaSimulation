@@ -78,6 +78,7 @@ namespace NBALigaSimulation.Server.Services.PlayerService
                 .Include(p => p.Ratings)
                 .Include(p => p.Contract)
                 .Include(p => p.RegularStats)
+                .Include(p => p.Stats)
                 .FirstOrDefaultAsync(p => p.Id == playerId);
 
             if (player == null)
