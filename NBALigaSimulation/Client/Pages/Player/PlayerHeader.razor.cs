@@ -15,9 +15,6 @@ namespace NBALigaSimulation.Client.Pages.Player
             stats = player.RegularStats.Last();
         }
 
-
-
-
     }
 }
 

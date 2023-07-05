@@ -1,1 +1,36 @@
-﻿
+﻿<MudContainer>
+     <div class="logs">
+      <table>
+               <thead>
+                  <tr>
+                     @foreach (var h in headings)
+                     {
+                     <th>@h</th>
+                     }
+                  </tr>
+               </thead>
+               <tbody>
+                  @foreach (var stat in logs)
+                  {
+                      <tr>
+                         <td>@stat.GameDate</td>
+                         <td><MudAvatar Style="vertical-align: middle; background: none" Size="Size.Small" Image=@($"Images/logos/{stat.OppAbrev}.svg") Square="true" /></td>
+                         <td>@Format(@stat.Min)</td>
+                         <td>@stat.Fg-@stat.Fga</td>
+                         <td>@stat.Tp-@stat.Tpa</td>
+                         <td>@stat.Ft-@stat.Fta</td>
+                         <td>@stat.Orb</td>
+                         <td>@stat.Trb</td>
+                         <td>@stat.Ast</td>
+                         <td>@stat.Tov</td>
+                         <td>@stat.Stl</td>
+                         <td>@stat.Blk</td>
+                         <td>@stat.Pf</td>
+                         <td>@stat.Pts</td>
+                      </tr>
+                  }
+               </tbody>
+      </table>
+      </div>
+
+</MudContainer>
