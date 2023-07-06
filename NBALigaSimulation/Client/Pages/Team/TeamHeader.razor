@@ -1,4 +1,6 @@
 ﻿@using Color = MudBlazor.Color
+@inject IStatsService StatsService
+
 
 <div class="card @team.Abrv">
 
@@ -24,32 +26,32 @@
      
      <div class="ppg"> 
      <p>PPG</p>
-     <span>6th</span>
-     <p>117.2</p>
+     <span>@(Util.GetOrdinal(ppgRank))</span>
+     <p>@ppg</p>
      </div>
 
      <MudDivider Vertical="true" FlexItem="true" Style="width: 0.5px"/>
 
      <div class="rpg"> 
      <p>RPG</p>
-     <span>6th</span>
-     <p>45.7</p>
+      <span>@(Util.GetOrdinal(rpgRank))</span>
+     <p>@rpg</p>
      </div>
 
       <MudDivider Vertical="true" FlexItem="true" Style="width: 0.5px" />
 
      <div class="apg"> 
      <p>APG</p>
-     <span>15th</span>
-     <p>25.2</p>
+      <span>@(Util.GetOrdinal(apgRank))</span>
+     <p>@apg</p>
      </div>
 
       <MudDivider Vertical="true" FlexItem="true"  Style="width: 0.5px"/>
 
      <div class="oppg"> 
      <p>OPPG</p>
-     <span>20th</span>
-     <p>116.6</p>
+      <span>@(Util.GetOrdinal(oppgRank))</span>
+     <p>@oppg</p>
      </div>
 
   </div>

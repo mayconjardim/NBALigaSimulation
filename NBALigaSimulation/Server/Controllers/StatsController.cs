@@ -21,10 +21,10 @@ namespace NBALigaSimulation.Server.Controllers
             return Ok(result);
         }
 
-        [HttpGet("players/{playerId}")]
-        public async Task<ActionResult<ServiceResponse<List<TeamRegularStatsDto>>>> GetAllRegularStatsByPlayerId(int playerId)
+        [HttpGet("teams/ranks")]
+        public async Task<ActionResult<ServiceResponse<List<TeamRegularStatsDto>>>> GetAllTeamRegularStatsRank()
         {
-            var result = await _statsService.GetAllRegularStatsByPlayerId(playerId);
+            var result = await _statsService.GetAllTeamRegularStatsRank();
             return Ok(result);
         }
 
