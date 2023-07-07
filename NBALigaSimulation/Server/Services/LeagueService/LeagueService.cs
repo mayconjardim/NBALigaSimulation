@@ -25,7 +25,5 @@ namespace NBALigaSimulation.Server.Services.League
             return response;
         }
 
-
-
     }
 }
