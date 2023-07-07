@@ -10,7 +10,7 @@ namespace NBALigaSimulation.Server.Controllers
 
         private readonly ILeagueService _leagueService;
 
-        public LeagueController(LeagueService leagueService)
+        public LeagueController(ILeagueService leagueService)
         {
             _leagueService = leagueService;
         }

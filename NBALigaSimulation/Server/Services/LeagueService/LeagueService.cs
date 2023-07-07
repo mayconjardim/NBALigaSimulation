@@ -16,10 +16,10 @@ namespace NBALigaSimulation.Server.Services.League
 
         public async Task<ServiceResponse<List<TeamDraftPickDto>>> GetAllDraftPicks()
         {
-            var teams = await _context.TeamDraftPicks.ToListAsync();
+            var picks = await _context.TeamDraftPicks.Include(t => t.Team).ToListAsync();
             var response = new ServiceResponse<List<TeamDraftPickDto>>
             {
-                Data = _mapper.Map<List<TeamDraftPickDto>>(teams)
+                Data = _mapper.Map<List<TeamDraftPickDto>>(picks)
             };
 
             return response;
