@@ -1,35 +1,40 @@
 ﻿@inject NavigationManager NavigationManager
 @inject ILocalStorageService LocalStorage
  
-
 <MudContainer>
-    <div class="container">
-            @foreach (var player in team.Players)
-            {  
-               <div class="@team.Abrv card"  @onclick="() => NavigateToPlayerPage(player.Id)">   
+    @if(team.Players.Count > 0)
+    {
+        <div class="container">
+                @foreach (var player in team.Players)
+                {  
+                   <div class="@team.Abrv card"  @onclick="() => NavigateToPlayerPage(player.Id)">   
                
-                <MudCardHeader Style="margin-bottom: 0; padding-bottom: 0">
-                   <CardHeaderAvatar>
-                      <MudAvatar Size="Size.Large" >
-                        <img src="@player.ImgUrl" class="@team.Abrv"/>
-                      </MudAvatar>
-                   </CardHeaderAvatar>
-                   <CardHeaderContent>
-                       <span>@player.Name</span>
-                    </CardHeaderContent>
-                </MudCardHeader>
-                   <MudCardContent Style="background-color: #03234C; margin: 10px;">     
+                    <MudCardHeader Style="margin-bottom: 0; padding-bottom: 0">
+                       <CardHeaderAvatar>
+                          <MudAvatar Size="Size.Large" >
+                            <img src="@player.ImgUrl" class="@team.Abrv"/>
+                          </MudAvatar>
+                       </CardHeaderAvatar>
+                       <CardHeaderContent>
+                           <span>@player.Name</span>
+                        </CardHeaderContent>
+                    </MudCardHeader>
+                       <MudCardContent Style="background-color: #03234C; margin: 10px;">     
                        
-                     <div class="info">
-                        <p>@Util.Position(player.Pos)</p> 
-                        <p>@player.Ratings.Count Season</p> 
-                        <p>@Util.InchesToCm(player.Hgt)cm, @Util.LbsToKg(player.Weight)kg, @(season - player.Born.Year) years</p> 
-                        <p>$ @player.Contract.Amount.ToString("N0")</p> 
-                        <p>@player.RegularStats.Last().PtsPG PPG - @player.RegularStats.Last().TRebPG RPG - @player.RegularStats.Last().AstPG APG</p> 
-                     </div>
-                    </MudCardContent>
+                         <div class="info">
+                            <p>@Util.Position(player.Pos)</p> 
+                            <p>@player.Ratings.Count Season</p> 
+                            <p>@Util.InchesToCm(player.Hgt)cm, @Util.LbsToKg(player.Weight)kg, @(season - player.Born.Year) years</p> 
+                            <p>$ @player.Contract.Amount.ToString("N0")</p> 
+                            @if (player.RegularStats.Count > 0)
+                            {
+                            <p>@player.RegularStats.Last().PtsPG PPG - @player.RegularStats.Last().TRebPG RPG - @player.RegularStats.Last().AstPG APG</p> 
+                            }
+                         </div>
+                        </MudCardContent>
 
-               </div>
-            }   
-    </div>
+                   </div>
+                }   
+        </div>
+    }
 </MudContainer>

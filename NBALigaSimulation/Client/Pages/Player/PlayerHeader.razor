@@ -26,8 +26,12 @@
 
      <div class="stats">
      
+         @if(player.RegularStats.Count > 0)
+         {
          <div class="ppg"> 
-             <span>@stats.PtsPG</span>
+              
+                <span>@stats.PtsPG</span>
+             
              <p>PPG</p>
          </div>
      
@@ -51,7 +55,7 @@
              <span>@stats.FgPct</span>
              <p>FG%</p>
          </div>
-
+         }
     </div>
 
  </div>

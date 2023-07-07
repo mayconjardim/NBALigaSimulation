@@ -12,10 +12,6 @@ namespace NBALigaSimulation.Client.Shared.Components
 
         string[] east = { "EAST", "W-L", "PCT", "PF", "PA", "DIFF", "STRK" };
         string[] west = { "WEST", "W-L", "PCT", "PF", "PA", "DIFF", "STRK" };
-
-
-
-
         protected override async Task OnInitializedAsync()
         {
             message = "Carregando Stats...";

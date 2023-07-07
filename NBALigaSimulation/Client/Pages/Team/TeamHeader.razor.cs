@@ -10,13 +10,13 @@ namespace NBALigaSimulation.Client.Pages.Team
 
         private string message;
 
-        private string ppg;
+        private string ppg = string.Empty;
         private int ppgRank;
-        private string rpg;
+        private string rpg = string.Empty;
         private int rpgRank;
-        private string apg;
+        private string apg = string.Empty;
         private int apgRank;
-        private string oppg;
+        private string oppg = string.Empty;
         private int oppgRank;
 
         protected override async Task OnInitializedAsync()

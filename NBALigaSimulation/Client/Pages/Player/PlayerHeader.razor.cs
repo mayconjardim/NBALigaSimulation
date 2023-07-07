@@ -12,7 +12,10 @@ namespace NBALigaSimulation.Client.Pages.Player
 
         protected override void OnInitialized()
         {
-            stats = player.RegularStats.Last();
+            if (player.RegularStats != null && player.RegularStats.Any())
+            {
+                stats = player.RegularStats.Last();
+            }
         }
 
     }

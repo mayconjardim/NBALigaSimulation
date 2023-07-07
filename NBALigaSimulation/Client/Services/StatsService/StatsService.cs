@@ -21,5 +21,11 @@
             var result = await _http.GetFromJsonAsync<ServiceResponse<List<TeamRegularStatsRankDto>>>($"api/stats/teams/ranks");
             return result;
         }
+
+        public async Task<ServiceResponse<List<PlayerRegularStatsDto>>> GetAllPlayerRegularStats()
+        {
+            var result = await _http.GetFromJsonAsync<ServiceResponse<List<PlayerRegularStatsDto>>>($"api/stats/players");
+            return result;
+        }
     }
 }
