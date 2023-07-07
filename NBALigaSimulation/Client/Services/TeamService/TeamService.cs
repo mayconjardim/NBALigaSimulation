@@ -20,6 +20,12 @@ namespace NBALigaSimulation.Client.Services.TeamService
             return result;
         }
 
+        public async Task<ServiceResponse<List<TeamSimpleWithPlayersDto>>> GetAllTeamsWithPlayers()
+        {
+            var result = await _http.GetFromJsonAsync<ServiceResponse<List<TeamSimpleWithPlayersDto>>>($"api/teams/players");
+            return result;
+        }
+
         public async Task<ServiceResponse<TeamCompleteDto>> GetTeamById(int teamId)
         {
             var result = await _http.GetFromJsonAsync<ServiceResponse<TeamCompleteDto>>($"api/teams/{teamId}");
