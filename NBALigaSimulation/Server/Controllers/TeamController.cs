@@ -23,6 +23,15 @@ namespace NBALigaSimulation.Server.Controllers
 
         }
 
+        [HttpGet]
+        public async Task<ActionResult<ServiceResponse<List<TeamSimpleWithPlayersDto>>>> GetAllTeamsWithPlayers()
+        {
+
+            var result = await _teamService.GetAllTeamsWithPlayers();
+            return Ok(result);
+
+        }
+
         [HttpGet("{teamId}")]
         public async Task<ActionResult<ServiceResponse<TeamCompleteDto>>> GetTeamById(int teamId)
         {

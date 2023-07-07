@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using Microsoft.Extensions.Configuration;
 
 namespace NBALigaSimulation.Server.Profiles
 {
@@ -19,6 +18,7 @@ namespace NBALigaSimulation.Server.Profiles
             CreateMap<PlayerContract, PlayerContractDto>().ReverseMap();
 
             CreateMap<Team, TeamSimpleDto>();
+            CreateMap<Team, TeamSimpleWithPlayersDto>().ReverseMap();
             CreateMap<Team, TeamCompleteDto>().ReverseMap();
             CreateMap<TeamGameplan, TeamGameplanDto>().ReverseMap();
 
