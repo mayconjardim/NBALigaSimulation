@@ -1,4 +1,6 @@
-﻿namespace NBALigaSimulation.Shared.Models
+﻿using System.Globalization;
+
+namespace NBALigaSimulation.Shared.Models
 {
     public class TeamRegularStats
     {
@@ -51,5 +53,14 @@
         public int AllowedFTM { get; set; }
         public int AllowedFTA { get; set; }
 
+        public double WinPct
+        {
+            get
+            {
+                int games = (HomeWins + HomeLosses + RoadWins + RoadLosses);
+                double winPct = (double)(HomeWins + RoadWins) / games;
+                return winPct;
+            }
+        }
     }
 }

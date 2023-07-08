@@ -52,14 +52,14 @@ namespace NBALigaSimulation.Server.Services.GameService
                 return response;
             }
 
-            if (!ArePlayersInCorrectOrder(game.HomeTeam.Players))
+            if (!SimulationUtils.ArePlayersInCorrectOrder(game.HomeTeam.Players))
             {
-                AdjustRosterOrder(game.HomeTeam.Players);
+                SimulationUtils.AdjustRosterOrder(game.HomeTeam.Players);
             }
 
-            if (!ArePlayersInCorrectOrder(game.AwayTeam.Players))
+            if (!SimulationUtils.ArePlayersInCorrectOrder(game.AwayTeam.Players))
             {
-                AdjustRosterOrder(game.AwayTeam.Players);
+                SimulationUtils.AdjustRosterOrder(game.AwayTeam.Players);
             }
 
             await _context.SaveChangesAsync();
@@ -161,6 +161,8 @@ namespace NBALigaSimulation.Server.Services.GameService
         {
             ServiceResponse<bool> response = new ServiceResponse<bool>();
 
+            List<Team> teams = await _context.Teams.Where(t => t.IsHuman == true).Include(t => t.TeamRegularStats).ToListAsync();
+
             DateTime? firstUnsimulatedDate = await _context.Games
                 .Where(g => !g.Happened)
                 .OrderBy(g => g.GameDate)
@@ -186,18 +188,18 @@ namespace NBALigaSimulation.Server.Services.GameService
 
             foreach (Game game in games)
             {
+
                 game.Season = await _context.Seasons.OrderBy(s => s.Id).LastOrDefaultAsync();
 
-                if (ArePlayersInCorrectOrder(game.HomeTeam.Players))
+                if (SimulationUtils.ArePlayersInCorrectOrder(game.HomeTeam.Players))
                 {
-                    AdjustRosterOrder(game.HomeTeam.Players);
+                    SimulationUtils.AdjustRosterOrder(game.HomeTeam.Players);
                 }
 
-                if (ArePlayersInCorrectOrder(game.AwayTeam.Players))
+                if (SimulationUtils.ArePlayersInCorrectOrder(game.AwayTeam.Players))
                 {
-                    AdjustRosterOrder(game.AwayTeam.Players);
+                    SimulationUtils.AdjustRosterOrder(game.AwayTeam.Players);
                 }
-
 
                 await _context.SaveChangesAsync();
 
@@ -218,8 +220,9 @@ namespace NBALigaSimulation.Server.Services.GameService
 
                 try
                 {
-                    RegularStatUtil.UpdateTeamRegularStats(game);
-                    RegularStatUtil.UpdatePlayerGames(game);
+                    SimulationUtils.UpdateTeamRegularStats(game);
+                    SimulationUtils.UpdatePlayerGames(game);
+                    SimulationUtils.UpdateStandings(teams, game.Season.Year);
                     await _context.SaveChangesAsync();
                 }
                 catch (Exception ex)
@@ -233,30 +236,9 @@ namespace NBALigaSimulation.Server.Services.GameService
 
             response.Success = true;
             response.Data = true;
-
             return response;
         }
 
-        public bool ArePlayersInCorrectOrder(List<Player> Players)
-        {
-            for (int i = 0; i < Players.Count; i++)
-            {
-                if (Players[i].RosterOrder != i)
-                {
-                    return false;
-                }
-            }
-
-            return true;
-        }
-
-        public void AdjustRosterOrder(List<Player> Players)
-        {
-            for (int i = 0; i < Players.Count; i++)
-            {
-                Players[i].RosterOrder = i;
-            }
-        }
 
     }
 }

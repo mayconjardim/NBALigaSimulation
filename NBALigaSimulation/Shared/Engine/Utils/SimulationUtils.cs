@@ -1,8 +1,9 @@
-﻿using NBALigaSimulation.Shared.Models;
+﻿using NBALigaSimulation.Shared.Dtos;
+using NBALigaSimulation.Shared.Models;
 
 namespace NBALigaSimulation.Shared.Engine.Utils
 {
-    public static class RegularStatUtil
+    public static class SimulationUtils
     {
 
 
@@ -143,6 +144,52 @@ namespace NBALigaSimulation.Shared.Engine.Utils
                     regularStats.Games += 1;
                 }
             }
+        }
+        public static bool ArePlayersInCorrectOrder(List<Player> Players)
+        {
+            for (int i = 0; i < Players.Count; i++)
+            {
+                if (Players[i].RosterOrder != i)
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        public static void AdjustRosterOrder(List<Player> Players)
+        {
+            for (int i = 0; i < Players.Count; i++)
+            {
+                Players[i].RosterOrder = i;
+            }
+        }
+
+        public static void UpdateStandings(List<Team> teams, int season)
+        {
+            List<TeamRegularStats> eastTeams = teams.Where(t => t.Conference == "East")
+                                       .Select(t => t.TeamRegularStats.Find(trs => trs.Season == season))
+                                       .OrderByDescending(trs => trs.WinPct)
+                                       .ToList();
+
+            List<TeamRegularStats> westTeams = teams.Where(t => t.Conference == "West")
+                                       .Select(t => t.TeamRegularStats.Find(trs => trs.Season == season))
+                                       .OrderByDescending(trs => trs.WinPct)
+                                       .ToList();
+
+            foreach (var team in eastTeams)
+            {
+                int index = eastTeams.IndexOf(team);
+                team.ConfRank = index + 1;
+            }
+
+            foreach (var team in westTeams)
+            {
+                int index = westTeams.IndexOf(team);
+                team.ConfRank = index + 1;
+            }
+
         }
 
     }

@@ -10,5 +10,6 @@
         Task<ServiceResponse<bool>> UpdateGame(int GameId);
         Task<ServiceResponse<bool>> UpdateGames();
         Task<ServiceResponse<bool>> SimGameByDate();
+
     }
 }

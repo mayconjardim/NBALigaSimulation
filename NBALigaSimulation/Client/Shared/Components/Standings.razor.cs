@@ -23,8 +23,8 @@ namespace NBALigaSimulation.Client.Shared.Components
             }
             else
             {
-                statsEast = result.Data.OrderByDescending(t => t.Wins).Where(t => t.TeamConference == "East").ToList();
-                statsWest = result.Data.OrderByDescending(t => t.Wins).Where(t => t.TeamConference == "West").ToList();
+                statsEast = result.Data.OrderBy(t => t.ConfRank).Where(t => t.TeamConference == "East").ToList();
+                statsWest = result.Data.OrderBy(t => t.ConfRank).Where(t => t.TeamConference == "West").ToList();
             }
 
         }
