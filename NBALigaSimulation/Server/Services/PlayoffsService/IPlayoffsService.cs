@@ -3,7 +3,8 @@
     public interface IPlayoffsService
     {
 
-        Task<ServiceResponse<PlayoffsDto>> GetPlayoffs();
+        Task<ServiceResponse<List<PlayoffsDto>>> GetPlayoffs();
+        Task<ServiceResponse<bool>> GeneratePlayoffs();
 
     }
 }

@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using Player = NBALigaSimulation.Shared.Models.Player;
 
 namespace NBALigaSimulation.Server.Services.PlayerService
 {

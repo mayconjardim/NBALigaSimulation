@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using NBALigaSimulation.Shared.Engine.Utils;
 
 namespace NBALigaSimulation.Server.Services.PlayoffsService
 {
@@ -14,9 +15,9 @@ namespace NBALigaSimulation.Server.Services.PlayoffsService
             _mapper = mapper;
         }
 
-        public async Task<ServiceResponse<PlayoffsDto>> GetPlayoffs()
+        public async Task<ServiceResponse<List<PlayoffsDto>>> GetPlayoffs()
         {
-            var response = new ServiceResponse<PlayoffsDto>();
+            var response = new ServiceResponse<List<PlayoffsDto>>();
             var season = await _context.Seasons.OrderBy(s => s.Year).LastOrDefaultAsync();
 
             var playoffs = await _context.Playoffs.Where(p => p.Season == season.Year).ToListAsync();
@@ -28,10 +29,37 @@ namespace NBALigaSimulation.Server.Services.PlayoffsService
             }
             else
             {
-                response.Data = _mapper.Map<PlayoffsDto>(playoffs);
+
+                response.Data = _mapper.Map<List<PlayoffsDto>>(playoffs);
             }
 
             return response;
         }
+
+        public async Task<ServiceResponse<bool>> GeneratePlayoffs()
+        {
+            var response = new ServiceResponse<bool>();
+            var season = await _context.Seasons.OrderBy(s => s.Year).LastOrDefaultAsync();
+
+            List<Team> teamsEast = await _context.Teams
+                .Include(t => t.TeamRegularStats)
+                .Where(t => t.Conference == "East" && t.TeamRegularStats.Any(trs => trs.Season == season.Year))
+                .ToListAsync();
+
+            List<Team> teamsWest = await _context.Teams
+                .Include(t => t.TeamRegularStats)
+                .Where(t => t.Conference == "West" && t.TeamRegularStats.Any(trs => trs.Season == season.Year))
+                .ToListAsync();
+
+            var playoffs = PlayoffsUtils.Generate1stRound(teamsEast, teamsWest, season.Year);
+            _context.AddRange(playoffs);
+            await _context.SaveChangesAsync();
+
+            response.Success = true;
+            return response;
+        }
+
+
+
     }
 }
