@@ -21,6 +21,7 @@
         public DbSet<Trade> Trades { get; set; }
         public DbSet<TradePicks> TradePicks { get; set; }
         public DbSet<FAOffer> FAOffers { get; set; }
+        public DbSet<Playoffs> Playoffs { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -163,6 +164,19 @@
            .HasOne(f => f.Player)
            .WithMany()
            .HasForeignKey(f => f.PlayerId);
+
+            modelBuilder.Entity<Playoffs>(entity =>
+            {
+                entity.HasKey(e => e.Id);
+
+                entity.HasOne(e => e.TeamOne)
+                    .WithMany()
+                    .HasForeignKey(e => e.TeamOneId);
+
+                entity.HasOne(e => e.TeamTwo)
+                    .WithMany()
+                    .HasForeignKey(e => e.TeamTwoId);
+            });
 
         }
     }

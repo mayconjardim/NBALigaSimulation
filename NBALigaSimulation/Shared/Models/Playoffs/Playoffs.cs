@@ -1,4 +1,4 @@
-﻿namespace NBALigaSimulation.Shared.Models.Playoffs
+﻿namespace NBALigaSimulation.Shared.Models
 {
     public class Playoffs
     {
