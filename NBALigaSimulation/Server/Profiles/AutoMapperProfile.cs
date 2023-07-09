@@ -88,6 +88,8 @@ namespace NBALigaSimulation.Server.Profiles
 
             CreateMap<FAOfferDto, FAOffer>();
 
+            CreateMap<Playoffs, PlayoffsDto>().ReverseMap();
+
 
         }
     }
