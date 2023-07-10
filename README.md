@@ -33,5 +33,5 @@ Bem-vindo a NBALIGA! Neste jogo, o usuário vair assumir o papel de um gerente d
 
 ## Tecnologias Utilizadas
 
-- Linguagem de programação: C#
-- Banco de dados: SQLite
+- Linguagem de programação: C# com EF Core e Blazor.
+- Banco de dados: SQLite.
