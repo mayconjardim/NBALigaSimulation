@@ -120,5 +120,95 @@ namespace NBALigaSimulation.Shared.Engine.Utils
 
         }
 
+        public static List<Game> Generate1stRoundGames(List<Playoffs> playoffs)
+        {
+
+            List<Game> games = new List<Game>();
+
+            DateTime dataInicial = DateTime.UtcNow.AddDays(1);
+            TimeZoneInfo tzBrasilia = TimeZoneInfo.FindSystemTimeZoneById("E. South America Standard Time");
+            dataInicial = new DateTime(dataInicial.Year, dataInicial.Month, dataInicial.Day, 23, 0, 0);
+            dataInicial = TimeZoneInfo.ConvertTimeFromUtc(dataInicial, tzBrasilia);
+
+
+            foreach (var serie in playoffs)
+            {
+
+                Game game1 = new Game
+                {
+                    Type = 1,
+                    HomeTeam = serie.TeamOne,
+                    AwayTeam = serie.TeamTwo,
+                    GameDate = dataInicial
+                };
+
+                games.Add(game1);
+
+                Game game2 = new Game
+                {
+                    Type = 1,
+                    HomeTeam = serie.TeamOne,
+                    AwayTeam = serie.TeamTwo,
+                    GameDate = dataInicial.AddMinutes(10)
+                };
+
+                games.Add(game2);
+
+                Game game3 = new Game
+                {
+                    Type = 1,
+                    HomeTeam = serie.TeamTwo,
+                    AwayTeam = serie.TeamOne,
+                    GameDate = dataInicial.AddMinutes(20)
+                };
+
+                games.Add(game3);
+
+                Game game4 = new Game
+                {
+                    Type = 1,
+                    HomeTeam = serie.TeamTwo,
+                    AwayTeam = serie.TeamOne,
+                    GameDate = dataInicial.AddMinutes(30)
+                };
+
+                games.Add(game4);
+
+
+                Game game5 = new Game
+                {
+                    Type = 1,
+                    HomeTeam = serie.TeamOne,
+                    AwayTeam = serie.TeamTwo,
+                    GameDate = dataInicial.AddMinutes(40)
+                };
+
+                games.Add(game5);
+
+                Game game6 = new Game
+                {
+                    Type = 1,
+                    HomeTeam = serie.TeamTwo,
+                    AwayTeam = serie.TeamOne,
+                    GameDate = dataInicial.AddMinutes(50)
+                };
+
+                games.Add(game6);
+
+                Game game7 = new Game
+                {
+                    Type = 1,
+                    HomeTeam = serie.TeamOne,
+                    AwayTeam = serie.TeamTwo,
+                    GameDate = dataInicial.AddMinutes(60)
+                };
+
+                games.Add(game7);
+
+            }
+
+            return games;
+        }
+
     }
 }

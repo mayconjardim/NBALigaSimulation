@@ -88,7 +88,15 @@ namespace NBALigaSimulation.Server.Profiles
 
             CreateMap<FAOfferDto, FAOffer>();
 
-            CreateMap<Playoffs, PlayoffsDto>().ReverseMap();
+            CreateMap<PlayoffsDto, Playoffs>();
+            CreateMap<Playoffs, PlayoffsDto>()
+                .ForMember(dest => dest.teamOneAbrv, opt => opt.MapFrom(src => src.TeamOne.Abrv))
+                .ForMember(dest => dest.teamOneName, opt => opt.MapFrom(src => src.TeamOne.Name))
+                .ForMember(dest => dest.teamOneRegion, opt => opt.MapFrom(src => src.TeamOne.Region))
+                .ForMember(dest => dest.teamTwoAbrv, opt => opt.MapFrom(src => src.TeamTwo.Abrv))
+                .ForMember(dest => dest.teamTwoName, opt => opt.MapFrom(src => src.TeamTwo.Name))
+                .ForMember(dest => dest.teamTwoRegion, opt => opt.MapFrom(src => src.TeamTwo.Region));
+
 
 
         }

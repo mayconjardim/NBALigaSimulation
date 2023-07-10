@@ -161,7 +161,7 @@ namespace NBALigaSimulation.Server.Services.GameService
         {
             ServiceResponse<bool> response = new ServiceResponse<bool>();
 
-            List<Team> teams = await _context.Teams.Where(t => t.IsHuman == true).Include(t => t.TeamRegularStats).ToListAsync();
+            var season = await _context.Seasons.OrderBy(s => s.Id).LastOrDefaultAsync();
 
             DateTime? firstUnsimulatedDate = await _context.Games
                 .Where(g => !g.Happened)
@@ -189,7 +189,7 @@ namespace NBALigaSimulation.Server.Services.GameService
             foreach (Game game in games)
             {
 
-                game.Season = await _context.Seasons.OrderBy(s => s.Id).LastOrDefaultAsync();
+                game.Season = season;
 
                 if (SimulationUtils.ArePlayersInCorrectOrder(game.HomeTeam.Players))
                 {
@@ -222,7 +222,7 @@ namespace NBALigaSimulation.Server.Services.GameService
                 {
                     SimulationUtils.UpdateTeamRegularStats(game);
                     SimulationUtils.UpdatePlayerGames(game);
-                    SimulationUtils.UpdateStandings(teams, game.Season.Year);
+                    UpdateStandings();
                     await _context.SaveChangesAsync();
                 }
                 catch (Exception ex)
@@ -239,6 +239,37 @@ namespace NBALigaSimulation.Server.Services.GameService
             return response;
         }
 
+        public async void UpdateStandings()
+        {
+
+            List<Team> teams = await _context.Teams.Where(t => t.IsHuman == true).ToListAsync();
+            var season = await _context.Seasons.OrderBy(s => s.Id).LastOrDefaultAsync();
+
+
+            List<TeamRegularStats> eastTeams = teams.Where(t => t.Conference == "East")
+                                      .Select(t => t.TeamRegularStats.Find(trs => trs.Season == season.Year))
+                                      .OrderByDescending(trs => trs.WinPct)
+                                      .ToList();
+
+            List<TeamRegularStats> westTeams = teams.Where(t => t.Conference == "West")
+                                       .Select(t => t.TeamRegularStats.Find(trs => trs.Season == season.Year))
+                                       .OrderByDescending(trs => trs.WinPct)
+                                       .ToList();
+
+            foreach (var team in eastTeams)
+            {
+                int index = eastTeams.IndexOf(team);
+                team.ConfRank = index + 1;
+            }
+
+            foreach (var team in westTeams)
+            {
+                int index = westTeams.IndexOf(team);
+                team.ConfRank = index + 1;
+            }
+
+            await _context.SaveChangesAsync();
+        }
 
     }
 }
