@@ -28,7 +28,8 @@ namespace NBALigaSimulation.Server.Controllers
         [HttpPost("generate")]
         public async Task<ActionResult<ServiceResponse<bool>>> GeneratePlayoffs()
         {
-            return Ok(await _playoffsService.GeneratePlayoffs());
+            var result = await _playoffsService.GeneratePlayoffs();
+            return Ok(result);
         }
 
 

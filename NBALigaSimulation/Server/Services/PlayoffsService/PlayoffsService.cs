@@ -52,8 +52,9 @@ namespace NBALigaSimulation.Server.Services.PlayoffsService
                 .ToListAsync();
 
             var playoffs = PlayoffsUtils.Generate1stRound(teamsEast, teamsWest, season.Year);
-            var games = PlayoffsUtils.Generate1stRoundGames(playoffs);
+            var games = PlayoffsUtils.Generate1stRoundGames(playoffs, season);
 
+            _context.AddRange(games);
             _context.AddRange(playoffs);
             await _context.SaveChangesAsync();
 

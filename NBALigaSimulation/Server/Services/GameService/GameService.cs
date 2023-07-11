@@ -268,7 +268,6 @@ namespace NBALigaSimulation.Server.Services.GameService
                 team.ConfRank = index + 1;
             }
 
-            await _context.SaveChangesAsync();
         }
 
     }

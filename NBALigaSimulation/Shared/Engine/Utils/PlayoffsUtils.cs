@@ -120,7 +120,7 @@ namespace NBALigaSimulation.Shared.Engine.Utils
 
         }
 
-        public static List<Game> Generate1stRoundGames(List<Playoffs> playoffs)
+        public static List<Game> Generate1stRoundGames(List<Playoffs> playoffs, Season season)
         {
 
             List<Game> games = new List<Game>();
@@ -137,9 +137,10 @@ namespace NBALigaSimulation.Shared.Engine.Utils
                 Game game1 = new Game
                 {
                     Type = 1,
-                    HomeTeam = serie.TeamOne,
-                    AwayTeam = serie.TeamTwo,
-                    GameDate = dataInicial
+                    HomeTeamId = serie.TeamOneId,
+                    AwayTeamId = serie.TeamTwoId,
+                    GameDate = dataInicial,
+                    Season = season,
                 };
 
                 games.Add(game1);
@@ -147,9 +148,10 @@ namespace NBALigaSimulation.Shared.Engine.Utils
                 Game game2 = new Game
                 {
                     Type = 1,
-                    HomeTeam = serie.TeamOne,
-                    AwayTeam = serie.TeamTwo,
-                    GameDate = dataInicial.AddMinutes(10)
+                    HomeTeamId = serie.TeamOneId,
+                    AwayTeamId = serie.TeamTwoId,
+                    GameDate = dataInicial.AddMinutes(10),
+                    Season = season,
                 };
 
                 games.Add(game2);
@@ -157,9 +159,10 @@ namespace NBALigaSimulation.Shared.Engine.Utils
                 Game game3 = new Game
                 {
                     Type = 1,
-                    HomeTeam = serie.TeamTwo,
-                    AwayTeam = serie.TeamOne,
-                    GameDate = dataInicial.AddMinutes(20)
+                    HomeTeamId = serie.TeamTwoId,
+                    AwayTeamId = serie.TeamOneId,
+                    GameDate = dataInicial.AddMinutes(20),
+                    Season = season,
                 };
 
                 games.Add(game3);
@@ -167,9 +170,10 @@ namespace NBALigaSimulation.Shared.Engine.Utils
                 Game game4 = new Game
                 {
                     Type = 1,
-                    HomeTeam = serie.TeamTwo,
-                    AwayTeam = serie.TeamOne,
-                    GameDate = dataInicial.AddMinutes(30)
+                    HomeTeamId = serie.TeamTwoId,
+                    AwayTeamId = serie.TeamOneId,
+                    GameDate = dataInicial.AddMinutes(30),
+                    Season = season,
                 };
 
                 games.Add(game4);
@@ -178,9 +182,10 @@ namespace NBALigaSimulation.Shared.Engine.Utils
                 Game game5 = new Game
                 {
                     Type = 1,
-                    HomeTeam = serie.TeamOne,
-                    AwayTeam = serie.TeamTwo,
-                    GameDate = dataInicial.AddMinutes(40)
+                    HomeTeamId = serie.TeamOneId,
+                    AwayTeamId = serie.TeamTwoId,
+                    GameDate = dataInicial.AddMinutes(40),
+                    Season = season,
                 };
 
                 games.Add(game5);
@@ -188,9 +193,10 @@ namespace NBALigaSimulation.Shared.Engine.Utils
                 Game game6 = new Game
                 {
                     Type = 1,
-                    HomeTeam = serie.TeamTwo,
-                    AwayTeam = serie.TeamOne,
-                    GameDate = dataInicial.AddMinutes(50)
+                    HomeTeamId = serie.TeamTwoId,
+                    AwayTeamId = serie.TeamOneId,
+                    GameDate = dataInicial.AddMinutes(50),
+                    Season = season,
                 };
 
                 games.Add(game6);
@@ -198,9 +204,10 @@ namespace NBALigaSimulation.Shared.Engine.Utils
                 Game game7 = new Game
                 {
                     Type = 1,
-                    HomeTeam = serie.TeamOne,
-                    AwayTeam = serie.TeamTwo,
-                    GameDate = dataInicial.AddMinutes(60)
+                    HomeTeamId = serie.TeamOneId,
+                    AwayTeamId = serie.TeamTwoId,
+                    GameDate = dataInicial.AddMinutes(60),
+                    Season = season,
                 };
 
                 games.Add(game7);
