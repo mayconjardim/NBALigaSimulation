@@ -221,22 +221,49 @@ namespace NBALigaSimulation.Shared.Engine.Utils
             Team awayTeam = game.AwayTeam;
             int season = game.Season.Year;
 
-            foreach (var player in homeTeam.Players)
+            if (game.Type == 0)
             {
-                var regularStats = player.RegularStats.Find(s => s.Season == season);
-                if (regularStats != null && player.Stats.Find(p => p.GameId == game.Id).Min > 0)
-                {
-                    regularStats.Games += 1;
-                }
-            }
 
-            foreach (var player in awayTeam.Players)
-            {
-                var regularStats = player.RegularStats.Find(s => s.Season == season);
-                if (regularStats != null && player.Stats.Find(p => p.GameId == game.Id).Min > 0)
+                foreach (var player in homeTeam.Players)
                 {
-                    regularStats.Games += 1;
+                    var regularStats = player.RegularStats.Find(s => s.Season == season);
+                    if (regularStats != null && player.Stats.Find(p => p.GameId == game.Id).Min > 0)
+                    {
+                        regularStats.Games += 1;
+                    }
                 }
+
+                foreach (var player in awayTeam.Players)
+                {
+                    var regularStats = player.RegularStats.Find(s => s.Season == season);
+                    if (regularStats != null && player.Stats.Find(p => p.GameId == game.Id).Min > 0)
+                    {
+                        regularStats.Games += 1;
+                    }
+                }
+
+            }
+            else if (game.Type == 1)
+            {
+
+                foreach (var player in homeTeam.Players)
+                {
+                    var playoffStats = player.PlayoffsStats.Find(s => s.Season == season);
+                    if (playoffStats != null && player.Stats.Find(p => p.GameId == game.Id).Min > 0)
+                    {
+                        playoffStats.Games += 1;
+                    }
+                }
+
+                foreach (var player in awayTeam.Players)
+                {
+                    var playoffStats = player.PlayoffsStats.Find(s => s.Season == season);
+                    if (playoffStats != null && player.Stats.Find(p => p.GameId == game.Id).Min > 0)
+                    {
+                        playoffStats.Games += 1;
+                    }
+                }
+
             }
         }
         public static bool ArePlayersInCorrectOrder(List<Player> Players)

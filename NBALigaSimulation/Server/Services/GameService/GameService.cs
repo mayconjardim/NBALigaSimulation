@@ -220,7 +220,7 @@ namespace NBALigaSimulation.Server.Services.GameService
 
                 try
                 {
-                    SimulationUtils.UpdateTeamRegularStats(game);
+                    SimulationUtils.UpdateTeamStats(game);
                     SimulationUtils.UpdatePlayerGames(game);
                     UpdateStandings();
                     await _context.SaveChangesAsync();
