@@ -262,10 +262,10 @@ namespace NBALigaSimulation.Server.Services.GameService
             List<Game> games = await _context.Games
                 .Include(p => p.HomeTeam.Players.OrderBy(p => p.RosterOrder)).ThenInclude(p => p.Ratings)
                 .Include(p => p.AwayTeam.Players.OrderBy(p => p.RosterOrder)).ThenInclude(p => p.Ratings)
-                .Include(p => p.HomeTeam.TeamRegularStats)
-                .Include(p => p.AwayTeam.TeamRegularStats)
-                .Include(p => p.HomeTeam.Players.OrderBy(p => p.RosterOrder)).ThenInclude(p => p.RegularStats)
-                .Include(p => p.AwayTeam.Players.OrderBy(p => p.RosterOrder)).ThenInclude(p => p.RegularStats)
+                .Include(p => p.HomeTeam.TeamPlayoffsStats)
+                .Include(p => p.AwayTeam.TeamPlayoffsStats)
+                .Include(p => p.HomeTeam.Players.OrderBy(p => p.RosterOrder)).ThenInclude(p => p.PlayoffsStats)
+                .Include(p => p.AwayTeam.Players.OrderBy(p => p.RosterOrder)).ThenInclude(p => p.PlayoffsStats)
                 .Where(g => g.GameDate == firstUnsimulatedDate && !g.Happened && g.Type == 1)
                 .ToListAsync();
 

@@ -263,7 +263,6 @@ namespace NBALigaSimulation.Shared.Engine.Utils
                         playoffStats.Games += 1;
                     }
                 }
-
             }
         }
         public static bool ArePlayersInCorrectOrder(List<Player> Players)
