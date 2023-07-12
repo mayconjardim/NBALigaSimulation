@@ -17,6 +17,7 @@ namespace NBALigaSimulation.Shared.Models
         public List<TeamDraftPicks> DraftPicks { get; set; } = new List<TeamDraftPicks>();
         public TeamGameplan Gameplan { get; set; }
         public List<TeamRegularStats> TeamRegularStats { get; set; } = new List<TeamRegularStats>();
+        public List<TeamPlayoffsStats> TeamPlayoffsStats { get; set; } = new List<TeamPlayoffsStats>();
 
         [NotMapped]
         public TeamCompositeRating CompositeRating { get; set; }
