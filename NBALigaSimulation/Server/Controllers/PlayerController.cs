@@ -31,7 +31,6 @@ namespace NBALigaSimulation.Server.Controllers
 
         }
 
-
         [HttpGet("{playerId}")]
         public async Task<ActionResult<ServiceResponse<PlayerCompleteDto>>> GetPlayerById(int playerId)
         {
@@ -58,7 +57,6 @@ namespace NBALigaSimulation.Server.Controllers
         {
             return Ok(await _playerService.CreatePlayers(requests));
         }
-
 
         [HttpPut("rosterorder")]
         public async Task<ActionResult> UpdateRosterOrder(List<PlayerCompleteDto> updatedPlayerList)
