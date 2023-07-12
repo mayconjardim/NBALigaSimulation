@@ -157,7 +157,7 @@ namespace NBALigaSimulation.Server.Services.GameService
             return response;
         }
 
-        public async Task<ServiceResponse<bool>> SimGameByDate()
+        public async Task<ServiceResponse<bool>> SimGameByDateRegular()
         {
             ServiceResponse<bool> response = new ServiceResponse<bool>();
 
@@ -183,7 +183,7 @@ namespace NBALigaSimulation.Server.Services.GameService
                 .Include(p => p.AwayTeam.TeamRegularStats)
                 .Include(p => p.HomeTeam.Players.OrderBy(p => p.RosterOrder)).ThenInclude(p => p.RegularStats)
                 .Include(p => p.AwayTeam.Players.OrderBy(p => p.RosterOrder)).ThenInclude(p => p.RegularStats)
-                .Where(g => g.GameDate == firstUnsimulatedDate && !g.Happened)
+                .Where(g => g.GameDate == firstUnsimulatedDate && !g.Happened && g.Type == 0)
                 .ToListAsync();
 
             foreach (Game game in games)
@@ -237,7 +237,91 @@ namespace NBALigaSimulation.Server.Services.GameService
             response.Success = true;
             response.Data = true;
             return response;
+
         }
+
+        public async Task<ServiceResponse<bool>> SimGameByDatePlayoffs()
+        {
+            ServiceResponse<bool> response = new ServiceResponse<bool>();
+
+            var season = await _context.Seasons.OrderBy(s => s.Id).LastOrDefaultAsync();
+
+            DateTime? firstUnsimulatedDate = await _context.Games
+                .Where(g => !g.Happened)
+                .OrderBy(g => g.GameDate)
+                .Select(g => g.GameDate)
+                .FirstOrDefaultAsync();
+
+            if (!firstUnsimulatedDate.HasValue)
+            {
+                response.Success = false;
+                response.Message = "Não há datas não simuladas disponíveis.";
+                return response;
+            }
+
+            List<Game> games = await _context.Games
+                .Include(p => p.HomeTeam.Players.OrderBy(p => p.RosterOrder)).ThenInclude(p => p.Ratings)
+                .Include(p => p.AwayTeam.Players.OrderBy(p => p.RosterOrder)).ThenInclude(p => p.Ratings)
+                .Include(p => p.HomeTeam.TeamRegularStats)
+                .Include(p => p.AwayTeam.TeamRegularStats)
+                .Include(p => p.HomeTeam.Players.OrderBy(p => p.RosterOrder)).ThenInclude(p => p.RegularStats)
+                .Include(p => p.AwayTeam.Players.OrderBy(p => p.RosterOrder)).ThenInclude(p => p.RegularStats)
+                .Where(g => g.GameDate == firstUnsimulatedDate && !g.Happened && g.Type == 1)
+                .ToListAsync();
+
+            foreach (Game game in games)
+            {
+
+                game.Season = season;
+
+                if (SimulationUtils.ArePlayersInCorrectOrder(game.HomeTeam.Players))
+                {
+                    SimulationUtils.AdjustRosterOrder(game.HomeTeam.Players);
+                }
+
+                if (SimulationUtils.ArePlayersInCorrectOrder(game.AwayTeam.Players))
+                {
+                    SimulationUtils.AdjustRosterOrder(game.AwayTeam.Players);
+                }
+
+                await _context.SaveChangesAsync();
+
+                game.GameSim();
+
+                game.Happened = true;
+
+                try
+                {
+                    await _context.SaveChangesAsync();
+                }
+                catch (Exception ex)
+                {
+                    response.Success = false;
+                    response.Message = $"Erro ao salvar alterações para o jogo com ID {game.Id}: {ex.Message}";
+                    return response;
+                }
+
+                try
+                {
+                    SimulationUtils.UpdateTeamStats(game);
+                    SimulationUtils.UpdatePlayerGames(game);
+                    UpdateStandings();
+                    await _context.SaveChangesAsync();
+                }
+                catch (Exception ex)
+                {
+                    response.Success = false;
+                    response.Message = $"Erro ao salvar alterações para o jogo com ID {game.Id}: {ex.Message}";
+                    return response;
+                }
+
+            }
+
+            response.Success = true;
+            response.Data = true;
+            return response;
+        }
+
 
         public async void UpdateStandings()
         {
