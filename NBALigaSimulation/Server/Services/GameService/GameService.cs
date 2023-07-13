@@ -230,6 +230,9 @@ namespace NBALigaSimulation.Server.Services.GameService
 
 			}
 
+
+
+
 			await UpdateStandings();
 			response.Success = true;
 			response.Data = true;
@@ -337,8 +340,6 @@ namespace NBALigaSimulation.Server.Services.GameService
 			.ToListAsync();
 			_context.Games.RemoveRange(remaining);
 			await _context.SaveChangesAsync();
-
-
 
 			response.Success = true;
 			response.Data = true;
