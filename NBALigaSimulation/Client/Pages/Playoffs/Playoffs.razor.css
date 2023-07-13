@@ -165,3 +165,8 @@
     .playoff-table .playoff-table-tour:last-child .playoff-table-pair:before {
         display: none;
     }
+
+span {
+    float: right;
+    text-align: right;
+}

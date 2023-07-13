@@ -154,7 +154,7 @@ namespace NBALigaSimulation.Shared.Engine.Utils
 						Type = 1,
 						HomeTeamId = serie.TeamOneId,
 						AwayTeamId = serie.TeamTwoId,
-						GameDate = dataInicial.AddMinutes(10),
+						GameDate = dataInicial,
 						Season = season
 					}
 				};
@@ -169,7 +169,7 @@ namespace NBALigaSimulation.Shared.Engine.Utils
 						Type = 1,
 						HomeTeamId = serie.TeamTwoId,
 						AwayTeamId = serie.TeamOneId,
-						GameDate = dataInicial.AddMinutes(20),
+						GameDate = dataInicial,
 						Season = season
 					}
 				};
@@ -184,7 +184,7 @@ namespace NBALigaSimulation.Shared.Engine.Utils
 						Type = 1,
 						HomeTeamId = serie.TeamTwoId,
 						AwayTeamId = serie.TeamOneId,
-						GameDate = dataInicial.AddMinutes(30),
+						GameDate = dataInicial,
 						Season = season
 					}
 				};
@@ -199,7 +199,7 @@ namespace NBALigaSimulation.Shared.Engine.Utils
 						Type = 1,
 						HomeTeamId = serie.TeamOneId,
 						AwayTeamId = serie.TeamTwoId,
-						GameDate = dataInicial.AddMinutes(40),
+						GameDate = dataInicial,
 						Season = season
 					}
 				};
@@ -214,7 +214,7 @@ namespace NBALigaSimulation.Shared.Engine.Utils
 						Type = 1,
 						HomeTeamId = serie.TeamTwoId,
 						AwayTeamId = serie.TeamOneId,
-						GameDate = dataInicial.AddMinutes(50),
+						GameDate = dataInicial,
 						Season = season
 					}
 				};
@@ -229,7 +229,7 @@ namespace NBALigaSimulation.Shared.Engine.Utils
 						Type = 1,
 						HomeTeamId = serie.TeamOneId,
 						AwayTeamId = serie.TeamTwoId,
-						GameDate = dataInicial.AddMinutes(60),
+						GameDate = dataInicial,
 						Season = season
 					}
 				};

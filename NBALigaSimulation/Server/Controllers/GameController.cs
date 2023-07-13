@@ -2,113 +2,126 @@
 
 namespace NBALigaSimulation.Server.Controllers
 {
-    [Route("api/games")]
-    [ApiController]
-    public class GameController : ControllerBase
-    {
+	[Route("api/games")]
+	[ApiController]
+	public class GameController : ControllerBase
+	{
 
-        private readonly IGameService _gameService;
+		private readonly IGameService _gameService;
 
-        public GameController(IGameService gameService)
-        {
-            _gameService = gameService;
-        }
+		public GameController(IGameService gameService)
+		{
+			_gameService = gameService;
+		}
 
 
-        [HttpPost]
-        public async Task<ActionResult<ServiceResponse<GameCompleteDto>>> CreateGame(CreateGameDto request)
-        {
-            return Ok(await _gameService.CreateGame(request));
-        }
+		[HttpPost]
+		public async Task<ActionResult<ServiceResponse<GameCompleteDto>>> CreateGame(CreateGameDto request)
+		{
+			return Ok(await _gameService.CreateGame(request));
+		}
 
-        [HttpPut("update/{gameId}")]
-        public async Task<IActionResult> UpdateGame(int gameId)
-        {
-            ServiceResponse<bool> response = await _gameService.UpdateGame(gameId);
+		[HttpPut("update/{gameId}")]
+		public async Task<IActionResult> UpdateGame(int gameId)
+		{
+			ServiceResponse<bool> response = await _gameService.UpdateGame(gameId);
 
-            if (!response.Success)
-            {
-                return BadRequest(response);
-            }
+			if (!response.Success)
+			{
+				return BadRequest(response);
+			}
 
-            return Ok(response);
-        }
+			return Ok(response);
+		}
 
-        [HttpPut("update/sim")]
-        public async Task<IActionResult> UpdateGames()
-        {
-            ServiceResponse<bool> response = await _gameService.UpdateGames();
+		[HttpPut("update/sim")]
+		public async Task<IActionResult> UpdateGames()
+		{
+			ServiceResponse<bool> response = await _gameService.UpdateGames();
 
-            if (!response.Success)
-            {
-                return BadRequest(response);
-            }
+			if (!response.Success)
+			{
+				return BadRequest(response);
+			}
 
-            return Ok(response);
-        }
+			return Ok(response);
+		}
 
-        [HttpGet]
-        public async Task<ActionResult<ServiceResponse<List<GameCompleteDto>>>> GetAllGames()
-        {
+		[HttpGet]
+		public async Task<ActionResult<ServiceResponse<List<GameCompleteDto>>>> GetAllGames()
+		{
 
-            var result = await _gameService.GetAllGames();
-            return Ok(result);
+			var result = await _gameService.GetAllGames();
+			return Ok(result);
 
-        }
+		}
 
-        [HttpGet("{gameId}")]
-        public async Task<ActionResult<ServiceResponse<GameCompleteDto>>> GetGameById(int gameId)
-        {
+		[HttpGet("{gameId}")]
+		public async Task<ActionResult<ServiceResponse<GameCompleteDto>>> GetGameById(int gameId)
+		{
 
-            var result = await _gameService.GetGameById(gameId);
+			var result = await _gameService.GetGameById(gameId);
 
-            if (!result.Success)
-            {
-                return NotFound(result);
-            }
+			if (!result.Success)
+			{
+				return NotFound(result);
+			}
 
-            return Ok(result);
+			return Ok(result);
 
-        }
+		}
 
-        [HttpGet("teams/{teamId}")]
-        public async Task<ActionResult<ServiceResponse<GameCompleteDto>>> GetGamesByTeamId(int teamId)
-        {
+		[HttpGet("teams/{teamId}")]
+		public async Task<ActionResult<ServiceResponse<GameCompleteDto>>> GetGamesByTeamId(int teamId)
+		{
 
-            var result = await _gameService.GetGamesByTeamId(teamId);
+			var result = await _gameService.GetGamesByTeamId(teamId);
 
-            if (!result.Success)
-            {
-                return NotFound(result);
-            }
+			if (!result.Success)
+			{
+				return NotFound(result);
+			}
 
-            return Ok(result);
-        }
+			return Ok(result);
+		}
 
-        [HttpPut("update/date/playoffs")]
-        public async Task<ActionResult<ServiceResponse<bool>>> SimGameByDatePlayoffs()
-        {
-            ServiceResponse<bool> response = await _gameService.SimGameByDatePlayoffs();
+		[HttpPut("update/date/playoffs")]
+		public async Task<ActionResult<ServiceResponse<bool>>> SimGameByDatePlayoffs()
+		{
+			ServiceResponse<bool> response = await _gameService.SimGameByDatePlayoffs();
 
-            if (!response.Success)
-            {
-                return BadRequest(response);
-            }
+			if (!response.Success)
+			{
+				return BadRequest(response);
+			}
 
-            return Ok(response);
-        }
+			return Ok(response);
+		}
 
-        [HttpPut("update/date/regular")]
-        public async Task<ActionResult<ServiceResponse<bool>>> SimGameByDateRegular()
-        {
-            ServiceResponse<bool> response = await _gameService.SimGameByDateRegular();
+		[HttpPut("update/date/regular")]
+		public async Task<ActionResult<ServiceResponse<bool>>> SimGameByDateRegular()
+		{
+			ServiceResponse<bool> response = await _gameService.SimGameByDateRegular();
 
-            if (!response.Success)
-            {
-                return BadRequest(response);
-            }
+			if (!response.Success)
+			{
+				return BadRequest(response);
+			}
 
-            return Ok(response);
-        }
-    }
+			return Ok(response);
+		}
+
+		[HttpPut("update/date/all")]
+		public async Task<ActionResult<ServiceResponse<bool>>> SimAll()
+		{
+			ServiceResponse<bool> response = await _gameService.SimAll();
+
+			if (!response.Success)
+			{
+				return BadRequest(response);
+			}
+
+			return Ok(response);
+		}
+	}
 }
