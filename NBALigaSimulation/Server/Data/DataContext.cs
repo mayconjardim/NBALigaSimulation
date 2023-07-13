@@ -199,7 +199,8 @@ namespace NBALigaSimulation.Server.Data
 			modelBuilder.Entity<PlayoffsGame>()
 				.HasOne(pg => pg.Playoffs)
 				.WithMany(p => p.PlayoffGames)
-				.HasForeignKey(pg => pg.PlayoffsId);
+				.HasForeignKey(pg => pg.PlayoffsId)
+				 .OnDelete(DeleteBehavior.Cascade);
 
 			modelBuilder.Entity<PlayoffsGame>()
 				.HasOne(pg => pg.Game)
