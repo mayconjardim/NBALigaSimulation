@@ -9,6 +9,8 @@ namespace NBALigaSimulation.Server.Services.PlayoffsService
 		Task<ServiceResponse<bool>> GeneratePlayoffs();
 		Task<ServiceResponse<bool>> Generate2Round();
 		Task<ServiceResponse<bool>> Generate3Round();
+		Task<ServiceResponse<bool>> Generate4Round();
+
 
 	}
 }

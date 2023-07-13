@@ -46,6 +46,13 @@ namespace NBALigaSimulation.Server.Controllers
 			return Ok(result);
 		}
 
+		[HttpPost("generate/finals")]
+		public async Task<ActionResult<ServiceResponse<bool>>> Generate4Round()
+		{
+			var result = await _playoffsService.Generate4Round();
+			return Ok(result);
+		}
+
 
 	}
 }

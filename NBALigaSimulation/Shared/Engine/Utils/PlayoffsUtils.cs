@@ -351,6 +351,51 @@ namespace NBALigaSimulation.Shared.Engine.Utils
 			return playoffs;
 		}
 
+		public static List<Playoffs> Generate4ndRound(List<Playoffs> playoffsSeries, int season)
+		{
+
+			var winnerSerie13 = playoffsSeries
+			   .Where(s => s.SeriesId == 13 && s.Season == season && (s.WinsTeamOne == 4 || s.WinsTeamTwo == 4))
+			   .Select(s => s.WinsTeamOne == 4 ? s.TeamOne : s.TeamTwo)
+			   .FirstOrDefault();
+
+			var winnerSerie14 = playoffsSeries
+			   .Where(s => s.SeriesId == 14 && s.Season == season && (s.WinsTeamOne == 4 || s.WinsTeamTwo == 4))
+			   .Select(s => s.WinsTeamOne == 4 ? s.TeamOne : s.TeamTwo)
+			   .FirstOrDefault();
+
+		
+			List<Playoffs> playoffs = new List<Playoffs>();
+
+			int teamOneId;
+			int teamTwoId;
+
+			if (winnerSerie13.TeamRegularStats.Where(t => t.Season == season).LastOrDefault().ConfRank > winnerSerie14.TeamRegularStats.Where(t => t.Season == season).LastOrDefault().ConfRank)
+			{
+				teamOneId = winnerSerie13.Id;
+				teamTwoId = winnerSerie14.Id;
+			}
+			else
+			{
+				teamOneId = winnerSerie14.Id;
+				teamTwoId = winnerSerie13.Id;
+			}
+
+			var Series15 = new Playoffs
+			{
+				Season = season,
+				SeriesId = 15,
+				Complete = false,
+				TeamOneId = teamOneId,
+				TeamTwoId = teamTwoId,
+				WinsTeamOne = 0,
+				WinsTeamTwo = 0
+			};
+
+			playoffs.Add(Series15);
+			return playoffs;
+		}
+
 		public static List<PlayoffsGame> GenerateRoundGames(List<Playoffs> playoffs, Season season)
 		{
 			List<PlayoffsGame> playoffGames = new List<PlayoffsGame>();

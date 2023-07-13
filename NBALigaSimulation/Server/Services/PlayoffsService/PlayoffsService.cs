@@ -106,6 +106,28 @@ namespace NBALigaSimulation.Server.Services.PlayoffsService
 			return response;
 		}
 
+			public async Task<ServiceResponse<bool>> Generate4Round()
+		{
+			var response = new ServiceResponse<bool>();
+			var season = await _context.Seasons.OrderBy(s => s.Year).LastOrDefaultAsync();
+
+			List<Playoffs> playoffs = await _context.Playoffs
+			.Where(p => p.Season == season.Year)
+			.Include(t => t.TeamOne).ThenInclude(t => t.TeamRegularStats)
+			.Include(t => t.TeamTwo).ThenInclude(t => t.TeamRegularStats)
+			.ToListAsync();
+
+			var newPlayoffs = PlayoffsUtils.Generate4ndRound(playoffs, season.Year);
+			var games = PlayoffsUtils.GenerateRoundGames(newPlayoffs, season);
+
+			_context.AddRange(games);
+			_context.AddRange(newPlayoffs);
+			await _context.SaveChangesAsync();
+
+			response.Success = true;
+			return response;
+		}
+
 
 	}
 }
