@@ -1,120 +1,72 @@
 ﻿@page "/playoffs"
-@inject IStatsService StatsService
+@inject IPlayoffsService PlayoffsService
 
 <MudContainer>
-
-<h1>PLAYOFFS</h1>
-<main id="tournament">
-	<ul class="round round-1">
-		<li class="spacer">&nbsp;</li>
-	
-		@* SERIE 1 *@
-		<li class="game game-top winner">Lousville <span>79</span></li>
-		<li class="game game-spacer">&nbsp;</li>
-		<li class="game game-bottom ">NC A&T <span>48</span></li>
-
-		<li class="spacer">&nbsp;</li>
+@if (series != null)
+{
 		
-		@* SERIE 2 *@
-		<li class="game game-top">Colo St <span>84</span></li>
-		<li class="game game-spacer">&nbsp;</li>
-		<li class="game game-bottom ">Missouri <span>72</span></li>
+<div class="playoff-table">
+    <div class="playoff-table-content">
+        <div class="playoff-table-tour">
+            @foreach (var seriesItem in series)
+            {
+                var serie = seriesItem.Value;
 
-		<li class="spacer">&nbsp;</li>
-		
-		@* SERIE 3 *@
-		<li class="game game-top ">Oklahoma St <span>55</span></li>
-		<li class="game game-spacer">&nbsp;</li>
-		<li class="game game-bottom winner">Oregon <span>68</span></li>
+                <div class="playoff-table-group">
+                    <div class="playoff-table-pair playoff-table-pair-style">
+                        <div class="playoff-table-left-player"><MudAvatar Style="vertical-align: middle; background: none" Size="Size.Small" Image=@($"Images/logos/{serie.teamOneAbrv}.svg") Square="true" /> @serie.teamOneName</div>
+                        <div class="playoff-table-right-player"><MudAvatar Style="vertical-align: middle; background: none" Size="Size.Small" Image=@($"Images/logos/{serie.teamTwoAbrv}.svg") Square="true" /> @serie.teamTwoName</div>
+                    </div>
+                </div>
+            }
+        </div>
 
-		<li class="spacer">&nbsp;</li>
-		
-		@* SERIE 4*@
-		<li class="game game-top">Saint Louis <span>64</span></li>
-		<li class="game game-spacer">&nbsp;</li>
-		<li class="game game-bottom ">New Mexico St <span>44</span></li>
+        <div class="playoff-table-tour">
+            <div class="playoff-table-group">
+                <div class="playoff-table-pair playoff-table-pair-style">
+                    <div class="playoff-table-left-player">Иванов</div>
+                    <div class="playoff-table-right-player">Сидоров</div>
+                </div>
+                <div class="playoff-table-pair playoff-table-pair-style">
+                    <div class="playoff-table-left-player">Иванов</div>
+                    <div class="playoff-table-right-player">Сидоров</div>
+                </div>
+            </div>
+            <div class="playoff-table-group">
+                <div class="playoff-table-pair playoff-table-pair-style">
+                    <div class="playoff-table-left-player">Иванов</div>
+                    <div class="playoff-table-right-player">Сидоров</div>
+                </div>
+                <div class="playoff-table-pair playoff-table-pair-style">
+                    <div class="playoff-table-left-player">Иванов</div>
+                    <div class="playoff-table-right-player">Сидоров</div>
+                </div>
+            </div>
+        </div>
 
-		<li class="spacer">&nbsp;</li>
-		
-		@* SERIE 5 *@
-		<li class="game game-top">Memphis <span>54</span></li>
-		<li class="game game-spacer">&nbsp;</li>
-		<li class="game game-bottom ">St Mary's <span>52</span></li>
+        <div class="playoff-table-tour">
+            <div class="playoff-table-group">
+                <div class="playoff-table-pair playoff-table-pair-style">
+                    <div class="playoff-table-left-player">Иванов</div>
+                    <div class="playoff-table-right-player">Сидоров</div>
+                </div>
+                <div class="playoff-table-pair playoff-table-pair-style">
+                    <div class="playoff-table-left-player">Иванов</div>
+                    <div class="playoff-table-right-player">Сидоров</div>
+                </div>
+            </div>
+        </div>
 
-		<li class="spacer">&nbsp;</li>
-		
-		@* SERIE 6*@
-		<li class="game game-top">Mich St <span>65</span></li>
-		<li class="game game-spacer">&nbsp;</li>
-		<li class="game game-bottom ">Valparaiso <span>54</span></li>
-
-		<li class="spacer">&nbsp;</li>
-		
-		@* SERIE 7 *@
-		<li class="game game-top">Creighton <span>67</span></li>
-		<li class="game game-spacer">&nbsp;</li>
-		<li class="game game-bottom ">Cincinnati <span>63</span></li>
-
-		<li class="spacer">&nbsp;</li>
-		
-		@* SERIE 8 *@
-		<li class="game game-top">Duke <span>73</span></li>
-		<li class="game game-spacer">&nbsp;</li>
-		<li class="game game-bottom ">Albany <span>61</span></li>
-
-		<li class="spacer">&nbsp;</li>
-	</ul>
-	<ul class="round round-2">
-		<li class="spacer">&nbsp;</li>
-		
-		<li class="game game-top">Lousville <span>82</span></li>
-		<li class="game game-spacer">&nbsp;</li>
-		<li class="game game-bottom ">Colo St <span>56</span></li>
-
-		<li class="spacer">&nbsp;</li>
-		
-		<li class="game game-top">Oregon <span>74</span></li>
-		<li class="game game-spacer">&nbsp;</li>
-		<li class="game game-bottom ">Saint Louis <span>57</span></li>
-
-		<li class="spacer">&nbsp;</li>
-		
-		<li class="game game-top ">Memphis <span>48</span></li>
-		<li class="game game-spacer">&nbsp;</li>
-		<li class="game game-bottom">Mich St <span>70</span></li>
-
-		<li class="spacer">&nbsp;</li>
-		
-		<li class="game game-top ">Creighton <span>50</span></li>
-		<li class="game game-spacer">&nbsp;</li>
-		<li class="game game-bottom">Duke <span>66</span></li>
-
-		<li class="spacer">&nbsp;</li>
-	</ul>
-	<ul class="round round-3">
-		<li class="spacer">&nbsp;</li>
-		
-		<li class="game game-top">Lousville <span>77</span></li>
-		<li class="game game-spacer">&nbsp;</li>
-		<li class="game game-bottom ">Oregon <span>69</span></li>
-
-		<li class="spacer">&nbsp;</li>
-		
-		<li class="game game-top ">Mich St <span>61</span></li>
-		<li class="game game-spacer">&nbsp;</li>
-		<li class="game game-bottom">Duke <span>71</span></li>
-
-		<li class="spacer">&nbsp;</li>
-	</ul>
-	<ul class="round round-4">
-		<li class="spacer">&nbsp;</li>
-		
-		<li class="game game-top">Lousville <span>85</span></li>
-		<li class="game game-spacer">&nbsp;</li>
-		<li class="game game-bottom ">Duke <span>63</span></li>
-		
-		<li class="spacer">&nbsp;</li>
-	</ul>		
-</main>
-
+        <div class="playoff-table-tour">
+            <div class="playoff-table-group">
+                <div class="playoff-table-pair playoff-table-pair-style">
+                    <div class="playoff-table-left-player">Иванов</div>
+                    <div class="playoff-table-right-player">Сидоров</div>
+                </div>
+               
+            </div>
+        </div>
+    </div>
+</div>
+}
 </MudContainer>

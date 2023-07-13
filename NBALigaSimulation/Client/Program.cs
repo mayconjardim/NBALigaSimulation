@@ -11,6 +11,7 @@ global using NBALigaSimulation.Client.Services.FAService;
 global using NBALigaSimulation.Client.Services.SeasonService;
 global using NBALigaSimulation.Client.Services.StatsService;
 global using NBALigaSimulation.Client.Services.LeagueService;
+global using NBALigaSimulation.Client.Services.PlayoffsService;
 global using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
@@ -19,7 +20,6 @@ using NBALigaSimulation.Client;
 using pax.BlazorChartJs;
 using Blazored.LocalStorage;
 using Plk.Blazor.DragDrop;
-using NBALigaSimulation.Client.Services.PlayoffsService;
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
 
