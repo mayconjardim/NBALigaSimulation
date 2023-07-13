@@ -171,9 +171,7 @@ namespace NBALigaSimulation.Server.Services.GameService
 
             if (!firstUnsimulatedDate.HasValue)
             {
-                response.Success = false;
                 response.Message = "Não há datas não simuladas disponíveis.";
-                return response;
             }
 
             List<Game> games = await _context.Games
@@ -203,8 +201,8 @@ namespace NBALigaSimulation.Server.Services.GameService
                 await _context.SaveChangesAsync();
 
                 game.GameSim();
-
                 game.Happened = true;
+
 
                 try
                 {
@@ -221,7 +219,6 @@ namespace NBALigaSimulation.Server.Services.GameService
                 {
                     SimulationUtils.UpdateTeamStats(game);
                     SimulationUtils.UpdatePlayerGames(game);
-                    UpdateStandings();
                     await _context.SaveChangesAsync();
                 }
                 catch (Exception ex)
@@ -233,6 +230,7 @@ namespace NBALigaSimulation.Server.Services.GameService
 
             }
 
+            await UpdateStandings();
             response.Success = true;
             response.Data = true;
             return response;
@@ -304,6 +302,7 @@ namespace NBALigaSimulation.Server.Services.GameService
                 {
                     SimulationUtils.UpdateTeamStats(game);
                     SimulationUtils.UpdatePlayerGames(game);
+                    await UpdateStandings();
                     await _context.SaveChangesAsync();
                 }
                 catch (Exception ex)
@@ -324,7 +323,7 @@ namespace NBALigaSimulation.Server.Services.GameService
         public async Task UpdateStandings()
         {
 
-            var season = await _context.Seasons.LastOrDefaultAsync();
+            var season = await _context.Seasons.OrderBy(s => s.Year).LastOrDefaultAsync();
             if (season == null)
             {
                 return;
@@ -359,6 +358,9 @@ namespace NBALigaSimulation.Server.Services.GameService
                     westTeams[i].ConfRank = i + 1;
                 }
             }
+
+            await _context.SaveChangesAsync();
+
         }
 
     }
