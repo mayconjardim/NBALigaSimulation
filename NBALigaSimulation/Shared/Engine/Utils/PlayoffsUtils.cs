@@ -120,126 +120,6 @@ namespace NBALigaSimulation.Shared.Engine.Utils
 
 		}
 
-		public static List<PlayoffsGame> Generate1stRoundGames(List<Playoffs> playoffs, Season season)
-		{
-			List<PlayoffsGame> playoffGames = new List<PlayoffsGame>();
-
-			DateTime dataInicial = DateTime.UtcNow.AddDays(1);
-			TimeZoneInfo tzBrasilia = TimeZoneInfo.FindSystemTimeZoneById("E. South America Standard Time");
-			dataInicial = new DateTime(dataInicial.Year, dataInicial.Month, dataInicial.Day, 23, 0, 0);
-			dataInicial = TimeZoneInfo.ConvertTimeFromUtc(dataInicial, tzBrasilia);
-
-			foreach (var serie in playoffs)
-			{
-				var playoffGame1 = new PlayoffsGame
-				{
-					Playoffs = serie,
-					Game = new Game
-					{
-						Type = 1,
-						HomeTeamId = serie.TeamOneId,
-						AwayTeamId = serie.TeamTwoId,
-						GameDate = dataInicial,
-						Season = season
-					}
-				};
-
-				playoffGames.Add(playoffGame1);
-
-				var playoffGame2 = new PlayoffsGame
-				{
-					Playoffs = serie,
-					Game = new Game
-					{
-						Type = 1,
-						HomeTeamId = serie.TeamOneId,
-						AwayTeamId = serie.TeamTwoId,
-						GameDate = dataInicial,
-						Season = season
-					}
-				};
-
-				playoffGames.Add(playoffGame2);
-
-				var playoffGame3 = new PlayoffsGame
-				{
-					Playoffs = serie,
-					Game = new Game
-					{
-						Type = 1,
-						HomeTeamId = serie.TeamTwoId,
-						AwayTeamId = serie.TeamOneId,
-						GameDate = dataInicial,
-						Season = season
-					}
-				};
-
-				playoffGames.Add(playoffGame3);
-
-				var playoffGame4 = new PlayoffsGame
-				{
-					Playoffs = serie,
-					Game = new Game
-					{
-						Type = 1,
-						HomeTeamId = serie.TeamTwoId,
-						AwayTeamId = serie.TeamOneId,
-						GameDate = dataInicial,
-						Season = season
-					}
-				};
-
-				playoffGames.Add(playoffGame4);
-
-				var playoffGame5 = new PlayoffsGame
-				{
-					Playoffs = serie,
-					Game = new Game
-					{
-						Type = 1,
-						HomeTeamId = serie.TeamOneId,
-						AwayTeamId = serie.TeamTwoId,
-						GameDate = dataInicial,
-						Season = season
-					}
-				};
-
-				playoffGames.Add(playoffGame5);
-
-				var playoffGame6 = new PlayoffsGame
-				{
-					Playoffs = serie,
-					Game = new Game
-					{
-						Type = 1,
-						HomeTeamId = serie.TeamTwoId,
-						AwayTeamId = serie.TeamOneId,
-						GameDate = dataInicial,
-						Season = season
-					}
-				};
-
-				playoffGames.Add(playoffGame6);
-
-				var playoffGame7 = new PlayoffsGame
-				{
-					Playoffs = serie,
-					Game = new Game
-					{
-						Type = 1,
-						HomeTeamId = serie.TeamOneId,
-						AwayTeamId = serie.TeamTwoId,
-						GameDate = dataInicial,
-						Season = season
-					}
-				};
-
-				playoffGames.Add(playoffGame7);
-			}
-
-			return playoffGames;
-		}
-
 		public static List<Playoffs> Generate2ndRound(List<Playoffs> playoffsSeries, int season)
 		{
 
@@ -390,7 +270,88 @@ namespace NBALigaSimulation.Shared.Engine.Utils
 			return playoffs;
 		}
 
-		public static List<PlayoffsGame> Generate2ndRoundGames(List<Playoffs> playoffs, Season season)
+
+		public static List<Playoffs> Generate3ndRound(List<Playoffs> playoffsSeries, int season)
+		{
+
+			var winnerSerie9 = playoffsSeries
+			   .Where(s => s.SeriesId == 9 && s.Season == season && (s.WinsTeamOne == 4 || s.WinsTeamTwo == 4))
+			   .Select(s => s.WinsTeamOne == 4 ? s.TeamOne : s.TeamTwo)
+			   .FirstOrDefault();
+
+			var winnerSerie10 = playoffsSeries
+			   .Where(s => s.SeriesId == 10 && s.Season == season && (s.WinsTeamOne == 4 || s.WinsTeamTwo == 4))
+			   .Select(s => s.WinsTeamOne == 4 ? s.TeamOne : s.TeamTwo)
+			   .FirstOrDefault();
+
+			var winnerSerie11 = playoffsSeries
+			   .Where(s => s.SeriesId == 11 && s.Season == season && (s.WinsTeamOne == 4 || s.WinsTeamTwo == 4))
+			   .Select(s => s.WinsTeamOne == 4 ? s.TeamOne : s.TeamTwo)
+			   .FirstOrDefault();
+
+			var winnerSerie12 = playoffsSeries
+			   .Where(s => s.SeriesId == 12 && s.Season == season && (s.WinsTeamOne == 4 || s.WinsTeamTwo == 4))
+			   .Select(s => s.WinsTeamOne == 4 ? s.TeamOne : s.TeamTwo)
+			   .FirstOrDefault();
+
+			List<Playoffs> playoffs = new List<Playoffs>();
+
+			int teamOneId;
+			int teamTwoId;
+
+			if (winnerSerie9.TeamRegularStats.Where(t => t.Season == season).LastOrDefault().ConfRank > winnerSerie10.TeamRegularStats.Where(t => t.Season == season).LastOrDefault().ConfRank)
+			{
+				teamOneId = winnerSerie9.Id;
+				teamTwoId = winnerSerie10.Id;
+			}
+			else
+			{
+				teamOneId = winnerSerie10.Id;
+				teamTwoId = winnerSerie9.Id;
+			}
+
+			var Series13 = new Playoffs
+			{
+				Season = season,
+				SeriesId = 13,
+				Complete = false,
+				TeamOneId = teamOneId,
+				TeamTwoId = teamTwoId,
+				WinsTeamOne = 0,
+				WinsTeamTwo = 0
+			};
+
+			playoffs.Add(Series13);
+
+
+			if (winnerSerie11.TeamRegularStats.Where(t => t.Season == season).LastOrDefault().ConfRank > winnerSerie12.TeamRegularStats.Where(t => t.Season == season).LastOrDefault().ConfRank)
+			{
+				teamOneId = winnerSerie11.Id;
+				teamTwoId = winnerSerie12.Id;
+			}
+			else
+			{
+				teamOneId = winnerSerie12.Id;
+				teamTwoId = winnerSerie11.Id;
+			}
+
+			Playoffs Series14 = new Playoffs
+			{
+				Season = season,
+				SeriesId = 14,
+				Complete = false,
+				TeamOneId = teamOneId,
+				TeamTwoId = teamTwoId,
+				WinsTeamOne = 0,
+				WinsTeamTwo = 0
+			};
+
+			playoffs.Add(Series14);
+
+			return playoffs;
+		}
+
+		public static List<PlayoffsGame> GenerateRoundGames(List<Playoffs> playoffs, Season season)
 		{
 			List<PlayoffsGame> playoffGames = new List<PlayoffsGame>();
 
@@ -509,6 +470,7 @@ namespace NBALigaSimulation.Shared.Engine.Utils
 
 			return playoffGames;
 		}
+
 
 	}
 }

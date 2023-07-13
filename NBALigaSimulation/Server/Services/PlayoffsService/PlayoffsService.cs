@@ -52,7 +52,7 @@ namespace NBALigaSimulation.Server.Services.PlayoffsService
 				.ToListAsync();
 
 			var playoffs = PlayoffsUtils.Generate1stRound(teamsEast, teamsWest, season.Year);
-			var games = PlayoffsUtils.Generate1stRoundGames(playoffs, season);
+			var games = PlayoffsUtils.GenerateRoundGames(playoffs, season);
 
 			_context.AddRange(games);
 			_context.AddRange(playoffs);
@@ -74,7 +74,7 @@ namespace NBALigaSimulation.Server.Services.PlayoffsService
 			.ToListAsync();
 
 			var newPlayoffs = PlayoffsUtils.Generate2ndRound(playoffs, season.Year);
-			var games = PlayoffsUtils.Generate2ndRoundGames(newPlayoffs, season);
+			var games = PlayoffsUtils.GenerateRoundGames(newPlayoffs, season);
 
 			_context.AddRange(games);
 			_context.AddRange(newPlayoffs);
@@ -84,6 +84,27 @@ namespace NBALigaSimulation.Server.Services.PlayoffsService
 			return response;
 		}
 
+		public async Task<ServiceResponse<bool>> Generate3Round()
+		{
+			var response = new ServiceResponse<bool>();
+			var season = await _context.Seasons.OrderBy(s => s.Year).LastOrDefaultAsync();
+
+			List<Playoffs> playoffs = await _context.Playoffs
+			.Where(p => p.Season == season.Year)
+			.Include(t => t.TeamOne).ThenInclude(t => t.TeamRegularStats)
+			.Include(t => t.TeamTwo).ThenInclude(t => t.TeamRegularStats)
+			.ToListAsync();
+
+			var newPlayoffs = PlayoffsUtils.Generate3ndRound(playoffs, season.Year);
+			var games = PlayoffsUtils.GenerateRoundGames(newPlayoffs, season);
+
+			_context.AddRange(games);
+			_context.AddRange(newPlayoffs);
+			await _context.SaveChangesAsync();
+
+			response.Success = true;
+			return response;
+		}
 
 
 	}
