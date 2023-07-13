@@ -27,6 +27,11 @@
 				}
 			}
 		}
+
+		private string CheckWinner(int wins)
+		{
+			return wins == 4 ? "bold-span" : "";
+		}
 	}
 
 }

@@ -15,9 +15,13 @@
                 <div class="playoff-table-group">
                     <div class="playoff-table-pair playoff-table-pair-style">
                         <div class="playoff-table-left-player"><MudAvatar Style="vertical-align: middle; background: none" Size="Size.Small" Image=@($"Images/logos/{serie.teamOneAbrv}.svg") Square="true" />
-                            @serie.teamOneName <span>[ @serie.WinsTeamOne ]</span></div>
+                            @serie.teamOneName <span class="@CheckWinner(serie.WinsTeamOne)">[@serie.WinsTeamOne]</span>
+
+                            </div>
                         <div class="playoff-table-right-player"><MudAvatar Style="vertical-align: middle; background: none" Size="Size.Small" Image=@($"Images/logos/{serie.teamTwoAbrv}.svg") Square="true" />
-                            @serie.teamTwoName  <span>[ @serie.WinsTeamTwo ]</span></div>
+                            @serie.teamTwoName  <span class="@CheckWinner(serie.WinsTeamTwo)">[@serie.WinsTeamTwo]</span>
+
+                            </div>
                     </div>
                 </div>
             }

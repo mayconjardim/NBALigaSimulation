@@ -170,3 +170,7 @@ span {
     float: right;
     text-align: right;
 }
+
+.bold-span {
+    font-weight: bold;
+}
