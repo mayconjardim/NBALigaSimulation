@@ -19,6 +19,7 @@ using NBALigaSimulation.Client;
 using pax.BlazorChartJs;
 using Blazored.LocalStorage;
 using Plk.Blazor.DragDrop;
+using NBALigaSimulation.Client.Services.PlayoffsService;
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
 
@@ -33,6 +34,7 @@ builder.Services.AddScoped<ISeasonService, SeasonService>();
 builder.Services.AddScoped<IFAService, FAService>();
 builder.Services.AddScoped<IStatsService, StatsService>();
 builder.Services.AddScoped<ILeagueService, LeagueService>();
+builder.Services.AddScoped<IPlayoffsService, PlayoffsService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddOptions();
 builder.Services.AddAuthorizationCore();

@@ -30,6 +30,8 @@ namespace NBALigaSimulation.Client.Pages.Team
             {
                 games = result.Data;
                 totalGames = games.Count;
+                gamesaway = games.Where(t => t.AwayTeamId == team.Id).Count();
+                gamehome = games.Where(t => t.HomeTeamId == team.Id).Count();
 
             }
         }

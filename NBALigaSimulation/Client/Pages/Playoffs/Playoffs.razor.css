@@ -1,86 +1,58 @@
-﻿body {
-    color: #000000;
+﻿main {
+    display: flex;
+    flex-direction: row;
 }
 
-td.main {
-    font-size: 10pt;
-    font-weight: 500;
-    color: #000000;
+.round {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width: 200px;
+    list-style: none;
+    padding: 0;
 }
 
-a.linkmain {
-    font-size: 10pt;
-    font-weight: 500;
-    color: #000000;
+    .round .spacer {
+        flex-grow: 1;
+    }
+
+        .round .spacer:first-child,
+        .round .spacer:last-child {
+            flex-grow: .5;
+        }
+
+    .round .game-spacer {
+        flex-grow: 1;
+    }
+
+
+body {
+    padding: 10px;
+    line-height: 1.4em;
 }
 
-a.linkhuman {
-    font-size: 10pt;
-    font-weight: 500;
-    color: #0000FF;
+li.game {
+    padding-left: 20px;
 }
 
-td.header {
-    background: #990000;
-    font-size: 10pt;
-    font-weight: bold;
-    color: #FFFFFF;
+    li.game.winner {
+        font-weight: bold;
+    }
+
+    li.game span {
+        float: right;
+        margin-right: 5px;
+    }
+
+li.game-top {
+    border-bottom: 1px solid #aaa;
 }
 
-td.plainheader {
-    background: #990000;
-    font-family: tahoma;
-    font-size: 24pt;
-    font-weight: bold;
-    color: #FFFFFF;
+li.game-spacer {
+    border-right: 1px solid #aaa;
+    min-height: 40px;
 }
 
-td.headerbg {
-    background: #990000;
-    font-family: tahoma;
-    font-size: 8pt;
-    font-weight: bold;
-    color: #FFFFFF;
-}
-
-tr.row1 {
-    background: #F8F8F8;
-}
-
-tr.row2 {
-    background: #E7E7E7;
-}
-
-tr.teamcolor {
-    background: #990000;
-    color: #FFFFFF;
-}
-
-td.teamheader {
-    background: #990000;
-    font-family: tahoma;
-    font-size: 24pt;
-    font-weight: bold;
-    color: #FFFFFF;
-}
-
-td.teamheader2 {
-    background: #990000;
-    font-family: tahoma;
-    font-size: 10pt;
-    font-weight: bold;
-    color: #FFFFFF;
-}
-
-td.tableheader {
-    font-size: 14pt;
-    font-weight: bold;
-    color: #000000;
-}
-
-td.newheader {
-    font-family: tahoma;
-    font-size: 24pt;
-    font-weight: bold;
-    color: #000000;
+li.game-bottom {
+    border-top: 1px solid #aaa;
 }

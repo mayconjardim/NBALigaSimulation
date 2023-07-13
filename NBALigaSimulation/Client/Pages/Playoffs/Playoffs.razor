@@ -2,316 +2,119 @@
 @inject IStatsService StatsService
 
 <MudContainer>
-      <table style="margin: 1em 2em 1em 1em; font-size: 90%;" border="0" cellpadding="0" cellspacing="0" height="520" width="781">
-         <tbody>
-            <tr>
-               <td height="36" width="8">&nbsp;</td>
-               <td colspan="3" style="border: 1px solid rgb(170, 170, 170);" align="center" bgcolor="#f2f2f2" height="36" width="183">First round</td>
-               <td colspan="2" height="36" width="16"></td>
-               <td colspan="3" style="border: 1px solid rgb(170, 170, 170);" align="center" bgcolor="#f2f2f2" height="36" width="178">Second round</td>
-               <td colspan="2" height="36" width="16"></td>
-               <td colspan="3" style="border: 1px solid rgb(170, 170, 170);" align="center" bgcolor="#f2f2f2" height="36" width="178">Conference Finals</td>
-               <td colspan="2" height="36" width="16"></td>
-               <td colspan="3" style="border: 1px solid rgb(170, 170, 170);" align="center" bgcolor="#f2f2f2" height="36" width="178">League Finals</td>
-            </tr>
-            <tr>
-               <td width="8" height="17">&nbsp;</td>
-               <td width="25" height="17"></td>
-               <td width="130" height="17"></td>
-               <td width="30" height="17"></td>
-               <td width="8" height="17"></td>
-               <td width="8" height="17"></td>
-               <td width="25" height="17"></td>
-               <td width="130" height="17"></td>
-               <td width="25" height="17"></td>
-               <td width="8" height="17"></td>
-               <td width="8" height="17"></td>
-               <td width="25" height="17"></td>
-               <td width="130" height="17"></td>
-               <td width="25" height="17"></td>
-               <td width="8" height="17"></td>
-               <td width="8" height="17"></td>
-               <td width="25" height="17"></td>
-               <td width="130" height="17"></td>
-               <td width="25" height="17"></td>
-            </tr>
-            <tr>
-               @* 1º SEED*@
-               <td height="20" width="8"></td>
-               <td style="border: 1px solid rgb(170, 170, 170);" align="center" bgcolor="#f2f2f2" height="19" width="23">#1</td>
-               <td style="border: 1px solid rgb(170, 170, 170);" bgcolor="#f9f9f9" height="19" width="128">&nbsp;<a class="linkhuman" href="./rosters/roster24.htm">Spurs</a></td>
-               <td style="border: 1px solid rgb(170, 170, 170);" align="center" bgcolor="#f9f9f9" height="19" width="28">4</td>
-               <td style="border-style: solid; border-color: black; border-width: 0pt 0pt 2px;" align="center" height="20" width="8">&nbsp;</td>
-            </tr>
-            <tr>
-               @* 8º SEED *@
-               <td height="10" width="8"></td>
-               <td rowspan="2" style="border: 1px solid rgb(170, 170, 170);" align="center" bgcolor="#f2f2f2" height="19" width="23">#8</td>
-               <td rowspan="2" style="border: 1px solid rgb(170, 170, 170);" bgcolor="#f9f9f9" height="19" width="128">&nbsp;<a class="linkhuman" href="./rosters/roster27.htm">SuperSonics</a></td>
-               <td rowspan="2" style="border: 1px solid rgb(170, 170, 170);" align="center" bgcolor="#f9f9f9" height="19" width="28">0</td>
-               <td rowspan="6" style="border-style: solid; border-color: black; border-width: 2px 2px 2px 0pt;" align="center" height="61" width="6">&nbsp;</td>
-            </tr>
 
+<h1>PLAYOFFS</h1>
+<main id="tournament">
+	<ul class="round round-1">
+		<li class="spacer">&nbsp;</li>
+	
+		@* SERIE 1 *@
+		<li class="game game-top winner">Lousville <span>79</span></li>
+		<li class="game game-spacer">&nbsp;</li>
+		<li class="game game-bottom ">NC A&T <span>48</span></li>
 
-            <tr>
-                 @* 2º ROUND *@
-               <td height="12" width="8"></td>
-               <td rowspan="2" style="border-style: solid; border-color: black; border-width: 0pt 0pt 2px;" align="center" height="22" width="8">&nbsp;</td>
-               <td rowspan="2" style="border: 1px solid rgb(170, 170, 170);" align="center" bgcolor="#f2f2f2" height="22" width="23">#1</td>
-               <td rowspan="2" style="border: 1px solid rgb(170, 170, 170);" bgcolor="#f9f9f9" height="22" width="128">&nbsp;<a class="linkhuman" href="./rosters/roster24.htm">Spurs</a></td>
-               <td rowspan="2" style="border: 1px solid rgb(170, 170, 170);" align="center" bgcolor="#f9f9f9" height="22" width="23">4</td>
-               <td rowspan="2" style="border-style: solid; border-color: black; border-width: 0pt 0pt 2px;" align="center" height="22" width="8">&nbsp;</td>
-            </tr>
-            <tr>
-               <td height="10" width="8"></td>
-               <td rowspan="2" colspan="3" align="center" height="20" width="185">&nbsp;</td>
-            </tr>
-            <tr>
-               <td height="10" width="8"></td>
-               <td rowspan="2" style="border-style: solid; border-color: black; border-width: 2px 0pt 0pt;" align="center" height="21" width="8">&nbsp;</td>
-               <td rowspan="2" style="border: 1px solid rgb(170, 170, 170);" align="center" bgcolor="#f2f2f2" height="21" width="23">#5</td>
-               <td rowspan="2" style="border: 1px solid rgb(170, 170, 170);" bgcolor="#f9f9f9" height="21" width="128">&nbsp;<a class="linkhuman" href="./rosters/roster19.htm">Timberwolves</a></td>
-               <td rowspan="2" style="border: 1px solid rgb(170, 170, 170);" align="center" bgcolor="#f9f9f9" height="21" width="23">1</td>
-               <td rowspan="12" style="border-style: solid; border-color: black; border-width: 2px 2px 2px 0pt;" align="center" height="122" width="6">&nbsp;</td>
-            </tr>
+		<li class="spacer">&nbsp;</li>
+		
+		@* SERIE 2 *@
+		<li class="game game-top">Colo St <span>84</span></li>
+		<li class="game game-spacer">&nbsp;</li>
+		<li class="game game-bottom ">Missouri <span>72</span></li>
 
+		<li class="spacer">&nbsp;</li>
+		
+		@* SERIE 3 *@
+		<li class="game game-top ">Oklahoma St <span>55</span></li>
+		<li class="game game-spacer">&nbsp;</li>
+		<li class="game game-bottom winner">Oregon <span>68</span></li>
 
+		<li class="spacer">&nbsp;</li>
+		
+		@* SERIE 4*@
+		<li class="game game-top">Saint Louis <span>64</span></li>
+		<li class="game game-spacer">&nbsp;</li>
+		<li class="game game-bottom ">New Mexico St <span>44</span></li>
 
+		<li class="spacer">&nbsp;</li>
+		
+		@* SERIE 5 *@
+		<li class="game game-top">Memphis <span>54</span></li>
+		<li class="game game-spacer">&nbsp;</li>
+		<li class="game game-bottom ">St Mary's <span>52</span></li>
 
-            <tr>
-               <td height="11" width="8"></td>
-               <td rowspan="2" style="border: 1px solid rgb(170, 170, 170);" align="center" bgcolor="#f2f2f2" height="19" width="23">#4</td>
-               <td rowspan="2" style="border: 1px solid rgb(170, 170, 170);" bgcolor="#f9f9f9" height="19" width="128">&nbsp;<a class="linkhuman" href="./rosters/roster15.htm">Lakers</a></td>
-               <td rowspan="2" style="border: 1px solid rgb(170, 170, 170);" align="center" bgcolor="#f9f9f9" height="19" width="28">1</td>
-            </tr>
-            <tr>
-               <td height="8" width="8"></td>
-            </tr>
-            <tr>
-               <td height="11" width="8"></td>
-               <td rowspan="2" style="border: 1px solid rgb(170, 170, 170);" align="center" bgcolor="#f2f2f2" height="23" width="23">#5</td>
-               <td rowspan="2" style="border: 1px solid rgb(170, 170, 170);" bgcolor="#f9f9f9" height="23" width="128">&nbsp;<a class="linkhuman" href="./rosters/roster19.htm">Timberwolves</a></td>
-               <td rowspan="2" style="border: 1px solid rgb(170, 170, 170);" align="center" bgcolor="#f9f9f9" height="23" width="28">4</td>
-               <td rowspan="2" style="border-style: solid; border-color: black; border-width: 2px 0pt 0pt;" align="center" height="23" width="8">&nbsp;</td>
-            </tr>
-            <tr>
-               <td height="12" width="8"></td>
-               <td colspan="5" height="12" width="196"></td>
-               <td rowspan="2" style="border-style: solid; border-color: black; border-width: 0pt 0pt 2px;" align="center" height="20" width="8">&nbsp;</td>
-               <td rowspan="2" style="border: 1px solid rgb(170, 170, 170);" align="center" bgcolor="#f2f2f2" height="20" width="23">#1</td>
-               <td rowspan="2" style="border: 1px solid rgb(170, 170, 170);" bgcolor="#f9f9f9" height="20" width="128">&nbsp;<a class="linkhuman" href="./rosters/roster24.htm">Spurs</a></td>
-               <td rowspan="2" style="border: 1px solid rgb(170, 170, 170);" align="center" bgcolor="#f9f9f9" height="20" width="23">4</td>
-               <td rowspan="2" style="border-style: solid; border-color: black; border-width: 0pt 0pt 2px;" align="center" height="20" width="8">&nbsp;</td>
-            </tr>
-            <tr>
-               <td height="8" width="8"></td>
-               <td rowspan="2" colspan="8" align="center" height="18" width="381"></td>
-            </tr>
-            <tr>
-               <td height="10" width="8"></td>
-               <td rowspan="2" style="border-style: solid; border-color: black; border-width: 2px 0pt 0pt;" align="center" height="21" width="8">&nbsp;</td>
-               <td rowspan="2" style="border: 1px solid rgb(170, 170, 170);" align="center" bgcolor="#f2f2f2" height="20" width="23">#2</td>
-               <td rowspan="2" style="border: 1px solid rgb(170, 170, 170);" bgcolor="#f9f9f9" height="20" width="128">&nbsp;<a class="linkhuman" href="./rosters/roster11.htm">Warriors</a></td>
-               <td rowspan="2" style="border: 1px solid rgb(170, 170, 170);" align="center" bgcolor="#f9f9f9" height="20" width="23">1</td>
-               <td rowspan="24" style="border-style: solid; border-color: black; border-width: 2px 2px 2px 0pt;" align="center" height="243" width="6">&nbsp;</td>
-            </tr>
-            <tr>
-               <td height="11" width="8"></td>
-               <td rowspan="2" style="border: 1px solid rgb(170, 170, 170);" align="center" bgcolor="#f2f2f2" height="19" width="23">#3</td>
-               <td rowspan="2" style="border: 1px solid rgb(170, 170, 170);" bgcolor="#f9f9f9" height="19" width="128">&nbsp;<a class="linkhuman" href="./rosters/roster16.htm">Grizzlies</a></td>
-               <td rowspan="2" style="border: 1px solid rgb(170, 170, 170);" align="center" bgcolor="#f9f9f9" height="19" width="28">4</td>
-               <td rowspan="2" style="border-style: solid; border-color: black; border-width: 0pt 0pt 2px;" align="center" height="19" width="8">&nbsp;</td>
-            </tr>
-            <tr>
-               <td height="8" width="8"></td>
-            </tr>
-            <tr>
-               <td height="11" width="8"></td>
-               <td rowspan="2" style="border: 1px solid rgb(170, 170, 170);" align="center" bgcolor="#f2f2f2" height="19" width="23">#6</td>
-               <td rowspan="2" style="border: 1px solid rgb(170, 170, 170);" bgcolor="#f9f9f9" height="19" width="128">&nbsp;<a class="linkhuman" href="./rosters/roster23.htm">TrailBlazers</a></td>
-               <td rowspan="2" style="border: 1px solid rgb(170, 170, 170);" align="center" bgcolor="#f9f9f9" height="19" width="28">3</td>
-               <td rowspan="6" style="border-style: solid; border-color: black; border-width: 2px 2px 2px 0pt;" align="center" height="62" width="6">&nbsp;</td>
-            </tr>
-            <tr>
-               <td height="12" width="8"></td>
-               <td rowspan="2" style="border-style: solid; border-color: black; border-width: 0pt 0pt 2px;" align="center" height="22" width="8">&nbsp;</td>
-               <td rowspan="2" style="border: 1px solid rgb(170, 170, 170);" align="center" bgcolor="#f2f2f2" height="22" width="23">#3</td>
-               <td rowspan="2" style="border: 1px solid rgb(170, 170, 170);" bgcolor="#f9f9f9" height="22" width="128">&nbsp;<a class="linkhuman" href="./rosters/roster16.htm">Grizzlies</a></td>
-               <td rowspan="2" style="border: 1px solid rgb(170, 170, 170);" align="center" bgcolor="#f9f9f9" height="22" width="23">3</td>
-            </tr>
-            <tr>
-               <td height="10" width="8"></td>
-               <td rowspan="2" colspan="3" align="center" height="20" width="185">&nbsp;</td>
-            </tr>
-            <tr>
-               <td height="10" width="8"></td>
-               <td rowspan="2" style="border-style: solid; border-color: black; border-width: 2px 0pt 0pt;" align="center" height="21" width="8">&nbsp;</td>
-               <td rowspan="2" style="border: 1px solid rgb(170, 170, 170);" align="center" bgcolor="#f2f2f2" height="22" width="23">#2</td>
-               <td rowspan="2" style="border: 1px solid rgb(170, 170, 170);" bgcolor="#f9f9f9" height="22" width="128">&nbsp;<a class="linkhuman" href="./rosters/roster11.htm">Warriors</a></td>
-               <td rowspan="2" style="border: 1px solid rgb(170, 170, 170);" align="center" bgcolor="#f9f9f9" height="22" width="23">4</td>
-               <td rowspan="12" style="border-style: solid; border-color: black; border-width: 2px 0pt;" align="center" height="121" width="8">&nbsp;</td>
-            </tr>
-            <tr>
-               <td height="11" width="8"></td>
-               <td rowspan="2" style="border: 1px solid rgb(170, 170, 170);" align="center" bgcolor="#f2f2f2" height="19" width="23">#2</td>
-               <td rowspan="2" style="border: 1px solid rgb(170, 170, 170);" bgcolor="#f9f9f9" height="19" width="128">&nbsp;<a class="linkhuman" href="./rosters/roster11.htm">Warriors</a></td>
-               <td rowspan="2" style="border: 1px solid rgb(170, 170, 170);" align="center" bgcolor="#f9f9f9" height="19" width="28">4</td>
-            </tr>
-            <tr>
-               <td height="8" width="8"></td>
-            </tr>
-            <tr>
-               <td height="11" width="8"></td>
-               <td rowspan="2" style="border: 1px solid rgb(170, 170, 170);" align="center" bgcolor="#f2f2f2" height="19" width="23">#7</td>
-               <td rowspan="2" style="border: 1px solid rgb(170, 170, 170);" bgcolor="#f9f9f9" height="19" width="128">&nbsp;<a class="linkhuman" href="./rosters/roster26.htm">Jazz</a></td>
-               <td rowspan="2" style="border: 1px solid rgb(170, 170, 170);" align="center" bgcolor="#f9f9f9" height="19" width="28">3</td>
-               <td rowspan="2" style="border-style: solid; border-color: black; border-width: 2px 0pt 0pt;" align="center" height="22" width="8">&nbsp;</td>
-            </tr>
-            <tr>
-               <td height="11" width="8"></td>
-               <td colspan="10" height="11" width="392"></td>
-               <td rowspan="2" style="border-style: solid; border-color: black; border-width: 0pt 0pt 2px;" align="center" height="19" width="8">&nbsp;</td>
-               <td rowspan="2" style="border: 1px solid rgb(170, 170, 170);" align="center" bgcolor="#f2f2f2" height="19" width="23">#1</td>
-               <td rowspan="2" style="border: 1px solid rgb(170, 170, 170);" bgcolor="#f9f9f9" height="19" width="128">&nbsp;<a class="linkhuman" href="./rosters/roster24.htm">Spurs</a></td>
-               <td rowspan="2" style="border: 1px solid rgb(170, 170, 170);" align="center" bgcolor="#f9f9f9" height="19" width="23">4</td>
-            </tr>
-            <tr>
-               <td rowspan="2" height="19" width="8"></td>
-               <td height="8" width="25"></td>
-               <td rowspan="2" colspan="12" align="center" height="19" width="552"></td>
-            </tr>
-            <tr>
-               <td height="11" width="25"></td>
-               <td rowspan="2" style="border-style: solid; border-color: black; border-width: 2px 0pt 0pt;" align="center" height="22" width="8">&nbsp;</td>
-               <td rowspan="2" style="border: 1px solid rgb(170, 170, 170);" align="center" bgcolor="#f2f2f2" height="19" width="23">#2</td>
-               <td rowspan="2" style="border: 1px solid rgb(170, 170, 170);" bgcolor="#f9f9f9" height="19" width="128">&nbsp;<a class="linkhuman" href="./rosters/roster21.htm">Knicks</a></td>
-               <td rowspan="2" style="border: 1px solid rgb(170, 170, 170);" align="center" bgcolor="#f9f9f9" height="19" width="23">2</td>
-            </tr>
-            <tr>
-               <td height="11" width="8"></td>
-               <td rowspan="2" style="border: 1px solid rgb(170, 170, 170);" align="center" bgcolor="#f2f2f2" height="19" width="23">#3</td>
-               <td rowspan="2" style="border: 1px solid rgb(170, 170, 170);" bgcolor="#f9f9f9" height="19" width="128">&nbsp;<a class="linkhuman" href="./rosters/roster13.htm">Pacers</a></td>
-               <td rowspan="2" style="border: 1px solid rgb(170, 170, 170);" align="center" bgcolor="#f9f9f9" height="19" width="28">4</td>
-               <td rowspan="2" style="border-style: solid; border-color: black; border-width: 0pt 0pt 2px;" align="center" height="19" width="8">&nbsp;</td>
-            </tr>
-            <tr>
-               <td height="8" width="8"></td>
-            </tr>
-            <tr>
-               <td height="11" width="8"></td>
-               <td rowspan="2" style="border: 1px solid rgb(170, 170, 170);" align="center" bgcolor="#f2f2f2" height="19" width="23">#6</td>
-               <td rowspan="2" style="border: 1px solid rgb(170, 170, 170);" bgcolor="#f9f9f9" height="19" width="128">&nbsp;<a class="linkhuman" href="./rosters/roster25.htm">Raptors</a></td>
-               <td rowspan="2" style="border: 1px solid rgb(170, 170, 170);" align="center" bgcolor="#f9f9f9" height="19" width="28">2</td>
-               <td rowspan="6" style="border-style: solid; border-color: black; border-width: 2px 2px 2px 0pt;" align="center" height="63" width="6">&nbsp;</td>
-            </tr>
-            <tr>
-               <td height="11" width="8"></td>
-               <td rowspan="2" style="border-style: solid; border-color: black; border-width: 0pt 0pt 2px;" align="center" height="21" width="8">&nbsp;</td>
-               <td rowspan="2" style="border: 1px solid rgb(170, 170, 170);" align="center" bgcolor="#f2f2f2" height="22" width="23">#3</td>
-               <td rowspan="2" style="border: 1px solid rgb(170, 170, 170);" bgcolor="#f9f9f9" height="22" width="128">&nbsp;<a class="linkhuman" href="./rosters/roster13.htm">Pacers</a></td>
-               <td rowspan="2" style="border: 1px solid rgb(170, 170, 170);" align="center" bgcolor="#f9f9f9" height="22" width="23">3</td>
-            </tr>
-            <tr>
-               <td height="10" width="8"></td>
-               <td rowspan="2" colspan="3" align="center" height="21" width="185">&nbsp;</td>
-            </tr>
-            <tr>
-               <td height="11" width="8"></td>
-               <td rowspan="2" style="border-style: solid; border-color: black; border-width: 2px 0pt 0pt;" align="center" height="23" width="8">&nbsp;</td>
-               <td rowspan="2" style="border: 1px solid rgb(170, 170, 170);" align="center" bgcolor="#f2f2f2" height="22" width="23">#2</td>
-               <td rowspan="2" style="border: 1px solid rgb(170, 170, 170);" bgcolor="#f9f9f9" height="22" width="128">&nbsp;<a class="linkhuman" href="./rosters/roster21.htm">Knicks</a></td>
-               <td rowspan="2" style="border: 1px solid rgb(170, 170, 170);" align="center" bgcolor="#f9f9f9" height="22" width="23">4</td>
-               <td rowspan="12" style="border-style: solid; border-color: black; border-width: 2px 2px 2px 0pt;" align="center" height="122" width="6">&nbsp;</td>
-            </tr>
-            <tr>
-               <td height="12" width="8"></td>
-               <td rowspan="2" style="border: 1px solid rgb(170, 170, 170);" align="center" bgcolor="#f2f2f2" height="19" width="23">#2</td>
-               <td rowspan="2" style="border: 1px solid rgb(170, 170, 170);" bgcolor="#f9f9f9" height="19" width="128">&nbsp;<a class="linkhuman" href="./rosters/roster21.htm">Knicks</a></td>
-               <td rowspan="2" style="border: 1px solid rgb(170, 170, 170);" align="center" bgcolor="#f9f9f9" height="19" width="28">4</td>
-            </tr>
-            <tr>
-               <td height="8" width="8"></td>
-            </tr>
-            <tr>
-               <td height="10" width="8"></td>
-               <td rowspan="2" style="border: 1px solid rgb(170, 170, 170);" align="center" bgcolor="#f2f2f2" height="19" width="23">#7</td>
-               <td rowspan="2" style="border: 1px solid rgb(170, 170, 170);" bgcolor="#f9f9f9" height="19" width="128">&nbsp;<a class="linkhuman" href="./rosters/roster10.htm">Pistons</a></td>
-               <td rowspan="2" style="border: 1px solid rgb(170, 170, 170);" align="center" bgcolor="#f9f9f9" height="19" width="28">1</td>
-               <td rowspan="2" style="border-style: solid; border-color: black; border-width: 2px 0pt 0pt;" align="center" height="21" width="8">&nbsp;</td>
-            </tr>
-            <tr>
-               <td height="11" width="8"></td>
-               <td colspan="5" height="11" width="196"></td>
-               <td rowspan="2" style="border-style: solid; border-color: black; border-width: 0pt 0pt 2px;" align="center" height="19" width="8">&nbsp;</td>
-               <td rowspan="2" style="border: 1px solid rgb(170, 170, 170);" align="center" bgcolor="#f2f2f2" height="19" width="23">#2</td>
-               <td rowspan="2" style="border: 1px solid rgb(170, 170, 170);" bgcolor="#f9f9f9" height="19" width="128">&nbsp;<a class="linkhuman" href="./rosters/roster21.htm">Knicks</a></td>
-               <td rowspan="2" style="border: 1px solid rgb(170, 170, 170);" align="center" bgcolor="#f9f9f9" height="19" width="23">4</td>
-            </tr>
-            <tr>
-               <td height="8" width="8"></td>
-               <td rowspan="2" colspan="8" align="center" height="19" width="381"></td>
-            </tr>
-            <tr>
-               <td height="11" width="8"></td>
-               <td rowspan="2" style="border-style: solid; border-color: black; border-width: 2px 0pt 0pt;" align="center" height="22" width="8">&nbsp;</td>
-               <td rowspan="2" style="border: 1px solid rgb(170, 170, 170);" align="center" bgcolor="#f2f2f2" height="19" width="23">#1</td>
-               <td rowspan="2" style="border: 1px solid rgb(170, 170, 170);" bgcolor="#f9f9f9" height="19" width="128">&nbsp;<a class="linkhuman" href="./rosters/roster6.htm">Nets</a></td>
-               <td rowspan="2" style="border: 1px solid rgb(170, 170, 170);" align="center" bgcolor="#f9f9f9" height="19" width="23">3</td>
-               <td rowspan="2" style="border-style: solid; border-color: black; border-width: 2px 0pt 0pt;" align="center" height="22" width="8">&nbsp;</td>
-            </tr>
-            <tr>
-               <td height="11" width="8"></td>
-               <td rowspan="2" style="border: 1px solid rgb(170, 170, 170);" align="center" bgcolor="#f2f2f2" height="19" width="23">#4</td>
-               <td rowspan="2" style="border: 1px solid rgb(170, 170, 170);" bgcolor="#f9f9f9" height="19" width="128">&nbsp;<a class="linkhuman" href="./rosters/roster8.htm">Bulls</a></td>
-               <td rowspan="2" style="border: 1px solid rgb(170, 170, 170);" align="center" bgcolor="#f9f9f9" height="19" width="28">4</td>
-               <td rowspan="2" style="border-style: solid; border-color: black; border-width: 0pt 0pt 2px;" align="center" height="19" width="8">&nbsp;</td>
-            </tr>
-            <tr>
-               <td height="8" width="8"></td>
-            </tr>
-            <tr>
-               <td height="11" width="8"></td>
-               <td rowspan="2" style="border: 1px solid rgb(170, 170, 170);" align="center" bgcolor="#f2f2f2" height="19" width="23">#5</td>
-               <td rowspan="2" style="border: 1px solid rgb(170, 170, 170);" bgcolor="#f9f9f9" height="19" width="128">&nbsp;<a class="linkhuman" href="./rosters/roster7.htm">Hornets</a></td>
-               <td rowspan="2" style="border: 1px solid rgb(170, 170, 170);" align="center" bgcolor="#f9f9f9" height="19" width="28">1</td>
-               <td rowspan="6" style="border-style: solid; border-color: black; border-width: 2px 2px 2px 0pt;" align="center" height="63" width="6">&nbsp;</td>
-            </tr>
-            <tr>
-               <td height="11" width="8"></td>
-               <td rowspan="2" style="border-style: solid; border-color: black; border-width: 0pt 0pt 2px;" align="center" height="21" width="8">&nbsp;</td>
-               <td rowspan="2" style="border: 1px solid rgb(170, 170, 170);" align="center" bgcolor="#f2f2f2" height="22" width="23">#4</td>
-               <td rowspan="2" style="border: 1px solid rgb(170, 170, 170);" bgcolor="#f9f9f9" height="22" width="128">&nbsp;<a class="linkhuman" href="./rosters/roster8.htm">Bulls</a></td>
-               <td rowspan="2" style="border: 1px solid rgb(170, 170, 170);" align="center" bgcolor="#f9f9f9" height="22" width="23">2</td>
-            </tr>
-            <tr>
-               <td height="10" width="8"></td>
-               <td rowspan="2" colspan="3" align="center" height="21" width="185">&nbsp;</td>
-            </tr>
-            <tr>
-               <td height="11" width="8"></td>
-               <td rowspan="2" style="border-style: solid; border-color: black; border-width: 2px 0pt 0pt;" align="center" height="23" width="8">&nbsp;</td>
-               <td rowspan="2" style="border: 1px solid rgb(170, 170, 170);" align="center" bgcolor="#f2f2f2" height="22" width="23">#1</td>
-               <td rowspan="2" style="border: 1px solid rgb(170, 170, 170);" bgcolor="#f9f9f9" height="22" width="128">&nbsp;<a class="linkhuman" href="./rosters/roster6.htm">Nets</a></td>
-               <td rowspan="2" style="border: 1px solid rgb(170, 170, 170);" align="center" bgcolor="#f9f9f9" height="22" width="23">4</td>
-               <td rowspan="2" style="border-style: solid; border-color: black; border-width: 2px 0pt 0pt;" align="center" height="23" width="8">&nbsp;</td>
-            </tr>
-            <tr>
-               <td height="12" width="8"></td>
-               <td rowspan="2" style="border: 1px solid rgb(170, 170, 170);" align="center" bgcolor="#f2f2f2" height="19" width="23">#1</td>
-               <td rowspan="2" style="border: 1px solid rgb(170, 170, 170);" bgcolor="#f9f9f9" height="19" width="128">&nbsp;<a class="linkhuman" href="./rosters/roster6.htm">Nets</a></td>
-               <td rowspan="2" style="border: 1px solid rgb(170, 170, 170);" align="center" bgcolor="#f9f9f9" height="19" width="28">4</td>
-            </tr>
-            <tr>
-               <td height="8" width="8"></td>
-            </tr>
-            <tr>
-               <td height="19" width="8"></td>
-               <td rowspan="2" style="border: 1px solid rgb(170, 170, 170);" align="center" bgcolor="#f2f2f2" height="19" width="23">#8</td>
-               <td rowspan="2" style="border: 1px solid rgb(170, 170, 170);" bgcolor="#f9f9f9" height="19" width="128">&nbsp;<a class="linkhuman" href="./rosters/roster5.htm">Celtics</a></td>
-               <td rowspan="2" style="border: 1px solid rgb(170, 170, 170);" align="center" bgcolor="#f9f9f9" height="19" width="28">0</td>
-               <td style="border-style: solid; border-color: black; border-width: 2px 0pt 0pt;" align="center" height="19" width="8">&nbsp;</td>
-            </tr>
-         </tbody>
-      </table>
+		<li class="spacer">&nbsp;</li>
+		
+		@* SERIE 6*@
+		<li class="game game-top">Mich St <span>65</span></li>
+		<li class="game game-spacer">&nbsp;</li>
+		<li class="game game-bottom ">Valparaiso <span>54</span></li>
+
+		<li class="spacer">&nbsp;</li>
+		
+		@* SERIE 7 *@
+		<li class="game game-top">Creighton <span>67</span></li>
+		<li class="game game-spacer">&nbsp;</li>
+		<li class="game game-bottom ">Cincinnati <span>63</span></li>
+
+		<li class="spacer">&nbsp;</li>
+		
+		@* SERIE 8 *@
+		<li class="game game-top">Duke <span>73</span></li>
+		<li class="game game-spacer">&nbsp;</li>
+		<li class="game game-bottom ">Albany <span>61</span></li>
+
+		<li class="spacer">&nbsp;</li>
+	</ul>
+	<ul class="round round-2">
+		<li class="spacer">&nbsp;</li>
+		
+		<li class="game game-top">Lousville <span>82</span></li>
+		<li class="game game-spacer">&nbsp;</li>
+		<li class="game game-bottom ">Colo St <span>56</span></li>
+
+		<li class="spacer">&nbsp;</li>
+		
+		<li class="game game-top">Oregon <span>74</span></li>
+		<li class="game game-spacer">&nbsp;</li>
+		<li class="game game-bottom ">Saint Louis <span>57</span></li>
+
+		<li class="spacer">&nbsp;</li>
+		
+		<li class="game game-top ">Memphis <span>48</span></li>
+		<li class="game game-spacer">&nbsp;</li>
+		<li class="game game-bottom">Mich St <span>70</span></li>
+
+		<li class="spacer">&nbsp;</li>
+		
+		<li class="game game-top ">Creighton <span>50</span></li>
+		<li class="game game-spacer">&nbsp;</li>
+		<li class="game game-bottom">Duke <span>66</span></li>
+
+		<li class="spacer">&nbsp;</li>
+	</ul>
+	<ul class="round round-3">
+		<li class="spacer">&nbsp;</li>
+		
+		<li class="game game-top">Lousville <span>77</span></li>
+		<li class="game game-spacer">&nbsp;</li>
+		<li class="game game-bottom ">Oregon <span>69</span></li>
+
+		<li class="spacer">&nbsp;</li>
+		
+		<li class="game game-top ">Mich St <span>61</span></li>
+		<li class="game game-spacer">&nbsp;</li>
+		<li class="game game-bottom">Duke <span>71</span></li>
+
+		<li class="spacer">&nbsp;</li>
+	</ul>
+	<ul class="round round-4">
+		<li class="spacer">&nbsp;</li>
+		
+		<li class="game game-top">Lousville <span>85</span></li>
+		<li class="game game-spacer">&nbsp;</li>
+		<li class="game game-bottom ">Duke <span>63</span></li>
+		
+		<li class="spacer">&nbsp;</li>
+	</ul>		
+</main>
 
 </MudContainer>
