@@ -19,6 +19,7 @@ namespace NBALigaSimulation.Server.Data
 		public DbSet<PlayerRegularStats> PlayerRegularStats { get; set; }
 		public DbSet<PlayerPlayoffsStats> PlayerPlayoffsStats { get; set; }
 		public DbSet<PlayerContract> PlayerContracts { get; set; }
+		public DbSet<PlayerAwards> PlayerAwards { get; set; }
 		public DbSet<GamePlayByPlay> PlayByPlays { get; set; }
 		public DbSet<Season> Seasons { get; set; }
 		public DbSet<User> Users { get; set; }
@@ -99,6 +100,11 @@ namespace NBALigaSimulation.Server.Data
 			 .WithOne(g => g.Player)
 			 .HasForeignKey(g => g.PlayerId);
 
+			modelBuilder.Entity<Player>()
+			 .HasMany(p => p.PlayerAwards)
+			 .WithOne(g => g.Player)
+			 .HasForeignKey(g => g.PlayerId);
+
 			modelBuilder.Entity<Team>(entity =>
 			{
 				entity.HasKey(t => t.Id);
@@ -106,6 +112,7 @@ namespace NBALigaSimulation.Server.Data
 					.WithOne()
 					.HasForeignKey(s => s.TeamId);
 			});
+
 
 			modelBuilder.Entity<Team>()
 			.HasMany(t => t.DraftPicks)
