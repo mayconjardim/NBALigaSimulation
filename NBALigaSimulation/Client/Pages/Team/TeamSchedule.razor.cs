@@ -11,10 +11,6 @@ namespace NBALigaSimulation.Client.Pages.Team
 		private string message = string.Empty;
 
 
-		private int gamehome;
-		private int gamesaway;
-		private int totalGames;
-
 		string[] headings = { "HOME", "AWAY", "DATE", "RESULT" };
 
 		protected override async Task OnParametersSetAsync()
@@ -28,8 +24,7 @@ namespace NBALigaSimulation.Client.Pages.Team
 			}
 			else
 			{
-				games = result.Data.OrderBy(t => t.GameDate).Where(t => t.Type == 1).ToList();
-
+				games = result.Data.OrderBy(t => t.GameDate).ToList();
 
 			}
 		}

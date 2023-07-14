@@ -2,50 +2,48 @@
  
 <MudContainer>
 
-     <H1>Home: @gamehome | Away: @gamesaway | Total: @totalGames</H1>
+    <div class="container">
+        @if (games != null )
+        {
 
-<div class="container">
-    @if (games != null )
-    {
-
-        <table>
-            <thead>
-                <tr>
-                    @foreach (var h in headings)
-                    {
-                        <th>@h</th>
-                    }
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var (index, game) in games.Select((g, i) => (i, g)))
-                {
+            <table>
+                <thead>
                     <tr>
-                       <td><a href="team/@game.HomeTeamId"><MudAvatar Style="vertical-align: middle; background: none" Size="Size.Medium" Image=@($"Images/logos/{game.HomeTeam}.svg") Square="true" /></a> </td>
-                       <td><a href="team/@game.AwayTeamId"><MudAvatar Style="vertical-align: middle; background: none" Size="Size.Medium" Image=@($"Images/logos/{game.AwayTeam}.svg") Square="true" /></a> </td>
-                       <td>@game.GameDate.ToShortDateString()</td>
-                       @if(@game.HomeTeamScore > 0)
-                       {
-                        <td>
-                          <a href="game/@game.Id">
-                          <span class="@GetScoreClass(game.HomeTeamScore, game.AwayTeamScore)">
-                          @game.HomeTeamScore
-                          </span>
-                          : 
-                          <span class="@GetScoreClass(game.AwayTeamScore, game.HomeTeamScore)">
-                          @game.AwayTeamScore
-                          </span>
-                          </a>
-                        </td>
-                       }else
-                       {
-                         <td>TBD</td>      
-                       }
+                        @foreach (var h in headings)
+                        {
+                            <th>@h</th>
+                        }
                     </tr>
-                }
-            </tbody>
-        </table>
+                </thead>
+                <tbody>
+                    @foreach (var (index, game) in games.Select((g, i) => (i, g)))
+                    {
+                        <tr>
+                           <td><a href="team/@game.HomeTeamId"><MudAvatar Style="vertical-align: middle; background: none" Size="Size.Medium" Image=@($"Images/logos/{game.HomeTeam}.svg") Square="true" /></a> </td>
+                           <td><a href="team/@game.AwayTeamId"><MudAvatar Style="vertical-align: middle; background: none" Size="Size.Medium" Image=@($"Images/logos/{game.AwayTeam}.svg") Square="true" /></a> </td>
+                           <td>@game.GameDate.ToShortDateString()</td>
+                           @if(@game.HomeTeamScore > 0)
+                           {
+                            <td>
+                              <a href="game/@game.Id">
+                              <span class="@GetScoreClass(game.HomeTeamScore, game.AwayTeamScore)">
+                              @game.HomeTeamScore
+                              </span>
+                              : 
+                              <span class="@GetScoreClass(game.AwayTeamScore, game.HomeTeamScore)">
+                              @game.AwayTeamScore
+                              </span>
+                              </a>
+                            </td>
+                           }else
+                           {
+                             <td>TBD</td>      
+                           }
+                        </tr>
+                    }
+                </tbody>
+            </table>
 
-    }
-</div>
+         }
+    </div>
  </MudContainer>
