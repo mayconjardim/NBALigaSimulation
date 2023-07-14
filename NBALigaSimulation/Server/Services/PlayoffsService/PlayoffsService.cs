@@ -106,7 +106,7 @@ namespace NBALigaSimulation.Server.Services.PlayoffsService
 			return response;
 		}
 
-			public async Task<ServiceResponse<bool>> Generate4Round()
+		public async Task<ServiceResponse<bool>> Generate4Round()
 		{
 			var response = new ServiceResponse<bool>();
 			var season = await _context.Seasons.OrderBy(s => s.Year).LastOrDefaultAsync();
@@ -127,6 +127,58 @@ namespace NBALigaSimulation.Server.Services.PlayoffsService
 			response.Success = true;
 			return response;
 		}
+
+		public async Task<ServiceResponse<bool>> EndPlayoffs()
+		{
+			var response = new ServiceResponse<bool>();
+			var season = await _context.Seasons.OrderBy(s => s.Year).LastOrDefaultAsync();
+
+			var playoffs = await _context.Playoffs
+				.Where(p => p.Season == season.Year && p.SeriesId == 15)
+				.Include(g => g.PlayoffGames)
+				.ToListAsync();
+
+			var championId = playoffs.FirstOrDefault(t => t.SeriesId == 15).WinsTeamOne == 4 ?
+				playoffs.FirstOrDefault(t => t.SeriesId == 15).TeamOneId :
+				playoffs.FirstOrDefault(t => t.SeriesId == 15).TeamTwoId;
+
+			var championTeam = _context.Teams.LastOrDefault(t => t.Id == championId);
+			if (championTeam != null)
+			{
+				championTeam.Championships += 1;
+			}
+
+			var gamesList = playoffs.SelectMany(t => t.PlayoffGames).ToList();
+			var gamesId = gamesList.Select(game => game.GameId).ToList();
+			var games = await _context.Games.Where(game => gamesId.Contains(game.Id)).Include(t => t.PlayerGameStats.Where(t => t.TeamId == championId)).ToListAsync();
+
+			var playerGameScores = new Dictionary<int, double>();
+
+			foreach (var game in games)
+			{
+				foreach (var playerGameStat in game.PlayerGameStats)
+				{
+					var playerId = playerGameStat.PlayerId;
+					var gameScore = playerGameStat.GameScore;
+					if (playerGameScores.ContainsKey(playerId))
+					{
+						playerGameScores[playerId] += gameScore;
+					}
+					else
+					{
+						playerGameScores[playerId] = gameScore;
+					}
+				}
+			}
+
+			var playerIdWithMaxGameScore = playerGameScores.OrderByDescending(kv => kv.Value).FirstOrDefault().Key;
+			var playerWithMaxGameScore = await _context.Players.FirstOrDefaultAsync(p => p.Id == playerIdWithMaxGameScore);
+
+
+			response.Success = true;
+			return response;
+		}
+
 
 
 	}

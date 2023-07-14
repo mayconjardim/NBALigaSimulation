@@ -364,7 +364,7 @@ namespace NBALigaSimulation.Shared.Engine.Utils
 			   .Select(s => s.WinsTeamOne == 4 ? s.TeamOne : s.TeamTwo)
 			   .FirstOrDefault();
 
-		
+
 			List<Playoffs> playoffs = new List<Playoffs>();
 
 			int teamOneId;
@@ -515,7 +515,6 @@ namespace NBALigaSimulation.Shared.Engine.Utils
 
 			return playoffGames;
 		}
-
 
 	}
 }
