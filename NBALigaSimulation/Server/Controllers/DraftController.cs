@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Swashbuckle.AspNetCore.Annotations;
 
 namespace NBALigaSimulation.Server.Controllers
 {
@@ -14,6 +15,21 @@ namespace NBALigaSimulation.Server.Controllers
 			_draftService = draftService;
 		}
 
+		[HttpGet]
+		[SwaggerOperation(Summary = "GetLastLottery", Description = "Retorna a ultima loteria realizada.")]
+		public async Task<ActionResult<ServiceResponse<DraftLotteryDto>>> GetLastLottery()
+		{
+
+			var result = await _draftService.GetLastLottery();
+
+			if (!result.Success)
+			{
+				return NotFound(result);
+			}
+
+			return Ok(result);
+
+		}
 
 		[HttpPost("lottery")]
 		public async Task<ActionResult<ServiceResponse<bool>>> GenerateLottery()

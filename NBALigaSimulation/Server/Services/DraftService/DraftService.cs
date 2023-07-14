@@ -15,6 +15,24 @@ namespace NBALigaSimulation.Server.Services.DraftService
 			_mapper = mapper;
 		}
 
+		public async Task<ServiceResponse<DraftLotteryDto>> GetLastLottery()
+		{
+			var response = new ServiceResponse<DraftLotteryDto>();
+			var lottery = await _context.DraftLotteries.OrderBy(s => s.Season).LastOrDefaultAsync();
+
+			if (lottery == null)
+			{
+				response.Success = false;
+				response.Message = $"Loteria não econtrada!";
+			}
+			else
+			{
+				response.Data = _mapper.Map<DraftLotteryDto>(lottery);
+			}
+
+			return response;
+		}
+
 		public async Task<ServiceResponse<bool>> GenerateLottery()
 		{
 			var response = new ServiceResponse<bool>();
@@ -65,6 +83,7 @@ namespace NBALigaSimulation.Server.Services.DraftService
 			response.Success = true;
 			return response;
 		}
+
 
 	}
 }
