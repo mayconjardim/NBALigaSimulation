@@ -1,6 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
-
-namespace NBALigaSimulation.Server.Services.PlayoffsService
+﻿namespace NBALigaSimulation.Server.Services.PlayoffsService
 {
 	public interface IPlayoffsService
 	{
@@ -10,7 +8,7 @@ namespace NBALigaSimulation.Server.Services.PlayoffsService
 		Task<ServiceResponse<bool>> Generate2Round();
 		Task<ServiceResponse<bool>> Generate3Round();
 		Task<ServiceResponse<bool>> Generate4Round();
-
+		Task<ServiceResponse<bool>> EndPlayoffs();
 
 	}
 }

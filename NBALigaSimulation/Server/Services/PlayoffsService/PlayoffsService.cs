@@ -142,7 +142,7 @@ namespace NBALigaSimulation.Server.Services.PlayoffsService
 				playoffs.FirstOrDefault(t => t.SeriesId == 15).TeamOneId :
 				playoffs.FirstOrDefault(t => t.SeriesId == 15).TeamTwoId;
 
-			var championTeam = _context.Teams.LastOrDefault(t => t.Id == championId);
+			var championTeam = _context.Teams.OrderBy(t => t.Id).LastOrDefault(t => t.Id == championId);
 			if (championTeam != null)
 			{
 				championTeam.Championships += 1;
@@ -156,7 +156,7 @@ namespace NBALigaSimulation.Server.Services.PlayoffsService
 
 			foreach (var game in games)
 			{
-				foreach (var playerGameStat in game.PlayerGameStats)
+				foreach (var playerGameStat in game.PlayerGameStats.Where(pgs => pgs.TeamId == championId))
 				{
 					var playerId = playerGameStat.PlayerId;
 					var gameScore = playerGameStat.GameScore;
@@ -172,14 +172,36 @@ namespace NBALigaSimulation.Server.Services.PlayoffsService
 			}
 
 			var playerIdWithMaxGameScore = playerGameScores.OrderByDescending(kv => kv.Value).FirstOrDefault().Key;
-			var playerWithMaxGameScore = await _context.Players.FirstOrDefaultAsync(p => p.Id == playerIdWithMaxGameScore);
+			var playerWithMaxGameScore = await _context.Players.Include(p => p.PlayoffsStats).Include(p => p.PlayerAwards).SingleOrDefaultAsync(p => p.Id == playerIdWithMaxGameScore);
 
+			if (playerWithMaxGameScore != null)
+			{
+				var playoffsStats = playerWithMaxGameScore.PlayoffsStats.SingleOrDefault(ps => ps.Season == season.Year);
+				if (playoffsStats != null)
+				{
 
+					var award = new PlayerAwards
+					{
+						PlayerId = playerIdWithMaxGameScore,
+						Player = playerWithMaxGameScore,
+						Award = "NBA Finals MVP",
+						Season = season.Year,
+						Team = championTeam.Name,
+						Ppg = playoffsStats.PtsPG,
+						Rpg = playoffsStats.TRebPG,
+						Apg = playoffsStats.AstPG,
+						Spg = playoffsStats.StlPG,
+						Bpg = playoffsStats.BlkPG
+					};
+
+					_context.Add(award);
+				}
+			}
+
+			await _context.SaveChangesAsync();
 			response.Success = true;
 			return response;
 		}
-
-
 
 	}
 }

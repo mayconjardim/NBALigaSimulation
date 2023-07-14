@@ -53,6 +53,13 @@ namespace NBALigaSimulation.Server.Controllers
 			return Ok(result);
 		}
 
+		[HttpPost("end")]
+		public async Task<ActionResult<ServiceResponse<bool>>> EndPlayoffs()
+		{
+			var result = await _playoffsService.EndPlayoffs();
+			return Ok(result);
+		}
+
 
 	}
 }
