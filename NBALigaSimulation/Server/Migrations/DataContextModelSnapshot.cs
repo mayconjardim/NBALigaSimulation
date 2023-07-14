@@ -17,6 +17,62 @@ namespace NBALigaSimulation.Server.Migrations
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "7.0.5");
 
+            modelBuilder.Entity("NBALigaSimulation.Shared.Models.Draft.DraftLottery", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("FifthTeam")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("FifthTeamId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("FirstTeam")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("FirstTeamId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("FourthTeam")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("FourthTeamId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("Season")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("SecondTeam")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("SecondTeamId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("SixthTeam")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("SixthTeamId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("ThirdTeam")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("ThirdTeamId")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("DraftLotteries");
+                });
+
             modelBuilder.Entity("NBALigaSimulation.Shared.Models.FAOffer", b =>
                 {
                     b.Property<int>("Id")
@@ -168,30 +224,35 @@ namespace NBALigaSimulation.Server.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<double>("Apg")
-                        .HasColumnType("REAL");
+                    b.Property<string>("Apg")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("Award")
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<double>("Bpg")
-                        .HasColumnType("REAL");
+                    b.Property<string>("Bpg")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
 
                     b.Property<int>("PlayerId")
                         .HasColumnType("INTEGER");
 
-                    b.Property<double>("Ppg")
-                        .HasColumnType("REAL");
+                    b.Property<string>("Ppg")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
 
-                    b.Property<double>("Rpg")
-                        .HasColumnType("REAL");
+                    b.Property<string>("Rpg")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
 
                     b.Property<int>("Season")
                         .HasColumnType("INTEGER");
 
-                    b.Property<double>("Spg")
-                        .HasColumnType("REAL");
+                    b.Property<string>("Spg")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("Team")
                         .IsRequired()

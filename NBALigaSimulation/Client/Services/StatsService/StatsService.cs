@@ -33,5 +33,11 @@
 			var result = await _http.GetFromJsonAsync<ServiceResponse<List<PlayerPlayoffsStatsDto>>>($"api/stats/playoffs/players");
 			return result;
 		}
+
+		public async Task<ServiceResponse<List<TeamPlayoffsStatsDto>>> GetAllTeamPlayoffsStats()
+		{
+			var result = await _http.GetFromJsonAsync<ServiceResponse<List<TeamPlayoffsStatsDto>>>($"api/stats/playoffs/teams");
+			return result;
+		}
 	}
 }

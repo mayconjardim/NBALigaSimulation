@@ -1,4 +1,5 @@
 ﻿using NBALigaSimulation.Shared.Models;
+using NBALigaSimulation.Shared.Models.Draft;
 
 namespace NBALigaSimulation.Server.Data
 {
@@ -28,6 +29,8 @@ namespace NBALigaSimulation.Server.Data
 		public DbSet<FAOffer> FAOffers { get; set; }
 		public DbSet<Playoffs> Playoffs { get; set; }
 		public DbSet<PlayoffsGame> PlayoffGames { get; set; }
+		public DbSet<DraftLottery> DraftLotteries { get; set; }
+
 
 		protected override void OnModelCreating(ModelBuilder modelBuilder)
 		{
@@ -213,6 +216,11 @@ namespace NBALigaSimulation.Server.Data
 				.HasOne(pg => pg.Game)
 				.WithMany()
 				.HasForeignKey(pg => pg.GameId);
+
+			modelBuilder.Entity<DraftLottery>(entity =>
+			{
+				entity.HasKey(e => e.Id);
+			});
 
 		}
 	}

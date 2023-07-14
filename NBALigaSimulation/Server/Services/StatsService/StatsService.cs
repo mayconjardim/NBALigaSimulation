@@ -32,6 +32,25 @@ namespace NBALigaSimulation.Server.Services.StatsService
 			return response;
 		}
 
+		public async Task<ServiceResponse<List<TeamPlayoffsStatsDto>>> GetAllTeamPlayoffsStats()
+		{
+
+			var season = _context.Seasons.OrderBy(s => s.Year).Last();
+
+			var teamRegularStatsList = await _context.TeamPlayoffsStats
+				.Where(t => t.Season == season.Year)
+				.Include(t => t.Team)
+				.ToListAsync();
+
+			var response = new ServiceResponse<List<TeamPlayoffsStatsDto>>
+			{
+				Data = _mapper.Map<List<TeamPlayoffsStatsDto>>(teamRegularStatsList)
+			};
+
+			return response;
+		}
+
+
 		public async Task<ServiceResponse<List<TeamRegularStatsRankDto>>> GetAllTeamRegularStatsRank()
 		{
 

@@ -21,6 +21,13 @@ namespace NBALigaSimulation.Server.Controllers
 			return Ok(result);
 		}
 
+		[HttpGet("playoffs/teams")]
+		public async Task<ActionResult<ServiceResponse<List<TeamPlayoffsStatsDto>>>> GetAllTeamPlayoffsStats()
+		{
+			var result = await _statsService.GetAllTeamPlayoffsStats();
+			return Ok(result);
+		}
+
 		[HttpGet("teams/ranks")]
 		public async Task<ActionResult<ServiceResponse<List<TeamRegularStatsDto>>>> GetAllTeamRegularStatsRank()
 		{

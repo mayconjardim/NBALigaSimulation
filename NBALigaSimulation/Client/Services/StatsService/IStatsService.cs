@@ -4,6 +4,7 @@
 	{
 
 		Task<ServiceResponse<List<TeamRegularStatsDto>>> GetAllTeamRegularStats();
+		Task<ServiceResponse<List<TeamPlayoffsStatsDto>>> GetAllTeamPlayoffsStats();
 		Task<ServiceResponse<List<TeamRegularStatsRankDto>>> GetAllTeamRegularStatsRank();
 		Task<ServiceResponse<List<PlayerRegularStatsDto>>> GetAllPlayerRegularStats();
 		Task<ServiceResponse<List<PlayerPlayoffsStatsDto>>> GetAllPlayerPlayoffsStats();
