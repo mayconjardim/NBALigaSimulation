@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using NBALigaSimulation.Shared.Engine.Utils;
 
 namespace NBALigaSimulation.Server.Services.DraftService
 {
@@ -7,17 +8,63 @@ namespace NBALigaSimulation.Server.Services.DraftService
 
 		private readonly DataContext _context;
 		private readonly IMapper _mapper;
-		private readonly IDraftService _draftService;
 
-		public DraftService(DataContext context, IMapper mapper, IDraftService draftService)
+		public DraftService(DataContext context, IMapper mapper)
 		{
 			_context = context;
 			_mapper = mapper;
-			_draftService = draftService;
 		}
 
+		public async Task<ServiceResponse<bool>> GenerateLottery()
+		{
+			var response = new ServiceResponse<bool>();
+			var season = await _context.Seasons.OrderBy(s => s.Year).LastOrDefaultAsync();
 
+			var lottery = await _context.DraftLotteries
+				.Where(l => l.Season == season.Year)
+				.OrderByDescending(l => l.Id)
+				.FirstOrDefaultAsync();
 
+			if (lottery != null)
+			{
+				response.Success = false;
+				response.Message = "Loteria já criada!";
+				return response;
+			}
+
+			var teams = await _context.TeamRegularStats
+				.Where(t => t.Season == season.Year)
+				.Include(t => t.Team)
+				.ToListAsync();
+
+			teams = teams.AsEnumerable().OrderByDescending(t => t.ConfRank).Take(6).ToList();
+			teams = teams.OrderByDescending(t => t.WinPct).ToList();
+
+			var order = DraftUtils.RunLottery(teams);
+
+			var newLottery = new DraftLottery
+			{
+				Id = 1,
+				Season = season.Year,
+				FirstTeam = order[0].Team.Abrv,
+				FirstTeamId = order[0].TeamId,
+				SecondTeam = order[1].Team.Abrv,
+				SecondTeamId = order[1].TeamId,
+				ThirdTeam = order[2].Team.Abrv,
+				ThirdTeamId = order[2].TeamId,
+				FourthTeam = order[3].Team.Abrv,
+				FourthTeamId = order[3].TeamId,
+				FifthTeam = order[4].Team.Abrv,
+				FifthTeamId = order[4].TeamId,
+				SixthTeam = order[5].Team.Abrv,
+				SixthTeamId = order[5].TeamId,
+			};
+
+			_context.Add(newLottery);
+			await _context.SaveChangesAsync();
+			response.Success = true;
+			return response;
+		}
 
 	}
 }

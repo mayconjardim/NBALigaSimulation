@@ -1,7 +1,4 @@
-﻿using NBALigaSimulation.Shared.Models;
-using NBALigaSimulation.Shared.Models.Draft;
-
-namespace NBALigaSimulation.Server.Data
+﻿namespace NBALigaSimulation.Server.Data
 {
 	public class DataContext : DbContext
 	{
@@ -216,11 +213,6 @@ namespace NBALigaSimulation.Server.Data
 				.HasOne(pg => pg.Game)
 				.WithMany()
 				.HasForeignKey(pg => pg.GameId);
-
-			modelBuilder.Entity<DraftLottery>(entity =>
-			{
-				entity.HasKey(e => e.Id);
-			});
 
 		}
 	}

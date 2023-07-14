@@ -1,4 +1,4 @@
-﻿namespace NBALigaSimulation.Shared.Models.Draft
+﻿namespace NBALigaSimulation.Shared.Models
 {
 	public class DraftLottery
 	{

@@ -2,8 +2,6 @@
 {
 	public interface IDraftService
 	{
-
 		Task<ServiceResponse<bool>> GenerateLottery();
-
 	}
 }
