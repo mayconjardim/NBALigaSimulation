@@ -54,6 +54,8 @@ namespace NBALigaSimulation.Server.Profiles
 			CreateMap<PlayerPlayoffsStats, PlayerPlayoffsStatsDto>().ReverseMap();
 
 			CreateMap<TeamGameStats, TeamGameStatsDto>();
+			CreateMap<TeamPlayoffsStats, TeamPlayoffsStatsDto>().ReverseMap();
+
 
 			CreateMap<TeamRegularStats, TeamRegularStatsDto>()
 			  .ForMember(dest => dest.TeamName, opt => opt.MapFrom(src => src.Team.Name))
