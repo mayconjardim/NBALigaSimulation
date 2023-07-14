@@ -1,0 +1,182 @@
+﻿@page "/playoffs/stats/players"
+@inject IStatsService StatsService
+
+<MudContainer>
+@if (categoryLists.ContainsKey("Pts"))
+{
+<h3>PLAYOFFS LEADERS</h3>    
+
+ <div class="stats">
+
+   <table>
+    <thead>
+        <tr>
+            <th>POINTS</th>
+            <th>PTS</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var (stats, index) in categoryLists["Pts"].Select((s, i) => (s, i)))
+        {
+            <tr>
+                <td>@(index + 1). <a href=@("/player/" + stats.PlayerId)>@stats.Name</a>, <a href=@("/team/" + stats.TeamId)>@stats.TeamAbrv</a></td>
+                <td>@stats.PtsPG</td>
+            </tr>
+        }
+    </tbody>
+   </table>
+
+   <table>
+    <thead>
+        <tr>
+            <th>REBOUNDS</th>
+            <th>REB</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var (stats, index) in categoryLists["Reb"].Select((s, i) => (s, i)))
+        {
+            <tr>
+               <td>@(index + 1). <a href=@("/player/" + stats.PlayerId)>@stats.Name</a>, <a href=@("/team/" + stats.TeamId)>@stats.TeamAbrv</a></td>
+                <td>@stats.TRebPG</td>
+            </tr>
+        }
+    </tbody>
+   </table>
+     
+   <table>
+    <thead>
+        <tr>
+            <th>ASSISTS</th>
+            <th>AST</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var (stats, index) in categoryLists["Ast"].Select((s, i) => (s, i)))
+        {
+            <tr>
+                <td>@(index + 1). <a href=@("/player/" + stats.PlayerId)>@stats.Name</a>, <a href=@("/team/" + stats.TeamId)>@stats.TeamAbrv</a></td>
+                <td>@stats.AstPG</td>
+            </tr>
+        }
+    </tbody>
+   </table>
+
+   <table>
+    <thead>
+        <tr>
+            <th>BLOCKS</th>
+            <th>BLK</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var (stats, index) in categoryLists["Blk"].Select((s, i) => (s, i)))
+        {
+            <tr>
+                <td>@(index + 1). <a href=@("/player/" + stats.PlayerId)>@stats.Name</a>, <a href=@("/team/" + stats.TeamId)>@stats.TeamAbrv</a></td>
+                <td>@stats.BlkPG</td>
+            </tr>
+        }
+    </tbody>
+   </table>
+
+   <table>
+    <thead>
+        <tr>
+            <th>STEALS</th>
+            <th>STL</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var (stats, index) in categoryLists["Stl"].Select((s, i) => (s, i)))
+        {
+            <tr>
+                <td>@(index + 1). <a href=@("/player/" + stats.PlayerId)>@stats.Name</a>, <a href=@("/team/" + stats.TeamId)>@stats.TeamAbrv</a></td>
+                <td>@stats.StlPG</td>
+            </tr>
+        }
+    </tbody>
+   </table>
+
+   <table>
+    <thead>
+        <tr>
+            <th>MINUTES</th>
+            <th>MIN</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var (stats, index) in categoryLists["Min"].Select((s, i) => (s, i)))
+        {
+            <tr>
+                <td>@(index + 1). <a href=@("/player/" + stats.PlayerId)>@stats.Name</a>, <a href=@("/team/" + stats.TeamId)>@stats.TeamAbrv</a></td>
+                <td>@stats.MinPG</td>
+            </tr>
+        }
+    </tbody>
+   </table>
+
+   <table>
+    <thead>
+        <tr>
+            <th>FIELD GOAL PERCENTAGE</th>
+            <th>FG%</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var (stats, index) in categoryLists["FGPct"].Select((s, i) => (s, i)))
+        {
+            <tr>
+                <td>@(index + 1). <a href=@("/player/" + stats.PlayerId)>@stats.Name</a>, <a href=@("/team/" + stats.TeamId)>@stats.TeamAbrv</a></td>
+                <td>@stats.FgPct</td>
+            </tr>
+        }
+    </tbody>
+   </table>
+
+   <table>
+    <thead>
+        <tr>
+            <th>THREE-POINTER PERCENTAGE</th>
+            <th>3PT%</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var (stats, index) in categoryLists["TPPct"].Select((s, i) => (s, i)))
+        {
+            <tr>
+                <td>@(index + 1). <a href=@("/player/" + stats.PlayerId)>@stats.Name</a>, <a href=@("/team/" + stats.TeamId)>@stats.TeamAbrv</a></td>
+                <td>@stats.TpPct</td>
+            </tr>
+        }
+    </tbody>
+   </table>
+
+   <table>
+    <thead>
+        <tr>
+            <th>FREE THROW PERCENTAGE</th>
+            <th>FT%</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var (stats, index) in categoryLists["FTPct"].Select((s, i) => (s, i)))
+        {
+            <tr>
+                <td>@(index + 1). <a href=@("/player/" + stats.PlayerId)>@stats.Name</a>, <a href=@("/team/" + stats.TeamId)>@stats.TeamAbrv</a></td>
+                <td>@stats.FtPct</td>
+            </tr>
+        }
+    </tbody>
+   </table>
+
+
+  </div>
+}
+else
+{
+@message
+}
+</MudContainer>
+
+

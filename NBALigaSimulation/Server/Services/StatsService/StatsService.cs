@@ -72,8 +72,8 @@ namespace NBALigaSimulation.Server.Services.StatsService
 
 			var season = _context.Seasons.OrderBy(s => s.Year).Last();
 
-			var playerRegularStatsList = await _context.PlayerRegularStats
-				.Where(t => t.Season == season.Year && t.Min > 5 && t.Fg > 10)
+			var playerRegularStatsList = await _context.PlayerPlayoffsStats
+				.Where(t => t.Season == season.Year && t.Min > 5)
 				.ToListAsync();
 
 			var response = new ServiceResponse<List<PlayerPlayoffsStatsDto>>
