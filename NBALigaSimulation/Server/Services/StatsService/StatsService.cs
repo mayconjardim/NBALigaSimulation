@@ -2,72 +2,89 @@
 
 namespace NBALigaSimulation.Server.Services.StatsService
 {
-    public class StatsService : IStatsService
-    {
+	public class StatsService : IStatsService
+	{
 
-        private readonly DataContext _context;
-        private readonly IMapper _mapper;
+		private readonly DataContext _context;
+		private readonly IMapper _mapper;
 
-        public StatsService(DataContext context, IMapper mapper)
-        {
-            _context = context;
-            _mapper = mapper;
-        }
+		public StatsService(DataContext context, IMapper mapper)
+		{
+			_context = context;
+			_mapper = mapper;
+		}
 
-        public async Task<ServiceResponse<List<TeamRegularStatsDto>>> GetAllTeamRegularStats()
-        {
+		public async Task<ServiceResponse<List<TeamRegularStatsDto>>> GetAllTeamRegularStats()
+		{
 
-            var season = _context.Seasons.OrderBy(s => s.Year).Last();
+			var season = _context.Seasons.OrderBy(s => s.Year).Last();
 
-            var teamRegularStatsList = await _context.TeamRegularStats
-                .Where(t => t.Season == season.Year)
-                .Include(t => t.Team)
-                .ToListAsync();
+			var teamRegularStatsList = await _context.TeamRegularStats
+				.Where(t => t.Season == season.Year)
+				.Include(t => t.Team)
+				.ToListAsync();
 
-            var response = new ServiceResponse<List<TeamRegularStatsDto>>
-            {
-                Data = _mapper.Map<List<TeamRegularStatsDto>>(teamRegularStatsList)
-            };
+			var response = new ServiceResponse<List<TeamRegularStatsDto>>
+			{
+				Data = _mapper.Map<List<TeamRegularStatsDto>>(teamRegularStatsList)
+			};
 
-            return response;
-        }
+			return response;
+		}
 
-        public async Task<ServiceResponse<List<TeamRegularStatsRankDto>>> GetAllTeamRegularStatsRank()
-        {
+		public async Task<ServiceResponse<List<TeamRegularStatsRankDto>>> GetAllTeamRegularStatsRank()
+		{
 
-            var season = _context.Seasons.OrderBy(s => s.Year).Last();
+			var season = _context.Seasons.OrderBy(s => s.Year).Last();
 
-            var teamRegularStatsList = await _context.TeamRegularStats
-                .Where(t => t.Season == season.Year)
-                .Include(t => t.Team)
-                .ToListAsync();
+			var teamRegularStatsList = await _context.TeamRegularStats
+				.Where(t => t.Season == season.Year)
+				.Include(t => t.Team)
+				.ToListAsync();
 
-            var response = new ServiceResponse<List<TeamRegularStatsRankDto>>
-            {
-                Data = _mapper.Map<List<TeamRegularStatsRankDto>>(teamRegularStatsList)
-            };
+			var response = new ServiceResponse<List<TeamRegularStatsRankDto>>
+			{
+				Data = _mapper.Map<List<TeamRegularStatsRankDto>>(teamRegularStatsList)
+			};
 
-            return response;
-        }
+			return response;
+		}
 
-        public async Task<ServiceResponse<List<PlayerRegularStatsDto>>> GetAllPlayerRegularStats()
-        {
+		public async Task<ServiceResponse<List<PlayerRegularStatsDto>>> GetAllPlayerRegularStats()
+		{
 
-            var season = _context.Seasons.OrderBy(s => s.Year).Last();
+			var season = _context.Seasons.OrderBy(s => s.Year).Last();
 
-            var playerRegularStatsList = await _context.PlayerRegularStats
-                .Where(t => t.Season == season.Year && t.Min > 5 && t.Fg > 10)
-                .ToListAsync();
+			var playerRegularStatsList = await _context.PlayerRegularStats
+				.Where(t => t.Season == season.Year && t.Min > 5 && t.Fg > 10)
+				.ToListAsync();
 
-            var response = new ServiceResponse<List<PlayerRegularStatsDto>>
-            {
-                Data = _mapper.Map<List<PlayerRegularStatsDto>>(playerRegularStatsList)
-            };
+			var response = new ServiceResponse<List<PlayerRegularStatsDto>>
+			{
+				Data = _mapper.Map<List<PlayerRegularStatsDto>>(playerRegularStatsList)
+			};
 
-            return response;
-        }
+			return response;
+		}
+
+		public async Task<ServiceResponse<List<PlayerPlayoffsStatsDto>>> GetAllPlayerPlayoffsStats()
+		{
+
+			var season = _context.Seasons.OrderBy(s => s.Year).Last();
+
+			var playerRegularStatsList = await _context.PlayerRegularStats
+				.Where(t => t.Season == season.Year && t.Min > 5 && t.Fg > 10)
+				.ToListAsync();
+
+			var response = new ServiceResponse<List<PlayerPlayoffsStatsDto>>
+			{
+				Data = _mapper.Map<List<PlayerPlayoffsStatsDto>>(playerRegularStatsList)
+			};
+
+			return response;
+		}
 
 
 
-    }
+	}
 }
