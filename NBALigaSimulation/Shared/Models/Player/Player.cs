@@ -21,6 +21,8 @@ namespace NBALigaSimulation.Shared.Models
         public List<PlayerGameStats> Stats { get; set; } = new List<PlayerGameStats>();
         public List<PlayerRegularStats> RegularStats { get; set; } = new List<PlayerRegularStats>();
         public List<PlayerPlayoffsStats> PlayoffsStats { get; set; } = new List<PlayerPlayoffsStats>();
+        public List<PlayerAwards> PlayerAwards { get; set; } = new List<PlayerAwards>();
+
 
         private static Random random = new Random();
 
