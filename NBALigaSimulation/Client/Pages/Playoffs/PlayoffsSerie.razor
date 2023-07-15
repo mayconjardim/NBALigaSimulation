@@ -1,0 +1,7 @@
+﻿@page "/playoffs/{id:int}"
+@inject IPlayoffsService PlayoffsService
+
+@if(playoffs != null)
+{
+<h3>@playoffs.teamOneName vs @playoffs.teamTwoName</h3>    
+}

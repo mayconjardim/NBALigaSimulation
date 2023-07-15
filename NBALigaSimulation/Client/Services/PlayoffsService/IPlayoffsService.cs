@@ -4,6 +4,7 @@
     {
 
         Task<ServiceResponse<List<PlayoffsDto>>> GetPlayoffs();
+        Task<ServiceResponse<PlayoffsDto>> GetPlayoffsById(int Id);
         Task<ServiceResponse<bool>> GeneratePlayoffs();
 
     }

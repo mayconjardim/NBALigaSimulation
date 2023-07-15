@@ -22,5 +22,11 @@
             var result = await _http.GetFromJsonAsync<ServiceResponse<List<PlayoffsDto>>>($"api/playoffs");
             return result;
         }
+
+        public async Task<ServiceResponse<PlayoffsDto>> GetPlayoffsById(int Id)
+        {
+            var response = await _http.GetFromJsonAsync<ServiceResponse<PlayoffsDto>>($"api/playoffs/{Id}");
+            return response;
+        }
     }
 }

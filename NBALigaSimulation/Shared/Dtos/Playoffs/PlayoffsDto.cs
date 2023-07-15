@@ -1,4 +1,6 @@
-﻿namespace NBALigaSimulation.Shared.Dtos
+﻿using NBALigaSimulation.Shared.Models;
+
+namespace NBALigaSimulation.Shared.Dtos
 {
     public class PlayoffsDto
     {
@@ -17,6 +19,6 @@
         public int TeamTwoId { get; set; }
         public int WinsTeamOne { get; set; }
         public int WinsTeamTwo { get; set; }
-
+        public List<GameCompleteDto> GameCompletes { get; set; } = new List<GameCompleteDto>();
     }
 }
