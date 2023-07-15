@@ -1,5 +1,8 @@
-﻿   <h3>REGULAR SEASON</h3>    
-
+﻿   
+@if(player.RegularStats != null)
+{
+<h3>REGULAR SEASON</h3> 
+<h5>STATS</h5>
    <div class="stats">
         <table>
             <thead>
@@ -50,12 +53,9 @@
                 }
             </tbody>
         </table>
-    </div>
-    <h3>SHOT LOCATIONS</h3>
-
+   </div>
+    <h5>SHOT LOCATIONS</h5>
     <div class="stats">
-       
-
         <table>
             <thead>
                 <tr>
@@ -100,3 +100,107 @@
 
     </div>
 
+}
+
+<h3>PLAYOFFS</h3>  
+<h5>STATS</h5>
+ @if(player.PlayoffsStats != null)
+{
+   <div class="stats">
+        <table>
+            <thead>
+                <tr>
+                    <th colspan="5" style="text-align: center"></th>
+                    <th colspan="3"  style="text-align: center">FG</th>
+                    <th colspan="3"  style="text-align: center">3PT</th>
+                    <th colspan="3"  style="text-align: center">FT</th>
+                    <th colspan="3"  style="text-align: center">REB</th>
+                    <th colspan="8"  style="text-align: center"></th>
+                </tr>
+                <tr>
+                    @foreach (var h in stats)
+                    {
+                        <th>@h</th>
+                    }
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var stats in player.PlayoffsStats)
+                {
+                    <tr>
+                        <td>@stats.Season</td>
+                        <td><MudAvatar Style="vertical-align: middle; background: none; padding: 0; margin: 0" Size="Size.Small" Image=@($"Images/logos/{stats.TeamAbrv}.svg") Square="true" /></td>
+                        <td>@stats.Games</td>
+                        <td>@stats.Gs</td>
+                        <td>@stats.MinPG</td>
+                        <td>@stats.FgPG</td>
+                        <td>@stats.FgaPG</td>
+                        <td>@stats.FgPct</td>
+                        <td>@stats.TpPG</td>
+                        <td>@stats.TpaPG</td>
+                        <td>@stats.TpPct</td>
+                        <td>@stats.FtPG</td>
+                        <td>@stats.FtaPG</td>
+                        <td>@stats.FtPct</td>
+                        <td>@stats.ORebPG</td>
+                        <td>@stats.DRebPG</td>
+                        <td>@stats.TRebPG</td>
+                        <td>@stats.AstPG</td>
+                        <td>@stats.TovPG</td>
+                        <td>@stats.StlPG</td>
+                        <td>@stats.BlkPG</td>
+                        <td>@stats.PfPG</td>
+                        <td>@stats.PtsPG</td>
+                        <td>@stats.PER</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+   </div>
+     <h5>SHOT LOCATIONS</h5>
+    <div class="stats">
+        <table>
+            <thead>
+                <tr>
+                    <th colspan="5" style="text-align: center"></th>
+                    <th colspan="3"  style="text-align: center">AT RIM</th>
+                    <th colspan="3"  style="text-align: center">LOW POST</th>
+                    <th colspan="3"  style="text-align: center">MID-RANGE</th>
+                    <th colspan="3"  style="text-align: center">3PT</th>
+                </tr>
+                <tr>
+                    @foreach (var h in locations)
+                    {
+                        <th>@h</th>
+                    }
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var stats in player.PlayoffsStats)
+                {
+                    <tr>
+                        <td>@stats.Season</td>
+                        <td><MudAvatar Style="vertical-align: middle; background: none; padding: 0; margin: 0" Size="Size.Small" Image=@($"Images/logos/{stats.TeamAbrv}.svg") Square="true" /></td>
+                        <td>@stats.Games</td>
+                        <td>@stats.Gs</td>
+                        <td>@stats.MinPG</td>
+                        <td>@stats.FgAtRim</td>
+                        <td>@stats.FgaAtRim</td>
+                        <td>@stats.FgAtRimPct</td>
+                        <td>@stats.FgLowPost</td>
+                        <td>@stats.FgaLowPost</td>
+                        <td>@stats.FgLowPostPct</td>
+                        <td>@stats.FgMidRange</td>
+                        <td>@stats.FgaMidRange</td>
+                        <td>@stats.FgMidRangePct</td>
+                        <td>@stats.Tp</td>
+                        <td>@stats.Tpa</td>
+                        <td>@stats.TpPct</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+    </div>
+
+}
