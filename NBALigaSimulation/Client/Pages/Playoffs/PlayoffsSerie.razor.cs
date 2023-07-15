@@ -11,6 +11,8 @@ namespace NBALigaSimulation.Client.Pages.Playoffs
         [Parameter]
         public int Id { get; set; }
 
+        string[] headings = { "HOME", "AWAY", "DATE", "RESULT" };
+
         protected override async Task OnParametersSetAsync()
         {
             message = "Carregando Serie...";
@@ -25,6 +27,8 @@ namespace NBALigaSimulation.Client.Pages.Playoffs
                 playoffs = result.Data;
             }
         }
+
+
 
     }
 }

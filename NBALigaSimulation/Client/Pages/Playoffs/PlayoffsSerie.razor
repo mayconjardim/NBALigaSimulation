@@ -3,5 +3,66 @@
 
 @if(playoffs != null)
 {
-<h3>@playoffs.teamOneName vs @playoffs.teamTwoName</h3>    
+
+    <div class="@playoffs.teamOneAbrv  header">
+
+     <MudAvatar Style="vertical-align: middle; background: none; margin: 5px" Size="Size.Large" Image=@($"Images/logos/{playoffs.teamOneAbrv}.svg") Square="true" />
+     <h1>@playoffs.teamOneAbrv</h1>
+     <h1>@playoffs.WinsTeamOne,</h1>
+     <MudAvatar Style="vertical-align: middle; background: none; margin: 5px" Size="Size.Large" Image=@($"Images/logos/{playoffs.teamTwoAbrv}.svg") Square="true" />
+     <h1>@playoffs.teamTwoAbrv</h1>
+     <h1>@playoffs.WinsTeamTwo</h1>
+
+    </div>
+
+    <MudContainer>
+
+    <div class="container">
+        @if (playoffs.GameCompletes != null )
+        {
+
+            <table>
+                <thead>
+                    <tr>
+                        @foreach (var h in headings)
+                        {
+                            <th>@h</th>
+                        }
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var (index, game) in playoffs.GameCompletes.Select((g, i) => (i, g)))
+                    {
+                        <tr>
+                           <td><a href="team/@game.HomeTeamId"><MudAvatar Style="vertical-align: middle; background: none" Size="Size.Medium" Image=@($"Images/logos/{game.HomeTeam}.svg") Square="true" /></a> </td>
+                           <td><a href="team/@game.AwayTeamId"><MudAvatar Style="vertical-align: middle; background: none" Size="Size.Medium" Image=@($"Images/logos/{game.AwayTeam}.svg") Square="true" /></a> </td>
+                           <td>@game.GameDate.ToShortDateString()</td>
+                           @if(@game.HomeTeamScore > 0)
+                           {
+                            <td>
+                              <a href="game/@game.Id">
+                              <span class="@Util.GetScoreClass(game.HomeTeamScore, game.AwayTeamScore)">
+                              @game.HomeTeamScore
+                              </span>
+                              : 
+                              <span class="@Util.GetScoreClass(game.AwayTeamScore, game.HomeTeamScore)">
+                              @game.AwayTeamScore
+                              </span>
+                              </a>
+                            </td>
+                           }else
+                           {
+                             <td>TBD</td>      
+                           }
+                        </tr>
+                    }
+                </tbody>
+            </table>
+
+         }
+    </div>
+ </MudContainer>
+
+
+
 }

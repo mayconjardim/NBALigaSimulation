@@ -69,6 +69,22 @@
             return x.ToString() + suffix;
         }
 
+        public static string GetScoreClass(int homeScore, int awayScore)
+        {
+            if (homeScore > awayScore)
+            {
+                return "text-green";
+            }
+            else if (awayScore > homeScore)
+            {
+                return "text-red";
+            }
+            else
+            {
+                return "";
+            }
+        }
+
 
     }
 
