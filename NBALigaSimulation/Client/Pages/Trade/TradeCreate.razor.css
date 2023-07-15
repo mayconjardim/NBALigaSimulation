@@ -39,20 +39,27 @@
     flex-basis: 100%;
 }
 
-.mud-table {
+table {
+    width: 100%;
     border-collapse: collapse;
-    margin: 10px 0;
+    box-shadow: rgba(9, 30, 66, 0.25) 0px 4px 8px -2px, rgba(9, 30, 66, 0.08) 0px 0px 0px 1px;
+    font-size: 12px;
 }
 
-    .mud-table th, .mud-table td {
-        border: 1px solid #ccc;
-        padding: 8px;
-    }
+th,
+td {
+    padding: 6px;
+    text-align: left;
+    border: 1px solid #ddd;
+    white-space: nowrap;
+}
 
-.border {
-    border-radius: 4px;
-    border: 0.5px solid rgba(0,0,0,0.1);
-    box-shadow: rgba(9, 30, 66, 0.25) 0px 4px 8px -2px, rgba(9, 30, 66, 0.08) 0px 0px 0px 1px;
+th {
+    background-color: #f2f2f2;
+}
+
+tr:nth-child(even) {
+    background-color: #f9f9f9;
 }
 
 .send {
