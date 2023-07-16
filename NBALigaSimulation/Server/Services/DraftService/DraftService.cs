@@ -84,6 +84,9 @@ namespace NBALigaSimulation.Server.Services.DraftService
 			return response;
 		}
 
-
-	}
+        public async Task<ServiceResponse<bool>> GenerateDraft()
+        {
+            throw new NotImplementedException();
+        }
+    }
 }

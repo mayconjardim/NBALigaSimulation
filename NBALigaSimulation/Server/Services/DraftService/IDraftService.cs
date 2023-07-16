@@ -1,8 +1,10 @@
 ﻿namespace NBALigaSimulation.Server.Services.DraftService
 {
-	public interface IDraftService
-	{
-		Task<ServiceResponse<DraftLotteryDto>> GetLastLottery();
-		Task<ServiceResponse<bool>> GenerateLottery();
-	}
+    public interface IDraftService
+    {
+        Task<ServiceResponse<DraftLotteryDto>> GetLastLottery();
+        Task<ServiceResponse<bool>> GenerateLottery();
+        Task<ServiceResponse<bool>> GenerateDraft();
+
+    }
 }
