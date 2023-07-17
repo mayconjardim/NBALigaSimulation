@@ -53,14 +53,17 @@ namespace NBALigaSimulation.Shared.Engine.Utils
 
         public static List<Draft> GenerateDraft(DraftLottery lottery, int season, List<TeamRegularStats> regularStats, List<TeamDraftPicks> picks, List<Team> teams)
         {
-            List<Draft> newDraft = new List<Draft>();
 
-            regularStats.RemoveAll(stats => stats.TeamId == lottery.FirstTeamId);
-            regularStats.RemoveAll(stats => stats.TeamId == lottery.SecondTeamId);
-            regularStats.RemoveAll(stats => stats.TeamId == lottery.ThirdTeamId);
-            regularStats.RemoveAll(stats => stats.TeamId == lottery.FourthTeamId);
-            regularStats.RemoveAll(stats => stats.TeamId == lottery.FifthTeamId);
-            regularStats.RemoveAll(stats => stats.TeamId == lottery.SixthTeamId);
+            List<TeamRegularStats> newStatsList = regularStats
+                .OrderBy(stats => stats.WinPct)
+                .ThenBy(stats => stats.Points)
+                .Where(stats => stats.TeamId != lottery.FirstTeamId
+                             && stats.TeamId != lottery.SecondTeamId
+                             && stats.TeamId != lottery.ThirdTeamId
+                             && stats.TeamId != lottery.FourthTeamId
+                             && stats.TeamId != lottery.FifthTeamId
+                             && stats.TeamId != lottery.SixthTeamId)
+             .ToList();
 
             var firstTeamPick = picks.FirstOrDefault(p => p.Original == lottery.FirstTeam);
             var SecondTeamPick = picks.FirstOrDefault(p => p.Original == lottery.SecondTeam);
@@ -69,10 +72,135 @@ namespace NBALigaSimulation.Shared.Engine.Utils
             var FifthTeamPick = picks.FirstOrDefault(p => p.Original == lottery.FifthTeam);
             var SixthTeamPick = picks.FirstOrDefault(p => p.Original == lottery.SixthTeam);
 
-            var sortedStats = regularStats.OrderByDescending(stats => stats.WinPct).ToList();
+            var sortedStats = regularStats
+                .OrderByDescending(stats => stats.WinPct)
+                .ThenBy(stats => stats.Points)
+                .ToList();
+
+            List<Draft> newDraft = new List<Draft>
+            {
+                new Draft
+                {
+                    Original = lottery.FirstTeam,
+                    Pick = 1,
+                    Season = season,
+                    TeamId = firstTeamPick.TeamId,
+                    Round = 1,
+                    DateTime = null,
+                    Player = null,
+                    PlayerId = null,
+                },
+
+                new Draft
+                {
+                    Original = lottery.SecondTeam,
+                    Pick = 2,
+                    Season = season,
+                    TeamId = SecondTeamPick.TeamId,
+                    Round = 1,
+                    DateTime = null,
+                    Player = null,
+                    PlayerId = null,
+                },
+
+                new Draft
+                {
+                    Original = lottery.ThirdTeam,
+                    Pick = 3,
+                    Season = season,
+                    TeamId = ThirdTeamPick.TeamId,
+                    Round = 1,
+                    DateTime = null,
+                    Player = null,
+                    PlayerId = null,
+                },
+
+                new Draft
+                {
+                    Original = lottery.FourthTeam,
+                    Pick = 4,
+                    Season = season,
+                    TeamId = FourthTeamPick.TeamId,
+                    Round = 1,
+                    DateTime = null,
+                    Player = null,
+                    PlayerId = null,
+
+                },
+
+                new Draft
+                {
+                    Original = lottery.FifthTeam,
+                    Pick = 5,
+                    Season = season,
+                    TeamId = FifthTeamPick.TeamId,
+                    Round = 1,
+                    DateTime = null,
+                    Player = null,
+                    PlayerId = null,
+                },
+
+                new Draft
+                {
+                    Original = lottery.SixthTeam,
+                    Pick = 6,
+                    Season = season,
+                    TeamId = SixthTeamPick.TeamId,
+                    Round = 1,
+                    DateTime = null,
+                    Player = null,
+                    PlayerId = null,
+                },
+
+            };
+
+            int pickNumber = 7;
+
+            for (int i = 0; i < 16; i++)
+            {
+                string teamAbrv = newStatsList[i].Team.Abrv;
+                int? teamId = picks
+                    .Where(pick => pick.Original == teamAbrv && pick.Round == 1)
+                    .Select(pick => pick.TeamId)
+                    .FirstOrDefault();
+
+                newDraft.Add(new Draft
+                {
+                    Original = teamAbrv,
+                    Pick = pickNumber++,
+                    Season = season,
+                    TeamId = (int)teamId,
+                    Round = 1,
+                    DateTime = null,
+                    Player = null,
+                    PlayerId = null,
+                });
+            }
+
+            int pickNumberRound2 = 23;
+
+            for (int i = 0; i < 22; i++)
+            {
+                string teamAbrv = sortedStats[i].Team.Abrv;
+                int? teamId = picks
+                    .Where(pick => pick.Original == teamAbrv && pick.Round == 2)
+                    .Select(pick => pick.TeamId)
+                    .FirstOrDefault();
+
+                newDraft.Add(new Draft
+                {
+                    Original = teamAbrv,
+                    Pick = pickNumberRound2++,
+                    Season = season,
+                    TeamId = (int)teamId,
+                    Round = 2,
+                    DateTime = null,
+                    Player = null,
+                    PlayerId = null,
+                });
+            }
 
 
-           
 
             return newDraft;
         }

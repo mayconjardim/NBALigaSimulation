@@ -96,6 +96,17 @@ namespace NBALigaSimulation.Server.Services.DraftService
                .OrderByDescending(l => l.Id)
                .FirstOrDefaultAsync();
 
+            var newDraft = await _context.Drafts
+            .Where(l => l.Season == season.Year)
+            .OrderByDescending(l => l.Id).ToListAsync();
+
+            if (newDraft.Count > 0)
+            {
+                response.Success = false;
+                response.Message = "Draft já criado!";
+                return response;
+            }
+
             var teams = await _context.Teams
                 .Where(t => t.IsHuman == true)
                 .ToListAsync();
@@ -104,133 +115,7 @@ namespace NBALigaSimulation.Server.Services.DraftService
 
             var picks = await _context.TeamDraftPicks.Where(s => s.Year == season.Year).Include(t => t.Team).ToListAsync();
 
-            regularStats.RemoveAll(stats => stats.TeamId == lottery.FirstTeamId);
-            regularStats.RemoveAll(stats => stats.TeamId == lottery.SecondTeamId);
-            regularStats.RemoveAll(stats => stats.TeamId == lottery.ThirdTeamId);
-            regularStats.RemoveAll(stats => stats.TeamId == lottery.FourthTeamId);
-            regularStats.RemoveAll(stats => stats.TeamId == lottery.FifthTeamId);
-            regularStats.RemoveAll(stats => stats.TeamId == lottery.SixthTeamId);
-
-            var firstTeamPick = picks.FirstOrDefault(p => p.Original == lottery.FirstTeam);
-            var SecondTeamPick = picks.FirstOrDefault(p => p.Original == lottery.SecondTeam);
-            var ThirdTeamPick = picks.FirstOrDefault(p => p.Original == lottery.ThirdTeam);
-            var FourthTeamPick = picks.FirstOrDefault(p => p.Original == lottery.FourthTeam);
-            var FifthTeamPick = picks.FirstOrDefault(p => p.Original == lottery.FifthTeam);
-            var SixthTeamPick = picks.FirstOrDefault(p => p.Original == lottery.SixthTeam);
-
-            var sortedStats = regularStats
-                .OrderBy(stats => stats.WinPct)
-                .ToList();
-
-            for (int i = 0; i < sortedStats.Count; i++)
-            {
-                await Console.Out.WriteLineAsync(i + " - " + sortedStats[i].Team.Abrv);
-            }
-
-
-
-
-            List<Draft> newDraft = new List<Draft>
-            {
-                new Draft
-                {
-                    Original = lottery.FirstTeam,
-                    Pick = 1,
-                    Season = season.Year,
-                    TeamId = firstTeamPick.TeamId,
-                    Round = 1,
-                    DateTime = null,
-                    Player = null,
-                    PlayerId = null,
-                },
-
-                new Draft
-                {
-                    Original = lottery.SecondTeam,
-                    Pick = 2,
-                    Season = season.Year,
-                    TeamId = SecondTeamPick.TeamId,
-                    Round = 1,
-                    DateTime = null,
-                    Player = null,
-                    PlayerId = null,
-                },
-
-                new Draft
-                {
-                    Original = lottery.ThirdTeam,
-                    Pick = 3,
-                    Season = season.Year,
-                    TeamId = ThirdTeamPick.TeamId,
-                    Round = 1,
-                    DateTime = null,
-                    Player = null,
-                    PlayerId = null,
-                },
-
-                new Draft
-                {
-                    Original = lottery.FourthTeam,
-                    Pick = 4,
-                    Season = season.Year,
-                    TeamId = FourthTeamPick.TeamId,
-                    Round = 1,
-                    DateTime = null,
-                    Player = null,
-                    PlayerId = null,
-
-                },
-
-                new Draft
-                {
-                    Original = lottery.FifthTeam,
-                    Pick = 5,
-                    Season = season.Year,
-                    TeamId = FifthTeamPick.TeamId,
-                    Round = 1,
-                    DateTime = null,
-                    Player = null,
-                    PlayerId = null,
-                },
-
-                new Draft
-                {
-                    Original = lottery.SixthTeam,
-                    Pick = 6,
-                    Season = season.Year,
-                    TeamId = SixthTeamPick.TeamId,
-                    Round = 1,
-                    DateTime = null,
-                    Player = null,
-                    PlayerId = null,
-                },
-
-            };
-
-            int pickNumber = 7;
-
-            for (int i = 0; i < 16; i++)
-            {
-                string teamAbrv = sortedStats[i].Team.Abrv;
-                int? teamId = picks
-                    .Where(pick => pick.Original == teamAbrv && pick.Round == 1)
-                    .Select(pick => pick.TeamId)
-                    .FirstOrDefault();
-
-                newDraft.Add(new Draft
-                {
-                    Original = teamAbrv,
-                    Pick = pickNumber++,
-                    Season = season.Year,
-                    TeamId = (int)teamId,
-                    Round = 1,
-                    DateTime = null,
-                    Player = null,
-                    PlayerId = null,
-                });
-            }
-
-
+            newDraft = DraftUtils.GenerateDraft(lottery, season.Year, regularStats, picks, teams);
 
             _context.AddRange(newDraft);
 
