@@ -38,6 +38,12 @@ namespace NBALigaSimulation.Server.Controllers
             return Ok(result);
         }
 
+        [HttpPost("generate/draft")]
+        public async Task<ActionResult<ServiceResponse<bool>>> GenerateDraft()
+        {
+            var result = await _draftService.GenerateDraft();
+            return Ok(result);
+        }
 
     }
 }
