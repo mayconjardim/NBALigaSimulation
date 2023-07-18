@@ -13,7 +13,7 @@ namespace NBALigaSimulation.Client.Pages.Playoffs
 
         string[] headings = { "HOME", "AWAY", "DATE", "RESULT" };
 
-        protected override async Task OnParametersSetAsync()
+        protected override async Task OnInitializedAsync()
         {
             message = "Carregando Serie...";
 

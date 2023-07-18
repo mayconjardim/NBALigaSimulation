@@ -39,7 +39,7 @@ namespace NBALigaSimulation.Server.Services.DraftService
         {
             var response = new ServiceResponse<List<DraftDto>>();
             var season = await _context.Seasons.OrderBy(s => s.Year).LastOrDefaultAsync();
-            var draft = await _context.Drafts.OrderBy(s => s.Pick).Where(d => d.Season == season.Year).ToListAsync();
+            var draft = await _context.Drafts.OrderBy(s => s.Pick).Where(d => d.Season == season.Year).Include(d => d.Team).ToListAsync();
 
             if (draft == null)
             {

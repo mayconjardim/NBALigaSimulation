@@ -22,7 +22,7 @@ namespace NBALigaSimulation.Client.Pages.FA
         private PlayerCompleteDto? player = null;
         private TeamCompleteDto? team = null;
 
-        protected override async Task OnParametersSetAsync()
+        protected override async Task OnInitializedAsync()
         {
             message = "Carregando Jogador...";
 

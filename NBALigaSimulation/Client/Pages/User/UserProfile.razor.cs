@@ -12,7 +12,7 @@ namespace NBALigaSimulation.Client.Pages.User
 
         private string message = string.Empty;
 
-        protected override async Task OnParametersSetAsync()
+        protected override async Task OnInitializedAsync()
         {
             message = "Carregando Time...";
 

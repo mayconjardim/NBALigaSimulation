@@ -19,7 +19,7 @@ namespace NBALigaSimulation.Client.Pages.Team
             NavigationManager.NavigateTo($"/player/{playerId}");
         }
 
-        protected override async Task OnParametersSetAsync()
+        protected override async Task OnInitializedAsync()
         {
             season = int.Parse(await LocalStorage.GetItemAsync<string>("season"));
         }

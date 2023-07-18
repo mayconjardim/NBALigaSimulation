@@ -46,7 +46,7 @@ namespace NBALigaSimulation.Client.Pages.Player
         ChartComponent? chartComponent2;
         ChartJsConfig chartJsConfig2 = null!;
 
-        protected override async Task OnParametersSetAsync()
+        protected override async Task OnInitializedAsync()
         {
             season = int.Parse(await LocalStorage.GetItemAsync<string>("season"));
         }

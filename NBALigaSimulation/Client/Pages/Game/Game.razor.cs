@@ -16,7 +16,7 @@ namespace NBALigaSimulation.Client.Pages.Game
         [Parameter]
         public int Id { get; set; }
 
-        protected override async Task OnParametersSetAsync()
+        protected override async Task OnInitializedAsync()
         {
             message = "Carregando jogo...";
 

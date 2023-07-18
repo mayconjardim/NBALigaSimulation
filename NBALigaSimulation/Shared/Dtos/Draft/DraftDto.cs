@@ -7,6 +7,8 @@
         public int Season { get; set; }
         public int Round { get; set; }
         public int Pick { get; set; }
+        public string TeamName { get; set; }
+        public string TeamAbrv { get; set; }
         public int TeamId { get; set; }
         public string Original { get; set; }
         public int? PlayerId { get; set; }

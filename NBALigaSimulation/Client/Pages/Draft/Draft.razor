@@ -1,0 +1,36 @@
+﻿@page "/draft"
+@inject IDraftService DraftService
+
+<MudContainer>
+@if (drafts != null)
+{
+     <div class="draft">
+      <table>
+                <thead>
+                    <tr>
+                        @foreach (var h in headings)
+                        {
+                            <th>@h</th>
+                        }
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var (index, draft) in drafts.Select((g, i) => (i, g)))
+                    {
+                        <tr>
+                           <td>@draft.Round</td>
+                           <td>@draft.Pick</td>
+                           <td><a href="team/@draft.TeamId"><MudAvatar Style="vertical-align: middle; background: none" Size="Size.Small" Image=@($"Images/logos/{draft.TeamAbrv}.svg") Square="true" />@draft.TeamName</a> 
+                           @if (draft.TeamAbrv != draft.Original)
+                           {
+                             <span> via @draft.Original</span> 
+                           }
+                           </td>
+                           <td></td>
+                        </tr>
+                    }
+                </tbody>
+      </table>
+      </div>
+}
+</MudContainer>

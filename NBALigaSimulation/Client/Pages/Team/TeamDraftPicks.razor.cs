@@ -13,7 +13,7 @@ namespace NBALigaSimulation.Client.Pages.Team
 
         public string message { get; set; }
 
-        protected override async Task OnParametersSetAsync()
+        protected override async Task OnInitializedAsync()
         {
             message = "Carregando Draft Picks...";
 

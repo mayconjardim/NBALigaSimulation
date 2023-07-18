@@ -13,7 +13,7 @@ namespace NBALigaSimulation.Client.Pages.Team
 
         string[] headings = { "HOME", "AWAY", "DATE", "RESULT" };
 
-        protected override async Task OnParametersSetAsync()
+        protected override async Task OnInitializedAsync()
         {
             message = "Carregando Jogos por Time...";
 
