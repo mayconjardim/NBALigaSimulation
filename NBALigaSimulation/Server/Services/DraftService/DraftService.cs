@@ -34,6 +34,26 @@ namespace NBALigaSimulation.Server.Services.DraftService
             return response;
         }
 
+
+        public async Task<ServiceResponse<List<DraftDto>>> GetLastDraft()
+        {
+            var response = new ServiceResponse<List<DraftDto>>();
+            var season = await _context.Seasons.OrderBy(s => s.Year).LastOrDefaultAsync();
+            var draft = await _context.Drafts.OrderBy(s => s.Pick).Where(d => d.Season == season.Year).ToListAsync();
+
+            if (draft == null)
+            {
+                response.Success = false;
+                response.Message = $"Draft não econtrado!";
+            }
+            else
+            {
+                response.Data = _mapper.Map<List<DraftDto>>(draft);
+            }
+
+            return response;
+        }
+
         public async Task<ServiceResponse<bool>> GenerateLottery()
         {
             var response = new ServiceResponse<bool>();

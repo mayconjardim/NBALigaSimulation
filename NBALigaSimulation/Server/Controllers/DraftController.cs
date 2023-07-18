@@ -15,6 +15,22 @@ namespace NBALigaSimulation.Server.Controllers
             _draftService = draftService;
         }
 
+        [HttpGet]
+        [SwaggerOperation(Summary = "GetLastDraft", Description = "Retorna a ultimo draft realizado.")]
+        public async Task<ActionResult<ServiceResponse<List<DraftDto>>>> GetLastDraft()
+        {
+
+            var result = await _draftService.GetLastDraft();
+
+            if (!result.Success)
+            {
+                return NotFound(result);
+            }
+
+            return Ok(result);
+
+        }
+
         [HttpGet("lotto")]
         [SwaggerOperation(Summary = "GetLastLottery", Description = "Retorna a ultima loteria realizada.")]
         public async Task<ActionResult<ServiceResponse<DraftLotteryDto>>> GetLastLottery()

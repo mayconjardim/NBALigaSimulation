@@ -103,6 +103,8 @@ namespace NBALigaSimulation.Server.Profiles
                 .ForMember(dest => dest.GameCompletes, opt => opt.MapFrom(src => src.PlayoffGames.Select(pg => pg.Game)));
 
             CreateMap<DraftLottery, DraftLotteryDto>().ReverseMap();
+            CreateMap<Draft, DraftDto>().ReverseMap();
+
 
         }
     }
