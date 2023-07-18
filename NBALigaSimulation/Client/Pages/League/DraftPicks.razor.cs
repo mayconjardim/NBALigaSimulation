@@ -12,7 +12,6 @@
         {
             message = "Carregando Draft Picks...";
 
-
             var result = await LeagueService.GetAllDraftPicks();
             if (!result.Success)
             {

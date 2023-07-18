@@ -11,6 +11,7 @@
         public string TeamAbrv { get; set; }
         public int TeamId { get; set; }
         public string Original { get; set; }
+        public string PlayerName { get; set; } = string.Empty;
         public int? PlayerId { get; set; }
         public DateTime? DateTime { get; set; }
 

@@ -31,6 +31,15 @@ namespace NBALigaSimulation.Server.Controllers
 
         }
 
+        [HttpGet("draft")]
+        public async Task<ActionResult<ServiceResponse<List<PlayerSimpleDto>>>> GetAllDraftPlayers()
+        {
+
+            var result = await _playerService.GetAllDraftPlayers();
+            return Ok(result);
+
+        }
+
         [HttpGet("{playerId}")]
         public async Task<ActionResult<ServiceResponse<PlayerCompleteDto>>> GetPlayerById(int playerId)
         {

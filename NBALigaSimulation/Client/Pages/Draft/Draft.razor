@@ -1,6 +1,11 @@
 ﻿@page "/draft"
 @inject IDraftService DraftService
-
+@inject IAuthService AuthService
+@inject ITeamService TeamService
+@inject IPlayerService PlayerService
+@inject NavigationManager NavigationManager
+@inject ILocalStorageService LocalStorage
+  
 <MudContainer>
 @if (drafts != null)
 {
@@ -11,6 +16,7 @@
                         @foreach (var h in headings)
                         {
                             <th>@h</th>
+
                         }
                     </tr>
                 </thead>
@@ -26,11 +32,35 @@
                              <span> via @draft.Original</span> 
                            }
                            </td>
-                           <td></td>
+                          <td>
+                                @if (draft.PlayerId != null)
+                                {
+                                    @draft.PlayerName
+                                } else
+                                {
+                                   
+                                      @if(onTheClockShown)
+                                      {
+                                            if (UserTeamId == draft.TeamId)
+                                            {
+                                               <MudIconButton Href="/team/15" Style="margin-right: 5px" Icon="@Icons.Material.Filled.AddCircleOutline" Color="Color.Primary" Size="Size.Small" />
+                                            }
+
+                                            @getOnClock(nextPick.TeamId, draft.TeamId)
+                                      }
+                                    
+                                }
+
+                            </td>
                         </tr>
                     }
                 </tbody>
       </table>
      </div>
 }
+
+    @if (UserTeamId != 0)
+    {
+        @UserTeamId
+    }
 </MudContainer>

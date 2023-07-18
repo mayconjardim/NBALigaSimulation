@@ -69,6 +69,19 @@ namespace NBALigaSimulation.Server.Services.PlayerService
             return response;
         }
 
+        public async Task<ServiceResponse<List<PlayerCompleteDto>>> GetAllDraftPlayers()
+        {
+            var players = await _context.Players.Where(t => t.TeamId == 22)
+                .Include(p => p.Ratings)
+                .ToListAsync();
+            var response = new ServiceResponse<List<PlayerCompleteDto>>
+            {
+                Data = _mapper.Map<List<PlayerCompleteDto>>(players)
+            };
+
+            return response;
+        }
+
         public async Task<ServiceResponse<PlayerCompleteDto>> GetPlayerById(int playerId)
         {
             var response = new ServiceResponse<PlayerCompleteDto>();
