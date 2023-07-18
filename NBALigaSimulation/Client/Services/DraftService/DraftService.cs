@@ -9,15 +9,21 @@
             _http = http;
         }
 
-        public Task<ServiceResponse<bool>> GenerateLottery()
+        public async Task<ServiceResponse<List<DraftDto>>> GetLastDraft()
         {
-            throw new NotImplementedException();
+            var response = await _http.GetFromJsonAsync<ServiceResponse<List<DraftDto>>>($"api/draft");
+            return response;
         }
 
         public async Task<ServiceResponse<DraftLotteryDto>> GetLastLottery()
         {
             var response = await _http.GetFromJsonAsync<ServiceResponse<DraftLotteryDto>>($"api/draft/lotto");
             return response;
+        }
+
+        public Task<ServiceResponse<bool>> GenerateLottery()
+        {
+            throw new NotImplementedException();
         }
 
     }
