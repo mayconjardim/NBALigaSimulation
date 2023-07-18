@@ -4,6 +4,10 @@
 <MudContainer>
     <div class="card-ratings border">
         
+        @if (rating != null)
+        {
+            
+      
             <div class="ratings">
                 <div class="chart">
                     <ChartComponent @ref="chartComponent" ChartJsConfig="chartJsConfig"></ChartComponent>
@@ -43,6 +47,7 @@
                     </div>
                     
              </div>
+        }
     </div>
 
     <div class="card-info border">
@@ -62,7 +67,7 @@
             <p>Draft</p><span>2018 - R1 (Pick 6) by ORL</span>
         </MudListItem>
         <MudListItem Icon="@Icons.Material.Filled.Work">
-           <p>Experience</p><span>4 Years</span>
+           <p>Experience</p><span>@player.Ratings.Count Year(s)</span>
         </MudListItem>
       </MudList>
      </div>
@@ -73,10 +78,13 @@
             Contract
         </MudListSubheader>
       
-           <MudListItem Icon="@Icons.Material.Filled.AttachMoney">
-          <p>Season / Amount</p>
-          <span>@player.Contract.Amount</span>
-           </MudListItem>
+          @if (player.Contract != null)
+          {
+          <MudListItem Icon="@Icons.Material.Filled.AttachMoney">
+                      <p>Season / Amount</p>
+                      <span>@player.Contract.Amount</span>
+          </MudListItem>
+          }
       </MudList>
      </div>
 

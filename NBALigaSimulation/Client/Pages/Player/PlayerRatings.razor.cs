@@ -15,7 +15,6 @@ namespace NBALigaSimulation.Client.Pages.Player
         private List<string> badgesPhysical = new List<string> { "Dp", "Di", "R", "A" };
 
         public int season = 0;
-        public int exp = 0;
 
         public string GetBadgeName(string badge)
         {
@@ -53,8 +52,6 @@ namespace NBALigaSimulation.Client.Pages.Player
 
         protected override void OnInitialized()
         {
-
-            exp = player.Contract.Exp;
 
             var Options = new ChartJsOptions()
             {
@@ -112,7 +109,6 @@ namespace NBALigaSimulation.Client.Pages.Player
                         },
                         Grid = new ChartJsGrid()
                         {
-                            // Color = "yellow"
                         },
                         SuggestedMin = 0,
                         SuggestedMax = 0
