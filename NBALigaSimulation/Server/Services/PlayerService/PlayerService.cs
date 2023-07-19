@@ -195,5 +195,23 @@ namespace NBALigaSimulation.Server.Services.PlayerService
 
             return response;
         }
+
+        public async Task<ServiceResponse<List<string>>> GetPlayersSearchSuggestions(string searchText)
+        {
+            var response = new ServiceResponse<List<string>>();
+
+            var players = await _context.Players.Where(p => p.Name.ToLower().Contains(searchText.ToLower())).ToListAsync();
+
+            List<string> suggestions = new List<string>();
+
+            foreach (var player in players)
+            {
+                suggestions.Add(player.Name);
+            }
+
+            response.Data = suggestions;
+
+            return response;
+        }
     }
 }
