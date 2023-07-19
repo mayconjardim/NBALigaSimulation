@@ -1,6 +1,4 @@
-﻿using NBALigaSimulation.Shared.Models;
-
-namespace NBALigaSimulation.Client.Pages.Draft
+﻿namespace NBALigaSimulation.Client.Pages.Draft
 {
     partial class Draft
     {

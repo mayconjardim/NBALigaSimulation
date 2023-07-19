@@ -1,44 +1,13 @@
-﻿@page "/freeagency"
+﻿@page "/draft/player/{id:int}/{pick:int}"
 @attribute [Authorize]
+@inject IDraftService DraftService
+@inject IAuthService AuthService
 @inject IPlayerService PlayerService
-@inject IFAService FAService
 @inject ILocalStorageService LocalStorage
-@inject ISnackbar Snackbar
 
 <MudContainer>
-<CascadingAuthenticationState>
- <AuthorizeView>
+<AuthorizeView>
 
-@if (faOffers.Count > 0)
-{
-  <div class="ofertas">
-   <MudSimpleTable Hover="true" Dense="true" FixedHeader="true" Style="margin: 10px">
-    <thead>
-        <tr>
-            @foreach (var h in headings)
-            {
-                <th>@h</th>
-            }
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var offer in faOffers)
-        {
-            <tr>
-                    <td><a href="@("player/" + offer.PlayerId)">@offer.PlayerName</a></td>
-                    <td>@offer.Amount.ToString("N0")/@offer.Years yr(s)</td>
-                    <td>
-                        <MudAvatar Style="vertical-align: middle; background: none">
-                         <MudIconButton @onclick="() => DeleteOffer(offer.Id)"  Color="Color.Error" Icon="@Icons.Material.Filled.Delete" Size="Size.Medium">
-                         </MudIconButton>
-                        </MudAvatar>
-                    </td>
-            </tr>
-         }
-    </tbody>
-    </MudSimpleTable>
-  </div>
- }
  @if (players != null)
  {
   <MudSelect Style="margin: 10px" Margin="Margin.Dense" T="string" Label="Filter" Variant="Variant.Outlined"  ValueChanged="@HandlePositionChanged">
@@ -79,7 +48,7 @@
         <MudTh><MudTableSortLabel SortBy="new Func<PlayerCompleteDto, object>(x=>x.Ratings.Last().End)">END</MudTableSortLabel></MudTh>
     </HeaderContent>
     <RowTemplate Context="data">
-        <MudTd><MudIconButton Href="@("faoffer/" + data.Id)" Icon="@Icons.Material.Filled.AddCircle" Variant="Variant.Filled" Color="Color.Primary" Size="Size.Small" /></MudTd>
+        <MudTd><MudIconButton  Icon="@Icons.Material.Filled.AddCircle" Variant="Variant.Filled" Color="Color.Primary" Size="Size.Small" /></MudTd>
         <MudTd Style="white-space: nowrap;" DataLabel="NAME"><a  style="color: blue" href="@("player/" + data.Id)">@data.Name</a></MudTd>
         <MudTd DataLabel="AGE">@(season - data.Born.Year)</MudTd>
         <MudTd DataLabel="OVR">@data.Pos</MudTd>
@@ -104,5 +73,5 @@
   </MudTable>
  }
  </AuthorizeView>
- </CascadingAuthenticationState>
- </MudContainer>
+</MudContainer>
+

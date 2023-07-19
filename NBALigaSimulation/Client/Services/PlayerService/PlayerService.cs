@@ -55,5 +55,11 @@ namespace NBALigaSimulation.Client.Services.PlayerService
             var result = await _http.GetFromJsonAsync<ServiceResponse<List<PlayerCompleteDto>>>($"api/players/fa");
             return result;
         }
+
+        public async Task<ServiceResponse<List<PlayerCompleteDto>>> GetAllDraftPlayers()
+        {
+            var result = await _http.GetFromJsonAsync<ServiceResponse<List<PlayerCompleteDto>>>($"api/players/draft");
+            return result;
+        }
     }
 }
