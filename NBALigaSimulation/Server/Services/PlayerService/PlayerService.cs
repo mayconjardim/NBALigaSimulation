@@ -184,5 +184,16 @@ namespace NBALigaSimulation.Server.Services.PlayerService
             return response;
         }
 
+        public async Task<ServiceResponse<List<PlayerSimpleDto>>> SearchPlayers(string searchText)
+        {
+
+            var response = new ServiceResponse<List<PlayerSimpleDto>>();
+
+            var players = await _context.Players.Where(p => p.Name.ToLower().Contains(searchText.ToLower())).ToListAsync();
+
+            response.Data = _mapper.Map<List<PlayerSimpleDto>>(players);
+
+            return response;
+        }
     }
 }
