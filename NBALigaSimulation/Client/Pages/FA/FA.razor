@@ -5,7 +5,7 @@
 @inject ILocalStorageService LocalStorage
 @inject ISnackbar Snackbar
 
-<MudContainer>
+<div class="container">
 <CascadingAuthenticationState>
  <AuthorizeView>
 
@@ -41,7 +41,7 @@
  }
  @if (players != null)
  {
-  <MudSelect Style="margin: 10px" Margin="Margin.Dense" T="string" Label="Filter" Variant="Variant.Outlined"  ValueChanged="@HandlePositionChanged">
+  <MudSelect Style="margin: 10px" Margin="Margin.Dense" Dense="true" T="string" Label="Filter" Variant="Variant.Outlined"  ValueChanged="@HandlePositionChanged">
         <MudSelectItem Value="@("ALL")" />
         <MudSelectItem Value="@("PG")" />
         <MudSelectItem Value="@("SG")" />
@@ -54,7 +54,7 @@
         <MudSelectItem Value="@("C")" />
   </MudSelect>
       
-  <MudTable Style="margin: 10px"  Items="@filteredPlayers" Breakpoint="Breakpoint.None" HorizontalScrollbar="true">
+  <MudTable Style="margin: 10px"  Margin="Margin.Dense"  Dense="true"  Items="@filteredPlayers" Breakpoint="Breakpoint.None" HorizontalScrollbar="true">
     <HeaderContent>
         <MudTh></MudTh>
         <MudTh><MudTableSortLabel Enabled="@false" SortBy="new Func<PlayerCompleteDto, object>(x=>x.Name)">NAME</MudTableSortLabel></MudTh>
@@ -105,4 +105,4 @@
  }
  </AuthorizeView>
  </CascadingAuthenticationState>
- </MudContainer>
+ </div>

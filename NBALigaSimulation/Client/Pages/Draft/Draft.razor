@@ -42,7 +42,7 @@
                                       {
                                             if (UserTeamId == draft.TeamId)
                                             {
-                                               <MudIconButton Href="@("/draft/player/" + draft.TeamId)" Style="margin-right: 5px" Icon="@Icons.Material.Filled.AddCircleOutline" Color="Color.Primary" Size="Size.Small" />
+                                               <MudIconButton Href="@("/draft/player/" + draft.TeamId + "/" + draft.Pick)"  Style="margin-right: 5px" Icon="@Icons.Material.Filled.AddCircleOutline" Color="Color.Primary" Size="Size.Small" />
                                             }
 
                                             @getOnClock(nextPick.TeamId, draft.TeamId)

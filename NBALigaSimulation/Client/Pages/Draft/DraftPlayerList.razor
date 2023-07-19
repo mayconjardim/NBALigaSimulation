@@ -1,16 +1,15 @@
-﻿@page "/draft/player/{id:int}/{pick:int}"
+﻿@page "/draft/player/{team:int}/{pick:int}"
 @attribute [Authorize]
 @inject IDraftService DraftService
 @inject IAuthService AuthService
 @inject IPlayerService PlayerService
 @inject ILocalStorageService LocalStorage
 
-<MudContainer>
 <AuthorizeView>
-
+<div class="container">
  @if (players != null)
  {
-  <MudSelect Style="margin: 10px" Margin="Margin.Dense" T="string" Label="Filter" Variant="Variant.Outlined"  ValueChanged="@HandlePositionChanged">
+  <MudSelect Style="margin: 10px" Margin="Margin.Dense" Dense="true" T="string" Label="Filter" Variant="Variant.Outlined"  ValueChanged="@HandlePositionChanged">
         <MudSelectItem Value="@("ALL")" />
         <MudSelectItem Value="@("PG")" />
         <MudSelectItem Value="@("SG")" />
@@ -23,7 +22,7 @@
         <MudSelectItem Value="@("C")" />
   </MudSelect>
       
-  <MudTable Style="margin: 10px"  Items="@filteredPlayers" Breakpoint="Breakpoint.None" HorizontalScrollbar="true">
+  <MudTable Style="margin: 10px"  Margin="Margin.Dense" Dense="true"  Items="@filteredPlayers" Breakpoint="Breakpoint.None" HorizontalScrollbar="true">
     <HeaderContent>
         <MudTh></MudTh>
         <MudTh><MudTableSortLabel Enabled="@false" SortBy="new Func<PlayerCompleteDto, object>(x=>x.Name)">NAME</MudTableSortLabel></MudTh>
@@ -48,7 +47,7 @@
         <MudTh><MudTableSortLabel SortBy="new Func<PlayerCompleteDto, object>(x=>x.Ratings.Last().End)">END</MudTableSortLabel></MudTh>
     </HeaderContent>
     <RowTemplate Context="data">
-        <MudTd><MudIconButton  Icon="@Icons.Material.Filled.AddCircle" Variant="Variant.Filled" Color="Color.Primary" Size="Size.Small" /></MudTd>
+        <MudTd><MudIconButton OnClick="@(() => DraftPlayer(data.Id))" Icon="@Icons.Material.Filled.AddCircle" Variant="Variant.Filled" Color="Color.Primary" Size="Size.Small" /></MudTd>
         <MudTd Style="white-space: nowrap;" DataLabel="NAME"><a  style="color: blue" href="@("player/" + data.Id)">@data.Name</a></MudTd>
         <MudTd DataLabel="AGE">@(season - data.Born.Year)</MudTd>
         <MudTd DataLabel="OVR">@data.Pos</MudTd>
@@ -72,6 +71,6 @@
     </RowTemplate>
   </MudTable>
  }
+ </div>
  </AuthorizeView>
-</MudContainer>
 

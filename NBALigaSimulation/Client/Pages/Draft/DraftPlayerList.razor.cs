@@ -5,7 +5,7 @@ namespace NBALigaSimulation.Client.Pages.Draft
     {
 
         [Parameter]
-        public int Id { get; set; }
+        public int team { get; set; }
 
         [Parameter]
         public int pick { get; set; }
@@ -56,8 +56,10 @@ namespace NBALigaSimulation.Client.Pages.Draft
             }
         }
 
-        private void DraftPlayer(int Id)
+        private void DraftPlayer(int playerId)
         {
+
+
 
         }
 
