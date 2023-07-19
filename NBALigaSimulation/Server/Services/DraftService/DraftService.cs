@@ -169,7 +169,7 @@ namespace NBALigaSimulation.Server.Services.DraftService
                     player.TeamId = request.TeamId;
                     player.Draft = new PlayerDraft
                     {
-                        Pick = request.PlayerId,
+                        Pick = request.Pick,
                         Round = request.Round,
                         Team = request.Team,
                         Year = request.Year

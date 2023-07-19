@@ -14,7 +14,16 @@
     <CardHeaderContent>
          <p class="lastname">@player.Name</p>
         <MudText Typo="Typo.caption">
-         <MudAvatar Style="vertical-align: middle; background: none" Size="Size.Small" Image=@($"Images/logos/{player.TeamAbrv}.svg") Square="true" />
+                    @if (player.TeamId == 21)
+                    {
+                        <b>FA - </b>
+                    }else if (player.TeamId == 22)
+                    {
+                        <b>DRAFT - </b>
+                    }else
+                    {
+                    <MudAvatar Style="vertical-align: middle; background: none" Size="Size.Small" Image=@($"Images/logos/{player.TeamAbrv}.svg") Square="true" />
+                    }
           @Util.Position(player.Pos)
         </MudText>
     </CardHeaderContent>
