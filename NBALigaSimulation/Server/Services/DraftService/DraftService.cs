@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using NBALigaSimulation.Server.Migrations;
 using NBALigaSimulation.Shared.Engine.Utils;
 using System.Collections.Generic;
 
@@ -39,7 +40,7 @@ namespace NBALigaSimulation.Server.Services.DraftService
         {
             var response = new ServiceResponse<List<DraftDto>>();
             var season = await _context.Seasons.OrderBy(s => s.Year).LastOrDefaultAsync();
-            var draft = await _context.Drafts.OrderBy(s => s.Pick).Where(d => d.Season == season.Year).Include(d => d.Team).ToListAsync();
+            var draft = await _context.Drafts.OrderBy(s => s.Pick).Where(d => d.Season == season.Year).Include(d => d.Team).Include(d => d.Player).ToListAsync();
 
             if (draft == null)
             {
@@ -152,24 +153,47 @@ namespace NBALigaSimulation.Server.Services.DraftService
 
             var player = await _context.Players.Where(p => p.Id == request.PlayerId).FirstOrDefaultAsync();
 
-            if (player != null)
+            var draft = await _context.Drafts.Where(d => d.Pick == request.Pick && d.TeamId == request.TeamId && d.Season == season.Year).FirstOrDefaultAsync();
+
+            try
             {
 
-                player.TeamId = request.TeamId;
-                player.Draft = new PlayerDraft
+                if (draft != null && player != null)
                 {
-                    Pick = request.PlayerId,
-                    Round = request.Round,
-                    Team = request.Team,
-                    Year = request.Year
-                };
 
-                player.Contract = DraftUtils.RookieContracts(request.Pick, season.Year);
+                    draft.Player = player;
+                    draft.PlayerId = request.PlayerId;
+                    draft.DateTime = DateTime.Now;
+                    _context.Update(draft);
 
-                _context.Update(player);
+                    player.TeamId = request.TeamId;
+                    player.Draft = new PlayerDraft
+                    {
+                        Pick = request.PlayerId,
+                        Round = request.Round,
+                        Team = request.Team,
+                        Year = request.Year
+                    };
+
+                    player.Contract = DraftUtils.RookieContracts(request.Pick, season.Year);
+
+                    _context.Update(player);
+                }
+
+                await _context.SaveChangesAsync();
+
+
+            }
+            catch (Exception ex)
+            {
+
+                response.Success = false;
+                response.Message = "Não foi possivel draftar o jogador!";
+                return response;
+
+
             }
 
-            await _context.SaveChangesAsync();
             response.Success = true;
             return response;
         }

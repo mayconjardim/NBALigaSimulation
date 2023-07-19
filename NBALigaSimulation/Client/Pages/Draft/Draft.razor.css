@@ -39,3 +39,11 @@ a {
 span {
     font-size: 10px;
 }
+
+@media (max-width: 640px) {
+
+    .name {
+        font-size: 10px;
+        white-space: nowrap;
+    }
+}

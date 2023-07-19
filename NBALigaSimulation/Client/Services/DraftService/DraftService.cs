@@ -26,5 +26,13 @@
             throw new NotImplementedException();
         }
 
+        public async Task<ServiceResponse<bool>> SelectDraftedPlayer(DraftPlayerDto request)
+        {
+            var response = new ServiceResponse<bool>();
+            var result = await _http.PutAsJsonAsync("api/draft/select", request);
+            return response;
+        }
+
+
     }
 }
