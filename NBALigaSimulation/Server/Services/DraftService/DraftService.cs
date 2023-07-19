@@ -144,17 +144,30 @@ namespace NBALigaSimulation.Server.Services.DraftService
             return response;
         }
 
-        public async Task<ServiceResponse<bool>> SelectPlayer(Draft Player)
+        public async Task<ServiceResponse<bool>> SelectDraftedPlayer(DraftPlayerDto request)
         {
 
             var response = new ServiceResponse<bool>();
             var season = await _context.Seasons.OrderBy(s => s.Year).LastOrDefaultAsync();
 
-            var selectedPlayer = await _context.Players.Where()
+            var player = await _context.Players.Where(p => p.Id == request.PlayerId).FirstOrDefaultAsync();
 
+            if (player != null)
+            {
 
+                player.TeamId = request.TeamId;
+                player.Draft = new PlayerDraft
+                {
+                    Pick = request.PlayerId,
+                    Round = request.Round,
+                    Team = request.Team,
+                    Year = request.Year
+                };
 
-            _context.Add();
+                player.Contract = DraftUtils.RookieContracts(request.Pick, season.Year);
+
+                _context.Update(player);
+            }
 
             await _context.SaveChangesAsync();
             response.Success = true;

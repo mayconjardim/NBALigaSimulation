@@ -61,5 +61,18 @@ namespace NBALigaSimulation.Server.Controllers
             return Ok(result);
         }
 
+        [HttpPut("select")]
+        public async Task<ActionResult<ServiceResponse<bool>>> SelectDraftedPlayer(DraftPlayerDto request)
+        {
+            var response = await _draftService.SelectDraftedPlayer(request);
+
+            if (!response.Success)
+            {
+                return BadRequest(response);
+            }
+
+            return Ok(response);
+        }
+
     }
 }

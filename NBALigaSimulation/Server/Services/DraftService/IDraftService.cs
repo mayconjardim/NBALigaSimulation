@@ -7,7 +7,7 @@
         Task<ServiceResponse<DraftLotteryDto>> GetLastLottery();
         Task<ServiceResponse<bool>> GenerateLottery();
         Task<ServiceResponse<bool>> GenerateDraft();
-        Task<ServiceResponse<bool>> SelectPlayer();
+        Task<ServiceResponse<bool>> SelectDraftedPlayer(DraftPlayerDto request);
 
     }
 }
