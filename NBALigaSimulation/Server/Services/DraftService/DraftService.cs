@@ -143,5 +143,45 @@ namespace NBALigaSimulation.Server.Services.DraftService
             response.Success = true;
             return response;
         }
+
+        public async Task<ServiceResponse<bool>> SelectPlayer()
+        {
+
+            var response = new ServiceResponse<bool>();
+            var season = await _context.Seasons.OrderBy(s => s.Year).LastOrDefaultAsync();
+
+            var lottery = await _context.DraftLotteries
+               .Where(l => l.Season == season.Year)
+               .OrderByDescending(l => l.Id)
+               .FirstOrDefaultAsync();
+
+            var newDraft = await _context.Drafts
+            .Where(l => l.Season == season.Year)
+            .OrderByDescending(l => l.Id).ToListAsync();
+
+            if (newDraft.Count > 0)
+            {
+                response.Success = false;
+                response.Message = "Draft já criado!";
+                return response;
+            }
+
+            var teams = await _context.Teams
+                .Where(t => t.IsHuman == true)
+                .ToListAsync();
+
+            var regularStats = await _context.TeamRegularStats.Where(s => s.Season == season.Year).Include(t => t.Team).ToListAsync();
+
+            var picks = await _context.TeamDraftPicks.Where(s => s.Year == season.Year).Include(t => t.Team).ToListAsync();
+
+            newDraft = DraftUtils.GenerateDraft(lottery, season.Year, regularStats, picks, teams);
+
+            _context.AddRange(newDraft);
+
+            await _context.SaveChangesAsync();
+            response.Success = true;
+            return response;
+        }
+
     }
 }

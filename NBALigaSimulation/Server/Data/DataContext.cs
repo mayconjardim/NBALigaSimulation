@@ -1,4 +1,6 @@
-﻿namespace NBALigaSimulation.Server.Data
+﻿using Microsoft.EntityFrameworkCore;
+
+namespace NBALigaSimulation.Server.Data
 {
     public class DataContext : DbContext
     {
@@ -50,7 +52,10 @@
                 .HasForeignKey(p => p.TeamId);
 
             modelBuilder.Entity<Player>()
-          .OwnsOne(p => p.Born);
+            .OwnsOne(p => p.Born);
+
+            modelBuilder.Entity<Player>()
+          .OwnsOne(p => p.Draft);
 
             modelBuilder.Entity<PlayerRatings>()
                 .HasOne(e => e.Player)
