@@ -184,33 +184,15 @@ namespace NBALigaSimulation.Server.Services.PlayerService
             return response;
         }
 
-        public async Task<ServiceResponse<List<PlayerSimpleDto>>> SearchPlayers(string searchText)
+        public async Task<ServiceResponse<List<PlayerSimpleDto>>> GetPlayersSearchSuggestions(string searchText)
         {
-
             var response = new ServiceResponse<List<PlayerSimpleDto>>();
 
             var players = await _context.Players.Where(p => p.Name.ToLower().Contains(searchText.ToLower())).ToListAsync();
 
             response.Data = _mapper.Map<List<PlayerSimpleDto>>(players);
 
-            return response;
-        }
-
-        public async Task<ServiceResponse<List<string>>> GetPlayersSearchSuggestions(string searchText)
-        {
-            var response = new ServiceResponse<List<string>>();
-
-            var players = await _context.Players.Where(p => p.Name.ToLower().Contains(searchText.ToLower())).ToListAsync();
-
-            List<string> suggestions = new List<string>();
-
-            foreach (var player in players)
-            {
-                suggestions.Add(player.Name);
-            }
-
-            response.Data = suggestions;
-
+            response.Success = true;
             return response;
         }
     }

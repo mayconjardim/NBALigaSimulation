@@ -106,21 +106,6 @@ namespace NBALigaSimulation.Server.Controllers
             return Ok(response);
         }
 
-        [HttpGet("search/{searchText}")]
-        public async Task<ActionResult<ServiceResponse<List<PlayerSimpleDto>>>> SearchPlayers(string searchText)
-        {
-
-            var result = await _playerService.SearchPlayers(searchText);
-
-            if (!result.Success)
-            {
-                return NotFound(result);
-            }
-
-            return Ok(result);
-
-        }
-
         [HttpGet("searchsuggestion/{searchText}")]
         public async Task<ActionResult<ServiceResponse<List<PlayerSimpleDto>>>> GetPlayersSearchSuggestions(string searchText)
         {
