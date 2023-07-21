@@ -7,38 +7,32 @@
  {
       
   <div class="options"> 
+      
+      <MudSelect Style="margin: 10px" Margin="Margin.Dense" Dense="true" T="string" Label="VIEW" Variant="Variant.Outlined"  ValueChanged="@HandleTeamChanged">
+            <MudSelectItem Value="@("ALL")" />
+            <MudSelectItem Value="@("DRAFT")" />
+            <MudSelectItem Value="@("FREE AGENTS")" />
+            <MudSelectItem Value="@("EXPIRANTES")" />
+      </MudSelect>
 
-     <MudSelect Style="margin: 10px" Margin="Margin.Dense" Dense="true" T="string" Label="POSITION" Variant="Variant.Outlined"  ValueChanged="@HandlePositionChanged">
-        <MudSelectItem Value="@("ALL")" />
-        <MudSelectItem Value="@("PG")" />
-        <MudSelectItem Value="@("SG")" />
-        <MudSelectItem Value="@("G")" />
-        <MudSelectItem Value="@("GF")" />
-        <MudSelectItem Value="@("SF")" />
-        <MudSelectItem Value="@("PF")" />
-        <MudSelectItem Value="@("F")" />
-        <MudSelectItem Value="@("FC")" />
-        <MudSelectItem Value="@("C")" />
-  </MudSelect>
-
-  <MudSelect Style="margin: 10px" Margin="Margin.Dense" Dense="true" T="string" Label="POSITION" Variant="Variant.Outlined"  ValueChanged="@HandlePositionChanged">
-        <MudSelectItem Value="@("ALL")" />
-        <MudSelectItem Value="@("PG")" />
-        <MudSelectItem Value="@("SG")" />
-        <MudSelectItem Value="@("G")" />
-        <MudSelectItem Value="@("GF")" />
-        <MudSelectItem Value="@("SF")" />
-        <MudSelectItem Value="@("PF")" />
-        <MudSelectItem Value="@("F")" />
-        <MudSelectItem Value="@("FC")" />
-        <MudSelectItem Value="@("C")" />
-  </MudSelect>
+      <MudSelect Style="margin: 10px" Margin="Margin.Dense" Dense="true" T="string" Label="POSITION" Variant="Variant.Outlined"  ValueChanged="@HandlePositionChanged">
+            <MudSelectItem Value="@("ALL")" />
+            <MudSelectItem Value="@("PG")" />
+            <MudSelectItem Value="@("SG")" />
+            <MudSelectItem Value="@("G")" />
+            <MudSelectItem Value="@("GF")" />
+            <MudSelectItem Value="@("SF")" />
+            <MudSelectItem Value="@("PF")" />
+            <MudSelectItem Value="@("F")" />
+            <MudSelectItem Value="@("FC")" />
+            <MudSelectItem Value="@("C")" />
+      </MudSelect>
 
   </div>  
   <MudTable Style="margin: 10px"  Margin="Margin.Dense"  Dense="true"  Items="@filteredPlayers" Breakpoint="Breakpoint.None" HorizontalScrollbar="true">
     <HeaderContent>
         <MudTh><MudTableSortLabel Enabled="@false" SortBy="new Func<PlayerCompleteDto, object>(x=>x.Name)">NAME</MudTableSortLabel></MudTh>
-        <MudTh><MudTableSortLabel Enabled="@false" SortBy="new Func<PlayerCompleteDto, object>(x=>x.Born.Year)">AGE</MudTableSortLabel></MudTh>
+        <MudTh><MudTableSortLabel SortBy="new Func<PlayerCompleteDto, object>(x=>x.Born.Year)">AGE</MudTableSortLabel></MudTh>
         <MudTh><MudTableSortLabel Enabled="@false" SortBy="new Func<PlayerCompleteDto, object>(x=>x.Pos)">POS</MudTableSortLabel></MudTh>
         <MudTh><MudTableSortLabel SortBy="new Func<PlayerCompleteDto, object>(x=>x.Ratings.Last().Ovr)">OVR</MudTableSortLabel></MudTh>
         <MudTh><MudTableSortLabel SortBy="new Func<PlayerCompleteDto, object>(x=>x.Ratings.Last().Pot)">POT</MudTableSortLabel></MudTh>
