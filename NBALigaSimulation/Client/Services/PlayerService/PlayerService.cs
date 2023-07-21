@@ -1,6 +1,4 @@
-﻿using System.Net.Http;
-
-namespace NBALigaSimulation.Client.Services.PlayerService
+﻿namespace NBALigaSimulation.Client.Services.PlayerService
 {
     public class PlayerService : IPlayerService
     {
@@ -12,6 +10,12 @@ namespace NBALigaSimulation.Client.Services.PlayerService
         }
 
         public string Message { get; set; } = "Carregando Jogador...";
+
+        public async Task<ServiceResponse<List<PlayerCompleteDto>>> GetAllPlayers()
+        {
+            var result = await _http.GetFromJsonAsync<ServiceResponse<List<PlayerCompleteDto>>>($"api/players");
+            return result;
+        }
 
         public async Task<ServiceResponse<PlayerCompleteDto>> GetPlayerById(int playerId)
         {

@@ -45,12 +45,12 @@ namespace NBALigaSimulation.Server.Services.PlayerService
         }
 
 
-        public async Task<ServiceResponse<List<PlayerSimpleDto>>> GetAllPlayers()
+        public async Task<ServiceResponse<List<PlayerCompleteDto>>> GetAllPlayers()
         {
-            var players = await _context.Players.ToListAsync();
-            var response = new ServiceResponse<List<PlayerSimpleDto>>
+            var players = await _context.Players.Include(p => p.Ratings).ToListAsync();
+            var response = new ServiceResponse<List<PlayerCompleteDto>>
             {
-                Data = _mapper.Map<List<PlayerSimpleDto>>(players)
+                Data = _mapper.Map<List<PlayerCompleteDto>>(players)
             };
 
             return response;

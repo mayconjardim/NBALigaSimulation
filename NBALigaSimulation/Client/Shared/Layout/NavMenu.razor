@@ -23,7 +23,7 @@
      <MudNavGroup Icon="@Icons.Material.Filled.East" Title="East" Expanded="false">
         @foreach (var team in East)
             {
-                <MudNavLink Href="@string.Format("/team/{0}", team.Id)"  Match="NavLinkMatch.Prefix">
+                <MudNavLink Href="@string.Format("/team/{0}", team.Id)"  Match="NavLinkMatch.Prefix" >
                      <MudAvatar Style="vertical-align: middle; background: none" Size="Size.Small" Image=@($"Images/logos/{team.Abrv}.svg") Square="true" />
                 @team.Name</MudNavLink>
             }
@@ -33,7 +33,7 @@
 
         @foreach (var team in West)
         {
-                <MudNavLink Href="@string.Format("/team/{0}", team.Id)"  Match="NavLinkMatch.Prefix">
+                <MudNavLink Href="@string.Format("/team/{0}", team.Id)"  Match="NavLinkMatch.Prefix" >
                      <MudAvatar Style="vertical-align: middle; background: none" Size="Size.Small" Image=@($"Images/logos/{team.Abrv}.svg") Square="true" />
                 @team.Name</MudNavLink>
         }
@@ -82,6 +82,11 @@
     private bool showUserMenu = false;
 
     private string UserMenuCssClass => showUserMenu ? "show-menu" : null;
+
+      private void RefreshPage()
+    {
+        StateHasChanged();
+    }
 
     protected override async Task OnInitializedAsync()
     {
