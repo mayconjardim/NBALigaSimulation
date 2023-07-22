@@ -31,5 +31,13 @@
             var result = await response.Content.ReadFromJsonAsync<ServiceResponse<CompleteSeasonDto>>();
             return result;
         }
+
+        public async Task<ServiceResponse<CompleteSeasonDto>> GenerateSchedule()
+        {
+            var payload = new ServiceResponse<CompleteSeasonDto>();
+            var response = await _http.PutAsJsonAsync("api/seasons/schedule", payload);
+            var result = await response.Content.ReadFromJsonAsync<ServiceResponse<CompleteSeasonDto>>();
+            return result;
+        }
     }
 }

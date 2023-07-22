@@ -44,6 +44,25 @@
 
         }
 
+        private async Task GenerateSchedule()
+        {
+
+            var seasonResponse = await SeasonService.GenerateSchedule();
+
+            if (seasonResponse.Success)
+            {
+                messageCssClass = "success";
+                Snackbar.Add(seasonResponse.Message, MudBlazor.Severity.Success);
+            }
+            else
+            {
+                messageCssClass = "error";
+                Snackbar.Add(seasonResponse.Message, MudBlazor.Severity.Error);
+
+            }
+
+        }
+
         private async Task CreateLottery()
         {
 
