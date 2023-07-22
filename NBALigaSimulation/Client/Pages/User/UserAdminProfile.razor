@@ -2,6 +2,7 @@
 @attribute [Authorize]
 @inject ISeasonService SeasonService
 @inject IDraftService DraftService
+@inject IGameService GameService
 @inject ISnackbar Snackbar
 
 
@@ -26,6 +27,16 @@
                         <MudListItem Icon="@Icons.Material.Filled.Add">
                          <MudButton Variant="Variant.Text" OnClick="GenerateSchedule">Criar Schedule</MudButton>  
                         </MudListItem>
+
+                        <MudListItem Icon="@Icons.Material.Filled.Add">
+                         <MudButton Variant="Variant.Text" OnClick="SimGameByDateRegular">Simular Rodada</MudButton>  
+                        </MudListItem>
+
+                        @if (isSimulating)
+                        {
+                            <MudSpinner Size="MudBlazor.Size.Small" />
+                        }
+
                     </NestedList>
                 </MudListItem>
 

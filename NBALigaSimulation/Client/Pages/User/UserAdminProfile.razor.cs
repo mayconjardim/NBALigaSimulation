@@ -63,6 +63,23 @@
 
         }
 
+        private async Task SimGameByDateRegular()
+        {
+            var gameResponse = await GameService.SimGameByDateRegular();
+
+            if (gameResponse.Success)
+            {
+                messageCssClass = "success";
+                Snackbar.Add(gameResponse.Message, MudBlazor.Severity.Success);
+            }
+            else
+            {
+                messageCssClass = "error";
+                Snackbar.Add(gameResponse.Message, MudBlazor.Severity.Error);
+
+            }
+        }
+
         private async Task CreateLottery()
         {
 

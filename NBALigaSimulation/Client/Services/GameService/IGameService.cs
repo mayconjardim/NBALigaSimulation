@@ -7,6 +7,7 @@
         Task<GameCompleteDto> CreateGame(CreateGameDto game);
         Task<ServiceResponse<bool>> UpdateGame(int gameId);
         Task<ServiceResponse<List<GameCompleteDto>>> GetGamesByTeamId(int teamId);
+        Task<ServiceResponse<bool>> SimGameByDateRegular();
 
     }
 }

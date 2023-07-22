@@ -116,6 +116,7 @@ namespace NBALigaSimulation.Server.Services.SeasonService
 
             await _context.SaveChangesAsync();
 
+            response.Message = "Schedule criado com sucesso!";
             response.Success = true;
             response.Data = _mapper.Map<CompleteSeasonDto>(season);
 

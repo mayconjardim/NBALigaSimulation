@@ -1,4 +1,6 @@
 ﻿
+using Microsoft.VisualBasic;
+
 namespace NBALigaSimulation.Client.Services.GameService
 {
     public class GameService : IGameService
@@ -45,6 +47,14 @@ namespace NBALigaSimulation.Client.Services.GameService
         public async Task<ServiceResponse<List<GameCompleteDto>>> GetGamesByTeamId(int teamId)
         {
             var result = await _http.GetFromJsonAsync<ServiceResponse<List<GameCompleteDto>>>($"api/games/teams/{teamId}");
+            return result;
+        }
+
+        public async Task<ServiceResponse<bool>> SimGameByDateRegular()
+        {
+            var payload = new ServiceResponse<bool>();
+            var response = await _http.PutAsJsonAsync($"api/games/update/date/regular", payload);
+            var result = await response.Content.ReadFromJsonAsync<ServiceResponse<bool>>();
             return result;
         }
     }
