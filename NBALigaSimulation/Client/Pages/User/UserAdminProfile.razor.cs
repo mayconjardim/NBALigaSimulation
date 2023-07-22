@@ -44,5 +44,24 @@
 
         }
 
+        private async Task CreateDraft()
+        {
+
+            var draftResponse = await DraftService.GenerateDraft();
+
+            if (draftResponse.Success)
+            {
+                messageCssClass = "success";
+                Snackbar.Add(draftResponse.Message, MudBlazor.Severity.Success);
+            }
+            else
+            {
+                messageCssClass = "error";
+                Snackbar.Add(draftResponse.Message, MudBlazor.Severity.Error);
+
+            }
+
+        }
+
     }
 }

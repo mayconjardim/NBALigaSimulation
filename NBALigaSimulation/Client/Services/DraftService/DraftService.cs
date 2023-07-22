@@ -37,5 +37,13 @@
             return response;
         }
 
+        public async Task<ServiceResponse<bool>> GenerateDraft()
+        {
+            var payload = new ServiceResponse<bool>();
+            var response = await _http.PostAsJsonAsync($"api/draft/generate/draft", payload);
+            var result = await response.Content.ReadFromJsonAsync<ServiceResponse<bool>>();
+
+            return result;
+        }
     }
 }
