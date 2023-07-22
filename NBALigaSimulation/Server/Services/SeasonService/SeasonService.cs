@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 
-
 namespace NBALigaSimulation.Server.Services.SeasonService
 {
     public class SeasonService : ISeasonService

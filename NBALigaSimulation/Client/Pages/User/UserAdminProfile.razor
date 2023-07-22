@@ -1,4 +1,29 @@
 ﻿@page "/profile/admin"
 @attribute [Authorize]
+@inject ISeasonService SeasonService
+@inject ISnackbar Snackbar
 
-<h1>ADMIN PAINEL</h1>
+
+<MudContainer>
+    <div class="container"> 
+        <MudPaper Width="300px">
+            <MudList Clickable="true">
+                <MudListSubheader>
+                    Admin Painel
+                </MudListSubheader>
+       
+                <MudListItem Icon="@Icons.Material.Filled.Inbox" Text="Season" InitiallyExpanded="true">
+                    <NestedList>
+                        <MudListItem Icon="@Icons.Material.Filled.StarRate">
+                         <MudButton Variant="Variant.Text" OnClick="CreateSeason">Criar Temporada</MudButton>  
+                        </MudListItem>
+                        <MudListItem Icon="@Icons.Material.Filled.WatchLater">
+                            Snoozed
+                        </MudListItem>
+                    </NestedList>
+                </MudListItem>
+
+            </MudList>
+        </MudPaper>
+    </div>
+</MudContainer>

@@ -18,9 +18,9 @@ namespace NBALigaSimulation.Server.Controllers
         [HttpPost]
         [SwaggerOperation(Summary = "CreateSeason", Description = "Cria uma nova temporada.")]
 
-        public async Task<ActionResult<ServiceResponse<CompleteSeasonDto>>> CreateSeason(CreateSeasonDto request)
+        public async Task<ActionResult<ServiceResponse<CompleteSeasonDto>>> CreateSeason()
         {
-            return Ok(await _seasonService.CreateSeason(request));
+            return Ok(await _seasonService.CreateSeason());
         }
 
         [HttpGet]

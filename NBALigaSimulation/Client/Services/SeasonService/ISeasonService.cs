@@ -2,7 +2,9 @@
 {
     public interface ISeasonService
     {
+
         Task<ServiceResponse<CompleteSeasonDto>> GetLastSeason();
+        Task<ServiceResponse<CompleteSeasonDto>> CreateSeason();
 
     }
 }
