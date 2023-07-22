@@ -8,6 +8,16 @@ namespace NBALigaSimulation.Shared.Models
         public int Id { get; set; }
         public int Year { get; set; }
         public List<Game> Games { get; set; }
+        public bool IsCompleted { get; set; } = false;
+        public bool LotteryCompleted { get; set; } = false;
+        public bool DraftCompleted { get; set; } = false;
+        public bool TcCompleted { get; set; } = false;
+        public bool DeadlineCompleted { get; set; } = false;
+        public bool RegularCompleted { get; set; } = false;
+        public bool FirstRoundCompleted { get; set; } = false;
+        public bool SecondRoundCompleted { get; set; } = false;
+        public bool ThirdRoundCompleted { get; set; } = false;
+        public bool FourthRoundCompleted { get; set; } = false;
 
         public void NewSchedule(List<Team> teams)
         {
