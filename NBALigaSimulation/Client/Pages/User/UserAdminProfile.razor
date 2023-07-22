@@ -1,6 +1,7 @@
 ﻿@page "/profile/admin"
 @attribute [Authorize]
 @inject ISeasonService SeasonService
+@inject IDraftService DraftService
 @inject ISnackbar Snackbar
 
 
@@ -17,11 +18,17 @@
                         <MudListItem Icon="@Icons.Material.Filled.StarRate">
                          <MudButton Variant="Variant.Text" OnClick="CreateSeason">Criar Temporada</MudButton>  
                         </MudListItem>
-                        <MudListItem Icon="@Icons.Material.Filled.WatchLater">
-                            Snoozed
+                    </NestedList>
+                </MudListItem>
+
+                 <MudListItem Icon="@Icons.Material.Filled.Inbox" Text="Draft" InitiallyExpanded="true">
+                    <NestedList>
+                        <MudListItem Icon="@Icons.Material.Filled.StarRate">
+                         <MudButton Variant="Variant.Text" OnClick="CreateLottery">Criar Loteria</MudButton>  
                         </MudListItem>
                     </NestedList>
                 </MudListItem>
+
 
             </MudList>
         </MudPaper>

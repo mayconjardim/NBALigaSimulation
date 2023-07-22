@@ -25,5 +25,24 @@
 
         }
 
+        private async Task CreateLottery()
+        {
+
+            var draftResponse = await DraftService.GenerateLottery();
+
+            if (draftResponse.Success)
+            {
+                messageCssClass = "success";
+                Snackbar.Add(draftResponse.Message, MudBlazor.Severity.Success);
+            }
+            else
+            {
+                messageCssClass = "error";
+                Snackbar.Add(draftResponse.Message, MudBlazor.Severity.Error);
+
+            }
+
+        }
+
     }
 }

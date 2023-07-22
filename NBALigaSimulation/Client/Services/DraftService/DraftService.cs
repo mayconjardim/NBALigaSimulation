@@ -21,9 +21,13 @@
             return response;
         }
 
-        public Task<ServiceResponse<bool>> GenerateLottery()
+        public async Task<ServiceResponse<bool>> GenerateLottery()
         {
-            throw new NotImplementedException();
+            var payload = new ServiceResponse<bool>();
+            var response = await _http.PostAsJsonAsync($"api/draft/generate/lottery", payload);
+            var result = await response.Content.ReadFromJsonAsync<ServiceResponse<bool>>();
+
+            return result;
         }
 
         public async Task<ServiceResponse<bool>> SelectDraftedPlayer(DraftPlayerDto request)
@@ -32,7 +36,6 @@
             var result = await _http.PutAsJsonAsync("api/draft/select", request);
             return response;
         }
-
 
     }
 }

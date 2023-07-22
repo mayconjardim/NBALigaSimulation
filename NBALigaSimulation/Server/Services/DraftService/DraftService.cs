@@ -60,20 +60,22 @@ namespace NBALigaSimulation.Server.Services.DraftService
             var response = new ServiceResponse<bool>();
             var season = await _context.Seasons.OrderBy(s => s.Year).LastOrDefaultAsync();
 
+            var year = season.Year - 1;
+
             var lottery = await _context.DraftLotteries
-                .Where(l => l.Season == season.Year)
+                .Where(l => l.Season == year)
                 .OrderByDescending(l => l.Id)
                 .FirstOrDefaultAsync();
 
-            if (lottery != null)
+            if (lottery == null)
             {
                 response.Success = false;
-                response.Message = "Loteria já criada!";
+                response.Message = "Não é possivel criar a loteria!";
                 return response;
             }
 
             var teams = await _context.TeamRegularStats
-                .Where(t => t.Season == season.Year)
+                .Where(t => t.Season == year)
                 .Include(t => t.Team)
                 .ToListAsync();
 
@@ -102,6 +104,7 @@ namespace NBALigaSimulation.Server.Services.DraftService
 
             _context.Add(newLottery);
             await _context.SaveChangesAsync();
+            response.Message = "Loteria criada com sucesso!";
             response.Success = true;
             return response;
         }
@@ -111,11 +114,19 @@ namespace NBALigaSimulation.Server.Services.DraftService
 
             var response = new ServiceResponse<bool>();
             var season = await _context.Seasons.OrderBy(s => s.Year).LastOrDefaultAsync();
+            var year = season.Year - 1;
 
             var lottery = await _context.DraftLotteries
-               .Where(l => l.Season == season.Year)
+               .Where(l => l.Season == year)
                .OrderByDescending(l => l.Id)
                .FirstOrDefaultAsync();
+
+            if (lottery == null)
+            {
+                response.Success = false;
+                response.Message = "Não é possivel criar o draft!";
+                return response;
+            }
 
             var newDraft = await _context.Drafts
             .Where(l => l.Season == season.Year)
@@ -141,6 +152,7 @@ namespace NBALigaSimulation.Server.Services.DraftService
             _context.AddRange(newDraft);
 
             await _context.SaveChangesAsync();
+            response.Message = "Draft criado com sucesso!";
             response.Success = true;
             return response;
         }

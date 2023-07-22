@@ -18,38 +18,11 @@
 
         public async Task<ServiceResponse<CompleteSeasonDto>> CreateSeason()
         {
-            var response = new ServiceResponse<CompleteSeasonDto>();
-
-            var payload = new CreateSeasonDto();
-
-            var result = await _http.PostAsJsonAsync("api/seasons", payload);
-
-            if (result.IsSuccessStatusCode)
-            {
-                var tradeResponse = await result.Content.ReadFromJsonAsync<ServiceResponse<CompleteSeasonDto>>();
-
-                if (tradeResponse.Success)
-                {
-                    response.Success = true;
-                    response.Data = tradeResponse.Data;
-                    response.Message = "Temporada criada com sucesso.";
-                }
-                else
-                {
-                    response.Success = false;
-                    response.Message = tradeResponse.Message;
-                }
-            }
-            else
-            {
-                response.Success = false;
-                response.Message = "Failed to create trade. HTTP status code: " + result.StatusCode;
-            }
-
-            return response;
+            var payload = new ServiceResponse<CompleteSeasonDto>();
+            var response = await _http.PostAsJsonAsync("api/seasons", payload);
+            var result = await response.Content.ReadFromJsonAsync<ServiceResponse<CompleteSeasonDto>>();
+            return result;
         }
-
-
 
     }
 }
