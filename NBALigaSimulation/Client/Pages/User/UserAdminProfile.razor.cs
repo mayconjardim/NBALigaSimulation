@@ -9,17 +9,17 @@
         private async Task CreateSeason()
         {
 
-            var faResponse = await SeasonService.CreateSeason();
+            var seasonResponse = await SeasonService.CreateSeason();
 
-            if (faResponse.Success)
+            if (seasonResponse.Success)
             {
                 messageCssClass = "success";
-                Snackbar.Add("Season criada com sucesso!", MudBlazor.Severity.Success);
+                Snackbar.Add(seasonResponse.Message, MudBlazor.Severity.Success);
             }
             else
             {
                 messageCssClass = "error";
-                Snackbar.Add("Season não criada!", MudBlazor.Severity.Error);
+                Snackbar.Add(seasonResponse.Message, MudBlazor.Severity.Error);
 
             }
 

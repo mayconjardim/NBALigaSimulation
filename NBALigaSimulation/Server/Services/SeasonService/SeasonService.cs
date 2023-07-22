@@ -23,6 +23,14 @@ namespace NBALigaSimulation.Server.Services.SeasonService
             {
                 response.Success = false;
                 response.Message = $"Temporada não econtrada!";
+                return response;
+            }
+
+            if (!LastSeason.IsCompleted)
+            {
+                response.Success = false;
+                response.Message = $"Temporada ainda não finalizada";
+                return response;
             }
 
             Season season = new Season();
@@ -55,6 +63,7 @@ namespace NBALigaSimulation.Server.Services.SeasonService
 
             await _context.SaveChangesAsync();
 
+            response.Message = $"Temporada criada com sucesso!";
             response.Success = true;
             response.Data = _mapper.Map<CompleteSeasonDto>(season);
             return response;
