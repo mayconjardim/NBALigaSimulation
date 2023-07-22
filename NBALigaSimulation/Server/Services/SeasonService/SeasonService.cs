@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
-using Microsoft.EntityFrameworkCore;
-using static MudBlazor.CategoryTypes;
+
 
 namespace NBALigaSimulation.Server.Services.SeasonService
 {
@@ -15,11 +14,20 @@ namespace NBALigaSimulation.Server.Services.SeasonService
             _mapper = mapper;
         }
 
-        public async Task<ServiceResponse<CompleteSeasonDto>> CreateSeason(CreateSeasonDto request)
+        public async Task<ServiceResponse<CompleteSeasonDto>> CreateSeason()
         {
             ServiceResponse<CompleteSeasonDto> response = new ServiceResponse<CompleteSeasonDto>();
 
-            Season season = _mapper.Map<Season>(request);
+            var LastSeason = await _context.Seasons.OrderBy(s => s.Year).LastOrDefaultAsync();
+
+            if (LastSeason == null)
+            {
+                response.Success = false;
+                response.Message = $"Temporada não econtrada!";
+            }
+
+            Season season = new Season();
+            season.Year = LastSeason.Year + 1;
 
             _context.Add(season);
             await _context.SaveChangesAsync();
@@ -36,7 +44,7 @@ namespace NBALigaSimulation.Server.Services.SeasonService
                     {
                         TeamId = team.Id,
                         Original = team.Abrv,
-                        Year = season.Year,
+                        Year = season.Year + 3,
                         Round = round
                     };
 
