@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using NBALigaSimulation.Server.Services.PlayoffsService;
 using NBALigaSimulation.Shared.Engine.Utils;
 
 namespace NBALigaSimulation.Server.Services.GameService
@@ -9,12 +10,15 @@ namespace NBALigaSimulation.Server.Services.GameService
         private readonly DataContext _context;
         private readonly IMapper _mapper;
         private readonly ITeamService _teamService;
+        private readonly IPlayoffsService _playoffsService;
 
-        public GameService(DataContext context, IMapper mapper, ITeamService teamService)
+
+        public GameService(DataContext context, IMapper mapper, ITeamService teamService, IPlayoffsService playoffsService)
         {
             _context = context;
             _mapper = mapper;
             _teamService = teamService;
+            _playoffsService = playoffsService;
         }
 
         public async Task<ServiceResponse<GameCompleteDto>> CreateGame(CreateGameDto request)
@@ -164,17 +168,32 @@ namespace NBALigaSimulation.Server.Services.GameService
             var season = await _context.Seasons.OrderBy(s => s.Id).LastOrDefaultAsync();
 
             DateTime? firstUnsimulatedDate = await _context.Games
-                .Where(g => !g.Happened)
-                .OrderBy(g => g.GameDate)
-                .Select(g => g.GameDate)
-                .FirstOrDefaultAsync();
+             .Where(g => !g.Happened)
+             .OrderBy(g => g.GameDate)
+             .Select(g => g.GameDate)
+             .FirstOrDefaultAsync();
 
-            if (!firstUnsimulatedDate.HasValue)
+            if (firstUnsimulatedDate != null)
             {
+
+                var teamRegularStats = await _context.TeamRegularStats.Where(t => t.Season == season.Year).ToListAsync();
+
+                bool isRegularSeasonComplete = teamRegularStats.All(t => t.HomeLosses + t.HomeWins + t.RoadLosses + t.RoadWins == 82);
+
+                if (isRegularSeasonComplete)
+                {
+                    var playoffs = await _playoffsService.GeneratePlayoffs();
+
+                    response.Message = "Temporada regular finalizada, playoffs gerado!";
+                    response.Success = true;
+                    return response;
+                }
+
                 response.Message = "Não há datas não simuladas disponíveis.";
                 response.Success = false;
                 return response;
             }
+
 
             List<Game> games = await _context.Games
                 .Include(p => p.HomeTeam.Players.OrderBy(p => p.RosterOrder)).ThenInclude(p => p.Ratings)
@@ -234,7 +253,17 @@ namespace NBALigaSimulation.Server.Services.GameService
 
             await UpdateStandings();
             response.Success = true;
-            response.Message = "Jogos simulados com sucesso!";
+
+            if (firstUnsimulatedDate.HasValue)
+            {
+                response.Message = "TEM DATAS SIM!";
+            }
+            else
+            {
+                response.Message = "lixo não tem datas";
+
+            }
+
             response.Data = true;
             return response;
 
