@@ -15,24 +15,37 @@
        
                 <MudListItem Icon="@Icons.Material.Filled.Inbox" Text="Season" InitiallyExpanded="true">
                     <NestedList>
-                        <MudListItem Icon="@Icons.Material.Filled.StarRate">
+                        <MudListItem Icon="@Icons.Material.Filled.Add">
                          <MudButton Variant="Variant.Text" OnClick="CreateSeason">Criar Temporada</MudButton>  
+                        </MudListItem>
+
+                          <MudListItem Icon="@Icons.Material.Filled.Add">
+                         <MudButton Variant="Variant.Text" OnClick="GenerateTC">Training Camp</MudButton>  
                         </MudListItem>
                     </NestedList>
                 </MudListItem>
 
-                 <MudListItem Icon="@Icons.Material.Filled.Inbox" Text="Draft" InitiallyExpanded="true">
+                <MudListItem Icon="@Icons.Material.Filled.Inbox" Text="Draft" InitiallyExpanded="true">
                     <NestedList>
-                        <MudListItem Icon="@Icons.Material.Filled.StarRate">
+                        <MudListItem Icon="@Icons.Material.Filled.Add">
                          <MudButton Variant="Variant.Text" OnClick="CreateLottery">Criar Loteria</MudButton>  
                         </MudListItem>
 
-                        <MudListItem Icon="@Icons.Material.Filled.StarRate">
+                        <MudListItem Icon="@Icons.Material.Filled.Add">
                          <MudButton Variant="Variant.Text" OnClick="CreateDraft">Criar Draft</MudButton>  
                         </MudListItem>
                     </NestedList>
                 </MudListItem>
 
+                <MudListItem Icon="@Icons.Material.Filled.Inbox" Text="FA" InitiallyExpanded="true">
+                    <NestedList>
+                        <MudListItem Icon="@Icons.Material.Filled.Add">
+                         <MudButton Variant="Variant.Text" >Simular FA</MudButton>  
+                        </MudListItem>
+                    </NestedList>
+                </MudListItem>
+
+         
 
             </MudList>
         </MudPaper>

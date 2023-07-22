@@ -5,6 +5,7 @@
 
         Task<ServiceResponse<CompleteSeasonDto>> GetLastSeason();
         Task<ServiceResponse<CompleteSeasonDto>> CreateSeason();
+        Task<ServiceResponse<CompleteSeasonDto>> GenerateTrainingCamp();
 
     }
 }

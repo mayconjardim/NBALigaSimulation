@@ -24,5 +24,12 @@
             return result;
         }
 
+        public async Task<ServiceResponse<CompleteSeasonDto>> GenerateTrainingCamp()
+        {
+            var payload = new ServiceResponse<CompleteSeasonDto>();
+            var response = await _http.PostAsJsonAsync("api/seasons/tc", payload);
+            var result = await response.Content.ReadFromJsonAsync<ServiceResponse<CompleteSeasonDto>>();
+            return result;
+        }
     }
 }

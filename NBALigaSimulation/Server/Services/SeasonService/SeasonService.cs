@@ -137,6 +137,13 @@ namespace NBALigaSimulation.Server.Services.SeasonService
 
             List<Player> players = await _context.Players.Include(p => p.Ratings).ToListAsync();
 
+            if (players.Any(p => p.Ratings.Where(s => s.Season == season.Year).Any()))
+            {
+                response.Success = false;
+                response.Message = "TrainingCamp já realizado!";
+                return response;
+            }
+
             foreach (Player player in players)
             {
                 var newRatings = player.TrainingCamp(season);
