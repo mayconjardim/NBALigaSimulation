@@ -173,7 +173,13 @@ namespace NBALigaSimulation.Server.Services.GameService
              .Select(g => g.GameDate)
              .FirstOrDefaultAsync();
 
-            if (firstUnsimulatedDate != null)
+            var unSimulatedDates = await _context.Games
+                .Where(g => !g.Happened)
+                .OrderBy(g => g.GameDate)
+                .Select(g => g.GameDate)
+                .ToListAsync();
+
+            if (unSimulatedDates.Count == 0)
             {
 
                 var teamRegularStats = await _context.TeamRegularStats.Where(t => t.Season == season.Year).ToListAsync();
@@ -183,7 +189,7 @@ namespace NBALigaSimulation.Server.Services.GameService
                 if (isRegularSeasonComplete)
                 {
                     var playoffs = await _playoffsService.GeneratePlayoffs();
-
+                    season.RegularCompleted = true;
                     response.Message = "Temporada regular finalizada, playoffs gerado!";
                     response.Success = true;
                     return response;
@@ -253,17 +259,6 @@ namespace NBALigaSimulation.Server.Services.GameService
 
             await UpdateStandings();
             response.Success = true;
-
-            if (firstUnsimulatedDate.HasValue)
-            {
-                response.Message = "TEM DATAS SIM!";
-            }
-            else
-            {
-                response.Message = "lixo não tem datas";
-
-            }
-
             response.Data = true;
             return response;
 
@@ -352,6 +347,7 @@ namespace NBALigaSimulation.Server.Services.GameService
 
                         if (playoffToUpdate.WinsTeamOne >= 4 || playoffToUpdate.WinsTeamTwo >= 4)
                         {
+                            playoffToUpdate.Complete = true;
                             break;
                         }
                     }
@@ -367,9 +363,9 @@ namespace NBALigaSimulation.Server.Services.GameService
             List<Game> remaining = await _context.Games
             .Where(t => t.GameDate == gameDate && !t.Happened)
             .ToListAsync();
+
             _context.Games.RemoveRange(remaining);
             await _context.SaveChangesAsync();
-
             response.Success = true;
             response.Data = true;
             return response;
@@ -489,6 +485,8 @@ namespace NBALigaSimulation.Server.Services.GameService
 
         }
 
-
     }
 }
+
+
+

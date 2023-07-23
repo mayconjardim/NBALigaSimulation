@@ -5,10 +5,9 @@
 @inject IGameService GameService
 @inject ISnackbar Snackbar
 
-
 <MudContainer>
     <div class="container"> 
-        <MudPaper Width="300px">
+        <MudPaper Width="500px">
             <MudList Clickable="true">
                 <MudListSubheader>
                     Admin Painel
@@ -51,6 +50,14 @@
                     <NestedList>
                         <MudListItem Icon="@Icons.Material.Filled.Add">
                          <MudButton Variant="Variant.Text" >Simular FA</MudButton>  
+                        </MudListItem>
+                    </NestedList>
+                </MudListItem>
+
+                 <MudListItem Icon="@Icons.Material.Filled.Inbox" Text="Playoffs" InitiallyExpanded="true">
+                    <NestedList>
+                        <MudListItem Icon="@Icons.Material.Filled.Add">
+                           <MudButton Variant="Variant.Text" OnClick="SimGameByDatePlayoffs">Simular Rodada Playoffs</MudButton>  
                         </MudListItem>
                     </NestedList>
                 </MudListItem>

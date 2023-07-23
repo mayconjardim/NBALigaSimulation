@@ -82,6 +82,16 @@ namespace NBALigaSimulation.Server.Services.PlayoffsService
                 .Where(t => t.Conference == "West" && t.TeamRegularStats.Any(trs => trs.Season == season.Year))
                 .ToListAsync();
 
+
+            var playoffsExists = await _context.Playoffs.Where(p => p.Season == season.Year).ToListAsync();
+
+            if (playoffsExists.Count > 0)
+            {
+                response.Success = false;
+                response.Message = $"Já existe playoffs da temporada {season.Year}!";
+                return response;
+            }
+
             var playoffs = PlayoffsUtils.Generate1stRound(teamsEast, teamsWest, season.Year);
             var games = PlayoffsUtils.GenerateRoundGames(playoffs, season);
 

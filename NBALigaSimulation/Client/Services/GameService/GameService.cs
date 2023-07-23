@@ -57,5 +57,13 @@ namespace NBALigaSimulation.Client.Services.GameService
             var result = await response.Content.ReadFromJsonAsync<ServiceResponse<bool>>();
             return result;
         }
+
+        public async Task<ServiceResponse<bool>> SimGameByDatePlayoffs()
+        {
+            var payload = new ServiceResponse<bool>();
+            var response = await _http.PutAsJsonAsync($"api/games/update/date/playoffs", payload);
+            var result = await response.Content.ReadFromJsonAsync<ServiceResponse<bool>>();
+            return result;
+        }
     }
 }
