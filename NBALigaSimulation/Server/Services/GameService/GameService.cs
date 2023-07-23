@@ -363,14 +363,13 @@ namespace NBALigaSimulation.Server.Services.GameService
             List<Game> remaining = await _context.Games
             .Where(t => t.GameDate == gameDate && !t.Happened)
             .ToListAsync();
-
             _context.Games.RemoveRange(remaining);
             await _context.SaveChangesAsync();
+
             response.Success = true;
             response.Data = true;
             return response;
         }
-
 
         public async Task UpdateStandings()
         {

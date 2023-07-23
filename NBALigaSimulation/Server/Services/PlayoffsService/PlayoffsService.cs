@@ -114,6 +114,13 @@ namespace NBALigaSimulation.Server.Services.PlayoffsService
             .Include(t => t.TeamTwo).ThenInclude(t => t.TeamRegularStats)
             .ToListAsync();
 
+            if (playoffs.Any(p => p.SeriesId == 9))
+            {
+                response.Success = false;
+                response.Message = "Já existe um 2º round gerado!";
+                return response;
+            }
+
             var newPlayoffs = PlayoffsUtils.Generate2ndRound(playoffs, season.Year);
             var games = PlayoffsUtils.GenerateRoundGames(newPlayoffs, season);
 
@@ -121,6 +128,7 @@ namespace NBALigaSimulation.Server.Services.PlayoffsService
             _context.AddRange(newPlayoffs);
             await _context.SaveChangesAsync();
 
+            response.Message = "2º round gerado sucesso!";
             response.Success = true;
             return response;
         }
@@ -135,6 +143,13 @@ namespace NBALigaSimulation.Server.Services.PlayoffsService
             .Include(t => t.TeamOne).ThenInclude(t => t.TeamRegularStats)
             .Include(t => t.TeamTwo).ThenInclude(t => t.TeamRegularStats)
             .ToListAsync();
+
+            if (playoffs.Any(p => p.SeriesId == 13))
+            {
+                response.Success = false;
+                response.Message = "Já existe um 3º round gerado!";
+                return response;
+            }
 
             var newPlayoffs = PlayoffsUtils.Generate3ndRound(playoffs, season.Year);
             var games = PlayoffsUtils.GenerateRoundGames(newPlayoffs, season);
@@ -158,6 +173,14 @@ namespace NBALigaSimulation.Server.Services.PlayoffsService
             .Include(t => t.TeamTwo).ThenInclude(t => t.TeamRegularStats)
             .ToListAsync();
 
+
+            if (playoffs.Any(p => p.SeriesId == 15))
+            {
+                response.Success = false;
+                response.Message = "Já existe um 4º round gerado!";
+                return response;
+            }
+
             var newPlayoffs = PlayoffsUtils.Generate4ndRound(playoffs, season.Year);
             var games = PlayoffsUtils.GenerateRoundGames(newPlayoffs, season);
 
@@ -174,14 +197,31 @@ namespace NBALigaSimulation.Server.Services.PlayoffsService
             var response = new ServiceResponse<bool>();
             var season = await _context.Seasons.OrderBy(s => s.Year).LastOrDefaultAsync();
 
+            if (season.IsCompleted)
+            {
+                response.Success = false;
+                response.Message = "A temporada já foi finalizada!";
+                return response;
+            }
+
+            season.IsCompleted = true;
+
             var playoffs = await _context.Playoffs
                 .Where(p => p.Season == season.Year && p.SeriesId == 15)
                 .Include(g => g.PlayoffGames)
                 .ToListAsync();
 
+            if (playoffs.Count == 0)
+            {
+                response.Success = false;
+                response.Message = "Não é possivel terminar o playoffs!";
+                return response;
+            }
+
             var championId = playoffs.FirstOrDefault(t => t.SeriesId == 15).WinsTeamOne == 4 ?
                 playoffs.FirstOrDefault(t => t.SeriesId == 15).TeamOneId :
                 playoffs.FirstOrDefault(t => t.SeriesId == 15).TeamTwoId;
+
 
             var championTeam = _context.Teams.OrderBy(t => t.Id).LastOrDefault(t => t.Id == championId);
             if (championTeam != null)

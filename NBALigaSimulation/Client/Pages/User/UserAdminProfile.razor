@@ -3,6 +3,7 @@
 @inject ISeasonService SeasonService
 @inject IDraftService DraftService
 @inject IGameService GameService
+@inject IPlayoffsService PlayoffsService
 @inject ISnackbar Snackbar
 
 <MudContainer>
@@ -58,6 +59,22 @@
                     <NestedList>
                         <MudListItem Icon="@Icons.Material.Filled.Add">
                            <MudButton Variant="Variant.Text" OnClick="SimGameByDatePlayoffs">Simular Rodada Playoffs</MudButton>  
+                        </MudListItem>
+
+                        <MudListItem Icon="@Icons.Material.Filled.Add">
+                           <MudButton Variant="Variant.Text" OnClick="Generate2round">Gerar 2º Round</MudButton>  
+                        </MudListItem>
+
+                        <MudListItem Icon="@Icons.Material.Filled.Add">
+                           <MudButton Variant="Variant.Text" OnClick="Generate3round">Gerar 3º Round</MudButton>  
+                        </MudListItem>
+
+                        <MudListItem Icon="@Icons.Material.Filled.Add">
+                           <MudButton Variant="Variant.Text" OnClick="Generate4round">Gerar 4º Round</MudButton>  
+                        </MudListItem>
+
+                        <MudListItem Icon="@Icons.Material.Filled.Add">
+                           <MudButton Variant="Variant.Text" OnClick="EndPlayoffs">Terminar Playoffs</MudButton>  
                         </MudListItem>
                     </NestedList>
                 </MudListItem>

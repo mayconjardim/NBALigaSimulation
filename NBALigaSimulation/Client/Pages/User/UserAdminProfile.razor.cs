@@ -97,6 +97,74 @@
             }
         }
 
+        private async Task Generate2round()
+        {
+            var gameResponse = await PlayoffsService.Generate2Round();
+
+            if (gameResponse.Success)
+            {
+                messageCssClass = "success";
+                Snackbar.Add(gameResponse.Message, MudBlazor.Severity.Success);
+            }
+            else
+            {
+                messageCssClass = "error";
+                Snackbar.Add(gameResponse.Message, MudBlazor.Severity.Error);
+
+            }
+        }
+
+        private async Task Generate3round()
+        {
+            var gameResponse = await PlayoffsService.Generate3Round();
+
+            if (gameResponse.Success)
+            {
+                messageCssClass = "success";
+                Snackbar.Add(gameResponse.Message, MudBlazor.Severity.Success);
+            }
+            else
+            {
+                messageCssClass = "error";
+                Snackbar.Add(gameResponse.Message, MudBlazor.Severity.Error);
+
+            }
+        }
+
+        private async Task Generate4round()
+        {
+            var gameResponse = await PlayoffsService.Generate4Round();
+
+            if (gameResponse.Success)
+            {
+                messageCssClass = "success";
+                Snackbar.Add(gameResponse.Message, MudBlazor.Severity.Success);
+            }
+            else
+            {
+                messageCssClass = "error";
+                Snackbar.Add(gameResponse.Message, MudBlazor.Severity.Error);
+
+            }
+        }
+
+        private async Task EndPlayoffs()
+        {
+            var gameResponse = await PlayoffsService.EndPlayoffs();
+
+            if (gameResponse.Success)
+            {
+                messageCssClass = "success";
+                Snackbar.Add(gameResponse.Message, MudBlazor.Severity.Success);
+            }
+            else
+            {
+                messageCssClass = "error";
+                Snackbar.Add(gameResponse.Message, MudBlazor.Severity.Error);
+
+            }
+        }
+
         private async Task CreateLottery()
         {
 

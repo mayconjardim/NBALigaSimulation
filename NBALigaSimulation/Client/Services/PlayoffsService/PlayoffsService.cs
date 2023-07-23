@@ -12,11 +12,6 @@
 
         public string Message { get; set; } = "Carregando Playoffs...";
 
-        public Task<ServiceResponse<bool>> GeneratePlayoffs()
-        {
-            throw new NotImplementedException();
-        }
-
         public async Task<ServiceResponse<List<PlayoffsDto>>> GetPlayoffs()
         {
             var result = await _http.GetFromJsonAsync<ServiceResponse<List<PlayoffsDto>>>($"api/playoffs");
@@ -27,6 +22,38 @@
         {
             var response = await _http.GetFromJsonAsync<ServiceResponse<PlayoffsDto>>($"api/playoffs/{Id}");
             return response;
+        }
+
+        public async Task<ServiceResponse<bool>> Generate2Round()
+        {
+            var payload = new ServiceResponse<bool>();
+            var response = await _http.PostAsJsonAsync("api/playoffs/generate/confsemis", payload);
+            var result = await response.Content.ReadFromJsonAsync<ServiceResponse<bool>>();
+            return result;
+        }
+
+        public async Task<ServiceResponse<bool>> Generate3Round()
+        {
+            var payload = new ServiceResponse<bool>();
+            var response = await _http.PostAsJsonAsync("api/playoffs/generate/conffinals", payload);
+            var result = await response.Content.ReadFromJsonAsync<ServiceResponse<bool>>();
+            return result;
+        }
+
+        public async Task<ServiceResponse<bool>> Generate4Round()
+        {
+            var payload = new ServiceResponse<bool>();
+            var response = await _http.PostAsJsonAsync("api/playoffs/generate/finals", payload);
+            var result = await response.Content.ReadFromJsonAsync<ServiceResponse<bool>>();
+            return result;
+        }
+
+        public async Task<ServiceResponse<bool>> EndPlayoffs()
+        {
+            var payload = new ServiceResponse<bool>();
+            var response = await _http.PostAsJsonAsync("api/playoffs/end", payload);
+            var result = await response.Content.ReadFromJsonAsync<ServiceResponse<bool>>();
+            return result;
         }
     }
 }
