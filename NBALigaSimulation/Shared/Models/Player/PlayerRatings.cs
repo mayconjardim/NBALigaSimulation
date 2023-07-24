@@ -68,10 +68,13 @@ namespace NBALigaSimulation.Shared.Models
                 rating.Add("dnk", Dnk);
                 rating.Add("fg", Fg);
                 rating.Add("tp", Tp);
+                rating.Add("spd", Spd);
+                rating.Add("drb", Drb);
 
-                List<string> attributes = new List<string> { "ins", "dnk", "fg", "tp" };
+                List<string> attributes = new List<string> { "ins", "dnk", "fg", "tp", "spd", "drb" };
+                List<double> weights = new List<double> { 1.5, 1, 1, 1, 0.15, 0.15 };
 
-                usage = Converter.Composite(rating, attributes);
+                usage = Converter.Composite(rating, attributes, weights);
                 return usage;
             }
         }
@@ -294,7 +297,7 @@ namespace NBALigaSimulation.Shared.Models
                 rating.Add("spd", Spd);
 
                 List<string> attributes = new List<string> { "hgt", "blk", "spd" };
-                List<double> weights = new List<double> { 1, 1, -1 };
+                List<double> weights = new List<double> { 1.5, 1, 1, -1 };
 
 
                 fouling = Converter.Composite(rating, attributes, weights);
@@ -381,7 +384,7 @@ namespace NBALigaSimulation.Shared.Models
 
 
                 List<string> attributes = new List<string> { "endu", "hgt" };
-                List<double> weights = new List<double> { 1, -0.1 };
+                List<double> weights = new List<double> { 1, 1, -0.1 };
 
 
                 endurance = Converter.Composite(rating, attributes, weights);

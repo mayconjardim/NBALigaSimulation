@@ -50,10 +50,9 @@ namespace NBALigaSimulation.Shared.Models
             Team[] Teams = { HomeTeam, AwayTeam };
             CompositeHelper.UpdatePace(Teams);
 
-            double paceFactor = 105.8 / 100;
-            paceFactor += 0.025 * Math.Clamp((paceFactor - 1) / 0.2, -1, 1);
             NumPossessions = Convert.ToInt32((((Teams[0].CompositeRating.Ratings["GamePace"]
-                + Teams[1].CompositeRating.Ratings["GamePace"]) / 2) * 1.1 * paceFactor));
+                + Teams[1].CompositeRating.Ratings["GamePace"]) / 2 * RandomUtils.RandomUniform(0.9, 1.1))));
+
             Dt = 48.0 / (2 * NumPossessions);
 
             int[][] PlayersOnCourt = new int[][] { new int[] { 0, 1, 2, 3, 4 }, new int[] { 0, 1, 2, 3, 4 } };
@@ -78,7 +77,6 @@ namespace NBALigaSimulation.Shared.Models
                 //RecordPlay("Overtime");
                 SimPossessions(Teams, PlayersOnCourt);
             }
-
 
         }
 
@@ -379,52 +377,46 @@ namespace NBALigaSimulation.Shared.Models
 
         public string DoShot(int shooter, Team[] Teams, int[][] PlayersOnCourt)
         {
-            double fatigue, probMake, probAndOne, probMissAndFoul, r1, r2, r3;
-            int p, passer;
-            string type;
+            int p = PlayersOnCourt[Offense][shooter];
 
-            p = PlayersOnCourt[Offense][shooter];
+            double currentFatigue = Fatigue(Teams[Offense].Players[p].Stats.Find(s => s.GameId == Id).Energy);
 
-            fatigue = Fatigue(Teams[Offense].Players[p].Stats.Find(s => s.GameId == Id).Energy);
-
-            // Esta é uma tentativa "assistida" (ou seja, uma assistência será registrada se for feita)
-            passer = -1;
+            int passer = -1;
             if (OffenseHelper.ProbAst(Teams, Offense, Defense) > new Random().NextDouble())
             {
                 double[] ratios = RatingArray(Teams, "GamePassing", Offense, PlayersOnCourt, 2);
                 passer = ArrayHelper.PickPlayer(ratios, shooter);
             }
 
-            double shootingThreePointerScaled = Teams[Offense].Players[p].Ratings.LastOrDefault().GameShootingThreePointer;
-            if (shootingThreePointerScaled > 0.55)
-            {
-                shootingThreePointerScaled =
-                    0.55 + (shootingThreePointerScaled - 0.55) * (0.3 / 0.45);
-            }
+            double probAndOne;
+            double probMake;
+            double probMissAndFoul;
+            string type;
 
-            // Escolhe o tipo de chute e armazene a taxa de sucesso (sem defesa) em probMake e a probabilidade de AndOne
-            if (Teams[Offense].Players[p].Ratings.Last().GameShootingThreePointer > 0.35 &&
-               new Random().NextDouble() < 0.67 * shootingThreePointerScaled)
+            double shootingThreePointerScaled = Teams[Offense].Players[p].Ratings.LastOrDefault().GameShootingThreePointer;
+            if (shootingThreePointerScaled > 0.5 &&
+               new Random().NextDouble() < 0.35 * Teams[Offense].Players[p].Ratings.LastOrDefault().GameShootingThreePointer)
             {
                 // Three pointer
                 type = "ThreePointer";
                 probMissAndFoul = 0.02;
-                probMake = shootingThreePointerScaled * 0.3 + 0.36;
+                probMake = shootingThreePointerScaled * 0.35 + 0.24;
                 probAndOne = 0.01;
             }
             else
             {
-                r1 = 0.8 * new Random().NextDouble() * Teams[Offense].Players[p].Ratings.Last().GameShootingMidRange;
-                r2 = new Random().NextDouble() * (Teams[Offense].Players[p].Ratings.Last().GameShootingAtRim + SynergyFactor *
-                    (Teams[Offense].Synergy.Off - Teams[Defense].Synergy.Def));  // A sinergia torna os tiros fáceis mais prováveis ou menos prováveis
-                r3 = new Random().NextDouble() * (Teams[Offense].Players[p].Ratings.Last().GameShootingLowPost + SynergyFactor *
-                    (Teams[Offense].Synergy.Off - Teams[Defense].Synergy.Def));  // A sinergia torna os tiros fáceis mais prováveis ou menos prováveis
+                double r1 = new Random().NextDouble() * Teams[Offense].Players[p].Ratings.Last().GameShootingMidRange;
+                double r2 = new Random().NextDouble() * (Teams[Offense].Players[p].Ratings.Last().GameShootingAtRim +
+                    SynergyFactor * (Teams[Offense].Synergy.Off - Teams[Defense].Synergy.Def));
+                double r3 = new Random().NextDouble() * (Teams[Offense].Players[p].Ratings.Last().GameShootingLowPost +
+                    SynergyFactor * (Teams[Offense].Synergy.Off - Teams[Defense].Synergy.Def));
+
                 if (r1 > r2 && r1 > r3)
                 {
                     // Two point jumper
                     type = "MidRange";
                     probMissAndFoul = 0.07;
-                    probMake = Teams[Offense].Players[p].Ratings.Last().GameShootingMidRange * 0.32 + 0.32;
+                    probMake = Teams[Offense].Players[p].Ratings.Last().GameShootingMidRange * 0.3 + 0.29;
                     probAndOne = 0.05;
                 }
                 else if (r2 > r3)
@@ -432,7 +424,7 @@ namespace NBALigaSimulation.Shared.Models
                     // Dunk, fast break or half court
                     type = "AtRim";
                     probMissAndFoul = 0.37;
-                    probMake = Teams[Offense].Players[p].Ratings.Last().GameShootingAtRim * 0.32 + 0.52;
+                    probMake = Teams[Offense].Players[p].Ratings.Last().GameShootingAtRim * 0.3 + 0.52;
                     probAndOne = 0.25;
                 }
                 else
@@ -440,16 +432,16 @@ namespace NBALigaSimulation.Shared.Models
                     // Post up
                     type = "LowPost";
                     probMissAndFoul = 0.33;
-                    probMake = Teams[Offense].Players[p].Ratings.Last().GameShootingLowPost * 0.32 + 0.37;
+                    probMake = Teams[Offense].Players[p].Ratings.Last().GameShootingLowPost * 0.3 + 0.37;
                     probAndOne = 0.15;
                 }
             }
 
             probMake = (probMake - 0.25 * Teams[Defense].CompositeRating.Ratings["GameDefense"] + SynergyFactor * (Teams[Offense].Synergy.Off -
-                Teams[Defense].Synergy.Def)) * fatigue;
+                Teams[Defense].Synergy.Def)) * currentFatigue;
 
             // Assisted shots are easier
-            if (passer >= 0)
+            if (passer != -1)
             {
                 probMake += 0.025;
             }
@@ -467,44 +459,54 @@ namespace NBALigaSimulation.Shared.Models
                 {
                     return DoFg(shooter, passer, type, true, Teams, PlayersOnCourt); // fg, orb, or drb
                 }
-                return DoFg(shooter, passer, type, false, Teams, PlayersOnCourt); // fg
-            }
-
-            // Miss, but fouled
-            if (probMissAndFoul > new Random().NextDouble())
-            {
-                if (type == "ThreePointer")
+                else
                 {
-                    return DoFt(shooter, 3, Teams, PlayersOnCourt); // fg, orb, or drb
+                    return DoFg(shooter, passer, type, false, Teams, PlayersOnCourt); // fg
                 }
-                return DoFt(shooter, 2, Teams, PlayersOnCourt); // fg, orb, or drb
             }
+            else
+            {
+                // Miss, but fouled
+                if (probMissAndFoul > new Random().NextDouble())
+                {
+                    if (type == "ThreePointer")
+                    {
+                        return DoFt(shooter, 3, Teams, PlayersOnCourt);
+                    }
+                    else
+                    {
+                        return DoFt(shooter, 2, Teams, PlayersOnCourt);
+                    }
+                }
+                else
+                {
+                    // Miss
+                    p = PlayersOnCourt[Offense][shooter];
+                    RecordStat(Offense, p, "Fga", Teams);
+                    if (type == "AtRim")
+                    {
+                        RecordStat(Offense, p, "FgaAtRim", Teams);
+                        RecordPlay("MissAtRim", Offense, new string[] { Teams[Offense].Players[p].Name }, Teams);
+                    }
+                    else if (type == "LowPost")
+                    {
+                        RecordStat(Offense, p, "FgaLowPost", Teams);
+                        RecordPlay("MissLowPost", Offense, new string[] { Teams[Offense].Players[p].Name }, Teams);
+                    }
+                    else if (type == "MidRange")
+                    {
+                        RecordStat(Offense, p, "FgaMidRange", Teams);
+                        RecordPlay("MissMidRange", Offense, new string[] { Teams[Offense].Players[p].Name }, Teams);
+                    }
+                    else if (type == "ThreePointer")
+                    {
+                        RecordStat(Offense, p, "Tpa", Teams);
+                        RecordPlay("MissTp", Offense, new string[] { Teams[Offense].Players[p].Name }, Teams);
+                    }
 
-            // Miss
-            p = PlayersOnCourt[Offense][shooter];
-            RecordStat(Offense, p, "Fga", Teams);
-            if (type == "AtRim")
-            {
-                RecordStat(Offense, p, "FgaAtRim", Teams);
-                RecordPlay("MissAtRim", Offense, new string[] { Teams[Offense].Players[p].Name }, Teams);
+                    return DoReb(Teams, PlayersOnCourt);
+                }
             }
-            else if (type == "LowPost")
-            {
-                RecordStat(Offense, p, "FgaLowPost", Teams);
-                RecordPlay("MissLowPost", Offense, new string[] { Teams[Offense].Players[p].Name }, Teams);
-            }
-            else if (type == "MidRange")
-            {
-                RecordStat(Offense, p, "FgaMidRange", Teams);
-                RecordPlay("MissMidRange", Offense, new string[] { Teams[Offense].Players[p].Name }, Teams);
-            }
-            else if (type == "ThreePointer")
-            {
-                RecordStat(Offense, p, "Tpa", Teams);
-                RecordPlay("MissTp", Offense, new string[] { Teams[Offense].Players[p].Name }, Teams);
-            }
-
-            return DoReb(Teams, PlayersOnCourt); // o
         }
 
         private string DoBlk(int shooter, string type, Team[] Teams, int[][] PlayersOnCourt)
