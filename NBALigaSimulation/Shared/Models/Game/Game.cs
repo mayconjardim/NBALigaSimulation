@@ -32,7 +32,7 @@ namespace NBALigaSimulation.Shared.Models
         [NotMapped]
         int Overtimes = 0; // Números de overtimes 
         [NotMapped]
-        double SynergyFactor = 0.05; // Qual a importância da sinergia?
+        double SynergyFactor = 0.01; // Qual a importância da sinergia?
         [NotMapped]
         int Offense; // Time que está atacando
         [NotMapped]
@@ -50,8 +50,10 @@ namespace NBALigaSimulation.Shared.Models
             Team[] Teams = { HomeTeam, AwayTeam };
             CompositeHelper.UpdatePace(Teams);
 
+            double paceFactor = 105.8 / 100;
+            paceFactor += 0.025 * Math.Clamp((paceFactor - 1) / 0.2, -1, 1);
             NumPossessions = Convert.ToInt32((((Teams[0].CompositeRating.Ratings["GamePace"]
-                + Teams[1].CompositeRating.Ratings["GamePace"]) / 2 * RandomUtils.RandomUniform(0.9, 1.1))));
+                + Teams[1].CompositeRating.Ratings["GamePace"]) / 2) * 1.1 * paceFactor));
 
             Dt = 48.0 / (2 * NumPossessions);
 
@@ -406,9 +408,13 @@ namespace NBALigaSimulation.Shared.Models
             else
             {
                 double r1 = new Random().NextDouble() * Teams[Offense].Players[p].Ratings.Last().GameShootingMidRange;
-                double r2 = new Random().NextDouble() * (Teams[Offense].Players[p].Ratings.Last().GameShootingAtRim +
+                double r2 = new Random().NextDouble() * (Teams[Offense].Players[p].Ratings.Last().GameShootingAtRim;
+                double r3 = new Random().NextDouble() * (Teams[Offense].Players[p].Ratings.Last().GameShootingLowPost;
+
+                double r6 = new Random().NextDouble() * Teams[Offense].Players[p].Ratings.Last().GameShootingMidRange;
+                double r4 = new Random().NextDouble() * (Teams[Offense].Players[p].Ratings.Last().GameShootingAtRim +
                     SynergyFactor * (Teams[Offense].Synergy.Off - Teams[Defense].Synergy.Def));
-                double r3 = new Random().NextDouble() * (Teams[Offense].Players[p].Ratings.Last().GameShootingLowPost +
+                double r5 = new Random().NextDouble() * (Teams[Offense].Players[p].Ratings.Last().GameShootingLowPost +
                     SynergyFactor * (Teams[Offense].Synergy.Off - Teams[Defense].Synergy.Def));
 
                 if (r1 > r2 && r1 > r3)
@@ -437,7 +443,7 @@ namespace NBALigaSimulation.Shared.Models
                 }
             }
 
-            probMake = (probMake - 0.25 * Teams[Defense].CompositeRating.Ratings["GameDefense"] + SynergyFactor * (Teams[Offense].Synergy.Off -
+            probMake = (probMake- 0.25 * Teams[Defense].CompositeRating.Ratings["GameDefense"] + SynergyFactor * (Teams[Offense].Synergy.Off -
                 Teams[Defense].Synergy.Def)) * currentFatigue;
 
             // Assisted shots are easier
