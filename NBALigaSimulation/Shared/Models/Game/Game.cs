@@ -110,7 +110,7 @@ namespace NBALigaSimulation.Shared.Models
                 Defense = (Offense == 1) ? 0 : 1;
 
 
-                CompositeHelper.UpdateCompositeRating(Teams, PlayersOnCourt);
+                UpdateCompositeRatings(Teams, PlayersOnCourt);
 
                 string outcome = SimPossession(Teams, PlayersOnCourt);
 
@@ -407,14 +407,11 @@ namespace NBALigaSimulation.Shared.Models
             }
             else
             {
-                double r1 = new Random().NextDouble() * Teams[Offense].Players[p].Ratings.Last().GameShootingMidRange;
-                double r2 = new Random().NextDouble() * (Teams[Offense].Players[p].Ratings.Last().GameShootingAtRim;
-                double r3 = new Random().NextDouble() * (Teams[Offense].Players[p].Ratings.Last().GameShootingLowPost;
 
-                double r6 = new Random().NextDouble() * Teams[Offense].Players[p].Ratings.Last().GameShootingMidRange;
-                double r4 = new Random().NextDouble() * (Teams[Offense].Players[p].Ratings.Last().GameShootingAtRim +
+                double r1 = new Random().NextDouble() * Teams[Offense].Players[p].Ratings.Last().GameShootingMidRange;
+                double r2 = new Random().NextDouble() * (Teams[Offense].Players[p].Ratings.Last().GameShootingAtRim +
                     SynergyFactor * (Teams[Offense].Synergy.Off - Teams[Defense].Synergy.Def));
-                double r5 = new Random().NextDouble() * (Teams[Offense].Players[p].Ratings.Last().GameShootingLowPost +
+                double r3 = new Random().NextDouble() * (Teams[Offense].Players[p].Ratings.Last().GameShootingLowPost +
                     SynergyFactor * (Teams[Offense].Synergy.Off - Teams[Defense].Synergy.Def));
 
                 if (r1 > r2 && r1 > r3)
@@ -443,11 +440,11 @@ namespace NBALigaSimulation.Shared.Models
                 }
             }
 
-            probMake = (probMake- 0.25 * Teams[Defense].CompositeRating.Ratings["GameDefense"] + SynergyFactor * (Teams[Offense].Synergy.Off -
+            probMake = (probMake - 0.25 * Teams[Defense].CompositeRating.Ratings["GameDefense"] + SynergyFactor * (Teams[Offense].Synergy.Off -
                 Teams[Defense].Synergy.Def)) * currentFatigue;
 
             // Assisted shots are easier
-            if (passer != -1)
+            if (passer >= 0)
             {
                 probMake += 0.025;
             }
@@ -935,7 +932,72 @@ namespace NBALigaSimulation.Shared.Models
             return result;
         }
 
+        public void UpdateCompositeRatings(Team[] teams, int[][] playersOnCourt)
+        {
+            string[] toUpdate = { "GameDribbling", "GamePassing", "GameRebounding", "GameDefense", "GameDefensePerimeter", "GameBlocking", "GamePace" };
 
+            for (int i = 0; i < 2; i++)
+            {
+
+                if (teams[i].CompositeRating == null)
+                {
+                    teams[i].CompositeRating = new TeamCompositeRating();
+                }
+
+                for (int j = 0; j < 5; j++)
+                {
+
+                    int playerRosterOrder = playersOnCourt[i][j];
+                    var playerRatings = teams[i].Players.Find(player => player.RosterOrder == playerRosterOrder).Ratings.LastOrDefault();
+                    double ratingValue = 0;
+                    string rat = string.Empty;
+
+                    foreach (string rating in toUpdate)
+                    {
+                        teams[i].CompositeRating.Ratings[rating] = 0;
+
+                        if (rating == "GameDribbling")
+                        {
+                            ratingValue = playerRatings.GameDribbling;
+                        }
+                        else if (rating == "GamePassing")
+                        {
+                            ratingValue = playerRatings.GamePassing;
+                        }
+                        else if (rating == "GameRebounding")
+                        {
+                            ratingValue = playerRatings.GameRebounding;
+                        }
+                        else if (rating == "GameDefense")
+                        {
+                            ratingValue = playerRatings.GameDefense;
+                        }
+                        else if (rating == "GameDefensePerimeter")
+                        {
+                            ratingValue = playerRatings.GameDefensePerimeter;
+                        }
+                        else if (rating == "GameBlocking")
+                        {
+                            ratingValue = playerRatings.GameBlocking;
+                        }
+
+                        teams[i].CompositeRating.Ratings[rating] += ratingValue * Fatigue(teams[i].Players.Find(player => player.RosterOrder == playerRosterOrder).Stats.Find(s => s.GameId == Id).Energy);
+                        rat = rating;
+                    }
+
+                    teams[i].CompositeRating.Ratings[rat] = teams[i].CompositeRating.Ratings[rat] / 5;
+
+                }
+
+                teams[i].CompositeRating.Ratings["GameDribbling"] += 0.1 * teams[i].Synergy.Off;
+                teams[i].CompositeRating.Ratings["GamePassing"] += 0.1 * teams[i].Synergy.Off;
+                teams[i].CompositeRating.Ratings["GameRebounding"] += 0.1 * teams[i].Synergy.Reb;
+                teams[i].CompositeRating.Ratings["GameDefense"] += 0.1 * teams[i].Synergy.Def;
+                teams[i].CompositeRating.Ratings["GameDefensePerimeter"] += 0.1 * teams[i].Synergy.Def;
+                teams[i].CompositeRating.Ratings["GameBlocking"] += 0.1 * teams[i].Synergy.Def;
+
+            }
+        }
 
 
     }

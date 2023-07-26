@@ -5,6 +5,8 @@ namespace NBALigaSimulation.Shared.Engine
     public static class CompositeHelper
     {
 
+
+
         public static void UpdateCompositeRating(Team[] teams, int[][] playersOnCourt)
         {
             string[] toUpdate = { "GameDribbling", "GamePassing", "GameRebounding", "GameDefense", "GameDefensePerimeter", "GameBlocking", "GamePace" };
@@ -54,7 +56,6 @@ namespace NBALigaSimulation.Shared.Engine
                         }
 
                         teams[i].CompositeRating.Ratings[rating] += ratingValue;
-
                     }
                 }
 
