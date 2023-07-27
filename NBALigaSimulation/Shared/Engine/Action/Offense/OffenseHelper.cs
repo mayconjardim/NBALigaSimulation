@@ -7,7 +7,7 @@ namespace NBALigaSimulation.Shared.Engine
 
         public static double ProbAst(Team[] teams, int Offense, int Defense)
         {
-            return 0.6 * (2 + teams[Offense].CompositeRating.Ratings["GamePassing"]) / (2 + teams[Defense].CompositeRating.Ratings["GameDefense"]);
+            return 0.7 * (2 + teams[Offense].CompositeRating.Ratings["GamePassing"]) / (2 + teams[Defense].CompositeRating.Ratings["GameDefense"]);
         }
 
 

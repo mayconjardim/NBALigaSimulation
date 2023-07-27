@@ -62,7 +62,6 @@ namespace NBALigaSimulation.Shared.Engine
 
                 if (components[i] is string)
                 {
-                    // If the component is a string, fetch the value from the rating dictionary
                     string componentKey = (string)components[i];
                     if (ratings.ContainsKey(componentKey))
                     {
@@ -71,12 +70,10 @@ namespace NBALigaSimulation.Shared.Engine
                 }
                 else if (components[i] is double)
                 {
-                    // If the component is a double, use it directly as the factor
                     string component = components[i];
                     factor = (double)ratings[component];
                 }
 
-                // Special case for height due to rescaling
                 if (components[i] == "hgt")
                 {
                     factor = (factor - 25) * 2;

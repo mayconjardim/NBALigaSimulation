@@ -157,7 +157,6 @@ namespace NBALigaSimulation.Shared.Engine
                     ratingValue = playerRatings.GamePace;
                     break;
                 default:
-                    // Caso o nome do rating não seja reconhecido, mantém o valor 0.
                     break;
             }
 

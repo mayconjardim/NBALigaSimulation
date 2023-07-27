@@ -402,7 +402,7 @@ namespace NBALigaSimulation.Shared.Models
                 // Three pointer
                 type = "ThreePointer";
                 probMissAndFoul = 0.02;
-                probMake = shootingThreePointerScaled * 0.35 + 0.24;
+                probMake = shootingThreePointerScaled * 0.37 + 0.24;
                 probAndOne = 0.01;
             }
             else
@@ -708,7 +708,7 @@ namespace NBALigaSimulation.Shared.Models
                 int p = PlayersOnCourt[t][i];
                 var player = Teams[t].Players.Find(player => player.RosterOrder == p);
 
-                double energy = Fatigue(Teams[t].Players[p].Stats.Find(s => s.GameId == Id)?.Energy ?? 0);
+                double energy = (double)(player.Stats.Find(s => s.GameId == Id)?.Energy);
 
                 if (player != null && player.Ratings?.LastOrDefault() != null)
                 {
@@ -950,7 +950,7 @@ namespace NBALigaSimulation.Shared.Models
                     int playerRosterOrder = playersOnCourt[i][j];
                     var playerRatings = teams[i].Players.Find(player => player.RosterOrder == playerRosterOrder).Ratings.LastOrDefault();
                     double ratingValue = 0;
-                    string rat = string.Empty;
+                    string rats = string.Empty;
 
                     foreach (string rating in toUpdate)
                     {
@@ -982,10 +982,10 @@ namespace NBALigaSimulation.Shared.Models
                         }
 
                         teams[i].CompositeRating.Ratings[rating] += ratingValue * Fatigue(teams[i].Players.Find(player => player.RosterOrder == playerRosterOrder).Stats.Find(s => s.GameId == Id).Energy);
-                        rat = rating;
+                        rats = rating;
                     }
 
-                    teams[i].CompositeRating.Ratings[rat] = teams[i].CompositeRating.Ratings[rat] / 5;
+                    teams[i].CompositeRating.Ratings[rats] = teams[i].CompositeRating.Ratings[rats] / 5;
 
                 }
 
@@ -998,6 +998,7 @@ namespace NBALigaSimulation.Shared.Models
 
             }
         }
+
 
 
     }

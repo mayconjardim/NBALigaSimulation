@@ -40,26 +40,7 @@ namespace NBALigaSimulation.Shared.Engine
             return pick;
         }
 
-        public static double[] RatingArray(int[][] playersOnCourt, Team[] teams, string rating, int t, double power = 1)
-        {
-            double[] array = new double[5];
-            power = power != null ? power : 1;
 
-            for (int i = 0; i < 5; i++)
-            {
-                int p = playersOnCourt[t][i];
-                var player = teams[t].Players.Find(player => player.RosterOrder == p);
-
-
-                if (player != null)
-                {
-                    var playerRatings = player.Ratings.LastOrDefault();
-                    array[i] = Math.Pow(CompositeHelper.GetRatingValue(rating, playerRatings), power);
-                }
-            }
-
-            return array;
-        }
 
         public static PlayerContract GenContract(Player p, Season season, bool randomizeExp = false, bool randomizeAmount = true, bool noLimit = false)
         {
