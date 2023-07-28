@@ -10,6 +10,5 @@ namespace NBALigaSimulation.Shared.Engine
             return 0.7 * (2 + teams[Offense].CompositeRating.Ratings["GamePassing"]) / (2 + teams[Defense].CompositeRating.Ratings["GameDefense"]);
         }
 
-
     }
 }

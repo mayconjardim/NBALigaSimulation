@@ -60,8 +60,7 @@ namespace NBALigaSimulation.Shared.Models
             int[][] PlayersOnCourt = new int[][] { new int[] { 0, 1, 2, 3, 4 }, new int[] { 0, 1, 2, 3, 4 } };
 
             UpdatePlayersOnCourt(Teams, PlayersOnCourt);
-            UpdateSynergy(Teams, PlayersOnCourt);
-
+            //UpdateSynergy(Teams, PlayersOnCourt);
 
             SimPossessions(Teams, PlayersOnCourt);
 
@@ -130,7 +129,7 @@ namespace NBALigaSimulation.Shared.Models
                     bool substitutions = UpdatePlayersOnCourt(Teams, PlayersOnCourt);
                     if (substitutions)
                     {
-                        UpdateSynergy(Teams, PlayersOnCourt);
+                        //UpdateSynergy(Teams, PlayersOnCourt);
                     }
                 }
 
@@ -292,8 +291,8 @@ namespace NBALigaSimulation.Shared.Models
                 Teams[t].Synergy.Reb += RandomUtils.Sigmoid(skillsCount["R"], 15, 0.75) + RandomUtils.Sigmoid(skillsCount["R"], 5, 1.75);
                 Teams[t].Synergy.Reb /= 4;
             }
-        }
 
+        }
 
         public void UpdatePlayingTime(Team[] Teams, int[][] PlayersOnCourt)
         {
@@ -410,9 +409,9 @@ namespace NBALigaSimulation.Shared.Models
 
                 double r1 = new Random().NextDouble() * Teams[Offense].Players[p].Ratings.Last().GameShootingMidRange;
                 double r2 = new Random().NextDouble() * (Teams[Offense].Players[p].Ratings.Last().GameShootingAtRim +
-                    SynergyFactor * (Teams[Offense].Synergy.Off - Teams[Defense].Synergy.Def));
+                    SynergyFactor);
                 double r3 = new Random().NextDouble() * (Teams[Offense].Players[p].Ratings.Last().GameShootingLowPost +
-                    SynergyFactor * (Teams[Offense].Synergy.Off - Teams[Defense].Synergy.Def));
+                    SynergyFactor);
 
                 if (r1 > r2 && r1 > r3)
                 {
@@ -440,8 +439,7 @@ namespace NBALigaSimulation.Shared.Models
                 }
             }
 
-            probMake = (probMake - 0.25 * Teams[Defense].CompositeRating.Ratings["GameDefense"] + SynergyFactor * (Teams[Offense].Synergy.Off -
-                Teams[Defense].Synergy.Def)) * currentFatigue;
+            probMake = (probMake - 0.25 * Teams[Defense].CompositeRating.Ratings["GameDefense"] + SynergyFactor) * currentFatigue;
 
             // Assisted shots are easier
             if (passer >= 0)
@@ -661,7 +659,7 @@ namespace NBALigaSimulation.Shared.Models
                 RecordPlay("FoulOut", Defense, new string[] { Teams[Defense].Players[p].Name }, Teams);
                 // Force substitutions now
                 UpdatePlayersOnCourt(Teams, PlayersOnCourt);
-                UpdateSynergy(Teams, PlayersOnCourt);
+                //UpdateSynergy(Teams, PlayersOnCourt);
             }
         }
 
@@ -989,13 +987,15 @@ namespace NBALigaSimulation.Shared.Models
 
                 }
 
+
+                /*
                 teams[i].CompositeRating.Ratings["GameDribbling"] += 0.1 * teams[i].Synergy.Off;
                 teams[i].CompositeRating.Ratings["GamePassing"] += 0.1 * teams[i].Synergy.Off;
                 teams[i].CompositeRating.Ratings["GameRebounding"] += 0.1 * teams[i].Synergy.Reb;
                 teams[i].CompositeRating.Ratings["GameDefense"] += 0.1 * teams[i].Synergy.Def;
                 teams[i].CompositeRating.Ratings["GameDefensePerimeter"] += 0.1 * teams[i].Synergy.Def;
                 teams[i].CompositeRating.Ratings["GameBlocking"] += 0.1 * teams[i].Synergy.Def;
-
+                */
             }
         }
 
