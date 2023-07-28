@@ -50,7 +50,7 @@ namespace NBALigaSimulation.Shared.Models
             Team[] Teams = { HomeTeam, AwayTeam };
             CompositeHelper.UpdatePace(Teams);
 
-            double paceFactor = 105.8 / 100;
+            double paceFactor = 106.1 / 100;
             paceFactor += 0.025 * Math.Clamp((paceFactor - 1) / 0.2, -1, 1);
             NumPossessions = Convert.ToInt32((((Teams[0].CompositeRating.Ratings["GamePace"]
                 + Teams[1].CompositeRating.Ratings["GamePace"]) / 2) * 1.1 * paceFactor));
@@ -60,7 +60,7 @@ namespace NBALigaSimulation.Shared.Models
             int[][] PlayersOnCourt = new int[][] { new int[] { 0, 1, 2, 3, 4 }, new int[] { 0, 1, 2, 3, 4 } };
 
             UpdatePlayersOnCourt(Teams, PlayersOnCourt);
-            //UpdateSynergy(Teams, PlayersOnCourt);
+            UpdateSynergy(Teams, PlayersOnCourt);
 
             SimPossessions(Teams, PlayersOnCourt);
 
@@ -96,7 +96,6 @@ namespace NBALigaSimulation.Shared.Models
                     //recordPlay("quarter");
                 }
 
-
                 // Clock
                 T -= Dt;
                 if (T < 0)
@@ -129,7 +128,7 @@ namespace NBALigaSimulation.Shared.Models
                     bool substitutions = UpdatePlayersOnCourt(Teams, PlayersOnCourt);
                     if (substitutions)
                     {
-                        //UpdateSynergy(Teams, PlayersOnCourt);
+                        UpdateSynergy(Teams, PlayersOnCourt);
                     }
                 }
 
@@ -143,7 +142,6 @@ namespace NBALigaSimulation.Shared.Models
 
             for (int t = 0; t < 2; t++)
             {
-                // Overall ratings scaled by fatigue
                 double[] ovrs = new double[teams[t].Players.Count];
 
                 for (int p = 0; p < teams[t].Players.Count; p++)
@@ -165,7 +163,6 @@ namespace NBALigaSimulation.Shared.Models
                         }
                     }
 
-                    // Injured or fouled out players can't play
                     if (teams[t].Players[p].Stats.Find(s => s.GameId == Id).Pf >= 6)
                     {
                         ovrs[p] = double.NegativeInfinity;
@@ -173,60 +170,103 @@ namespace NBALigaSimulation.Shared.Models
                     else
                     {
                         ovrs[p] = teams[t].Players[p].Ratings.LastOrDefault().Ovr * Fatigue(teams[t].Players[p].Stats.Find(s => s.GameId == Id).Energy) *
-                            teams[t].Players[p].PtModifier * RandomUtils.RandomUniform(0.9, 1.1);
+                              teams[t].Players[p].PtModifier * RandomUtils.RandomUniform(0.9, 1.1);
                     }
                 }
-
-                // Loop through players on court (in inverse order of current roster position)
                 int i = 0;
                 for (int pp = 0; pp < PlayersOnCourt[t].Length; pp++)
                 {
                     int p = PlayersOnCourt[t][pp];
                     PlayersOnCourt[t][i] = p;
 
-                    // Loop through bench players (in order of current roster position) to see if any should be subbed in
                     for (int b = 0; b < teams[t].Players.Count; b++)
                     {
                         if (!PlayersOnCourt[t].Contains(b) && ((teams[t].Players[p].Stats.Find(s => s.GameId == Id).CourtTime > 3
-                            && teams[t].Players[b].Stats.Find(s => s.GameId == Id).BenchTime > 3
-                            && ovrs[b] > ovrs[p]) || teams[t].Players[p].Stats.Find(s => s.GameId == Id).Pf >= 6))
+                                && teams[t].Players[b].Stats.Find(s => s.GameId == Id).BenchTime > 3
+                                && ovrs[b] > ovrs[p]) || teams[t].Players[p].Stats.Find(s => s.GameId == Id).Pf >= 6))
                         {
+                            List<string> pos = new List<string>();
+                            for (int j = 0; j < PlayersOnCourt[t].Length; j++)
+                            {
+                                if (j != pp)
+                                {
+                                    int playerPos = PlayersOnCourt[t][j];
+
+                                    string position = teams[t].Players.Find(player => player.RosterOrder == playerPos).Pos;
+
+                                    pos.Add(position);
+                                }
+                            }
+
+                            string playersPos2 = teams[t].Players.Find(player => player.RosterOrder == b).Pos;
+
+                            pos.Add(playersPos2);
+                            // Require 2 Gs (or 1 PG) and 2 Fs (or 1 C)
+                            int numG = 0, numPG = 0, numF = 0, numC = 0;
+                            foreach (string position in pos)
+                            {
+                                if (position.Contains("G"))
+                                {
+                                    numG++;
+                                }
+                                if (position == "PG")
+                                {
+                                    numPG++;
+                                }
+                                if (position.Contains("F"))
+                                {
+                                    numF++;
+                                }
+                                if (position == "C")
+                                {
+                                    numC++;
+                                }
+                            }
+                            if ((numG < 2 && numPG == 0) || (numF < 2 && numC == 0))
+                            {
+                                if (Fatigue(teams[t].Players[p].Stats.Find(s => s.GameId == Id).Energy) > 0.7)
+                                {
+                                    continue;
+                                }
+                            }
+
                             substitutions = true;
 
                             // Substitute player
                             PlayersOnCourt[t][i] = b;
                             p = b;
+
                             teams[t].Players[b].Stats.Find(s => s.GameId == Id).CourtTime = RandomUtils.RandomUniform(-2, 2);
                             teams[t].Players[b].Stats.Find(s => s.GameId == Id).BenchTime = RandomUtils.RandomUniform(-2, 2);
                             teams[t].Players[p].Stats.Find(s => s.GameId == Id).CourtTime = RandomUtils.RandomUniform(-2, 2);
                             teams[t].Players[p].Stats.Find(s => s.GameId == Id).BenchTime = RandomUtils.RandomUniform(-2, 2);
+
                         }
                     }
-
-                    i++;
+                    i += 1;
                 }
+            }
 
-                if (!StartersRecorded)
+            if (!StartersRecorded)
+            {
+                for (int z = 0; z < 2; z++)
                 {
-                    for (int z = 0; z < 2; z++)
+                    for (int p = 0; p < teams[z].Players.Count; p++)
                     {
-                        for (int p = 0; p < teams[z].Players.Count; p++)
-                        {
-                            int playerRosterOrder = teams[z].Players[p].RosterOrder; // Armazena o ID do jogador em uma variável separada
+                        int playerRosterOrder = teams[z].Players[p].RosterOrder; // Armazena o ID do jogador em uma variável separada
 
-                            if (PlayersOnCourt[z].Any(play => play == playerRosterOrder))
-                            {
-                                RecordStat(z, playerRosterOrder, "Gs", teams);
-                            }
+                        if (PlayersOnCourt[z].Any(play => play == playerRosterOrder))
+                        {
+                            RecordStat(z, playerRosterOrder, "Gs", teams);
                         }
                     }
-                    StartersRecorded = true;
                 }
-
+                StartersRecorded = true;
             }
 
             return substitutions;
         }
+
 
         public void UpdateSynergy(Team[] Teams, int[][] PlayersOnCourt)
         {
@@ -409,9 +449,9 @@ namespace NBALigaSimulation.Shared.Models
 
                 double r1 = new Random().NextDouble() * Teams[Offense].Players[p].Ratings.Last().GameShootingMidRange;
                 double r2 = new Random().NextDouble() * (Teams[Offense].Players[p].Ratings.Last().GameShootingAtRim +
-                    SynergyFactor);
+                    SynergyFactor * (Teams[Offense].Synergy.Off - Teams[Defense].Synergy.Def));
                 double r3 = new Random().NextDouble() * (Teams[Offense].Players[p].Ratings.Last().GameShootingLowPost +
-                    SynergyFactor);
+                    SynergyFactor * (Teams[Offense].Synergy.Off - Teams[Defense].Synergy.Def));
 
                 if (r1 > r2 && r1 > r3)
                 {
@@ -439,7 +479,8 @@ namespace NBALigaSimulation.Shared.Models
                 }
             }
 
-            probMake = (probMake - 0.25 * Teams[Defense].CompositeRating.Ratings["GameDefense"] + SynergyFactor) * currentFatigue;
+            probMake = (probMake - 0.25 * Teams[Defense].CompositeRating.Ratings["GameDefense"] + SynergyFactor * (Teams[Offense].Synergy.Off -
+                Teams[Defense].Synergy.Def)) * currentFatigue;
 
             // Assisted shots are easier
             if (passer >= 0)
@@ -659,7 +700,7 @@ namespace NBALigaSimulation.Shared.Models
                 RecordPlay("FoulOut", Defense, new string[] { Teams[Defense].Players[p].Name }, Teams);
                 // Force substitutions now
                 UpdatePlayersOnCourt(Teams, PlayersOnCourt);
-                //UpdateSynergy(Teams, PlayersOnCourt);
+                UpdateSynergy(Teams, PlayersOnCourt);
             }
         }
 
@@ -987,15 +1028,13 @@ namespace NBALigaSimulation.Shared.Models
 
                 }
 
-
-                /*
                 teams[i].CompositeRating.Ratings["GameDribbling"] += 0.1 * teams[i].Synergy.Off;
                 teams[i].CompositeRating.Ratings["GamePassing"] += 0.1 * teams[i].Synergy.Off;
                 teams[i].CompositeRating.Ratings["GameRebounding"] += 0.1 * teams[i].Synergy.Reb;
                 teams[i].CompositeRating.Ratings["GameDefense"] += 0.1 * teams[i].Synergy.Def;
                 teams[i].CompositeRating.Ratings["GameDefensePerimeter"] += 0.1 * teams[i].Synergy.Def;
                 teams[i].CompositeRating.Ratings["GameBlocking"] += 0.1 * teams[i].Synergy.Def;
-                */
+
             }
         }
 
