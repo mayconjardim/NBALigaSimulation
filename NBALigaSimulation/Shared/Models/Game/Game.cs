@@ -1,5 +1,6 @@
 ﻿using NBALigaSimulation.Shared.Engine;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Numerics;
 
 namespace NBALigaSimulation.Shared.Models
 {
@@ -380,7 +381,7 @@ namespace NBALigaSimulation.Shared.Models
             ratios = RatingArray(Teams, "GameUsage", Offense, PlayersOnCourt);
             shooter = ArrayHelper.PickPlayer(ratios);
 
-            return DoShot(shooter, Teams, PlayersOnCourt); // fg, orb, or drb
+            return DoShot(shooter, Teams, PlayersOnCourt);
         }
 
         public string DoTov(Team[] Teams, int[][] PlayersOnCourt)
@@ -758,7 +759,6 @@ namespace NBALigaSimulation.Shared.Models
 
             return array;
         }
-
 
         public void RecordStat(int t, int p, string s, Team[] teams, int amount = 1, double amntDouble = 1.0)
         {

@@ -204,7 +204,7 @@ namespace NBALigaSimulation.Shared.Models
                 rating.Add("tp", Tp);
 
                 List<string> attributes = new List<string> { "hgt", "tp" };
-                List<double> weights = new List<double> { 0.2, 1 };
+                List<double> weights = new List<double> { 0.1, 1 };
 
                 shootingThreePointer = Converter.Composite(rating, attributes, weights);
                 return shootingThreePointer;
@@ -256,11 +256,13 @@ namespace NBALigaSimulation.Shared.Models
                 Dictionary<string, double> rating = new Dictionary<string, double>();
                 rating.Add("spd", Spd);
                 rating.Add("stl", Stl);
+                rating.Add("50", 50);
 
-                List<string> attributes = new List<string> { "spd", "stl" };
 
+                List<string> attributes = new List<string> { "50", "spd", "stl" };
+                List<double> weights = new List<double> { 1, 1, 1 };
 
-                stealing = Converter.Composite(rating, attributes);
+                stealing = Converter.Composite(rating, attributes, weights);
                 return stealing;
             }
         }
@@ -295,8 +297,9 @@ namespace NBALigaSimulation.Shared.Models
                 rating.Add("hgt", Hgt);
                 rating.Add("blk", Blk);
                 rating.Add("spd", Spd);
+                rating.Add("50", 50);
 
-                List<string> attributes = new List<string> { "hgt", "blk", "spd" };
+                List<string> attributes = new List<string> { "50", "hgt", "blk", "spd" };
                 List<double> weights = new List<double> { 1.5, 1, 1, -1 };
 
 
@@ -381,9 +384,9 @@ namespace NBALigaSimulation.Shared.Models
                 Dictionary<string, double> rating = new Dictionary<string, double>();
                 rating.Add("endu", End);
                 rating.Add("hgt", Hgt);
+                rating.Add("50", 50);
 
-
-                List<string> attributes = new List<string> { "endu", "hgt" };
+                List<string> attributes = new List<string> { "50", "endu", "hgt" };
                 List<double> weights = new List<double> { 1, 1, -0.1 };
 
 
