@@ -1,4 +1,5 @@
 ﻿using NBALigaSimulation.Shared.Engine;
+using System;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Numerics;
 
@@ -45,7 +46,7 @@ namespace NBALigaSimulation.Shared.Models
         [NotMapped]
         List<List<int>> PtsQtrs = new List<List<int>>();
 
-        public void GameSim()
+        private void GameSim()
         {
 
             Team[] Teams = { HomeTeam, AwayTeam };
@@ -78,7 +79,7 @@ namespace NBALigaSimulation.Shared.Models
 
         }
 
-        public void SimPossessions(Team[] Teams, int[][] PlayersOnCourt)
+        private void SimPossessions(Team[] Teams, int[][] PlayersOnCourt)
         {
             int i, outcome;
             bool substitutions;
@@ -93,9 +94,9 @@ namespace NBALigaSimulation.Shared.Models
                 Offense = (Offense == 1) ? 0 : 1;
                 Defense = (Offense == 1) ? 0 : 1;
 
-                if (i % this.SubsEveryN == 0)
+                if (i % SubsEveryN == 0)
                 {
-                    substitutions = UpdatePlayersOnCourt();
+                    substitutions = UpdatePlayersOnCourt(Teams, PlayersOnCourt);
                     if (substitutions)
                     {
                         UpdateSynergy();
@@ -121,6 +122,91 @@ namespace NBALigaSimulation.Shared.Models
             }
         }
 
+        public bool UpdatePlayersOnCourt(Team[] Teams, int[][] PlayersOnCourt)
+        {
+            bool substitutions = false;
+
+            for (int t = 0; t < 2; t++)
+            {
+                // Ovr por fadiga
+                double[] ovrs = new double[Teams[t].Players.Count];
+                for (int p = 0; p < Teams[t].Players.Count; p++)
+                {
+
+                    var player = Teams[t].Players.Find(player => player.RosterOrder == p);
+                    if (player != null)
+                    {
+                        if (player.Stats == null)
+                        {
+                            player.Stats = new List<PlayerGameStats>();
+                        }
+
+                        var lastStats = player.Stats.Find(s => s.GameId == Id);
+
+                        if (lastStats == null || lastStats.GameId != Id)
+                        {
+                            player.Stats.Add(new PlayerGameStats { GameId = Id, TeamId = Teams[t].Id, Name = player.Name, Season = Season.Year });
+                        }
+                    }
+
+                    // Jogadores lesionados ou com falta não podem jogar
+                    if (Teams[t].Players[p].Stats.Find(s => s.GameId == Id).Pf >= 6)
+                    {
+                        ovrs[p] = double.NegativeInfinity;
+                    }
+                    else
+                    {
+                        ovrs[p] = Teams[t].Players[p].Ratings.LastOrDefault().Ovr * Fatigue(Teams[t].Players[p].Stats.Find(s => s.GameId == Id).Energy) *
+                              Teams[t].Players[p].PtModifier * RandomUtils.RandomUniform(0.9, 1.1);
+                    }
+                }
+
+                // Percorre os jogadores na quadra (na ordem inversa da posição atual da lista)
+                int i = 0;
+                for (int pp = 0; pp < PlayersOnCourt[t].Length; pp++)
+                {
+                    int p = PlayersOnCourt[t][pp];
+                    PlayersOnCourt[t][i] = p;
+
+                    // Faz um loop pelos jogadores de banco (na ordem da posição atual da lista) para ver se algum deve ser substituído)
+                    for (int b = 0; b < Teams[t].Players.Count; b++)
+                    {
+                        if (PlayersOnCourt[t].Contains(b) == false && ((Teams[t].Players[p].Stats.Find(s => s.GameId == Id).CourtTime > 3 && Teams[t].Players[b].Stats.Find(s => s.GameId == Id).BenchTime > 3
+                            && ovrs[b] > ovrs[p]) || Teams[t].Players[p].Stats.Find(s => s.GameId == Id).Pf >= 6))
+                        {
+                            substitutions = true;
+
+                            // Jogador substituto
+                            PlayersOnCourt[t][i] = b;
+                            p = b;
+                            Teams[t].Players[b].Stats.Find(s => s.GameId == Id).CourtTime = RandomUtils.RandomUniform(-2, 2);
+                            Teams[t].Players[b].Stats.Find(s => s.GameId == Id).BenchTime = RandomUtils.RandomUniform(-2, 2);
+                            Teams[t].Players[p].Stats.Find(s => s.GameId == Id).CourtTime = RandomUtils.RandomUniform(-2, 2);
+                            Teams[t].Players[p].Stats.Find(s => s.GameId == Id).BenchTime = RandomUtils.RandomUniform(-2, 2);
+                        }
+                    }
+                    i += 1;
+                }
+            }
+
+            // Grave iniciadores se isso ainda não tiver sido feito. Isso deve ser executado na primeira vez que essa função for chamada e nunca mais.
+            if (!StartersRecorded)
+            {
+                for (int t = 0; t < 2; t++)
+                {
+                    for (int p = 0; p < Teams[t].Players.Count; p++)
+                    {
+                        if (PlayersOnCourt[t].Contains(p))
+                        {
+                            RecordStat(t, p, "Gs");
+                        }
+                    }
+                }
+                StartersRecorded = true;
+            }
+
+            return substitutions;
+        }
 
 
 
