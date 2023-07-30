@@ -557,7 +557,6 @@ namespace NBALigaSimulation.Shared.Models
             return 0.1 * defenseBlocking;
         }
 
-
         public string DoBlk(int shooter, string type, Team[] Teams, int[][] PlayersOnCourt)
         {
             double[] ratios = RatingArray(Teams, "GameBlocking", Defense, PlayersOnCourt, 4);
@@ -584,6 +583,46 @@ namespace NBALigaSimulation.Shared.Models
             }
 
             return DoReb();
+        }
+
+        public string DoFg(int shooter, int passer, string type, Team[] Teams, int[][] PlayersOnCourt)
+        {
+            int p;
+
+            if (passer >= 0)
+            {
+                p = PlayersOnCourt[Offense][passer];
+                RecordStat(Offense, p, "Ast", Teams);
+            }
+
+
+            p = PlayersOnCourt[Offense][shooter];
+            RecordStat(Offense, p, "Fga", Teams);
+            RecordStat(Offense, p, "Fg", Teams);
+            RecordStat(Offense, p, "Pts", Teams, 2);
+
+            switch (type)
+            {
+                case "AtRim":
+                    RecordStat(Offense, p, "FgaAtRim", Teams);
+                    RecordStat(Offense, p, "FgAtRim", Teams);
+                    break;
+                case "LowPost":
+                    RecordStat(Offense, p, "FgaLowPost", Teams);
+                    RecordStat(Offense, p, "FgLowPost", Teams);
+                    break;
+                case "MidRange":
+                    RecordStat(Offense, p, "FgaMidRange", Teams);
+                    RecordStat(Offense, p, "FgMidRange", Teams);
+                    break;
+                case "ThreePointer":
+                    RecordStat(Offense, p, "Pts", Teams);
+                    RecordStat(Offense, p, "Tpa", Teams);
+                    RecordStat(Offense, p, "Tp", Teams);
+                    break;
+            }
+
+            return "Fg";
         }
 
     }
