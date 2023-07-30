@@ -79,7 +79,8 @@ namespace NBALigaSimulation.Shared.Models
 
         private void SimPossessions(Team[] Teams, int[][] PlayersOnCourt)
         {
-            int i, outcome;
+            int i;
+            string outcome;
             bool substitutions;
 
             Offense = 0;
@@ -101,9 +102,9 @@ namespace NBALigaSimulation.Shared.Models
                     }
                 }
 
-                UpdateTeamCompositeRatings();
+                UpdateTeamCompositeRatings(Teams, PlayersOnCourt);
 
-                outcome = SimPossession();
+                outcome = SimPossession(Teams, PlayersOnCourt);
 
                 // Troca Offense e Defense para que o receba outra posse quando eles forem trocados novamente no início do loop.
                 if (outcome == "Orb")
@@ -112,7 +113,7 @@ namespace NBALigaSimulation.Shared.Models
                     Defense = (Offense == 1) ? 0 : 1;
                 }
 
-                UpdatePlayingTime();
+                UpdatePlayingTime(Teams, PlayersOnCourt);
 
                 //Injuries();
 
@@ -373,7 +374,7 @@ namespace NBALigaSimulation.Shared.Models
             int shooter;
 
             // Turnover?
-            if (ProbTov() > new Random().NextDouble())
+            if (ProbTov(Teams) > new Random().NextDouble())
             {
                 return DoTov(); // TOV
             }
@@ -383,6 +384,16 @@ namespace NBALigaSimulation.Shared.Models
             shooter = ArrayHelper.PickPlayer(ratios);
 
             return DoShot(shooter); // Fg, Orb ou Drb
+        }
+
+        public double ProbTov(Team[] Teams)
+        {
+
+            double defenseRating = Teams[Defense].CompositeRating.Ratings["GameDefense"];
+            double dribblingRating = Teams[Offense].CompositeRating.Ratings["GameDribbling"];
+            double passingRating = Teams[Offense].CompositeRating.Ratings["GamePassing"];
+
+            return 0.15 * (1 + defenseRating / (1 + 0.5 * (dribblingRating + passingRating)));
         }
 
 
