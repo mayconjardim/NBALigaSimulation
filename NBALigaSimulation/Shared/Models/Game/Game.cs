@@ -501,7 +501,7 @@ namespace NBALigaSimulation.Shared.Models
 
             if (ProbBlk(Teams) > new Random().NextDouble())
             {
-                return DoBlk(shooter);  // orb or drb
+                return DoBlk(shooter, type, Teams, PlayersOnCourt);  // orb or drb
             }
 
             // Acerto
@@ -556,6 +556,36 @@ namespace NBALigaSimulation.Shared.Models
 
             return 0.1 * defenseBlocking;
         }
+
+
+        public string DoBlk(int shooter, string type, Team[] Teams, int[][] PlayersOnCourt)
+        {
+            double[] ratios = RatingArray(Teams, "GameBlocking", Defense, PlayersOnCourt, 4);
+            int p = PlayersOnCourt[Defense][PickPlayer(ratios)];
+            RecordStat(Defense, p, "Blk", Teams);
+
+            int p2 = PlayersOnCourt[Offense][shooter];
+            RecordStat(Offense, p2, "Fga", Teams);
+            if (type == "AtRim")
+            {
+                RecordStat(Offense, p, "FgaAtRim", Teams);
+            }
+            else if (type == "LowPost")
+            {
+                RecordStat(Offense, p, "FgaLowPost", Teams);
+            }
+            else if (type == "MidRange")
+            {
+                RecordStat(Offense, p, "FgaMidRange", Teams);
+            }
+            else if (type == "ThreePointer")
+            {
+                RecordStat(Offense, p, "Tpa", Teams);
+            }
+
+            return DoReb();
+        }
+
     }
 
 }
