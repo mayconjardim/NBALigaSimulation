@@ -725,6 +725,40 @@ namespace NBALigaSimulation.Shared.Models
             return array;
         }
 
+        public int PickPlayer(double[] ratios, int exempt = -1)
+        {
+            if (exempt >= 0)
+            {
+                ratios[exempt] = 0;
+            }
+
+            double rand = new Random().NextDouble() * (ratios[0] + ratios[1] + ratios[2] + ratios[3] + ratios[4]);
+
+            int pick;
+            if (rand < ratios[0])
+            {
+                pick = 0;
+            }
+            else if (rand < (ratios[0] + ratios[1]))
+            {
+                pick = 1;
+            }
+            else if (rand < (ratios[0] + ratios[1] + ratios[2]))
+            {
+                pick = 2;
+            }
+            else if (rand < (ratios[0] + ratios[1] + ratios[2] + ratios[3]))
+            {
+                pick = 3;
+            }
+            else
+            {
+                pick = 4;
+            }
+
+            return pick;
+        }
+
     }
 
 }
