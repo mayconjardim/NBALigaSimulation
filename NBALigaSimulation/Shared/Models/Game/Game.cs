@@ -197,7 +197,7 @@ namespace NBALigaSimulation.Shared.Models
                     {
                         if (PlayersOnCourt[t].Contains(p))
                         {
-                            RecordStat(t, p, "Gs");
+                            RecordStat(t, p, "Gs", Teams);
                         }
                     }
                 }
@@ -376,14 +376,14 @@ namespace NBALigaSimulation.Shared.Models
             // Turnover?
             if (ProbTov(Teams) > new Random().NextDouble())
             {
-                return DoTov(); // TOV
+                return DoTov(Teams, PlayersOnCourt); // TOV
             }
 
             // Chutar se não houver turnover
             ratios = RatingArray(Teams, "GameUsage", Offense, PlayersOnCourt);
             shooter = ArrayHelper.PickPlayer(ratios);
 
-            return DoShot(shooter); // Fg, Orb ou Drb
+            return DoShot(shooter, Teams, PlayersOnCourt); // Fg, Orb ou Drb
         }
 
         public double ProbTov(Team[] Teams)
@@ -406,7 +406,7 @@ namespace NBALigaSimulation.Shared.Models
             RecordStat(Offense, p, "Tov", Teams);
             if (ProbStl(Teams) > new Random().NextDouble())
             {
-                return DoStl();
+                return DoStl(Teams, PlayersOnCourt);
             }
 
             return "Tov";
@@ -433,8 +433,8 @@ namespace NBALigaSimulation.Shared.Models
 
         public string DoShot(int shooter, Team[] Teams, int[][] PlayersOnCourt)
         {
-            double fatigue, passer, probMake, probAndOne, probMissAndFoul, r1, r2, r3;
-            int p, ratios;
+            double fatigue, probMake, probAndOne, probMissAndFoul, r1, r2, r3;
+            int p, ratios, passer;
             string type;
 
             p = PlayersOnCourt[Offense][shooter];
@@ -445,7 +445,7 @@ namespace NBALigaSimulation.Shared.Models
 
             // Esta é uma tentativa "assistencia" (ou seja, uma assistência será registrada se for feita)
             passer = -1;
-            if (ProbAst() > new Random().NextDouble())
+            if (ProbAst(Teams) > new Random().NextDouble())
             {
                 ratios = RatingArray(Teams, "GamePassing", Offense, PlayersOnCourt, 2);
                 passer = PickPlayer(ratios, shooter);
@@ -510,10 +510,10 @@ namespace NBALigaSimulation.Shared.Models
                 // And 1
                 if (probAndOne > new Random().NextDouble())
                 {
-                    DoFg(shooter, passer, type, true, Teams, PlayersOnCourt);
-                    return DoFt(shooter, 1);  // fg, orb, or drb
+                    DoFg(shooter, passer, type, Teams, PlayersOnCourt);
+                    return DoFt(shooter, 1, Teams, PlayersOnCourt);  // fg, orb, or drb
                 }
-                return DoFg(shooter, passer, type, false, Teams, PlayersOnCourt);   // fg
+                return DoFg(shooter, passer, type, Teams, PlayersOnCourt);   // fg
             }
 
             // Errou, mas sofreu falta
@@ -582,7 +582,7 @@ namespace NBALigaSimulation.Shared.Models
                 RecordStat(Offense, p, "Tpa", Teams);
             }
 
-            return DoReb();
+            return DoReb(Teams, PlayersOnCourt);
         }
 
         public string DoFg(int shooter, int passer, string type, Team[] Teams, int[][] PlayersOnCourt)
@@ -757,6 +757,28 @@ namespace NBALigaSimulation.Shared.Models
             }
 
             return pick;
+        }
+
+        public void RecordStat(int t, int p, string s, Team[] teams, int amount = 1, double amntDouble = 1.0)
+        {
+            amount = amount != 0 ? amount : 1;
+            RecordHelper.RecordStatHelperPlayer(GameDate, t, p, s, Id, teams, Type, Season.Year, amount, amntDouble);
+            if (s != "Gs" && s != "CourtTime" && s != "BenchTime" && s != "Energy")
+            {
+                RecordHelper.RecordStatHelperTeam(t, p, s, Id, teams, Season.Year, amount);
+
+            }
+        }
+
+        public double Fatigue(double energy)
+        {
+            energy += 0.05;
+            if (energy > 1)
+            {
+                energy = 1;
+            }
+
+            return energy;
         }
 
     }
