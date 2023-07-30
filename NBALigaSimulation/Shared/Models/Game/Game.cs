@@ -704,6 +704,27 @@ namespace NBALigaSimulation.Shared.Models
             return "Orb";
         }
 
+        public double[] RatingArray(Team[] Teams, string rating, int t, int[][] PlayersOnCourt, double power = 1)
+        {
+            double[] array = new double[5];
+            for (int i = 0; i < 5; i++)
+            {
+                int p = PlayersOnCourt[t][i];
+
+                var player = Teams[t].Players.Find(player => player.RosterOrder == p);
+
+                double energy = (double)(player.Stats.Find(s => s.GameId == Id)?.Energy);
+
+                if (player != null && player.Ratings?.LastOrDefault() != null)
+                {
+                    var playerRatings = player.Ratings.LastOrDefault();
+                    array[i] = Math.Pow(CompositeHelper.GetRatingValue(rating, playerRatings) * energy, power);
+                }
+            }
+
+            return array;
+        }
+
     }
 
 }
