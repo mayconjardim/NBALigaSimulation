@@ -1,6 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-
-namespace NBALigaSimulation.Server.Data
+﻿namespace NBALigaSimulation.Server.Data
 {
     public class DataContext : DbContext
     {
