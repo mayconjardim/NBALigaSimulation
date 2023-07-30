@@ -404,12 +404,22 @@ namespace NBALigaSimulation.Shared.Models
             ratios = RatingArray(Teams, "GameTurnovers", Offense, PlayersOnCourt, 0.5);
             p = PlayersOnCourt[Offense][PickPlayer(ratios)];
             RecordStat(Offense, p, "Tov", Teams);
-            if (ProbStl() > new Random().NextDouble())
+            if (ProbStl(Teams) > new Random().NextDouble())
             {
                 return DoStl();
             }
 
             return "Tov";
+        }
+
+        public double ProbStl(Team[] Teams)
+        {
+
+            double defensePerimeterRating = Teams[Defense].CompositeRating.Ratings["GameDefensePerimeter"];
+            double dribblingRating = Teams[Offense].CompositeRating.Ratings["GameDribbling"];
+            double passingRating = Teams[Offense].CompositeRating.Ratings["GamePassing"];
+
+            return 0.55 * defensePerimeterRating / (0.5 * (dribblingRating + passingRating));
         }
 
 
