@@ -54,8 +54,6 @@ namespace NBALigaSimulation.Shared.Models
 
             NumPossessions = (int)Math.Round(Teams[0].CompositeRating.Ratings["GamePace"] + Teams[1].CompositeRating.Ratings["GamePace"] / 2 * RandomUtils.RandomUniform(0.9, 1.1));
 
-            Dt = 48.0 / (2 * NumPossessions);
-
             int[][] PlayersOnCourt = new int[][] { new int[] { 0, 1, 2, 3, 4 }, new int[] { 0, 1, 2, 3, 4 } };
 
             UpdatePlayersOnCourt(Teams, PlayersOnCourt);
@@ -333,6 +331,39 @@ namespace NBALigaSimulation.Shared.Models
                 Teams[t].CompositeRating.Ratings["GameDefense"] += SynergyFactor * Teams[t].Synergy.Def;
                 Teams[t].CompositeRating.Ratings["GameDefensePerimeter"] += SynergyFactor * Teams[t].Synergy.Def;
                 Teams[t].CompositeRating.Ratings["GameBlocking"] += SynergyFactor * Teams[t].Synergy.Def;
+            }
+        }
+
+        public void UpdatePlayingTime(Team[] Teams, int[][] PlayersOnCourt)
+        {
+            // Tempo decorrido
+            Dt = (Overtimes > 0 ? 5 : 48) / (2 * NumPossessions);
+
+            for (int t = 0; t < 2; t++)
+            {
+                // Atualiza minutos (Ovr, quadra e banco)
+                for (int p = 0; p < Teams[t].Players.Count; p++)
+                {
+                    if (PlayersOnCourt[t].Contains(p))
+                    {
+                        RecordStat(t, p, "Min", Teams, 1, Dt);
+                        RecordStat(t, p, "CourtTime", Teams, 1, Dt);
+                        RecordStat(t, p, "Energy", Teams, 1, (-Dt * 0.04 * (1 - Teams[t].Players[p].Ratings.Last().GameEndurance)));
+                        if (Teams[t].Players[p].Stats.Find(s => s.GameId == Id)?.Energy < 0)
+                        {
+                            Teams[t].Players[p].Stats.Find(s => s.GameId == Id).Energy = 0;
+                        }
+                    }
+                    else
+                    {
+                        RecordStat(t, p, "BenchTime", Teams, 1, Dt);
+                        RecordStat(t, p, "Energy", Teams, 1, (Dt * 0.1));
+                        if (Teams[t].Players[p].Stats.Find(s => s.GameId == Id)?.Energy > 1)
+                        {
+                            Teams[t].Players[p].Stats.Find(s => s.GameId == Id).Energy = 1;
+                        }
+                    }
+                }
             }
         }
 
