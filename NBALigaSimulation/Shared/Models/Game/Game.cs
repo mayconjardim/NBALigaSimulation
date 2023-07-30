@@ -99,7 +99,7 @@ namespace NBALigaSimulation.Shared.Models
                     substitutions = UpdatePlayersOnCourt(Teams, PlayersOnCourt);
                     if (substitutions)
                     {
-                        UpdateSynergy();
+                        UpdateSynergy(Teams, PlayersOnCourt);
                     }
                 }
 
@@ -206,6 +206,67 @@ namespace NBALigaSimulation.Shared.Models
             }
 
             return substitutions;
+        }
+
+        public void UpdateSynergy(Team[] Teams, int[][] PlayersOnCourt)
+        {
+            for (int t = 0; t < 2; t++)
+            {
+
+                if (Teams[t].Synergy == null)
+                {
+                    Teams[t].Synergy = new TeamSynergy();
+                }
+
+                // Faz uma lista com todas as habilidades dos jogadores ativos em uma equipe (incluindo duplicatas)
+                List<string> allSkills = new List<string>();
+                for (int i = 0; i < 5; i++)
+                {
+                    int p = PlayersOnCourt[t][i];
+                    allSkills.AddRange(Teams[t].Players[p].Ratings.LastOrDefault().Skills);
+                }
+                Dictionary<string, int> skillsCount = new Dictionary<string, int>();
+                foreach (string skill in allSkills)
+                {
+                    if (skillsCount.ContainsKey(skill))
+                    {
+                        skillsCount[skill]++;
+                    }
+                    else
+                    {
+                        skillsCount[skill] = 1;
+                    }
+                }
+
+                // Sinergia ofensiva
+                Teams[t].Synergy.Off = 0;
+                Teams[t].Synergy.Off += (skillsCount.ContainsKey("3") && skillsCount["3"] >= 2) ? 3 : 0;
+                Teams[t].Synergy.Off += (skillsCount.ContainsKey("3") && skillsCount["3"] >= 3) ? 1 : 0;
+                Teams[t].Synergy.Off += (skillsCount.ContainsKey("3") && skillsCount["3"] >= 4) ? 1 : 0;
+                Teams[t].Synergy.Off += (skillsCount.ContainsKey("B") && skillsCount["B"] >= 1) ? 3 : 0;
+                Teams[t].Synergy.Off += (skillsCount.ContainsKey("B") && skillsCount["B"] >= 2) ? 1 : 0;
+                Teams[t].Synergy.Off += (skillsCount.ContainsKey("Ps") && skillsCount["Ps"] >= 1) ? 3 : 0;
+                Teams[t].Synergy.Off += (skillsCount.ContainsKey("Ps") && skillsCount["Ps"] >= 2) ? 1 : 0;
+                Teams[t].Synergy.Off += (skillsCount.ContainsKey("Ps") && skillsCount["Ps"] >= 3) ? 1 : 0;
+                Teams[t].Synergy.Off += (skillsCount.ContainsKey("Po") && skillsCount["Po"] >= 1) ? 1 : 0;
+                Teams[t].Synergy.Off += (skillsCount.ContainsKey("A") && skillsCount["A"] >= 3) ? 1 : 0;
+                Teams[t].Synergy.Off += (skillsCount.ContainsKey("A") && skillsCount["A"] >= 4) ? 1 : 0;
+                Teams[t].Synergy.Off /= 17;
+
+                // Sinergia defensiva
+                Teams[t].Synergy.Def = 0;
+                Teams[t].Synergy.Def += (skillsCount.ContainsKey("Dp") && skillsCount["Dp"] >= 1) ? 1 : 0;
+                Teams[t].Synergy.Def += (skillsCount.ContainsKey("Di") && skillsCount["Di"] >= 1) ? 3 : 0;
+                Teams[t].Synergy.Def += (skillsCount.ContainsKey("A") && skillsCount["A"] >= 3) ? 1 : 0;
+                Teams[t].Synergy.Def += (skillsCount.ContainsKey("A") && skillsCount["A"] >= 4) ? 1 : 0;
+                Teams[t].Synergy.Def /= 6;
+
+                // Sinergia rebotes
+                Teams[t].Synergy.Reb = 0;
+                Teams[t].Synergy.Reb += (skillsCount.ContainsKey("R") && skillsCount["R"] >= 1) ? 3 : 0;
+                Teams[t].Synergy.Reb += (skillsCount.ContainsKey("R") && skillsCount["R"] >= 2) ? 1 : 0;
+                Teams[t].Synergy.Reb /= 4;
+            }
         }
 
 
