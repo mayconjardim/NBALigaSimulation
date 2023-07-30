@@ -269,6 +269,73 @@ namespace NBALigaSimulation.Shared.Models
             }
         }
 
+        public void UpdateTeamCompositeRatings(Team[] Teams, int[][] PlayersOnCourt)
+        {
+            // Atualize apenas aqueles que são realmente usados
+            string[] toUpdate = { "GameDribbling", "GamePassing", "GameRebounding", "GameDefense", "GameDefensePerimeter", "GameBlocking", "GamePace" };
+            string ratings = string.Empty;
+
+
+            for (int t = 0; t < 2; t++)
+            {
+
+                if (Teams[t].CompositeRating == null)
+                {
+                    Teams[t].CompositeRating = new TeamCompositeRating();
+                }
+
+                foreach (string rating in toUpdate)
+                {
+                    Teams[t].CompositeRating.Ratings[rating] = 0;
+
+                    for (int i = 0; i < 5; i++)
+                    {
+                        int playerRosterOrder = PlayersOnCourt[t][i];
+                        var playerRatings = Teams[i].Players.Find(player => player.RosterOrder == playerRosterOrder).Ratings.LastOrDefault();
+                        double ratingValue = 0;
+
+                        if (rating == "GameDribbling")
+                        {
+                            ratingValue = playerRatings.GameDribbling;
+                        }
+                        else if (rating == "GamePassing")
+                        {
+                            ratingValue = playerRatings.GamePassing;
+                        }
+                        else if (rating == "GameRebounding")
+                        {
+                            ratingValue = playerRatings.GameRebounding;
+                        }
+                        else if (rating == "GameDefense")
+                        {
+                            ratingValue = playerRatings.GameDefense;
+                        }
+                        else if (rating == "GameDefensePerimeter")
+                        {
+                            ratingValue = playerRatings.GameDefensePerimeter;
+                        }
+                        else if (rating == "GameBlocking")
+                        {
+                            ratingValue = playerRatings.GameBlocking;
+                        }
+
+                        Teams[i].CompositeRating.Ratings[rating] += ratingValue * Fatigue(Teams[i].Players.Find(player => player.RosterOrder == playerRosterOrder).Stats.Find(s => s.GameId == Id).Energy);
+                        ratings = rating;
+
+                    }
+
+                    Teams[t].CompositeRating.Ratings[ratings] = Teams[t].CompositeRating.Ratings[ratings] / 5;
+                }
+
+                Teams[t].CompositeRating.Ratings["GameDribbling"] += SynergyFactor * Teams[t].Synergy.Off;
+                Teams[t].CompositeRating.Ratings["GamePassing"] += SynergyFactor * Teams[t].Synergy.Off;
+                Teams[t].CompositeRating.Ratings["GameRebounding"] += SynergyFactor * Teams[t].Synergy.Reb;
+                Teams[t].CompositeRating.Ratings["GameDefense"] += SynergyFactor * Teams[t].Synergy.Def;
+                Teams[t].CompositeRating.Ratings["GameDefensePerimeter"] += SynergyFactor * Teams[t].Synergy.Def;
+                Teams[t].CompositeRating.Ratings["GameBlocking"] += SynergyFactor * Teams[t].Synergy.Def;
+            }
+        }
+
 
 
     }
