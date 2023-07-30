@@ -46,7 +46,7 @@ namespace NBALigaSimulation.Shared.Models
         [NotMapped]
         List<List<int>> PtsQtrs = new List<List<int>>();
 
-        private void GameSim()
+        public void GameSim()
         {
 
             Team[] Teams = { HomeTeam, AwayTeam };
@@ -121,7 +121,7 @@ namespace NBALigaSimulation.Shared.Models
             }
         }
 
-        public bool UpdatePlayersOnCourt(Team[] Teams, int[][] PlayersOnCourt)
+        private bool UpdatePlayersOnCourt(Team[] Teams, int[][] PlayersOnCourt)
         {
             bool substitutions = false;
 
@@ -207,7 +207,7 @@ namespace NBALigaSimulation.Shared.Models
             return substitutions;
         }
 
-        public void UpdateSynergy(Team[] Teams, int[][] PlayersOnCourt)
+        private void UpdateSynergy(Team[] Teams, int[][] PlayersOnCourt)
         {
             for (int t = 0; t < 2; t++)
             {
@@ -268,7 +268,7 @@ namespace NBALigaSimulation.Shared.Models
             }
         }
 
-        public void UpdateTeamCompositeRatings(Team[] Teams, int[][] PlayersOnCourt)
+        private void UpdateTeamCompositeRatings(Team[] Teams, int[][] PlayersOnCourt)
         {
             // Atualize apenas aqueles que são realmente usados
             string[] toUpdate = { "GameDribbling", "GamePassing", "GameRebounding", "GameDefense", "GameDefensePerimeter", "GameBlocking", "GamePace" };
@@ -335,7 +335,7 @@ namespace NBALigaSimulation.Shared.Models
             }
         }
 
-        public void UpdatePlayingTime(Team[] Teams, int[][] PlayersOnCourt)
+        private void UpdatePlayingTime(Team[] Teams, int[][] PlayersOnCourt)
         {
             // Tempo decorrido
             Dt = (Overtimes > 0 ? 5 : 48) / (2 * NumPossessions);
@@ -368,7 +368,7 @@ namespace NBALigaSimulation.Shared.Models
             }
         }
 
-        public string SimPossession(Team[] Teams, int[][] PlayersOnCourt)
+        private string SimPossession(Team[] Teams, int[][] PlayersOnCourt)
         {
             double[] ratios;
             int shooter;
@@ -386,7 +386,7 @@ namespace NBALigaSimulation.Shared.Models
             return DoShot(shooter, Teams, PlayersOnCourt); // Fg, Orb ou Drb
         }
 
-        public double ProbTov(Team[] Teams)
+        private double ProbTov(Team[] Teams)
         {
 
             double defenseRating = Teams[Defense].CompositeRating.Ratings["GameDefense"];
@@ -396,7 +396,7 @@ namespace NBALigaSimulation.Shared.Models
             return 0.15 * (1 + defenseRating / (1 + 0.5 * (dribblingRating + passingRating)));
         }
 
-        public string DoTov(Team[] Teams, int[][] PlayersOnCourt)
+        private string DoTov(Team[] Teams, int[][] PlayersOnCourt)
         {
             int p;
             double[] ratios;
@@ -412,7 +412,7 @@ namespace NBALigaSimulation.Shared.Models
             return "Tov";
         }
 
-        public double ProbStl(Team[] Teams)
+        private double ProbStl(Team[] Teams)
         {
 
             double defensePerimeterRating = Teams[Defense].CompositeRating.Ratings["GameDefensePerimeter"];
@@ -422,7 +422,7 @@ namespace NBALigaSimulation.Shared.Models
             return 0.55 * defensePerimeterRating / (0.5 * (dribblingRating + passingRating));
         }
 
-        public string DoStl(Team[] Teams, int[][] PlayersOnCourt)
+        private string DoStl(Team[] Teams, int[][] PlayersOnCourt)
         {
             double[] ratios = RatingArray(Teams, "GameStealing", Defense, PlayersOnCourt);
             int p = PlayersOnCourt[Defense][PickPlayer(ratios)];
@@ -431,11 +431,12 @@ namespace NBALigaSimulation.Shared.Models
             return "Stl";
         }
 
-        public string DoShot(int shooter, Team[] Teams, int[][] PlayersOnCourt)
+        private string DoShot(int shooter, Team[] Teams, int[][] PlayersOnCourt)
         {
             double fatigue, probMake, probAndOne, probMissAndFoul, r1, r2, r3;
-            int p, ratios, passer;
+            int p, passer;
             string type;
+            double[] ratios;
 
             p = PlayersOnCourt[Offense][shooter];
 
@@ -549,7 +550,7 @@ namespace NBALigaSimulation.Shared.Models
             return DoReb(Teams, PlayersOnCourt);
         }
 
-        public double ProbBlk(Team[] Teams)
+        private double ProbBlk(Team[] Teams)
         {
 
             double defenseBlocking = Teams[Defense].CompositeRating.Ratings["GameBlocking"];
@@ -557,7 +558,7 @@ namespace NBALigaSimulation.Shared.Models
             return 0.1 * defenseBlocking;
         }
 
-        public string DoBlk(int shooter, string type, Team[] Teams, int[][] PlayersOnCourt)
+        private string DoBlk(int shooter, string type, Team[] Teams, int[][] PlayersOnCourt)
         {
             double[] ratios = RatingArray(Teams, "GameBlocking", Defense, PlayersOnCourt, 4);
             int p = PlayersOnCourt[Defense][PickPlayer(ratios)];
@@ -585,7 +586,7 @@ namespace NBALigaSimulation.Shared.Models
             return DoReb(Teams, PlayersOnCourt);
         }
 
-        public string DoFg(int shooter, int passer, string type, Team[] Teams, int[][] PlayersOnCourt)
+        private string DoFg(int shooter, int passer, string type, Team[] Teams, int[][] PlayersOnCourt)
         {
             int p;
 
@@ -625,14 +626,14 @@ namespace NBALigaSimulation.Shared.Models
             return "Fg";
         }
 
-        public double ProbAst(Team[] Teams)
+        private double ProbAst(Team[] Teams)
         {
             double passing = Teams[Offense].CompositeRating.Ratings["GamePassing"];
             double defense = Teams[Defense].CompositeRating.Ratings["GameDefense"];
             return 0.6 * (2 + passing / (2 + defense));
         }
 
-        public string DoFt(int shooter, int amount, Team[] Teams, int[][] PlayersOnCourt)
+        private string DoFt(int shooter, int amount, Team[] Teams, int[][] PlayersOnCourt)
         {
             DoPf(Defense, Teams, PlayersOnCourt);
             int p = PlayersOnCourt[Offense][shooter];
@@ -659,7 +660,7 @@ namespace NBALigaSimulation.Shared.Models
             return outcome;
         }
 
-        public void DoPf(int t, Team[] Teams, int[][] PlayersOnCourt)
+        private void DoPf(int t, Team[] Teams, int[][] PlayersOnCourt)
         {
 
             double[] ratios = RatingArray(Teams, "GameFouling", t, PlayersOnCourt);
@@ -675,7 +676,7 @@ namespace NBALigaSimulation.Shared.Models
             }
         }
 
-        public string DoReb(Team[] Teams, int[][] PlayersOnCourt)
+        private string DoReb(Team[] Teams, int[][] PlayersOnCourt)
         {
             if (0.15 > new Random().NextDouble())
             {
@@ -704,7 +705,7 @@ namespace NBALigaSimulation.Shared.Models
             return "Orb";
         }
 
-        public double[] RatingArray(Team[] Teams, string rating, int t, int[][] PlayersOnCourt, double power = 1)
+        private double[] RatingArray(Team[] Teams, string rating, int t, int[][] PlayersOnCourt, double power = 1)
         {
             double[] array = new double[5];
             for (int i = 0; i < 5; i++)
@@ -725,7 +726,7 @@ namespace NBALigaSimulation.Shared.Models
             return array;
         }
 
-        public int PickPlayer(double[] ratios, int exempt = -1)
+        private int PickPlayer(double[] ratios, int exempt = -1)
         {
             if (exempt >= 0)
             {
@@ -759,7 +760,7 @@ namespace NBALigaSimulation.Shared.Models
             return pick;
         }
 
-        public void RecordStat(int t, int p, string s, Team[] teams, int amount = 1, double amntDouble = 1.0)
+        private void RecordStat(int t, int p, string s, Team[] teams, int amount = 1, double amntDouble = 1.0)
         {
             amount = amount != 0 ? amount : 1;
             RecordHelper.RecordStatHelperPlayer(GameDate, t, p, s, Id, teams, Type, Season.Year, amount, amntDouble);
@@ -770,7 +771,7 @@ namespace NBALigaSimulation.Shared.Models
             }
         }
 
-        public double Fatigue(double energy)
+        private double Fatigue(double energy)
         {
             energy += 0.05;
             if (energy > 1)
