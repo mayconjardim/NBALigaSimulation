@@ -632,6 +632,33 @@ namespace NBALigaSimulation.Shared.Models
             return 0.6 * (2 + passing / (2 + defense));
         }
 
+        public string DoFt(int shooter, int amount, Team[] Teams, int[][] PlayersOnCourt)
+        {
+            DoPf(Defense, Teams, PlayersOnCourt);
+            int p = PlayersOnCourt[Offense][shooter];
+
+            var player = Teams[Offense].Players.Find(player => player.RosterOrder == p);
+
+            string outcome = string.Empty;
+            for (int i = 0; i < amount; i++)
+            {
+                RecordStat(Offense, p, "Fta", Teams);
+                if (new Random().NextDouble() < player.Ratings.LastOrDefault().GameShootingFT * 0.3 + 0.6) // Entre 60% e 90%
+                {
+                    RecordStat(Offense, p, "Ft", Teams);
+                    RecordStat(Offense, p, "Pts", Teams);
+                    outcome = "Fg";
+                }
+            }
+
+            if (outcome != "Fg")
+            {
+                outcome = DoReb(Teams, PlayersOnCourt);
+            }
+
+            return outcome;
+        }
+
     }
 
 }
