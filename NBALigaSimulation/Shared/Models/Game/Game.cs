@@ -379,7 +379,7 @@ namespace NBALigaSimulation.Shared.Models
                 return DoTov(); // TOV
             }
 
-            // Shot if there is no turnover
+            // Chutar se não houver turnover
             ratios = RatingArray(Teams, "GameUsage", Offense, PlayersOnCourt);
             shooter = ArrayHelper.PickPlayer(ratios);
 
@@ -394,6 +394,22 @@ namespace NBALigaSimulation.Shared.Models
             double passingRating = Teams[Offense].CompositeRating.Ratings["GamePassing"];
 
             return 0.15 * (1 + defenseRating / (1 + 0.5 * (dribblingRating + passingRating)));
+        }
+
+        public string DoTov(Team[] Teams, int[][] PlayersOnCourt)
+        {
+            int p;
+            double[] ratios;
+
+            ratios = RatingArray(Teams, "GameTurnovers", Offense, PlayersOnCourt, 0.5);
+            p = PlayersOnCourt[Offense][PickPlayer(ratios)];
+            RecordStat(Offense, p, "Tov", Teams);
+            if (ProbStl() > new Random().NextDouble())
+            {
+                return DoStl();
+            }
+
+            return "Tov";
         }
 
 
