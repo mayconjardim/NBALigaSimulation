@@ -659,6 +659,22 @@ namespace NBALigaSimulation.Shared.Models
             return outcome;
         }
 
+        public void DoPf(int t, Team[] Teams, int[][] PlayersOnCourt)
+        {
+
+            double[] ratios = RatingArray(Teams, "GameFouling", t, PlayersOnCourt);
+            int p = PlayersOnCourt[t][PickPlayer(ratios)];
+            RecordStat(Defense, p, "Pf", Teams);
+
+            var player = Teams[Defense].Players.Find(player => player.RosterOrder == p);
+
+            if (player.Stats.Find(s => s.GameId == Id).Pf >= 6)
+            {
+                UpdatePlayersOnCourt(Teams, PlayersOnCourt);
+                UpdateSynergy(Teams, PlayersOnCourt);
+            }
+        }
+
     }
 
 }
