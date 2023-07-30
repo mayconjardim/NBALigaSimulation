@@ -499,7 +499,7 @@ namespace NBALigaSimulation.Shared.Models
                 probMake += 0.025;
             }
 
-            if (ProbBlk() > new Random().NextDouble())
+            if (ProbBlk(Teams) > new Random().NextDouble())
             {
                 return DoBlk(shooter);  // orb or drb
             }
@@ -549,7 +549,13 @@ namespace NBALigaSimulation.Shared.Models
             return DoReb(Teams, PlayersOnCourt);
         }
 
+        public double ProbBlk(Team[] Teams)
+        {
 
+            double defenseBlocking = Teams[Defense].CompositeRating.Ratings["GameBlocking"];
 
+            return 0.1 * defenseBlocking;
+        }
     }
+
 }
