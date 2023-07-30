@@ -431,6 +431,125 @@ namespace NBALigaSimulation.Shared.Models
             return "Stl";
         }
 
+        public string DoShot(int shooter, Team[] Teams, int[][] PlayersOnCourt)
+        {
+            double fatigue, passer, probMake, probAndOne, probMissAndFoul, r1, r2, r3;
+            int p, ratios;
+            string type;
+
+            p = PlayersOnCourt[Offense][shooter];
+
+            var player = Teams[Offense].Players.Find(player => player.RosterOrder == p);
+
+            fatigue = Fatigue(Teams[Offense].Players[p].Stats.Find(s => s.GameId == Id).Energy);
+
+            // Esta é uma tentativa "assistencia" (ou seja, uma assistência será registrada se for feita)
+            passer = -1;
+            if (ProbAst() > new Random().NextDouble())
+            {
+                ratios = RatingArray(Teams, "GamePassing", Offense, PlayersOnCourt, 2);
+                passer = PickPlayer(ratios, shooter);
+            }
+
+            // Escolha o tipo de cute e armazene a taxa de sucesso (sem defesa) em probMake e a probabilidade de acerto e falta em probAndOne
+            if (player.Ratings.LastOrDefault().GameShootingThreePointer > 0.4 && new Random().NextDouble() < (0.35 * player.Ratings.LastOrDefault().GameShootingThreePointer))
+            {
+                // Three pointer
+                type = "ThreePointer";
+                probMissAndFoul = 0.02;
+                probMake = player.Ratings.LastOrDefault().GameShootingThreePointer * 0.68;
+                probAndOne = 0.01;
+            }
+            else
+            {
+                r1 = new Random().NextDouble() * player.Ratings.LastOrDefault().GameShootingMidRange;
+                r2 = new Random().NextDouble() * (player.Ratings.LastOrDefault().GameShootingAtRim + SynergyFactor * (Teams[Offense].Synergy.Off - Teams[Defense].Synergy.Def)); // A sinergia torna os chutes fáceis mais prováveis ou menos prováveis
+                r3 = new Random().NextDouble() * player.Ratings.LastOrDefault().GameShootingLowPost;
+                if (r1 > r2 && r1 > r3)
+                {
+                    // Two point jumper
+                    type = "MidRange";
+                    probMissAndFoul = 0.07;
+                    probMake = player.Ratings.LastOrDefault().GameShootingMidRange * 0.3 + 0.29;
+                    probAndOne = 0.05;
+                }
+                else if (r2 > r3)
+                {
+                    // Dunk ou Layup
+                    type = "AtRim";
+                    probMissAndFoul = 0.37;
+                    probMake = player.Ratings.LastOrDefault().GameShootingAtRim * 0.3 + 0.52;
+                    probAndOne = 0.25;
+                }
+                else
+                {
+                    // Post up
+                    type = "LowPost";
+                    probMissAndFoul = 0.33;
+                    probMake = player.Ratings.LastOrDefault().GameShootingLowPost * 0.3 + 0.37;
+                    probAndOne = 0.15;
+                }
+            }
+
+            probMake = (probMake - 0.25 * Teams[Defense].CompositeRating.Ratings["GameDefense"] + SynergyFactor * (Teams[Offense].Synergy.Off - Teams[Defense].Synergy.Def)) * fatigue;
+
+            // chutes com assistencia são mais fáceis
+            if (passer >= 0)
+            {
+                probMake += 0.025;
+            }
+
+            if (ProbBlk() > new Random().NextDouble())
+            {
+                return DoBlk(shooter);  // orb or drb
+            }
+
+            // Acerto
+            if (probMake > new Random().NextDouble())
+            {
+                // And 1
+                if (probAndOne > new Random().NextDouble())
+                {
+                    DoFg(shooter, passer, type, true, Teams, PlayersOnCourt);
+                    return DoFt(shooter, 1);  // fg, orb, or drb
+                }
+                return DoFg(shooter, passer, type, false, Teams, PlayersOnCourt);   // fg
+            }
+
+            // Errou, mas sofreu falta
+            if (probMissAndFoul > new Random().NextDouble())
+            {
+                if (type == "ThreePointer")
+                {
+                    return DoFt(shooter, 3, Teams, PlayersOnCourt);  // fg, orb, or drb
+                }
+                return DoFt(shooter, 2, Teams, PlayersOnCourt); // fg, orb, or drb
+            }
+
+            // errou
+            p = PlayersOnCourt[Offense][shooter];
+            RecordStat(Offense, p, "Fga", Teams);
+            if (type == "AtRim")
+            {
+                RecordStat(Offense, p, "FgaAtRim", Teams);
+            }
+            else if (type == "LowPost")
+            {
+                RecordStat(Offense, p, "FgaLowPost", Teams);
+            }
+            else if (type == "MidRange")
+            {
+                RecordStat(Offense, p, "FgaMidRange", Teams);
+            }
+            else if (type == "ThreePointer")
+            {
+                RecordStat(Offense, p, "Tpa", Teams);
+            }
+
+            return DoReb(Teams, PlayersOnCourt);
+        }
+
+
 
     }
 }
