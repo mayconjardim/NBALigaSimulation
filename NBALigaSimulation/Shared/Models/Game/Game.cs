@@ -367,6 +367,23 @@ namespace NBALigaSimulation.Shared.Models
             }
         }
 
+        public string SimPossession(Team[] Teams, int[][] PlayersOnCourt)
+        {
+            double[] ratios;
+            int shooter;
+
+            // Turnover?
+            if (ProbTov() > new Random().NextDouble())
+            {
+                return DoTov(); // TOV
+            }
+
+            // Shot if there is no turnover
+            ratios = RatingArray(Teams, "GameUsage", Offense, PlayersOnCourt);
+            shooter = ArrayHelper.PickPlayer(ratios);
+
+            return DoShot(shooter); // Fg, Orb ou Drb
+        }
 
 
     }
