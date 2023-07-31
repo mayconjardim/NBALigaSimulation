@@ -64,14 +64,14 @@
             <p>Age</p><span>@(season - player.Born.Year)</span>
         </MudListItem>
         <MudListItem Icon="@Icons.Material.Filled.Elevator">
-          @if (player.Draft.Pick > 0)
-          {
-            <p>Draft</p><span>@player.Draft.Year - R @player.Draft.Round (Pick @player.Draft.Pick) by @player.Draft.Team</span>
-          }
-          else
-          {
-            <p>Draft</p><span>Undrafted</span>
-          }
+        @if (player.Draft?.Team?.Length > 0 || player.Draft?.Pick > 0)
+            {
+                <p>Draft</p><span>@(player.Draft.Year) - R @(player.Draft.Round) (Pick @(player.Draft.Pick)) by @(player.Draft.Team)</span>
+            }
+            else
+            {
+                <p>Draft</p><span>Undrafted</span>
+            }
         </MudListItem>
         <MudListItem Icon="@Icons.Material.Filled.Work">
            <p>Experience</p><span>@player.Ratings.Count Year(s)</span>
