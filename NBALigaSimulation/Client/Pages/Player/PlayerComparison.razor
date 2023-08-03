@@ -1,8 +1,18 @@
-﻿@page "/player/{id:int}"
+﻿@page "/playerComparison/{id:int}"
 @inject IPlayerService PlayerService
 
 
+<MudContainer>
 @if (playerOne !=  null)
 {
-    
-}
+ 
+  
+    <div></div>
+    <p>@playerOne.Name vs </p>
+
+        @if (playerTwo != null)
+        {
+            @playerTwo.Name
+        }
+    }
+</MudContainer>

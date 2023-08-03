@@ -23,6 +23,11 @@
     private List<PlayerSimpleDto> suggestions = new List<PlayerSimpleDto>();
     protected ElementReference searchInput;
 
+    private string searchData = "Dados do Search";
+
+    [Inject]
+    private IDataService DataService { get; set; }
+
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         if (firstRender)
@@ -33,10 +38,22 @@
 
     public void NavigateToPlayer()
     {
+        if (NavigationManager.Uri.Contains("/playerComparison/"))
+        {
             if (!string.IsNullOrEmpty(searchText) && int.TryParse(searchText, out int selectedPlayerId))
             {
-                NavigationManager.NavigateTo($"player/{selectedPlayerId}", forceLoad: true); 
-                searchText = string.Empty;
+                DataService.SetData(selectedPlayerId);
+            }
+              
+            }
+            else
+            {
+              
+                if (!string.IsNullOrEmpty(searchText) && int.TryParse(searchText, out int selectedPlayerId))
+                {
+                    searchText = string.Empty;
+                    NavigationManager.NavigateTo($"/player/{selectedPlayerId}", forceLoad: true);
+                }
             }
     }
 

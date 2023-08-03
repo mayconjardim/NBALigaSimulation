@@ -2,6 +2,7 @@ global using System.Net.Http.Json;
 global using NBALigaSimulation.Shared.Models;
 global using NBALigaSimulation.Shared.Dtos;
 global using NBALigaSimulation.Client.Utilities;
+global using NBALigaSimulation.Client.Shared.Services;
 global using NBALigaSimulation.Client.Services.PlayerService;
 global using NBALigaSimulation.Client.Services.TeamService;
 global using NBALigaSimulation.Client.Services.GameService;
@@ -27,6 +28,7 @@ var builder = WebAssemblyHostBuilder.CreateDefault(args);
 builder.RootComponents.Add<App>("#app");
 builder.RootComponents.Add<HeadOutlet>("head::after");
 
+builder.Services.AddScoped<IDataService, DataService>();
 builder.Services.AddScoped<IPlayerService, PlayerService>();
 builder.Services.AddScoped<ITeamService, TeamService>();
 builder.Services.AddScoped<IGameService, GameService>();
