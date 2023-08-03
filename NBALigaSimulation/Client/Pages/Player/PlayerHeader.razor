@@ -24,7 +24,7 @@
                     {
                     <MudAvatar Style="vertical-align: middle; background: none" Size="Size.Small" Image=@($"Images/logos/{player.TeamAbrv}.svg") Square="true" />
                     }
-          @Util.Position(player.Pos)
+          @Util.Position(player.Pos) <MudIconButton Href=@("/playerComparison/" + player.Id) Style="margin-bottom: 3px; color: white" Icon="@Icons.Material.Filled.CompareArrows" Size="Size.Small" />
         </MudText>
     </CardHeaderContent>
 
