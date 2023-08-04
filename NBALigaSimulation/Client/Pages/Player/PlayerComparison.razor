@@ -1,18 +1,33 @@
 ﻿@page "/playerComparison/{id:int}"
 @inject IPlayerService PlayerService
 
-
 <MudContainer>
+<div class="players">
 @if (playerOne !=  null)
 {
+
+    <div class="players-card">
+   
+     <p>@playerOne.Name vs </p>
+      <MudProgressLinear Style="transform: scaleX(-1);" Rounded="true" Color="Color.Info" Size="Size.Medium" Value="25" Class="my-7">
+        <MudText Typo="Typo.subtitle1" Color="Color.Dark" Style="transform: scaleX(1);">
+            <span>@playerOne.Ratings.LastOrDefault()?.Ins</span>
+        </MudText>
+      </MudProgressLinear>
+
+
+    </div>
  
-  
-    <div></div>
-    <p>@playerOne.Name vs </p>
+     <MudProgressLinear  Color="Color.Info" Size="Size.Large" Value="25" Class="my-7">
+        <MudText Typo="Typo.subtitle1" Color="Color.Dark">
+            <p>65</p>
+        </MudText>
+     </MudProgressLinear>
 
         @if (playerTwo != null)
         {
             @playerTwo.Name
         }
-    }
+}
+</div>
 </MudContainer>
