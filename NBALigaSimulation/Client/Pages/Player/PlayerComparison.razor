@@ -5,29 +5,34 @@
 <div class="players">
 @if (playerOne !=  null)
 {
+    <MudGrid>
 
-    <div class="players-card">
-   
-     <p>@playerOne.Name vs </p>
-      <MudProgressLinear Style="transform: scaleX(-1);" Rounded="true" Color="Color.Info" Size="Size.Medium" Value="25" Class="my-7">
-        <MudText Typo="Typo.subtitle1" Color="Color.Dark" Style="transform: scaleX(1);">
-            <span>@playerOne.Ratings.LastOrDefault()?.Ins</span>
-        </MudText>
-      </MudProgressLinear>
+        <MudItem xs="12" sm="6">
+            <MudPaper Class="d-flex align-center justify-center mud-width-full py-8">
+             
+                 <MudProgressLinear Style="transform: scaleX(1); margin: 5px" Rounded="true" Color="Color.Info" Size="Size.Medium" Value="@playerOne.Ratings.LastOrDefault().Ovr" Class="my-7"/>
+                 <span>(@playerOne.Ratings.LastOrDefault().Ovr) OVR</span>
 
+                 <MudProgressLinear Style="transform: scaleX(1); margin: 5px" Rounded="true" Color="Color.Info" Size="Size.Medium" Value="@playerOne.Ratings.LastOrDefault().Pot" Class="my-7"/>
+                 <span>(@playerOne.Ratings.LastOrDefault().Pot) POT</span>
 
-    </div>
- 
-     <MudProgressLinear  Color="Color.Info" Size="Size.Large" Value="25" Class="my-7">
-        <MudText Typo="Typo.subtitle1" Color="Color.Dark">
-            <p>65</p>
-        </MudText>
-     </MudProgressLinear>
+            </MudPaper>
 
+         
+        </MudItem>
+    
         @if (playerTwo != null)
         {
-            @playerTwo.Name
+            <MudItem xs="12" sm="6">
+            <MudPaper Class="d-flex align-center justify-center mud-width-full py-8">
+             
+                     <MudProgressLinear Style="transform: scaleX(-1); margin: 5px" Rounded="true" Color="Color.Info" Size="Size.Medium" Value="@playerTwo.Ratings.LastOrDefault().Pot"  Class="my-7"/>
+                     <span>(@playerTwo.Ratings.LastOrDefault().Pot) OVR</span>
+            </MudPaper>
+            </MudItem>
         }
+    </MudGrid>
+
 }
 </div>
 </MudContainer>
