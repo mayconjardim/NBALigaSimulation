@@ -1,2 +1,14 @@
-﻿.progress {
+﻿.players {
+    margin: 10px;
+}
+
+.progress {
+    display: flex;
+    align-items: center;
+}
+
+span {
+    margin-left: 8px;
+    font-size: 10px;
+    font-weight: 800;
 }
