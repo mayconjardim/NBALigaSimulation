@@ -1,5 +1,6 @@
 ﻿@page "/playerComparison/{id:int}"
 @inject IPlayerService PlayerService
+@inject ILocalStorageService LocalStorage
 
 <MudContainer>
 <div class="players">
@@ -9,6 +10,18 @@
 
         <MudItem xs="12" sm="6">
             <MudPaper Class="align-center justify-center mud-width-full py-8">
+
+                    <div class="players-header">
+                         <CardHeaderAvatar>
+       
+                             <MudAvatar Style="width: 120px; height: 100px; background: none;"  Color="Color.Surface">
+                                        <img src="@playerOne.ImgUrl"/>
+                             </MudAvatar>
+                         </CardHeaderAvatar>
+
+                         <h3>@playerOne.Name | @playerOne.Pos | @(season - playerOne.Born.Year) years</h3>
+
+                    </div>
 
                     <MudList Dense="true">
                         
@@ -146,126 +159,139 @@
           <MudItem xs="12" sm="6">
             <MudPaper Class="align-center justify-center mud-width-full py-8">
 
+
+                    <div class="players-header">
+                         <CardHeaderAvatar>
+       
+                             <MudAvatar Style="width: 120px; height: 100px; background: none;"  Color="Color.Surface">
+                                        <img src="@playerTwo.ImgUrl"/>
+                             </MudAvatar>
+                         </CardHeaderAvatar>
+
+                         <h3>@playerTwo.Name | @playerTwo.Pos | @(season - playerTwo.Born.Year) years</h3>
+
+                    </div>
+
                     <MudList Dense="true">
                         
                         <MudListItem Dense="true">
                            <div class="progress">
-                                <MudProgressLinear Rounded="true" Style="transform: scaleX(-1); margin: 0; padding: 0;" Color="Color.Secondary" Size="Size.Small" Value="@playerTwo.Ratings.LastOrDefault().Ovr" />
                                 <span>(@playerTwo.Ratings.LastOrDefault().Ovr) OVR</span>
+                                <MudProgressLinear Rounded="true" Style="transform: scaleX(-1); margin: 0; padding: 0;" Color="Color.Secondary" Size="Size.Small" Value="@playerTwo.Ratings.LastOrDefault().Ovr" />
                             </div>
                         </MudListItem>
                       
                         <MudListItem Dense="true">
                             <div class="progress">
-                                <MudProgressLinear Rounded="true" Style="transform: scaleX(-1); margin: 0; padding: 0;" Color="Color.Secondary" Size="Size.Small" Value="@playerTwo.Ratings.LastOrDefault().Pot" />
                                 <span>(@playerTwo.Ratings.LastOrDefault().Pot) POT</span>
+                                <MudProgressLinear Rounded="true" Style="transform: scaleX(-1); margin: 0; padding: 0;" Color="Color.Secondary" Size="Size.Small" Value="@playerTwo.Ratings.LastOrDefault().Pot" />
                             </div>
                         </MudListItem>
 
                         <MudListItem Dense="true">
                             <div class="progress">
-                                <MudProgressLinear Rounded="true"  Style="transform: scaleX(-1); margin: 0; padding: 0;"  Color="Color.Secondary" Size="Size.Small" Value="@playerTwo.Ratings.LastOrDefault().Ins" />
                                 <span>(@playerTwo.Ratings.LastOrDefault().Ins) INS</span>
-                            </div>
-                        </MudListItem>
-                 
-                        <MudListItem Dense="true">
-                            <div class="progress">
-                                <MudProgressLinear Rounded="true"  Style="transform: scaleX(-1); margin: 0; padding: 0;"  Color="Color.Secondary" Size="Size.Small" Value="@playerTwo.Ratings.LastOrDefault().Dnk" />
-                                <span>(@playerTwo.Ratings.LastOrDefault().Dnk) DNK</span>
-                            </div>
-                        </MudListItem>
-
-                        <MudListItem Dense="true">
-                            <div class="progress">
-                                <MudProgressLinear Rounded="true"  Style="transform: scaleX(-1); margin: 0; padding: 0;"  Color="Color.Secondary" Size="Size.Small" Value="@playerTwo.Ratings.LastOrDefault().Ft" />
-                                <span>(@playerTwo.Ratings.LastOrDefault().Ft) FTS</span>
-                            </div>
-                        </MudListItem>
-
-                        <MudListItem Dense="true">
-                            <div class="progress">
                                 <MudProgressLinear Rounded="true"  Style="transform: scaleX(-1); margin: 0; padding: 0;"  Color="Color.Secondary" Size="Size.Small" Value="@playerTwo.Ratings.LastOrDefault().Ins" />
-                                <span>(@playerTwo.Ratings.LastOrDefault().Ins) 2PT</span>
-                            </div>
-                        </MudListItem>
-
-                        <MudListItem Dense="true">
-                            <div class="progress">
-                                <MudProgressLinear Rounded="true"  Style="transform: scaleX(-1); margin: 0; padding: 0;"  Color="Color.Secondary" Size="Size.Small" Value="@playerTwo.Ratings.LastOrDefault().Tp" />
-                                <span>(@playerTwo.Ratings.LastOrDefault().Tp) 3PT</span>
-                            </div>
-                        </MudListItem>
-
-                        <MudListItem Dense="true">
-                            <div class="progress">
-                                <MudProgressLinear Rounded="true"  Style="transform: scaleX(-1); margin: 0; padding: 0;"  Color="Color.Secondary" Size="Size.Small" Value="@playerTwo.Ratings.LastOrDefault().Drb" />
-                                <span>(@playerTwo.Ratings.LastOrDefault().Drb) DRL</span>
-                            </div>
-                        </MudListItem>
-
-                        <MudListItem Dense="true">
-                            <div class="progress">
-                                <MudProgressLinear Rounded="true"  Style="transform: scaleX(-1); margin: 0; padding: 0;"  Color="Color.Secondary" Size="Size.Small" Value="@playerTwo.Ratings.LastOrDefault().Pss" />
-                                <span>(@playerTwo.Ratings.LastOrDefault().Pss) PAS</span>
-                            </div>
-                        </MudListItem>
-
-
-
-                        <MudListItem Dense="true">
-                            <div class="progress">
-                                <MudProgressLinear Rounded="true"  Style="transform: scaleX(-1); margin: 0; padding: 0;"  Color="Color.Secondary" Size="Size.Small" Value="@playerTwo.Ratings.LastOrDefault().Stl" />
-                                <span>(@playerTwo.Ratings.LastOrDefault().Stl) STL</span>
-                            </div>
-                        </MudListItem>
-
-                        <MudListItem Dense="true">
-                            <div class="progress">
-                                <MudProgressLinear Rounded="true" Style="transform: scaleX(-1); margin: 0; padding: 0;"  Color="Color.Secondary" Size="Size.Small" Value="@playerTwo.Ratings.LastOrDefault().Reb" />
-                                <span>(@playerTwo.Ratings.LastOrDefault().Reb) REB</span>
                             </div>
                         </MudListItem>
                  
                         <MudListItem Dense="true">
                             <div class="progress">
-                                <MudProgressLinear Rounded="true"  Style="transform: scaleX(-1); margin: 0; padding: 0;"  Color="Color.Secondary" Size="Size.Small" Value="@playerTwo.Ratings.LastOrDefault().Blk" />
+                                <span>(@playerTwo.Ratings.LastOrDefault().Dnk) DNK</span>
+                                <MudProgressLinear Rounded="true"  Style="transform: scaleX(-1); margin: 0; padding: 0;"  Color="Color.Secondary" Size="Size.Small" Value="@playerTwo.Ratings.LastOrDefault().Dnk" />
+                            </div>
+                        </MudListItem>
+
+                        <MudListItem Dense="true">
+                            <div class="progress">
+                                <span>(@playerTwo.Ratings.LastOrDefault().Ft) FTS</span>
+                                <MudProgressLinear Rounded="true"  Style="transform: scaleX(-1); margin: 0; padding: 0;"  Color="Color.Secondary" Size="Size.Small" Value="@playerTwo.Ratings.LastOrDefault().Ft" />
+                            </div>
+                        </MudListItem>
+
+                        <MudListItem Dense="true">
+                            <div class="progress">
+                                <span>(@playerTwo.Ratings.LastOrDefault().Ins) 2PT</span>
+                                <MudProgressLinear Rounded="true"  Style="transform: scaleX(-1); margin: 0; padding: 0;"  Color="Color.Secondary" Size="Size.Small" Value="@playerTwo.Ratings.LastOrDefault().Ins" />
+                            </div>
+                        </MudListItem>
+
+                        <MudListItem Dense="true">
+                            <div class="progress">
+                                <span>(@playerTwo.Ratings.LastOrDefault().Tp) 3PT</span>
+                                <MudProgressLinear Rounded="true"  Style="transform: scaleX(-1); margin: 0; padding: 0;"  Color="Color.Secondary" Size="Size.Small" Value="@playerTwo.Ratings.LastOrDefault().Tp" />
+                            </div>
+                        </MudListItem>
+
+                        <MudListItem Dense="true">
+                            <div class="progress">
+                                <span>(@playerTwo.Ratings.LastOrDefault().Drb) DRL</span>
+                                <MudProgressLinear Rounded="true"  Style="transform: scaleX(-1); margin: 0; padding: 0;"  Color="Color.Secondary" Size="Size.Small" Value="@playerTwo.Ratings.LastOrDefault().Drb" />
+                            </div>
+                        </MudListItem>
+
+                        <MudListItem Dense="true">
+                            <div class="progress">
+                                <span>(@playerTwo.Ratings.LastOrDefault().Pss) PAS</span>
+                                <MudProgressLinear Rounded="true"  Style="transform: scaleX(-1); margin: 0; padding: 0;"  Color="Color.Secondary" Size="Size.Small" Value="@playerTwo.Ratings.LastOrDefault().Pss" />
+                            </div>
+                        </MudListItem>
+
+
+
+                        <MudListItem Dense="true">
+                            <div class="progress">
+                                <span>(@playerTwo.Ratings.LastOrDefault().Stl) STL</span>
+                                <MudProgressLinear Rounded="true"  Style="transform: scaleX(-1); margin: 0; padding: 0;"  Color="Color.Secondary" Size="Size.Small" Value="@playerTwo.Ratings.LastOrDefault().Stl" />
+                            </div>
+                        </MudListItem>
+
+                        <MudListItem Dense="true">
+                            <div class="progress">
+                                <span>(@playerTwo.Ratings.LastOrDefault().Reb) REB</span>
+                                <MudProgressLinear Rounded="true" Style="transform: scaleX(-1); margin: 0; padding: 0;"  Color="Color.Secondary" Size="Size.Small" Value="@playerTwo.Ratings.LastOrDefault().Reb" />
+                            </div>
+                        </MudListItem>
+                 
+                        <MudListItem Dense="true">
+                            <div class="progress">
                                 <span>(@playerTwo.Ratings.LastOrDefault().Blk) BLK</span>
+                                <MudProgressLinear Rounded="true"  Style="transform: scaleX(-1); margin: 0; padding: 0;"  Color="Color.Secondary" Size="Size.Small" Value="@playerTwo.Ratings.LastOrDefault().Blk" />
                             </div>
                         </MudListItem>
 
                         <MudListItem Dense="true">
                             <div class="progress">
-                                <MudProgressLinear Rounded="true"  Style="transform: scaleX(-1); margin: 0; padding: 0;"  Color="Color.Secondary" Size="Size.Small" Value="@playerTwo.Ratings.LastOrDefault().Hgt" />
                                 <span>(@playerTwo.Ratings.LastOrDefault().Hgt) HGT</span>
+                                <MudProgressLinear Rounded="true"  Style="transform: scaleX(-1); margin: 0; padding: 0;"  Color="Color.Secondary" Size="Size.Small" Value="@playerTwo.Ratings.LastOrDefault().Hgt" />
                             </div>
                         </MudListItem>
 
                         <MudListItem Dense="true">
                             <div class="progress">
-                                <MudProgressLinear Rounded="true"  Style="transform: scaleX(-1); margin: 0; padding: 0;"  Color="Color.Secondary" Size="Size.Small" Value="@playerTwo.Ratings.LastOrDefault().Str" />
                                 <span>(@playerTwo.Ratings.LastOrDefault().Str) STR</span>
+                                <MudProgressLinear Rounded="true"  Style="transform: scaleX(-1); margin: 0; padding: 0;"  Color="Color.Secondary" Size="Size.Small" Value="@playerTwo.Ratings.LastOrDefault().Str" />
                             </div>
                         </MudListItem>
 
                         <MudListItem Dense="true">
                             <div class="progress">
-                                <MudProgressLinear Rounded="true"  Style="transform: scaleX(-1); margin: 0; padding: 0;"  Color="Color.Secondary" Size="Size.Small" Value="@playerTwo.Ratings.LastOrDefault().Spd" />
                                 <span>(@playerTwo.Ratings.LastOrDefault().Spd) SPD</span>
+                                <MudProgressLinear Rounded="true"  Style="transform: scaleX(-1); margin: 0; padding: 0;"  Color="Color.Secondary" Size="Size.Small" Value="@playerTwo.Ratings.LastOrDefault().Spd" />
                             </div>
                         </MudListItem>
 
                         <MudListItem Dense="true">
                             <div class="progress">
-                                <MudProgressLinear Rounded="true"  Style="transform: scaleX(-1); margin: 0; padding: 0;"  Color="Color.Secondary" Size="Size.Small" Value="@playerTwo.Ratings.LastOrDefault().Jmp" />
                                 <span>(@playerOne.Ratings.LastOrDefault().Jmp) JMP</span>
+                                <MudProgressLinear Rounded="true"  Style="transform: scaleX(-1); margin: 0; padding: 0;"  Color="Color.Secondary" Size="Size.Small" Value="@playerTwo.Ratings.LastOrDefault().Jmp" />
                             </div>
                         </MudListItem>
 
                         <MudListItem Dense="true">
                             <div class="progress">
-                                <MudProgressLinear Rounded="true"  Style="transform: scaleX(-1); margin: 0; padding: 0;" Color="Color.Secondary" Size="Size.Small" Value="@playerTwo.Ratings.LastOrDefault().End" />
                                 <span>(@playerTwo.Ratings.LastOrDefault().End) END</span>
+                                <MudProgressLinear Rounded="true"  Style="transform: scaleX(-1); margin: 0; padding: 0;" Color="Color.Secondary" Size="Size.Small" Value="@playerTwo.Ratings.LastOrDefault().End" />
                             </div>
                         </MudListItem>
 

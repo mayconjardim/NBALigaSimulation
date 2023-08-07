@@ -9,6 +9,7 @@ namespace NBALigaSimulation.Client.Pages.Player
         private PlayerCompleteDto? playerTwo = null;
         private int playerTwoId;
         private string message = string.Empty;
+        private int season;
         private string searchText = string.Empty;
         private List<PlayerSimpleDto> suggestions = new List<PlayerSimpleDto>();
         protected ElementReference searchInput;
@@ -24,6 +25,7 @@ namespace NBALigaSimulation.Client.Pages.Player
             message = "Carregando Jogador...";
 
             var result = await PlayerService.GetPlayerById(Id);
+            season = int.Parse(await LocalStorage.GetItemAsync<string>("season"));
             if (!result.Success)
             {
                 message = result.Message;

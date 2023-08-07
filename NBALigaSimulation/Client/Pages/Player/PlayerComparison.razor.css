@@ -12,3 +12,19 @@ span {
     font-size: 10px;
     font-weight: 800;
 }
+
+img {
+    width: 95%;
+    height: 95%;
+}
+
+.players-header {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+    .players-header h3 {
+        text-align: center;
+    }
