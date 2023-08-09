@@ -25,7 +25,10 @@
                             <p>@Util.Position(player.Pos)</p> 
                             <p>@player.Ratings.Count Season</p> 
                             <p>@Util.InchesToCm(player.Hgt)cm, @Util.LbsToKg(player.Weight)kg, @(season - player.Born.Year) years</p> 
-                            <p>$ @player.Contract.Amount.ToString("N0")</p> 
+                             @if (player.Contract != null)
+                            {
+                              <p>$ @player.Contract.Amount.ToString("N0")</p> 
+                            }
                             @if (player.RegularStats.Count > 0)
                             {
                             <p>@player.RegularStats.Last().PtsPG PPG - @player.RegularStats.Last().TRebPG RPG - @player.RegularStats.Last().AstPG APG</p> 
