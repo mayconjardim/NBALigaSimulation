@@ -11,6 +11,8 @@ namespace NBALigaSimulation.Client.Pages.User
         private TeamGameplanDto? teamGameplan = null;
 
         private string message = string.Empty;
+        private int season;
+
 
         protected override async Task OnInitializedAsync()
         {
@@ -26,6 +28,7 @@ namespace NBALigaSimulation.Client.Pages.User
             {
                 team = result.Data;
                 teamGameplan = team.Gameplan;
+                season = int.Parse(await LocalStorage.GetItemAsync<string>("season"));
                 await LocalStorage.SetItemAsync("team", result.Data.Abrv);
                 await LocalStorage.SetItemAsync("teamId", result.Data.Id);
 
