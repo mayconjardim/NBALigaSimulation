@@ -188,7 +188,6 @@ namespace NBALigaSimulation.Shared.Models
                             string playersPos2 = teams[t].Players.Find(player => player.RosterOrder == b).Pos;
 
                             pos.Add(playersPos2);
-                            // Require 2 Gs (or 1 PG) and 2 Fs (or 1 C)
                             int numG = 0, numPG = 0, numF = 0, numC = 0;
                             foreach (string position in pos)
                             {
@@ -503,12 +502,12 @@ namespace NBALigaSimulation.Shared.Models
             }
 
             // Escolha o tipo de cute e armazene a taxa de sucesso (sem defesa) em probMake e a probabilidade de acerto e falta em probAndOne
-            if (player.Ratings.LastOrDefault().GameShootingThreePointer > 0.4 && new Random().NextDouble() < (0.35 * player.Ratings.LastOrDefault().GameShootingThreePointer))
+            if (player.Ratings.LastOrDefault().GameShootingThreePointer > 0.5 && new Random().NextDouble() < (0.35 * player.Ratings.LastOrDefault().GameShootingThreePointer))
             {
                 // Three pointer
                 type = "ThreePointer";
                 probMissAndFoul = 0.02;
-                probMake = player.Ratings.LastOrDefault().GameShootingThreePointer * 0.68;
+                probMake = player.Ratings.LastOrDefault().GameShootingThreePointer * 0.35 + 0.24;
                 probAndOne = 0.01;
             }
             else
