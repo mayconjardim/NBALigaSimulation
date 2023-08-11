@@ -442,7 +442,7 @@ namespace NBALigaSimulation.Shared.Models
             double dribblingRating = Teams[Offense].CompositeRating.Ratings["GameDribbling"];
             double passingRating = Teams[Offense].CompositeRating.Ratings["GamePassing"];
 
-            return 0.15 * (1 + defenseRating / (1 + 0.5 * (dribblingRating + passingRating)));
+            return 0.13 * (1 + defenseRating / (1 + 0.5 * (dribblingRating + passingRating)));
         }
 
         private string DoTov(Team[] Teams, int[][] PlayersOnCourt)
