@@ -62,16 +62,6 @@ namespace NBALigaSimulation.Shared.Models
             UpdatePlayersOnCourt(Teams, PlayersOnCourt);
             UpdateSynergy(Teams, PlayersOnCourt);
 
-
-            foreach (var team in Teams)
-            {
-                foreach (var player in team.Players)
-                {
-                    Console.WriteLine(player.Name + " - " + player.CompositeRating.Ratings["Endurance"]);
-                }
-            }
-
-
             SimPossessions(Teams, PlayersOnCourt);
 
 
@@ -347,7 +337,7 @@ namespace NBALigaSimulation.Shared.Models
                 {
 
                     int playerRosterOrder = playersOnCourt[i][j];
-                    var playerRatings = teams[i].Players.Find(player => player.RosterOrder == playerRosterOrder).Ratings.LastOrDefault();
+                    var playerRatings = teams[i].Players.Find(player => player.RosterOrder == playerRosterOrder).CompositeRating;
                     double ratingValue = 0;
                     string rats = string.Empty;
 
@@ -357,27 +347,27 @@ namespace NBALigaSimulation.Shared.Models
 
                         if (rating == "GameDribbling")
                         {
-                            ratingValue = playerRatings.GameDribbling;
+                            ratingValue = playerRatings.Ratings["Dribbling"];
                         }
                         else if (rating == "GamePassing")
                         {
-                            ratingValue = playerRatings.GamePassing;
+                            ratingValue = playerRatings.Ratings["Passing"];
                         }
                         else if (rating == "GameRebounding")
                         {
-                            ratingValue = playerRatings.GameRebounding;
+                            ratingValue = playerRatings.Ratings["Rebounding"];
                         }
                         else if (rating == "GameDefense")
                         {
-                            ratingValue = playerRatings.GameDefense;
+                            ratingValue = playerRatings.Ratings["Defense"];
                         }
                         else if (rating == "GameDefensePerimeter")
                         {
-                            ratingValue = playerRatings.GameDefensePerimeter;
+                            ratingValue = playerRatings.Ratings["DefensePerimeter"];
                         }
                         else if (rating == "GameBlocking")
                         {
-                            ratingValue = playerRatings.GameBlocking;
+                            ratingValue = playerRatings.Ratings["Blocking"];
                         }
 
                         teams[i].CompositeRating.Ratings[rating] += ratingValue * Fatigue(teams[i].Players.Find(player => player.RosterOrder == playerRosterOrder).Stats.Find(s => s.GameId == Id).Energy);
