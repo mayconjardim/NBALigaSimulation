@@ -34,7 +34,7 @@ namespace NBALigaSimulation.Shared.Models
         [NotMapped]
         int Overtimes = 0; // Números de overtimes 
         [NotMapped]
-        double SynergyFactor = 0.1; // Qual a importância da sinergia?
+        double SynergyFactor = 0.05; // Qual a importância da sinergia?
         [NotMapped]
         int Offense; // Time que está atacando
         [NotMapped]
@@ -61,6 +61,8 @@ namespace NBALigaSimulation.Shared.Models
 
             UpdatePlayersOnCourt(Teams, PlayersOnCourt);
             UpdateSynergy(Teams, PlayersOnCourt);
+            HomeCourtAdvantage(Teams, PlayersOnCourt);
+
 
             SimPossessions(Teams, PlayersOnCourt);
 
@@ -80,6 +82,31 @@ namespace NBALigaSimulation.Shared.Models
             }
 
         }
+
+        private void HomeCourtAdvantage(Team[] Teams, int[][] PlayersOnCourt)
+        {
+            double factor;
+            for (int t = 0; t < 2; t++)
+            {
+                if (t == 0)
+                {
+                    factor = 1.025;  // Bonus pro time da casa
+                }
+                else
+                {
+                    factor = 0.975;  // Penalty pro time de fora
+                }
+
+                for (int p = 0; p < Teams[t].Players.Count; p++)
+                {
+                    foreach (string r in Teams[t].Players[p].CompositeRating.Ratings.Keys.ToList())
+                    {
+                        Teams[t].Players[p].CompositeRating.Ratings[r] *= factor;
+                    }
+                }
+            }
+        }
+
 
         private void SimPossessions(Team[] Teams, int[][] PlayersOnCourt)
         {
