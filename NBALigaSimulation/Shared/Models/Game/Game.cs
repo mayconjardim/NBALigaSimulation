@@ -385,7 +385,7 @@ namespace NBALigaSimulation.Shared.Models
                         RecordStat(t, p, "Min", Teams, 1, Dt);
                         RecordStat(t, p, "CourtTime", Teams, 1, Dt);
                         // Isso costumava ser 0,04. Aumente mais para diminuir o PT
-                        RecordStat(t, p, "Energy", Teams, 1, (-Dt * 0.06 * (1 - Teams[t].Players[p].Ratings.Last().GameEndurance)));
+                        RecordStat(t, p, "Energy", Teams, 1, (-Dt * 0.06 * (1 - Teams[t].Players[p].CompositeRating.Ratings["Endurance"])));
                         if (Teams[t].Players[p].Stats.Find(s => s.GameId == Id)?.Energy < 0)
                         {
                             Teams[t].Players[p].Stats.Find(s => s.GameId == Id).Energy = 0;
@@ -489,25 +489,25 @@ namespace NBALigaSimulation.Shared.Models
             }
 
             // Escolha o tipo de cute e armazene a taxa de sucesso (sem defesa) em probMake e a probabilidade de acerto e falta em probAndOne
-            if (player.Ratings.LastOrDefault().GameShootingThreePointer > 0.5 && new Random().NextDouble() < (0.35 * player.Ratings.LastOrDefault().GameShootingThreePointer))
+            if (player.CompositeRating.Ratings["ShootingThreePointer"] > 0.5 && new Random().NextDouble() < (0.35 * player.CompositeRating.Ratings["ShootingThreePointer"]))
             {
                 // Three pointer
                 type = "ThreePointer";
                 probMissAndFoul = 0.02;
-                probMake = player.Ratings.LastOrDefault().GameShootingThreePointer * 0.35 + 0.24;
+                probMake = player.CompositeRating.Ratings["ShootingThreePointer"] * 0.35 + 0.24;
                 probAndOne = 0.01;
             }
             else
             {
-                r1 = new Random().NextDouble() * player.Ratings.LastOrDefault().GameShootingMidRange;
-                r2 = new Random().NextDouble() * (player.Ratings.LastOrDefault().GameShootingAtRim + SynergyFactor * (Teams[Offense].Synergy.Off - Teams[Defense].Synergy.Def)); // A sinergia torna os chutes fáceis mais prováveis ou menos prováveis
-                r3 = new Random().NextDouble() * player.Ratings.LastOrDefault().GameShootingLowPost;
+                r1 = new Random().NextDouble() * player.CompositeRating.Ratings["ShootingMidRange"];
+                r2 = new Random().NextDouble() * (player.CompositeRating.Ratings["ShootingAtRim"] + SynergyFactor * (Teams[Offense].Synergy.Off - Teams[Defense].Synergy.Def)); // A sinergia torna os chutes fáceis mais prováveis ou menos prováveis
+                r3 = new Random().NextDouble() * player.CompositeRating.Ratings["ShootingLowPost"];
                 if (r1 > r2 && r1 > r3)
                 {
                     // Two point jumper
                     type = "MidRange";
                     probMissAndFoul = 0.07;
-                    probMake = player.Ratings.LastOrDefault().GameShootingMidRange * 0.3 + 0.29;
+                    probMake = player.CompositeRating.Ratings["ShootingMidRange"] * 0.3 + 0.29;
                     probAndOne = 0.05;
                 }
                 else if (r2 > r3)
@@ -515,7 +515,7 @@ namespace NBALigaSimulation.Shared.Models
                     // Dunk ou Layup
                     type = "AtRim";
                     probMissAndFoul = 0.37;
-                    probMake = player.Ratings.LastOrDefault().GameShootingAtRim * 0.3 + 0.52;
+                    probMake = player.CompositeRating.Ratings["ShootingAtRim"] * 0.3 + 0.52;
                     probAndOne = 0.25;
                 }
                 else
@@ -523,7 +523,7 @@ namespace NBALigaSimulation.Shared.Models
                     // Post up
                     type = "LowPost";
                     probMissAndFoul = 0.33;
-                    probMake = player.Ratings.LastOrDefault().GameShootingLowPost * 0.3 + 0.37;
+                    probMake = player.CompositeRating.Ratings["ShootingLowPost"] * 0.3 + 0.37;
                     probAndOne = 0.15;
                 }
             }
@@ -680,7 +680,7 @@ namespace NBALigaSimulation.Shared.Models
             for (int i = 0; i < amount; i++)
             {
                 RecordStat(Offense, p, "Fta", Teams);
-                if (new Random().NextDouble() < player.Ratings.LastOrDefault().GameShootingFT * 0.3 + 0.6) // Entre 60% e 90%
+                if (new Random().NextDouble() < player.CompositeRating.Ratings["ShootingFT"] * 0.3 + 0.6) // Entre 60% e 90%
                 {
                     RecordStat(Offense, p, "Ft", Teams);
                     RecordStat(Offense, p, "Pts", Teams);
