@@ -1,5 +1,4 @@
 ﻿using NBALigaSimulation.Shared.Models;
-using System.Net;
 
 namespace NBALigaSimulation.Shared.Engine
 {
@@ -20,6 +19,7 @@ namespace NBALigaSimulation.Shared.Engine
                         player.CompositeRating = new PlayerCompositeRating();
                     }
 
+                    //Pace
                     player.CompositeRating.Ratings["Pace"] = 0;
                     Dictionary<string, double> pace = new Dictionary<string, double>();
                     pace.Add("spd", player.Ratings.LastOrDefault().Spd);
@@ -31,6 +31,23 @@ namespace NBALigaSimulation.Shared.Engine
                     pace.Add("pss", player.Ratings.LastOrDefault().Pss);
                     List<string> paceAttributes = new List<string> { "spd", "jmp", "dnk", "tp", "stl", "drb", "pss" };
                     player.CompositeRating.Ratings["Pace"] = Converter.Composite(pace, paceAttributes);
+
+                    //Usage
+                    player.CompositeRating.Ratings["Usage"] = 0;
+                    Dictionary<string, double> usage = new Dictionary<string, double>();
+                    usage.Add("ins", player.Ratings.LastOrDefault().Ins);
+                    usage.Add("dnk", player.Ratings.LastOrDefault().Dnk);
+                    usage.Add("fg", player.Ratings.LastOrDefault().Fg);
+                    usage.Add("tp", player.Ratings.LastOrDefault().Tp);
+                    usage.Add("spd", player.Ratings.LastOrDefault().Spd);
+                    usage.Add("drb", player.Ratings.LastOrDefault().Drb);
+
+                    List<string> usageAttributes = new List<string> { "ins", "dnk", "fg", "tp", "spd", "drb" };
+                    // List<double> usageWeights = new List<double> { 1.5, 1, 1, 1, 0.15, 0.15 };
+                    player.CompositeRating.Ratings["Usage"] = Converter.Composite(usage, usageAttributes);
+
+
+
 
                 }
 
