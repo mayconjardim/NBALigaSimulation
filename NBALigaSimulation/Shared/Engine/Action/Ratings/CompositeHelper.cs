@@ -51,8 +51,14 @@ namespace NBALigaSimulation.Shared.Engine
                     List<string> dribblingAttributes = new List<string> { "drb", "spd" };
                     player.CompositeRating.Ratings["Dribbling"] = Converter.Composite(usage, usageAttributes);
 
-
-
+                    //Passing
+                    player.CompositeRating.Ratings["Passing"] = 0;
+                    Dictionary<string, double> passing = new Dictionary<string, double>();
+                    passing.Add("drb", player.Ratings.LastOrDefault().Drb);
+                    passing.Add("pss", player.Ratings.LastOrDefault().Pss);
+                    List<string> passingAttributes = new List<string> { "drb", "pss" };
+                    List<double> passingWeights = new List<double> { 0.4, 1 };
+                    player.CompositeRating.Ratings["Passing"] = Converter.Composite(passing, passingAttributes, passingWeights);
                 }
 
             }
