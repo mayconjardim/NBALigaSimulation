@@ -228,7 +228,7 @@ namespace NBALigaSimulation.Shared.Engine
                 {
 
                     int playerRosterOrder = playersOnCourt[i][j];
-                    var playerRatings = teams[i].Players.Find(player => player.RosterOrder == playerRosterOrder).Ratings.LastOrDefault();
+                    var playerRatings = teams[i].Players.Find(player => player.RosterOrder == playerRosterOrder);
                     double ratingValue = 0;
 
                     foreach (string rating in toUpdate)
@@ -237,27 +237,27 @@ namespace NBALigaSimulation.Shared.Engine
 
                         if (rating == "GameDribbling")
                         {
-                            ratingValue = playerRatings.GameDribbling;
+                            ratingValue = playerRatings.CompositeRating.Ratings["Dribbling"];
                         }
                         else if (rating == "GamePassing")
                         {
-                            ratingValue = playerRatings.GamePassing;
+                            ratingValue = playerRatings.CompositeRating.Ratings["Passing"];
                         }
                         else if (rating == "GameRebounding")
                         {
-                            ratingValue = playerRatings.GameRebounding;
+                            ratingValue = playerRatings.CompositeRating.Ratings["Rebounding"];
                         }
                         else if (rating == "GameDefense")
                         {
-                            ratingValue = playerRatings.GameDefense;
+                            ratingValue = playerRatings.CompositeRating.Ratings["Defense"];
                         }
                         else if (rating == "GameDefensePerimeter")
                         {
-                            ratingValue = playerRatings.GameDefensePerimeter;
+                            ratingValue = playerRatings.CompositeRating.Ratings["DefensePerimeter"];
                         }
                         else if (rating == "GameBlocking")
                         {
-                            ratingValue = playerRatings.GameBlocking;
+                            ratingValue = playerRatings.CompositeRating.Ratings["Blocking"];
                         }
 
                         teams[i].CompositeRating.Ratings[rating] += ratingValue;
@@ -293,7 +293,7 @@ namespace NBALigaSimulation.Shared.Engine
 
                 for (int i = 0; i < numPlayers; i++)
                 {
-                    teams[t].CompositeRating.Ratings["GamePace"] += teams[t].Players.Find(p => p.RosterOrder == i).Ratings.Last().GamePace;
+                    teams[t].CompositeRating.Ratings["GamePace"] += teams[t].Players.Find(p => p.RosterOrder == i).CompositeRating.Ratings["Pace"];
                 }
 
                 teams[t].CompositeRating.Ratings["GamePace"] /= numPlayers;
@@ -301,65 +301,65 @@ namespace NBALigaSimulation.Shared.Engine
             }
         }
 
-        public static double GetRatingValue(string ratingName, PlayerRatings playerRatings)
+        public static double GetRatingValue(string ratingName, Player playerRatings)
         {
             double ratingValue = 0;
 
             switch (ratingName)
             {
                 case "GameEndurance":
-                    ratingValue = playerRatings.GameEndurance;
+                    ratingValue = playerRatings.CompositeRating.Ratings["Endurance"];
                     break;
                 case "GameDefensePerimeter":
-                    ratingValue = playerRatings.GameDefensePerimeter;
+                    ratingValue = playerRatings.CompositeRating.Ratings["DefensePerimeter"];
                     break;
                 case "GameDefenseInterior":
-                    ratingValue = playerRatings.GameDefenseInterior;
+                    ratingValue = playerRatings.CompositeRating.Ratings["DefenseInterior"];
                     break;
                 case "GameDefense":
-                    ratingValue = playerRatings.GameDefense;
+                    ratingValue = playerRatings.CompositeRating.Ratings["Defense"];
                     break;
                 case "GameFouling":
-                    ratingValue = playerRatings.GameFouling;
+                    ratingValue = playerRatings.CompositeRating.Ratings["Fouling"];
                     break;
                 case "GameBlocking":
-                    ratingValue = playerRatings.GameBlocking;
+                    ratingValue = playerRatings.CompositeRating.Ratings["Blocking"];
                     break;
                 case "GameStealing":
-                    ratingValue = playerRatings.GameStealing;
+                    ratingValue = playerRatings.CompositeRating.Ratings["Stealing"];
                     break;
                 case "GameRebounding":
-                    ratingValue = playerRatings.GameRebounding;
+                    ratingValue = playerRatings.CompositeRating.Ratings["Rebounding"];
                     break;
                 case "GameShootingFT":
-                    ratingValue = playerRatings.GameShootingFT;
+                    ratingValue = playerRatings.CompositeRating.Ratings["ShootingFT"];
                     break;
                 case "GameShootingThreePointer":
-                    ratingValue = playerRatings.GameShootingThreePointer;
+                    ratingValue = playerRatings.CompositeRating.Ratings["ShootingThreePointer"];
                     break;
                 case "GameShootingMidRange":
-                    ratingValue = playerRatings.GameShootingMidRange;
+                    ratingValue = playerRatings.CompositeRating.Ratings["ShootingMidRange"];
                     break;
                 case "GameShootingLowPost":
-                    ratingValue = playerRatings.GameShootingLowPost;
+                    ratingValue = playerRatings.CompositeRating.Ratings["ShootingLowPost"];
                     break;
                 case "GameShootingAtRim":
-                    ratingValue = playerRatings.GameShootingAtRim;
+                    ratingValue = playerRatings.CompositeRating.Ratings["ShootingAtRim"];
                     break;
                 case "GameTurnovers":
-                    ratingValue = playerRatings.GameTurnovers;
+                    ratingValue = playerRatings.CompositeRating.Ratings["Turnovers"];
                     break;
                 case "GamePassing":
-                    ratingValue = playerRatings.GamePassing;
+                    ratingValue = playerRatings.CompositeRating.Ratings["Passing"];
                     break;
                 case "GameDribbling":
-                    ratingValue = playerRatings.GameDribbling;
+                    ratingValue = playerRatings.CompositeRating.Ratings["Dribbling"];
                     break;
                 case "GameUsage":
-                    ratingValue = playerRatings.GameUsage;
+                    ratingValue = playerRatings.CompositeRating.Ratings["Usage"];
                     break;
                 case "GamePace":
-                    ratingValue = playerRatings.GamePace;
+                    ratingValue = playerRatings.CompositeRating.Ratings["Pace"];
                     break;
                 default:
                     break;
