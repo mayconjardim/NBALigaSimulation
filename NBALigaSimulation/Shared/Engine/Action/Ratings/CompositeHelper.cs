@@ -162,15 +162,27 @@ namespace NBALigaSimulation.Shared.Engine
                     //Defense
                     player.CompositeRating.Ratings["Defense"] = 0;
                     Dictionary<string, double> defense = new Dictionary<string, double>();
-                    defense.Add("hgt", Hgt);
-                    defense.Add("stre", Str);
-                    defense.Add("spd", Spd);
-                    defense.Add("jmp", Jmp);
-                    defense.Add("blk", Blk);
-                    defense.Add("stl", Stl);
+                    defense.Add("hgt", player.Ratings.LastOrDefault().Hgt);
+                    defense.Add("stre", player.Ratings.LastOrDefault().Str);
+                    defense.Add("spd", player.Ratings.LastOrDefault().Spd);
+                    defense.Add("jmp", player.Ratings.LastOrDefault().Jmp);
+                    defense.Add("blk", player.Ratings.LastOrDefault().Blk);
+                    defense.Add("stl", player.Ratings.LastOrDefault().Stl);
                     List<string> defenseAttributes = new List<string> { "hgt", "stre", "spd", "jmp", "blk", "stl" };
                     List<double> defenseWeights = new List<double> { 1, 1, 1, 0.5, 1, 1 };
-                    player.CompositeRating.Ratings["Defense"] = Converter.Composite(rating, attributes, weights);
+                    player.CompositeRating.Ratings["Defense"] = Converter.Composite(defense, defenseAttributes, defenseWeights);
+
+                    //DefenseInterior
+                    player.CompositeRating.Ratings["DefenseInterior"] = 0;
+                    Dictionary<string, double> defenseInterior = new Dictionary<string, double>();
+                    defenseInterior.Add("hgt", player.Ratings.LastOrDefault().Hgt);
+                    defenseInterior.Add("stre", player.Ratings.LastOrDefault().Str);
+                    defenseInterior.Add("spd", player.Ratings.LastOrDefault().Spd);
+                    defenseInterior.Add("jmp", player.Ratings.LastOrDefault().Jmp);
+                    defenseInterior.Add("blk", player.Ratings.LastOrDefault().Blk);
+                    List<string> defenseInteriorAttributes = new List<string> { "hgt", "stre", "spd", "jmp", "blk" };
+                    List<double> defenseInteriorWeights = new List<double> { 2, 1, 0.5, 0.5, 1};
+                    player.CompositeRating.Ratings["DefenseInterior"] = Converter.Composite(defenseInterior, defenseInteriorAttributes, defenseInteriorWeights);
 
                 }
 
