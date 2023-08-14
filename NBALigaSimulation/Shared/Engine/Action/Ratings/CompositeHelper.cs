@@ -1,4 +1,5 @@
 ﻿using NBALigaSimulation.Shared.Models;
+using System.Reflection;
 
 namespace NBALigaSimulation.Shared.Engine
 {
@@ -39,13 +40,16 @@ namespace NBALigaSimulation.Shared.Engine
                     usage.Add("dnk", player.Ratings.LastOrDefault().Dnk);
                     usage.Add("fg", player.Ratings.LastOrDefault().Fg);
                     usage.Add("tp", player.Ratings.LastOrDefault().Tp);
-                    usage.Add("spd", player.Ratings.LastOrDefault().Spd);
-                    usage.Add("drb", player.Ratings.LastOrDefault().Drb);
-
-                    List<string> usageAttributes = new List<string> { "ins", "dnk", "fg", "tp", "spd", "drb" };
-                    // List<double> usageWeights = new List<double> { 1.5, 1, 1, 1, 0.15, 0.15 };
+                    List<string> usageAttributes = new List<string> { "ins", "dnk", "fg", "tp" };
                     player.CompositeRating.Ratings["Usage"] = Converter.Composite(usage, usageAttributes);
 
+                    //Dribbling
+                    player.CompositeRating.Ratings["Dribbling"] = 0;
+                    Dictionary<string, double> dribbling = new Dictionary<string, double>();
+                    dribbling.Add("drb", player.Ratings.LastOrDefault().Drb);
+                    dribbling.Add("spd", player.Ratings.LastOrDefault().Spd);
+                    List<string> dribblingAttributes = new List<string> { "drb", "spd" };
+                    player.CompositeRating.Ratings["Dribbling"] = Converter.Composite(usage, usageAttributes);
 
 
 
