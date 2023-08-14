@@ -755,7 +755,7 @@ namespace NBALigaSimulation.Shared.Models
                 if (player != null && player.Ratings?.LastOrDefault() != null)
                 {
                     var playerRatings = player.Ratings.LastOrDefault();
-                    array[i] = Math.Pow(CompositeHelper.GetRatingValue(rating, playerRatings) * energy, power);
+                    array[i] = Math.Pow(CompositeHelper.GetRatingValue(rating, player) * energy, power);
                 }
             }
 
