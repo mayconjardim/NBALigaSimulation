@@ -1,4 +1,5 @@
 ﻿using NBALigaSimulation.Shared.Models;
+using System.Net;
 using System.Reflection;
 
 namespace NBALigaSimulation.Shared.Engine
@@ -59,6 +60,30 @@ namespace NBALigaSimulation.Shared.Engine
                     List<string> passingAttributes = new List<string> { "drb", "pss" };
                     List<double> passingWeights = new List<double> { 0.4, 1 };
                     player.CompositeRating.Ratings["Passing"] = Converter.Composite(passing, passingAttributes, passingWeights);
+
+                    //Turnovers
+                    player.CompositeRating.Ratings["Turnovers"] = 0;
+                    Dictionary<string, double> turnovers = new Dictionary<string, double>();
+                    turnovers.Add("drb", player.Ratings.LastOrDefault().Drb);
+                    turnovers.Add("pss", player.Ratings.LastOrDefault().Pss);
+                    turnovers.Add("spd", player.Ratings.LastOrDefault().Spd);
+                    turnovers.Add("hgt", player.Ratings.LastOrDefault().Hgt);
+                    turnovers.Add("ins", player.Ratings.LastOrDefault().Ins);
+                    List<string> turnoversAttributes = new List<string> { "drb", "pss", "spd", "hgt", "ins" };
+                    List<double> turnoversWeights = new List<double> { 1, 1, -1, 1, 1 };
+                    player.CompositeRating.Ratings["Turnovers"] = Converter.Composite(turnovers, turnoversAttributes, turnoversWeights);
+
+                    //ShootingAtRim
+                    player.CompositeRating.Ratings["ShootingAtRim"] = 0;
+                    Dictionary<string, double> shootingAtRim = new Dictionary<string, double>();
+                    shootingAtRim.Add("hgt", player.Ratings.LastOrDefault().Hgt);
+                    shootingAtRim.Add("spd", player.Ratings.LastOrDefault().Spd);
+                    shootingAtRim.Add("jmp", player.Ratings.LastOrDefault().Jmp);
+                    shootingAtRim.Add("dnk", player.Ratings.LastOrDefault().Dnk);
+                    List<string> shootingAtRimAttributes = new List<string> { "hgt", "spd", "jmp", "dnk" };
+                    List<double> shootingAtRimWeights = new List<double> { 1, 0.2, 0.6, 0.4 };
+                    player.CompositeRating.Ratings["ShootingAtRim"] = Converter.Composite(shootingAtRim, shootingAtRimAttributes, shootingAtRimWeights);
+
                 }
 
             }
