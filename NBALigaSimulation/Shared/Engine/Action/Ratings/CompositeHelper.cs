@@ -205,7 +205,6 @@ namespace NBALigaSimulation.Shared.Engine
                     List<double> enduranceWeights = new List<double> { 1, 1, -0.1 };
                     player.CompositeRating.Ratings["Endurance"] = Converter.Composite(endurance, enduranceAttributes, enduranceWeights);
 
-
                 }
 
             }
