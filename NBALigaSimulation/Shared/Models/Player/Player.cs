@@ -1,4 +1,5 @@
 ﻿using NBALigaSimulation.Shared.Engine;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace NBALigaSimulation.Shared.Models
 {
@@ -24,6 +25,8 @@ namespace NBALigaSimulation.Shared.Models
         public List<PlayerPlayoffsStats> PlayoffsStats { get; set; } = new List<PlayerPlayoffsStats>();
         public List<PlayerAwards> PlayerAwards { get; set; } = new List<PlayerAwards>();
 
+        [NotMapped]
+        public PlayerCompositeRating CompositeRating { get; set; }
 
         private static Random random = new Random();
 

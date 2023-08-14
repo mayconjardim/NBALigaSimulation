@@ -1,10 +1,42 @@
 ﻿using NBALigaSimulation.Shared.Models;
+using System.Net;
 
 namespace NBALigaSimulation.Shared.Engine
 {
     public static class CompositeHelper
     {
 
+        public static void UpdatePlayersCompositeRating(Team[] teams)
+        {
+
+            foreach (var team in teams)
+            {
+
+                foreach (var player in team.Players)
+                {
+
+                    if (player.CompositeRating == null)
+                    {
+                        player.CompositeRating = new PlayerCompositeRating();
+                    }
+
+                    player.CompositeRating.Ratings["Pace"] = 0;
+                    Dictionary<string, double> pace = new Dictionary<string, double>();
+                    pace.Add("spd", player.Ratings.LastOrDefault().Spd);
+                    pace.Add("jmp", player.Ratings.LastOrDefault().Jmp);
+                    pace.Add("dnk", player.Ratings.LastOrDefault().Dnk);
+                    pace.Add("tp", player.Ratings.LastOrDefault().Tp);
+                    pace.Add("stl", player.Ratings.LastOrDefault().Stl);
+                    pace.Add("drb", player.Ratings.LastOrDefault().Reb);
+                    pace.Add("pss", player.Ratings.LastOrDefault().Pss);
+                    List<string> paceAttributes = new List<string> { "spd", "jmp", "dnk", "tp", "stl", "drb", "pss" };
+                    player.CompositeRating.Ratings["Pace"] = Converter.Composite(pace, paceAttributes);
+
+                }
+
+            }
+
+        }
 
 
         public static void UpdateCompositeRating(Team[] teams, int[][] playersOnCourt)

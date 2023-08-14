@@ -50,6 +50,7 @@ namespace NBALigaSimulation.Shared.Models
         {
 
             Team[] Teams = { HomeTeam, AwayTeam };
+            CompositeHelper.UpdatePlayersCompositeRating(Teams);
             CompositeHelper.UpdatePace(Teams);
 
             NumPossessions = (int)Math.Round(Teams[0].CompositeRating.Ratings["GamePace"] + Teams[1].CompositeRating.Ratings["GamePace"] / 2 * RandomUtils.RandomUniform(0.9, 1.1));
@@ -61,7 +62,18 @@ namespace NBALigaSimulation.Shared.Models
             UpdatePlayersOnCourt(Teams, PlayersOnCourt);
             UpdateSynergy(Teams, PlayersOnCourt);
 
+
+            foreach (var team in Teams)
+            {
+                foreach (var player in team.Players)
+                {
+                    Console.WriteLine(player.Name + " - " + player.CompositeRating.Ratings["Pace"]);
+                }
+            }
+
+
             SimPossessions(Teams, PlayersOnCourt);
+
 
             // Jogue períodos de prorrogação se necessário
             while (Teams[0].Stats.Find(s => s.GameId == Id)?.Pts == Teams[1].Stats.Find(s => s.GameId == Id)?.Pts)
