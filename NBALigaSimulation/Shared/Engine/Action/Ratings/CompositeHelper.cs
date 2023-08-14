@@ -149,6 +149,28 @@ namespace NBALigaSimulation.Shared.Engine
                     List<double> blockingWeights = new List<double> { 1.5, 0.5, 0.5 };
                     player.CompositeRating.Ratings["Blocking"] = Converter.Composite(blocking, blockingAttributes, blockingWeights);
 
+                    //Fouling
+                    player.CompositeRating.Ratings["Fouling"] = 0;
+                    Dictionary<string, double> fouling = new Dictionary<string, double>();
+                    fouling.Add("hgt", player.Ratings.LastOrDefault().Hgt);
+                    fouling.Add("blk", player.Ratings.LastOrDefault().Blk);
+                    fouling.Add("spd", player.Ratings.LastOrDefault().Spd);
+                    List<string> foulingAttributes = new List<string> { "hgt", "blk", "spd" };
+                    List<double> foulingWeights = new List<double> { 1, 1, -1 };
+                    player.CompositeRating.Ratings["Fouling"] = Converter.Composite(fouling, foulingAttributes, foulingWeights);
+
+                    //Defense
+                    player.CompositeRating.Ratings["Defense"] = 0;
+                    Dictionary<string, double> defense = new Dictionary<string, double>();
+                    defense.Add("hgt", Hgt);
+                    defense.Add("stre", Str);
+                    defense.Add("spd", Spd);
+                    defense.Add("jmp", Jmp);
+                    defense.Add("blk", Blk);
+                    defense.Add("stl", Stl);
+                    List<string> defenseAttributes = new List<string> { "hgt", "stre", "spd", "jmp", "blk", "stl" };
+                    List<double> defenseWeights = new List<double> { 1, 1, 1, 0.5, 1, 1 };
+                    player.CompositeRating.Ratings["Defense"] = Converter.Composite(rating, attributes, weights);
 
                 }
 

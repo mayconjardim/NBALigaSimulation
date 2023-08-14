@@ -67,7 +67,7 @@ namespace NBALigaSimulation.Shared.Models
             {
                 foreach (var player in team.Players)
                 {
-                    Console.WriteLine(player.Name + " - " + player.CompositeRating.Ratings["Stealing"]);
+                    Console.WriteLine(player.Name + " - " + player.CompositeRating.Ratings["Fouling"]);
                 }
             }
 
