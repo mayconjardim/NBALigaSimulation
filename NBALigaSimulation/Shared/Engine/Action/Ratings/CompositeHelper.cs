@@ -84,6 +84,27 @@ namespace NBALigaSimulation.Shared.Engine
                     List<double> shootingAtRimWeights = new List<double> { 1, 0.2, 0.6, 0.4 };
                     player.CompositeRating.Ratings["ShootingAtRim"] = Converter.Composite(shootingAtRim, shootingAtRimAttributes, shootingAtRimWeights);
 
+                    //ShootingLowPost
+                    player.CompositeRating.Ratings["ShootingLowPost"] = 0;
+                    Dictionary<string, double> shootingLowPost = new Dictionary<string, double>();
+                    shootingLowPost.Add("hgt", player.Ratings.LastOrDefault().Hgt);
+                    shootingLowPost.Add("stre", player.Ratings.LastOrDefault().Str);
+                    shootingLowPost.Add("spd", player.Ratings.LastOrDefault().Spd);
+                    shootingLowPost.Add("ins", player.Ratings.LastOrDefault().Ins);
+                    List<string> shootingLowPostAttributes = new List<string> { "hgt", "stre", "spd", "ins" };
+                    List<double> shootingLowPostWeights = new List<double> { 1, 0.6, 0.2, 1 };
+                    player.CompositeRating.Ratings["ShootingLowPost"] = Converter.Composite(shootingLowPost, shootingLowPostAttributes, shootingLowPostWeights);
+
+                    //ShootingMidRange
+                    player.CompositeRating.Ratings["ShootingMidRange"] = 0;
+                    Dictionary<string, double> shootingMidRange = new Dictionary<string, double>();
+                    shootingMidRange.Add("hgt", player.Ratings.LastOrDefault().Hgt);
+                    shootingMidRange.Add("fg", player.Ratings.LastOrDefault().Fg);
+                    List<string> shootingMidRangeAttributes = new List<string> { "hgt", "fg" };
+                    List<double> shootingMidRangeWeights = new List<double> { 0.2, 1 };
+                    player.CompositeRating.Ratings["ShootingMidRange"] = Converter.Composite(shootingMidRange, shootingMidRangeAttributes, shootingMidRangeWeights);
+
+
                 }
 
             }
