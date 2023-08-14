@@ -181,8 +181,30 @@ namespace NBALigaSimulation.Shared.Engine
                     defenseInterior.Add("jmp", player.Ratings.LastOrDefault().Jmp);
                     defenseInterior.Add("blk", player.Ratings.LastOrDefault().Blk);
                     List<string> defenseInteriorAttributes = new List<string> { "hgt", "stre", "spd", "jmp", "blk" };
-                    List<double> defenseInteriorWeights = new List<double> { 2, 1, 0.5, 0.5, 1};
+                    List<double> defenseInteriorWeights = new List<double> { 2, 1, 0.5, 0.5, 1 };
                     player.CompositeRating.Ratings["DefenseInterior"] = Converter.Composite(defenseInterior, defenseInteriorAttributes, defenseInteriorWeights);
+
+                    //DefensePerimeter
+                    player.CompositeRating.Ratings["DefensePerimeter"] = 0;
+                    Dictionary<string, double> defensePerimeter = new Dictionary<string, double>();
+                    defensePerimeter.Add("hgt", player.Ratings.LastOrDefault().Hgt);
+                    defensePerimeter.Add("stre", player.Ratings.LastOrDefault().Str);
+                    defensePerimeter.Add("spd", player.Ratings.LastOrDefault().Spd);
+                    defensePerimeter.Add("jmp", player.Ratings.LastOrDefault().Jmp);
+                    defensePerimeter.Add("stl", player.Ratings.LastOrDefault().Stl);
+                    List<string> defensePerimeterAttributes = new List<string> { "hgt", "stre", "spd", "jmp", "stl" };
+                    List<double> defensePerimeterWeights = new List<double> { 1, 1, 2, 0.5, 1 };
+                    player.CompositeRating.Ratings["DefensePerimeter"] = Converter.Composite(defensePerimeter, defensePerimeterAttributes, defensePerimeterWeights);
+
+                    //Endurance
+                    player.CompositeRating.Ratings["Endurance"] = 0;
+                    Dictionary<string, double> endurance = new Dictionary<string, double>();
+                    endurance.Add("endu", player.Ratings.LastOrDefault().End);
+                    endurance.Add("hgt", player.Ratings.LastOrDefault().Hgt);
+                    List<string> enduranceAttributes = new List<string> { "endu", "hgt" };
+                    List<double> enduranceWeights = new List<double> { 1, 1, -0.1 };
+                    player.CompositeRating.Ratings["Endurance"] = Converter.Composite(endurance, enduranceAttributes, enduranceWeights);
+
 
                 }
 
