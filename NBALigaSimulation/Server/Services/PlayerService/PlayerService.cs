@@ -113,28 +113,34 @@ namespace NBALigaSimulation.Server.Services.PlayerService
         {
             var response = new ServiceResponse<bool>();
 
-            foreach (var player in updatedPlayerList)
+            try
             {
-                var playerDb = await _context.Players.FirstOrDefaultAsync(p => p.Id == player.Id);
-
-                if (playerDb == null)
+                for (int i = 0; i < updatedPlayerList.Count; i++)
                 {
-                    response.Success = false;
-                    response.Message = $"O Player com o Id {player.Id} não existe!";
-                    return response;
+                    var player = updatedPlayerList[i];
 
-                }
-                else
-                {
-                    int rosterOrder = updatedPlayerList.IndexOf(player);
-                    playerDb.RosterOrder = rosterOrder;
+                    Player playerDb = await _context.Players.FindAsync(player.Id);
+
+                    if (playerDb == null)
+                    {
+                        response.Success = false;
+                        response.Message = $"The player with ID {player.Id} does not exist!";
+                        return response;
+                    }
+
+                    playerDb.RosterOrder = i;
                 }
 
+                await _context.SaveChangesAsync();
+
+                response.Success = true;
+                response.Message = "Roster order updated successfully.";
             }
-
-            await _context.SaveChangesAsync();
-            response.Success = true;
-            response.Message = "Roster order updated successfully.";
+            catch (Exception ex)
+            {
+                response.Success = false;
+                response.Message = $"An error occurred: {ex.Message}";
+            }
 
             return response;
         }

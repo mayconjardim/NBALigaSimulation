@@ -63,9 +63,7 @@ namespace NBALigaSimulation.Shared.Models
             UpdateSynergy(Teams, PlayersOnCourt);
             HomeCourtAdvantage(Teams, PlayersOnCourt);
 
-
             SimPossessions(Teams, PlayersOnCourt);
-
 
             // Jogue períodos de prorrogação se necessário
             while (Teams[0].Stats.Find(s => s.GameId == Id)?.Pts == Teams[1].Stats.Find(s => s.GameId == Id)?.Pts)
