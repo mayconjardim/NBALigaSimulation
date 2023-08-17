@@ -205,6 +205,18 @@ namespace NBALigaSimulation.Shared.Engine
                     List<double> enduranceWeights = new List<double> { 1, 1, -0.1 };
                     player.CompositeRating.Ratings["Endurance"] = Converter.Composite(endurance, enduranceAttributes, enduranceWeights);
 
+
+                    //Athleticism
+                    player.CompositeRating.Ratings["Athleticism"] = 0;
+                    Dictionary<string, double> athleticism = new Dictionary<string, double>();
+                    athleticism.Add("stre", player.Ratings.LastOrDefault().Str);
+                    athleticism.Add("spd", player.Ratings.LastOrDefault().Spd);
+                    athleticism.Add("jmp", player.Ratings.LastOrDefault().Jmp);
+                    athleticism.Add("hgt", player.Ratings.LastOrDefault().Hgt);
+                    List<string> athleticismAttributes = new List<string> { "stre", "spd", "jmp", "hgt" };
+                    List<double> athleticismWeights = new List<double> { 1, 1, 1, 0.5 };
+                    player.CompositeRating.Ratings["Endurance"] = Converter.Composite(athleticism, athleticismAttributes, athleticismWeights);
+
                 }
 
             }
