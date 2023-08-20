@@ -24,7 +24,7 @@ namespace NBALigaSimulation.Shared.Models
         public List<PlayerGameStats> PlayerGameStats { get; set; } = new List<PlayerGameStats>();
         public List<GamePlayByPlay> PlayByPlay { get; set; } = new List<GamePlayByPlay>();
 
-        // Atributos Globais da Simulação
+        // Atributos Globais da Simulação de um jogo
         [NotMapped]
         int NumPossessions; // Quantidade posses de uma partida
         [NotMapped]
@@ -599,7 +599,7 @@ namespace NBALigaSimulation.Shared.Models
                     // Two point jumper
                     type = "MidRange";
                     probMissAndFoul = 0.07;
-                    probMake = player.CompositeRating.Ratings["ShootingMidRange"] * 0.3 + 0.29;
+                    probMake = player.CompositeRating.Ratings["ShootingMidRange"] * 0.6 + 0.29;
                     probAndOne = 0.05;
                 }
                 else if (r2 > r3)
