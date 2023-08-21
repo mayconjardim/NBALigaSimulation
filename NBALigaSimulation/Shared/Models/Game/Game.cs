@@ -44,6 +44,8 @@ namespace NBALigaSimulation.Shared.Models
         [NotMapped]
         double Dt = 0; // Tempo decorrido por posse
         [NotMapped]
+        double PaceFactor = 99.2 / 100;
+        [NotMapped]
         List<List<int>> PtsQtrs = new List<List<int>>();
 
         public void GameSim()
@@ -53,7 +55,9 @@ namespace NBALigaSimulation.Shared.Models
             CompositeHelper.UpdatePlayersCompositeRating(Teams);
             CompositeHelper.UpdatePace(Teams);
 
-            NumPossessions = (int)Math.Round(Teams[0].CompositeRating.Ratings["GamePace"] + Teams[1].CompositeRating.Ratings["GamePace"] / 2 * RandomUtils.RandomUniform(0.9, 1.1));
+
+            PaceFactor += 0.025 * RandomUtils.Bound((PaceFactor - 1) / 0.2, -1, 1);
+            NumPossessions = (int)Math.Round((Teams[0].CompositeRating.Ratings["GamePace"] + Teams[1].CompositeRating.Ratings["GamePace"] / 2) * 1.1 * PaceFactor);
 
             Dt = 48.0 / (2 * NumPossessions);
 
