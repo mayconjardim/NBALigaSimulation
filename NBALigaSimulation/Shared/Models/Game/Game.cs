@@ -160,7 +160,7 @@ namespace NBALigaSimulation.Shared.Models
                 for (int p = 0; p < teams[t].Players.Count; p++)
                 {
 
-                    var player = teams[t].Players.Find(player => player.RosterOrder == p);
+                    var player = teams[t].Players[p];
                     if (player != null)
                     {
                         if (player.Stats == null)
@@ -507,7 +507,7 @@ namespace NBALigaSimulation.Shared.Models
 
             // Chutar se não houver turnover
             ratios = RatingArray(Teams, "Usage", Offense, PlayersOnCourt);
-            shooter = ArrayHelper.PickPlayer(ratios);
+            shooter = PickPlayer(ratios);
 
             return DoShot(shooter, Teams, PlayersOnCourt); // Fg, Orb ou Drb
         }
@@ -566,7 +566,7 @@ namespace NBALigaSimulation.Shared.Models
 
             p = PlayersOnCourt[Offense][shooter];
 
-            var player = Teams[Offense].Players.Find(player => player.RosterOrder == p);
+            var player = Teams[Offense].Players[p];
 
             fatigue = Fatigue(Teams[Offense].Players[p].Stats.Find(s => s.GameId == Id).Energy);
 
@@ -579,12 +579,12 @@ namespace NBALigaSimulation.Shared.Models
             }
 
             // Escolha o tipo de cute e armazene a taxa de sucesso (sem defesa) em probMake e a probabilidade de acerto e falta em probAndOne
-            if (player.CompositeRating.Ratings["ShootingThreePointer"] > 0.5 && new Random().NextDouble() < (0.35 * player.CompositeRating.Ratings["ShootingThreePointer"]))
+            if (player.CompositeRating.Ratings["ShootingThreePointer"] > 0.4 && new Random().NextDouble() < (0.35 * player.CompositeRating.Ratings["ShootingThreePointer"]))
             {
                 // Three pointer
                 type = "ThreePointer";
                 probMissAndFoul = 0.02;
-                probMake = player.CompositeRating.Ratings["ShootingThreePointer"] * 0.35 + 0.24;
+                probMake = player.CompositeRating.Ratings["ShootingThreePointer"] * 0.68;
                 probAndOne = 0.01;
             }
             else
@@ -764,7 +764,7 @@ namespace NBALigaSimulation.Shared.Models
             DoPf(Defense, Teams, PlayersOnCourt);
             int p = PlayersOnCourt[Offense][shooter];
 
-            var player = Teams[Offense].Players.Find(player => player.RosterOrder == p);
+            var player = Teams[Offense].Players[p];
 
             string outcome = string.Empty;
             for (int i = 0; i < amount; i++)
@@ -793,7 +793,7 @@ namespace NBALigaSimulation.Shared.Models
             int p = PlayersOnCourt[t][PickPlayer(ratios)];
             RecordStat(Defense, p, "Pf", Teams);
 
-            var player = Teams[Defense].Players.Find(player => player.RosterOrder == p);
+            var player = Teams[Defense].Players[p];
 
             if (player.Stats.Find(s => s.GameId == Id).Pf >= 6)
             {
@@ -848,38 +848,36 @@ namespace NBALigaSimulation.Shared.Models
         }
 
 
-        private int PickPlayer(double[] ratios, int exempt = -1)
+        private int PickPlayer(double[] ratios, int? exempt = null)
         {
-            if (exempt >= 0)
+            if (exempt.HasValue)
             {
-                ratios[exempt] = 0;
+                ratios[exempt.Value] = 0;
             }
 
-            double rand = new Random().NextDouble() * (ratios[0] + ratios[1] + ratios[2] + ratios[3] + ratios[4]);
+            double sum = ratios.Sum();
 
-            int pick;
-            if (rand < ratios[0])
+            if (sum == 0)
             {
-                pick = 0;
-            }
-            else if (rand < (ratios[0] + ratios[1]))
-            {
-                pick = 1;
-            }
-            else if (rand < (ratios[0] + ratios[1] + ratios[2]))
-            {
-                pick = 2;
-            }
-            else if (rand < (ratios[0] + ratios[1] + ratios[2] + ratios[3]))
-            {
-                pick = 3;
-            }
-            else
-            {
-                pick = 4;
+                var candidates = Enumerable.Range(0, ratios.Length).Where(i => i != exempt).ToList();
+                Random random = new Random();
+                return candidates[random.Next(candidates.Count)];
             }
 
-            return pick;
+            double rand = new Random().NextDouble() * sum;
+
+            double runningSum = 0;
+
+            for (int i = 0; i < ratios.Length; i++)
+            {
+                runningSum += ratios[i];
+                if (rand < runningSum)
+                {
+                    return i;
+                }
+            }
+
+            return 0;
         }
 
         private void RecordStat(int t, int p, string s, Team[] teams, int amount = 1, double amntDouble = 1.0)
