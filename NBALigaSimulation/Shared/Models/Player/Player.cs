@@ -16,7 +16,7 @@ namespace NBALigaSimulation.Shared.Models
         public string ImgUrl { get; set; } = string.Empty;
         public Team Team { get; set; }
         public int TeamId { get; set; }
-        public double PtModifier { get; set; }
+        public decimal PtModifier { get; set; }
         public int RosterOrder { get; set; }
         public PlayerContract? Contract { get; set; }
         public List<PlayerRatings> Ratings { get; set; } = new List<PlayerRatings>();
@@ -34,7 +34,7 @@ namespace NBALigaSimulation.Shared.Models
         {
 
             Random random = new Random();
-            double coachingRank = 15.5;
+            decimal coachingRank = 15.5m;
             int years = 1;
             int age = season.Year - Born.Year;
 
@@ -77,19 +77,19 @@ namespace NBALigaSimulation.Shared.Models
                     ratings.Pot -= random.Next(5, 25);
                 }
 
-                double baseChange = ArrayHelper.CalcBaseChange(age, ratings.Pot - ratings.Ovr);
+                decimal baseChange = ArrayHelper.CalcBaseChange(age, ratings.Pot - ratings.Ovr);
 
                 if (baseChange >= 0)
                 {
-                    baseChange *= (coachingRank - 1) * -0.5 / (20 - 1) + 1.25;
+                    baseChange *= (coachingRank - 1) * -0.5m / (20 - 1) + 1.25m;
                 }
                 else
                 {
-                    baseChange *= (coachingRank - 1) * 0.5 / (20 - 1) + 0.75;
+                    baseChange *= (coachingRank - 1) * 0.5m / (20 - 1) + 0.75m;
                 }
 
 
-                double baseChangeLocal;
+                decimal baseChangeLocal;
                 if (age <= 24)
                 {
                     baseChangeLocal = baseChange;
@@ -100,25 +100,25 @@ namespace NBALigaSimulation.Shared.Models
                 }
                 else
                 {
-                    baseChangeLocal = baseChange - 2.5;
+                    baseChangeLocal = baseChange - 2.5m;
                 }
 
-                ratings.Spd = ArrayHelper.LimitRating(ratings.Spd + RandomUtils.Bound(baseChangeLocal * RandomUtils.RandomUniform(0.5, 1.5), -20, 10));
-                ratings.Jmp = ArrayHelper.LimitRating(ratings.Jmp + RandomUtils.Bound(baseChangeLocal * RandomUtils.RandomUniform(0.5, 1.5), -20, 10));
-                ratings.End = ArrayHelper.LimitRating(ratings.End + RandomUtils.Bound(baseChangeLocal * RandomUtils.RandomUniform(0.5, 1.5), -20, 10));
+                ratings.Spd = ArrayHelper.LimitRating(ratings.Spd + RandomUtils.Bound(baseChangeLocal * RandomUtils.RandomUniform(0.5m, 1.5m), -20, 10));
+                ratings.Jmp = ArrayHelper.LimitRating(ratings.Jmp + RandomUtils.Bound(baseChangeLocal * RandomUtils.RandomUniform(0.5m, 1.5m), -20, 10));
+                ratings.End = ArrayHelper.LimitRating(ratings.End + RandomUtils.Bound(baseChangeLocal * RandomUtils.RandomUniform(0.5m, 1.5m), -20, 10));
 
 
-                ratings.Drb = ArrayHelper.LimitRating(ratings.Drb + RandomUtils.Bound(baseChange * RandomUtils.RandomUniform(0.5, 1.5), -1, 10));
-                ratings.Pss = ArrayHelper.LimitRating(ratings.Pss + RandomUtils.Bound(baseChange * RandomUtils.RandomUniform(0.5, 1.5), -1, 10));
-                ratings.Reb = ArrayHelper.LimitRating(ratings.Reb + RandomUtils.Bound(baseChange * RandomUtils.RandomUniform(0.5, 1.5), -1, 10));
+                ratings.Drb = ArrayHelper.LimitRating(ratings.Drb + RandomUtils.Bound(baseChange * RandomUtils.RandomUniform(0.5m, 1.5m), -1, 10));
+                ratings.Pss = ArrayHelper.LimitRating(ratings.Pss + RandomUtils.Bound(baseChange * RandomUtils.RandomUniform(0.5m, 1.5m), -1, 10));
+                ratings.Reb = ArrayHelper.LimitRating(ratings.Reb + RandomUtils.Bound(baseChange * RandomUtils.RandomUniform(0.5m, 1.5m), -1, 10));
 
 
-                ratings.Str = ArrayHelper.LimitRating(ratings.Str + baseChange * RandomUtils.RandomUniform(0.5, 1.5));
-                ratings.Dnk = ArrayHelper.LimitRating(ratings.Dnk + baseChange * RandomUtils.RandomUniform(0.5, 1.5));
-                ratings.Blk = ArrayHelper.LimitRating(ratings.Blk + baseChange * RandomUtils.RandomUniform(0.5, 1.5));
-                ratings.Stl = ArrayHelper.LimitRating(ratings.Stl + baseChange * RandomUtils.RandomUniform(0.5, 1.5));
+                ratings.Str = ArrayHelper.LimitRating(ratings.Str + baseChange * RandomUtils.RandomUniform(0.5m, 1.5m));
+                ratings.Dnk = ArrayHelper.LimitRating(ratings.Dnk + baseChange * RandomUtils.RandomUniform(0.5m, 1.5m));
+                ratings.Blk = ArrayHelper.LimitRating(ratings.Blk + baseChange * RandomUtils.RandomUniform(0.5m, 1.5m));
+                ratings.Stl = ArrayHelper.LimitRating(ratings.Stl + baseChange * RandomUtils.RandomUniform(0.5m, 1.5m));
 
-                double baseChangeLocals;
+                decimal baseChangeLocals;
                 if (age <= 24)
                 {
                     baseChangeLocals = baseChange;
@@ -129,13 +129,13 @@ namespace NBALigaSimulation.Shared.Models
                 }
                 else
                 {
-                    baseChangeLocals = baseChange + 2.5;
+                    baseChangeLocals = baseChange + 2.5m;
                 }
 
-                ratings.Ins = ArrayHelper.LimitRating(ratings.Ins + baseChangeLocals * RandomUtils.RandomUniform(0.5, 1.5));
-                ratings.Ft = ArrayHelper.LimitRating(ratings.Ft + baseChangeLocals * RandomUtils.RandomUniform(0.5, 1.5));
-                ratings.Fg = ArrayHelper.LimitRating(ratings.Fg + baseChangeLocals * RandomUtils.RandomUniform(0.5, 1.5));
-                ratings.Tp = ArrayHelper.LimitRating(ratings.Tp + baseChangeLocals * RandomUtils.RandomUniform(0.5, 1.5));
+                ratings.Ins = ArrayHelper.LimitRating(ratings.Ins + baseChangeLocals * RandomUtils.RandomUniform(0.5m, 1.5m));
+                ratings.Ft = ArrayHelper.LimitRating(ratings.Ft + baseChangeLocals * RandomUtils.RandomUniform(0.5m, 1.5m));
+                ratings.Fg = ArrayHelper.LimitRating(ratings.Fg + baseChangeLocals * RandomUtils.RandomUniform(0.5m, 1.5m));
+                ratings.Tp = ArrayHelper.LimitRating(ratings.Tp + baseChangeLocals * RandomUtils.RandomUniform(0.5m, 1.5m));
 
                 ratings.Pot += -2 + (int)Math.Round(RandomUtils.Gauss(0, 2));
                 if (ratings.Ovr > ratings.Pot || age > 28)

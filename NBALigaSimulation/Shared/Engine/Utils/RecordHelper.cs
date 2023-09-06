@@ -112,7 +112,7 @@ namespace NBALigaSimulation.Shared.Engine
             }
         }
 
-        public static void RecordStatHelperPlayer(DateTime gameDate, int t, int p, string s, int Id, Team[] teams, int type, int season, int amt = 1, double amntDouble = 1.0)
+        public static void RecordStatHelperPlayer(DateTime gameDate, int t, int p, string s, int Id, Team[] teams, int type, int season, int amt = 1, decimal amntDouble = 1.0m)
         {
             int opp = 0;
             if (t == 0)
@@ -426,7 +426,7 @@ namespace NBALigaSimulation.Shared.Engine
             }
         }
 
-        public static void RecordStatHelperPlayerMinutes(int t, int p, string s, int Id, Team[] teams, double amt = 1.0)
+        public static void RecordStatHelperPlayerMinutes(int t, int p, string s, int Id, Team[] teams, decimal amt = 1.0m)
         {
             var player = teams[t].Players.Find(player => player.RosterOrder == p);
             var stats = player.Stats.Find(stats => stats.GameId == Id);

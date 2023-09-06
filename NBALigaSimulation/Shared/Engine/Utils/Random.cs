@@ -1,21 +1,57 @@
-﻿namespace NBALigaSimulation.Shared.Engine
+﻿using System;
+
+namespace NBALigaSimulation.Shared.Engine
 {
     public static class RandomUtils
     {
 
         private static Random random = new Random();
 
-        public static double RandomUniform(double a, double b)
+        public static decimal RandomUniform(decimal a, decimal b)
         {
-            return random.NextDouble() * (b - a) + a;
+            double randomValue = random.NextDouble();
+            decimal decimalRandomValue = (decimal)randomValue;
+
+            return decimalRandomValue * (b - a) + a;
         }
 
-        public static double Sigmoid(double x, double a, double b)
+        public static decimal Power(decimal baseValue, int exponent)
         {
-            return 1 / (1 + Math.Exp(-(a * (x - b))));
+            if (exponent < 0)
+            {
+                throw new ArgumentException("Exponent must be non-negative.");
+            }
+
+            decimal result = 1M;
+
+            for (int i = 0; i < exponent; i++)
+            {
+                result *= baseValue;
+            }
+
+            return result;
         }
 
-        public static double Clamp(double value, double min, double max)
+        public static decimal Exp(decimal x, int numTerms = 15)
+        {
+            decimal result = 1M;
+            decimal factorial = 1M;
+
+            for (int i = 1; i <= numTerms; i++)
+            {
+                factorial *= i;
+                result += (Power(x, i) / factorial);
+            }
+
+            return result;
+        }
+
+        public static decimal Sigmoid(decimal x, decimal a, decimal b)
+        {
+            return 1M / (1M + Exp(-(a * (x - b))));
+        }
+
+        public static decimal Clamp(decimal value, decimal min, decimal max)
         {
             if (value < min)
                 return min;
@@ -39,6 +75,7 @@
                 list[n] = value;
             }
         }
+
         public static string Ordinal(int x)
         {
             string suffix;
@@ -80,13 +117,20 @@
             return x;
         }
 
-        public static double Gauss(double mu = 0, double sigma = 1)
+        public static decimal Gauss(decimal mu = 0, decimal sigma = 1)
         {
-            double u1 = 1.0 - random.NextDouble();
-            double u2 = 1.0 - random.NextDouble();
-            double randStdNormal = Math.Sqrt(-2.0 * Math.Log(u1)) * Math.Sin(2.0 * Math.PI * u2);
-            double randNormal = mu + sigma * randStdNormal;
+            decimal u1 = 1.0m - (decimal)random.NextDouble();
+            decimal u2 = 1.0m - (decimal)random.NextDouble();
+            decimal randStdNormal = (decimal)Math.Sqrt((double)(-2.0m * (decimal)Math.Log((double)u1))) * (decimal)Math.Sin(2.0 * Math.PI * (double)u2);
+            decimal randNormal = mu + sigma * randStdNormal;
             return randNormal;
+        }
+
+
+        static System.Random rnd = new System.Random();
+        public static decimal GetRandomDecimal(int minValue, int maxValue, int decimalPlaces)
+        {
+            return System.Math.Round(Convert.ToDecimal(rnd.NextDouble() * (maxValue - minValue) + minValue), decimalPlaces);
         }
 
     }

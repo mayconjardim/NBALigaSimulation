@@ -12,7 +12,7 @@
         public int Season { get; set; }
         public int Games { get; set; }
         public int Gs { get; set; }
-        public double Min { get; set; }
+        public decimal Min { get; set; }
         public int Fg { get; set; }
         public int Fga { get; set; }
         public int FgAtRim { get; set; }

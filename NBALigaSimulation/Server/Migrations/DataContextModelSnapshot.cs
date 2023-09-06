@@ -236,8 +236,8 @@ namespace NBALigaSimulation.Server.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<double>("PtModifier")
-                        .HasColumnType("REAL");
+                    b.Property<decimal>("PtModifier")
+                        .HasColumnType("TEXT");
 
                     b.Property<int>("RosterOrder")
                         .HasColumnType("INTEGER");
@@ -334,20 +334,20 @@ namespace NBALigaSimulation.Server.Migrations
                     b.Property<int>("Ast")
                         .HasColumnType("INTEGER");
 
-                    b.Property<double>("BenchTime")
-                        .HasColumnType("REAL");
+                    b.Property<decimal>("BenchTime")
+                        .HasColumnType("TEXT");
 
                     b.Property<int>("Blk")
                         .HasColumnType("INTEGER");
 
-                    b.Property<double>("CourtTime")
-                        .HasColumnType("REAL");
+                    b.Property<decimal>("CourtTime")
+                        .HasColumnType("TEXT");
 
                     b.Property<int>("Drb")
                         .HasColumnType("INTEGER");
 
-                    b.Property<double>("Energy")
-                        .HasColumnType("REAL");
+                    b.Property<decimal>("Energy")
+                        .HasColumnType("TEXT");
 
                     b.Property<int>("Fg")
                         .HasColumnType("INTEGER");
@@ -388,8 +388,8 @@ namespace NBALigaSimulation.Server.Migrations
                     b.Property<int>("Gs")
                         .HasColumnType("INTEGER");
 
-                    b.Property<double>("Min")
-                        .HasColumnType("REAL");
+                    b.Property<decimal>("Min")
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -492,8 +492,8 @@ namespace NBALigaSimulation.Server.Migrations
                     b.Property<int>("Gs")
                         .HasColumnType("INTEGER");
 
-                    b.Property<double>("Min")
-                        .HasColumnType("REAL");
+                    b.Property<decimal>("Min")
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -661,8 +661,8 @@ namespace NBALigaSimulation.Server.Migrations
                     b.Property<int>("Gs")
                         .HasColumnType("INTEGER");
 
-                    b.Property<double>("Min")
-                        .HasColumnType("REAL");
+                    b.Property<decimal>("Min")
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("Name")
                         .IsRequired()

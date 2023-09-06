@@ -69,10 +69,10 @@
               <span  class="drag40">@data.Pos</span>
               <span  class="drag40">@Age(@data.Born.Year, @season)</span>
               <span  class="drag40">@data.Ratings.Last().Ovr</span>
-              <MudSelect Style="width: 100px;" Dense="true" @bind-Value="@data.PtModifier" Margin="Margin.Dense" T="double" SelectedValuesChanged="@(v => UpdatePtModifier(v, data.Id))">
+              <MudSelect Style="width: 100px;" Dense="true" @bind-Value="@data.PtModifier" Margin="Margin.Dense" T="decimal" SelectedValuesChanged="@(v => UpdatePtModifier(v, data.Id))">
                     @foreach (var pt in PtOptions)
                     {
-                        <MudSelectItem T="double" Value="@pt">@GetOptionLabel(pt)</MudSelectItem>
+                        <MudSelectItem T="decimal" Value="@pt">@GetOptionLabel(pt)</MudSelectItem>
                     }
               </MudSelect>
              </div>

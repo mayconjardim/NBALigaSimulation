@@ -6,11 +6,11 @@ namespace NBALigaSimulation.Shared.Models
     public class TeamCompositeRating
     {
 
-        public Dictionary<string, double> Ratings { get; set; }
+        public Dictionary<string, decimal> Ratings { get; set; }
 
         public TeamCompositeRating()
         {
-            Ratings = new Dictionary<string, double>();
+            Ratings = new Dictionary<string, decimal>();
         }
 
     }

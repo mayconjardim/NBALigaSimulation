@@ -81,7 +81,7 @@ namespace NBALigaSimulation.Server.Controllers
         }
 
         [HttpPut("{playerId}/ptmodifier")]
-        public async Task<ActionResult> UpdatePlayerPtModifier(int playerId, [FromBody] double newPtModifier)
+        public async Task<ActionResult> UpdatePlayerPtModifier(int playerId, [FromBody] decimal newPtModifier)
         {
             var response = await _playerService.UpdatePlayerPtModifier(playerId, newPtModifier);
 

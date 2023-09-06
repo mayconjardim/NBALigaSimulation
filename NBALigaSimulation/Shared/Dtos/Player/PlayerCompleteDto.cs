@@ -15,7 +15,7 @@ namespace NBALigaSimulation.Shared.Dtos
         public int TeamId { get; set; }
         public string TeamName { get; set; } = string.Empty;
         public string TeamAbrv { get; set; } = string.Empty;
-        public double PtModifier { get; set; }
+        public decimal PtModifier { get; set; }
 
         [JsonProperty("RosterOrder")]
         public int RosterOrder { get; set; }

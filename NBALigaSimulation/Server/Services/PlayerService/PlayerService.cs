@@ -145,7 +145,7 @@ namespace NBALigaSimulation.Server.Services.PlayerService
             return response;
         }
 
-        public async Task<ServiceResponse<bool>> UpdatePlayerPtModifier(int playerId, double newPtModifier)
+        public async Task<ServiceResponse<bool>> UpdatePlayerPtModifier(int playerId, decimal newPtModifier)
         {
             var response = new ServiceResponse<bool>();
 

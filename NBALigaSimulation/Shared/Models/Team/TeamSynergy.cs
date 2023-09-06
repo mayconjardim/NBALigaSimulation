@@ -6,9 +6,9 @@ namespace NBALigaSimulation.Shared.Models
     public class TeamSynergy
     {
 
-        public double Off { get; set; }
-        public double Def { get; set; }
-        public double Reb { get; set; }
+        public decimal Off { get; set; }
+        public decimal Def { get; set; }
+        public decimal Reb { get; set; }
 
     }
 }

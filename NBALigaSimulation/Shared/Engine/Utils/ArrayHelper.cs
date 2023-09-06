@@ -54,7 +54,7 @@ namespace NBALigaSimulation.Shared.Engine
             amount = (int)(((ratings.Ovr - 1) / 100.0 - 0.45) * 3.3 * (maxAmount - minAmount) + minAmount);
             if (randomizeAmount)
             {
-                amount *= (int)RandomUtils.Bound(RandomUtils.Gauss(1, 0.1), 0, 2);
+                amount *= (int)RandomUtils.Bound(RandomUtils.Gauss(1, 0.1m), 0, 2);
             }
 
             potentialDifference = (int)Math.Round((ratings.Pot - ratings.Ovr) / 4.0);
@@ -114,12 +114,12 @@ namespace NBALigaSimulation.Shared.Engine
             return new PlayerContract { PlayerId = p.Id, Amount = amount, Exp = expiration };
         }
 
-        public static double CalcBaseChange(int age, int potentialDifference)
+        public static decimal CalcBaseChange(int age, int potentialDifference)
         {
 
             Random random = new Random();
 
-            double val;
+            decimal val;
 
             // Average rating change if there is no potential difference
             if (age <= 21)
@@ -148,43 +148,43 @@ namespace NBALigaSimulation.Shared.Engine
             {
                 if (random.NextDouble() < 0.75)
                 {
-                    val += potentialDifference * RandomUtils.RandomUniform(0.2, 0.9);
+                    val += potentialDifference * RandomUtils.RandomUniform(0.2m, 0.9m);
                 }
                 else
                 {
-                    val += potentialDifference * RandomUtils.RandomUniform(0.1, 0.3);
+                    val += potentialDifference * RandomUtils.RandomUniform(0.1m, 0.3m);
                 }
             }
             else if (age <= 25)
             {
                 if (random.NextDouble() < 0.25)
                 {
-                    val += potentialDifference * RandomUtils.RandomUniform(0.2, 0.9);
+                    val += potentialDifference * RandomUtils.RandomUniform(0.2m, 0.9m);
                 }
                 else
                 {
-                    val += potentialDifference * RandomUtils.RandomUniform(0.1, 0.3);
+                    val += potentialDifference * RandomUtils.RandomUniform(0.1m, 0.3m);
                 }
             }
             else
             {
-                val += potentialDifference * RandomUtils.RandomUniform(0, 0.1);
+                val += potentialDifference * RandomUtils.RandomUniform(0, 0.1m);
             }
 
             // Noise
             if (age <= 25)
             {
-                val += RandomUtils.Bound(RandomUtils.Gauss(0, 5), -4, 10);
+                val += RandomUtils.Bound(RandomUtils.Gauss(0, 5), -4, 10m);
             }
             else
             {
-                val += RandomUtils.Bound(RandomUtils.Gauss(0, 3), -2, 10);
+                val += RandomUtils.Bound(RandomUtils.Gauss(0, 3), -2, 10m);
             }
 
             return val;
         }
 
-        public static int LimitRating(double rating)
+        public static int LimitRating(decimal rating)
         {
             if (rating > 100)
             {

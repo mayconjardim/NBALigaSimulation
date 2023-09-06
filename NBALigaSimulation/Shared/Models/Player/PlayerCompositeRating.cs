@@ -3,11 +3,11 @@
     public class PlayerCompositeRating
     {
 
-        public Dictionary<string, double> Ratings { get; set; }
+        public Dictionary<string, decimal> Ratings { get; set; }
 
         public PlayerCompositeRating()
         {
-            Ratings = new Dictionary<string, double>();
+            Ratings = new Dictionary<string, decimal>();
         }
 
     }

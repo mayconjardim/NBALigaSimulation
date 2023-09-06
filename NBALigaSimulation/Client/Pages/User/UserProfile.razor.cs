@@ -66,20 +66,20 @@ namespace NBALigaSimulation.Client.Pages.User
 
         }
 
-        List<double> PtOptions = new List<double> { 0.0, 0.75, 1.0, 1.25, 1.75 };
+        List<decimal> PtOptions = new List<decimal> { 0.0m, 0.75m, 1.0m, 1.25m, 1.75m };
 
-        string GetOptionLabel(double value)
+        string GetOptionLabel(decimal value)
         {
 
             switch (value)
             {
-                case 0.0:
+                case 0.0m:
                     return "0";
-                case 0.75:
+                case 0.75m:
                     return "-";
-                case 1.0:
+                case 1.0m:
                     return "";
-                case 1.25:
+                case 1.25m:
                     return "+";
                 default:
                     return "++";
@@ -87,9 +87,9 @@ namespace NBALigaSimulation.Client.Pages.User
 
         }
 
-        private async Task UpdatePtModifier(IEnumerable<double> v, int playerId)
+        private async Task UpdatePtModifier(IEnumerable<decimal> v, int playerId)
         {
-            double newPtModifier = v.LastOrDefault();
+            decimal newPtModifier = v.LastOrDefault();
 
             await PlayerService.UpdatePlayerPtModifier(playerId, newPtModifier);
         }

@@ -3,15 +3,15 @@
     public static class Converter
     {
 
-        public static double Composite(Dictionary<string, double> ratings, List<string> components, List<double>? weights = null)
+        public static decimal Composite(Dictionary<string, decimal> ratings, List<string> components, List<decimal>? weights = null)
         {
-            double r = 0;
-            double rmax = 0;
-            double divideBy = 0;
+            decimal r = 0;
+            decimal rmax = 0;
+            decimal divideBy = 0;
 
             if (weights == null)
             {
-                weights = new List<double>();
+                weights = new List<decimal>();
                 for (int i = 0; i < components.Count; i++)
                 {
                     weights.Add(1);
@@ -21,7 +21,7 @@
             for (int i = 0; i < components.Count; i++)
             {
                 string component = components[i];
-                double rcomp = weights[i] * ratings[component];
+                decimal rcomp = weights[i] * ratings[component];
 
                 r += rcomp;
                 divideBy += 100 * weights[i];
@@ -40,11 +40,11 @@
             return r;
         }
 
-        public static bool hasSkill(List<int> skills, List<double> weights)
+        public static bool hasSkill(List<int> skills, List<decimal> weights)
         {
 
-            double numerator = 0;
-            double denominator = 0;
+            decimal numerator = 0;
+            decimal denominator = 0;
 
             for (int i = 0; i < skills.Count; i++)
             {
@@ -52,7 +52,7 @@
                 denominator += 100 * weights[i];
             }
 
-            if (numerator / denominator > 0.75)
+            if (numerator / denominator > 0.75m)
             {
                 return true;
             }

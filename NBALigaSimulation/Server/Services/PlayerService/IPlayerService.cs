@@ -11,7 +11,7 @@
         Task<ServiceResponse<List<PlayerCompleteDto>>> CreatePlayers(List<CreatePlayerDto> request);
         Task<ServiceResponse<List<PlayerSimpleDto>>> GetPlayersSearchSuggestions(string searchText);
         Task<ServiceResponse<bool>> UpdateRosterOrder(List<PlayerCompleteDto> updatedPlayerList);
-        Task<ServiceResponse<bool>> UpdatePlayerPtModifier(int playerId, double newPtModifier);
+        Task<ServiceResponse<bool>> UpdatePlayerPtModifier(int playerId, decimal newPtModifier);
         Task<ServiceResponse<bool>> GenerateContracts();
 
     }

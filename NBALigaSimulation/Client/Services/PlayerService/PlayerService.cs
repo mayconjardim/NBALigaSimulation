@@ -37,7 +37,7 @@
             return response;
         }
 
-        public async Task<ServiceResponse<bool>> UpdatePlayerPtModifier(int playerId, double newPtModifier)
+        public async Task<ServiceResponse<bool>> UpdatePlayerPtModifier(int playerId, decimal newPtModifier)
         {
 
             var result = await _http.PutAsJsonAsync($"api/players/{playerId}/ptmodifier", newPtModifier);
