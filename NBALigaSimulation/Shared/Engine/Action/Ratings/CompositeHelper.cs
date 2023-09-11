@@ -26,10 +26,9 @@ namespace NBALigaSimulation.Shared.Engine
                     pace.Add("jmp", player.Ratings.LastOrDefault().Jmp);
                     pace.Add("dnk", player.Ratings.LastOrDefault().Dnk);
                     pace.Add("tp", player.Ratings.LastOrDefault().Tp);
-                    pace.Add("stl", player.Ratings.LastOrDefault().Stl);
                     pace.Add("drb", player.Ratings.LastOrDefault().Reb);
                     pace.Add("pss", player.Ratings.LastOrDefault().Pss);
-                    List<string> paceAttributes = new List<string> { "spd", "jmp", "dnk", "tp", "stl", "drb", "pss" };
+                    List<string> paceAttributes = new List<string> { "spd", "jmp", "dnk", "tp", "drb", "pss" };
                     player.CompositeRating.Ratings["Pace"] = Converter.Composite(pace, paceAttributes);
 
                     //Usage
@@ -39,8 +38,13 @@ namespace NBALigaSimulation.Shared.Engine
                     usage.Add("dnk", player.Ratings.LastOrDefault().Dnk);
                     usage.Add("fg", player.Ratings.LastOrDefault().Fg);
                     usage.Add("tp", player.Ratings.LastOrDefault().Tp);
-                    List<string> usageAttributes = new List<string> { "ins", "dnk", "fg", "tp" };
-                    player.CompositeRating.Ratings["Usage"] = Converter.Composite(usage, usageAttributes);
+                    usage.Add("spd", player.Ratings.LastOrDefault().Spd);
+                    usage.Add("hgt", player.Ratings.LastOrDefault().Hgt);
+                    usage.Add("drb", player.Ratings.LastOrDefault().Drb);
+                    usage.Add("oiq", player.Ratings.LastOrDefault().Oiq);
+                    List<string> usageAttributes = new List<string> { "ins", "dnk", "fg", "tp", "spd", "hgt", "drb", "oiq" };
+                    List<double> usageWeights = new List<double> { 1.5, 1, 1, 1, 0.5, 0.5, 0.5, 0.5 };
+                    player.CompositeRating.Ratings["Usage"] = Converter.Composite(usage, usageAttributes, usageWeights);
 
                     //Dribbling
                     player.CompositeRating.Ratings["Dribbling"] = 0;
