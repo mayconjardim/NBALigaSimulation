@@ -395,8 +395,6 @@ namespace NBALigaSimulation.Shared.Models
             }
         }
 
-
-
         public void UpdateTeamCompositeRatings(Team[] teams, int[][] playersOnCourt)
         {
             string[] toUpdate = { "GameDribbling", "GamePassing", "GameRebounding", "GameDefense", "GameDefensePerimeter", "GameBlocking", "GamePace" };
