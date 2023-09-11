@@ -558,7 +558,7 @@ namespace NBALigaSimulation.Shared.Models
             return "Stl";
         }
 
-        private void DoShot(int shooter, Team[] Teams, int[][] PlayersOnCourt)
+        private string DoShot(int shooter, Team[] Teams, int[][] PlayersOnCourt)
         {
             double fatigue, probMake, probAndOne, probMissAndFoul, r1, r2, r3;
             int passer = -1;
@@ -585,8 +585,8 @@ namespace NBALigaSimulation.Shared.Models
             else
             {
                 r1 = new Random().NextDouble() * player.CompositeRating.Ratings["ShootingMidRange"];
-                r2 = new Random().NextDouble() * (player.CompositeRating.Ratings["ShootingAtRim"] + SynergyFactor * (Teams[Offense].Synergy.Off - Teams[Defense].Synergy.Def)); // Synergy makes easy shots either more likely or less likely
-                r3 = new Random().NextDouble() * (player.CompositeRating.Ratings["ShootingLowPost"] + SynergyFactor * (Teams[Offense].Synergy.Off - Teams[Defense].Synergy.Def)); // Synergy makes easy shots either more likely or less likely
+                r2 = new Random().NextDouble() * (player.CompositeRating.Ratings["ShootingAtRim"] + SynergyFactor * (Teams[Offense].Synergy.Off - Teams[Defense].Synergy.Def));
+                r3 = new Random().NextDouble() * (player.CompositeRating.Ratings["ShootingLowPost"] + SynergyFactor * (Teams[Offense].Synergy.Off - Teams[Defense].Synergy.Def));
                 if (r1 > r2 && r1 > r3)
                 {
                     type = "MidRange";
@@ -619,8 +619,7 @@ namespace NBALigaSimulation.Shared.Models
 
             if (ProbBlk(Teams) > new Random().NextDouble())
             {
-                DoBlk(shooter, type, Teams, PlayersOnCourt); // orb or drb
-                return;
+                return DoBlk(shooter, type, Teams, PlayersOnCourt); // orb or drb
             }
 
             // Make
@@ -629,11 +628,11 @@ namespace NBALigaSimulation.Shared.Models
                 // And 1
                 if (probAndOne > new Random().NextDouble())
                 {
-                    DoFg(shooter, passer, type, true); // fg, orb, or drb
+                    return DoFg(shooter, passer, type, true, Teams, PlayersOnCourt); // fg, orb, or drb
                 }
                 else
                 {
-                    DoFg(shooter, passer, type); // fg
+                    return DoFg(shooter, passer, type, false, Teams, PlayersOnCourt); // fg
                 }
             }
             else
@@ -643,11 +642,11 @@ namespace NBALigaSimulation.Shared.Models
                 {
                     if (type == "threePointer")
                     {
-                        DoFt(shooter, 3, Teams, PlayersOnCourt); // fg, orb, or drb
+                        return DoFt(shooter, 3, Teams, PlayersOnCourt); // fg, orb, or drb
                     }
                     else
                     {
-                        DoFt(shooter, 2, Teams, PlayersOnCourt); // fg, orb, or drb
+                        return DoFt(shooter, 2, Teams, PlayersOnCourt); // fg, orb, or drb
                     }
                 }
                 else
@@ -667,12 +666,13 @@ namespace NBALigaSimulation.Shared.Models
                     {
                         RecordStat(Offense, p, "FgaMidRange", Teams);
                     }
-                    else if (type == "ThreePointer", Teams)
+                    else if (type == "ThreePointer")
                     {
                         RecordStat(Offense, p, "Tpa", Teams);
                     }
-                    DoReb(Teams, PlayersOnCourt); // orb or drb
+
                 }
+                return DoReb(Teams, PlayersOnCourt);
             }
         }
 
@@ -712,41 +712,45 @@ namespace NBALigaSimulation.Shared.Models
             return DoReb(Teams, PlayersOnCourt);
         }
 
-        private string DoFg(int shooter, int passer, string type, Team[] Teams, int[][] PlayersOnCourt)
+        private string DoFg(int shooter, int passer, string type, bool andOne, Team[] Teams, int[][] PlayersOnCourt)
         {
-            int p;
+            int p = PlayersOnCourt[Offense][shooter];
+            RecordStat(Offense, p, "Fga", Teams);
+            RecordStat(Offense, p, "Fg", Teams);
+            RecordStat(Offense, p, "Pts", Teams, 2); // 2 points for 2's
+
+            if (type == "AtRim")
+            {
+                RecordStat(Offense, p, "FgaAtRim", Teams);
+                RecordStat(Offense, p, "FgAtRim", Teams);
+            }
+            else if (type == "LowPost")
+            {
+                RecordStat(Offense, p, "fgaLowPost", Teams);
+                RecordStat(Offense, p, "fgLowPost", Teams);
+            }
+            else if (type == "MidRange")
+            {
+                RecordStat(Offense, p, "FgaMidRange", Teams);
+                RecordStat(Offense, p, "FgMidRange", Teams);
+            }
+            else if (type == "ThreePointer")
+            {
+                RecordStat(Offense, p, "Pts", Teams);
+                RecordStat(Offense, p, "Tpa", Teams);
+                RecordStat(Offense, p, "Tp", Teams);
+            }
 
             if (passer >= 0)
             {
                 p = PlayersOnCourt[Offense][passer];
-                RecordStat(Offense, p, "Ast", Teams);
+                this.RecordStat(Offense, p, "Ast", Teams);
             }
 
-
-            p = PlayersOnCourt[Offense][shooter];
-            RecordStat(Offense, p, "Fga", Teams);
-            RecordStat(Offense, p, "Fg", Teams);
-            RecordStat(Offense, p, "Pts", Teams, 2);
-
-            switch (type)
+            if (andOne)
             {
-                case "AtRim":
-                    RecordStat(Offense, p, "FgaAtRim", Teams);
-                    RecordStat(Offense, p, "FgAtRim", Teams);
-                    break;
-                case "LowPost":
-                    RecordStat(Offense, p, "FgaLowPost", Teams);
-                    RecordStat(Offense, p, "FgLowPost", Teams);
-                    break;
-                case "MidRange":
-                    RecordStat(Offense, p, "FgaMidRange", Teams);
-                    RecordStat(Offense, p, "FgMidRange", Teams);
-                    break;
-                case "ThreePointer":
-                    RecordStat(Offense, p, "Pts", Teams);
-                    RecordStat(Offense, p, "Tpa", Teams);
-                    RecordStat(Offense, p, "Tp", Teams);
-                    break;
+                DoFt(shooter, 1, Teams, PlayersOnCourt);
+                return "Fg";
             }
 
             return "Fg";
