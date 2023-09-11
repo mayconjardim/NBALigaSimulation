@@ -1,6 +1,4 @@
 ﻿using NBALigaSimulation.Shared.Engine;
-using NBALigaSimulation.Shared.Models;
-using System.Net;
 
 namespace NBALigaSimulation.Shared.Dtos
 {
@@ -8,110 +6,69 @@ namespace NBALigaSimulation.Shared.Dtos
     {
         public int PlayerId { get; set; }
         public int Season { get; set; }
-        public int Hgt { get; set; }
-        public int Str { get; set; }
-        public int Spd { get; set; }
-        public int Jmp { get; set; }
-        public int End { get; set; }
-        public int Ins { get; set; }
+        public int Diq { get; set; }
         public int Dnk { get; set; }
-        public int Ft { get; set; }
-        public int Fg { get; set; }
-        public int Tp { get; set; }
-        public int Blk { get; set; }
-        public int Stl { get; set; }
         public int Drb { get; set; }
+        public int Endu { get; set; }
+        public int Fg { get; set; }
+        public int Ft { get; set; }
+        public int Fuzz { get; set; }
+        public int Hgt { get; set; }
+        public int Ins { get; set; }
+        public int Jmp { get; set; }
+        public int Oiq { get; set; }
+        public string Pos { get; set; }
+        public int Pot { get; set; }
         public int Pss { get; set; }
         public int Reb { get; set; }
-        public int Pot { get; set; }
-        public int Ovr => (int)Math.Round((4 * Hgt + Str + 4 * Spd + 2 * Jmp + 3 * End + 3 * Ins + 4 * Dnk + Ft + Fg + 2 * Tp + Blk + Stl + Drb + 3 * Pss + Reb) / 32.0);
+        public int Spd { get; set; }
+        public int Stre { get; set; }
+        public int Tp { get; set; }
 
-        public string Position
+        public int CalculateOvr
         {
             get
             {
-                bool c = false, g = false, pf = false, pg = false, sf = false, sg = false;
-                string position;
+                double r =
+                  (5 * Hgt +
+                  1 * Stre +
+                  4 * Spd +
+                  2 * Jmp +
+                  1 * Endu +
+                  1 * Ins +
+                  2 * Dnk +
+                  1 * Ft +
+                  1 * Fg +
+                  3 * Tp +
+                  7 * Oiq +
+                  3 * Diq +
+                  3 * Drb +
+                  3 * Pss +
+                  1 * Reb) / 38;
 
-                if (Reb >= 50)
+                double fudgeFactor = 0;
+                if (r >= 68)
                 {
-                    position = "GF";
+                    fudgeFactor = 8;
+                }
+                else if (r >= 50)
+                {
+                    fudgeFactor = 4 + (r - 50) * (4 / 18);
+                }
+                else if (r >= 42)
+                {
+                    fudgeFactor = -5 + (r - 42) * (10 / 8);
+                }
+                else if (r >= 31)
+                {
+                    fudgeFactor = -5 - (42 - r) * (5 / 11);
                 }
                 else
                 {
-                    position = "F";
+                    fudgeFactor = -10;
                 }
 
-                if (Hgt <= 30 || Spd >= 85)
-                {
-                    g = true;
-                    if ((Pss + Reb) >= 100)
-                    {
-                        pg = true;
-                    }
-                    if (Hgt >= 30)
-                    {
-                        sg = true;
-                    }
-                }
-
-                if (Hgt >= 50 && Hgt <= 65 && Spd >= 40)
-                {
-                    sf = true;
-                }
-
-                if (Hgt >= 70)
-                {
-                    pf = true;
-                }
-
-                if ((Hgt + Str) >= 130)
-                {
-                    c = true;
-                }
-
-                if (pg && !sg && !sf && !pf && !c)
-                {
-                    position = "PG";
-                }
-                else if (!pg && (g || sg) && !sf && !pf && !c)
-                {
-                    position = "SG";
-                }
-                else if (!pg && !sg && sf && !pf && !c)
-                {
-                    position = "SF";
-                }
-                else if (!pg && !sg && !sf && pf && !c)
-                {
-                    position = "PF";
-                }
-                else if (!pg && !sg && !sf && !pf && c)
-                {
-                    position = "C";
-                }
-
-
-                if ((pf || sf) && g)
-                {
-                    position = "GF";
-                }
-                else if (c && (pf || sf))
-                {
-                    position = "FC";
-                }
-                else if (pg && sg)
-                {
-                    position = "G";
-                }
-
-                if (position == "F" && Reb <= 20)
-                {
-                    position = "PF";
-                }
-
-                return position;
-
+                return RandomUtils.Bound((int)Math.Round(r + fudgeFactor), 0, 100);
             }
         }
 
@@ -125,7 +82,7 @@ namespace NBALigaSimulation.Shared.Dtos
                 {
                     skills.Add("3");
                 }
-                if (Converter.hasSkill(new List<int> { Str, Spd, Jmp, Hgt }, new List<double> { 1, 1, 1, 0.5 }))
+                if (Converter.hasSkill(new List<int> { Stre, Spd, Jmp, Hgt }, new List<double> { 1, 1, 1, 0.5 }))
                 {
                     skills.Add("A");
                 }
@@ -133,15 +90,15 @@ namespace NBALigaSimulation.Shared.Dtos
                 {
                     skills.Add("B");
                 }
-                if (Converter.hasSkill(new List<int> { Hgt, Str, Spd, Jmp, Blk }, new List<double> { 2, 1, 0.5, 0.5, 1 }))
+                if (Converter.hasSkill(new List<int> { Hgt, Stre, Spd, Jmp, Diq }, new List<double> { 2, 1, 0.5, 0.5, 1 }))
                 {
                     skills.Add("Di");
                 }
-                if (Converter.hasSkill(new List<int> { Hgt, Str, Spd, Jmp, Stl }, new List<double> { 1, 1, 2, 0.5, 1 }))
+                if (Converter.hasSkill(new List<int> { Hgt, Stre, Spd, Jmp, Diq }, new List<double> { 1, 1, 2, 0.5, 1 }))
                 {
                     skills.Add("Dp");
                 }
-                if (Converter.hasSkill(new List<int> { Hgt, Str, Spd, Ins }, new List<double> { 1, 0.6, 0.2, 1 }))
+                if (Converter.hasSkill(new List<int> { Hgt, Stre, Spd, Ins }, new List<double> { 1, 0.6, 0.2, 1 }))
                 {
                     skills.Add("Po");
                 }
@@ -149,7 +106,7 @@ namespace NBALigaSimulation.Shared.Dtos
                 {
                     skills.Add("Ps");
                 }
-                if (Converter.hasSkill(new List<int> { Hgt, Str, Jmp, Reb }, new List<double> { 1, 0.1, 0.1, 0.7 }))
+                if (Converter.hasSkill(new List<int> { Hgt, Stre, Jmp, Reb }, new List<double> { 1, 0.1, 0.1, 0.7 }))
                 {
                     skills.Add("R");
                 }
@@ -157,6 +114,6 @@ namespace NBALigaSimulation.Shared.Dtos
                 return skills;
             }
         }
-
     }
+
 }
