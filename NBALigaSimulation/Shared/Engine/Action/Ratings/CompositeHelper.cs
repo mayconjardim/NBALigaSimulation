@@ -52,7 +52,8 @@ namespace NBALigaSimulation.Shared.Engine
                     dribbling.Add("drb", player.Ratings.LastOrDefault().Drb);
                     dribbling.Add("spd", player.Ratings.LastOrDefault().Spd);
                     List<string> dribblingAttributes = new List<string> { "drb", "spd" };
-                    player.CompositeRating.Ratings["Dribbling"] = Converter.Composite(usage, usageAttributes);
+                    List<double> dribblingWeights = new List<double> { 1, 1 };
+                    player.CompositeRating.Ratings["Dribbling"] = Converter.Composite(dribbling, dribblingAttributes, dribblingWeights);
 
                     //Passing
                     player.CompositeRating.Ratings["Passing"] = 0;
