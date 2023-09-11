@@ -24,7 +24,7 @@ namespace NBALigaSimulation.Shared.Models
         public List<PlayerGameStats> PlayerGameStats { get; set; } = new List<PlayerGameStats>();
         public List<GamePlayByPlay> PlayByPlay { get; set; } = new List<GamePlayByPlay>();
 
-        // Atributos Globais da Simulação de um jogo
+        // Atributos Globais da Simulação
         [NotMapped]
         int NumPossessions; // Quantidade posses de uma partida
         [NotMapped]
@@ -44,8 +44,6 @@ namespace NBALigaSimulation.Shared.Models
         [NotMapped]
         double Dt = 0; // Tempo decorrido por posse
         [NotMapped]
-        double PaceFactor = 99.2 / 100;
-        [NotMapped]
         List<List<int>> PtsQtrs = new List<List<int>>();
 
         public void GameSim()
@@ -55,9 +53,7 @@ namespace NBALigaSimulation.Shared.Models
             CompositeHelper.UpdatePlayersCompositeRating(Teams);
             CompositeHelper.UpdatePace(Teams);
 
-
-            PaceFactor += 0.025 * RandomUtils.Bound((PaceFactor - 1) / 0.2, -1, 1);
-            NumPossessions = (int)Math.Round((Teams[0].CompositeRating.Ratings["GamePace"] + Teams[1].CompositeRating.Ratings["GamePace"] / 2) * 1.1 * PaceFactor);
+            NumPossessions = (int)Math.Round(101 + 96 / 2 * RandomUtils.RandomUniform(0.9, 1.1));
 
             Dt = 48.0 / (2 * NumPossessions);
 
@@ -66,6 +62,7 @@ namespace NBALigaSimulation.Shared.Models
             UpdatePlayersOnCourt(Teams, PlayersOnCourt);
             UpdateSynergy(Teams, PlayersOnCourt);
             HomeCourtAdvantage(Teams, PlayersOnCourt);
+
 
             SimPossessions(Teams, PlayersOnCourt);
 
@@ -92,11 +89,11 @@ namespace NBALigaSimulation.Shared.Models
             {
                 if (t == 0)
                 {
-                    factor = 1.01;  // Bonus pro time da casa
+                    factor = 1.025;  // Bonus pro time da casa
                 }
                 else
                 {
-                    factor = 0.99;  // Penalty pro time de fora
+                    factor = 0.975;  // Penalty pro time de fora
                 }
 
                 for (int p = 0; p < Teams[t].Players.Count; p++)
@@ -164,7 +161,7 @@ namespace NBALigaSimulation.Shared.Models
                 for (int p = 0; p < teams[t].Players.Count; p++)
                 {
 
-                    var player = teams[t].Players[p];
+                    var player = teams[t].Players.Find(player => player.RosterOrder == p);
                     if (player != null)
                     {
                         if (player.Stats == null)
@@ -510,8 +507,8 @@ namespace NBALigaSimulation.Shared.Models
             }
 
             // Chutar se não houver turnover
-            ratios = RatingArray(Teams, "Usage", Offense, PlayersOnCourt);
-            shooter = PickPlayer(ratios);
+            ratios = RatingArray(Teams, "GameUsage", Offense, PlayersOnCourt);
+            shooter = ArrayHelper.PickPlayer(ratios);
 
             return DoShot(shooter, Teams, PlayersOnCourt); // Fg, Orb ou Drb
         }
@@ -531,7 +528,7 @@ namespace NBALigaSimulation.Shared.Models
             int p;
             double[] ratios;
 
-            ratios = RatingArray(Teams, "Turnovers", Offense, PlayersOnCourt, 0.5);
+            ratios = RatingArray(Teams, "GameTurnovers", Offense, PlayersOnCourt, 0.5);
             p = PlayersOnCourt[Offense][PickPlayer(ratios)];
             RecordStat(Offense, p, "Tov", Teams);
             if (ProbStl(Teams) > new Random().NextDouble())
@@ -554,51 +551,44 @@ namespace NBALigaSimulation.Shared.Models
 
         private string DoStl(Team[] Teams, int[][] PlayersOnCourt)
         {
-            double[] ratios = RatingArray(Teams, "Stealing", Defense, PlayersOnCourt);
+            double[] ratios = RatingArray(Teams, "GameStealing", Defense, PlayersOnCourt);
             int p = PlayersOnCourt[Defense][PickPlayer(ratios)];
             RecordStat(Defense, p, "Stl", Teams);
 
             return "Stl";
         }
 
-        private string DoShot(int shooter, Team[] Teams, int[][] PlayersOnCourt)
+        private void DoShot(int shooter, Team[] Teams, int[][] PlayersOnCourt)
         {
             double fatigue, probMake, probAndOne, probMissAndFoul, r1, r2, r3;
-            int p, passer;
+            int passer = -1;
             string type;
-            double[] ratios;
 
-            p = PlayersOnCourt[Offense][shooter];
-
-            var player = Teams[Offense].Players[p];
+            int p = PlayersOnCourt[Offense][shooter];
+            var player = Teams[Offense].Players.Find(player => player.RosterOrder == p);
 
             fatigue = Fatigue(Teams[Offense].Players[p].Stats.Find(s => s.GameId == Id).Energy);
 
-            // Esta é uma tentativa "assistencia" (ou seja, uma assistência será registrada se for feita)
-            passer = -1;
             if (ProbAst(Teams) > new Random().NextDouble())
             {
-                ratios = RatingArray(Teams, "Passing", Offense, PlayersOnCourt, 2);
+                double[] ratios = RatingArray(Teams, "GamePassing", Offense, PlayersOnCourt, 2);
                 passer = PickPlayer(ratios, shooter);
             }
 
-            // Escolha o tipo de cute e armazene a taxa de sucesso (sem defesa) em probMake e a probabilidade de acerto e falta em probAndOne
             if (player.CompositeRating.Ratings["ShootingThreePointer"] > 0.4 && new Random().NextDouble() < (0.35 * player.CompositeRating.Ratings["ShootingThreePointer"]))
             {
-                // Three pointer
                 type = "ThreePointer";
                 probMissAndFoul = 0.02;
-                probMake = player.CompositeRating.Ratings["ShootingThreePointer"] * 0.68;
+                probMake = player.CompositeRating.Ratings["ShootingThreePointer"] * 0.5 + 0.1;
                 probAndOne = 0.01;
             }
             else
             {
                 r1 = new Random().NextDouble() * player.CompositeRating.Ratings["ShootingMidRange"];
-                r2 = new Random().NextDouble() * (player.CompositeRating.Ratings["ShootingAtRim"] + SynergyFactor * (Teams[Offense].Synergy.Off - Teams[Defense].Synergy.Def)); // A sinergia torna os chutes fáceis mais prováveis ou menos prováveis
-                r3 = new Random().NextDouble() * player.CompositeRating.Ratings["ShootingLowPost"];
+                r2 = new Random().NextDouble() * (player.CompositeRating.Ratings["ShootingAtRim"] + SynergyFactor * (Teams[Offense].Synergy.Off - Teams[Defense].Synergy.Def)); // Synergy makes easy shots either more likely or less likely
+                r3 = new Random().NextDouble() * (player.CompositeRating.Ratings["ShootingLowPost"] + SynergyFactor * (Teams[Offense].Synergy.Off - Teams[Defense].Synergy.Def)); // Synergy makes easy shots either more likely or less likely
                 if (r1 > r2 && r1 > r3)
                 {
-                    // Two point jumper
                     type = "MidRange";
                     probMissAndFoul = 0.07;
                     probMake = player.CompositeRating.Ratings["ShootingMidRange"] * 0.3 + 0.29;
@@ -606,7 +596,6 @@ namespace NBALigaSimulation.Shared.Models
                 }
                 else if (r2 > r3)
                 {
-                    // Dunk ou Layup
                     type = "AtRim";
                     probMissAndFoul = 0.37;
                     probMake = player.CompositeRating.Ratings["ShootingAtRim"] * 0.3 + 0.52;
@@ -614,7 +603,6 @@ namespace NBALigaSimulation.Shared.Models
                 }
                 else
                 {
-                    // Post up
                     type = "LowPost";
                     probMissAndFoul = 0.33;
                     probMake = player.CompositeRating.Ratings["ShootingLowPost"] * 0.3 + 0.37;
@@ -624,7 +612,6 @@ namespace NBALigaSimulation.Shared.Models
 
             probMake = (probMake - 0.25 * Teams[Defense].CompositeRating.Ratings["GameDefense"] + SynergyFactor * (Teams[Offense].Synergy.Off - Teams[Defense].Synergy.Def)) * fatigue;
 
-            // chutes com assistencia são mais fáceis
             if (passer >= 0)
             {
                 probMake += 0.025;
@@ -632,52 +619,61 @@ namespace NBALigaSimulation.Shared.Models
 
             if (ProbBlk(Teams) > new Random().NextDouble())
             {
-                return DoBlk(shooter, type, Teams, PlayersOnCourt);  // orb or drb
+                DoBlk(shooter, type, Teams, PlayersOnCourt); // orb or drb
+                return;
             }
 
-            // Acerto
+            // Make
             if (probMake > new Random().NextDouble())
             {
                 // And 1
                 if (probAndOne > new Random().NextDouble())
                 {
-                    DoFg(shooter, passer, type, Teams, PlayersOnCourt);
-                    return DoFt(shooter, 1, Teams, PlayersOnCourt);  // fg, orb, or drb
+                    DoFg(shooter, passer, type, true); // fg, orb, or drb
                 }
-                return DoFg(shooter, passer, type, Teams, PlayersOnCourt);   // fg
-            }
-
-            // Errou, mas sofreu falta
-            if (probMissAndFoul > new Random().NextDouble())
-            {
-                if (type == "ThreePointer")
+                else
                 {
-                    return DoFt(shooter, 3, Teams, PlayersOnCourt);  // fg, orb, or drb
+                    DoFg(shooter, passer, type); // fg
                 }
-                return DoFt(shooter, 2, Teams, PlayersOnCourt); // fg, orb, or drb
             }
-
-            // errou
-            p = PlayersOnCourt[Offense][shooter];
-            RecordStat(Offense, p, "Fga", Teams);
-            if (type == "AtRim")
+            else
             {
-                RecordStat(Offense, p, "FgaAtRim", Teams);
+                // Miss, but fouled
+                if (probMissAndFoul > new Random().NextDouble())
+                {
+                    if (type == "threePointer")
+                    {
+                        DoFt(shooter, 3, Teams, PlayersOnCourt); // fg, orb, or drb
+                    }
+                    else
+                    {
+                        DoFt(shooter, 2, Teams, PlayersOnCourt); // fg, orb, or drb
+                    }
+                }
+                else
+                {
+                    // Miss
+                    p = PlayersOnCourt[Offense][shooter];
+                    RecordStat(Offense, p, "Fga", Teams);
+                    if (type == "AtRim")
+                    {
+                        RecordStat(Offense, p, "FgaAtRim", Teams);
+                    }
+                    else if (type == "LowPost")
+                    {
+                        RecordStat(Offense, p, "FgaLowPost", Teams);
+                    }
+                    else if (type == "MidRange")
+                    {
+                        RecordStat(Offense, p, "FgaMidRange", Teams);
+                    }
+                    else if (type == "ThreePointer", Teams)
+                    {
+                        RecordStat(Offense, p, "Tpa", Teams);
+                    }
+                    DoReb(Teams, PlayersOnCourt); // orb or drb
+                }
             }
-            else if (type == "LowPost")
-            {
-                RecordStat(Offense, p, "FgaLowPost", Teams);
-            }
-            else if (type == "MidRange")
-            {
-                RecordStat(Offense, p, "FgaMidRange", Teams);
-            }
-            else if (type == "ThreePointer")
-            {
-                RecordStat(Offense, p, "Tpa", Teams);
-            }
-
-            return DoReb(Teams, PlayersOnCourt);
         }
 
         private double ProbBlk(Team[] Teams)
@@ -690,7 +686,7 @@ namespace NBALigaSimulation.Shared.Models
 
         private string DoBlk(int shooter, string type, Team[] Teams, int[][] PlayersOnCourt)
         {
-            double[] ratios = RatingArray(Teams, "Blocking", Defense, PlayersOnCourt, 4);
+            double[] ratios = RatingArray(Teams, "GameBlocking", Defense, PlayersOnCourt, 4);
             int p = PlayersOnCourt[Defense][PickPlayer(ratios)];
             RecordStat(Defense, p, "Blk", Teams);
 
@@ -768,7 +764,7 @@ namespace NBALigaSimulation.Shared.Models
             DoPf(Defense, Teams, PlayersOnCourt);
             int p = PlayersOnCourt[Offense][shooter];
 
-            var player = Teams[Offense].Players[p];
+            var player = Teams[Offense].Players.Find(player => player.RosterOrder == p);
 
             string outcome = string.Empty;
             for (int i = 0; i < amount; i++)
@@ -793,11 +789,11 @@ namespace NBALigaSimulation.Shared.Models
         private void DoPf(int t, Team[] Teams, int[][] PlayersOnCourt)
         {
 
-            double[] ratios = RatingArray(Teams, "Fouling", t, PlayersOnCourt);
+            double[] ratios = RatingArray(Teams, "GameFouling", t, PlayersOnCourt);
             int p = PlayersOnCourt[t][PickPlayer(ratios)];
             RecordStat(Defense, p, "Pf", Teams);
 
-            var player = Teams[Defense].Players[p];
+            var player = Teams[Defense].Players.Find(player => player.RosterOrder == p);
 
             if (player.Stats.Find(s => s.GameId == Id).Pf >= 6)
             {
@@ -808,7 +804,7 @@ namespace NBALigaSimulation.Shared.Models
 
         private string DoReb(Team[] Teams, int[][] PlayersOnCourt)
         {
-            if (new Random().NextDouble() < 0.15)
+            if (0.15 > new Random().NextDouble())
             {
                 return null;
             }
@@ -819,7 +815,7 @@ namespace NBALigaSimulation.Shared.Models
 
             if (0.75 * (2 + defenseRebounding) / (2 + offenseRebounding) > new Random().NextDouble())
             {
-                double[] ratios = RatingArray(Teams, "Rebounding", Defense, PlayersOnCourt);
+                double[] ratios = RatingArray(Teams, "GameRebounding", Defense, PlayersOnCourt);
                 int p = PlayersOnCourt[Defense][PickPlayer(ratios)];
                 RecordStat(Defense, p, "Drb", Teams);
                 RecordStat(Defense, p, "Trb", Teams);
@@ -827,7 +823,7 @@ namespace NBALigaSimulation.Shared.Models
                 return "Drb";
             }
 
-            double[] oRatios = RatingArray(Teams, "Rebounding", Offense, PlayersOnCourt);
+            double[] oRatios = RatingArray(Teams, "GameRebounding", Offense, PlayersOnCourt);
             int oP = PlayersOnCourt[Offense][PickPlayer(oRatios)];
             RecordStat(Offense, oP, "Orb", Teams);
             RecordStat(Offense, oP, "Trb", Teams);
@@ -838,50 +834,56 @@ namespace NBALigaSimulation.Shared.Models
         private double[] RatingArray(Team[] Teams, string rating, int t, int[][] PlayersOnCourt, double power = 1)
         {
             double[] array = new double[5];
-
             for (int i = 0; i < 5; i++)
             {
                 int p = PlayersOnCourt[t][i];
-                array[i] = Math.Pow(
-                    (Teams[t].Players[p].CompositeRating.Ratings[rating] *
-                    Fatigue(Teams[t].Players[p].Stats.Find(s => s.GameId == Id).Energy)),
-                    power);
+
+                var player = Teams[t].Players.Find(player => player.RosterOrder == p);
+
+                double energy = (double)(player.Stats.Find(s => s.GameId == Id)?.Energy);
+
+                if (player != null && player.Ratings?.LastOrDefault() != null)
+                {
+                    var playerRatings = player.Ratings.LastOrDefault();
+                    array[i] = Math.Pow(CompositeHelper.GetRatingValue(rating, player) * energy, power);
+                }
             }
 
             return array;
         }
 
-
-        private int PickPlayer(double[] ratios, int? exempt = null)
+        private int PickPlayer(double[] ratios, int exempt = -1)
         {
-            if (exempt.HasValue)
+            if (exempt >= 0)
             {
-                ratios[exempt.Value] = 0;
+                ratios[exempt] = 0;
             }
 
-            double sum = ratios.Sum();
+            double rand = new Random().NextDouble() * (ratios[0] + ratios[1] + ratios[2] + ratios[3] + ratios[4]);
 
-            if (sum == 0)
+            int pick;
+            if (rand < ratios[0])
             {
-                var candidates = Enumerable.Range(0, ratios.Length).Where(i => i != exempt).ToList();
-                Random random = new Random();
-                return candidates[random.Next(candidates.Count)];
+                pick = 0;
+            }
+            else if (rand < (ratios[0] + ratios[1]))
+            {
+                pick = 1;
+            }
+            else if (rand < (ratios[0] + ratios[1] + ratios[2]))
+            {
+                pick = 2;
+            }
+            else if (rand < (ratios[0] + ratios[1] + ratios[2] + ratios[3]))
+            {
+                pick = 3;
+            }
+            else
+            {
+                pick = 4;
             }
 
-            double rand = new Random().NextDouble() * sum;
-
-            double runningSum = 0;
-
-            for (int i = 0; i < ratios.Length; i++)
-            {
-                runningSum += ratios[i];
-                if (rand < runningSum)
-                {
-                    return i;
-                }
-            }
-
-            return 0;
+            return pick;
         }
 
         private void RecordStat(int t, int p, string s, Team[] teams, int amount = 1, double amntDouble = 1.0)
