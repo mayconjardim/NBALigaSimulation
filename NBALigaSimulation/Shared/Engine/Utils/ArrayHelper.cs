@@ -51,13 +51,13 @@ namespace NBALigaSimulation.Shared.Engine
             minAmount = 500;
             maxAmount = 20000;
 
-            amount = (int)(((ratings.Ovr - 1) / 100.0 - 0.45) * 3.3 * (maxAmount - minAmount) + minAmount);
+            amount = (int)(((ratings.CalculateOvr - 1) / 100.0 - 0.45) * 3.3 * (maxAmount - minAmount) + minAmount);
             if (randomizeAmount)
             {
                 amount *= (int)RandomUtils.Bound(RandomUtils.Gauss(1, 0.1), 0, 2);
             }
 
-            potentialDifference = (int)Math.Round((ratings.Pot - ratings.Ovr) / 4.0);
+            potentialDifference = (int)Math.Round((ratings.Pot - ratings.CalculateOvr) / 4.0);
             years = 5 - potentialDifference;
             if (years < 2)
             {

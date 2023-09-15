@@ -183,7 +183,7 @@ namespace NBALigaSimulation.Shared.Models
                     }
                     else
                     {
-                        ovrs[p] = teams[t].Players[p].Ratings.LastOrDefault().Ovr * Fatigue(teams[t].Players[p].Stats.Find(s => s.GameId == Id).Energy) *
+                        ovrs[p] = teams[t].Players[p].Ratings.LastOrDefault().CalculateOvr * Fatigue(teams[t].Players[p].Stats.Find(s => s.GameId == Id).Energy) *
                               teams[t].Players[p].PtModifier * RandomUtils.RandomUniform(0.9, 1.1);
                     }
                 }

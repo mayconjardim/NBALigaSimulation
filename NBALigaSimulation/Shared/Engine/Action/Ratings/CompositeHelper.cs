@@ -1,4 +1,5 @@
 ﻿using NBALigaSimulation.Shared.Models;
+using System.Security.Cryptography;
 
 namespace NBALigaSimulation.Shared.Engine
 {
@@ -60,20 +61,19 @@ namespace NBALigaSimulation.Shared.Engine
                     Dictionary<string, double> passing = new Dictionary<string, double>();
                     passing.Add("drb", player.Ratings.LastOrDefault().Drb);
                     passing.Add("pss", player.Ratings.LastOrDefault().Pss);
-                    List<string> passingAttributes = new List<string> { "drb", "pss" };
-                    List<double> passingWeights = new List<double> { 0.4, 1 };
+                    passing.Add("oiq", player.Ratings.LastOrDefault().Oiq);
+                    List<string> passingAttributes = new List<string> { "drb", "pss", "oiq" };
+                    List<double> passingWeights = new List<double> { 0.4, 1, 0.5 };
                     player.CompositeRating.Ratings["Passing"] = Converter.Composite(passing, passingAttributes, passingWeights);
 
                     //Turnovers
                     player.CompositeRating.Ratings["Turnovers"] = 0;
                     Dictionary<string, double> turnovers = new Dictionary<string, double>();
-                    turnovers.Add("drb", player.Ratings.LastOrDefault().Drb);
-                    turnovers.Add("pss", player.Ratings.LastOrDefault().Pss);
-                    turnovers.Add("spd", player.Ratings.LastOrDefault().Spd);
-                    turnovers.Add("hgt", player.Ratings.LastOrDefault().Hgt);
                     turnovers.Add("ins", player.Ratings.LastOrDefault().Ins);
-                    List<string> turnoversAttributes = new List<string> { "drb", "pss", "spd", "hgt", "ins" };
-                    List<double> turnoversWeights = new List<double> { 1, 1, -1, 1, 1 };
+                    turnovers.Add("pss", player.Ratings.LastOrDefault().Pss);
+                    turnovers.Add("oiq", player.Ratings.LastOrDefault().Oiq);
+                    List<string> turnoversAttributes = new List<string> { "50", "ins", "pss", "oiq" };
+                    List<double> turnoversWeights = new List<double> { 0.5, 1, 1, -1 };
                     player.CompositeRating.Ratings["Turnovers"] = Converter.Composite(turnovers, turnoversAttributes, turnoversWeights);
 
                     //ShootingAtRim
@@ -83,15 +83,16 @@ namespace NBALigaSimulation.Shared.Engine
                     shootingAtRim.Add("spd", player.Ratings.LastOrDefault().Spd);
                     shootingAtRim.Add("jmp", player.Ratings.LastOrDefault().Jmp);
                     shootingAtRim.Add("dnk", player.Ratings.LastOrDefault().Dnk);
-                    List<string> shootingAtRimAttributes = new List<string> { "hgt", "spd", "jmp", "dnk" };
-                    List<double> shootingAtRimWeights = new List<double> { 1, 0.2, 0.6, 0.4 };
+                    shootingAtRim.Add("oiq", player.Ratings.LastOrDefault().Oiq);
+                    List<string> shootingAtRimAttributes = new List<string> { "hgt", "spd", "jmp", "dnk", "oiq" };
+                    List<double> shootingAtRimWeights = new List<double> { 0.75, 0.2, 0.6, 0.4, 0.2 };
                     player.CompositeRating.Ratings["ShootingAtRim"] = Converter.Composite(shootingAtRim, shootingAtRimAttributes, shootingAtRimWeights);
 
                     //ShootingLowPost
                     player.CompositeRating.Ratings["ShootingLowPost"] = 0;
                     Dictionary<string, double> shootingLowPost = new Dictionary<string, double>();
                     shootingLowPost.Add("hgt", player.Ratings.LastOrDefault().Hgt);
-                    shootingLowPost.Add("stre", player.Ratings.LastOrDefault().Str);
+                    shootingLowPost.Add("stre", player.Ratings.LastOrDefault().Stre);
                     shootingLowPost.Add("spd", player.Ratings.LastOrDefault().Spd);
                     shootingLowPost.Add("ins", player.Ratings.LastOrDefault().Ins);
                     List<string> shootingLowPostAttributes = new List<string> { "hgt", "stre", "spd", "ins" };
@@ -127,7 +128,7 @@ namespace NBALigaSimulation.Shared.Engine
                     player.CompositeRating.Ratings["Rebounding"] = 0;
                     Dictionary<string, double> rebounding = new Dictionary<string, double>();
                     rebounding.Add("hgt", player.Ratings.LastOrDefault().Hgt);
-                    rebounding.Add("stre", player.Ratings.LastOrDefault().Str);
+                    rebounding.Add("stre", player.Ratings.LastOrDefault().Stre);
                     rebounding.Add("jmp", player.Ratings.LastOrDefault().Jmp);
                     rebounding.Add("reb", player.Ratings.LastOrDefault().Reb);
                     List<string> reboundingAttributes = new List<string> { "hgt", "stre", "jmp", "reb" };
@@ -166,7 +167,7 @@ namespace NBALigaSimulation.Shared.Engine
                     player.CompositeRating.Ratings["Defense"] = 0;
                     Dictionary<string, double> defense = new Dictionary<string, double>();
                     defense.Add("hgt", player.Ratings.LastOrDefault().Hgt);
-                    defense.Add("stre", player.Ratings.LastOrDefault().Str);
+                    defense.Add("stre", player.Ratings.LastOrDefault().Stre);
                     defense.Add("spd", player.Ratings.LastOrDefault().Spd);
                     defense.Add("jmp", player.Ratings.LastOrDefault().Jmp);
                     defense.Add("blk", player.Ratings.LastOrDefault().Blk);
@@ -179,7 +180,7 @@ namespace NBALigaSimulation.Shared.Engine
                     player.CompositeRating.Ratings["DefenseInterior"] = 0;
                     Dictionary<string, double> defenseInterior = new Dictionary<string, double>();
                     defenseInterior.Add("hgt", player.Ratings.LastOrDefault().Hgt);
-                    defenseInterior.Add("stre", player.Ratings.LastOrDefault().Str);
+                    defenseInterior.Add("stre", player.Ratings.LastOrDefault().Stre);
                     defenseInterior.Add("spd", player.Ratings.LastOrDefault().Spd);
                     defenseInterior.Add("jmp", player.Ratings.LastOrDefault().Jmp);
                     defenseInterior.Add("blk", player.Ratings.LastOrDefault().Blk);
@@ -191,7 +192,7 @@ namespace NBALigaSimulation.Shared.Engine
                     player.CompositeRating.Ratings["DefensePerimeter"] = 0;
                     Dictionary<string, double> defensePerimeter = new Dictionary<string, double>();
                     defensePerimeter.Add("hgt", player.Ratings.LastOrDefault().Hgt);
-                    defensePerimeter.Add("stre", player.Ratings.LastOrDefault().Str);
+                    defensePerimeter.Add("stre", player.Ratings.LastOrDefault().Stre);
                     defensePerimeter.Add("spd", player.Ratings.LastOrDefault().Spd);
                     defensePerimeter.Add("jmp", player.Ratings.LastOrDefault().Jmp);
                     defensePerimeter.Add("stl", player.Ratings.LastOrDefault().Stl);
@@ -212,7 +213,7 @@ namespace NBALigaSimulation.Shared.Engine
                     //Athleticism
                     player.CompositeRating.Ratings["Athleticism"] = 0;
                     Dictionary<string, double> athleticism = new Dictionary<string, double>();
-                    athleticism.Add("stre", player.Ratings.LastOrDefault().Str);
+                    athleticism.Add("stre", player.Ratings.LastOrDefault().Stre);
                     athleticism.Add("spd", player.Ratings.LastOrDefault().Spd);
                     athleticism.Add("jmp", player.Ratings.LastOrDefault().Jmp);
                     athleticism.Add("hgt", player.Ratings.LastOrDefault().Hgt);

@@ -43,18 +43,13 @@ namespace NBALigaSimulation.Shared.Models
             {
 
                 Hgt = lastRatings.Hgt,
-                Str = lastRatings.Str,
                 Spd = lastRatings.Spd,
                 Jmp = lastRatings.Jmp,
-                End = lastRatings.End,
                 Ins = lastRatings.Ins,
                 Dnk = lastRatings.Dnk,
                 Ft = lastRatings.Ft,
-
                 Fg = lastRatings.Fg,
                 Tp = lastRatings.Tp,
-                Blk = lastRatings.Blk,
-                Stl = lastRatings.Stl,
                 Drb = lastRatings.Drb,
                 Pss = lastRatings.Pss,
                 Reb = lastRatings.Reb,
@@ -77,7 +72,7 @@ namespace NBALigaSimulation.Shared.Models
                     ratings.Pot -= random.Next(5, 25);
                 }
 
-                double baseChange = ArrayHelper.CalcBaseChange(age, ratings.Pot - ratings.Ovr);
+                double baseChange = ArrayHelper.CalcBaseChange(age, ratings.Pot - ratings.CalculateOvr);
 
                 if (baseChange >= 0)
                 {
@@ -105,7 +100,7 @@ namespace NBALigaSimulation.Shared.Models
 
                 ratings.Spd = ArrayHelper.LimitRating(ratings.Spd + RandomUtils.Bound(baseChangeLocal * RandomUtils.RandomUniform(0.5, 1.5), -20, 10));
                 ratings.Jmp = ArrayHelper.LimitRating(ratings.Jmp + RandomUtils.Bound(baseChangeLocal * RandomUtils.RandomUniform(0.5, 1.5), -20, 10));
-                ratings.End = ArrayHelper.LimitRating(ratings.End + RandomUtils.Bound(baseChangeLocal * RandomUtils.RandomUniform(0.5, 1.5), -20, 10));
+                ratings.Endu = ArrayHelper.LimitRating(ratings.Endu + RandomUtils.Bound(baseChangeLocal * RandomUtils.RandomUniform(0.5, 1.5), -20, 10));
 
 
                 ratings.Drb = ArrayHelper.LimitRating(ratings.Drb + RandomUtils.Bound(baseChange * RandomUtils.RandomUniform(0.5, 1.5), -1, 10));
@@ -113,10 +108,9 @@ namespace NBALigaSimulation.Shared.Models
                 ratings.Reb = ArrayHelper.LimitRating(ratings.Reb + RandomUtils.Bound(baseChange * RandomUtils.RandomUniform(0.5, 1.5), -1, 10));
 
 
-                ratings.Str = ArrayHelper.LimitRating(ratings.Str + baseChange * RandomUtils.RandomUniform(0.5, 1.5));
+                ratings.Stre = ArrayHelper.LimitRating(ratings.Stre + baseChange * RandomUtils.RandomUniform(0.5, 1.5));
                 ratings.Dnk = ArrayHelper.LimitRating(ratings.Dnk + baseChange * RandomUtils.RandomUniform(0.5, 1.5));
-                ratings.Blk = ArrayHelper.LimitRating(ratings.Blk + baseChange * RandomUtils.RandomUniform(0.5, 1.5));
-                ratings.Stl = ArrayHelper.LimitRating(ratings.Stl + baseChange * RandomUtils.RandomUniform(0.5, 1.5));
+
 
                 double baseChangeLocals;
                 if (age <= 24)
@@ -138,15 +132,15 @@ namespace NBALigaSimulation.Shared.Models
                 ratings.Tp = ArrayHelper.LimitRating(ratings.Tp + baseChangeLocals * RandomUtils.RandomUniform(0.5, 1.5));
 
                 ratings.Pot += -2 + (int)Math.Round(RandomUtils.Gauss(0, 2));
-                if (ratings.Ovr > ratings.Pot || age > 28)
+                if (ratings.CalculateOvr > ratings.Pot || age > 28)
                 {
-                    ratings.Pot = ratings.Ovr;
+                    ratings.Pot = ratings.CalculateOvr;
                 }
             }
 
-            if (ratings.Ovr > ratings.Pot || age > 28)
+            if (ratings.CalculateOvr > ratings.Pot || age > 28)
             {
-                ratings.Pot = ratings.Ovr;
+                ratings.Pot = ratings.CalculateOvr;
             }
 
             return ratings;
