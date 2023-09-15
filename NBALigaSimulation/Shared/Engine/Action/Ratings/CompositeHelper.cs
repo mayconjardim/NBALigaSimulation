@@ -132,26 +132,29 @@ namespace NBALigaSimulation.Shared.Engine
                     rebounding.Add("stre", player.Ratings.LastOrDefault().Stre);
                     rebounding.Add("jmp", player.Ratings.LastOrDefault().Jmp);
                     rebounding.Add("reb", player.Ratings.LastOrDefault().Reb);
-                    List<string> reboundingAttributes = new List<string> { "hgt", "stre", "jmp", "reb" };
-                    List<double> reboundingWeights = new List<double> { 1.5, 0.1, 0.1, 0.7 };
+                    rebounding.Add("oiq", player.Ratings.LastOrDefault().Oiq);
+                    rebounding.Add("diq", player.Ratings.LastOrDefault().Diq);
+                    List<string> reboundingAttributes = new List<string> { "hgt", "stre", "jmp", "reb", "oiq", "diq" };
+                    List<double> reboundingWeights = new List<double> { 2, 0.1, 0.1, 2, 0.5, 0.5 };
                     player.CompositeRating.Ratings["Rebounding"] = Converter.Composite(rebounding, reboundingAttributes, reboundingWeights);
 
                     //Stealing
                     player.CompositeRating.Ratings["Stealing"] = 0;
                     Dictionary<string, double> stealing = new Dictionary<string, double>();
                     stealing.Add("spd", player.Ratings.LastOrDefault().Spd);
-                    stealing.Add("stl", player.Ratings.LastOrDefault().Stl);
-                    List<string> stealingAttributes = new List<string> { "spd", "stl" };
-                    player.CompositeRating.Ratings["Stealing"] = Converter.Composite(stealing, stealingAttributes);
+                    stealing.Add("diq", player.Ratings.LastOrDefault().Diq);
+                    List<string> stealingAttributes = new List<string> { "50", "spd", "diq" };
+                    List<double> stealingWeights = new List<double> { 1, 1, 2 };
+                    player.CompositeRating.Ratings["Stealing"] = Converter.Composite(stealing, stealingAttributes, stealingWeights);
 
                     //Blocking
                     player.CompositeRating.Ratings["Blocking"] = 0;
                     Dictionary<string, double> blocking = new Dictionary<string, double>();
                     blocking.Add("hgt", player.Ratings.LastOrDefault().Hgt);
                     blocking.Add("jmp", player.Ratings.LastOrDefault().Jmp);
-                    blocking.Add("blk", player.Ratings.LastOrDefault().Blk);
-                    List<string> blockingAttributes = new List<string> { "hgt", "jmp", "blk" };
-                    List<double> blockingWeights = new List<double> { 1.5, 0.5, 0.5 };
+                    blocking.Add("diq", player.Ratings.LastOrDefault().Diq);
+                    List<string> blockingAttributes = new List<string> { "hgt", "jmp", "diq" };
+                    List<double> blockingWeights = new List<double> { 2.5, 1.5, 0.5 };
                     player.CompositeRating.Ratings["Blocking"] = Converter.Composite(blocking, blockingAttributes, blockingWeights);
 
                     //Fouling
