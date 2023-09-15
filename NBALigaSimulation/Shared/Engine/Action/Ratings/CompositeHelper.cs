@@ -95,26 +95,27 @@ namespace NBALigaSimulation.Shared.Engine
                     shootingLowPost.Add("stre", player.Ratings.LastOrDefault().Stre);
                     shootingLowPost.Add("spd", player.Ratings.LastOrDefault().Spd);
                     shootingLowPost.Add("ins", player.Ratings.LastOrDefault().Ins);
-                    List<string> shootingLowPostAttributes = new List<string> { "hgt", "stre", "spd", "ins" };
-                    List<double> shootingLowPostWeights = new List<double> { 1, 0.6, 0.2, 1 };
+                    shootingLowPost.Add("oiq", player.Ratings.LastOrDefault().Oiq);
+                    List<string> shootingLowPostAttributes = new List<string> { "hgt", "stre", "spd", "ins", "oiq" };
+                    List<double> shootingLowPostWeights = new List<double> { 2, 0.6, 0.2, 1, 0.2 };
                     player.CompositeRating.Ratings["ShootingLowPost"] = Converter.Composite(shootingLowPost, shootingLowPostAttributes, shootingLowPostWeights);
 
                     //ShootingMidRange
-                    player.CompositeRating.Ratings["ShootingMidRange"] = 0;
+                    player.CompositeRating.Ratings["shootingMidRange"] = 0;
                     Dictionary<string, double> shootingMidRange = new Dictionary<string, double>();
-                    shootingMidRange.Add("hgt", player.Ratings.LastOrDefault().Hgt);
+                    shootingMidRange.Add("oiq", player.Ratings.LastOrDefault().Oiq);
                     shootingMidRange.Add("fg", player.Ratings.LastOrDefault().Fg);
-                    List<string> shootingMidRangeAttributes = new List<string> { "hgt", "fg" };
-                    List<double> shootingMidRangeWeights = new List<double> { 0.2, 1 };
+                    List<string> shootingMidRangeAttributes = new List<string> { "oiq", "fg" };
+                    List<double> shootingMidRangeWeights = new List<double> { -0.5, 1 };
                     player.CompositeRating.Ratings["ShootingMidRange"] = Converter.Composite(shootingMidRange, shootingMidRangeAttributes, shootingMidRangeWeights);
 
                     //ShootingThreePointer
                     player.CompositeRating.Ratings["ShootingThreePointer"] = 0;
                     Dictionary<string, double> shootingThreePointer = new Dictionary<string, double>();
-                    shootingThreePointer.Add("hgt", player.Ratings.LastOrDefault().Hgt);
+                    shootingThreePointer.Add("oiq", player.Ratings.LastOrDefault().Oiq);
                     shootingThreePointer.Add("tp", player.Ratings.LastOrDefault().Tp);
-                    List<string> shootingThreePointerAttributes = new List<string> { "hgt", "tp" };
-                    List<double> shootingThreePointerWeights = new List<double> { 0.2, 1 };
+                    List<string> shootingThreePointerAttributes = new List<string> { "oiq", "tp" };
+                    List<double> shootingThreePointerWeights = new List<double> { 0.1, 1 };
                     player.CompositeRating.Ratings["ShootingThreePointer"] = Converter.Composite(shootingThreePointer, shootingThreePointerAttributes, shootingThreePointerWeights);
 
                     //ShootingFT
