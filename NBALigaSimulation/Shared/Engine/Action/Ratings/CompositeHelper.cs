@@ -161,11 +161,23 @@ namespace NBALigaSimulation.Shared.Engine
                     player.CompositeRating.Ratings["Fouling"] = 0;
                     Dictionary<string, double> fouling = new Dictionary<string, double>();
                     fouling.Add("hgt", player.Ratings.LastOrDefault().Hgt);
-                    fouling.Add("blk", player.Ratings.LastOrDefault().Blk);
+                    fouling.Add("blk", player.Ratings.LastOrDefault().Diq);
                     fouling.Add("spd", player.Ratings.LastOrDefault().Spd);
-                    List<string> foulingAttributes = new List<string> { "hgt", "blk", "spd" };
-                    List<double> foulingWeights = new List<double> { 1, 1, -1 };
+                    List<string> foulingAttributes = new List<string> { "50", "hgt", "diq", "spd" };
+                    List<double> foulingWeights = new List<double> { 3, 1, -1, -1 };
                     player.CompositeRating.Ratings["Fouling"] = Converter.Composite(fouling, foulingAttributes, foulingWeights);
+
+                    //Drawing Fouls
+                    player.CompositeRating.Ratings["DrawingFouls"] = 0;
+                    Dictionary<string, double> drawingFouls = new Dictionary<string, double>();
+                    drawingFouls.Add("hgt", player.Ratings.LastOrDefault().Hgt);
+                    drawingFouls.Add("spd", player.Ratings.LastOrDefault().Spd);
+                    drawingFouls.Add("drb", player.Ratings.LastOrDefault().Drb);
+                    drawingFouls.Add("dnk", player.Ratings.LastOrDefault().Dnk);
+                    drawingFouls.Add("oiq", player.Ratings.LastOrDefault().Oiq);
+                    List<string> drawingFoulsAttributes = new List<string> { "hgt", "spd", "drb", "dnk", "oiq" };
+                    List<double> drawingFoulsWeights = new List<double> { 1, 1, 1, 1, 1 };
+                    player.CompositeRating.Ratings["DrawingFouls"] = Converter.Composite(drawingFouls, drawingFoulsAttributes, drawingFoulsWeights);
 
                     //Defense
                     player.CompositeRating.Ratings["Defense"] = 0;
@@ -174,10 +186,9 @@ namespace NBALigaSimulation.Shared.Engine
                     defense.Add("stre", player.Ratings.LastOrDefault().Stre);
                     defense.Add("spd", player.Ratings.LastOrDefault().Spd);
                     defense.Add("jmp", player.Ratings.LastOrDefault().Jmp);
-                    defense.Add("blk", player.Ratings.LastOrDefault().Blk);
-                    defense.Add("stl", player.Ratings.LastOrDefault().Stl);
-                    List<string> defenseAttributes = new List<string> { "hgt", "stre", "spd", "jmp", "blk", "stl" };
-                    List<double> defenseWeights = new List<double> { 1, 1, 1, 0.5, 1, 1 };
+                    defense.Add("diq", player.Ratings.LastOrDefault().Diq);
+                    List<string> defenseAttributes = new List<string> { "hgt", "stre", "spd", "jmp", "diq" };
+                    List<double> defenseWeights = new List<double> { 1, 1, 1, 0.5, 2 };
                     player.CompositeRating.Ratings["Defense"] = Converter.Composite(defense, defenseAttributes, defenseWeights);
 
                     //DefenseInterior
@@ -187,9 +198,9 @@ namespace NBALigaSimulation.Shared.Engine
                     defenseInterior.Add("stre", player.Ratings.LastOrDefault().Stre);
                     defenseInterior.Add("spd", player.Ratings.LastOrDefault().Spd);
                     defenseInterior.Add("jmp", player.Ratings.LastOrDefault().Jmp);
-                    defenseInterior.Add("blk", player.Ratings.LastOrDefault().Blk);
-                    List<string> defenseInteriorAttributes = new List<string> { "hgt", "stre", "spd", "jmp", "blk" };
-                    List<double> defenseInteriorWeights = new List<double> { 2, 1, 0.5, 0.5, 1 };
+                    defenseInterior.Add("diq", player.Ratings.LastOrDefault().Diq);
+                    List<string> defenseInteriorAttributes = new List<string> { "hgt", "stre", "spd", "jmp", "diq" };
+                    List<double> defenseInteriorWeights = new List<double> { 2.5, 1, 0.5, 0.5, 2 };
                     player.CompositeRating.Ratings["DefenseInterior"] = Converter.Composite(defenseInterior, defenseInteriorAttributes, defenseInteriorWeights);
 
                     //DefensePerimeter
@@ -199,18 +210,17 @@ namespace NBALigaSimulation.Shared.Engine
                     defensePerimeter.Add("stre", player.Ratings.LastOrDefault().Stre);
                     defensePerimeter.Add("spd", player.Ratings.LastOrDefault().Spd);
                     defensePerimeter.Add("jmp", player.Ratings.LastOrDefault().Jmp);
-                    defensePerimeter.Add("stl", player.Ratings.LastOrDefault().Stl);
-                    List<string> defensePerimeterAttributes = new List<string> { "hgt", "stre", "spd", "jmp", "stl" };
-                    List<double> defensePerimeterWeights = new List<double> { 1, 1, 2, 0.5, 1 };
+                    defensePerimeter.Add("diq", player.Ratings.LastOrDefault().Diq);
+                    List<string> defensePerimeterAttributes = new List<string> { "hgt", "stre", "spd", "jmp", "diq" };
+                    List<double> defensePerimeterWeights = new List<double> { 0.5, 0.5, 2, 0.5, 1 };
                     player.CompositeRating.Ratings["DefensePerimeter"] = Converter.Composite(defensePerimeter, defensePerimeterAttributes, defensePerimeterWeights);
 
                     //Endurance
                     player.CompositeRating.Ratings["Endurance"] = 0;
                     Dictionary<string, double> endurance = new Dictionary<string, double>();
-                    endurance.Add("endu", player.Ratings.LastOrDefault().End);
-                    endurance.Add("hgt", player.Ratings.LastOrDefault().Hgt);
-                    List<string> enduranceAttributes = new List<string> { "endu", "hgt" };
-                    List<double> enduranceWeights = new List<double> { 1, 1, -0.1 };
+                    endurance.Add("endu", player.Ratings.LastOrDefault().Endu);
+                    List<string> enduranceAttributes = new List<string> { "endu", "50" };
+                    List<double> enduranceWeights = new List<double> { 1, 1 };
                     player.CompositeRating.Ratings["Endurance"] = Converter.Composite(endurance, enduranceAttributes, enduranceWeights);
 
 
@@ -222,7 +232,7 @@ namespace NBALigaSimulation.Shared.Engine
                     athleticism.Add("jmp", player.Ratings.LastOrDefault().Jmp);
                     athleticism.Add("hgt", player.Ratings.LastOrDefault().Hgt);
                     List<string> athleticismAttributes = new List<string> { "stre", "spd", "jmp", "hgt" };
-                    List<double> athleticismWeights = new List<double> { 1, 1, 1, 0.5 };
+                    List<double> athleticismWeights = new List<double> { 1, 1, 1, 0.75 };
                     player.CompositeRating.Ratings["Endurance"] = Converter.Composite(athleticism, athleticismAttributes, athleticismWeights);
 
                 }
