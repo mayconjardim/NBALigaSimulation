@@ -123,14 +123,14 @@ namespace NBALigaSimulation.Client.Pages.Player
                 {
                     Labels = new List<string>()
                     {
-                      "STL", "REB", "BLK", "HGT", "STR", "SPD", "JMP", "END"
+                      "DIQ", "REB", "OIQ", "HGT", "STR", "SPD", "JMP", "END"
                     },
                     Datasets = new List<ChartJsDataset>()
                     {
                         new RadarDataset()
                         {
                             Label = "",
-                            Data = new List<object>() { rating.Stl, rating.Reb, rating.Blk, rating.Hgt, rating.Str, rating.Spd, rating.Jmp, rating.End },
+                            Data = new List<object>() { rating.Diq, rating.Reb, rating.Oiq, rating.Hgt, rating.Stre, rating.Spd, rating.Jmp, rating.Endu },
                             BackgroundColor = "rgba(3, 35, 76, 0.83)",
                             BorderColor = "#03234C",
                             BorderWidth = 3

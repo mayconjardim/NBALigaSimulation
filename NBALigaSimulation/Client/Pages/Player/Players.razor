@@ -34,7 +34,7 @@
         <MudTh><MudTableSortLabel Enabled="@false" SortBy="new Func<PlayerCompleteDto, object>(x=>x.Name)">NAME</MudTableSortLabel></MudTh>
         <MudTh><MudTableSortLabel SortBy="new Func<PlayerCompleteDto, object>(x=>x.Born.Year)">AGE</MudTableSortLabel></MudTh>
         <MudTh><MudTableSortLabel Enabled="@false" SortBy="new Func<PlayerCompleteDto, object>(x=>x.Pos)">POS</MudTableSortLabel></MudTh>
-        <MudTh><MudTableSortLabel SortBy="new Func<PlayerCompleteDto, object>(x=>x.Ratings.Last().Ovr)">OVR</MudTableSortLabel></MudTh>
+        <MudTh><MudTableSortLabel SortBy="new Func<PlayerCompleteDto, object>(x=>x.Ratings.Last().CalculateOvr)">OVR</MudTableSortLabel></MudTh>
         <MudTh><MudTableSortLabel SortBy="new Func<PlayerCompleteDto, object>(x=>x.Ratings.Last().Pot)">POT</MudTableSortLabel></MudTh>
         <MudTh><MudTableSortLabel SortBy="new Func<PlayerCompleteDto, object>(x=>x.Ratings.Last().Ins)">INS</MudTableSortLabel></MudTh>
         <MudTh><MudTableSortLabel SortBy="new Func<PlayerCompleteDto, object>(x=>x.Ratings.Last().Dnk)">DNK</MudTableSortLabel></MudTh>
@@ -43,20 +43,17 @@
         <MudTh><MudTableSortLabel SortBy="new Func<PlayerCompleteDto, object>(x=>x.Ratings.Last().Tp)">3P</MudTableSortLabel></MudTh>
         <MudTh><MudTableSortLabel SortBy="new Func<PlayerCompleteDto, object>(x=>x.Ratings.Last().Drb)">DRB</MudTableSortLabel></MudTh>
         <MudTh><MudTableSortLabel SortBy="new Func<PlayerCompleteDto, object>(x=>x.Ratings.Last().Pss)">PAS</MudTableSortLabel></MudTh>
-        <MudTh><MudTableSortLabel SortBy="new Func<PlayerCompleteDto, object>(x=>x.Ratings.Last().Stl)">STL</MudTableSortLabel></MudTh>
         <MudTh><MudTableSortLabel SortBy="new Func<PlayerCompleteDto, object>(x=>x.Ratings.Last().Reb)">REB</MudTableSortLabel></MudTh>
-        <MudTh><MudTableSortLabel SortBy="new Func<PlayerCompleteDto, object>(x=>x.Ratings.Last().Blk)">BLK</MudTableSortLabel></MudTh>
         <MudTh><MudTableSortLabel SortBy="new Func<PlayerCompleteDto, object>(x=>x.Ratings.Last().Hgt)">HGT</MudTableSortLabel></MudTh>
-        <MudTh><MudTableSortLabel SortBy="new Func<PlayerCompleteDto, object>(x=>x.Ratings.Last().Str)">STR</MudTableSortLabel></MudTh>
         <MudTh><MudTableSortLabel SortBy="new Func<PlayerCompleteDto, object>(x=>x.Ratings.Last().Spd)">SPD</MudTableSortLabel></MudTh>
         <MudTh><MudTableSortLabel SortBy="new Func<PlayerCompleteDto, object>(x=>x.Ratings.Last().Jmp)">JMP</MudTableSortLabel></MudTh>
-        <MudTh><MudTableSortLabel SortBy="new Func<PlayerCompleteDto, object>(x=>x.Ratings.Last().End)">END</MudTableSortLabel></MudTh>
+        <MudTh><MudTableSortLabel SortBy="new Func<PlayerCompleteDto, object>(x=>x.Ratings.Last().Endu)">END</MudTableSortLabel></MudTh>
     </HeaderContent>
     <RowTemplate Context="data">
         <MudTd Style="white-space: nowrap;" DataLabel="NAME"><a  style="color: blue" href="@("player/" + data.Id)">@data.Name</a></MudTd>
         <MudTd DataLabel="AGE">@(season - data.Born.Year)</MudTd>
         <MudTd DataLabel="OVR">@data.Pos</MudTd>
-        <MudTd DataLabel="OVR">@data.Ratings.Last().Ovr</MudTd>
+        <MudTd DataLabel="OVR">@data.Ratings.Last().CalculateOvr</MudTd>
         <MudTd DataLabel="POT">@data.Ratings.Last().Pot</MudTd>
         <MudTd DataLabel="INS">@data.Ratings.Last().Ins</MudTd>
         <MudTd DataLabel="DNK">@data.Ratings.Last().Dnk</MudTd>
@@ -65,14 +62,11 @@
         <MudTd DataLabel="3P"> @data.Ratings.Last().Tp</MudTd>
         <MudTd DataLabel="DRB">@data.Ratings.Last().Drb</MudTd>
         <MudTd DataLabel="PAS">@data.Ratings.Last().Pss</MudTd>
-        <MudTd DataLabel="STL">@data.Ratings.Last().Stl</MudTd>
         <MudTd DataLabel="REB">@data.Ratings.Last().Reb</MudTd>
-        <MudTd DataLabel="BLK">@data.Ratings.Last().Blk</MudTd>
         <MudTd DataLabel="HGT">@data.Ratings.Last().Hgt</MudTd>
-        <MudTd DataLabel="STR">@data.Ratings.Last().Str</MudTd>
         <MudTd DataLabel="SPD">@data.Ratings.Last().Spd</MudTd>
         <MudTd DataLabel="JMP">@data.Ratings.Last().Jmp</MudTd>
-        <MudTd DataLabel="END">@data.Ratings.Last().End</MudTd>
+        <MudTd DataLabel="END">@data.Ratings.Last().Endu</MudTd>
     </RowTemplate>
      <PagerContent>
         <MudTablePager PageSizeOptions="new int[]{50, 100}" />

@@ -549,7 +549,7 @@ namespace NBALigaSimulation.Server.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("Blk")
+                    b.Property<int>("Diq")
                         .HasColumnType("INTEGER");
 
                     b.Property<int>("Dnk")
@@ -558,13 +558,16 @@ namespace NBALigaSimulation.Server.Migrations
                     b.Property<int>("Drb")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("End")
+                    b.Property<int>("Endu")
                         .HasColumnType("INTEGER");
 
                     b.Property<int>("Fg")
                         .HasColumnType("INTEGER");
 
                     b.Property<int>("Ft")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("Fuzz")
                         .HasColumnType("INTEGER");
 
                     b.Property<int>("Hgt")
@@ -576,8 +579,15 @@ namespace NBALigaSimulation.Server.Migrations
                     b.Property<int>("Jmp")
                         .HasColumnType("INTEGER");
 
+                    b.Property<int>("Oiq")
+                        .HasColumnType("INTEGER");
+
                     b.Property<int>("PlayerId")
                         .HasColumnType("INTEGER");
+
+                    b.Property<string>("Pos")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
 
                     b.Property<int>("Pot")
                         .HasColumnType("INTEGER");
@@ -594,10 +604,7 @@ namespace NBALigaSimulation.Server.Migrations
                     b.Property<int>("Spd")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("Stl")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("Str")
+                    b.Property<int>("Stre")
                         .HasColumnType("INTEGER");
 
                     b.Property<int>("Tp")

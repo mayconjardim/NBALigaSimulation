@@ -68,7 +68,7 @@
               <span style="width: 150px">@data.Name</span>
               <span  class="drag40">@data.Pos</span>
               <span  class="drag40">@Age(@data.Born.Year, @season)</span>
-              <span  class="drag40">@data.Ratings.Last().Ovr</span>
+              <span  class="drag40">@data.Ratings.Last().CalculateOvr</span>
               <MudSelect Style="width: 100px;" Dense="true" @bind-Value="@data.PtModifier" Margin="Margin.Dense" T="double" SelectedValuesChanged="@(v => UpdatePtModifier(v, data.Id))">
                     @foreach (var pt in PtOptions)
                     {

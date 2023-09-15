@@ -110,7 +110,7 @@
                                     </td>
                                     <td>@player.Pos</td>
                                     <td>@player.Born.Year</td>
-                                    <td>@player.Ratings.Last().Ovr</td>
+                                    <td>@player.Ratings.Last().CalculateOvr</td>
                                     <td>@player.Ratings.Last().Pot</td>
                                     <td>$@player.Contract.Amount.ToString("N0")</td>
                                 </tr>
@@ -178,7 +178,7 @@
                                             </td>
                                             <td>@player.Pos</td>
                                             <td>@player.Born.Year</td>
-                                            <td>@player.Ratings.Last().Ovr</td>
+                                            <td>@player.Ratings.Last().CalculateOvr</td>
                                             <td>@player.Ratings.Last().Pot</td>
                                             <td>$@player.Contract.Amount.ToString("N0")</td>
                                         </tr>

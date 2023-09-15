@@ -27,8 +27,8 @@
                         
                         <MudListItem Dense="true">
                            <div class="progress">
-                                <MudProgressLinear Rounded="true" Style="margin: 0; padding: 0;" Color="Color.Primary" Size="Size.Small" Value="@playerOne.Ratings.LastOrDefault().Ovr" />
-                                <span>(@playerOne.Ratings.LastOrDefault().Ovr) OVR</span>
+                                <MudProgressLinear Rounded="true" Style="margin: 0; padding: 0;" Color="Color.Primary" Size="Size.Small" Value="@playerOne.Ratings.LastOrDefault().CalculateOvr" />
+                                <span>(@playerOne.Ratings.LastOrDefault().CalculateOvr) OVR</span>
                             </div>
                         </MudListItem>
                       
@@ -89,14 +89,6 @@
                         </MudListItem>
 
 
-
-                        <MudListItem Dense="true">
-                            <div class="progress">
-                                <MudProgressLinear Rounded="true" Style="margin: 0; padding: 0;" Color="Color.Primary" Size="Size.Small" Value="@playerOne.Ratings.LastOrDefault().Stl" />
-                                <span>(@playerOne.Ratings.LastOrDefault().Stl) STL</span>
-                            </div>
-                        </MudListItem>
-
                         <MudListItem Dense="true">
                             <div class="progress">
                                 <MudProgressLinear Rounded="true" Style="margin: 0; padding: 0;" Color="Color.Primary" Size="Size.Small" Value="@playerOne.Ratings.LastOrDefault().Reb" />
@@ -104,12 +96,7 @@
                             </div>
                         </MudListItem>
                  
-                        <MudListItem Dense="true">
-                            <div class="progress">
-                                <MudProgressLinear Rounded="true" Style="margin: 0; padding: 0;" Color="Color.Primary" Size="Size.Small" Value="@playerOne.Ratings.LastOrDefault().Blk" />
-                                <span>(@playerOne.Ratings.LastOrDefault().Blk) BLK</span>
-                            </div>
-                        </MudListItem>
+                  
 
                         <MudListItem Dense="true">
                             <div class="progress">
@@ -118,12 +105,7 @@
                             </div>
                         </MudListItem>
 
-                        <MudListItem Dense="true">
-                            <div class="progress">
-                                <MudProgressLinear Rounded="true" Style="margin: 0; padding: 0;" Color="Color.Primary" Size="Size.Small" Value="@playerOne.Ratings.LastOrDefault().Str" />
-                                <span>(@playerOne.Ratings.LastOrDefault().Str) STR</span>
-                            </div>
-                        </MudListItem>
+                
 
                         <MudListItem Dense="true">
                             <div class="progress">
@@ -141,8 +123,8 @@
 
                         <MudListItem Dense="true">
                             <div class="progress">
-                                <MudProgressLinear Rounded="true" Style="margin: 0; padding: 0;" Color="Color.Primary" Size="Size.Small" Value="@playerOne.Ratings.LastOrDefault().End" />
-                                <span>(@playerOne.Ratings.LastOrDefault().End) END</span>
+                                <MudProgressLinear Rounded="true" Style="margin: 0; padding: 0;" Color="Color.Primary" Size="Size.Small" Value="@playerOne.Ratings.LastOrDefault().Endu" />
+                                <span>(@playerOne.Ratings.LastOrDefault().Endu) END</span>
                             </div>
                         </MudListItem>
 
@@ -176,8 +158,8 @@
                         
                         <MudListItem Dense="true">
                            <div class="progress">
-                                <span>(@playerTwo.Ratings.LastOrDefault().Ovr) OVR</span>
-                                <MudProgressLinear Rounded="true" Style="transform: scaleX(-1); margin: 0; padding: 0;" Color="Color.Secondary" Size="Size.Small" Value="@playerTwo.Ratings.LastOrDefault().Ovr" />
+                                <span>(@playerTwo.Ratings.LastOrDefault().CalculateOvr) OVR</span>
+                                <MudProgressLinear Rounded="true" Style="transform: scaleX(-1); margin: 0; padding: 0;" Color="Color.Secondary" Size="Size.Small" Value="@playerTwo.Ratings.LastOrDefault().CalculateOvr" />
                             </div>
                         </MudListItem>
                       
@@ -239,12 +221,6 @@
 
 
 
-                        <MudListItem Dense="true">
-                            <div class="progress">
-                                <span>(@playerTwo.Ratings.LastOrDefault().Stl) STL</span>
-                                <MudProgressLinear Rounded="true"  Style="transform: scaleX(-1); margin: 0; padding: 0;"  Color="Color.Secondary" Size="Size.Small" Value="@playerTwo.Ratings.LastOrDefault().Stl" />
-                            </div>
-                        </MudListItem>
 
                         <MudListItem Dense="true">
                             <div class="progress">
@@ -253,12 +229,7 @@
                             </div>
                         </MudListItem>
                  
-                        <MudListItem Dense="true">
-                            <div class="progress">
-                                <span>(@playerTwo.Ratings.LastOrDefault().Blk) BLK</span>
-                                <MudProgressLinear Rounded="true"  Style="transform: scaleX(-1); margin: 0; padding: 0;"  Color="Color.Secondary" Size="Size.Small" Value="@playerTwo.Ratings.LastOrDefault().Blk" />
-                            </div>
-                        </MudListItem>
+                 
 
                         <MudListItem Dense="true">
                             <div class="progress">
@@ -267,12 +238,7 @@
                             </div>
                         </MudListItem>
 
-                        <MudListItem Dense="true">
-                            <div class="progress">
-                                <span>(@playerTwo.Ratings.LastOrDefault().Str) STR</span>
-                                <MudProgressLinear Rounded="true"  Style="transform: scaleX(-1); margin: 0; padding: 0;"  Color="Color.Secondary" Size="Size.Small" Value="@playerTwo.Ratings.LastOrDefault().Str" />
-                            </div>
-                        </MudListItem>
+                  
 
                         <MudListItem Dense="true">
                             <div class="progress">
@@ -290,8 +256,8 @@
 
                         <MudListItem Dense="true">
                             <div class="progress">
-                                <span>(@playerTwo.Ratings.LastOrDefault().End) END</span>
-                                <MudProgressLinear Rounded="true"  Style="transform: scaleX(-1); margin: 0; padding: 0;" Color="Color.Secondary" Size="Size.Small" Value="@playerTwo.Ratings.LastOrDefault().End" />
+                                <span>(@playerTwo.Ratings.LastOrDefault().Endu) END</span>
+                                <MudProgressLinear Rounded="true"  Style="transform: scaleX(-1); margin: 0; padding: 0;" Color="Color.Secondary" Size="Size.Small" Value="@playerTwo.Ratings.LastOrDefault().Endu" />
                             </div>
                         </MudListItem>
 
