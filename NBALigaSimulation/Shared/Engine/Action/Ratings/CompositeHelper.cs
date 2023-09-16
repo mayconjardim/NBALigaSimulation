@@ -72,7 +72,7 @@ namespace NBALigaSimulation.Shared.Engine
                     turnovers.Add("ins", player.Ratings.LastOrDefault().Ins);
                     turnovers.Add("pss", player.Ratings.LastOrDefault().Pss);
                     turnovers.Add("oiq", player.Ratings.LastOrDefault().Oiq);
-                    List<string> turnoversAttributes = new List<string> { "50", "ins", "pss", "oiq" };
+                    List<string> turnoversAttributes = new List<string> { "ins", "pss", "oiq" };
                     List<double> turnoversWeights = new List<double> { 0.5, 1, 1, -1 };
                     player.CompositeRating.Ratings["Turnovers"] = Converter.Composite(turnovers, turnoversAttributes, turnoversWeights);
 
@@ -143,7 +143,7 @@ namespace NBALigaSimulation.Shared.Engine
                     Dictionary<string, double> stealing = new Dictionary<string, double>();
                     stealing.Add("spd", player.Ratings.LastOrDefault().Spd);
                     stealing.Add("diq", player.Ratings.LastOrDefault().Diq);
-                    List<string> stealingAttributes = new List<string> { "50", "spd", "diq" };
+                    List<string> stealingAttributes = new List<string> { "spd", "diq" };
                     List<double> stealingWeights = new List<double> { 1, 1, 2 };
                     player.CompositeRating.Ratings["Stealing"] = Converter.Composite(stealing, stealingAttributes, stealingWeights);
 
@@ -161,9 +161,9 @@ namespace NBALigaSimulation.Shared.Engine
                     player.CompositeRating.Ratings["Fouling"] = 0;
                     Dictionary<string, double> fouling = new Dictionary<string, double>();
                     fouling.Add("hgt", player.Ratings.LastOrDefault().Hgt);
-                    fouling.Add("blk", player.Ratings.LastOrDefault().Diq);
+                    fouling.Add("diq", player.Ratings.LastOrDefault().Diq);
                     fouling.Add("spd", player.Ratings.LastOrDefault().Spd);
-                    List<string> foulingAttributes = new List<string> { "50", "hgt", "diq", "spd" };
+                    List<string> foulingAttributes = new List<string> { "hgt", "diq", "spd" };
                     List<double> foulingWeights = new List<double> { 3, 1, -1, -1 };
                     player.CompositeRating.Ratings["Fouling"] = Converter.Composite(fouling, foulingAttributes, foulingWeights);
 
@@ -219,7 +219,7 @@ namespace NBALigaSimulation.Shared.Engine
                     player.CompositeRating.Ratings["Endurance"] = 0;
                     Dictionary<string, double> endurance = new Dictionary<string, double>();
                     endurance.Add("endu", player.Ratings.LastOrDefault().Endu);
-                    List<string> enduranceAttributes = new List<string> { "endu", "50" };
+                    List<string> enduranceAttributes = new List<string> { "endu" };
                     List<double> enduranceWeights = new List<double> { 1, 1 };
                     player.CompositeRating.Ratings["Endurance"] = Converter.Composite(endurance, enduranceAttributes, enduranceWeights);
 

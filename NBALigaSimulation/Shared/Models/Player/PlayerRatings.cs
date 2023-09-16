@@ -21,7 +21,6 @@ namespace NBALigaSimulation.Shared.Models
         public int Ins { get; set; }
         public int Jmp { get; set; }
         public int Oiq { get; set; }
-        public string Pos { get; set; }
         public int Pot { get; set; }
         public int Pss { get; set; }
         public int Reb { get; set; }

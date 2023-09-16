@@ -585,10 +585,6 @@ namespace NBALigaSimulation.Server.Migrations
                     b.Property<int>("PlayerId")
                         .HasColumnType("INTEGER");
 
-                    b.Property<string>("Pos")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
                     b.Property<int>("Pot")
                         .HasColumnType("INTEGER");
 
