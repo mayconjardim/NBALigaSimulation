@@ -13,7 +13,7 @@ namespace NBALigaSimulation.Shared.Engine
             }
 
             Random rand = new Random();
-            double randomValue = rand.NextDouble() * (ratios[0] + ratios[1] + ratios[2] + ratios[3] + ratios[4]);
+            double randomValue = rand.NextDouble() * ratios.Sum();
             int pick;
 
             if (randomValue < ratios[0])
