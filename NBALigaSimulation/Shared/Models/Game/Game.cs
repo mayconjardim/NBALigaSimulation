@@ -149,6 +149,136 @@ namespace NBALigaSimulation.Shared.Models
             }
         }
 
+        private bool UpdatePlayersOnCourt(Team[] teams, int[][] PlayersOnCourt)
+        {
+            bool substitutions = false;
+
+            for (int t = 0; t < 2; t++)
+            {
+                double[] ovrs = new double[teams[t].Players.Count];
+
+                for (int p = 0; p < teams[t].Players.Count; p++)
+                {
+
+                    var player = teams[t].Players.Find(player => player.RosterOrder == p);
+                    if (player != null)
+                    {
+                        if (player.Stats == null)
+                        {
+                            player.Stats = new List<PlayerGameStats>();
+                        }
+
+                        var lastStats = player.Stats.Find(s => s.GameId == Id);
+
+                        if (lastStats == null || lastStats.GameId != Id)
+                        {
+                            player.Stats.Add(new PlayerGameStats { GameId = Id, TeamId = teams[t].Id, Name = player.Name, Season = Season.Year });
+                        }
+                    }
+
+                    if (teams[t].Players[p].Stats.Find(s => s.GameId == Id).Pf >= 6)
+                    {
+                        ovrs[p] = double.NegativeInfinity;
+                    }
+                    else
+                    {
+                        ovrs[p] = teams[t].Players[p].Ratings.LastOrDefault().CalculateOvr * Fatigue(teams[t].Players[p].Stats.Find(s => s.GameId == Id).Energy) *
+                              teams[t].Players[p].PtModifier * RandomUtils.RandomUniform(0.9, 1.1);
+                    }
+                }
+                int i = 0;
+                for (int pp = 0; pp < PlayersOnCourt[t].Length; pp++)
+                {
+                    int p = PlayersOnCourt[t][pp];
+                    PlayersOnCourt[t][i] = p;
+
+                    for (int b = 0; b < teams[t].Players.Count; b++)
+                    {
+                        if (!PlayersOnCourt[t].Contains(b) && ((teams[t].Players[p].Stats.Find(s => s.GameId == Id).CourtTime > 3
+                                && teams[t].Players[b].Stats.Find(s => s.GameId == Id).BenchTime > 3
+                                && ovrs[b] > ovrs[p]) || teams[t].Players[p].Stats.Find(s => s.GameId == Id).Pf >= 6))
+                        {
+                            List<string> pos = new List<string>();
+                            for (int j = 0; j < PlayersOnCourt[t].Length; j++)
+                            {
+                                if (j != pp)
+                                {
+                                    int playerPos = PlayersOnCourt[t][j];
+
+                                    string position = teams[t].Players.Find(player => player.RosterOrder == playerPos).Pos;
+
+                                    pos.Add(position);
+                                }
+                            }
+
+                            string playersPos2 = teams[t].Players.Find(player => player.RosterOrder == b).Pos;
+
+                            pos.Add(playersPos2);
+                            int numG = 0, numPG = 0, numF = 0, numC = 0;
+                            foreach (string position in pos)
+                            {
+                                if (position.Contains("G"))
+                                {
+                                    numG++;
+                                }
+                                if (position == "PG")
+                                {
+                                    numPG++;
+                                }
+                                if (position.Contains("F"))
+                                {
+                                    numF++;
+                                }
+                                if (position == "C")
+                                {
+                                    numC++;
+                                }
+                            }
+                            if ((numG < 2 && numPG == 0) || (numF < 2 && numC == 0))
+                            {
+                                if (Fatigue(teams[t].Players[p].Stats.Find(s => s.GameId == Id).Energy) > 0.7)
+                                {
+                                    continue;
+                                }
+                            }
+
+                            substitutions = true;
+
+                            // Substitute player
+                            PlayersOnCourt[t][i] = b;
+                            p = b;
+
+                            teams[t].Players[b].Stats.Find(s => s.GameId == Id).CourtTime = RandomUtils.RandomUniform(-2, 2);
+                            teams[t].Players[b].Stats.Find(s => s.GameId == Id).BenchTime = RandomUtils.RandomUniform(-2, 2);
+                            teams[t].Players[p].Stats.Find(s => s.GameId == Id).CourtTime = RandomUtils.RandomUniform(-2, 2);
+                            teams[t].Players[p].Stats.Find(s => s.GameId == Id).BenchTime = RandomUtils.RandomUniform(-2, 2);
+
+                        }
+                    }
+                    i += 1;
+                }
+            }
+
+            if (!StartersRecorded)
+            {
+                for (int z = 0; z < 2; z++)
+                {
+                    for (int p = 0; p < teams[z].Players.Count; p++)
+                    {
+                        int playerRosterOrder = teams[z].Players[p].RosterOrder; // Armazena o ID do jogador em uma variável separada
+
+                        if (PlayersOnCourt[z].Any(play => play == playerRosterOrder))
+                        {
+                            RecordStat(z, playerRosterOrder, "Gs", teams);
+                        }
+                    }
+                }
+                StartersRecorded = true;
+            }
+
+            return substitutions;
+        }
+
 
 
 
