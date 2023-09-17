@@ -368,7 +368,7 @@ namespace NBALigaSimulation.Shared.Models
             }
         }
 
-        public void UpdateTeamCompositeRatings(Team[] teams, int[][] playersOnCourt)
+        private void UpdateTeamCompositeRatings(Team[] teams, int[][] playersOnCourt)
         {
             string[] toUpdate = { "GameDribbling", "GamePassing", "GameRebounding", "GameDefense", "GameDefensePerimeter", "GameBlocking", "GamePace" };
 
@@ -434,7 +434,7 @@ namespace NBALigaSimulation.Shared.Models
             }
         }
 
-        public void UpdatePlayingTime(Team[] Teams, int[][] PlayersOnCourt, double possessionTime)
+        private void UpdatePlayingTime(Team[] Teams, int[][] PlayersOnCourt, double possessionTime)
         {
 
             for (int t = 0; t < 2; t++)
@@ -464,6 +464,20 @@ namespace NBALigaSimulation.Shared.Models
                 }
             }
         }
+
+        private string GetPossessionOutcome(Team[] Teams, int[][] PlayersOnCourt)
+        {
+            if (ProbTov(Teams) > new Random().NextDouble())
+            {
+                return DoTov(Teams, PlayersOnCourt);
+            }
+
+            double[] ratios = RatingArray("Usage", Offense);
+            int shooterIndex = PickPlayer(ratios);
+
+            return DoShot(shooterIndex, Teams, PlayersOnCourt);
+        }
+
 
     }
 
