@@ -503,6 +503,17 @@ namespace NBALigaSimulation.Shared.Models
             return "Tov";
         }
 
+        public double ProbStl(Team[] Teams)
+        {
+            double defensePerimeterRating = Teams[Defense].CompositeRating.Ratings["GameDefensePerimeter"];
+            double offenseRating = 0.5 * (Teams[Offense].CompositeRating.Ratings["GameDribbling"] + Teams[Offense].CompositeRating.Ratings["GamePassing"]);
+
+            return (0.55 * defensePerimeterRating) / offenseRating;
+        }
+
+
+
+
     }
 
 }
