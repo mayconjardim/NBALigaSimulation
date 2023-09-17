@@ -96,6 +96,21 @@ namespace NBALigaSimulation.Shared.Models
             }
         }
 
+        private void SimOvertime()
+        {
+            T = (int)Math.Ceiling(0.4 * 5);
+            Overtimes += 1;
+
+            Offense = (new Random().NextDouble() < 0.5) ? 0 : 1;
+            Defense = (Offense == 0) ? 1 : 0;
+
+            while (T > 0)
+            {
+                SimPossession(Teams, PlayersOnCourt);
+            }
+
+        }
+
 
 
     }
