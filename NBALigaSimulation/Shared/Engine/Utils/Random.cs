@@ -10,6 +10,13 @@
             return random.NextDouble() * (b - a) + a;
         }
 
+        public static int RandInt(int a, int b)
+        {
+            Random random = new Random();
+            return random.Next(a, b + 1);
+        }
+
+
         public static double Sigmoid(double x, double a, double b)
         {
             return 1 / (1 + Math.Exp(-(a * (x - b))));

@@ -75,7 +75,7 @@ namespace NBALigaSimulation.Shared.Models
 
         }
 
-        private void SimRegulation()
+        private void SimRegulation(Team[] Teams, int[][] PlayersOnCourt)
         {
             Offense = 0;
             Defense = 1;
@@ -96,7 +96,7 @@ namespace NBALigaSimulation.Shared.Models
             }
         }
 
-        private void SimOvertime()
+        private void SimOvertime(Team[] Teams, int[][] PlayersOnCourt)
         {
             T = (int)Math.Ceiling(0.4 * 5);
             Overtimes += 1;
@@ -108,8 +108,47 @@ namespace NBALigaSimulation.Shared.Models
             {
                 SimPossession(Teams, PlayersOnCourt);
             }
-
         }
+
+        private void SimPossession(Team[] Teams, int[][] PlayersOnCourt)
+        {
+            T -= Dt;
+            double possessionTime = Dt;
+
+            if (T < 0)
+            {
+                possessionTime += T;
+                T = 0;
+            }
+
+            Offense = (Offense == 1) ? 0 : 1;
+            Defense = (Offense == 1) ? 0 : 1;
+
+            UpdateTeamCompositeRatings(Teams, PlayersOnCourt);
+
+            string outcome = GetPossessionOutcome(Teams, PlayersOnCourt);
+
+            if (outcome == "Orb")
+            {
+                Offense = (Offense == 1) ? 0 : 1;
+                Defense = (Offense == 1) ? 0 : 1;
+            }
+
+            UpdatePlayingTime(possessionTime);
+
+            //Injuries();
+
+            if (RandomUtils.RandInt(1, SubsEveryN + 1) == 1)
+            {
+                bool substitutions = UpdatePlayersOnCourt(Teams, PlayersOnCourt);
+
+                if (substitutions)
+                {
+                    UpdateSynergy(Teams, PlayersOnCourt);
+                }
+            }
+        }
+
 
 
 
