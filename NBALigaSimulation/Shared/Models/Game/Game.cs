@@ -478,6 +478,14 @@ namespace NBALigaSimulation.Shared.Models
             return DoShot(shooterIndex, Teams, PlayersOnCourt);
         }
 
+        public double ProbTov(Team[] Teams)
+        { 
+  
+            double defenseRating = Teams[Defense].CompositeRating.Ratings["GameDefense"];
+            double offenseRating = 0.5 * (Teams[Offense].CompositeRating.Ratings["GameDribbling"] + Teams[Offense].CompositeRating.Ratings["GamePassing"]);
+
+            return (0.14 * defenseRating) / offenseRating;
+        }
 
     }
 
