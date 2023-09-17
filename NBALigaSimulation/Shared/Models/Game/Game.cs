@@ -75,6 +75,27 @@ namespace NBALigaSimulation.Shared.Models
 
         }
 
+        private void SimRegulation()
+        {
+            Offense = 0;
+            Defense = 1;
+            int quarter = 1;
+
+            while (true)
+            {
+                while (T > 0)
+                {
+                    SimPossession(Teams, PlayersOnCourt);
+                }
+                quarter += 1;
+
+                if (quarter == 5)
+                {
+                    break;
+                }
+            }
+        }
+
 
 
     }
