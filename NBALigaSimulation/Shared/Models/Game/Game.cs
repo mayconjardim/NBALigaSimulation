@@ -279,7 +279,70 @@ namespace NBALigaSimulation.Shared.Models
             return substitutions;
         }
 
+        private void UpdateSynergy(Team[] Teams, int[][] PlayersOnCourt)
+        {
+            for (int t = 0; t < 2; t++)
+            {
 
+                if (Teams[t].Synergy == null)
+                {
+                    Teams[t].Synergy = new TeamSynergy();
+                }
+
+                // Conta todas as habilidades *fracionárias* dos jogadores ativos em uma equipe (incluindo duplicatas)
+                Dictionary<string, double> skillsCount = new Dictionary<string, double>
+                {
+                    { "3", 0 },
+                    { "A", 0 },
+                    { "B", 0 },
+                    { "Di", 0 },
+                    { "Dp", 0 },
+                    { "Po", 0 },
+                    { "Ps", 0 },
+                    { "R", 0 }
+                };
+
+                for (int i = 0; i < 5; i++)
+                {
+                    int p = PlayersOnCourt[t][i];
+
+                    skillsCount["3"] += RandomUtils.Sigmoid(Teams[t].Players[p].CompositeRating.Ratings["ShootingThreePointer"], 15, 0.7);
+                    skillsCount["B"] += RandomUtils.Sigmoid(Teams[t].Players[p].CompositeRating.Ratings["Dribbling"], 15, 0.7);
+                    skillsCount["A"] += RandomUtils.Sigmoid(Teams[t].Players[p].CompositeRating.Ratings["Athleticism"], 15, 0.7);
+                    skillsCount["Di"] += RandomUtils.Sigmoid(Teams[t].Players[p].CompositeRating.Ratings["DefenseInterior"], 15, 0.7);
+                    skillsCount["Dp"] += RandomUtils.Sigmoid(Teams[t].Players[p].CompositeRating.Ratings["DefensePerimeter"], 15, 0.7);
+                    skillsCount["Po"] += RandomUtils.Sigmoid(Teams[t].Players[p].CompositeRating.Ratings["ShootingLowPost"], 15, 0.7);
+                    skillsCount["Ps"] += RandomUtils.Sigmoid(Teams[t].Players[p].CompositeRating.Ratings["Passing"], 15, 0.7);
+                    skillsCount["R"] += RandomUtils.Sigmoid(Teams[t].Players[p].CompositeRating.Ratings["Rebounding"], 15, 0.7);
+                }
+
+                // Sinergia ofensiva de base
+                Teams[t].Synergy.Off = 0;
+                Teams[t].Synergy.Off += 5 * RandomUtils.Sigmoid(skillsCount["3"], 3, 2);
+                Teams[t].Synergy.Off += 3 * RandomUtils.Sigmoid(skillsCount["B"], 15, 0.75) + RandomUtils.Sigmoid(skillsCount["B"], 5, 1.75);
+                Teams[t].Synergy.Off += 3 * RandomUtils.Sigmoid(skillsCount["Ps"], 15, 0.75) + RandomUtils.Sigmoid(skillsCount["Ps"], 5, 1.75)
+                    + RandomUtils.Sigmoid(skillsCount["Ps"], 5, 2.75);
+                Teams[t].Synergy.Off += RandomUtils.Sigmoid(skillsCount["Po"], 15, 0.75);
+                Teams[t].Synergy.Off += RandomUtils.Sigmoid(skillsCount["A"], 15, 1.75) + RandomUtils.Sigmoid(skillsCount["A"], 5, 2.75);
+                Teams[t].Synergy.Off /= 17;
+
+                // Punir as equipes por não terem múltiplas habilidades de perímetro
+                double perimFactor = RandomUtils.Clamp(Math.Sqrt(1 + skillsCount["B"] + skillsCount["Ps"] + skillsCount["3"]) - 1, 0, 2) / 2;
+                Teams[t].Synergy.Off *= 0.5 + 0.5 * perimFactor;
+
+                // Sinergia defensiva
+                Teams[t].Synergy.Def = 0;
+                Teams[t].Synergy.Def += RandomUtils.Sigmoid(skillsCount["Dp"], 15, 0.75);
+                Teams[t].Synergy.Def += 2 * RandomUtils.Sigmoid(skillsCount["Di"], 15, 0.75);
+                Teams[t].Synergy.Def += RandomUtils.Sigmoid(skillsCount["A"], 5, 2) + RandomUtils.Sigmoid(skillsCount["A"], 5, 3.25);
+                Teams[t].Synergy.Def /= 6;
+
+                // Recuperando a sinergia
+                Teams[t].Synergy.Reb = 0;
+                Teams[t].Synergy.Reb += RandomUtils.Sigmoid(skillsCount["R"], 15, 0.75) + RandomUtils.Sigmoid(skillsCount["R"], 5, 1.75);
+                Teams[t].Synergy.Reb /= 4;
+            }
+        }
 
 
     }
