@@ -134,7 +134,7 @@ namespace NBALigaSimulation.Shared.Models
                 Defense = (Offense == 1) ? 0 : 1;
             }
 
-            UpdatePlayingTime(possessionTime);
+            UpdatePlayingTime(Teams, PlayersOnCourt, possessionTime);
 
             //Injuries();
 
@@ -431,10 +431,39 @@ namespace NBALigaSimulation.Shared.Models
                 teams[i].CompositeRating.Ratings["GameDefense"] += SynergyFactor * teams[i].Synergy.Def;
                 teams[i].CompositeRating.Ratings["GameDefensePerimeter"] += SynergyFactor * teams[i].Synergy.Def;
                 teams[i].CompositeRating.Ratings["GameBlocking"] += SynergyFactor * teams[i].Synergy.Def;
-
             }
         }
 
+        public void UpdatePlayingTime(Team[] Teams, int[][] PlayersOnCourt, double possessionTime)
+        {
+
+            for (int t = 0; t < 2; t++)
+            {
+                for (int p = 0; p < Teams[t].Players.Count; p++)
+                {
+                    if (PlayersOnCourt[t].Contains(p))
+                    {
+                        RecordStat(t, p, "Min", Teams, 1, possessionTime);
+                        RecordStat(t, p, "CourtTime", Teams, 1, possessionTime);
+                        // Isso costumava ser 0,04. Aumente mais para diminuir o PT
+                        RecordStat(t, p, "Energy", Teams, 1, (-possessionTime * 0.06 * (1 - Teams[t].Players[p].CompositeRating.Ratings["Endurance"])));
+                        if (Teams[t].Players[p].Stats.Find(s => s.GameId == Id)?.Energy < 0)
+                        {
+                            Teams[t].Players[p].Stats.Find(s => s.GameId == Id).Energy = 0;
+                        }
+                    }
+                    else
+                    {
+                        RecordStat(t, p, "BenchTime", Teams, 1, possessionTime);
+                        RecordStat(t, p, "Energy", Teams, 1, (possessionTime * 0.1));
+                        if (Teams[t].Players[p].Stats.Find(s => s.GameId == Id)?.Energy > 1)
+                        {
+                            Teams[t].Players[p].Stats.Find(s => s.GameId == Id).Energy = 1;
+                        }
+                    }
+                }
+            }
+        }
 
     }
 
