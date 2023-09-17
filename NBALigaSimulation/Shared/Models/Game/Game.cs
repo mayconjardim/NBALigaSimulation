@@ -344,6 +344,29 @@ namespace NBALigaSimulation.Shared.Models
             }
         }
 
+        private void HomeCourtAdvantage(Team[] Teams, int[][] PlayersOnCourt)
+        {
+            double factor;
+            for (int t = 0; t < 2; t++)
+            {
+                if (t == 0)
+                {
+                    factor = 1.01;  // Bonus pro time da casa
+                }
+                else
+                {
+                    factor = 0.99;  // Penalty pro time de fora
+                }
+
+                for (int p = 0; p < Teams[t].Players.Count; p++)
+                {
+                    foreach (string r in Teams[t].Players[p].CompositeRating.Ratings.Keys.ToList())
+                    {
+                        Teams[t].Players[p].CompositeRating.Ratings[r] *= factor;
+                    }
+                }
+            }
+        }
 
     }
 
