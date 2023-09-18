@@ -681,6 +681,54 @@ namespace NBALigaSimulation.Shared.Models
             return DoReb(Teams, PlayersOnCourt);
         }
 
+        private string DoFg(int shooter, int? passer, string type, bool andOne = false, Team[] Teams, int[][] PlayersOnCourt)
+        {
+
+            int p = PlayersOnCourt[Offense][shooter];
+            RecordStat(Offense, p, "Fga", Teams);
+            RecordStat(Offense, p, "Fg", Teams);
+            RecordStat(Offense, p, "Pts", Teams, 2);
+
+            if (type == "AtRim")
+            {
+                RecordStat(Offense, p, "FgaAtRim", Teams);
+                RecordStat(Offense, p, "FgAtRim", Teams);
+
+            }
+            else if (type == "LowPost")
+            {
+                RecordStat(Offense, p, "FgaLowPost", Teams);
+                RecordStat(Offense, p, "FgLowPost");
+
+            }
+            else if (type == "MidRange")
+            {
+                RecordStat(Offense, p, "FgaMidRange", Teams);
+                RecordStat(Offense, p, "FgMidRange", Teams);
+
+            }
+            else if (type == "ThreePointer")
+            {
+                RecordStat(Offense, p, "Pts", Teams);
+                RecordStat(Offense, p, "Tpa", Teams);
+                RecordStat(Offense, p, "Tp", Teams);
+
+            }
+
+            if (passer.HasValue)
+            {
+                int p2 = PlayersOnCourt[Offense][passer.Value];
+                RecordStat(Offense, p2, "Ast", Teams);
+            }
+
+            if (andOne)
+            {
+                return DoFt(shooter, 1);
+            }
+
+            return "Fg";
+        }
+
 
 
 
