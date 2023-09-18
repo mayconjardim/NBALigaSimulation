@@ -511,6 +511,17 @@ namespace NBALigaSimulation.Shared.Models
             return (0.55 * defensePerimeterRating) / offenseRating;
         }
 
+        public string DoStl(int pStoleFrom, Team[] Teams, int[][] PlayersOnCourt)
+        {
+            double[] ratios = RatingArray(Teams, "GameStealing", Defense, PlayersOnCourt, 5);
+            int playerIndex = PickPlayer(ratios);
+            var p = PlayersOnCourt[Defense][playerIndex];
+
+            RecordStat(Defense, p, "Stl", Teams);
+
+            return "Stl";
+        }
+
 
 
 
