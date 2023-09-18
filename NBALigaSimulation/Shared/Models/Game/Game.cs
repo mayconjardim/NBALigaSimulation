@@ -651,6 +651,35 @@ namespace NBALigaSimulation.Shared.Models
             return 0.2 * Math.Pow(blockingRating, 2);
         }
 
+        private string DoBlk(int shooter, string type, Team[] Teams, int[][] PlayersOnCourt)
+        {
+            int p = PlayersOnCourt[Offense][shooter];
+            RecordStat(Offense, p, "ba");
+            RecordStat(Offense, p, "fga");
+
+            if (type == "AtRim")
+            {
+                RecordStat(Offense, p, "FgaAtRim", Teams);
+            }
+            else if (type == "LowPost")
+            {
+                RecordStat(Offense, p, "FgaLowPost", Teams);
+            }
+            else if (type == "MidRange")
+            {
+                RecordStat(Offense, p, "FgaMidRange", Teams);
+            }
+            else if (type == "ThreePointer")
+            {
+                RecordStat(Offense, p, "Tpa", Teams);
+            }
+
+            double[] blockingRatios = RatingArray(Teams, "GameBlocking", Defense, PlayersOnCourt, 10);
+            int p2 = PlayersOnCourt[Defense][PickPlayer(blockingRatios)];
+            RecordStat(Defense, p, "Blk", Teams);
+
+            return DoReb(Teams, PlayersOnCourt);
+        }
 
 
 
