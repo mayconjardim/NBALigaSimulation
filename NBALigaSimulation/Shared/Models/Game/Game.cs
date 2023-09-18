@@ -522,7 +522,7 @@ namespace NBALigaSimulation.Shared.Models
             return "Stl";
         }
 
-        public string DoShot(int shooter, Team[] Teams, int[][] PlayersOnCourt)
+        private string DoShot(int shooter, Team[] Teams, int[][] PlayersOnCourt)
         {
             int p = PlayersOnCourt[Offense][shooter];
             var player = Teams[Offense].Players.Find(player => player.RosterOrder == p);
@@ -643,6 +643,12 @@ namespace NBALigaSimulation.Shared.Models
             }
 
             return DoReb(Teams, PlayersOnCourt);
+        }
+
+        private double ProbBlk(Team[] Teams)
+        {
+            double blockingRating = Teams[Defense].CompositeRating.Ratings["GameBlocking"];
+            return 0.2 * Math.Pow(blockingRating, 2);
         }
 
 
