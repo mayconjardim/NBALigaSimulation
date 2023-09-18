@@ -785,6 +785,36 @@ namespace NBALigaSimulation.Shared.Models
             }
         }
 
+        private string DoReb(Team[] Teams, int[][] PlayersOnCourt)
+        {
+            double randomValue = new Random().NextDouble();
+
+            if (randomValue < 0.15)
+            {
+                return null;
+            }
+
+            double defenseReboundingRatio = (0.75 * (2 + Teams[Defense].CompositeRating.Ratings["GameRebounding"])) /
+                                            (2 + Teams[Offense].CompositeRating.Ratings["GameRebounding"]);
+
+            double[] ratios;
+            int p;
+
+            if (defenseReboundingRatio > new Random().NextDouble())
+            {
+                ratios = RatingArray(Teams, "Rebounding", Defense, 2);
+                p = PlayersOnCourt[Defense][PickPlayer(ratios)];
+                RecordStat(Defense, p, "Drb", Teams);
+                return "Drb";
+            }
+
+            ratios = RatingArray(Teams, "GameRebounding", Offense, PlayersOnCourt, 3);
+            p = PlayersOnCourt[Offense][PickPlayer(ratios)];
+            RecordStat(Offense, p, "Orb");
+
+            return "Orb";
+        }
+
 
     }
 
