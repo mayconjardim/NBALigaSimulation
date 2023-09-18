@@ -729,6 +729,14 @@ namespace NBALigaSimulation.Shared.Models
             return "Fg";
         }
 
+        private double ProbAst(Team[] Teams)
+        {
+            double passingRating = Teams[Offense].CompositeRating.Ratings["GamePassing"];
+            double defenseRating = Teams[Defense].CompositeRating.Ratings["GameDefense"];
+
+            return (0.6 * (2 + passingRating)) / (2 + defenseRating);
+        }
+
 
 
 
