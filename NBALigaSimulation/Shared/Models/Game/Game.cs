@@ -815,6 +815,35 @@ namespace NBALigaSimulation.Shared.Models
             return "Orb";
         }
 
+        private double[] RatingArray(string rating, int t, Team[] Teams, int[][] PlayersOnCourt, double power = 1)
+        {
+            double[] array = new double[5];
+            double total = 0;
+
+            for (int i = 0; i < 5; i++)
+            {
+                int p = PlayersOnCourt[t][i];
+                var player = Teams[t].Players.Find(player => player.RosterOrder == p);
+
+                array[i] = Math.Pow(Teams[t].Players[p].CompositeRating.Ratings[rating] *
+                                    Fatigue(player.Stats.Find(s => s.GameId == Id)?.Energy, power));
+                total += array[i];
+            }
+
+            double floor = 0.05 * total;
+            for (int i = 0; i < 5; i++)
+            {
+                if (array[i] < floor)
+                {
+                    array[i] = floor;
+                }
+            }
+
+            return array;
+        }
+
+
+
 
     }
 
