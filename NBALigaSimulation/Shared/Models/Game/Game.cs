@@ -853,6 +853,16 @@ namespace NBALigaSimulation.Shared.Models
             }
         }
 
+        private double Fatigue(double energy)
+        {
+            energy += 0.05;
+            if (energy > 1)
+            {
+                energy = 1;
+            }
+
+            return energy;
+        }
 
 
     }
