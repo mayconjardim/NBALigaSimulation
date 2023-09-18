@@ -723,7 +723,7 @@ namespace NBALigaSimulation.Shared.Models
 
             if (andOne)
             {
-                return DoFt(shooter, 1);
+                return DoFt(shooter, 1, Teams, PlayersOnCourt);
             }
 
             return "Fg";
@@ -735,6 +735,38 @@ namespace NBALigaSimulation.Shared.Models
             double defenseRating = Teams[Defense].CompositeRating.Ratings["GameDefense"];
 
             return (0.6 * (2 + passingRating)) / (2 + defenseRating);
+        }
+
+        private string DoFt(int shooter, int amount, Team[] Teams, int[][] PlayersOnCourt)
+        {
+            DoPf(Defense, Teams, PlayersOnCourt);
+            int p = PlayersOnCourt[Offense][shooter];
+
+            var player = Teams[Offense].Players.Find(player => player.RosterOrder == p);
+            double ftp = RandomUtils.Bound(player.CompositeRating.Ratings["ShootingFT"] * 0.6 + 0.45, 0, 0.95);
+
+            string outcome = null;
+            for (int i = 0; i < amount; i++)
+            {
+                RecordStat(Offense, p, "Fta", Teams);
+                if (new Random().NextDouble() < ftp)
+                {
+                    RecordStat(Offense, p, "Ft", Teams);
+                    RecordStat(Offense, p, "Pts", Teams);
+                    outcome = "Fg";
+                }
+                else
+                {
+                    outcome = null;
+                }
+            }
+
+            if (outcome != "Fg")
+            {
+                outcome = DoReb(Teams, PlayersOnCourt);
+            }
+
+            return outcome;
         }
 
 
