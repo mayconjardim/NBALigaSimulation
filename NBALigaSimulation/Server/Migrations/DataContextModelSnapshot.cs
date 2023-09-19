@@ -221,6 +221,10 @@ namespace NBALigaSimulation.Server.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
+                    b.Property<string>("College")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
                     b.Property<int>("Hgt")
                         .HasColumnType("INTEGER");
 

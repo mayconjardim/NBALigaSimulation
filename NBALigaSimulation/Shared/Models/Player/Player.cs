@@ -11,6 +11,7 @@ namespace NBALigaSimulation.Shared.Models
         public string Pos { get; set; } = string.Empty;
         public Born Born { get; set; }
         public PlayerDraft? Draft { get; set; }
+        public string College { get; set; } = string.Empty;
         public int Hgt { get; set; }
         public int Weight { get; set; }
         public string ImgUrl { get; set; } = string.Empty;
