@@ -7,7 +7,8 @@ namespace NBALigaSimulation.Shared.Models
     {
 
         public int Id { get; set; }
-        public string Name { get; set; } = string.Empty;
+        public string FirstName { get; set; } = string.Empty;
+        public string LastName { get; set; } = string.Empty;
         public string Pos { get; set; } = string.Empty;
         public Born Born { get; set; }
         public PlayerDraft? Draft { get; set; }
@@ -30,6 +31,14 @@ namespace NBALigaSimulation.Shared.Models
         public PlayerCompositeRating CompositeRating { get; set; }
 
         private static Random random = new Random();
+
+        public string Name
+        {
+            get
+            {
+                return $"{FirstName} {LastName}";
+            }
+        }
 
         public PlayerRatings TrainingCamp(Season season)
         {
