@@ -53,8 +53,8 @@ namespace NBALigaSimulation.Shared.Models
             CompositeHelper.UpdatePlayersCompositeRating(Teams);
             CompositeHelper.UpdatePace(Teams);
 
-            NumPossessions = (int)Math.Round((Teams[0].CompositeRating.Ratings["GamePace"] +
-               Teams[1].CompositeRating.Ratings["GamePace"]) / 2 * RandomUtils.RandomUniform(0.9, 1.1));
+            NumPossessions = (int)Math.Round((105.2 +
+               98.4) / 2 * RandomUtils.RandomUniform(0.9, 1.1)) ;
 
             Dt = 48.0 / (2 * NumPossessions);
 
@@ -65,88 +65,65 @@ namespace NBALigaSimulation.Shared.Models
             HomeCourtAdvantage(Teams, PlayersOnCourt);
 
 
-            SimRegulation(Teams, PlayersOnCourt);
+            SimPossessions(Teams, PlayersOnCourt);
 
             // Jogue períodos de prorrogação se necessário
             while (Teams[0].Stats.Find(s => s.GameId == Id)?.Pts == Teams[1].Stats.Find(s => s.GameId == Id)?.Pts)
             {
-                SimOvertime(Teams, PlayersOnCourt);
+                if (Overtimes == 0)
+                {
+                    NumPossessions = (int)Math.Round(NumPossessions * 5.0 / 48); // 5 minutos de posses
+                    Dt = 5.0 / (2 * NumPossessions);
+                }
+
+                T = 5.0;
+                Overtimes++;
+                SimPossessions(Teams, PlayersOnCourt);
             }
 
         }
 
-        private void SimRegulation(Team[] Teams, int[][] PlayersOnCourt)
+        private void SimPossessions(Team[] Teams, int[][] PlayersOnCourt)
         {
+            int i;
+            string outcome;
+            bool substitutions;
+
             Offense = 0;
             Defense = 1;
-            int quarter = 1;
 
-            while (true)
+            i = 0;
+            while (i < this.NumPossessions * 2)
             {
-                while (T > 0)
-                {
-                    SimPossession(Teams, PlayersOnCourt);
-                }
-                quarter += 1;
-
-                if (quarter == 5)
-                {
-                    break;
-                }
-            }
-        }
-
-        private void SimOvertime(Team[] Teams, int[][] PlayersOnCourt)
-        {
-            T = (int)Math.Ceiling(0.4 * 5);
-            Overtimes += 1;
-
-            Offense = (new Random().NextDouble() < 0.5) ? 0 : 1;
-            Defense = (Offense == 0) ? 1 : 0;
-
-            while (T > 0)
-            {
-                SimPossession(Teams, PlayersOnCourt);
-            }
-        }
-
-        private void SimPossession(Team[] Teams, int[][] PlayersOnCourt)
-        {
-
-            T -= Dt;
-            double possessionTime = Dt;
-
-            if (T < 0)
-            {
-                possessionTime += T;
-                T = 0;
-            }
-
-            Offense = (Offense == 1) ? 0 : 1;
-            Defense = (Offense == 1) ? 0 : 1;
-
-            UpdateTeamCompositeRatings(Teams, PlayersOnCourt);
-
-            string outcome = GetPossessionOutcome(Teams, PlayersOnCourt);
-
-            if (outcome == "Orb")
-            {
+                // Troca de posse
                 Offense = (Offense == 1) ? 0 : 1;
                 Defense = (Offense == 1) ? 0 : 1;
-            }
 
-            UpdatePlayingTime(Teams, PlayersOnCourt, possessionTime);
-
-            //Injuries();
-
-            if (RandomUtils.RandInt(1, SubsEveryN + 1) == 1)
-            {
-                bool substitutions = UpdatePlayersOnCourt(Teams, PlayersOnCourt);
-
-                if (substitutions)
+                if (i % SubsEveryN == 0)
                 {
-                    UpdateSynergy(Teams, PlayersOnCourt);
+                    substitutions = UpdatePlayersOnCourt(Teams, PlayersOnCourt);
+                    if (substitutions)
+                    {
+                        UpdateSynergy(Teams, PlayersOnCourt);
+                    }
                 }
+
+                UpdateTeamCompositeRatings(Teams, PlayersOnCourt);
+
+                outcome = GetPossessionOutcome(Teams, PlayersOnCourt);
+
+                // Troca Offense e Defense para que o receba outra posse quando eles forem trocados novamente no início do loop.
+                if (outcome == "Orb")
+                {
+                    Offense = (Offense == 1) ? 0 : 1;
+                    Defense = (Offense == 1) ? 0 : 1;
+                }
+
+                UpdatePlayingTime(Teams, PlayersOnCourt);
+
+                //Injuries();
+
+                i += 1;
             }
         }
 
@@ -435,7 +412,7 @@ namespace NBALigaSimulation.Shared.Models
             }
         }
 
-        private void UpdatePlayingTime(Team[] Teams, int[][] PlayersOnCourt, double possessionTime)
+        private void UpdatePlayingTime(Team[] Teams, int[][] PlayersOnCourt)
         {
 
             for (int t = 0; t < 2; t++)
@@ -444,10 +421,10 @@ namespace NBALigaSimulation.Shared.Models
                 {
                     if (PlayersOnCourt[t].Contains(p))
                     {
-                        RecordStat(t, p, "Min", Teams, 1, possessionTime);
-                        RecordStat(t, p, "CourtTime", Teams, 1, possessionTime);
+                        RecordStat(t, p, "Min", Teams, 1, Dt);
+                        RecordStat(t, p, "CourtTime", Teams, 1, Dt);
                         // Isso costumava ser 0,04. Aumente mais para diminuir o PT
-                        RecordStat(t, p, "Energy", Teams, 1, (-possessionTime * 0.06 * (1 - Teams[t].Players[p].CompositeRating.Ratings["Endurance"])));
+                        RecordStat(t, p, "Energy", Teams, 1, (-Dt * 0.06 * (1 - Teams[t].Players[p].CompositeRating.Ratings["Endurance"])));
                         if (Teams[t].Players[p].Stats.Find(s => s.GameId == Id)?.Energy < 0)
                         {
                             Teams[t].Players[p].Stats.Find(s => s.GameId == Id).Energy = 0;
@@ -455,8 +432,8 @@ namespace NBALigaSimulation.Shared.Models
                     }
                     else
                     {
-                        RecordStat(t, p, "BenchTime", Teams, 1, possessionTime);
-                        RecordStat(t, p, "Energy", Teams, 1, (possessionTime * 0.1));
+                        RecordStat(t, p, "BenchTime", Teams, 1, Dt);
+                        RecordStat(t, p, "Energy", Teams, 1, (Dt * 0.1));
                         if (Teams[t].Players[p].Stats.Find(s => s.GameId == Id)?.Energy > 1)
                         {
                             Teams[t].Players[p].Stats.Find(s => s.GameId == Id).Energy = 1;
