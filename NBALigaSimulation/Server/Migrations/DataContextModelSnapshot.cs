@@ -225,10 +225,6 @@ namespace NBALigaSimulation.Server.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("FirstName")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
                     b.Property<int>("Hgt")
                         .HasColumnType("INTEGER");
 
@@ -236,7 +232,7 @@ namespace NBALigaSimulation.Server.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("LastName")
+                    b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("TEXT");
 
