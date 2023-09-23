@@ -115,7 +115,7 @@ namespace NBALigaSimulation.Shared.Engine
                     shootingThreePointer.Add("oiq", player.Ratings.LastOrDefault().Oiq);
                     shootingThreePointer.Add("tp", player.Ratings.LastOrDefault().Tp);
                     List<string> shootingThreePointerAttributes = new List<string> { "oiq", "tp" };
-                    List<double> shootingThreePointerWeights = new List<double> { 0.1, 1 };
+                    List<double> shootingThreePointerWeights = new List<double> { 0.1, 2 };
                     player.CompositeRating.Ratings["ShootingThreePointer"] = Converter.Composite(shootingThreePointer, shootingThreePointerAttributes, shootingThreePointerWeights);
 
                     //ShootingFT
@@ -154,7 +154,7 @@ namespace NBALigaSimulation.Shared.Engine
                     blocking.Add("jmp", player.Ratings.LastOrDefault().Jmp);
                     blocking.Add("diq", player.Ratings.LastOrDefault().Diq);
                     List<string> blockingAttributes = new List<string> { "hgt", "jmp", "diq" };
-                    List<double> blockingWeights = new List<double> { 2.5, 1.5, 0.5 };
+                    List<double> blockingWeights = new List<double> { 3.5, 1.5, 0.5 };
                     player.CompositeRating.Ratings["Blocking"] = Converter.Composite(blocking, blockingAttributes, blockingWeights);
 
                     //Fouling

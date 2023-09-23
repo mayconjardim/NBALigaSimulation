@@ -44,7 +44,6 @@
         {
             if (weights == null)
             {
-                // Default: array of ones with the same size as components
                 weights = Enumerable.Repeat(1.0, components.Count).ToList();
             }
 
