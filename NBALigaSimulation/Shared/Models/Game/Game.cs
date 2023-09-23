@@ -53,8 +53,8 @@ namespace NBALigaSimulation.Shared.Models
             CompositeHelper.UpdatePlayersCompositeRating(Teams);
             CompositeHelper.UpdatePace(Teams);
 
-            NumPossessions = (int)Math.Round((105.2 +
-               98.4) / 2 * RandomUtils.RandomUniform(0.9, 1.1));
+            NumPossessions = (int)Math.Round((Teams[0].CompositeRating.Ratings["GamePace"] +
+                 Teams[1].CompositeRating.Ratings["GamePace"]) / 2 * RandomUtils.RandomUniform(0.9, 1.1));
 
             Dt = 48.0 / (2 * NumPossessions);
 
@@ -452,7 +452,7 @@ namespace NBALigaSimulation.Shared.Models
                 return DoTov(Teams, PlayersOnCourt);
             }
 
-            double[] ratios = RatingArray(Teams, "Usage", Offense, PlayersOnCourt);
+            double[] ratios = RatingArray(Teams, "Usage", Offense, PlayersOnCourt, 1.25);
             int shooterIndex = PickPlayer(ratios);
 
             return DoShot(shooterIndex, Teams, PlayersOnCourt);
@@ -797,7 +797,7 @@ namespace NBALigaSimulation.Shared.Models
             return "Orb";
         }
 
-        private double[] RatingArray(Team[] Teams, string rating, int t, int[][] PlayersOnCourt, double power = 1)
+        private double[] RatingArray2(Team[] Teams, string rating, int t, int[][] PlayersOnCourt, double power = 1)
         {
             double[] array = new double[5];
             double total = 0;
@@ -823,6 +823,52 @@ namespace NBALigaSimulation.Shared.Models
 
             return array;
         }
+
+        public double[] RatingArray(Team[] Teams, string rating, int t, int[][] PlayersOnCourt, double power = 1)
+        {
+            double[] array = new double[5];
+            double total = 0;
+
+
+            for (int i = 0; i < 5; i++)
+            {
+                int p = PlayersOnCourt[t][i];
+                double compositeRating = Teams[t].Players[p].CompositeRating.Ratings[rating];
+
+                if (rating == "Fouling")
+                {
+                    int pf = Teams[t].Players[p].Stats.Find(s => s.GameId == Id).Pf;
+                    if (pf == 6 - 1)
+                    {
+                        compositeRating *= 0.8;
+                    }
+                    else if (pf == 6)
+                    {
+                        compositeRating *= 0.5;
+                    }
+                    else if (pf > 6)
+                    {
+                        compositeRating *= 0.25;
+                    }
+                }
+
+                array[i] = Math.Pow(compositeRating * Fatigue(Teams[t].Players[p].Stats.Find(s => s.GameId == Id).Energy), power);
+                total += array[i];
+            }
+
+            double floor = 0.05 * total;
+
+            for (int i = 0; i < 5; i++)
+            {
+                if (array[i] < floor)
+                {
+                    array[i] = floor;
+                }
+            }
+
+            return array;
+        }
+
 
         private void RecordStat(int t, int p, string s, Team[] teams, int amount = 1, double amntDouble = 1.0)
         {
