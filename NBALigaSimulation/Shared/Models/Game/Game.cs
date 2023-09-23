@@ -294,12 +294,6 @@ namespace NBALigaSimulation.Shared.Models
                     skillsCount["R"] += RandomUtils.Sigmoid(Teams[t].Players[p].CompositeRating.Ratings["Rebounding"], 15, 0.61);
                 }
 
-                Console.WriteLine("Equipe " + Teams[t].Name);
-                foreach (var kvp in skillsCount)
-                {
-                    Console.WriteLine(kvp.Key + ": " + kvp.Value);
-                }
-
                 // Sinergia ofensiva de base
                 Teams[t].Synergy.Off = 0;
                 Teams[t].Synergy.Off += 5 * RandomUtils.Sigmoid(skillsCount["3"], 3, 2);
@@ -326,11 +320,7 @@ namespace NBALigaSimulation.Shared.Models
                 Teams[t].Synergy.Reb += RandomUtils.Sigmoid(skillsCount["R"], 15, 0.75) + RandomUtils.Sigmoid(skillsCount["R"], 5, 1.75);
                 Teams[t].Synergy.Reb /= 4;
 
-                Console.WriteLine("Equipe " + Teams[t].Name);
-                Console.WriteLine("Sinergia Ofensiva: " + Teams[t].Synergy.Off);
-                Console.WriteLine("Sinergia Defensiva: " + Teams[t].Synergy.Def);
-                Console.WriteLine("Sinergia de Rebote: " + Teams[t].Synergy.Reb);
-                Console.WriteLine();
+
             }
         }
 
