@@ -493,7 +493,7 @@ namespace NBALigaSimulation.Shared.Models
 
         private string DoStl(int pStoleFrom, Team[] Teams, int[][] PlayersOnCourt)
         {
-            double[] ratios = RatingArray(Teams, "Stealing", Defense, PlayersOnCourt, 5);
+            double[] ratios = RatingArray(Teams, "Stealing", Defense, PlayersOnCourt, 4);
             int playerIndex = PickPlayer(ratios);
             var p = PlayersOnCourt[Defense][playerIndex];
 
@@ -781,14 +781,14 @@ namespace NBALigaSimulation.Shared.Models
 
             if (defenseReboundingRatio > new Random().NextDouble())
             {
-                ratios = RatingArray(Teams, "Rebounding", Defense, PlayersOnCourt, 2);
+                ratios = RatingArray(Teams, "Rebounding", Defense, PlayersOnCourt, 3);
                 p = PlayersOnCourt[Defense][PickPlayer(ratios)];
                 RecordStat(Defense, p, "Drb", Teams);
                 RecordStat(Defense, p, "Trb", Teams);
                 return "Drb";
             }
 
-            ratios = RatingArray(Teams, "Rebounding", Offense, PlayersOnCourt, 3);
+            ratios = RatingArray(Teams, "Rebounding", Offense, PlayersOnCourt, 5);
             int oP = PlayersOnCourt[Offense][PickPlayer(ratios)];
             RecordStat(Offense, oP, "Orb", Teams);
             RecordStat(Offense, oP, "Trb", Teams);
@@ -892,7 +892,7 @@ namespace NBALigaSimulation.Shared.Models
             return energy;
         }
 
-        private int PickPlayer(double[] ratios, int? exempt = null)
+        private int PickPlayer2(double[] ratios, int? exempt = null)
         {
             if (exempt.HasValue)
             {
@@ -927,6 +927,39 @@ namespace NBALigaSimulation.Shared.Models
 
             return pick;
         }
+
+        public int PickPlayer(double[] ratios, int? exempt = null)
+        {
+            if (exempt.HasValue)
+            {
+                ratios[exempt.Value] = 0;
+            }
+
+            double sum = ratios.Sum();
+
+            if (sum == 0)
+            {
+                List<int> candidates = Enumerable.Range(0, ratios.Length).Where(i => i != exempt).ToList();
+                Random random = new Random();
+                return candidates[random.Next(candidates.Count)];
+            }
+
+            double rand = new Random().NextDouble() * sum;
+
+            double runningSum = 0;
+
+            for (int i = 0; i < ratios.Length; i++)
+            {
+                runningSum += ratios[i];
+                if (rand < runningSum)
+                {
+                    return i;
+                }
+            }
+
+            return 0;
+        }
+
 
 
     }
