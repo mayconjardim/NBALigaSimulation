@@ -797,34 +797,7 @@ namespace NBALigaSimulation.Shared.Models
             return "Orb";
         }
 
-        private double[] RatingArray2(Team[] Teams, string rating, int t, int[][] PlayersOnCourt, double power = 1)
-        {
-            double[] array = new double[5];
-            double total = 0;
-
-            for (int i = 0; i < 5; i++)
-            {
-                int p = PlayersOnCourt[t][i];
-                var player = Teams[t].Players.Find(player => player.RosterOrder == p);
-
-                array[i] = Math.Pow(Teams[t].Players[p].CompositeRating.Ratings[rating] *
-                                    Fatigue(player.Stats.Find(s => s.GameId == Id).Energy), power);
-                total += array[i];
-            }
-
-            double floor = 0.05 * total;
-            for (int i = 0; i < 5; i++)
-            {
-                if (array[i] < floor)
-                {
-                    array[i] = floor;
-                }
-            }
-
-            return array;
-        }
-
-        public double[] RatingArray(Team[] Teams, string rating, int t, int[][] PlayersOnCourt, double power = 1)
+        private double[] RatingArray(Team[] Teams, string rating, int t, int[][] PlayersOnCourt, double power = 1)
         {
             double[] array = new double[5];
             double total = 0;
@@ -892,43 +865,7 @@ namespace NBALigaSimulation.Shared.Models
             return energy;
         }
 
-        private int PickPlayer2(double[] ratios, int? exempt = null)
-        {
-            if (exempt.HasValue)
-            {
-                ratios[exempt.Value] = 0;
-            }
-
-            double rand = new Random().NextDouble() *
-                           (ratios[0] + ratios[1] + ratios[2] + ratios[3] + ratios[4]);
-
-            int pick;
-
-            if (rand < ratios[0])
-            {
-                pick = 0;
-            }
-            else if (rand < ratios[0] + ratios[1])
-            {
-                pick = 1;
-            }
-            else if (rand < ratios[0] + ratios[1] + ratios[2])
-            {
-                pick = 2;
-            }
-            else if (rand < ratios[0] + ratios[1] + ratios[2] + ratios[3])
-            {
-                pick = 3;
-            }
-            else
-            {
-                pick = 4;
-            }
-
-            return pick;
-        }
-
-        public int PickPlayer(double[] ratios, int? exempt = null)
+        private int PickPlayer(double[] ratios, int? exempt = null)
         {
             if (exempt.HasValue)
             {
