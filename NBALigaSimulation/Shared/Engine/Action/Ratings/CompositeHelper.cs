@@ -154,7 +154,7 @@ namespace NBALigaSimulation.Shared.Engine
                     blocking.Add("jmp", player.Ratings.LastOrDefault().Jmp);
                     blocking.Add("diq", player.Ratings.LastOrDefault().Diq);
                     List<string> blockingAttributes = new List<string> { "hgt", "jmp", "diq" };
-                    List<double> blockingWeights = new List<double> { 2.5, 1.5, 0.5 };
+                    List<double> blockingWeights = new List<double> { 3.0, 1.0, 2.0 };
                     player.CompositeRating.Ratings["Blocking"] = Converter.Composite(blocking, blockingAttributes, blockingWeights);
 
                     //Fouling

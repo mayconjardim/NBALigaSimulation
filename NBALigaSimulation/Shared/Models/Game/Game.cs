@@ -486,13 +486,22 @@ namespace NBALigaSimulation.Shared.Models
             return "Tov";
         }
 
-        private double ProbStl(Team[] Teams)
-        {
-            double defensePerimeterRating = Teams[Defense].CompositeRating.Ratings["GameDefensePerimeter"];
-            double offenseRating = 0.5 * (Teams[Offense].CompositeRating.Ratings["GameDribbling"] + Teams[Offense].CompositeRating.Ratings["GamePassing"]);
+  
 
-            return (0.55 * defensePerimeterRating) / offenseRating;
+         private double ProbStl(Team[] Teams)
+        {
+            double stealFactor = 1.09;
+            double defensePerimeter = Teams[Defense].CompositeRating.Ratings["GameDefensePerimeter"];
+            double dribbling = Teams[Offense].CompositeRating.Ratings["GameDribbling"];
+            double passing = Teams[Offense].CompositeRating.Ratings["GamePassing"];
+
+            double probability = stealFactor * ((0.45 * defensePerimeter) / (0.5 * (dribbling + passing)));
+
+            return BoundProb(probability);
         }
+
+
+
 
         private string DoStl(int pStoleFrom, Team[] Teams, int[][] PlayersOnCourt)
         {
@@ -658,7 +667,7 @@ namespace NBALigaSimulation.Shared.Models
 
         private double ProbBlk(Team[] Teams)
         {
-            return 1 * 0.4 * Math.Pow(Teams[Defense].CompositeRating.Ratings["GameBlocking"], 2);
+            return 2 * 0.2 * Math.Pow(Teams[Defense].CompositeRating.Ratings["GameBlocking"], 2);
         }
 
         private string DoBlk(int shooter, string type, Team[] Teams, int[][] PlayersOnCourt)
@@ -925,7 +934,11 @@ namespace NBALigaSimulation.Shared.Models
             return 0;
         }
 
-
+        private double BoundProb(double prob)
+        {
+                double boundedProb = RandomUtils.Bound(prob, 0.001, 0.999);
+                return boundedProb;
+        }
 
     }
 
