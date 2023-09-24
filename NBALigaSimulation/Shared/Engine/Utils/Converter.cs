@@ -49,16 +49,19 @@
 
             double numerator = 0;
             double denominator = 0;
-            double factor = 0;
             bool fuzz = false;
 
             for (int i = 0; i < components.Count; i++)
             {
                 var component = components[i];
+                double factor = 0;
 
-                if (component is string)
+                if (component == "50")
                 {
-                    string ratingName = component;
+                    factor = component[i];
+                }
+                else if (component is string ratingName)
+                {
                     if (!ratings.ContainsKey(ratingName))
                     {
                         throw new Exception($"Undefined value for rating \"{ratingName}\"");
@@ -68,7 +71,7 @@
 
                     if (fuzz)
                     {
-                        factor = rating;
+
                     }
                     else
                     {
@@ -86,7 +89,6 @@
 
             return RandomUtils.Bound(numerator / denominator, 0, 1);
         }
-
 
 
         public static bool hasSkill(List<int> skills, List<double> weights)

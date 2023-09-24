@@ -72,7 +72,7 @@ namespace NBALigaSimulation.Shared.Engine
                     turnovers.Add("ins", player.Ratings.LastOrDefault().Ins);
                     turnovers.Add("pss", player.Ratings.LastOrDefault().Pss);
                     turnovers.Add("oiq", player.Ratings.LastOrDefault().Oiq);
-                    List<string> turnoversAttributes = new List<string> { "ins", "pss", "oiq" };
+                    List<string> turnoversAttributes = new List<string> { 50, "ins", "pss", "oiq" };
                     List<double> turnoversWeights = new List<double> { 0.5, 1, 1, -1 };
                     player.CompositeRating.Ratings["Turnovers"] = Converter.Composite(turnovers, turnoversAttributes, turnoversWeights);
 
@@ -97,7 +97,7 @@ namespace NBALigaSimulation.Shared.Engine
                     shootingLowPost.Add("ins", player.Ratings.LastOrDefault().Ins);
                     shootingLowPost.Add("oiq", player.Ratings.LastOrDefault().Oiq);
                     List<string> shootingLowPostAttributes = new List<string> { "hgt", "stre", "spd", "ins", "oiq" };
-                    List<double> shootingLowPostWeights = new List<double> { 2, 0.6, 0.2, 1, 0.2 };
+                    List<double> shootingLowPostWeights = new List<double> { 1, 1, 0.2, 4.5, 0.5 };
                     player.CompositeRating.Ratings["ShootingLowPost"] = Converter.Composite(shootingLowPost, shootingLowPostAttributes, shootingLowPostWeights);
 
                     //ShootingMidRange
@@ -114,8 +114,10 @@ namespace NBALigaSimulation.Shared.Engine
                     Dictionary<string, double> shootingThreePointer = new Dictionary<string, double>();
                     shootingThreePointer.Add("oiq", player.Ratings.LastOrDefault().Oiq);
                     shootingThreePointer.Add("tp", player.Ratings.LastOrDefault().Tp);
-                    List<string> shootingThreePointerAttributes = new List<string> { "oiq", "tp" };
-                    List<double> shootingThreePointerWeights = new List<double> { 0.1, 2 };
+                    shootingThreePointer.Add("stre", player.Ratings.LastOrDefault().Stre);
+
+                    List<string> shootingThreePointerAttributes = new List<string> { "oiq", "tp", "stre" };
+                    List<double> shootingThreePointerWeights = new List<double> { 0.1, 3.5, 0.2 };
                     player.CompositeRating.Ratings["ShootingThreePointer"] = Converter.Composite(shootingThreePointer, shootingThreePointerAttributes, shootingThreePointerWeights);
 
                     //ShootingFT
@@ -144,7 +146,7 @@ namespace NBALigaSimulation.Shared.Engine
                     stealing.Add("spd", player.Ratings.LastOrDefault().Spd);
                     stealing.Add("diq", player.Ratings.LastOrDefault().Diq);
                     List<string> stealingAttributes = new List<string> { "spd", "diq" };
-                    List<double> stealingWeights = new List<double> { 1, 1, 2 };
+                    List<double> stealingWeights = new List<double> { 1, 2 };
                     player.CompositeRating.Ratings["Stealing"] = Converter.Composite(stealing, stealingAttributes, stealingWeights);
 
                     //Blocking
@@ -154,7 +156,7 @@ namespace NBALigaSimulation.Shared.Engine
                     blocking.Add("jmp", player.Ratings.LastOrDefault().Jmp);
                     blocking.Add("diq", player.Ratings.LastOrDefault().Diq);
                     List<string> blockingAttributes = new List<string> { "hgt", "jmp", "diq" };
-                    List<double> blockingWeights = new List<double> { 3.5, 1.5, 0.5 };
+                    List<double> blockingWeights = new List<double> { 4.0, 1.0, 3.5 };
                     player.CompositeRating.Ratings["Blocking"] = Converter.Composite(blocking, blockingAttributes, blockingWeights);
 
                     //Fouling
@@ -164,7 +166,7 @@ namespace NBALigaSimulation.Shared.Engine
                     fouling.Add("diq", player.Ratings.LastOrDefault().Diq);
                     fouling.Add("spd", player.Ratings.LastOrDefault().Spd);
                     List<string> foulingAttributes = new List<string> { "hgt", "diq", "spd" };
-                    List<double> foulingWeights = new List<double> { 3, 1, -1, -1 };
+                    List<double> foulingWeights = new List<double> { 1, -1, -1 };
                     player.CompositeRating.Ratings["Fouling"] = Converter.Composite(fouling, foulingAttributes, foulingWeights);
 
                     //Drawing Fouls
@@ -220,7 +222,7 @@ namespace NBALigaSimulation.Shared.Engine
                     Dictionary<string, double> endurance = new Dictionary<string, double>();
                     endurance.Add("endu", player.Ratings.LastOrDefault().Endu);
                     List<string> enduranceAttributes = new List<string> { "endu" };
-                    List<double> enduranceWeights = new List<double> { 1, 1 };
+                    List<double> enduranceWeights = new List<double> { 1 };
                     player.CompositeRating.Ratings["Endurance"] = Converter.Composite(endurance, enduranceAttributes, enduranceWeights);
 
 
