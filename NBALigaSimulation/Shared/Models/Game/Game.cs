@@ -776,11 +776,9 @@ namespace NBALigaSimulation.Shared.Models
             return "EndOfQuarter";
         }
 
-
         private double ProbBlk(Team[] Teams)
         {
-            double blockingRating = Teams[Defense].CompositeRating.Ratings["GameBlocking"];
-            return 0.2 * Math.Pow(blockingRating, 2);
+            return 1 * 0.2 * Math.Pow(Teams[Defense].CompositeRating.Ratings["GameBlocking"], 2);
         }
 
         private string DoBlk(int shooter, string type, Team[] Teams, int[][] PlayersOnCourt)
