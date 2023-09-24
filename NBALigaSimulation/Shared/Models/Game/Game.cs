@@ -57,7 +57,7 @@ namespace NBALigaSimulation.Shared.Models
             paceFactor += 0.025 * RandomUtils.Bound((paceFactor - 1) / 0.2, -1, 1);
 
 
-            NumPossessions = (int)((int) ((Teams[0].CompositeRating.Ratings["GamePace"]  + Teams[1].CompositeRating.Ratings["GamePace"]) / 2) * 1.1 * paceFactor); 
+            NumPossessions = (int)((int)((Teams[0].CompositeRating.Ratings["GamePace"] + Teams[1].CompositeRating.Ratings["GamePace"]) / 2) * 1.1 * paceFactor);
 
             Dt = 48.0 / (2 * NumPossessions);
 
@@ -920,20 +920,18 @@ namespace NBALigaSimulation.Shared.Models
 
         private string DoReb(Team[] Teams, int[][] PlayersOnCourt)
         {
-            double randomValue = new Random().NextDouble();
+            int p;
+            double[] ratios;
 
-            if (randomValue < 0.15)
+            if (new Random().NextDouble() < 0.15)
             {
                 return null;
             }
 
-            double defenseReboundingRatio = (0.75 * (2 + Teams[Defense].CompositeRating.Ratings["GameRebounding"])) /
-                                            (2 + Teams[Offense].CompositeRating.Ratings["GameRebounding"]);
+            double defensiveReboundingFactor = (0.75 * (2 + Teams[Defense].CompositeRating.Ratings["GameRebounding"]))
+                / (1) * (2 + Teams[Offense].CompositeRating.Ratings["GameRebounding"]));
 
-            double[] ratios;
-            int p;
-
-            if (defenseReboundingRatio > new Random().NextDouble())
+            if (defensiveReboundingFactor > new Random().NextDouble())
             {
                 ratios = RatingArray(Teams, "Rebounding", Defense, PlayersOnCourt, 3);
                 p = PlayersOnCourt[Defense][PickPlayer(ratios)];
@@ -946,10 +944,9 @@ namespace NBALigaSimulation.Shared.Models
             int oP = PlayersOnCourt[Offense][PickPlayer(ratios)];
             RecordStat(Offense, oP, "Orb", Teams);
             RecordStat(Offense, oP, "Trb", Teams);
-
-
             return "Orb";
         }
+
 
         private double[] RatingArray(Team[] Teams, string rating, int t, int[][] PlayersOnCourt, double power = 1)
         {
