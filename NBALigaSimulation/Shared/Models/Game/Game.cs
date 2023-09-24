@@ -860,11 +860,12 @@ namespace NBALigaSimulation.Shared.Models
 
         private double ProbAst(Team[] Teams)
         {
-            double passingRating = Teams[Offense].CompositeRating.Ratings["GamePassing"];
-            double defenseRating = Teams[Defense].CompositeRating.Ratings["GameDefense"];
+            double numerator = (0.6 * (2 + Teams[Offense].CompositeRating.Ratings["GamePassing"]));
+            double denominator = (2 + Teams[Defense].CompositeRating.Ratings["GameDefense"]);
 
-            return (0.6 * (2 + passingRating)) / (2 + defenseRating);
+            return (numerator / denominator) * 1;
         }
+
 
         private string DoFt(int shooter, int amount, Team[] Teams, int[][] PlayersOnCourt)
         {
