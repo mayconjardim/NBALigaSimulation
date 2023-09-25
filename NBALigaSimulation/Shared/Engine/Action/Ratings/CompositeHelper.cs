@@ -44,7 +44,7 @@ namespace NBALigaSimulation.Shared.Engine
                     usage.Add("drb", player.Ratings.LastOrDefault().Drb);
                     usage.Add("oiq", player.Ratings.LastOrDefault().Oiq);
                     List<string> usageAttributes = new List<string> { "ins", "dnk", "fg", "tp", "spd", "hgt", "drb", "oiq" };
-                    List<double> usageWeights = new List<double> { 1.5, 1, 1, 1, 1, 0.5, 0.5, 5 };
+                    List<double> usageWeights = new List<double> { 1.5, 1, 1, 1, 1, 0.8, 0.8, 5 };
                     player.CompositeRating.Ratings["Usage"] = Converter.Composite(usage, usageAttributes, usageWeights);
 
                     //Dribbling
@@ -135,7 +135,7 @@ namespace NBALigaSimulation.Shared.Engine
                     rebounding.Add("oiq", player.Ratings.LastOrDefault().Oiq);
                     rebounding.Add("diq", player.Ratings.LastOrDefault().Diq);
                     List<string> reboundingAttributes = new List<string> { "hgt", "stre", "jmp", "reb", "oiq", "diq" };
-                    List<double> reboundingWeights = new List<double> { 4.5, 0.1, 0.1, 2, 0.5, 0.8 };
+                    List<double> reboundingWeights = new List<double> { 8, 0.1, 0.1, 2, 0.5, 1.5 };
                     player.CompositeRating.Ratings["Rebounding"] = Converter.Composite(rebounding, reboundingAttributes, reboundingWeights);
 
                     //Stealing
