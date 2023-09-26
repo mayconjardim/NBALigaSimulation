@@ -103,7 +103,7 @@
                 denominator += 100 * weights[i];
             }
 
-            if (numerator / denominator > 0.75)
+            if (numerator / denominator > 0.61)
             {
                 return true;
             }

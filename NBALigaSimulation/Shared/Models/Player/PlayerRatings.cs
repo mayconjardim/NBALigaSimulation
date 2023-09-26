@@ -75,48 +75,6 @@ namespace NBALigaSimulation.Shared.Models
             }
         }
 
-        public List<string> Skills
-        {
-            get
-            {
-                List<string> skills = new();
-
-                if (Converter.hasSkill(new List<int> { Hgt, Tp }, new List<double> { 0.2, 1.0 }))
-                {
-                    skills.Add("3");
-                }
-                if (Converter.hasSkill(new List<int> { Stre, Spd, Jmp, Hgt }, new List<double> { 1, 1, 1, 0.5 }))
-                {
-                    skills.Add("A");
-                }
-                if (Converter.hasSkill(new List<int> { Drb, Spd }, new List<double> { 1, 1 }))
-                {
-                    skills.Add("B");
-                }
-                if (Converter.hasSkill(new List<int> { Hgt, Stre, Spd, Jmp, Diq }, new List<double> { 2, 1, 0.5, 0.5, 1 }))
-                {
-                    skills.Add("Di");
-                }
-                if (Converter.hasSkill(new List<int> { Hgt, Stre, Spd, Jmp, Diq }, new List<double> { 1, 1, 2, 0.5, 1 }))
-                {
-                    skills.Add("Dp");
-                }
-                if (Converter.hasSkill(new List<int> { Hgt, Stre, Spd, Ins }, new List<double> { 1, 0.6, 0.2, 1 }))
-                {
-                    skills.Add("Po");
-                }
-                if (Converter.hasSkill(new List<int> { Drb, Pss }, new List<double> { 0.4, 1 }))
-                {
-                    skills.Add("Ps");
-                }
-                if (Converter.hasSkill(new List<int> { Hgt, Stre, Jmp, Reb }, new List<double> { 1, 0.1, 0.1, 0.7 }))
-                {
-                    skills.Add("R");
-                }
-
-                return skills;
-            }
-        }
 
     }
 }

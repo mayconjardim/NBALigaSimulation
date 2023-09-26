@@ -77,11 +77,11 @@ namespace NBALigaSimulation.Shared.Dtos
             {
                 List<string> skills = new();
 
-                if (Converter.hasSkill(new List<int> { Hgt, Tp }, new List<double> { 0.2, 1.0 }))
+                if (Converter.hasSkill(new List<int> { Oiq, Tp }, new List<double> { 0.1, 1 }))
                 {
                     skills.Add("3");
                 }
-                if (Converter.hasSkill(new List<int> { Stre, Spd, Jmp, Hgt }, new List<double> { 1, 1, 1, 0.5 }))
+                if (Converter.hasSkill(new List<int> { Stre, Spd, Jmp, Hgt }, new List<double> { 1, 1, 1, 0.75 }))
                 {
                     skills.Add("A");
                 }
@@ -97,15 +97,15 @@ namespace NBALigaSimulation.Shared.Dtos
                 {
                     skills.Add("Dp");
                 }
-                if (Converter.hasSkill(new List<int> { Hgt, Stre, Spd, Ins }, new List<double> { 1, 0.6, 0.2, 1 }))
+                if (Converter.hasSkill(new List<int> { Hgt, Stre, Spd, Jmp, Diq }, new List<double> { 2, 0.6, 0.2, 1, 0.2 }))
                 {
                     skills.Add("Po");
                 }
-                if (Converter.hasSkill(new List<int> { Drb, Pss }, new List<double> { 0.4, 1 }))
+                if (Converter.hasSkill(new List<int> { Drb, Pss, Oiq }, new List<double> { 0.4, 1, 0.5 }))
                 {
                     skills.Add("Ps");
                 }
-                if (Converter.hasSkill(new List<int> { Hgt, Stre, Jmp, Reb }, new List<double> { 1, 0.1, 0.1, 0.7 }))
+                if (Converter.hasSkill(new List<int> { Hgt, Stre, Jmp, Reb, Oiq, Diq }, new List<double> { 2, 0.1, 0.1, 2, 0.5, 0.5 }))
                 {
                     skills.Add("R");
                 }
