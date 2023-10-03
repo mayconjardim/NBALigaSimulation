@@ -1,4 +1,5 @@
 ﻿using NBALigaSimulation.Shared.Engine;
+using NBALigaSimulation.Shared.Engine.Action.Gameplan;
 using System;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Numerics;
@@ -53,11 +54,11 @@ namespace NBALigaSimulation.Shared.Models
             CompositeHelper.UpdatePlayersCompositeRating(Teams);
             CompositeHelper.UpdatePace(Teams);
 
-            var paceFactor = 93.0 / 100;
+            var paceFactor = 93.5 / 100;
             paceFactor += 0.025 * RandomUtils.Bound((paceFactor - 1) / 0.2, -1, 1);
 
 
-            NumPossessions = (int)((int)((Teams[0].CompositeRating.Ratings["GamePace"] + Teams[1].CompositeRating.Ratings["GamePace"]) / 2) * 1.1 * paceFactor);
+            NumPossessions = (int)((int)(( GameplanUtils.GameplanPace(Teams[0].Gameplan.Pace) +  GameplanUtils.GameplanPace(Teams[1].Gameplan.Pace)) / 2) * 1.1 * paceFactor);
 
             Dt = 48.0 / (2 * NumPossessions);
 
