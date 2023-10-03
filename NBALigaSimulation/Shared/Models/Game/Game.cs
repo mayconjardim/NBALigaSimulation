@@ -548,6 +548,17 @@ namespace NBALigaSimulation.Shared.Models
             if (shootingThreePointerScaled > 0.55)
             {
                 shootingThreePointerScaled = 0.55 + (shootingThreePointerScaled - 0.55) * (0.3 / 0.45);
+
+                if (Teams[Offense].Gameplan.Focus == 3)
+                {
+                    shootingThreePointerScaled += GameplanUtils.GameplanFocus(Teams[Offense].Gameplan.Focus);
+                }
+
+                if (Teams[Offense].Gameplan.Focus == 1)
+                {
+                    shootingThreePointerScaled += GameplanUtils.GameplanFocus(Teams[Offense].Gameplan.Focus);
+                }
+
             }
 
             double shootingThreePointerScaled2 = shootingThreePointerScaled;

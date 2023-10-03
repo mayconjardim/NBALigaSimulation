@@ -29,6 +29,18 @@
             }
         }
 
+        public static double GameplanFocus(int value)
+        {
+            switch (value)
+            {
+                case 1:
+                    return -0.9;
+                case 2:
+                    return 0.0;
+                default:
+                    return 0.9;
+            }
+        }
 
 
 

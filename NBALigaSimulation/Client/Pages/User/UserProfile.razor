@@ -123,7 +123,7 @@
                             <select @bind="teamGameplan.Focus" class="mud-input mud-select-input" @oninput="HandleEventChanged">
                                 @foreach (var option in GPOptions)
                                 {
-                                    <option value="@option">@GetGP(option)</option>
+                                    <option value="@option">@GetFocus(option)</option>
                                 }
                             </select>
                         </div>

@@ -112,6 +112,21 @@ namespace NBALigaSimulation.Client.Pages.User
             }
         }
 
+        string GetFocus(double value)
+        {
+            switch (value)
+            {
+                case 1:
+                    return "Inside";
+                case 2:
+                    return "Balanced";
+                case 3:
+                    return "Outside";
+                default:
+                    return string.Empty;
+            }
+        }
+
         List<double> DefenseOptions = new List<double> { 1, 2, 3, 4 };
 
         string GetDefense(double value)
