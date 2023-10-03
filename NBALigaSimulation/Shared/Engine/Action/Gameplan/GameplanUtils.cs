@@ -42,6 +42,20 @@
             }
         }
 
+        public static double GameplanDefense(int value)
+        {
+            switch (value)
+            {
+                case 1:
+                    return 0.0;
+                case 2:
+                    return 0.0;
+                case 3:
+                    return 0.0;
+                default:
+                    return 0.9;
+            }
+        }
 
 
 

@@ -92,6 +92,8 @@ namespace NBALigaSimulation.Server.Services.GameService
                 Game game = await _context.Games
                   .Include(p => p.HomeTeam.Players.OrderBy(p => p.RosterOrder)).ThenInclude(p => p.Ratings)
                   .Include(p => p.AwayTeam.Players.OrderBy(p => p.RosterOrder)).ThenInclude(p => p.Ratings)
+                  .Include(t => t.HomeTeam.Gameplan)
+                  .Include(t => t.AwayTeam.Gameplan)
                   .FirstOrDefaultAsync(p => p.Id == gameId);
 
                 if (game == null)
@@ -211,6 +213,8 @@ namespace NBALigaSimulation.Server.Services.GameService
                 .Include(p => p.HomeTeam.Players.OrderBy(p => p.RosterOrder)).ThenInclude(p => p.RegularStats)
                 .Include(p => p.AwayTeam.Players.OrderBy(p => p.RosterOrder)).ThenInclude(p => p.RegularStats)
                 .Where(g => g.GameDate == firstUnsimulatedDate && !g.Happened)
+                .Include(t => t.HomeTeam.Gameplan)
+                 .Include(t => t.AwayTeam.Gameplan)
                 .ToListAsync();
 
             foreach (Game game in games)
@@ -291,6 +295,8 @@ namespace NBALigaSimulation.Server.Services.GameService
                   .Include(p => p.AwayTeam.TeamPlayoffsStats)
                   .Include(p => p.HomeTeam.Players.OrderBy(p => p.RosterOrder)).ThenInclude(p => p.PlayoffsStats)
                   .Include(p => p.AwayTeam.Players.OrderBy(p => p.RosterOrder)).ThenInclude(p => p.PlayoffsStats)
+                  .Include(t => t.HomeTeam.Gameplan)
+                  .Include(t => t.AwayTeam.Gameplan)
                   .Where(g => gameIds.Contains(g.Id) && !g.Happened && g.Type == 1)
                   .ToListAsync();
 
@@ -425,11 +431,14 @@ namespace NBALigaSimulation.Server.Services.GameService
             List<Game> games = await _context.Games
                 .Include(p => p.HomeTeam.Players.OrderBy(p => p.RosterOrder)).ThenInclude(p => p.Ratings)
                 .Include(p => p.AwayTeam.Players.OrderBy(p => p.RosterOrder)).ThenInclude(p => p.Ratings)
+                .Include(t => t.HomeTeam.Gameplan)
+                .Include(t => t.AwayTeam.Gameplan)
                 .Include(p => p.HomeTeam.TeamRegularStats)
                 .Include(p => p.AwayTeam.TeamRegularStats)
                 .Include(p => p.HomeTeam.Players.OrderBy(p => p.RosterOrder)).ThenInclude(p => p.RegularStats)
                 .Include(p => p.AwayTeam.Players.OrderBy(p => p.RosterOrder)).ThenInclude(p => p.RegularStats)
                 .Where(g => g.Happened == false)
+                .Include(t => t.HomeTeam.Gameplan)
                 .ToListAsync();
 
             foreach (Game game in games)
