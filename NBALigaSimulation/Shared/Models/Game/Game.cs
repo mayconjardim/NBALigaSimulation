@@ -58,7 +58,7 @@ namespace NBALigaSimulation.Shared.Models
             paceFactor += 0.025 * RandomUtils.Bound((paceFactor - 1) / 0.2, -1, 1);
 
 
-            NumPossessions = (int)((int)(( GameplanUtils.GameplanPace(Teams[0].Gameplan.Pace) +  GameplanUtils.GameplanPace(Teams[1].Gameplan.Pace)) / 2) * 1.1 * paceFactor);
+            NumPossessions = (int)((int)((GameplanUtils.GameplanPace(Teams[0].Gameplan.Pace) + GameplanUtils.GameplanPace(Teams[1].Gameplan.Pace)) / 2) * 1.1 * paceFactor);
 
             Dt = 48.0 / (2 * NumPossessions);
 
@@ -757,7 +757,7 @@ namespace NBALigaSimulation.Shared.Models
 
         private double ProbAst(Team[] Teams)
         {
-            double numerator = (0.9 * (2 + Teams[Offense].CompositeRating.Ratings["GamePassing"]));
+            double numerator = (0.9 * (2 + Teams[Offense].CompositeRating.Ratings["GamePassing"]) + GameplanUtils.GameplanMotion(Teams[Offense].Gameplan.Pace));
             double denominator = (2 + Teams[Defense].CompositeRating.Ratings["GameDefense"]);
 
             return (numerator / denominator) * 1;

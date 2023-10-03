@@ -44,6 +44,8 @@ namespace NBALigaSimulation.Server.Services.GameService
             Game game = await _context.Games
               .Include(p => p.HomeTeam.Players.OrderBy(p => p.RosterOrder)).ThenInclude(p => p.Ratings)
               .Include(p => p.AwayTeam.Players.OrderBy(p => p.RosterOrder)).ThenInclude(p => p.Ratings)
+              .Include(t => t.HomeTeam.Gameplan)
+              .Include(t => t.AwayTeam.Gameplan)
               .FirstOrDefaultAsync(p => p.Id == gameId);
 
             game.Season = await _context.Seasons.OrderBy(s => s.Id).LastOrDefaultAsync();
