@@ -1,7 +1,149 @@
 ﻿@page "/stats"
+@inject IStatsService StatsService
 
-<h3>PlayerStats</h3>
 
-@code {
+<MudContainer>
 
-}
+<h3>PLAYERS STATS</h3>    
+
+
+<div class="stats">
+  <table >
+    <thead>
+      <tr>
+        <th colspan="10"></th>
+        <th colspan="3" style="text-align: center" title="Field Goals">FG</th>
+        <th colspan="3" style="text-align: center" title="Three-Pointers">3PT</th>
+        <th colspan="3" style="text-align: center" title="Free Throws">FT</th>
+        <th colspan="3" style="text-align: center" title="Rebounds">Reb</th>
+      </tr>
+      <tr>
+        <th >Name</th>
+        <th title="Position">Pos</th>
+        <th @onclick='() => SortTable("Games")' title="Games Played">GP 
+            <i class="sort-icon @GetSortIcon("Games")"></i>
+        </th>
+        <th @onclick='() => SortTable("MinPG")' title="Minutes">Min
+            <i class="sort-icon @GetSortIcon("MinPG")"></i>
+
+        </th>
+
+        <th @onclick='() => SortTable("PtsPG")'>Pts
+            <i class="sort-icon @GetSortIcon("PtsPG")"></i>
+
+        </th>
+
+        <th @onclick='() => SortTable("AstPG")' title="Assists">Ast
+            <i class="sort-icon @GetSortIcon("AstPG")"></i>
+
+        </th>
+        <th @onclick='() => SortTable("TovPG")' title="Turnovers">TO
+            <i class="sort-icon @GetSortIcon("TovPG")"></i>
+
+        </th>
+        <th @onclick='() => SortTable("StlPG")' title="Steals">Stl
+            <i class="sort-icon @GetSortIcon("StlPG")"></i>
+
+        </th>
+        <th @onclick='() => SortTable("BlkPG")' title="Blocks">Blk
+            <i class="sort-icon @GetSortIcon("BlkPG")"></i>
+
+        </th>
+        <th @onclick='() => SortTable("PfPG")' title="Personal Fouls">PF
+            <i class="sort-icon @GetSortIcon("PfPG")"></i>
+
+        </th>
+     
+
+        <th @onclick='() => SortTable("FgPG")' title="Made">M
+            <i class="sort-icon @GetSortIcon("FgPG")"></i>
+
+        </th>
+        <th @onclick='() => SortTable("FgaPG")' title="Attempted">A
+            <i class="sort-icon @GetSortIcon("FgaPG")"></i>
+
+        </th>
+        <th @onclick='() => SortTable("FgPct")' title="Percentage">%
+            <i class="sort-icon @GetSortIcon("FgPct")"></i>
+
+        </th>
+        <th @onclick='() => SortTable("TpPG")' title="Made">M
+            <i class="sort-icon @GetSortIcon("TpPG")"></i>
+
+        </th>
+        <th @onclick='() => SortTable("TpaPG")' title="Attempted">A
+            <i class="sort-icon @GetSortIcon("TpaPG")"></i>
+
+        </th>
+        <th @onclick='() => SortTable("TpPct")' title="Percentage">%
+            <i class="sort-icon @GetSortIcon("TpPct")"></i>
+
+        </th>
+        <th @onclick='() => SortTable("FtPG")' title="Made">M
+            <i class="sort-icon @GetSortIcon("FtPG")"></i>
+
+        </th>
+        <th @onclick='() => SortTable("FtaPG")' title="Attempted">A
+            <i class="sort-icon @GetSortIcon("FtaPG")"></i>
+
+        </th>
+        <th @onclick='() => SortTable("FtPct")' title="Percentage">%
+            <i class="sort-icon @GetSortIcon("FtPct")"></i>
+
+        </th>
+        <th @onclick='() => SortTable("ORebPG")' title="Offensive">Off
+            <i class="sort-icon @GetSortIcon("ORebPG")"></i>
+
+        </th>
+        <th @onclick='() => SortTable("DRebPG")' title="Defensive">Def
+            <i class="sort-icon @GetSortIcon("DRebPG")"></i>
+
+        </th>
+        <th @onclick='() => SortTable("TRebPG")' title="Total">Tot
+            <i class="sort-icon @GetSortIcon("TRebPG")"></i>
+
+        </th>
+
+      </tr>
+    </thead>
+    <tbody>
+
+       @foreach (var player in GetCurrentPage())
+        {
+            <tr>
+                <td><a href=@("/player/" + player.PlayerId)>@AbbreviateLastName(player.Name)</a>, <a href=@("/team/" + player.TeamId)>@player.TeamAbrv</a></td>
+                <td>PG</td>
+                <td>@player.Games</td>
+                <td>@player.MinPG</td>
+                <td>@player.PtsPG</td>
+                <td>@player.AstPG</td>
+                <td>@player.TovPG</td>
+                <td>@player.StlPG</td>
+                <td>@player.BlkPG</td>
+                <td>@player.PfPG</td>
+                <td>@player.FgPG</td>
+                <td>@player.FgaPG</td>
+                <td>@player.FgPct</td>
+                <td>@player.TpPG</td>
+                <td>@player.TpaPG</td>
+                <td>@player.TpPct</td>
+                <td>@player.FtPG</td>
+                <td>@player.FtaPG</td>
+                <td>@player.FtPct</td>
+                <td>@player.ORebPG</td>
+                <td>@player.DRebPG</td>
+                <td>@player.TRebPG</td>
+            </tr>
+        }
+
+    </tbody>
+  </table>
+</div>
+
+<div class="pages">
+    <MudIconButton Icon="@Icons.Material.Filled.LastPage" @onclick="NextPage"></MudIconButton>
+    <MudIconButton Icon="@Icons.Material.Filled.FirstPage" @onclick="ReturnPage"></MudIconButton>
+</div>
+
+   
+</MudContainer>

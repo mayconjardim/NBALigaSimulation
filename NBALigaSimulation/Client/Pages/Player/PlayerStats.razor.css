@@ -1,4 +1,10 @@
-﻿h3, h5 {
+﻿.stats {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+
+h3, h5 {
     margin: 10px !important;
 }
 

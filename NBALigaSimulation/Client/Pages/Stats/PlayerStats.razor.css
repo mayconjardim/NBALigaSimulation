@@ -1,0 +1,65 @@
+﻿h3 {
+    margin: 10px;
+}
+
+
+.stats {
+    margin: 10px;
+    overflow-x: auto;
+    box-shadow: rgba(9, 30, 66, 0.25) 0px 4px 8px -2px, rgba(9, 30, 66, 0.08) 0px 0px 0px 1px;
+}
+
+a {
+    color: blue;
+}
+
+    a:hover {
+        text-decoration: underline;
+    }
+
+h3, h5 {
+    margin: 10px !important;
+}
+
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+thead {
+    text-transform: uppercase;
+}
+
+th,
+td {
+    padding: 6px;
+    text-align: center;
+    border: 1px solid #ddd;
+    white-space: nowrap;
+}
+
+
+th {
+    background-color: #f2f2f2;
+}
+
+tr, td {
+    background-color: #f9f9f9;
+}
+
+.sort-icon.asc::after {
+    content: '\25B2';
+    color: green;
+    margin-left: 5px;
+}
+
+.sort-icon.desc::after {
+    content: '\25BC';
+    color: red;
+    margin-left: 5px;
+}
+
+.pages {
+    margin: 10px;
+}
