@@ -53,7 +53,7 @@ namespace NBALigaSimulation.Shared.Models
             CompositeHelper.UpdatePlayersCompositeRating(Teams);
             CompositeHelper.UpdatePace(Teams);
 
-            var paceFactor = 99.1 / 100;
+            var paceFactor = 103.1 / 100;
             paceFactor += 0.025 * RandomUtils.Bound((paceFactor - 1) / 0.2, -1, 1);
 
 
