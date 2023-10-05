@@ -5,6 +5,7 @@
 		<Nullable>enable</Nullable>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<NoWarn>$(NoWarn);20504</NoWarn>
+		<ServiceWorkerAssetsManifest>service-worker-assets.js</ServiceWorkerAssetsManifest>
 	</PropertyGroup>
 
 	<ItemGroup>
@@ -23,6 +24,11 @@
 
 	<ItemGroup>
 		<Folder Include="wwwroot\Images\Utils\" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ServiceWorker Include="wwwroot\service-worker.js"
+		  PublishedContent="wwwroot\service-worker.published.js" />
 	</ItemGroup>
 
 </Project>
