@@ -7,6 +7,7 @@ namespace NBALigaSimulation.Shared.Dtos
 
         public int Id { get; set; }
         public string Name { get; set; } = string.Empty;
+        public string Pos { get; set; } = string.Empty;
         public int PlayerId { get; set; }
         public int TeamId { get; set; }
         public string TeamAbrv { get; set; }

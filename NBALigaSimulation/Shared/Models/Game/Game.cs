@@ -165,7 +165,7 @@ namespace NBALigaSimulation.Shared.Models
 
                         if (lastStats == null || lastStats.GameId != Id)
                         {
-                            player.Stats.Add(new PlayerGameStats { GameId = Id, TeamId = teams[t].Id, Name = player.Name, Season = Season.Year });
+                            player.Stats.Add(new PlayerGameStats { GameId = Id, TeamId = teams[t].Id, Name = player.Name, Season = Season.Year, Pos = player.Pos });
                         }
                     }
 

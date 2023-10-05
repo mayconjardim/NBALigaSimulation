@@ -135,7 +135,7 @@ namespace NBALigaSimulation.Shared.Engine
                     rebounding.Add("oiq", player.Ratings.LastOrDefault().Oiq);
                     rebounding.Add("diq", player.Ratings.LastOrDefault().Diq);
                     List<string> reboundingAttributes = new List<string> { "hgt", "stre", "jmp", "reb", "oiq", "diq" };
-                    List<double> reboundingWeights = new List<double> { 10.5, 0.1, 0.1, 2, 0.5, 1.5 };
+                    List<double> reboundingWeights = new List<double> { 5.5, 0.1, 0.1, 2, 0.5, 1.5 };
                     player.CompositeRating.Ratings["Rebounding"] = Converter.Composite(rebounding, reboundingAttributes, reboundingWeights);
 
                     //Stealing

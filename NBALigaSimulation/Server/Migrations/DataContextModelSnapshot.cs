@@ -412,6 +412,10 @@ namespace NBALigaSimulation.Server.Migrations
                     b.Property<int>("PlayerId")
                         .HasColumnType("INTEGER");
 
+                    b.Property<string>("Pos")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
                     b.Property<int>("Pts")
                         .HasColumnType("INTEGER");
 
@@ -683,6 +687,10 @@ namespace NBALigaSimulation.Server.Migrations
 
                     b.Property<int>("PlayerId")
                         .HasColumnType("INTEGER");
+
+                    b.Property<string>("Pos")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
 
                     b.Property<int>("Pts")
                         .HasColumnType("INTEGER");

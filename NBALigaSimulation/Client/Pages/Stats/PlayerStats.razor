@@ -112,7 +112,7 @@
         {
             <tr>
                 <td><a href=@("/player/" + player.PlayerId)>@AbbreviateLastName(player.Name)</a>, <a href=@("/team/" + player.TeamId)>@player.TeamAbrv</a></td>
-                <td>PG</td>
+                <td>@player.Pos</td>
                 <td>@player.Games</td>
                 <td>@player.MinPG</td>
                 <td>@player.PtsPG</td>
