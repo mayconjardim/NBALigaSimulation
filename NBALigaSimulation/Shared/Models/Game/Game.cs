@@ -712,18 +712,30 @@ namespace NBALigaSimulation.Shared.Models
             if (type == "AtRim")
             {
                 RecordStat(Offense, p, "FgaAtRim", Teams);
+
+                string[] names = { Teams[Offense].Players[p].Name };
+                RecordPlay("MissAtRim", Teams, Offense, names);
             }
             else if (type == "LowPost")
             {
                 RecordStat(Offense, p, "FgaLowPost", Teams);
+
+                string[] names = { Teams[Offense].Players[p].Name };
+                RecordPlay("MissLowPost", Teams, Offense, names);
             }
             else if (type == "MidRange")
             {
                 RecordStat(Offense, p, "FgaMidRange", Teams);
+
+                string[] names = { Teams[Offense].Players[p].Name };
+                RecordPlay("MissMidRange", Teams, Offense, names);
             }
             else if (type == "ThreePointer")
             {
                 RecordStat(Offense, p, "Tpa", Teams);
+
+                string[] names = { Teams[Offense].Players[p].Name };
+                RecordPlay("MissTp", Teams, Offense, names);
             }
 
             return DoReb(Teams, PlayersOnCourt);
@@ -738,27 +750,41 @@ namespace NBALigaSimulation.Shared.Models
         private string DoBlk(int shooter, string type, Team[] Teams, int[][] PlayersOnCourt)
         {
             int p = PlayersOnCourt[Offense][shooter];
+
+            double[] blockingRatios = RatingArray(Teams, "Blocking", Defense, PlayersOnCourt, 10);
+            int p2 = PlayersOnCourt[Defense][PickPlayer(blockingRatios)];
+
             RecordStat(Offense, p, "Fga", Teams);
 
             if (type == "AtRim")
             {
                 RecordStat(Offense, p, "FgaAtRim", Teams);
+
+                string[] names = { Teams[Defense].Players[p2].Name, Teams[Offense].Players[p].Name };
+                RecordPlay("BlkAtRim", Teams, Defense, names);
             }
             else if (type == "LowPost")
             {
                 RecordStat(Offense, p, "FgaLowPost", Teams);
+
+                string[] names = { Teams[Defense].Players[p2].Name, Teams[Offense].Players[p].Name };
+                RecordPlay("BlkLowPost", Teams, Defense, names);
             }
             else if (type == "MidRange")
             {
                 RecordStat(Offense, p, "FgaMidRange", Teams);
+
+                string[] names = { Teams[Defense].Players[p2].Name, Teams[Offense].Players[p].Name };
+                RecordPlay("BlkMidRange", Teams, Defense, names);
             }
             else if (type == "ThreePointer")
             {
                 RecordStat(Offense, p, "Tpa", Teams);
+
+                string[] names = { Teams[Defense].Players[p2].Name, Teams[Offense].Players[p].Name };
+                RecordPlay("BlkTp", Teams, Defense, names);
             }
 
-            double[] blockingRatios = RatingArray(Teams, "Blocking", Defense, PlayersOnCourt, 10);
-            int p2 = PlayersOnCourt[Defense][PickPlayer(blockingRatios)];
             RecordStat(Defense, p2, "Blk", Teams);
 
             return DoReb(Teams, PlayersOnCourt);
@@ -777,17 +803,24 @@ namespace NBALigaSimulation.Shared.Models
                 RecordStat(Offense, p, "FgaAtRim", Teams);
                 RecordStat(Offense, p, "FgAtRim", Teams);
 
+                string[] names = { Teams[Offense].Players[p].Name };
+                RecordPlay("FgAtRim" + (andOne ? "AndOne" : ""), Teams, Offense, names);
             }
             else if (type == "LowPost")
             {
                 RecordStat(Offense, p, "FgaLowPost", Teams);
                 RecordStat(Offense, p, "FgLowPost", Teams);
 
+                string[] names = { Teams[Offense].Players[p].Name };
+                RecordPlay("FgLowPost" + (andOne ? "AndOne" : ""), Teams, Offense, names);
             }
             else if (type == "MidRange")
             {
                 RecordStat(Offense, p, "FgaMidRange", Teams);
                 RecordStat(Offense, p, "FgMidRange", Teams);
+
+                string[] names = { Teams[Offense].Players[p].Name };
+                RecordPlay("FgMidRange" + (andOne ? "AndOne" : ""), Teams, Offense, names);
 
             }
             else if (type == "ThreePointer")
@@ -796,12 +829,18 @@ namespace NBALigaSimulation.Shared.Models
                 RecordStat(Offense, p, "Tpa", Teams);
                 RecordStat(Offense, p, "Tp", Teams);
 
+                string[] names = { Teams[Offense].Players[p].Name };
+                RecordPlay("Tp" + (andOne ? "AndOne" : ""), Teams, Offense, names);
+
             }
 
             if (passer.HasValue)
             {
                 int p2 = PlayersOnCourt[Offense][passer.Value];
                 RecordStat(Offense, p2, "Ast", Teams);
+
+                string[] names = { Teams[Offense].Players[p2].Name };
+                RecordPlay("Ast", Teams, Offense, names);
             }
 
             if (andOne)
@@ -837,10 +876,16 @@ namespace NBALigaSimulation.Shared.Models
                 {
                     RecordStat(Offense, p, "Ft", Teams);
                     RecordStat(Offense, p, "Pts", Teams);
+
+                    string[] names = { Teams[Offense].Players[p].Name };
+                    RecordPlay("Ft", Teams, Offense, names);
+
                     outcome = "Fg";
                 }
                 else
                 {
+                    string[] names = { Teams[Offense].Players[p].Name };
+                    RecordPlay("MissFt", Teams, Offense, names);
                     outcome = null;
                 }
             }
@@ -860,10 +905,17 @@ namespace NBALigaSimulation.Shared.Models
             int p = PlayersOnCourt[t][PickPlayer(ratios)];
             RecordStat(Defense, p, "Pf", Teams);
 
+
+            string[] names = { Teams[Defense].Players[p].Name };
+            RecordPlay("Pf", Teams, Defense, names);
+
             var player = Teams[Defense].Players.Find(player => player.RosterOrder == p);
 
             if (player.Stats.Find(s => s.GameId == Id).Pf >= 6)
             {
+
+                RecordPlay("FoulOut", Teams, Defense, names);
+
                 UpdatePlayersOnCourt(Teams, PlayersOnCourt);
                 UpdateSynergy(Teams, PlayersOnCourt);
             }
@@ -888,6 +940,10 @@ namespace NBALigaSimulation.Shared.Models
                 p = PlayersOnCourt[Defense][PickPlayer(ratios)];
                 RecordStat(Defense, p, "Drb", Teams);
                 RecordStat(Defense, p, "Trb", Teams);
+
+                string[] name = { Teams[Defense].Players[p].Name };
+                RecordPlay("Drb", Teams, Defense, name);
+
                 return "Drb";
             }
 
@@ -895,6 +951,10 @@ namespace NBALigaSimulation.Shared.Models
             int oP = PlayersOnCourt[Offense][PickPlayer(ratios)];
             RecordStat(Offense, oP, "Orb", Teams);
             RecordStat(Offense, oP, "Trb", Teams);
+
+            string[] names = { Teams[Offense].Players[oP].Name };
+            RecordPlay("Orb", Teams, Defense, names);
+
             return "Orb";
         }
 
