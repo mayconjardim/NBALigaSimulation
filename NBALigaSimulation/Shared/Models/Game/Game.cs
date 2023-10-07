@@ -43,8 +43,6 @@ namespace NBALigaSimulation.Shared.Models
         double T = 12.00; // Tempo por quarto
         [NotMapped]
         double Dt = 0; // Tempo decorrido por posse
-        [NotMapped]
-        List<List<List<int>>> PtsQtrs = new List<List<List<int>>>();
 
         public void GameSim()
         {
@@ -77,8 +75,8 @@ namespace NBALigaSimulation.Shared.Models
                 {
                     NumPossessions = (int)Math.Round(NumPossessions * 5.0 / 48); // 5 minutos de posses
                     Dt = 5.0 / (2 * NumPossessions);
-                    PtsQtrs[0].Add(new List<int>());
-                    PtsQtrs[1].Add(new List<int>());
+                    Teams[0].Stats.Find(s => s.GameId == Id)?.PtsQtrs.Add(0);
+                    Teams[1].Stats.Find(s => s.GameId == Id)?.PtsQtrs.Add(0);
                 }
 
                 T = 5.0;
@@ -111,12 +109,12 @@ namespace NBALigaSimulation.Shared.Models
 
             while (i < NumPossessions * 2)
             {
-                if ((i * Dt > 12 && PtsQtrs[0].Count == 1) ||
-                    (i * Dt > 24 && PtsQtrs[0].Count == 2) ||
-                    (i * Dt > 36 && PtsQtrs[0].Count == 3))
+                if ((i * Dt > 12 && Teams[0].Stats.Find(s => s.GameId == Id)?.PtsQtrs.Count == 1) ||
+                    (i * Dt > 24 && Teams[0].Stats.Find(s => s.GameId == Id)?.PtsQtrs.Count == 2) ||
+                    (i * Dt > 36 && Teams[0].Stats.Find(s => s.GameId == Id)?.PtsQtrs.Count == 3))
                 {
-                    PtsQtrs[0].Add(new List<int>());
-                    PtsQtrs[1].Add(new List<int>());
+                    Teams[0].Stats.Find(s => s.GameId == Id)?.PtsQtrs.Add(0);
+                    Teams[1].Stats.Find(s => s.GameId == Id)?.PtsQtrs.Add(0);
                     T = 12;
                     //RecordPlay("quarter");
                 }
@@ -923,7 +921,10 @@ namespace NBALigaSimulation.Shared.Models
             if (s != "Gs" && s != "CourtTime" && s != "BenchTime" && s != "Energy")
             {
                 RecordHelper.RecordStatHelperTeam(t, p, s, Id, teams, Season.Year, amount);
-
+                if (s == "Pts")
+                {
+                    teams[t].Stats.Find(s => s.GameId == Id).PtsQtrs[teams[t].Stats.Find(s => s.GameId == Id).PtsQtrs.Count - 1] += amount;
+                }
             }
         }
 
