@@ -31,6 +31,7 @@ namespace NBALigaSimulation.Shared.Models
         public int Blk { get; set; }
         public int Pf { get; set; }
         public int Pts { get; set; }
-        
+        List<List<int>> PtsQtrs = new List<List<int>>();
+
     }
 }

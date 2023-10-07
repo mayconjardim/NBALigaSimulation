@@ -97,7 +97,7 @@ namespace NBALigaSimulation.Shared.Dtos
                 {
                     skills.Add("Dp");
                 }
-                if (Converter.hasSkill(new List<int> { Hgt, Stre, Spd, Jmp, Diq }, new List<double> { 2, 0.6, 0.2, 1, 0.2 }))
+                if (Converter.hasSkill(new List<int> { Hgt, Stre, Spd, Jmp, Diq }, new List<double> { 1, 0.6, 0.2, 1, 1 }))
                 {
                     skills.Add("Po");
                 }

@@ -44,7 +44,7 @@ namespace NBALigaSimulation.Shared.Models
         [NotMapped]
         double Dt = 0; // Tempo decorrido por posse
         [NotMapped]
-        List<List<int>> PtsQtrs = new List<List<int>>();
+        List<List<List<int>>> PtsQtrs = new List<List<List<int>>>();
 
         public void GameSim()
         {
@@ -77,6 +77,8 @@ namespace NBALigaSimulation.Shared.Models
                 {
                     NumPossessions = (int)Math.Round(NumPossessions * 5.0 / 48); // 5 minutos de posses
                     Dt = 5.0 / (2 * NumPossessions);
+                    PtsQtrs[0].Add(new List<int>());
+                    PtsQtrs[1].Add(new List<int>());
                 }
 
                 T = 5.0;
@@ -98,30 +100,37 @@ namespace NBALigaSimulation.Shared.Models
 
         }
 
-        private void SimPossessions(Team[] Teams, int[][] PlayersOnCourt)
+        public void SimPossessions(Team[] Teams, int[][] PlayersOnCourt)
         {
-            int i;
+            int i = 0;
             string outcome;
             bool substitutions;
 
             Offense = 0;
             Defense = 1;
 
-            i = 0;
             while (i < NumPossessions * 2)
             {
+                if ((i * Dt > 12 && PtsQtrs[0].Count == 1) ||
+                    (i * Dt > 24 && PtsQtrs[0].Count == 2) ||
+                    (i * Dt > 36 && PtsQtrs[0].Count == 3))
+                {
+                    PtsQtrs[0].Add(new List<int>());
+                    PtsQtrs[1].Add(new List<int>());
+                    T = 12;
+                    //RecordPlay("quarter");
+                }
+
+                // Clock
+                T -= Dt;
+                if (T < 0)
+                {
+                    T = 0;
+                }
+
                 // Troca de posse
                 Offense = (Offense == 1) ? 0 : 1;
                 Defense = (Offense == 1) ? 0 : 1;
-
-                if (i % SubsEveryN == 0)
-                {
-                    substitutions = UpdatePlayersOnCourt(Teams, PlayersOnCourt);
-                    if (substitutions)
-                    {
-                        UpdateSynergy(Teams, PlayersOnCourt);
-                    }
-                }
 
                 UpdateTeamCompositeRatings(Teams, PlayersOnCourt);
 
@@ -137,6 +146,15 @@ namespace NBALigaSimulation.Shared.Models
                 UpdatePlayingTime(Teams, PlayersOnCourt);
 
                 //Injuries();
+
+                if (i % SubsEveryN == 0)
+                {
+                    substitutions = UpdatePlayersOnCourt(Teams, PlayersOnCourt);
+                    if (substitutions)
+                    {
+                        UpdateSynergy(Teams, PlayersOnCourt);
+                    }
+                }
 
                 i += 1;
             }
