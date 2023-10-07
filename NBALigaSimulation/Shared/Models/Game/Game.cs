@@ -1,5 +1,6 @@
 ﻿using NBALigaSimulation.Shared.Engine;
 using NBALigaSimulation.Shared.Engine.Action.Gameplan;
+using NBALigaSimulation.Shared.Engine.Utils;
 using System;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -77,13 +78,15 @@ namespace NBALigaSimulation.Shared.Models
                 {
                     NumPossessions = (int)Math.Round(NumPossessions * 5.0 / 48); // 5 minutos de posses
                     Dt = 5.0 / (2 * NumPossessions);
-                    PtsQrts[0].Add(0);
-                    PtsQrts[1].Add(0);
+
 
                 }
 
                 T = 5.0;
                 Overtimes++;
+                PtsQrts[0].Add(0);
+                PtsQrts[1].Add(0);
+                RecordPlay("Overtime", Teams);
                 SimPossessions(Teams, PlayersOnCourt);
             }
 
@@ -118,7 +121,7 @@ namespace NBALigaSimulation.Shared.Models
                     PtsQrts[0].Add(0);
                     PtsQrts[1].Add(0);
                     T = 12;
-                    //RecordPlay("quarter");
+                    RecordPlay("Quarter", Teams);
                 }
 
                 // Clock
@@ -257,12 +260,30 @@ namespace NBALigaSimulation.Shared.Models
 
                             // Substitute player
                             PlayersOnCourt[t][i] = b;
-                            p = b;
+                            //p = b;
 
                             teams[t].Players[b].Stats.Find(s => s.GameId == Id).CourtTime = RandomUtils.RandomUniform(-2, 2);
                             teams[t].Players[b].Stats.Find(s => s.GameId == Id).BenchTime = RandomUtils.RandomUniform(-2, 2);
                             teams[t].Players[p].Stats.Find(s => s.GameId == Id).CourtTime = RandomUtils.RandomUniform(-2, 2);
                             teams[t].Players[p].Stats.Find(s => s.GameId == Id).BenchTime = RandomUtils.RandomUniform(-2, 2);
+
+                            if (PlayByPlay != null)
+                            {
+                                PlayByPlay.Add(new GamePlayByPlay
+                                {
+                                    Type = "Sub",
+                                    T = t,
+                                    On = teams[t].Players[b].Id,
+                                    Off = teams[t].Players[p].Id
+                                });
+                            }
+
+                            if (StartersRecorded)
+                            {
+                                string[] names = { teams[t].Players[b].Name, teams[t].Players[p].Name };
+                                RecordPlay("Sub", teams, t, names);
+                            }
+                            break;
 
                         }
                     }
@@ -517,6 +538,11 @@ namespace NBALigaSimulation.Shared.Models
             {
                 return DoStl(p, Teams, PlayersOnCourt);
             }
+            else
+            {
+                string[] names = { Teams[Offense].Players[p].Name };
+                RecordPlay("Tov", Teams, Offense, names);
+            }
 
             return "Tov";
         }
@@ -540,6 +566,9 @@ namespace NBALigaSimulation.Shared.Models
             var p = PlayersOnCourt[Defense][playerIndex];
 
             RecordStat(Defense, p, "Stl", Teams);
+
+            string[] names = { Teams[Defense].Players[p].Name, Teams[Offense].Players[pStoleFrom].Name, };
+            RecordPlay("Stl", Teams, Defense, names);
 
             return "Stl";
         }
@@ -866,7 +895,6 @@ namespace NBALigaSimulation.Shared.Models
             int oP = PlayersOnCourt[Offense][PickPlayer(ratios)];
             RecordStat(Offense, oP, "Orb", Teams);
             RecordStat(Offense, oP, "Trb", Teams);
-            Console.WriteLine("entrou aqui no rebote ofensivo");
             return "Orb";
         }
 
@@ -987,6 +1015,158 @@ namespace NBALigaSimulation.Shared.Models
             double boundedProb = RandomUtils.Bound(prob, 0.001, 0.999);
             return boundedProb;
         }
+
+        public void RecordPlay(string type, Team[] teams, int? t = null, string[]? names = null)
+        {
+            string[] texts = null;
+            string text;
+            int i;
+            double sec;
+
+            if (PlayByPlay == null)
+            {
+                PlayByPlay = new List<GamePlayByPlay>();
+            }
+
+            if (PlayByPlay != null)
+            {
+                switch (type)
+                {
+                    case "Injury":
+                        texts = new string[] { "{0} was injured!" };
+                        break;
+                    case "Tov":
+                        texts = new string[] { "{0} turned the ball over" };
+                        break;
+                    case "Stl":
+                        texts = new string[] { "{0} stole the ball from {1}" };
+                        break;
+                    case "FgAtRim":
+                        texts = new string[] { "{0} made a dunk/layup" };
+                        break;
+                    case "FgAtRimAndOne":
+                        texts = new string[] { "{0} made a dunk/layup and got fouled!" };
+                        break;
+                    case "FgLowPost":
+                        texts = new string[] { "{0} made a low post shot" };
+                        break;
+                    case "FgLowPostAndOne":
+                        texts = new string[] { "{0} made a low post shot and got fouled!" };
+                        break;
+                    case "FgMidRange":
+                        texts = new string[] { "{0} made a mid-range shot" };
+                        break;
+                    case "FgMidRangeAndOne":
+                        texts = new string[] { "{0} made a mid-range shot and got fouled!" };
+                        break;
+                    case "Tp":
+                        texts = new string[] { "{0} made a three-pointer shot" };
+                        break;
+                    case "TpAndOne":
+                        texts = new string[] { "{0} made a three-pointer and got fouled!" };
+                        break;
+                    case "BlkAtRim":
+                        texts = new string[] { "{0} blocked {1}'s dunk/layup" };
+                        break;
+                    case "BlkLowPost":
+                        texts = new string[] { "{0} blocked {1}'s low post shot" };
+                        break;
+                    case "BlkMidRange":
+                        texts = new string[] { "{0} blocked {1}'s mid-range shot" };
+                        break;
+                    case "BlkTp":
+                        texts = new string[] { "{0} blocked {1}'s three-pointer" };
+                        break;
+                    case "MissAtRim":
+                        texts = new string[] { "{0} missed a dunk/layup" };
+                        break;
+                    case "MissLowPost":
+                        texts = new string[] { "{0} missed a low post shot" };
+                        break;
+                    case "MissMidRange":
+                        texts = new string[] { "{0} missed a mid-range shot" };
+                        break;
+                    case "MissTp":
+                        texts = new string[] { "{0} missed a three-pointer" };
+                        break;
+                    case "Orb":
+                        texts = new string[] { "{0} grabbed the offensive rebound" };
+                        break;
+                    case "Drb":
+                        texts = new string[] { "{0} grabbed the defensive rebound" };
+                        break;
+                    case "Ast":
+                        texts = new string[] { "(assist: {0})" };
+                        break;
+                    case "Quarter":
+                        texts = new string[] { "<b>Start of " + PbpHelper.Ordinal(PtsQrts[0].Count) + " quarter</b>" };
+                        break;
+                    case "Overtime":
+                        texts = new string[] { "<b>Start of " + PbpHelper.Ordinal(PtsQrts[1].Count - 4) + " overtime period</b>" };
+                        break;
+                    case "Ft":
+                        texts = new string[] { "{0} made a free throw" };
+                        break;
+                    case "MissFt":
+                        texts = new string[] { "{0} missed a free throw" };
+                        break;
+                    case "Pf":
+                        texts = new string[] { "Foul on {0}" };
+                        break;
+                    case "FoulOut":
+                        texts = new string[] { "{0} fouled out" };
+                        break;
+                    case "Sub":
+                        texts = new string[] { "Substitution: {0} for {1}" };
+                        break;
+                }
+
+                if (texts != null)
+                {
+                    text = texts[0];
+                    if (names != null)
+                    {
+                        for (i = 0; i < names.Length; i++)
+                        {
+                            text = text.Replace("{" + i + "}", names[i]);
+                        }
+                    }
+
+                    if (type == "Ast")
+                    {
+                        for (i = PlayByPlay.Count - 1; i >= 0; i--)
+                        {
+                            if (PlayByPlay[i].Type == "text")
+                            {
+                                PlayByPlay[i].Text += " " + text;
+                                break;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        sec = Math.Floor(T % 1 * 60);
+                        string secs = string.Empty;
+                        if (sec < 10)
+                        {
+                            secs = "0" + sec;
+                        }
+                        PlayByPlay.Add(new GamePlayByPlay
+                        {
+                            Type = "text",
+                            Text = text,
+                            T = T,
+                            Time = Math.Floor(T) + ":" + secs
+                        });
+                    }
+                }
+                else
+                {
+                    Console.WriteLine("No text for " + type);
+                }
+            }
+        }
+
 
     }
 
