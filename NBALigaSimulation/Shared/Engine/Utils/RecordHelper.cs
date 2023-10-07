@@ -1,4 +1,5 @@
 ﻿using NBALigaSimulation.Shared.Models;
+using System.Numerics;
 
 namespace NBALigaSimulation.Shared.Engine
 {

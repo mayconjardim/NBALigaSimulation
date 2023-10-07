@@ -43,6 +43,8 @@ namespace NBALigaSimulation.Shared.Models
         double T = 12.00; // Tempo por quarto
         [NotMapped]
         double Dt = 0; // Tempo decorrido por posse
+        [NotMapped]
+        List<List<int>> PtsQrts = new List<List<int>> { new List<int>(), new List<int>() };
 
         public void GameSim()
         {
@@ -75,8 +77,9 @@ namespace NBALigaSimulation.Shared.Models
                 {
                     NumPossessions = (int)Math.Round(NumPossessions * 5.0 / 48); // 5 minutos de posses
                     Dt = 5.0 / (2 * NumPossessions);
-                    Teams[0].Stats.Find(s => s.GameId == Id)?.PtsQtrs.Add(0);
-                    Teams[1].Stats.Find(s => s.GameId == Id)?.PtsQtrs.Add(0);
+                    PtsQrts[0].Add(0);
+                    PtsQrts[1].Add(0);
+
                 }
 
                 T = 5.0;
@@ -84,17 +87,16 @@ namespace NBALigaSimulation.Shared.Models
                 SimPossessions(Teams, PlayersOnCourt);
             }
 
-            /*
-            foreach (var team in Teams)
-            {
-                foreach (var player in team.Players)
-                {
-                    Console.WriteLine(player.Name + " 3ps: " + player.CompositeRating.Ratings["ShootingThreePointer"]);
-                    Console.WriteLine(player.Name + " Blk: " + player.CompositeRating.Ratings["Blocking"]);
+            Console.WriteLine("Valores em PtsQrts:");
 
+            foreach (var listaInterna in PtsQrts)
+            {
+                foreach (var valor in listaInterna)
+                {
+                    Console.Write(valor + " ");
                 }
+                Console.WriteLine(); // Pula para uma nova linha após cada lista interna
             }
-            */
 
         }
 
@@ -109,12 +111,12 @@ namespace NBALigaSimulation.Shared.Models
 
             while (i < NumPossessions * 2)
             {
-                if ((i * Dt > 12 && Teams[0].Stats.Find(s => s.GameId == Id)?.PtsQtrs.Count == 1) ||
-                    (i * Dt > 24 && Teams[0].Stats.Find(s => s.GameId == Id)?.PtsQtrs.Count == 2) ||
-                    (i * Dt > 36 && Teams[0].Stats.Find(s => s.GameId == Id)?.PtsQtrs.Count == 3))
+                if ((i * Dt > 12 && PtsQrts[0].Count == 1) ||
+                    (i * Dt > 24 && PtsQrts[0].Count == 2) ||
+                    (i * Dt > 36 && PtsQrts[0].Count == 3))
                 {
-                    Teams[0].Stats.Find(s => s.GameId == Id)?.PtsQtrs.Add(0);
-                    Teams[1].Stats.Find(s => s.GameId == Id)?.PtsQtrs.Add(0);
+                    PtsQrts[0].Add(0);
+                    PtsQrts[1].Add(0);
                     T = 12;
                     //RecordPlay("quarter");
                 }
@@ -838,20 +840,20 @@ namespace NBALigaSimulation.Shared.Models
             }
         }
 
-        private string DoReb(Team[] Teams, int[][] PlayersOnCourt)
+        public string DoReb(Team[] Teams, int[][] PlayersOnCourt)
         {
             int p;
             double[] ratios;
 
-            if (new Random().NextDouble() < 0.12)
+            if (new Random().NextDouble() < 0.15)
             {
                 return null;
             }
 
-            double defensiveReboundingFactor = (0.75 * (2 + Teams[Defense].CompositeRating.Ratings["GameRebounding"]))
-                / (1) * (2 + Teams[Offense].CompositeRating.Ratings["GameRebounding"]);
+            double defensiveReboundChance = (0.75 * (2 + Teams[Defense].CompositeRating.Ratings["GameRebounding"])) /
+                (1 * (2 + Teams[Offense].CompositeRating.Ratings["GameRebounding"]));
 
-            if (defensiveReboundingFactor > new Random().NextDouble())
+            if (defensiveReboundChance > new Random().NextDouble())
             {
                 ratios = RatingArray(Teams, "Rebounding", Defense, PlayersOnCourt, 3);
                 p = PlayersOnCourt[Defense][PickPlayer(ratios)];
@@ -864,9 +866,9 @@ namespace NBALigaSimulation.Shared.Models
             int oP = PlayersOnCourt[Offense][PickPlayer(ratios)];
             RecordStat(Offense, oP, "Orb", Teams);
             RecordStat(Offense, oP, "Trb", Teams);
+            Console.WriteLine("entrou aqui no rebote ofensivo");
             return "Orb";
         }
-
 
         private double[] RatingArray(Team[] Teams, string rating, int t, int[][] PlayersOnCourt, double power = 1)
         {
@@ -923,8 +925,17 @@ namespace NBALigaSimulation.Shared.Models
                 RecordHelper.RecordStatHelperTeam(t, p, s, Id, teams, Season.Year, amount);
                 if (s == "Pts")
                 {
-                    teams[t].Stats.Find(s => s.GameId == Id).PtsQtrs[teams[t].Stats.Find(s => s.GameId == Id).PtsQtrs.Count - 1] += amount;
+                    int length = PtsQrts[t].Count;
+                    if (length > 0)
+                    {
+                        PtsQrts[t][length - 1] += amount;
+                    }
+                    else
+                    {
+                        PtsQrts[t].Add(amount);
+                    }
                 }
+
             }
         }
 

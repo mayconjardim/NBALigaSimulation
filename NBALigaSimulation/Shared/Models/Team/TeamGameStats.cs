@@ -34,8 +34,5 @@ namespace NBALigaSimulation.Shared.Models
         public int Pf { get; set; }
         public int Pts { get; set; }
 
-        [NotMapped]
-        public List<int> PtsQtrs { get; set; } = new List<int>();
-
     }
 }
