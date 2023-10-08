@@ -145,5 +145,19 @@
          </div>
       </MudContainer>
    </MudTabPanel>
+
+      <MudTabPanel Text="Play-by-Play">
+      <MudContainer>
+         <div class="pbp">
+
+            
+                    @foreach (var pbp in game.PlayByPlay.Where(p => p.Text != null))
+                    {
+                        <p>@pbp.Text</p>
+                    }
+
+         </div>
+      </MudContainer>
+   </MudTabPanel>
 </MudTabs>
 }
