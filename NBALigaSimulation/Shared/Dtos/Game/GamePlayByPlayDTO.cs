@@ -1,4 +1,4 @@
-﻿namespace NBALigaSimulation.Shared.Dtos.Game
+﻿namespace NBALigaSimulation.Shared.Dtos
 {
     public class GamePlayByPlayDTO
     {

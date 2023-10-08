@@ -110,6 +110,7 @@ namespace NBALigaSimulation.Server.Profiles
 
             CreateMap<DraftDto, Draft>();
 
+            CreateMap<GamePlayByPlay, GamePlayByPlayDTO>().ReverseMap();
 
         }
     }

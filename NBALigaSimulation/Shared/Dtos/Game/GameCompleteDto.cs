@@ -1,6 +1,4 @@
-﻿using NBALigaSimulation.Shared.Models;
-
-namespace NBALigaSimulation.Shared.Dtos
+﻿namespace NBALigaSimulation.Shared.Dtos
 {
     public class GameCompleteDto
     {
@@ -18,7 +16,7 @@ namespace NBALigaSimulation.Shared.Dtos
         public List<TeamGameStatsDto> TeamGameStats { get; set; }
         public List<PlayerGameStatsDto> HomePlayerGameStats { get; set; }
         public List<PlayerGameStatsDto> AwayPlayerGameStats { get; set; }
-        public List<GamePlayByPlay> PlayByPlay { get; set; }
+        public List<GamePlayByPlayDTO> PlayByPlay { get; set; }
 
 
     }
