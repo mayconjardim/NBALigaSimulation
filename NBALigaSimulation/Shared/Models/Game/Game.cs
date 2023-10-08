@@ -1080,6 +1080,7 @@ namespace NBALigaSimulation.Shared.Models
         {
             string[] texts = null;
             string text;
+            string teamName = string.Empty;
             int i;
             double sec;
 
@@ -1181,6 +1182,12 @@ namespace NBALigaSimulation.Shared.Models
                         break;
                 }
 
+                if (t != null)
+                {
+                    int team = (int)t;
+                    teamName = teams[team].Name;
+                }
+
                 if (texts != null)
                 {
                     text = texts[0];
@@ -1215,6 +1222,7 @@ namespace NBALigaSimulation.Shared.Models
                             Time = Math.Floor(T) + ":" + secs,
                             On = 0,
                             Off = 0,
+                            TeamName = teamName
                         });
                     }
                 }

@@ -7,6 +7,7 @@
         public Game? Game { get; set; }
         public string? Type { get; set; }
         public string? Text { get; set; }
+        public string? TeamName { get; set; }
         public double? T { get; set; }
         public string? Time { get; set; }
         public int? On { get; set; }

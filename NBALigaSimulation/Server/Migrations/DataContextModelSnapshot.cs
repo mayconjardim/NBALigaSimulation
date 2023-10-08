@@ -202,6 +202,9 @@ namespace NBALigaSimulation.Server.Migrations
                     b.Property<double?>("T")
                         .HasColumnType("REAL");
 
+                    b.Property<string>("TeamName")
+                        .HasColumnType("TEXT");
+
                     b.Property<string>("Text")
                         .HasColumnType("TEXT");
 
