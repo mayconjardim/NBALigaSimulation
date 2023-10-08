@@ -59,3 +59,7 @@ th {
 tr:nth-child(even) {
     background-color: #f9f9f9;
 }
+
+.playbyplay {
+    margin-top: 15px;
+}

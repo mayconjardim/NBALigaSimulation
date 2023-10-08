@@ -148,9 +148,8 @@
 
       <MudTabPanel Text="Play-by-Play">
       <MudContainer>
-         <div class="pbp">
-                  
-                 <table >
+         <div style="overflow-x: auto">
+                 <table style="margin-top: 15px">
                     <thead>
                         <tr>
                         <th>TIME</th>
@@ -163,7 +162,7 @@
                          {
                             <tr>
                                 <td>@pbp.Time</td>
-                                <td>@pbp.Text</td>
+                                <td style="text-align:left"><MudAvatar Style="vertical-align: middle; background: none; margin-right: 5px" Size="Size.Small" Image=@($"Images/logos/{pbp.TeamName}.svg") Square="true" />@pbp.Text</td>
                                 <td>@pbp.Score</td>
                             </tr>
                          }
