@@ -183,29 +183,32 @@ namespace NBALigaSimulation.Server.Migrations
 
             modelBuilder.Entity("NBALigaSimulation.Shared.Models.GamePlayByPlay", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int?>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("GameId")
+                    b.Property<int?>("GameId")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("GameSimId")
+                    b.Property<int?>("GameSimId")
                         .HasColumnType("INTEGER");
 
-                    b.Property<double>("T")
+                    b.Property<int?>("Off")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int?>("On")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<double?>("T")
                         .HasColumnType("REAL");
 
                     b.Property<string>("Text")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Time")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Type")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
@@ -1377,9 +1380,7 @@ namespace NBALigaSimulation.Server.Migrations
                 {
                     b.HasOne("NBALigaSimulation.Shared.Models.Game", "Game")
                         .WithMany("PlayByPlay")
-                        .HasForeignKey("GameId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("GameId");
 
                     b.Navigation("Game");
                 });

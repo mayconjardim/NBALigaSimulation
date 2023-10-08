@@ -1159,10 +1159,10 @@ namespace NBALigaSimulation.Shared.Models
                         texts = new string[] { "(assist: {0})" };
                         break;
                     case "Quarter":
-                        texts = new string[] { "<b>Start of " + PbpHelper.Ordinal(PtsQrts[0].Count) + " quarter</b>" };
+                        texts = new string[] { "Start of " + PbpHelper.Ordinal(PtsQrts[0].Count) + " quarter" };
                         break;
                     case "Overtime":
-                        texts = new string[] { "<b>Start of " + PbpHelper.Ordinal(PtsQrts[1].Count - 4) + " overtime period</b>" };
+                        texts = new string[] { "Start of " + PbpHelper.Ordinal(PtsQrts[1].Count - 4) + " overtime period" };
                         break;
                     case "Ft":
                         texts = new string[] { "{0} made a free throw" };
@@ -1205,18 +1205,16 @@ namespace NBALigaSimulation.Shared.Models
                     }
                     else
                     {
-                        sec = Math.Floor(T % 1 * 60);
-                        string secs = string.Empty;
-                        if (sec < 10)
-                        {
-                            secs = "0" + sec;
-                        }
+                        sec = (int)Math.Floor((T * 60) % 60); // Converter minutos em segundos
+                        string secs = sec < 10 ? "0" + sec.ToString() : sec.ToString();
                         PlayByPlay.Add(new GamePlayByPlay
                         {
                             Type = "text",
                             Text = text,
                             T = T,
-                            Time = Math.Floor(T) + ":" + secs
+                            Time = Math.Floor(T) + ":" + secs,
+                            On = 0,
+                            Off = 0,
                         });
                     }
                 }
