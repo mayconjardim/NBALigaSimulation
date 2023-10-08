@@ -1233,6 +1233,109 @@ namespace NBALigaSimulation.Shared.Models
             }
         }
 
+        public double GetPossessionLength(bool intentionalFoul, Team[] Teams)
+        {
+            int quarter = PtsQrts.Count;
+            double pointDifferential = Teams[0].Stats.Find(s => s.GameId == Id).Pts - Teams[1].Stats.Find(s => s.GameId == Id).Pts;
+
+            if (quarter >= 4 &&
+                !false &&
+                T <= 24 / 60 &&
+                pointDifferential > 0 &&
+                !intentionalFoul)
+            {
+                return T;
+            }
+
+            bool holdForLastShot = !false &&
+                                   T <= 26 / 60 &&
+                                   (quarter < 4 || pointDifferential >= 0);
+            bool catchUp = !false &&
+                           quarter >= 4 &&
+                           ((T <= 3 && pointDifferential <= -10) ||
+                            (T <= 2 && pointDifferential <= -5) ||
+                            (T <= 1 && pointDifferential < 0));
+            bool maintainLead = !false &&
+                                quarter >= 4 &&
+                                ((T <= 3 && pointDifferential > 10) ||
+                                 (T <= 2 && pointDifferential > 5) ||
+                                 (T <= 1 && pointDifferential > 0));
+            bool twoForOne = !false && T >= 32 / 60 && T <= 52 / 60;
+            double lowerBound = 4 / 60;
+            double upperBound = 24 / 60;
+
+            if (lowerBound > T)
+            {
+                lowerBound = T;
+            }
+
+            if (upperBound > T)
+            {
+                upperBound = T;
+            }
+
+            double possessionLength; // [min]
+
+            if (intentionalFoul)
+            {
+                possessionLength = (new Random().NextDouble() * 3) / 60;
+                lowerBound = 0;
+                upperBound = T;
+            }
+            else if (holdForLastShot)
+            {
+                possessionLength = RandomUtils.Gauss(T, 5 / 60);
+            }
+            else if (catchUp)
+            {
+                possessionLength = RandomUtils.Gauss(Dt - 3 / 60, 5 / 60);
+                if (T < 48 / 60 && T > 4 / 60)
+                {
+                    upperBound = T / 2;
+                }
+            }
+            else if (maintainLead)
+            {
+                possessionLength = RandomUtils.Gauss(Dt + 3 / 60, 5 / 60);
+            }
+            else
+            {
+                possessionLength = RandomUtils.Gauss(Dt, 5 / 60);
+            }
+
+            if (twoForOne && !catchUp && !maintainLead)
+            {
+                if (new Random().NextDouble() < 0.6)
+                {
+                    lowerBound = T - 35 / 60;
+                    upperBound = T - 29 / 60;
+                }
+            }
+
+            if (upperBound < lowerBound)
+            {
+                lowerBound = upperBound;
+            }
+
+            if (lowerBound < 0)
+            {
+                lowerBound = 0;
+            }
+            if (upperBound < 1 / 60)
+            {
+                upperBound = 1 / 60;
+            }
+
+            upperBound = false ? double.PositiveInfinity : upperBound;
+
+            double bounded1 = RandomUtils.Bound(possessionLength, lowerBound, upperBound);
+
+            double finalUpperBound = false ? double.PositiveInfinity : T;
+
+            return RandomUtils.Bound(bounded1, 0, finalUpperBound);
+        }
+
+
 
     }
 
