@@ -199,6 +199,9 @@ namespace NBALigaSimulation.Server.Migrations
                     b.Property<int?>("On")
                         .HasColumnType("INTEGER");
 
+                    b.Property<string>("Score")
+                        .HasColumnType("TEXT");
+
                     b.Property<double?>("T")
                         .HasColumnType("REAL");
 
