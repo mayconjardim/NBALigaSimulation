@@ -7,6 +7,8 @@ namespace NBALigaSimulation.Shared.Dtos
 
         public string Name { get; set; } = string.Empty;
         public string Pos { get; set; } = string.Empty;
+        public string College { get; set; } = string.Empty;
+
         public Born Born { get; set; }
         public int Hgt { get; set; }
         public int Weight { get; set; }
