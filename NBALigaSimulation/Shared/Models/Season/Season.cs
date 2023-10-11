@@ -22,7 +22,6 @@ namespace NBALigaSimulation.Shared.Models
         public void NewSchedule(List<Team> teams)
         {
             List<Game> games = new List<Game>();
-            List<Game> gamesFinal = new List<Game>();
 
 
             List<Team> eastConferenceTeams = teams.Where(t => t.Conference == "East" && t.IsHuman == true).ToList();
@@ -85,50 +84,30 @@ namespace NBALigaSimulation.Shared.Models
             }
 
             RandomUtils.Shuffle(games);
-            int numRodadas = 82;
-            int jogosPorTimePorRodada = 2;
 
-            List<DateTime> datasRodadas = new List<DateTime>();
+            List<Game> week1 = new List<Game>();
+            List<Game> week2 = new List<Game>();
+            List<Game> week3 = new List<Game>();
+            List<Game> week4 = new List<Game>();
+            List<Game> week5 = new List<Game>();
+            List<Game> week6 = new List<Game>();
+            List<Game> week7 = new List<Game>();
+            List<Game> week8 = new List<Game>();
+            List<Game> week9 = new List<Game>();
+            List<Game> week10 = new List<Game>();
+            List<Game> week11 = new List<Game>();
+            List<Game> week12 = new List<Game>();
 
-            DateTime dataInicial = DateTime.UtcNow;
-            TimeZoneInfo tzBrasilia = TimeZoneInfo.FindSystemTimeZoneById("E. South America Standard Time");
-            dataInicial = new DateTime(dataInicial.Year, dataInicial.Month, dataInicial.Day, 23, 0, 0);
-            dataInicial = TimeZoneInfo.ConvertTimeFromUtc(dataInicial, tzBrasilia);
 
-            for (int rodada = 0; rodada < numRodadas; rodada++)
-            {
-                datasRodadas.Add(dataInicial);
-                dataInicial = dataInicial.AddDays(2);
-            }
+            ///week1 = games.Take(6).ToList();
+            //week1 = games.Take(6).ToList();
 
-            for (int rodada = 0; rodada < numRodadas; rodada++)
-            {
 
-                foreach (Team time in teams)
-                {
-                    List<Game> jogosCasa = games.Where(g => g.HomeTeam == time).Take(jogosPorTimePorRodada).ToList();
-                    List<Game> jogosFora = games.Where(g => g.AwayTeam == time).Take(jogosPorTimePorRodada).ToList();
 
-                    DateTime dataRodadaAtual = datasRodadas[rodada];
-                    foreach (Game jogo in jogosCasa)
-                    {
-                        jogo.GameDate = dataRodadaAtual;
-                    }
-                    foreach (Game jogo in jogosFora)
-                    {
-                        jogo.GameDate = dataRodadaAtual;
-                    }
 
-                    gamesFinal.AddRange(jogosCasa);
-                    gamesFinal.AddRange(jogosFora);
 
-                    games.RemoveAll(g => jogosCasa.Contains(g));
-                    games.RemoveAll(g => jogosFora.Contains(g));
-                }
 
-            }
-
-            Games = gamesFinal;
+            Games = games;
         }
 
     }
