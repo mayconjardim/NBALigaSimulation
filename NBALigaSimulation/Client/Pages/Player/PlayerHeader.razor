@@ -12,7 +12,11 @@
     </CardHeaderAvatar>
 
     <CardHeaderContent>
-         <p class="lastname">@player.Name</p>
+         <p class="lastname">@player.Name 
+           <MudAvatar Size="Size.Small" Color="Color.Primary"  Style="color: white" Variant="Variant.Outlined"><p style="font-size: 15px;">@player.Ratings.LastOrDefault().CalculateOvr</p></MudAvatar>
+           <MudAvatar Size="Size.Small"  Color="Color.Primary"  Style="color: white" Variant="Variant.Outlined"><p style="font-size: 15px;">@player.Ratings.LastOrDefault().Pot</p></MudAvatar>
+         </p>
+
         <MudText Typo="Typo.caption">
                     @if (player.TeamId == 21)
                     {
@@ -22,9 +26,12 @@
                         <b>DRAFT - </b>
                     }else
                     {
-                    <MudAvatar Style="vertical-align: middle; background: none" Size="Size.Small" Image=@($"Images/logos/{player.TeamAbrv}.svg") Square="true" />
+                    <MudAvatar Style="vertical-align: middle; background: none; margin-right: 5px" Size="Size.Small" Image=@($"Images/logos/{player.TeamAbrv}.svg") Square="true" />
                     }
-          @Util.Position(player.Pos) <MudIconButton Href=@("/playerComparison/" + player.Id) Style="margin-bottom: 3px; color: white" Icon="@Icons.Material.Filled.CompareArrows" Size="Size.Small" />
+           @Util.Position(player.Pos) <MudIconButton Href=@("/playerComparison/" + player.Id) Style="margin-bottom: 3px; color: white" Icon="@Icons.Material.Filled.CompareArrows" Size="Size.Small" />
+
+          
+
         </MudText>
     </CardHeaderContent>
 
