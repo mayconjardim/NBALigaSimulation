@@ -147,7 +147,7 @@ namespace NBALigaSimulation.Server.Services.SeasonService
 
             foreach (Player player in players)
             {
-                var newRatings = player.TrainingCamp(season);
+                var newRatings = TcUtils.TrainingCamp(player, season);
 
                 player.Ratings.Add(newRatings);
             }
