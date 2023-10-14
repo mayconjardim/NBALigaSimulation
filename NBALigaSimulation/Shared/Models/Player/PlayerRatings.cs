@@ -16,7 +16,6 @@ namespace NBALigaSimulation.Shared.Models
         public int Endu { get; set; }
         public int Fg { get; set; }
         public int Ft { get; set; }
-        public int Fuzz { get; set; }
         public int Hgt { get; set; }
         public int Ins { get; set; }
         public int Jmp { get; set; }

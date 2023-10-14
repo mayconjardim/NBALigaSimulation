@@ -43,22 +43,27 @@ namespace NBALigaSimulation.Shared.Models
             var ratings = new PlayerRatings
             {
 
-                Hgt = lastRatings.Hgt,
-                Spd = lastRatings.Spd,
-                Jmp = lastRatings.Jmp,
-                Ins = lastRatings.Ins,
+
+                Diq = lastRatings.Diq,
                 Dnk = lastRatings.Dnk,
-                Ft = lastRatings.Ft,
-                Fg = lastRatings.Fg,
-                Tp = lastRatings.Tp,
                 Drb = lastRatings.Drb,
-                Pss = lastRatings.Pss,
-                Reb = lastRatings.Reb,
+                Endu = lastRatings.Endu,
+                Fg = lastRatings.Fg,
+                Ft = lastRatings.Ft,
+                Hgt = lastRatings.Hgt,
+                Ins = lastRatings.Ins,
+                Jmp = lastRatings.Jmp,
+                Spd = lastRatings.Spd,
+                Stre = lastRatings.Stre,
+                Oiq = lastRatings.Oiq,
                 Pot = lastRatings.Pot,
+                Pss = lastRatings.Pss,
+                Tp = lastRatings.Tp,
+                Reb = lastRatings.Reb,
+
             };
 
             ratings.Season = season.Year;
-
 
             for (int i = 0; i < years; i++)
             {
@@ -108,7 +113,6 @@ namespace NBALigaSimulation.Shared.Models
                 ratings.Pss = ArrayHelper.LimitRating(ratings.Pss + RandomUtils.Bound(baseChange * RandomUtils.RandomUniform(0.5, 1.5), -1, 10));
                 ratings.Reb = ArrayHelper.LimitRating(ratings.Reb + RandomUtils.Bound(baseChange * RandomUtils.RandomUniform(0.5, 1.5), -1, 10));
 
-
                 ratings.Stre = ArrayHelper.LimitRating(ratings.Stre + baseChange * RandomUtils.RandomUniform(0.5, 1.5));
                 ratings.Dnk = ArrayHelper.LimitRating(ratings.Dnk + baseChange * RandomUtils.RandomUniform(0.5, 1.5));
 
@@ -131,6 +135,9 @@ namespace NBALigaSimulation.Shared.Models
                 ratings.Ft = ArrayHelper.LimitRating(ratings.Ft + baseChangeLocals * RandomUtils.RandomUniform(0.5, 1.5));
                 ratings.Fg = ArrayHelper.LimitRating(ratings.Fg + baseChangeLocals * RandomUtils.RandomUniform(0.5, 1.5));
                 ratings.Tp = ArrayHelper.LimitRating(ratings.Tp + baseChangeLocals * RandomUtils.RandomUniform(0.5, 1.5));
+
+                ratings.Oiq = ArrayHelper.LimitRating(ratings.Oiq + TcUtils.AgeModifier(age) * RandomUtils.RandomUniform(TcUtils.CalculateChangeLimits(age)[0], TcUtils.CalculateChangeLimits(age)[1]));
+                ratings.Diq = ArrayHelper.LimitRating(ratings.Diq + TcUtils.AgeModifier(age) * RandomUtils.RandomUniform(TcUtils.CalculateChangeLimits(age)[0], TcUtils.CalculateChangeLimits(age)[1]));
 
                 ratings.Pot += -2 + (int)Math.Round(RandomUtils.Gauss(0, 2));
                 if (ratings.CalculateOvr > ratings.Pot || age > 28)
