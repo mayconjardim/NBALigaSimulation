@@ -206,6 +206,8 @@ namespace NBALigaSimulation.Server.Services.GameService
             }
 
 
+
+
             List<Game> games = await _context.Games
                 .Include(p => p.HomeTeam.Players.OrderBy(p => p.RosterOrder)).ThenInclude(p => p.Ratings)
                 .Include(p => p.AwayTeam.Players.OrderBy(p => p.RosterOrder)).ThenInclude(p => p.Ratings)
@@ -439,7 +441,6 @@ namespace NBALigaSimulation.Server.Services.GameService
                 .Include(p => p.HomeTeam.Players.OrderBy(p => p.RosterOrder)).ThenInclude(p => p.RegularStats)
                 .Include(p => p.AwayTeam.Players.OrderBy(p => p.RosterOrder)).ThenInclude(p => p.RegularStats)
                 .Where(g => g.Happened == false)
-                .Include(t => t.HomeTeam.Gameplan)
                 .ToListAsync();
 
             foreach (Game game in games)

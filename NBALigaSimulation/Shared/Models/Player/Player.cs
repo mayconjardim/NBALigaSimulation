@@ -1,5 +1,4 @@
-﻿using NBALigaSimulation.Shared.Engine;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations.Schema;
 
 namespace NBALigaSimulation.Shared.Models
 {
