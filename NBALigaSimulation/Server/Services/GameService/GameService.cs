@@ -50,7 +50,6 @@ namespace NBALigaSimulation.Server.Services.GameService
 
             game.Season = await _context.Seasons.OrderBy(s => s.Id).LastOrDefaultAsync();
 
-
             if (game == null)
             {
                 response.Success = false;
