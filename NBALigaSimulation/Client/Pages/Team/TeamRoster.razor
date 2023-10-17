@@ -22,6 +22,11 @@
                        <MudCardContent Style="background-color: #03234C; margin: 10px;">     
                        
                          <div class="info">
+                         
+                             <p style="margin-bottom: 5px">
+                            <MudAvatar Size="Size.Small" Color="Color.Warning"  Style="color: white; vertical-align: middle; padding: 0; margin: 0" Variant="Variant.Outlined"><p style="font-size: 13px;">@player.Ratings.LastOrDefault().CalculateOvr</p></MudAvatar>
+                            <MudAvatar Size="Size.Small"  Color="Color.Warning"  Style="color: white;vertical-align: middle; padding: 0; margin: 0" Variant="Variant.Outlined"><p style="font-size: 13px;">@player.Ratings.LastOrDefault().Pot</p></MudAvatar>
+                             </p> 
                             <p>@Util.Position(player.Pos)</p> 
                             <p>@player.Ratings.Count Season</p> 
                             <p>@Util.InchesToCm(player.Hgt)cm, @Util.LbsToKg(player.Weight)kg, @(season - player.Born.Year) years</p> 

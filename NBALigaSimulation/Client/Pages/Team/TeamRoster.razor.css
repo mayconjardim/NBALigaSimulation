@@ -30,8 +30,9 @@
         font-size: 11px;
     }
 
-@media (max-width: 640px) {
 
+
+@media (max-width: 640px) {
     .container {
         flex-wrap: wrap;
     }
