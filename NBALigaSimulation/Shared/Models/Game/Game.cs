@@ -495,7 +495,6 @@ namespace NBALigaSimulation.Shared.Models
             return DoShot(shooterIndex, Teams, PlayersOnCourt);
         }
 
-
         private double ProbTov(Team[] Teams)
         {
             double turnoverFactor = 1;
@@ -507,7 +506,6 @@ namespace NBALigaSimulation.Shared.Models
 
             return BoundProb(probability);
         }
-
 
         private string DoTov(Team[] Teams, int[][] PlayersOnCourt)
         {
@@ -1061,7 +1059,7 @@ namespace NBALigaSimulation.Shared.Models
 
         public void RecordPlay(string type, Team[] teams, int? t = null, string[]? names = null)
         {
-            /*
+
             string[] texts = null;
             string text;
             string teamName = string.Empty;
@@ -1218,7 +1216,7 @@ namespace NBALigaSimulation.Shared.Models
                     Console.WriteLine("No text for " + type);
                 }
             }
-            */
+
         }
 
     }

@@ -1,16 +1,14 @@
 ﻿@inject IStatsService StatsService
 
-
-
- <div class="standings">
-
+<div class="standings">
     <div class="standings-table">
-       <table >
+        <table>
             <thead>
                 <tr>
-                    @foreach (var h in east)
+                    <th style="width: 20%;">EAST</th> 
+                    @foreach (var h in east.Skip(1)) 
                     {
-                        <th>@h</th>
+                        <th style="width: 13%;">@h</th>
                     }
                 </tr>
             </thead>
@@ -20,7 +18,7 @@
                     <tr>
                         <td>
                             <MudAvatar Style="vertical-align: middle; background: none" Size="Size.Small" Image=@($"Images/logos/{team.TeamAbrv}.svg") Square="true" />
-                            <a  style="color: #0000EE" href="team/@team.TeamId">@team.TeamRegion @team.TeamName</a>
+                            <a style="color: #0000EE" href="team/@team.TeamId">@team.TeamRegion @team.TeamName</a>
                         </td>
                         <td>@team.Wins-@team.Losses</td>
                         <td>@team.WinPct</td>
@@ -30,7 +28,7 @@
                         <td></td>
                     </tr>
 
-                    @if (index == 7) // 8th team
+                    @if (index == 7) // 8ª equipe
                     {
                         <tr>
                             <td colspan="14">
@@ -40,17 +38,17 @@
                     }
                 }
             </tbody>
-       </table>
-
+        </table>
     </div>
 
     <div class="standings-table">
-       <table >
+        <table>
             <thead>
                 <tr>
-                    @foreach (var h in east)
+                    <th style="width: 20%;">WEST</th> 
+                    @foreach (var h in west.Skip(1)) 
                     {
-                        <th>@h</th>
+                        <th style="width: 13%;">@h</th>
                     }
                 </tr>
             </thead>
@@ -60,7 +58,7 @@
                     <tr>
                         <td>
                             <MudAvatar Style="vertical-align: middle; background: none" Size="Size.Small" Image=@($"Images/logos/{team.TeamAbrv}.svg") Square="true" />
-                            <a  style="color: #0000EE" href="team/@team.TeamId">@team.TeamRegion @team.TeamName</a>
+                            <a style="color: #0000EE" href="team/@team.TeamId">@team.TeamRegion @team.TeamName</a>
                         </td>
                         <td>@team.Wins-@team.Losses</td>
                         <td>@team.WinPct</td>
@@ -70,7 +68,7 @@
                         <td></td>
                     </tr>
 
-                    @if (index == 7) // 8th team
+                    @if (index == 7) // 8ª equipe
                     {
                         <tr>
                             <td colspan="14">
@@ -80,10 +78,6 @@
                     }
                 }
             </tbody>
-       </table>
-
+        </table>
     </div>
-
- </div>
-
-
+</div>
