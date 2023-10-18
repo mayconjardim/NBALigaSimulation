@@ -1,5 +1,4 @@
 ﻿using NBALigaSimulation.Shared.Models;
-using System.Security.Cryptography;
 
 namespace NBALigaSimulation.Shared.Engine
 {
@@ -46,6 +45,13 @@ namespace NBALigaSimulation.Shared.Engine
 
                     List<string> usageAttributes = new List<string> { "ins", "dnk", "fg", "tp", "spd", "hgt", "drb", "oiq" };
                     List<double> usageWeights = new List<double> { 1.5, 1, 1, 1, 0.5, 0.5, 0.5, 2.5 };
+
+                    if (player.KeyPlayer)
+                    {
+                        usageAttributes.Add("50");
+                        usageWeights.Add(3.0);
+                    }
+
                     player.CompositeRating.Ratings["Usage"] = Converter.Composite(usage, usageAttributes, usageWeights);
 
                     //Dribbling
