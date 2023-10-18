@@ -19,6 +19,12 @@ namespace NBALigaSimulation.Shared.Engine
                         player.CompositeRating = new PlayerCompositeRating();
                     }
 
+                    double key = 0.1;
+                    if (player.KeyPlayer == true)
+                    {
+                        key = 3.0;
+                    }
+
                     //Pace
                     player.CompositeRating.Ratings["Pace"] = 0;
                     Dictionary<string, double> pace = new Dictionary<string, double>();
@@ -43,15 +49,8 @@ namespace NBALigaSimulation.Shared.Engine
                     usage.Add("drb", player.Ratings.LastOrDefault().Drb);
                     usage.Add("oiq", player.Ratings.LastOrDefault().Oiq);
 
-                    List<string> usageAttributes = new List<string> { "ins", "dnk", "fg", "tp", "spd", "hgt", "drb", "oiq" };
-                    List<double> usageWeights = new List<double> { 1.5, 1, 1, 1, 0.5, 0.5, 0.5, 2.5 };
-
-                    if (player.KeyPlayer)
-                    {
-                        usageAttributes.Add("50");
-                        usageWeights.Add(3.0);
-                    }
-
+                    List<string> usageAttributes = new List<string> { "50", "ins", "dnk", "fg", "tp", "spd", "hgt", "drb", "oiq" };
+                    List<double> usageWeights = new List<double> { key, 1.5, 1, 1, 1, 0.5, 0.5, 0.5, 2.5 };
                     player.CompositeRating.Ratings["Usage"] = Converter.Composite(usage, usageAttributes, usageWeights);
 
                     //Dribbling
