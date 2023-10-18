@@ -45,7 +45,7 @@ namespace NBALigaSimulation.Shared.Engine
                     usage.Add("oiq", player.Ratings.LastOrDefault().Oiq);
 
                     List<string> usageAttributes = new List<string> { "ins", "dnk", "fg", "tp", "spd", "hgt", "drb", "oiq" };
-                    List<double> usageWeights = new List<double> { 1.5, 1, 1, 1, 0.5, 0.5, 0.5, 0.5 };
+                    List<double> usageWeights = new List<double> { 1.5, 1, 1, 1, 0.5, 0.5, 0.5, 2.5 };
                     player.CompositeRating.Ratings["Usage"] = Converter.Composite(usage, usageAttributes, usageWeights);
 
                     //Dribbling

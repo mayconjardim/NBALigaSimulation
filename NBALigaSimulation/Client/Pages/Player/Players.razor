@@ -48,6 +48,9 @@
         <MudTh><MudTableSortLabel SortBy="new Func<PlayerCompleteDto, object>(x=>x.Ratings.Last().Spd)">SPD</MudTableSortLabel></MudTh>
         <MudTh><MudTableSortLabel SortBy="new Func<PlayerCompleteDto, object>(x=>x.Ratings.Last().Jmp)">JMP</MudTableSortLabel></MudTh>
         <MudTh><MudTableSortLabel SortBy="new Func<PlayerCompleteDto, object>(x=>x.Ratings.Last().Endu)">END</MudTableSortLabel></MudTh>
+        <MudTh><MudTableSortLabel SortBy="new Func<PlayerCompleteDto, object>(x=>x.Ratings.Last().Oiq)">OIQ</MudTableSortLabel></MudTh>
+        <MudTh><MudTableSortLabel SortBy="new Func<PlayerCompleteDto, object>(x=>x.Ratings.Last().Diq)">DIQ</MudTableSortLabel></MudTh>
+
     </HeaderContent>
     <RowTemplate Context="data">
         <MudTd Style="white-space: nowrap;" DataLabel="NAME"><a  style="color: blue" href="@("player/" + data.Id)">@data.Name</a></MudTd>
@@ -67,6 +70,9 @@
         <MudTd DataLabel="SPD">@data.Ratings.Last().Spd</MudTd>
         <MudTd DataLabel="JMP">@data.Ratings.Last().Jmp</MudTd>
         <MudTd DataLabel="END">@data.Ratings.Last().Endu</MudTd>
+        <MudTd DataLabel="OIQ">@data.Ratings.Last().Oiq</MudTd>
+        <MudTd DataLabel="DIQ">@data.Ratings.Last().Diq</MudTd>
+
     </RowTemplate>
      <PagerContent>
         <MudTablePager PageSizeOptions="new int[]{50, 100}" />

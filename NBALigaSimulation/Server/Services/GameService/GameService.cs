@@ -407,16 +407,22 @@ namespace NBALigaSimulation.Server.Services.GameService
                 .OrderByDescending(trs => trs?.WinPct ?? 0)
                 .ToList();
 
-            if (westTeams != null && eastTeams != null)
+            if (eastTeams != null && westTeams != null)
             {
                 for (int i = 0; i < eastTeams.Count; i++)
                 {
-                    eastTeams[i].ConfRank = i + 1;
+                    if (eastTeams[i] != null)
+                    {
+                        eastTeams[i].ConfRank = i + 1;
+                    }
                 }
 
                 for (int i = 0; i < westTeams.Count; i++)
                 {
-                    westTeams[i].ConfRank = i + 1;
+                    if (westTeams[i] != null)
+                    {
+                        westTeams[i].ConfRank = i + 1;
+                    }
                 }
             }
 
