@@ -60,6 +60,10 @@
                 {
                     factor = component[i];
                 }
+                else if (component == "ovr")
+                {
+                    factor = component[i];
+                }
                 else if (component is string ratingName)
                 {
                     if (!ratings.ContainsKey(ratingName))

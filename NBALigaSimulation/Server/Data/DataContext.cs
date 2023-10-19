@@ -101,7 +101,6 @@
                     .OnDelete(DeleteBehavior.Cascade);
             });
 
-
             modelBuilder.Entity<PlayerGameStats>()
             .HasOne(p => p.Game)
             .WithMany(g => g.PlayerGameStats)
@@ -129,7 +128,6 @@
                     .WithOne()
                     .HasForeignKey(s => s.TeamId);
             });
-
 
             modelBuilder.Entity<Team>()
             .HasMany(t => t.DraftPicks)

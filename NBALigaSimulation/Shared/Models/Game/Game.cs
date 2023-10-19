@@ -489,7 +489,7 @@ namespace NBALigaSimulation.Shared.Models
                 return DoTov(Teams, PlayersOnCourt);
             }
 
-            double[] ratios = RatingArray(Teams, "Usage", Offense, PlayersOnCourt, 4);
+            double[] ratios = RatingArray(Teams, "Usage", Offense, PlayersOnCourt, 10);
             int shooterIndex = PickPlayer(ratios);
 
             return DoShot(shooterIndex, Teams, PlayersOnCourt);
