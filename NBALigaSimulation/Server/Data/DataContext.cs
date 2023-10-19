@@ -87,7 +87,20 @@
                     .HasForeignKey(e => e.AwayTeamId)
                     .OnDelete(DeleteBehavior.Restrict);
 
+                entity.HasMany(g => g.PlayByPlay)
+                    .WithOne()
+                    .OnDelete(DeleteBehavior.Cascade);
             });
+
+            modelBuilder.Entity<GamePlayByPlay>(entity =>
+            {
+                entity.HasKey(e => e.Id);
+
+                entity.HasOne(e => e.Game)
+                    .WithMany(g => g.PlayByPlay)
+                    .OnDelete(DeleteBehavior.Cascade);
+            });
+
 
             modelBuilder.Entity<PlayerGameStats>()
             .HasOne(p => p.Game)

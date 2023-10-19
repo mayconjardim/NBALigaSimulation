@@ -22,7 +22,7 @@ namespace NBALigaSimulation.Shared.Engine
                     double key = 0.1;
                     if (player.KeyPlayer == true)
                     {
-                        key = 3.0;
+                        key = 5.0;
                     }
 
                     //Pace

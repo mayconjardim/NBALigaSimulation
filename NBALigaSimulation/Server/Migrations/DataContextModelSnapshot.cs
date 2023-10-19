@@ -1383,7 +1383,8 @@ namespace NBALigaSimulation.Server.Migrations
                 {
                     b.HasOne("NBALigaSimulation.Shared.Models.Game", "Game")
                         .WithMany("PlayByPlay")
-                        .HasForeignKey("GameId");
+                        .HasForeignKey("GameId")
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.Navigation("Game");
                 });
