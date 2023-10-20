@@ -19,30 +19,6 @@ namespace NBALigaSimulation.Shared.Engine
                         player.CompositeRating = new PlayerCompositeRating();
                     }
 
-                    double key = 1;
-
-                    if (player.Ratings.LastOrDefault()?.CalculateOvr > 65)
-                    {
-                        key = 2.5;
-                    }
-
-                    if (player.KeyPlayer)
-                    {
-                        key = 3.5;
-                    }
-
-                    //Pace
-                    player.CompositeRating.Ratings["Pace"] = 0;
-                    Dictionary<string, double> pace = new Dictionary<string, double>();
-                    pace.Add("spd", player.Ratings.LastOrDefault().Spd);
-                    pace.Add("jmp", player.Ratings.LastOrDefault().Jmp);
-                    pace.Add("dnk", player.Ratings.LastOrDefault().Dnk);
-                    pace.Add("tp", player.Ratings.LastOrDefault().Tp);
-                    pace.Add("drb", player.Ratings.LastOrDefault().Reb);
-                    pace.Add("pss", player.Ratings.LastOrDefault().Pss);
-                    List<string> paceAttributes = new List<string> { "spd", "jmp", "dnk", "tp", "drb", "pss" };
-                    player.CompositeRating.Ratings["Pace"] = Converter.Composite(pace, paceAttributes);
-
                     //Usage
                     player.CompositeRating.Ratings["Usage"] = 0;
                     Dictionary<string, double> usage = new Dictionary<string, double>();
@@ -56,9 +32,47 @@ namespace NBALigaSimulation.Shared.Engine
                     usage.Add("oiq", player.Ratings.LastOrDefault().Oiq);
 
                     List<string> usageAttributes = new List<string> { "ins", "dnk", "fg", "tp", "spd", "hgt", "drb", "oiq" };
-                    List<double> usageWeights = new List<double> { key * 1.5, key * 1, key * 1, key * 1, key * 0.5, key * 0.5, key * 0.5, key * 0.5 };
+                    List<double> usageWeights = new List<double> { 1.5, 1, 1, 1, 0.5, 0.5, 0.5, 0.5 };
 
-                    player.CompositeRating.Ratings["Usage"] = Converter.Composite(usage, usageAttributes, usageWeights);
+                    Random random = new Random();
+
+                    if (player.KeyPlayer)
+                    {
+                        double randomNumber;
+
+                        if (player.Ratings.LastOrDefault().CalculateOvr < 50)
+                        {
+                            randomNumber = random.NextDouble() * (0.500000 - 0.400000) + 0.400000;
+                        }
+                        else if (player.Ratings.LastOrDefault().CalculateOvr < 60)
+                        {
+                            randomNumber = random.NextDouble() * (0.650000 - 0.500000) + 0.500000;
+                        }
+                        else
+                        {
+                            randomNumber = random.NextDouble() * (0.850000 - 0.700000) + 0.700000;
+                        }
+
+                        player.CompositeRating.Ratings["Usage"] = randomNumber;
+                    }
+                    else
+                    {
+                        player.CompositeRating.Ratings["Usage"] = Converter.Composite(usage, usageAttributes, usageWeights);
+                    }
+
+                    Console.WriteLine(player.Name + " - Usage = " + player.CompositeRating.Ratings["Usage"]);
+
+                    //Pace
+                    player.CompositeRating.Ratings["Pace"] = 0;
+                    Dictionary<string, double> pace = new Dictionary<string, double>();
+                    pace.Add("spd", player.Ratings.LastOrDefault().Spd);
+                    pace.Add("jmp", player.Ratings.LastOrDefault().Jmp);
+                    pace.Add("dnk", player.Ratings.LastOrDefault().Dnk);
+                    pace.Add("tp", player.Ratings.LastOrDefault().Tp);
+                    pace.Add("drb", player.Ratings.LastOrDefault().Reb);
+                    pace.Add("pss", player.Ratings.LastOrDefault().Pss);
+                    List<string> paceAttributes = new List<string> { "spd", "jmp", "dnk", "tp", "drb", "pss" };
+                    player.CompositeRating.Ratings["Pace"] = Converter.Composite(pace, paceAttributes);
 
                     //Dribbling
                     player.CompositeRating.Ratings["Dribbling"] = 0;
@@ -148,7 +162,7 @@ namespace NBALigaSimulation.Shared.Engine
                     rebounding.Add("oiq", player.Ratings.LastOrDefault().Oiq);
                     rebounding.Add("diq", player.Ratings.LastOrDefault().Diq);
                     List<string> reboundingAttributes = new List<string> { "hgt", "stre", "jmp", "reb", "oiq", "diq" };
-                    List<double> reboundingWeights = new List<double> { 2, 0.1, 0.1, 2, 0.5, 0.5 };
+                    List<double> reboundingWeights = new List<double> { 3.0, 0.1, 0.1, 4.0, 0.5, 0.5 };
                     player.CompositeRating.Ratings["Rebounding"] = Converter.Composite(rebounding, reboundingAttributes, reboundingWeights);
 
                     //Stealing
