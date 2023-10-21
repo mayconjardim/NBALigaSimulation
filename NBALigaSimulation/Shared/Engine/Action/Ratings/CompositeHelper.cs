@@ -40,27 +40,28 @@ namespace NBALigaSimulation.Shared.Engine
                     {
                         double randomNumber;
 
-                        if (player.Ratings.LastOrDefault().CalculateOvr < 50)
+                        if (Converter.Composite(usage, usageAttributes, usageWeights) < 60)
                         {
-                            randomNumber = random.NextDouble() * (0.500000 - 0.400000) + 0.400000;
-                        }
-                        else if (player.Ratings.LastOrDefault().CalculateOvr < 60)
-                        {
-                            randomNumber = random.NextDouble() * (0.650000 - 0.500000) + 0.500000;
-                        }
-                        else
-                        {
-                            randomNumber = random.NextDouble() * (0.850000 - 0.700000) + 0.700000;
-                        }
+                            randomNumber = random.NextDouble() * (0.630000 - 0.600000) + 0.600000;
+                            player.CompositeRating.Ratings["Usage"] = randomNumber;
 
-                        player.CompositeRating.Ratings["Usage"] = randomNumber;
+                        }
+                        else if (Converter.Composite(usage, usageAttributes, usageWeights) > 60)
+                        {
+
+                            randomNumber = random.NextDouble() * (0.680000 - 0.650000) + 0.650000;
+                            player.CompositeRating.Ratings["Usage"] = randomNumber;
+                        }
                     }
                     else
                     {
                         player.CompositeRating.Ratings["Usage"] = Converter.Composite(usage, usageAttributes, usageWeights);
                     }
 
-                    Console.WriteLine(player.Name + " - Usage = " + player.CompositeRating.Ratings["Usage"]);
+
+
+                    Console.WriteLine(player.Name + " - " + player.CompositeRating.Ratings["Usage"]);
+
 
                     //Pace
                     player.CompositeRating.Ratings["Pace"] = 0;
@@ -162,7 +163,7 @@ namespace NBALigaSimulation.Shared.Engine
                     rebounding.Add("oiq", player.Ratings.LastOrDefault().Oiq);
                     rebounding.Add("diq", player.Ratings.LastOrDefault().Diq);
                     List<string> reboundingAttributes = new List<string> { "hgt", "stre", "jmp", "reb", "oiq", "diq" };
-                    List<double> reboundingWeights = new List<double> { 3.0, 0.1, 0.1, 4.0, 0.5, 0.5 };
+                    List<double> reboundingWeights = new List<double> { 5.0, 0.1, 0.1, 5.0, 0.5, 0.5 };
                     player.CompositeRating.Ratings["Rebounding"] = Converter.Composite(rebounding, reboundingAttributes, reboundingWeights);
 
                     //Stealing
