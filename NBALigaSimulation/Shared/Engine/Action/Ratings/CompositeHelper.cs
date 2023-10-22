@@ -1,4 +1,5 @@
 ﻿using NBALigaSimulation.Shared.Models;
+using System.Linq;
 
 namespace NBALigaSimulation.Shared.Engine
 {
@@ -32,33 +33,36 @@ namespace NBALigaSimulation.Shared.Engine
                     usage.Add("oiq", player.Ratings.LastOrDefault().Oiq);
 
                     List<string> usageAttributes = new List<string> { "ins", "dnk", "fg", "tp", "spd", "hgt", "drb", "oiq" };
-                    List<double> usageWeights = new List<double> { 1.5, 1, 1, 1, 0.5, 0.5, 0.5, 0.5 };
+                    List<double> usageWeights = new List<double> { 1.5, 1, 1, 1, 0.5, 0.5, 0.5, 1.5 };
 
                     Random random = new Random();
 
                     if (player.KeyPlayer)
                     {
+
                         double randomNumber;
 
-                        if (Converter.Composite(usage, usageAttributes, usageWeights) < 60)
+                        if (player.Ratings.LastOrDefault().CalculateOvr < 50)
                         {
-                            randomNumber = random.NextDouble() * (0.630000 - 0.600000) + 0.600000;
-                            player.CompositeRating.Ratings["Usage"] = randomNumber;
-
-                        }
-                        else if (Converter.Composite(usage, usageAttributes, usageWeights) > 60)
-                        {
-
-                            randomNumber = random.NextDouble() * (0.680000 - 0.650000) + 0.650000;
+                            randomNumber = random.NextDouble() * (0.580000 - 0.550000) + 0.550000;
                             player.CompositeRating.Ratings["Usage"] = randomNumber;
                         }
+                        else if (player.Ratings.LastOrDefault().CalculateOvr < 65)
+                        {
+                            randomNumber = random.NextDouble() * (0.620000 - 0.600000) + 0.600000;
+                            player.CompositeRating.Ratings["Usage"] = randomNumber;
+                        }
+                        else
+                        {
+                            randomNumber = random.NextDouble() * (0.650000 - 0.630000) + 0.630000;
+                            player.CompositeRating.Ratings["Usage"] = randomNumber;
+                        }
+
                     }
                     else
                     {
                         player.CompositeRating.Ratings["Usage"] = Converter.Composite(usage, usageAttributes, usageWeights);
                     }
-
-
 
                     Console.WriteLine(player.Name + " - " + player.CompositeRating.Ratings["Usage"]);
 
