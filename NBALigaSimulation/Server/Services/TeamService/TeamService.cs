@@ -107,6 +107,42 @@ namespace NBALigaSimulation.Server.Services.TeamService
             return response;
         }
 
+        public async Task<ServiceResponse<bool>> UpdateKeyPlayers(int teamId, List<PlayerCompleteDto> players)
+        {
+            ServiceResponse<bool> response = new ServiceResponse<bool>();
+
+            var team = await _context.Teams.Include(t => t.Players).FirstOrDefaultAsync(t => t.Id == teamId);
+
+            if (team == null)
+            {
+                response.Message = $"O Time com o Id {teamId} não existe!";
+                return response;
+            }
+
+            foreach (var player in players)
+            {
+                var existingPlayer = team.Players.FirstOrDefault(p => p.Id == player.Id);
+                if (existingPlayer != null)
+                {
+                    existingPlayer.KeyPlayer = player.KeyPlayer;
+                }
+            }
+
+            _context.Update(team);
+
+            try
+            {
+                await _context.SaveChangesAsync();
+                response.Success = true;
+            }
+            catch (Exception ex)
+            {
+                response.Message = $"Erro ao atualizar o time: {ex.Message}";
+            }
+
+            return response;
+        }
+
         public async Task<ServiceResponse<bool>> UpdateTeamGameplan(int teamId, TeamGameplanDto teamGameplanDto)
         {
             ServiceResponse<bool> response = new ServiceResponse<bool>();
@@ -115,7 +151,7 @@ namespace NBALigaSimulation.Server.Services.TeamService
 
             if (team == null)
             {
-                response.Message = "Team not found.";
+                response.Message = $"O Time com o Id {teamId} não existe!";
                 return response;
             }
 

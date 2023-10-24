@@ -50,5 +50,20 @@ namespace NBALigaSimulation.Client.Services.TeamService
 
             return new ServiceResponse<bool> { Success = true };
         }
+
+        public async Task<ServiceResponse<bool>> UpdateKeyPlayers(int teamId, List<PlayerCompleteDto> players)
+        {
+            var response = await _http.PutAsJsonAsync($"api/teams/{teamId}/keys", players);
+
+            if (!response.IsSuccessStatusCode)
+            {
+                var errorMessage = await response.Content.ReadAsStringAsync();
+                return new ServiceResponse<bool> { Success = false, Message = errorMessage };
+            }
+
+            return new ServiceResponse<bool> { Success = true };
+        }
+
+
     }
 }

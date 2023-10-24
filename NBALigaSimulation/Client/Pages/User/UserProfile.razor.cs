@@ -9,10 +9,11 @@ namespace NBALigaSimulation.Client.Pages.User
 
         private TeamCompleteDto? team = null;
         private TeamGameplanDto? teamGameplan = null;
+        private List<PlayerCompleteDto> keyPlayers;
+        private bool isDirty = false;
 
         private string message = string.Empty;
         private int season;
-
 
         protected override async Task OnInitializedAsync()
         {
@@ -147,8 +148,6 @@ namespace NBALigaSimulation.Client.Pages.User
             }
         }
 
-        private bool isDirty = false;
-
         private void HandleEventChanged(ChangeEventArgs e)
         {
             isDirty = true;
@@ -164,6 +163,24 @@ namespace NBALigaSimulation.Client.Pages.User
                 isDirty = false;
                 StateHasChanged();
                 Snackbar.Add("GAMEPLAN ATUALIIZADO COM SUCESSO", Severity.Success);
+
+            }
+            else
+            {
+                message = response.Message;
+            }
+        }
+
+        private async Task SaveKeyPlayers()
+        {
+            keyPlayers = team.Players.Where(player => player.KeyPlayer).ToList();
+            var response = await TeamService.UpdateKeyPlayers(team.Id, keyPlayers);
+
+            if (response.Success)
+            {
+                isDirty = false;
+                StateHasChanged();
+                Snackbar.Add("JOGADORES CHAVES ATUALIIZADOS COM SUCESSO", Severity.Success);
 
             }
             else
