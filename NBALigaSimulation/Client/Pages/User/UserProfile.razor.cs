@@ -11,6 +11,7 @@ namespace NBALigaSimulation.Client.Pages.User
         private TeamGameplanDto? teamGameplan = null;
         private List<PlayerCompleteDto> keyPlayers;
         private bool isDirty = false;
+        private bool isDirtySaveKeyPlayers = false;
 
         private string message = string.Empty;
         private int season;
@@ -171,14 +172,20 @@ namespace NBALigaSimulation.Client.Pages.User
             }
         }
 
+        private void HandleCheckboxKeyChange()
+        {
+            isDirtySaveKeyPlayers = true;
+            StateHasChanged();
+        }
+
         private async Task SaveKeyPlayers()
         {
-            keyPlayers = team.Players.Where(player => player.KeyPlayer).ToList();
+            keyPlayers = team.Players.ToList();
             var response = await TeamService.UpdateKeyPlayers(team.Id, keyPlayers);
 
             if (response.Success)
             {
-                isDirty = false;
+                isDirtySaveKeyPlayers = false;
                 StateHasChanged();
                 Snackbar.Add("JOGADORES CHAVES ATUALIIZADOS COM SUCESSO", Severity.Success);
 

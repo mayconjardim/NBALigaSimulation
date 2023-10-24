@@ -75,5 +75,18 @@ namespace NBALigaSimulation.Server.Controllers
             return Ok();
         }
 
+        [HttpPut("{teamId}/keys")]
+        public async Task<ActionResult> UpdateKeyPlayers(int teamId, List<PlayerCompleteDto> players)
+        {
+            var response = await _teamService.UpdateKeyPlayers(teamId, players);
+
+            if (!response.Success)
+            {
+                return BadRequest(response.Message);
+            }
+
+            return Ok();
+        }
+
     }
 }

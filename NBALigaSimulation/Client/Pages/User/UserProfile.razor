@@ -153,29 +153,26 @@
 
          <div class="key border">
 
-              <MudPaper Width="300px">
-
-                     <MudList Clickable="true">
-                        <MudListItem Icon="@Icons.Material.Filled.Key">
-
-                            @foreach (var player in team.Players)
+             <MudPaper Width="300px">
+                <MudList Clickable="true">
+                    <MudListItem Icon="@Icons.Material.Filled.Key">
+                        @foreach (var player in team.Players)
+                        {
+                            <div>
+                                <input type="checkbox" @bind="player.KeyPlayer"  @onclick="() => HandleCheckboxKeyChange()"/>
+                                @player.Name
+                            </div>
+                            @if (team.Players.Count(p => p.KeyPlayer) >= 4 && player.KeyPlayer)
                             {
-                                <div>
-                                    <input type="checkbox" @bind="player.KeyPlayer" />
-                                    @player.Name
-                                </div>
-                                @if (team.Players.Count(p => p.KeyPlayer) >= 4 && player.KeyPlayer)
-                                {
-                                    player.KeyPlayer = false;
-                                }
+                                player.KeyPlayer = false;
                             }
-
-                        </MudListItem>
-                     </MudList>
-              </MudPaper>
+                        }
+                    </MudListItem>
+                </MudList>
+            </MudPaper>
 
               <div class="d-flex justify-center">
-                    <MudButton Style="margin: 10px" Variant="Variant.Outlined" disabled="@(!isDirty)" ButtonType="ButtonType.Submit" @onclick="SaveKeyPlayers">Salvar Jogadores Chave</MudButton>
+                    <MudButton Style="margin: 10px" Variant="Variant.Outlined" disabled="@(!isDirtySaveKeyPlayers)" ButtonType="ButtonType.Submit" @onclick="SaveKeyPlayers">Salvar Jogadores Chave</MudButton>
               </div>
          </div>
      </div>
