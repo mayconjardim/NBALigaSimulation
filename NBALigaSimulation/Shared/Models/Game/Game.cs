@@ -35,6 +35,8 @@ namespace NBALigaSimulation.Shared.Models
         [NotMapped]
         double SynergyFactor = 0.01; // Qual a importância da sinergia?
         [NotMapped]
+        double FatigueFactor = 0.055;
+        [NotMapped]
         int Offense; // Time que está atacando
         [NotMapped]
         int Defense; // Time que está defendendo
@@ -463,7 +465,10 @@ namespace NBALigaSimulation.Shared.Models
                         RecordStat(t, p, "Min", Teams, 1, Dt);
                         RecordStat(t, p, "CourtTime", Teams, 1, Dt);
                         // Isso costumava ser 0,04. Aumente mais para diminuir o PT
-                        RecordStat(t, p, "Energy", Teams, 1, (-Dt * 0.06 * (1 - Teams[t].Players[p].CompositeRating.Ratings["Endurance"])));
+                        double energyChange = -Dt *
+                                   FatigueFactor *
+                                   (1 - Teams[t].Players[p].CompositeRating.Ratings["Endurance"]);
+                        RecordStat(t, p, "Energy", Teams, 1, energyChange);
                         if (Teams[t].Players[p].Stats.Find(s => s.GameId == Id)?.Energy < 0)
                         {
                             Teams[t].Players[p].Stats.Find(s => s.GameId == Id).Energy = 0;
