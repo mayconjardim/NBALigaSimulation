@@ -33,7 +33,7 @@ namespace NBALigaSimulation.Shared.Engine
                     usage.Add("oiq", player.Ratings.LastOrDefault().Oiq);
 
                     List<string> usageAttributes = new List<string> { "ins", "dnk", "fg", "tp", "spd", "hgt", "drb", "oiq" };
-                    List<double> usageWeights = new List<double> { 1.5, 1, 1, 1, 0.5, 0.5, 0.5, 1.5 };
+                    List<double> usageWeights = new List<double> { 1.5, 1, 1, 1, 0.5, 0.5, 0.5, 0.5 };
 
                     Random random = new Random();
 
@@ -63,11 +63,23 @@ namespace NBALigaSimulation.Shared.Engine
                             randomNumber = random.NextDouble() * (0.580000 - 0.550000) + 0.550000;
                             player.CompositeRating.Ratings["Usage"] = randomNumber;
                         }
+
                     }
                     else
                     {
+                        double randomNumber;
 
-                        player.CompositeRating.Ratings["Usage"] = Converter.Composite(usage, usageAttributes, usageWeights);
+                        if (player.PtModifier <= 1.25 && player.CompositeRating.Ratings["Usage"] > 0.55)
+                        {
+                            randomNumber = random.NextDouble() * (0.520000 - 0.500000) + 0.500000;
+                            player.CompositeRating.Ratings["Usage"] = randomNumber;
+
+                        }
+                        else
+                        {
+                            player.CompositeRating.Ratings["Usage"] = Converter.Composite(usage, usageAttributes, usageWeights);
+                        }
+
                     }
 
 
