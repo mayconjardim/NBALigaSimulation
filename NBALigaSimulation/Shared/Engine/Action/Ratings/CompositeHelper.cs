@@ -66,6 +66,7 @@ namespace NBALigaSimulation.Shared.Engine
                     }
                     else
                     {
+
                         player.CompositeRating.Ratings["Usage"] = Converter.Composite(usage, usageAttributes, usageWeights);
                     }
 

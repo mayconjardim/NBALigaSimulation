@@ -68,7 +68,7 @@ namespace NBALigaSimulation.Client.Pages.User
 
         }
 
-        List<double> PtOptions = new List<double> { 0.0, 0.75, 1.0, 1.25, 1.75 };
+        List<double> PtOptions = new List<double> { 0.0, 0.75, 1.0, 1.25, 1.75, 2.0 };
 
         string GetOptionLabel(double value)
         {
@@ -83,8 +83,10 @@ namespace NBALigaSimulation.Client.Pages.User
                     return "";
                 case 1.25:
                     return "+";
-                default:
+                case 1.75:
                     return "++";
+                default:
+                    return "+++";
             }
 
         }
