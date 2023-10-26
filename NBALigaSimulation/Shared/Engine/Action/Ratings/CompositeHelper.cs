@@ -58,13 +58,17 @@ namespace NBALigaSimulation.Shared.Engine
                             player.CompositeRating.Ratings["Usage"] = randomNumber;
                         }
 
+                        if (player.PtModifier <= 1.25)
+                        {
+                            randomNumber = random.NextDouble() * (0.580000 - 0.550000) + 0.550000;
+                            player.CompositeRating.Ratings["Usage"] = randomNumber;
+                        }
                     }
                     else
                     {
                         player.CompositeRating.Ratings["Usage"] = Converter.Composite(usage, usageAttributes, usageWeights);
                     }
 
-                    Console.WriteLine(player.Name + " - " + player.CompositeRating.Ratings["Usage"]);
 
 
                     //Pace
