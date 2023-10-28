@@ -188,12 +188,12 @@ namespace NBALigaSimulation.Server.Services.GameService
 
                 var teamRegularStats = await _context.TeamRegularStats.Where(t => t.Season == season.Year).ToListAsync();
 
-                bool isRegularSeasonComplete = teamRegularStats.All(t => t.HomeLosses + t.HomeWins + t.RoadLosses + t.RoadWins == 82);
+                bool isRegularSeasonComplete = teamRegularStats.All(t => t.HomeLosses + t.HomeWins + t.RoadLosses + t.RoadWins == 74);
 
                 if (isRegularSeasonComplete)
                 {
                     var playoffs = await _playoffsService.GeneratePlayoffs();
-                    season.RegularCompleted = true;
+
                     response.Message = "Temporada regular finalizada, playoffs gerado!";
                     response.Success = true;
                     return response;

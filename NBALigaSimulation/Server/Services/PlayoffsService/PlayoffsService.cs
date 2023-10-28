@@ -94,6 +94,7 @@ namespace NBALigaSimulation.Server.Services.PlayoffsService
 
             var playoffs = PlayoffsUtils.Generate1stRound(teamsEast, teamsWest, season.Year);
             var games = PlayoffsUtils.GenerateRoundGames(playoffs, season);
+            season.RegularCompleted = true;
 
             _context.AddRange(games);
             _context.AddRange(playoffs);
