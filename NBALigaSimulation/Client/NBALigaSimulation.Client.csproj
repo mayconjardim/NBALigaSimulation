@@ -31,4 +31,10 @@
 		  PublishedContent="wwwroot\service-worker.published.js" />
 	</ItemGroup>
 
+	<ItemGroup>
+		<Content Update="wwwroot\basketball.db">
+			<CopyToPublishDirectory>Never</CopyToPublishDirectory>
+		</Content>
+	</ItemGroup>
+
 </Project>
