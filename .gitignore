@@ -362,3 +362,5 @@ MigrationBackup/
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
 /NBALigaSimulation/Server/Basketball.db
+/NBALigaSimulation/Server/Basketball.db
+/NBALigaSimulation/Server/appsettings.json
