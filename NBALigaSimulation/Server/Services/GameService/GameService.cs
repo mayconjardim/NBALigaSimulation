@@ -204,9 +204,6 @@ namespace NBALigaSimulation.Server.Services.GameService
                 return response;
             }
 
-
-
-
             List<Game> games = await _context.Games
                 .Include(p => p.HomeTeam.Players.OrderBy(p => p.RosterOrder)).ThenInclude(p => p.Ratings)
                 .Include(p => p.AwayTeam.Players.OrderBy(p => p.RosterOrder)).ThenInclude(p => p.Ratings)
@@ -242,6 +239,7 @@ namespace NBALigaSimulation.Server.Services.GameService
                 try
                 {
                     await _context.SaveChangesAsync();
+
                 }
                 catch (Exception ex)
                 {
@@ -254,6 +252,9 @@ namespace NBALigaSimulation.Server.Services.GameService
                 {
                     SimulationUtils.UpdateTeamStats(game);
                     SimulationUtils.UpdatePlayerGames(game);
+                    GameNews news = SimulationUtils.NewGenerator(game);
+                    await _context.AddAsync(news);
+
                     await _context.SaveChangesAsync();
                 }
                 catch (Exception ex)
@@ -271,7 +272,6 @@ namespace NBALigaSimulation.Server.Services.GameService
             return response;
 
         }
-
 
         public async Task<ServiceResponse<bool>> SimGameByDatePlayoffs()
         {
@@ -353,6 +353,8 @@ namespace NBALigaSimulation.Server.Services.GameService
 
                         SimulationUtils.UpdateTeamStats(game);
                         SimulationUtils.UpdatePlayerGames(game);
+                        GameNews news = SimulationUtils.NewGenerator(game);
+                        await _context.AddAsync(news);
                         await _context.SaveChangesAsync();
 
                         if (playoffToUpdate.WinsTeamOne >= 4 || playoffToUpdate.WinsTeamTwo >= 4)
@@ -484,6 +486,8 @@ namespace NBALigaSimulation.Server.Services.GameService
                 {
                     SimulationUtils.UpdateTeamStats(game);
                     SimulationUtils.UpdatePlayerGames(game);
+                    GameNews news = SimulationUtils.NewGenerator(game);
+                    await _context.AddAsync(news);
                     await _context.SaveChangesAsync();
                 }
                 catch (Exception ex)

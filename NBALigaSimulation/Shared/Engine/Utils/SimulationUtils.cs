@@ -1,5 +1,6 @@
 ﻿using NBALigaSimulation.Shared.Dtos;
 using NBALigaSimulation.Shared.Models;
+using System.Linq;
 
 namespace NBALigaSimulation.Shared.Engine.Utils
 {
@@ -311,6 +312,45 @@ namespace NBALigaSimulation.Shared.Engine.Utils
             }
 
         }
+        public static GameNews NewGenerator(Game game)
+        {
+            var homeTeamStats = game.TeamGameStats.Find(g => g.TeamId == game.HomeTeamId);
+            var awayTeamStats = game.TeamGameStats.Find(g => g.TeamId == game.AwayTeamId);
+
+            var highestScoringPlayerHome = game.PlayerGameStats
+                .Where(p => p.TeamId == game.HomeTeamId)
+                .OrderByDescending(p => p.Pts)
+                .FirstOrDefault();
+
+            var highestScoringPlayerAway = game.PlayerGameStats
+                .Where(p => p.TeamId == game.AwayTeamId)
+                .OrderByDescending(p => p.Pts)
+                .FirstOrDefault();
+
+            string winningTeam = homeTeamStats.Pts > awayTeamStats.Pts ? game.HomeTeam.Name : game.AwayTeam.Name;
+            string losingTeam = homeTeamStats.Pts > awayTeamStats.Pts ? game.AwayTeam.Name : game.HomeTeam.Name;
+
+            var random = new Random();
+            var titleTemplates = new List<string>
+            {
+                $"{winningTeam} vencem {losingTeam} por {homeTeamStats.Pts}-{awayTeamStats.Pts}.",
+                $"{highestScoringPlayerHome.Name} lidera o {winningTeam} com {highestScoringPlayerHome.Pts} contra {losingTeam}.",
+                $"{highestScoringPlayerAway.Name} marca {highestScoringPlayerAway.Pts} pontos contra o {losingTeam} na vitória por {homeTeamStats.Pts}-{awayTeamStats.Pts}.",
+                $"{winningTeam} vencem {losingTeam} por {homeTeamStats.Pts}-{awayTeamStats.Pts}.",
+                $"A equipe dos {winningTeam} segura os {losingTeam} e vence por {homeTeamStats.Pts} a {awayTeamStats.Pts}."
+            };
+
+            var randomIndex = random.Next(titleTemplates.Count);
+            var selectedTitle = titleTemplates[randomIndex];
+
+            var news = new GameNews
+            {
+                GameId = game.Id,
+                Title = selectedTitle
+            };
+            return news;
+        }
+
 
     }
 }

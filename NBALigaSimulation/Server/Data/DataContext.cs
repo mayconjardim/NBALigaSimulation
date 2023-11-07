@@ -28,7 +28,7 @@
         public DbSet<PlayoffsGame> PlayoffGames { get; set; }
         public DbSet<Draft> Drafts { get; set; }
         public DbSet<DraftLottery> DraftLotteries { get; set; }
-
+        public DbSet<GameNews> GameNews { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

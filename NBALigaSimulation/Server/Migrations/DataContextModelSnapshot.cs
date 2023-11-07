@@ -181,6 +181,24 @@ namespace NBALigaSimulation.Server.Migrations
                     b.ToTable("Games");
                 });
 
+            modelBuilder.Entity("NBALigaSimulation.Shared.Models.GameNews", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("GameId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("GameNews");
+                });
+
             modelBuilder.Entity("NBALigaSimulation.Shared.Models.GamePlayByPlay", b =>
                 {
                     b.Property<int?>("Id")
