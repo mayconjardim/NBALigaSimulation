@@ -252,7 +252,7 @@ namespace NBALigaSimulation.Server.Services.GameService
                 {
                     SimulationUtils.UpdateTeamStats(game);
                     SimulationUtils.UpdatePlayerGames(game);
-                    GameNews news = SimulationUtils.NewGenerator(game);
+                    News news = SimulationUtils.NewGenerator(game);
                     await _context.AddAsync(news);
 
                     await _context.SaveChangesAsync();
@@ -353,7 +353,7 @@ namespace NBALigaSimulation.Server.Services.GameService
 
                         SimulationUtils.UpdateTeamStats(game);
                         SimulationUtils.UpdatePlayerGames(game);
-                        GameNews news = SimulationUtils.NewGenerator(game);
+                        News news = SimulationUtils.NewGenerator(game);
                         await _context.AddAsync(news);
                         await _context.SaveChangesAsync();
 
@@ -486,7 +486,7 @@ namespace NBALigaSimulation.Server.Services.GameService
                 {
                     SimulationUtils.UpdateTeamStats(game);
                     SimulationUtils.UpdatePlayerGames(game);
-                    GameNews news = SimulationUtils.NewGenerator(game);
+                    News news = SimulationUtils.NewGenerator(game);
                     await _context.AddAsync(news);
                     await _context.SaveChangesAsync();
                 }

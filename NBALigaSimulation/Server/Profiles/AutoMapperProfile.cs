@@ -112,6 +112,9 @@ namespace NBALigaSimulation.Server.Profiles
 
             CreateMap<GamePlayByPlay, GamePlayByPlayDTO>().ReverseMap();
 
+            CreateMap<News, NewsDto>().ReverseMap();
+
+
         }
     }
 }

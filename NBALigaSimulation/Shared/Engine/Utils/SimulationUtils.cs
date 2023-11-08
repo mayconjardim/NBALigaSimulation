@@ -1,6 +1,4 @@
-﻿using NBALigaSimulation.Shared.Dtos;
-using NBALigaSimulation.Shared.Models;
-using System.Linq;
+﻿using NBALigaSimulation.Shared.Models;
 
 namespace NBALigaSimulation.Shared.Engine.Utils
 {
@@ -312,7 +310,7 @@ namespace NBALigaSimulation.Shared.Engine.Utils
             }
 
         }
-        public static GameNews NewGenerator(Game game)
+        public static News NewGenerator(Game game)
         {
             var homeTeamStats = game.TeamGameStats.Find(g => g.TeamId == game.HomeTeamId);
             var awayTeamStats = game.TeamGameStats.Find(g => g.TeamId == game.AwayTeamId);
@@ -343,7 +341,7 @@ namespace NBALigaSimulation.Shared.Engine.Utils
             var randomIndex = random.Next(titleTemplates.Count);
             var selectedTitle = titleTemplates[randomIndex];
 
-            var news = new GameNews
+            var news = new News
             {
                 GameId = game.Id,
                 Title = selectedTitle

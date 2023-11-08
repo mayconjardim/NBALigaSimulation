@@ -13,6 +13,7 @@ global using NBALigaSimulation.Server.Services.StatsService;
 global using NBALigaSimulation.Server.Services.League;
 global using NBALigaSimulation.Server.Services.DraftService;
 global using NBALigaSimulation.Server.Services.AuthService;
+using NBALigaSimulation.Server.Services.NewsService;
 using Microsoft.AspNetCore.Hosting.StaticWebAssets;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
@@ -26,7 +27,7 @@ StaticWebAssetsLoader.UseStaticWebAssets(builder.Environment, builder.Configurat
 // Add services to the container.
 
 builder.Services.AddDbContext<DataContext>(DbContextOptions =>
-		  DbContextOptions.UseSqlite(builder.Configuration["ConnectionStrings:NbaligaDBConnectionString"]));
+          DbContextOptions.UseSqlite(builder.Configuration["ConnectionStrings:NbaligaDBConnectionString"]));
 
 builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();
@@ -34,7 +35,7 @@ builder.Services.AddRazorPages();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
 {
-	c.EnableAnnotations();
+    c.EnableAnnotations();
 });
 builder.Services.AddAutoMapper(typeof(Program).Assembly);
 
@@ -48,21 +49,22 @@ builder.Services.AddScoped<IStatsService, StatsService>();
 builder.Services.AddScoped<ILeagueService, LeagueService>();
 builder.Services.AddScoped<IPlayoffsService, PlayoffsService>();
 builder.Services.AddScoped<IDraftService, DraftService>();
+builder.Services.AddScoped<INewsService, NewsService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-	.AddJwtBearer(options =>
-	{
-		options.TokenValidationParameters = new TokenValidationParameters
-		{
-			ValidateIssuerSigningKey = true,
-			IssuerSigningKey =
-				new SymmetricSecurityKey(System.Text.Encoding.UTF8
-				.GetBytes(builder.Configuration.GetSection("AppSettings:Token").Value)),
-			ValidateIssuer = false,
-			ValidateAudience = false
-		};
-	});
+    .AddJwtBearer(options =>
+    {
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuerSigningKey = true,
+            IssuerSigningKey =
+                new SymmetricSecurityKey(System.Text.Encoding.UTF8
+                .GetBytes(builder.Configuration.GetSection("AppSettings:Token").Value)),
+            ValidateIssuer = false,
+            ValidateAudience = false
+        };
+    });
 
 builder.Services.AddHttpContextAccessor();
 
@@ -79,14 +81,14 @@ app.UseSwaggerUI();
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
-	app.UseWebAssemblyDebugging();
+    app.UseWebAssemblyDebugging();
 
 }
 else
 {
-	app.UseExceptionHandler("/Error");
-	// The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-	app.UseHsts();
+    app.UseExceptionHandler("/Error");
+    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
+    app.UseHsts();
 }
 
 app.UseSwagger();
