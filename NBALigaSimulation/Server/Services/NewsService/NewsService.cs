@@ -16,7 +16,10 @@ namespace NBALigaSimulation.Server.Services.NewsService
 
         public async Task<ServiceResponse<List<NewsDto>>> GetAllNews()
         {
-            var news = await _context.GameNews.ToListAsync();
+            var news = await _context.GameNews.OrderByDescending(n => n.Id)
+                                               .Take(23)
+                                               .ToListAsync();
+
             var response = new ServiceResponse<List<NewsDto>>
             {
                 Data = _mapper.Map<List<NewsDto>>(news)
