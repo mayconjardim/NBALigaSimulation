@@ -25,7 +25,7 @@
                         <td>@team.PF</td>
                         <td>@team.PA</td>
                         <td><span style="@GetDiffStyle(team.DIFF)">@GetFormattedDiff(team.DIFF)</span></td>
-                        <td></td>
+                        <td>@GetStreak(team.Streak)</td>
                     </tr>
 
                     @if (index == 7) // 8ª equipe
@@ -65,7 +65,7 @@
                         <td>@team.PF</td>
                         <td>@team.PA</td>
                         <td><span style="@GetDiffStyle(team.DIFF)">@GetFormattedDiff(team.DIFF)</span></td>
-                        <td></td>
+                        <td>@GetStreak(team.Streak)</td>
                     </tr>
 
                     @if (index == 7) // 8ª equipe

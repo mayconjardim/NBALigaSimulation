@@ -40,15 +40,54 @@ namespace NBALigaSimulation.Shared.Engine.Utils
                     awayTeam.TeamRegularStats.Add(AwayGame);
                 }
 
+                //Logica de Streak
                 if (HomeGameStat.Pts > AwayGameStat.Pts)
                 {
                     HomeGame.HomeWins += 1;
                     AwayGame.RoadLosses += 1;
+
+                    if (HomeGame.Streak > 0)
+                    {
+                        HomeGame.Streak += 1;
+                    }
+                    else
+                    {
+                        HomeGame.Streak = 1;
+                    }
+
+                    if (AwayGame.Streak > 0)
+                    {
+                        AwayGame.Streak = 0;
+                    }
+                    else
+                    {
+                        AwayGame.Streak -= 1;
+                    }
+
                 }
                 else
                 {
                     HomeGame.HomeLosses += 1;
                     AwayGame.RoadWins += 1;
+
+                    if (AwayGame.Streak > 0)
+                    {
+                        AwayGame.Streak += 1;
+                    }
+                    else
+                    {
+                        AwayGame.Streak = 1;
+                    }
+
+                    if (HomeGame.Streak > 0)
+                    {
+                        HomeGame.Streak = 0;
+                    }
+                    else
+                    {
+                        HomeGame.Streak -= 1;
+                    }
+
                 }
 
                 //HomeTeam

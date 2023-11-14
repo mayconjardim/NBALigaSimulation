@@ -61,7 +61,23 @@ namespace NBALigaSimulation.Client.Shared.Components
             return $"{style}; font-weight: bold";
         }
 
+        private string GetStreak(int streak)
+        {
 
+            if (streak > 0)
+            {
+                return "W" + streak;
+            }
+            else if (streak < 0)
+            {
+                return "L" + Math.Abs(streak);
+            }
+            else
+            {
+                return "L1";
+            }
+
+        }
 
     }
 }
