@@ -1,6 +1,4 @@
-﻿using System.Globalization;
-
-namespace NBALigaSimulation.Shared.Models
+﻿namespace NBALigaSimulation.Shared.Models
 {
     public class TeamRegularStats
     {
@@ -10,6 +8,7 @@ namespace NBALigaSimulation.Shared.Models
         public Team Team { get; set; }
         public int Season { get; set; }
         public int ConfRank { get; set; }
+        public int Streak { get; set; }
 
         public int HomeWins { get; set; }
         public int HomeLosses { get; set; }

@@ -144,31 +144,6 @@
          </div>
       </MudContainer>
    </MudTabPanel>
-
-      <MudTabPanel Text="Play-by-Play">
-      <MudContainer>
-         <div style="overflow-x: auto">
-                 <table style="margin-top: 15px">
-                    <thead>
-                        <tr>
-                        <th>TIME</th>
-                        <th>PLAY</th>
-                        <th>SCORE</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                         @foreach (var pbp in game.PlayByPlay.Where(p => p.Text != null))
-                         {
-                            <tr>
-                                <td>@pbp.Time</td>
-                                <td style="text-align:left"><MudAvatar Style="vertical-align: middle; background: none; margin-right: 5px" Size="Size.Small" Image=@($"Images/logos/{pbp.TeamName}.svg") Square="true" />@pbp.Text</td>
-                                <td>@pbp.Score</td>
-                            </tr>
-                         }
-                    </tbody>
-                 </table>
-         </div>
-      </MudContainer>
-   </MudTabPanel>
+   
 </MudTabs>
 }

@@ -252,6 +252,7 @@ namespace NBALigaSimulation.Shared.Models
                             teams[t].Players[p].Stats.Find(s => s.GameId == Id).CourtTime = RandomUtils.RandomUniform(-2, 2);
                             teams[t].Players[p].Stats.Find(s => s.GameId == Id).BenchTime = RandomUtils.RandomUniform(-2, 2);
 
+                            /*
                             if (PlayByPlay != null)
                             {
                                 PlayByPlay.Add(new GamePlayByPlay
@@ -262,6 +263,7 @@ namespace NBALigaSimulation.Shared.Models
                                     Off = teams[t].Players[p].Id
                                 });
                             }
+                            */
 
                             if (StartersRecorded)
                             {

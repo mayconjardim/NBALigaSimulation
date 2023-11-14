@@ -16,6 +16,7 @@ namespace NBALigaSimulation.Shared.Dtos
         public string TeamConference { get; set; }
         public int Season { get; set; }
         public int ConfRank { get; set; }
+        public int Streak { get; set; }
 
         public int HomeWins { get; set; }
         public int HomeLosses { get; set; }
