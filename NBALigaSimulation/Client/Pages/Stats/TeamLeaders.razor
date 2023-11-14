@@ -8,23 +8,26 @@
 
  <div class="stats">
 
-   <table>
-    <thead>
-        <tr>
-            <th>POINTS</th>
-            <th>PTS</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var (stats, index) in categoryLists["Pts"].Select((s, i) => (s, i)))
-        {
+     <table>
+        <thead>
             <tr>
-                <td>@(index + 1). <a href=@("/team/" + stats.TeamId)>@stats.TeamName</a></td>
-                <td>@stats.PtsPG</td>
+                <th>POINTS</th>
+                <th>PTS</th>
             </tr>
-        }
-    </tbody>
-   </table>
+        </thead>
+        <tbody>
+            @foreach (var (stats, index) in categoryLists["Pts"].Select((s, i) => (s, i)))
+            {
+                <tr>
+                    <td>
+                       @(index + 1). <a href=@("/team/" + stats.TeamId) >@stats.TeamName</a>
+                    </td>
+                    <td>@stats.PtsPG</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
 
    <table>
     <thead>

@@ -63,3 +63,8 @@ tr:nth-child(even) {
 .playbyplay {
     margin-top: 15px;
 }
+
+.pos {
+    font-size: 10px;
+    vertical-align: top;
+}
