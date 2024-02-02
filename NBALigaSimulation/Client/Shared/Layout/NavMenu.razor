@@ -1,29 +1,11 @@
-﻿<div class="top-row ps-3 navbar navbar-dark">
-    <div class="container-fluid">
-        <a class="navbar-brand" href="">NBALIGA-Basketball.Client</a>
-        <button title="Navigation menu" class="navbar-toggler" @onclick="ToggleNavMenu">
-            <span class="navbar-toggler-icon"></span>
-        </button>
+﻿<nav class="nav menu">
+    <div class="menu-body">
+        <a class="nav-link" href="#">Home</a>
+        <a class="nav-link" href="#">Times</a>
+        <a class="nav-link" href="#">Classificação</a>
+        <a class="nav-link" href="#">Calendário</a>
+        <a class="nav-link" href="#">Estatísticas</a>
+        <a class="nav-link" href="#">Draft</a>
+        <a class="nav-link" href="#">Jogadores</a>
     </div>
-</div>
-
-<div class="@NavMenuCssClass nav-scrollable" @onclick="ToggleNavMenu">
-    <nav class="flex-column">
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
-                <span class="bi bi-house-door-fill-nav-menu" aria-hidden="true"></span> Home
-            </NavLink>
-        </div>
-    </nav>
-</div>
-
-@code {
-    private bool collapseNavMenu = true;
-
-    private string? NavMenuCssClass => collapseNavMenu ? "collapse" : null;
-
-    private void ToggleNavMenu()
-    {
-        collapseNavMenu = !collapseNavMenu;
-    }
-}
+</nav>
