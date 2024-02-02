@@ -1,0 +1,144 @@
+﻿.PHI {
+    background: linear-gradient(rgba(0, 107, 182, 0.8), rgba(0, 107, 182, 3)), url("../Images/Logos/PHI.svg");
+    background-color: #006bb6;
+}
+
+.MIL {
+    background: linear-gradient(rgba(0, 71, 27, 0.8), rgba(0, 71, 27, 3)), url("../Images/Logos/MIL.svg");
+    background-color: #00471b;
+}
+
+.CHI {
+    background: linear-gradient(rgba(206, 17, 65, 0.8), rgba(206, 17, 65, 3)), url("../Images/Logos/CHI.svg");
+    background-color: #ce1141;
+}
+
+.BOS {
+    background: linear-gradient(rgba(0, 122, 51, 0.8), rgba(0, 122, 51, 3)), url("../Images/Logos/BOS.svg");
+    background-color: #007a33;
+}
+
+.LAC {
+    background: linear-gradient(rgba(29, 66, 138, 0.8), rgba(29, 66, 138, 3)), url("../Images/Logos/LAC.svg");
+    background-color: #1d428a;
+}
+
+.MEM {
+    background: linear-gradient(rgba(93, 118, 169, 0.8), rgba(93, 118, 169, 3)), url("../Images/Logos/MEM.svg");
+    background-color: #5d76a9;
+}
+
+.ATL {
+    background: linear-gradient(rgba(200, 16, 46, 0.8), rgba(200, 16, 46, 3)), url("../Images/Logos/ATL.svg");
+    background-color: #c8102e;
+}
+
+.MIA {
+    background: linear-gradient(rgba(152, 0, 46, 0.8), rgba(152, 0, 46, 3)), url("../Images/Logos/MIA.svg");
+    background-color: #98002e;
+}
+
+.CHA {
+    background: linear-gradient(rgba(29, 17, 96, 0.8), rgba(29, 17, 96, 3)), url("../Images/Logos/CHA.svg");
+    background-color: #1d1160;
+}
+
+.UTA {
+    background: linear-gradient(rgba(0, 43, 92, 0.8), rgba(0, 43, 92, 3)), url("../Images/Logos/UTA.svg");
+    background-color: #002b5c;
+}
+
+.NYK {
+    background: linear-gradient(rgba(245, 132, 38, 0.8), rgba(245, 132, 38, 3)), url("../Images/Logos/NYK.svg");
+    background-color: #f58426;
+}
+
+.LAL {
+    background: linear-gradient(rgba(85, 37, 131, 0.8), rgba(85, 37, 131, 3)), url("../Images/Logos/LAL.svg");
+    background-color: #552583;
+}
+
+.DAL {
+    background: linear-gradient(rgba(0, 83, 140, 0.8), rgba(0, 83, 140, 3)), url("../Images/Logos/DAL.svg");
+    background-color: #00538c;
+}
+
+.IND {
+    background: linear-gradient(rgba(0, 45, 98, 0.8), rgba(0, 45, 98, 3)), url("../Images/Logos/IND.svg");
+    background-color: #002d62;
+}
+
+.NOP {
+    background: linear-gradient(rgba(12, 35, 64, 0.8), rgba(12, 35, 64, 3)), url("../Images/Logos/Pacers.svg");
+    background-color: #0c2340;
+}
+
+.DET {
+    background: linear-gradient(rgba(200, 16, 46, 0.8), rgba(200, 16, 46, 3)), url("../Images/Logos/DET.svg");
+    background-color: #c9072a;
+}
+
+.TOR {
+    background: linear-gradient(rgba(206, 17, 65, 0.8), rgba(206, 17, 65, 3)), url("../Images/Logos/TOR.svg");
+    background-color: #ce1141;
+}
+
+.HOU {
+    background: linear-gradient(rgba(189, 27, 33, 0.8), rgba(189, 27, 33, 3)), url("../Images/Logos/HOU.svg");
+    background-color: #bd1b21;
+}
+
+.SAS {
+    background: linear-gradient(rgba(128, 128, 128, 0.8), rgba(128, 128, 128, 3)), url("../Images/Logos/SAS.svg");
+    background-color: #808080;
+}
+
+.OKC {
+    background: linear-gradient(rgba(0, 125, 195, 0.8), rgba(0, 125, 195, 3)), url("../Images/Logos/SEA.svg");
+    background-color: #007ac1;
+}
+
+.MIN {
+    background: linear-gradient(rgba(12, 35, 64, 0.8), rgba(12, 35, 64, 3)), url("../Images/Logos/MIN.svg");
+    background-color: #0c2340;
+}
+
+.POR {
+    background: linear-gradient(rgba(224, 58, 62, 0.8), rgba(224, 58, 62, 3)), url("../Images/Logos/POR.svg");
+    background-color: #e03a3e;
+}
+
+.GSW {
+    background: linear-gradient(rgba(29, 66, 138, 0.8), rgba(29, 66, 138, 3)), url("../Images/Logos/GSW.svg");
+    background-color: #1d428a;
+}
+
+.OKC {
+    background: linear-gradient(rgba(29, 66, 138, 0.8), rgba(29, 66, 138, 3)), url("../Images/Logos/OKC.svg");
+    background-color: #1d428a;
+}
+
+.CLE {
+    background: linear-gradient(rgba(134, 0, 56, 0.8), rgba(134, 0, 56,3)), url("../Images/Logos/CLE.svg");
+    background-color: #1d428a;
+}
+
+.BKN {
+    background: linear-gradient(rgba(0, 1, 1, 0.8), rgba(0, 1, 1, 3)), url("../Images/Logos/BKN.svg");
+    background-color: #000;
+}
+
+.PHO {
+    background: linear-gradient(rgba(229, 95, 32, 0.8), rgba(29, 17, 96, 3)), url("../Images/Logos/PHO.svg");
+    background-color: #1d428a;
+}
+
+.DRAFT {
+    background: linear-gradient(rgba(29, 66, 138, 0.8), rgba(29, 66, 138, 3)), url("../Images/Logos/DRAFT.svg");
+    background-color: #1d428a;
+}
+
+.FA {
+    background: linear-gradient(rgba(29, 66, 138, 0.8), rgba(29, 66, 138, 3)), url("../Images/Logos/FA.svg");
+    background-color: #1d428a;
+}
