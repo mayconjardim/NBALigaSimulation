@@ -9,13 +9,10 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="blazor-dragdrop" Version="2.6.1" />
 		<PackageReference Include="Blazored.LocalStorage" Version="4.4.0" />
 		<PackageReference Include="Microsoft.AspNetCore.Components.Authorization" Version="8.0.1" />
 		<PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="8.0.1" />
 		<PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="8.0.1" PrivateAssets="all" />
-		<PackageReference Include="MudBlazor" Version="6.15.0" />
-		<PackageReference Include="pax.BlazorChartJs" Version="0.8.2" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -24,6 +21,7 @@
 
 	<ItemGroup>
 		<Folder Include="wwwroot\Images\Utils\" />
+		<Folder Include="wwwroot\js\" />
 	</ItemGroup>
 
 	<ItemGroup>

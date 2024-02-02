@@ -1,62 +1,16 @@
 ﻿@inherits LayoutComponentBase
-@using Color = MudBlazor.Color
-@inject ILocalStorageService LocalStorage
-@inject ISeasonService SeasonService
+<div class="page">
+    <div class="sidebar">
+        <NavMenu />
+    </div>
 
-<MudThemeProvider  Theme="myTheme"/>
-<MudDialogProvider />
-<MudSnackbarProvider />
+    <main>
+        <div class="top-row px-4">
+            <a href="https://learn.microsoft.com/aspnet/core/" target="_blank">About</a>
+        </div>
 
-<MudLayout>
-    <MudAppBar  Color="Color.Primary"  Fixed="true">
-        <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" OnClick="@((e) => DrawerToggle())" />
-        <h2>NBALIGA</h2> 
-        <MudSpacer />
-        <Search></Search>
-    </MudAppBar>
-    <MudDrawer @bind-Open="@_drawerOpen">
-        <NavMenu/>
-    </MudDrawer>
-    <MudMainContent>
-        @Body
-    </MudMainContent>
-</MudLayout>
-
-@code {
-
-    protected override async Task OnInitializedAsync()
-    {
-
-            var result = await SeasonService.GetLastSeason();
-            if (!result.Success)
-            {
-            }
-            else
-            {
-                await LocalStorage.SetItemAsync("season", result.Data.Year.ToString());
-            }
-
-    }
-
-    bool _drawerOpen = true;
-
-    void DrawerToggle()
-    {
-        _drawerOpen = !_drawerOpen;
-    }
-
-    private MudTheme myTheme = new()
-    {
-        Palette = new Palette
-        {
-            Primary = "#03234C",
-            Secondary = "#9100C0", //roxo
-            Info = "#094ECA", //azul
-            Success = "#377C00", //verde
-            Warning = "#FFFFFF",//branco
-            Error = "#cf080f", //vermelho
-            AppbarBackground = "#FFFFFF",
-         
-        }
-    };
-}
+        <article class="content px-4">
+            @Body
+        </article>
+    </main>
+</div>

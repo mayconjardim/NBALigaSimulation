@@ -6,7 +6,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
     <title>NBALigaSimulation</title>
     <base href="/" />
-    <link href="_content/MudBlazor/MudBlazor.min.css" rel="stylesheet" />
     <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" rel="stylesheet" />
     <link href="css/app.css" rel="stylesheet" />
     <link href="NBALigaSimulation.Client.styles.css" rel="stylesheet" />
@@ -32,18 +31,8 @@
         <a href="" class="reload">Reload</a>
         <a class="dismiss">🗙</a>
     </div>
-    <script src="js/drag.js"></script>
     <script src="_framework/blazor.webassembly.js"></script>
-    <script src="_content/MudBlazor/MudBlazor.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/mobile-drag-drop@2.3.0-rc.2/index.min.js"></script>
     <script>navigator.serviceWorker.register('service-worker.js');</script>
-    <script>
-        // options are optional ;)
-        MobileDragDrop.polyfill({
-            // use this to make use of the scroll behaviour
-            dragImageTranslateOverride: MobileDragDrop.scrollBehaviourDragImageTranslateOverride
-        });
-    </script>
     <script src="/_framework/aspnetcore-browser-refresh.js"></script>
 </body>
 
