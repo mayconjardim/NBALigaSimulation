@@ -21,7 +21,6 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<Folder Include="wwwroot\Images\Utils\" />
 		<Folder Include="wwwroot\js\" />
 	</ItemGroup>
 
