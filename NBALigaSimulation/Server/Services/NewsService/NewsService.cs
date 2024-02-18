@@ -1,4 +1,6 @@
 ﻿using AutoMapper;
+using NBALigaSimulation.Shared.Dtos.GameNews;
+using NBALigaSimulation.Shared.Models.Utils;
 
 namespace NBALigaSimulation.Server.Services.NewsService
 {

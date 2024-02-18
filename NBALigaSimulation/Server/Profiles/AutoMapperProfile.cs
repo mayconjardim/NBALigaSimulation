@@ -1,4 +1,22 @@
 ﻿using AutoMapper;
+using NBALigaSimulation.Shared.Dtos.Drafts;
+using NBALigaSimulation.Shared.Dtos.FA;
+using NBALigaSimulation.Shared.Dtos.GameNews;
+using NBALigaSimulation.Shared.Dtos.Games;
+using NBALigaSimulation.Shared.Dtos.Players;
+using NBALigaSimulation.Shared.Dtos.Playoffs;
+using NBALigaSimulation.Shared.Dtos.Seasons;
+using NBALigaSimulation.Shared.Dtos.Teams;
+using NBALigaSimulation.Shared.Dtos.Trades;
+using NBALigaSimulation.Shared.Models.Drafts;
+using NBALigaSimulation.Shared.Models.FA;
+using NBALigaSimulation.Shared.Models.GameNews;
+using NBALigaSimulation.Shared.Models.Games;
+using NBALigaSimulation.Shared.Models.Players;
+using NBALigaSimulation.Shared.Models.Season;
+using NBALigaSimulation.Shared.Models.SeasonPlayoffs;
+using NBALigaSimulation.Shared.Models.Teams;
+using NBALigaSimulation.Shared.Models.Trades;
 
 namespace NBALigaSimulation.Server.Profiles
 {
@@ -110,7 +128,6 @@ namespace NBALigaSimulation.Server.Profiles
 
             CreateMap<DraftDto, Draft>();
 
-            CreateMap<GamePlayByPlay, GamePlayByPlayDTO>().ReverseMap();
 
             CreateMap<News, NewsDto>().ReverseMap();
 

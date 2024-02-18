@@ -3,10 +3,10 @@
 }
 
 .navbar-brand  {
-    margin: 0.3rem 1rem;
+    margin: 0.3rem 0.50rem;
     color: white;
     font-weight: 600;
-} 
+}
 
 .navbar-brand img {
     vertical-align: middle;
@@ -14,11 +14,36 @@
 
 .nav-item a {
     padding: 0.625rem;
-    text-decoration: none;
     color: white;
     font-weight: 600;
 }
 
-    .nav-item a:hover {
-        color: grey;
+.nav-item a:hover {
+    color: grey;
+    text-decoration-line: underline;
+    text-underline-offset: 0.5rem;
+    text-decoration-color: white;
+}
+
+.search {
+    width: 45%; 
+}
+
+.search .form-control {
+    background-color: transparent !important;
+    color: white;
+}
+
+.navbar-brand a:hover {
+    text-decoration: none;
+}
+
+@media only screen and (min-width: 601px) {
+    .navbar-brand  {
+        margin: 0.3rem 1rem;
     }
+
+    .search {
+        width: 35%; 
+    }
+}

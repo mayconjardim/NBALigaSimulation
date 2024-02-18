@@ -1,4 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using NBALigaSimulation.Shared.Dtos.Players;
+using NBALigaSimulation.Shared.Models.Utils;
 
 namespace NBALigaSimulation.Server.Controllers
 {

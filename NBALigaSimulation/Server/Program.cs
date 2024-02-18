@@ -10,7 +10,6 @@ global using NBALigaSimulation.Server.Services.SeasonService;
 global using NBALigaSimulation.Server.Services.TradeService;
 global using NBALigaSimulation.Server.Services.FAService;
 global using NBALigaSimulation.Server.Services.StatsService;
-global using NBALigaSimulation.Server.Services.League;
 global using NBALigaSimulation.Server.Services.DraftService;
 global using NBALigaSimulation.Server.Services.AuthService;
 using NBALigaSimulation.Server.Services.NewsService;
@@ -18,6 +17,7 @@ using Microsoft.AspNetCore.Hosting.StaticWebAssets;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Globalization;
+using NBALigaSimulation.Server.Services.LeagueService;
 using NBALigaSimulation.Server.Services.PlayoffsService;
 
 var builder = WebApplication.CreateBuilder(args);

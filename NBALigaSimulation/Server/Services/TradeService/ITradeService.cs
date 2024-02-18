@@ -1,4 +1,5 @@
-﻿using NBALigaSimulation.Shared.Models;
+﻿using NBALigaSimulation.Shared.Dtos.Trades;
+using NBALigaSimulation.Shared.Models.Utils;
 
 namespace NBALigaSimulation.Server.Services.TradeService
 {

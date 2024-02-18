@@ -1,7 +1,8 @@
-﻿using NBALigaSimulation.Shared.Engine;
-using System.Runtime.CompilerServices;
+﻿using NBALigaSimulation.Shared.Engine.Utils;
+using NBALigaSimulation.Shared.Models.Games;
+using NBALigaSimulation.Shared.Models.Teams;
 
-namespace NBALigaSimulation.Shared.Models
+namespace NBALigaSimulation.Shared.Models.Season
 {
     public class Season
     {

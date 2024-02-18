@@ -1,4 +1,7 @@
 ﻿using AutoMapper;
+using NBALigaSimulation.Shared.Dtos.FA;
+using NBALigaSimulation.Shared.Models.FA;
+using NBALigaSimulation.Shared.Models.Utils;
 
 namespace NBALigaSimulation.Server.Services.FAService
 {

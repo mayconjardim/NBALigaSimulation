@@ -1,4 +1,7 @@
-﻿namespace NBALigaSimulation.Server.Services.PlayerService
+﻿using NBALigaSimulation.Shared.Dtos.Players;
+using NBALigaSimulation.Shared.Models.Utils;
+
+namespace NBALigaSimulation.Server.Services.PlayerService
 {
     public interface IPlayerService
     {

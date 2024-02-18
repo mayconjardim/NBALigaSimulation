@@ -1,4 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using NBALigaSimulation.Shared.Dtos.Trades;
+using NBALigaSimulation.Shared.Models.Utils;
 
 namespace NBALigaSimulation.Server.Controllers
 {

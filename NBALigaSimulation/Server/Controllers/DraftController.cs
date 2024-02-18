@@ -1,4 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using NBALigaSimulation.Shared.Dtos.Drafts;
+using NBALigaSimulation.Shared.Models.Utils;
 using Swashbuckle.AspNetCore.Annotations;
 
 namespace NBALigaSimulation.Server.Controllers

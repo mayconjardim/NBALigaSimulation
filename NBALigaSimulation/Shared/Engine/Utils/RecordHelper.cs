@@ -1,6 +1,8 @@
 ﻿using NBALigaSimulation.Shared.Models;
+using NBALigaSimulation.Shared.Models.Players;
+using NBALigaSimulation.Shared.Models.Teams;
 
-namespace NBALigaSimulation.Shared.Engine
+namespace NBALigaSimulation.Shared.Engine.Utils
 {
     public static class RecordHelper
     {

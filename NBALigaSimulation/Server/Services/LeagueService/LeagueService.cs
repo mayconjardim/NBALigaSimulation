@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
+using NBALigaSimulation.Shared.Dtos.Teams;
+using NBALigaSimulation.Shared.Models.Utils;
 
-namespace NBALigaSimulation.Server.Services.League
+namespace NBALigaSimulation.Server.Services.LeagueService
 {
     public class LeagueService : ILeagueService
     {

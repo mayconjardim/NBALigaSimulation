@@ -1,7 +1,4 @@
-﻿
-using NBALigaSimulation.Shared.Dtos;
-
-namespace NBALigaSimulation.Shared.Models
+﻿namespace NBALigaSimulation.Shared.Models.Utils
 {
     public class ServiceResponse<T>
     {
@@ -10,9 +7,5 @@ namespace NBALigaSimulation.Shared.Models
         public bool Success { get; set; } = true;
         public string Message { get; set; } = string.Empty;
 
-        public static implicit operator ServiceResponse<T>(ServiceResponse<List<PlayerSimpleDto>> v)
-        {
-            throw new NotImplementedException();
-        }
     }
 }

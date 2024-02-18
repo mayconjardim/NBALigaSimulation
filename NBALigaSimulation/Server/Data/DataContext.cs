@@ -1,4 +1,15 @@
-﻿namespace NBALigaSimulation.Server.Data
+﻿using NBALigaSimulation.Shared.Models.Drafts;
+using NBALigaSimulation.Shared.Models.FA;
+using NBALigaSimulation.Shared.Models.GameNews;
+using NBALigaSimulation.Shared.Models.Games;
+using NBALigaSimulation.Shared.Models.Players;
+using NBALigaSimulation.Shared.Models.Season;
+using NBALigaSimulation.Shared.Models.SeasonPlayoffs;
+using NBALigaSimulation.Shared.Models.Teams;
+using NBALigaSimulation.Shared.Models.Trades;
+using NBALigaSimulation.Shared.Models.Users;
+
+namespace NBALigaSimulation.Server.Data
 {
     public class DataContext : DbContext
     {
@@ -18,7 +29,6 @@
         public DbSet<PlayerPlayoffsStats> PlayerPlayoffsStats { get; set; }
         public DbSet<PlayerContract> PlayerContracts { get; set; }
         public DbSet<PlayerAwards> PlayerAwards { get; set; }
-        public DbSet<GamePlayByPlay> PlayByPlays { get; set; }
         public DbSet<Season> Seasons { get; set; }
         public DbSet<User> Users { get; set; }
         public DbSet<Trade> Trades { get; set; }
@@ -86,19 +96,6 @@
                     .WithMany()
                     .HasForeignKey(e => e.AwayTeamId)
                     .OnDelete(DeleteBehavior.Restrict);
-
-                entity.HasMany(g => g.PlayByPlay)
-                    .WithOne()
-                    .OnDelete(DeleteBehavior.Cascade);
-            });
-
-            modelBuilder.Entity<GamePlayByPlay>(entity =>
-            {
-                entity.HasKey(e => e.Id);
-
-                entity.HasOne(e => e.Game)
-                    .WithMany(g => g.PlayByPlay)
-                    .OnDelete(DeleteBehavior.Cascade);
             });
 
             modelBuilder.Entity<PlayerGameStats>()

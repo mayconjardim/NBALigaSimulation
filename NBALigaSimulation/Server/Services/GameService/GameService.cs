@@ -1,6 +1,11 @@
 ﻿using AutoMapper;
 using NBALigaSimulation.Server.Services.PlayoffsService;
+using NBALigaSimulation.Shared.Dtos.Games;
 using NBALigaSimulation.Shared.Engine.Utils;
+using NBALigaSimulation.Shared.Models.GameNews;
+using NBALigaSimulation.Shared.Models.Games;
+using NBALigaSimulation.Shared.Models.Season;
+using NBALigaSimulation.Shared.Models.Utils;
 
 namespace NBALigaSimulation.Server.Services.GameService
 {
@@ -132,7 +137,6 @@ namespace NBALigaSimulation.Server.Services.GameService
             .Include(p => p.AwayTeam)
             .Include(p => p.TeamGameStats)
             .Include(p => p.PlayerGameStats)
-            .Include(p => p.PlayByPlay)
             .FirstOrDefaultAsync(p => p.Id == gameId);
 
             if (game == null)

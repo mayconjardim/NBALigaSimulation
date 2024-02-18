@@ -14,4 +14,8 @@
 	<ItemGroup>
 		<SupportedPlatform Include="browser" />
 	</ItemGroup>
+
+	<ItemGroup>
+	  <Folder Include="Engine\GameSim\" />
+	</ItemGroup>
 </Project>

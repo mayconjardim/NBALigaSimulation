@@ -1,7 +1,9 @@
 ﻿using AutoMapper;
-using NBALigaSimulation.Server.Migrations;
 using NBALigaSimulation.Shared.Engine.Utils;
-using System.Collections.Generic;
+using NBALigaSimulation.Shared.Dtos.Drafts;
+using NBALigaSimulation.Shared.Models.Drafts;
+using NBALigaSimulation.Shared.Models.Players;
+using NBALigaSimulation.Shared.Models.Utils;
 
 namespace NBALigaSimulation.Server.Services.DraftService
 {

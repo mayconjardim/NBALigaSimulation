@@ -1,4 +1,4 @@
-﻿namespace NBALigaSimulation.Shared.Engine
+﻿namespace NBALigaSimulation.Shared.Engine.Utils
 {
     public static class RandomUtils
     {

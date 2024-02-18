@@ -1,5 +1,7 @@
 ﻿using NBALigaSimulation.Shared.Models;
-using System;
+using NBALigaSimulation.Shared.Models.Drafts;
+using NBALigaSimulation.Shared.Models.Players;
+using NBALigaSimulation.Shared.Models.Teams;
 
 namespace NBALigaSimulation.Shared.Engine.Utils
 {

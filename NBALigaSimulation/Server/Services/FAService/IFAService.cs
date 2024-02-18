@@ -1,4 +1,7 @@
-﻿namespace NBALigaSimulation.Server.Services.FAService
+﻿using NBALigaSimulation.Shared.Dtos.FA;
+using NBALigaSimulation.Shared.Models.Utils;
+
+namespace NBALigaSimulation.Server.Services.FAService
 {
     public interface IFAService
     {

@@ -1,4 +1,7 @@
 ﻿using AutoMapper;
+using NBALigaSimulation.Shared.Dtos.Players;
+using NBALigaSimulation.Shared.Dtos.Teams;
+using NBALigaSimulation.Shared.Models.Utils;
 
 namespace NBALigaSimulation.Server.Services.TeamService
 {

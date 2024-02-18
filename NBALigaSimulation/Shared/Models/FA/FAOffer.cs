@@ -1,4 +1,7 @@
-﻿namespace NBALigaSimulation.Shared.Models
+﻿using NBALigaSimulation.Shared.Models.Players;
+using NBALigaSimulation.Shared.Models.Teams;
+
+namespace NBALigaSimulation.Shared.Models.FA
 {
     public class FAOffer
     {

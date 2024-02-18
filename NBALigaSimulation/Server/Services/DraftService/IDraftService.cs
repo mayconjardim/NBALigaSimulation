@@ -1,4 +1,7 @@
-﻿namespace NBALigaSimulation.Server.Services.DraftService
+﻿using NBALigaSimulation.Shared.Dtos.Drafts;
+using NBALigaSimulation.Shared.Models.Utils;
+
+namespace NBALigaSimulation.Server.Services.DraftService
 {
     public interface IDraftService
     {

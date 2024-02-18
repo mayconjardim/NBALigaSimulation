@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using NBALigaSimulation.Server.Services.NewsService;
+using NBALigaSimulation.Shared.Dtos.GameNews;
+using NBALigaSimulation.Shared.Models.Utils;
 
 namespace NBALigaSimulation.Server.Controllers
 {

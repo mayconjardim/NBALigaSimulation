@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using NBALigaSimulation.Server.Services.PlayoffsService;
+using NBALigaSimulation.Shared.Dtos.Playoffs;
+using NBALigaSimulation.Shared.Models.Utils;
 
 namespace NBALigaSimulation.Server.Controllers
 {

@@ -1,6 +1,6 @@
-﻿using NBALigaSimulation.Shared.Models;
+﻿using NBALigaSimulation.Shared.Dtos.Games;
 
-namespace NBALigaSimulation.Shared.Dtos
+namespace NBALigaSimulation.Shared.Dtos.Playoffs
 {
     public class PlayoffsDto
     {

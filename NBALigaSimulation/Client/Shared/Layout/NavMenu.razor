@@ -1,10 +1,14 @@
 ﻿<nav class="navbar navbar-expand-lg bg-body-tertiary">
     <div class="container-fluid">
     
-        <a class="navbar-brand" href="#">
+        <a class="navbar-brand" >
             <img  src="Images/Utils/basketball.svg" height="25">
             NBALIGA
         </a>
+        
+         <form class="d-lg-none d-flex search" role="search">
+            <input class="form-control me-2" type="search" placeholder="Procurar Jogador... " aria-label="Search">
+         </form>  
         
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
@@ -43,11 +47,12 @@
                 </li>
                 
             </ul>
-         
-           <form class="d-flex w-50" role="search">
-               <input class="form-control me-2 flex-grow-1" type="search" placeholder="Procurar Jogador..." aria-label="Search">
-           </form>
+            
+               <form class="d-none d-lg-block d-xl-block search ml-auto" role="search">
+                    <input class="form-control me-2" type="search" placeholder="Procurar Jogador" aria-label="Search">
+               </form>
             
         </div>
+        
     </div>
 </nav>

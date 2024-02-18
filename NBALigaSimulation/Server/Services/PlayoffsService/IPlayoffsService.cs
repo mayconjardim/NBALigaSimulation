@@ -1,4 +1,7 @@
-﻿namespace NBALigaSimulation.Server.Services.PlayoffsService
+﻿using NBALigaSimulation.Shared.Dtos.Playoffs;
+using NBALigaSimulation.Shared.Models.Utils;
+
+namespace NBALigaSimulation.Server.Services.PlayoffsService
 {
     public interface IPlayoffsService
     {

@@ -1,4 +1,7 @@
-﻿namespace NBALigaSimulation.Server.Services.GameService
+﻿using NBALigaSimulation.Shared.Dtos.Games;
+using NBALigaSimulation.Shared.Models.Utils;
+
+namespace NBALigaSimulation.Server.Services.GameService
 {
 	public interface IGameService
 	{

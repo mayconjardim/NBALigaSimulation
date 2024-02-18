@@ -1,4 +1,7 @@
-﻿namespace NBALigaSimulation.Server.Services.AuthService
+﻿using NBALigaSimulation.Shared.Models.Utils;
+using User = NBALigaSimulation.Shared.Models.Users.User;
+
+namespace NBALigaSimulation.Server.Services.AuthService
 {
     public interface IAuthService
     {

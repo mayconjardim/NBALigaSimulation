@@ -1,4 +1,4 @@
-﻿namespace NBALigaSimulation.Shared.Dtos
+﻿namespace NBALigaSimulation.Shared.Dtos.FA
 {
     public class FAOfferDto
     {
