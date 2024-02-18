@@ -1,7 +1,8 @@
 ﻿using NBALigaSimulation.Shared.Engine;
-using NBALigaSimulation.Shared.Engine.Action.Gameplan;
 using NBALigaSimulation.Shared.Engine.Utils;
 using System.ComponentModel.DataAnnotations.Schema;
+using NBALigaSimulation.Shared.Engine.Gameplan;
+using NBALigaSimulation.Shared.Engine.Ratings;
 
 namespace NBALigaSimulation.Shared.Models
 {

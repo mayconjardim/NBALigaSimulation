@@ -1,7 +1,7 @@
 ﻿using NBALigaSimulation.Shared.Models;
 using System.Linq;
 
-namespace NBALigaSimulation.Shared.Engine
+namespace NBALigaSimulation.Shared.Engine.Ratings
 {
     public static class CompositeHelper
     {

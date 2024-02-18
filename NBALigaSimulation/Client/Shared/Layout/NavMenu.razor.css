@@ -1,39 +1,24 @@
-﻿.menu {
-    display: flex;
+﻿.navbar {
     background: var(--primary-color);
-    height: 4.5rem;
-    align-items: center;
-    justify-content: space-between; 
-    padding: 0 10px;
 }
 
-.brand {
-    margin: 0.3rem;
+.navbar-brand  {
+    margin: 0.3rem 1rem;
     color: white;
-    margin-right: auto; 
+    font-weight: 600;
 } 
 
-.brand img {
-    vertical-align: top;
+.navbar-brand img {
+    vertical-align: middle;
 }
 
-.menu-body {
-    display: flex;
-    align-items: center;
-    overflow-x: auto;
-    white-space: nowrap;
-    -webkit-overflow-scrolling: touch;
-    justify-content: center; 
-}
-
-.menu a {
-    display: inline-block;
-    padding: 10px;
+.nav-item a {
+    padding: 0.625rem;
     text-decoration: none;
     color: white;
     font-weight: 600;
 }
 
-    .menu a:hover {
+    .nav-item a:hover {
         color: grey;
     }

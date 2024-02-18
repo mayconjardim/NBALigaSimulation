@@ -1,4 +1,4 @@
-﻿namespace NBALigaSimulation.Shared.Engine.Action.Gameplan
+﻿namespace NBALigaSimulation.Shared.Engine.Gameplan
 {
     public static class GameplanUtils
     {
