@@ -2,7 +2,7 @@
 using NBALigaSimulation.Shared.Models.Games;
 using NBALigaSimulation.Shared.Models.Teams;
 
-namespace NBALigaSimulation.Shared.Models.Season
+namespace NBALigaSimulation.Shared.Models.Seasons
 {
     public class Season
     {

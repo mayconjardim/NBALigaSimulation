@@ -13,8 +13,8 @@ using NBALigaSimulation.Shared.Models.FA;
 using NBALigaSimulation.Shared.Models.GameNews;
 using NBALigaSimulation.Shared.Models.Games;
 using NBALigaSimulation.Shared.Models.Players;
-using NBALigaSimulation.Shared.Models.Season;
 using NBALigaSimulation.Shared.Models.SeasonPlayoffs;
+using NBALigaSimulation.Shared.Models.Seasons;
 using NBALigaSimulation.Shared.Models.Teams;
 using NBALigaSimulation.Shared.Models.Trades;
 

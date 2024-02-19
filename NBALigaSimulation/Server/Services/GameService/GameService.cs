@@ -1,10 +1,11 @@
 ﻿using AutoMapper;
 using NBALigaSimulation.Server.Services.PlayoffsService;
 using NBALigaSimulation.Shared.Dtos.Games;
+using NBALigaSimulation.Shared.Engine.GameSim.GameStart;
 using NBALigaSimulation.Shared.Engine.Utils;
 using NBALigaSimulation.Shared.Models.GameNews;
 using NBALigaSimulation.Shared.Models.Games;
-using NBALigaSimulation.Shared.Models.Season;
+using NBALigaSimulation.Shared.Models.Seasons;
 using NBALigaSimulation.Shared.Models.Utils;
 
 namespace NBALigaSimulation.Server.Services.GameService
@@ -74,7 +75,7 @@ namespace NBALigaSimulation.Server.Services.GameService
 
             await _context.SaveChangesAsync();
 
-            game.GameSim();
+            GameSimulation.Sim(game);
 
             await _context.SaveChangesAsync();
 
@@ -107,7 +108,7 @@ namespace NBALigaSimulation.Server.Services.GameService
                     return response;
                 }
 
-                game.GameSim(); // Simula o jogo
+                GameSimulation.Sim(game);
 
                 await _context.SaveChangesAsync();
             }
@@ -236,7 +237,7 @@ namespace NBALigaSimulation.Server.Services.GameService
 
                 await _context.SaveChangesAsync();
 
-                game.GameSim();
+                GameSimulation.Sim(game);
                 game.Happened = true;
 
 
@@ -323,7 +324,8 @@ namespace NBALigaSimulation.Server.Services.GameService
 
                     await _context.SaveChangesAsync();
 
-                    game.GameSim();
+                   
+
                     game.Happened = true;
 
                     await _context.SaveChangesAsync();
@@ -470,7 +472,7 @@ namespace NBALigaSimulation.Server.Services.GameService
 
                 await _context.SaveChangesAsync();
 
-                game.GameSim();
+                GameSimulation.Sim(game);
                 game.Happened = true;
 
 

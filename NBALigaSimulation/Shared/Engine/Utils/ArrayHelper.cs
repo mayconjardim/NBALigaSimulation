@@ -1,6 +1,5 @@
-﻿using NBALigaSimulation.Shared.Models;
-using NBALigaSimulation.Shared.Models.Players;
-using NBALigaSimulation.Shared.Models.Season;
+﻿using NBALigaSimulation.Shared.Models.Players;
+using NBALigaSimulation.Shared.Models.Seasons;
 
 namespace NBALigaSimulation.Shared.Engine.Utils
 {
