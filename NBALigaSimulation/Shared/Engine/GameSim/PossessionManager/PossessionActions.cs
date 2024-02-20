@@ -1,3 +1,4 @@
+using NBALigaSimulation.Shared.Engine.GameSim.ProbabilityManager;
 using NBALigaSimulation.Shared.Models.Games;
 using NBALigaSimulation.Shared.Models.Teams;
 
@@ -67,7 +68,7 @@ public static class PossessionActions
             
             public static string GetPossessionOutcome(Game game, Team[] Teams, int[][] PlayersOnCourt)
             {
-                if (game.ProbTov(Teams) > new Random().NextDouble())
+                if (ProbabilityActions.ProbTov(game, Teams) > new Random().NextDouble())
                 {
                     return game.DoTov(Teams, PlayersOnCourt);
                 }
