@@ -399,20 +399,7 @@ namespace NBALigaSimulation.Shared.Models.Games
         }
 
   
-        public string DoStl(int pStoleFrom, Team[] Teams, int[][] PlayersOnCourt)
-        {
-            double[] ratios = RatingArray(Teams, "Stealing", Defense, PlayersOnCourt, 4);
-            int playerIndex = PickPlayer(ratios);
-            var p = PlayersOnCourt[Defense][playerIndex];
-
-            RecordStat(Defense, p, "Stl", Teams);
-
-            string[] names = { Teams[Defense].Players[p].Name, Teams[Offense].Players[pStoleFrom].Name, };
-            //RecordPlay"Stl", Teams, Defense, names);
-
-            return "Stl";
-        }
-
+        
         public string DoShot(int shooter, Team[] Teams, int[][] PlayersOnCourt)
         {
 
@@ -581,52 +568,7 @@ namespace NBALigaSimulation.Shared.Models.Games
             return DoReb(Teams, PlayersOnCourt);
 
         }
-
-      
-
-        public string DoBlk(int shooter, string type, Team[] Teams, int[][] PlayersOnCourt)
-        {
-            int p = PlayersOnCourt[Offense][shooter];
-
-            double[] blockingRatios = RatingArray(Teams, "Blocking", Defense, PlayersOnCourt, 10);
-            int p2 = PlayersOnCourt[Defense][PickPlayer(blockingRatios)];
-
-            RecordStat(Offense, p, "Fga", Teams);
-
-            if (type == "AtRim")
-            {
-                RecordStat(Offense, p, "FgaAtRim", Teams);
-
-                string[] names = { Teams[Defense].Players[p2].Name, Teams[Offense].Players[p].Name };
-                //RecordPlay"BlkAtRim", Teams, Defense, names);
-            }
-            else if (type == "LowPost")
-            {
-                RecordStat(Offense, p, "FgaLowPost", Teams);
-
-                string[] names = { Teams[Defense].Players[p2].Name, Teams[Offense].Players[p].Name };
-                //RecordPlay"BlkLowPost", Teams, Defense, names);
-            }
-            else if (type == "MidRange")
-            {
-                RecordStat(Offense, p, "FgaMidRange", Teams);
-
-                string[] names = { Teams[Defense].Players[p2].Name, Teams[Offense].Players[p].Name };
-                //RecordPlay"BlkMidRange", Teams, Defense, names);
-            }
-            else if (type == "ThreePointer")
-            {
-                RecordStat(Offense, p, "Tpa", Teams);
-
-                string[] names = { Teams[Defense].Players[p2].Name, Teams[Offense].Players[p].Name };
-                //RecordPlay"BlkTp", Teams, Defense, names);
-            }
-
-            RecordStat(Defense, p2, "Blk", Teams);
-
-            return DoReb(Teams, PlayersOnCourt);
-        }
-
+        
         public string DoFg(int shooter, int? passer, string type, Team[] Teams, int[][] PlayersOnCourt, bool andOne = false)
         {
 
@@ -728,66 +670,8 @@ namespace NBALigaSimulation.Shared.Models.Games
             return outcome;
         }
 
-        public void DoPf(int t, Team[] Teams, int[][] PlayersOnCourt)
-        {
-
-            double[] ratios = RatingArray(Teams, "Fouling", t, PlayersOnCourt, 2);
-            int p = PlayersOnCourt[t][PickPlayer(ratios)];
-            RecordStat(Defense, p, "Pf", Teams);
-
-
-            string[] names = { Teams[Defense].Players[p].Name };
-            //RecordPlay"Pf", Teams, Defense, names);
-
-            var player = Teams[Defense].Players.Find(player => player.RosterOrder == p);
-
-            if (player.Stats.Find(s => s.GameId == Id).Pf >= 6)
-            {
-
-                //RecordPlay"FoulOut", Teams, Defense, names);
-
-                UpdatePlayersOnCourt(Teams, PlayersOnCourt);
-                UpdateSynergy(Teams, PlayersOnCourt);
-            }
-        }
-
-        public string DoReb(Team[] Teams, int[][] PlayersOnCourt)
-        {
-            int p;
-            double[] ratios;
-
-            if (new Random().NextDouble() < 0.15)
-            {
-                return null;
-            }
-
-            double defensiveReboundChance = (0.75 * (2 + Teams[Defense].CompositeRating.Ratings["GameRebounding"])) /
-                (1 * (2 + Teams[Offense].CompositeRating.Ratings["GameRebounding"]));
-
-            if (defensiveReboundChance > new Random().NextDouble())
-            {
-                ratios = RatingArray(Teams, "Rebounding", Defense, PlayersOnCourt, 10);
-                p = PlayersOnCourt[Defense][PickPlayer(ratios)];
-                RecordStat(Defense, p, "Drb", Teams);
-                RecordStat(Defense, p, "Trb", Teams);
-
-                string[] name = { Teams[Defense].Players[p].Name };
-                //RecordPlay"Drb", Teams, Defense, name);
-
-                return "Drb";
-            }
-
-            ratios = RatingArray(Teams, "Rebounding", Offense, PlayersOnCourt, 5);
-            int oP = PlayersOnCourt[Offense][PickPlayer(ratios)];
-            RecordStat(Offense, oP, "Orb", Teams);
-            RecordStat(Offense, oP, "Trb", Teams);
-
-            string[] names = { Teams[Offense].Players[oP].Name };
-            //RecordPlay"Orb", Teams, Defense, names);
-
-            return "Orb";
-        }
-
+       
+        
         public double[] RatingArray(Team[] Teams, string rating, int t, int[][] PlayersOnCourt, double power = 1)
         {
             double[] array = new double[5];
