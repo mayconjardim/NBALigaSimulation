@@ -208,8 +208,7 @@ public static class CourtActions
                 Teams[t].Synergy.Reb = 0;
                 Teams[t].Synergy.Reb += RandomUtils.Sigmoid(skillsCount["R"], 15, 0.75) + RandomUtils.Sigmoid(skillsCount["R"], 5, 1.75);
                 Teams[t].Synergy.Reb /= 4;
-
-
+                
             }
         }
 
