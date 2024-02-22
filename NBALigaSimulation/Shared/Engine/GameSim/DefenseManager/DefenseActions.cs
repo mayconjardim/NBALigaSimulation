@@ -18,26 +18,18 @@ public static class DefenseActions
         if (type == "AtRim")
         {
             RecordStat(game.Offense, p, "FgaAtRim", Teams);
-
-            string[] names = { Teams[game.Defense].Players[p2].Name, Teams[game.Offense].Players[p].Name };
         }
         else if (type == "LowPost")
         {
             RecordStat(game.Offense, p, "FgaLowPost", Teams);
-
-            string[] names = { Teams[game.Defense].Players[p2].Name, Teams[game.Offense].Players[p].Name };
         }
         else if (type == "MidRange")
         {
             RecordStat(game.Offense, p, "FgaMidRange", Teams);
-
-            string[] names = { Teams[game.Defense].Players[p2].Name, Teams[game.Offense].Players[p].Name };
         }
         else if (type == "ThreePointer")
         {
             RecordStat(game.Offense, p, "Tpa", Teams);
-
-            string[] names = { Teams[game.Defense].Players[p2].Name, Teams[game.Offense].Players[p].Name };
         }
 
         RecordStat(game.Defense, p2, "Blk", Teams);
