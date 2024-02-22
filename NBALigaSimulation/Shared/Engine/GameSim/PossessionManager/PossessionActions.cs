@@ -1,4 +1,8 @@
+using NBALigaSimulation.Shared.Engine.GameSim.CourtManager;
+using NBALigaSimulation.Shared.Engine.GameSim.OffenseManager;
+using NBALigaSimulation.Shared.Engine.GameSim.PlayerManager;
 using NBALigaSimulation.Shared.Engine.GameSim.ProbabilityManager;
+using NBALigaSimulation.Shared.Engine.Ratings;
 using NBALigaSimulation.Shared.Models.Games;
 using NBALigaSimulation.Shared.Models.Teams;
 
@@ -38,7 +42,7 @@ public static class PossessionActions
                     game.Offense = (game.Offense == 1) ? 0 : 1;
                     game.Defense = (game.Offense == 1) ? 0 : 1;
     
-                    game.UpdateTeamCompositeRatings(Teams, PlayersOnCourt);
+                    CompositeHelper.UpdateTeamCompositeRatings(game, Teams, PlayersOnCourt);
     
                     outcome = GetPossessionOutcome(game, Teams, PlayersOnCourt);
     
@@ -49,16 +53,16 @@ public static class PossessionActions
                         game.Defense = (game.Offense == 1) ? 0 : 1;
                     }
     
-                    game.UpdatePlayingTime(Teams, PlayersOnCourt);
+                    PlayerActions.UpdatePlayingTime(game, Teams, PlayersOnCourt);
     
                     //Injuries();
     
                     if (i % game.SubsEveryN == 0)
                     {
-                        substitutions = game.UpdatePlayersOnCourt(Teams, PlayersOnCourt);
+                        substitutions = CourtActions.UpdatePlayersOnCourt(game, Teams, PlayersOnCourt);
                         if (substitutions)
                         {
-                            game.UpdateSynergy(Teams, PlayersOnCourt);
+                            CourtActions.UpdateSynergy(game, Teams, PlayersOnCourt);
                         }
                     }
     
@@ -70,12 +74,12 @@ public static class PossessionActions
             {
                 if (ProbabilityActions.ProbTov(game, Teams) > new Random().NextDouble())
                 {
-                    return game.DoTov(Teams, PlayersOnCourt);
+                    return OffenseActions.DoTov(game, Teams, PlayersOnCourt);
                 }
 
-                double[] ratios = game.RatingArray(Teams, "Usage", game.Offense, PlayersOnCourt, 10);
-                int shooterIndex = game.PickPlayer(ratios);
+                double[] ratios = PlayerActions.RatingArray(game, Teams, "Usage", game.Offense, PlayersOnCourt, 10);
+                int shooterIndex = PlayerActions.PickPlayer(ratios);
 
-                return game.DoShot(shooterIndex, Teams, PlayersOnCourt);
+                return OffenseActions.DoShot(game, shooterIndex, Teams, PlayersOnCourt);
             }
 }

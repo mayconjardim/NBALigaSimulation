@@ -1,5 +1,6 @@
 using NBALigaSimulation.Shared.Engine.Gameplan;
 using NBALigaSimulation.Shared.Engine.GameSim.DefenseManager;
+using NBALigaSimulation.Shared.Engine.GameSim.PlayerManager;
 using NBALigaSimulation.Shared.Engine.GameSim.ProbabilityManager;
 using NBALigaSimulation.Shared.Engine.Utils;
 using NBALigaSimulation.Shared.Models.Games;
@@ -16,14 +17,14 @@ public static class OffenseActions
             int p = PlayersOnCourt[game.Offense][shooter];
             var player = Teams[game.Offense].Players.Find(player => player.RosterOrder == p);
 
-            double currentFatigue = Fatigue(Teams[game.Offense].Players[p].Stats.Find(s => s.GameId == game.Id).Energy);
+            double currentFatigue = PlayerActions.Fatigue(Teams[game.Offense].Players[p].Stats.Find(s => s.GameId == game.Id).Energy);
 
             int? passer = null;
 
             if (ProbabilityActions.ProbAst(game, Teams) > new Random().NextDouble())
             {
-                double[] ratios = RatingArray(Teams, "Passing", game.Offense, PlayersOnCourt, 10);
-                passer = PickPlayer(ratios, shooter);
+                double[] ratios = PlayerActions.RatingArray(game, Teams, "Passing", game.Offense, PlayersOnCourt, 10);
+                passer = PlayerActions.PickPlayer(ratios, shooter);
             }
 
             double shootingThreePointerScaled = player.CompositeRating.Ratings["ShootingThreePointer"];
@@ -134,37 +135,37 @@ public static class OffenseActions
             {
                 if (probAndOne > new Random().NextDouble())
                 {
-                    return DoFg(shooter, passer, type, Teams, PlayersOnCourt, true);
+                    return DoFg(game, shooter, passer, type, Teams, PlayersOnCourt, true);
                 }
 
-                return DoFg(shooter, passer, type, Teams, PlayersOnCourt);
+                return DoFg(game, shooter, passer, type, Teams, PlayersOnCourt);
             }
 
             if (probMissAndFoul > new Random().NextDouble())
             {
                 if (type == "ThreePointer")
                 {
-                    return DoFt(shooter, 3, Teams, PlayersOnCourt); // fg, orb, or drb
+                    return DoFt(game, shooter, 3, Teams, PlayersOnCourt); // fg, orb, or drb
                 }
-                return DoFt(shooter, 2, Teams, PlayersOnCourt); // fg, orb, or drb
+                return DoFt(game, shooter, 2, Teams, PlayersOnCourt); // fg, orb, or drb
             }
 
-            RecordStat(game.Offense, p, "Fga", Teams);
+            PlayerActions.RecordStat(game, game.Offense, p, "Fga", Teams);
             if (type == "AtRim")
             {
-                RecordStat(game.Offense, p, "FgaAtRim", Teams);
+                PlayerActions.RecordStat(game, game.Offense, p, "FgaAtRim", Teams);
             }
             else if (type == "LowPost")
             {
-                RecordStat(game.Offense, p, "FgaLowPost", Teams);
+                PlayerActions.RecordStat(game, game.Offense, p, "FgaLowPost", Teams);
             }
             else if (type == "MidRange")
             {
-                RecordStat(game.Offense, p, "FgaMidRange", Teams);
+                PlayerActions.RecordStat(game, game.Offense, p, "FgaMidRange", Teams);
             }
             else if (type == "ThreePointer")
             {
-                RecordStat(game.Offense, p, "Tpa", Teams);
+                PlayerActions.RecordStat(game, game.Offense, p, "Tpa", Teams);
             }
 
             return DefenseActions.DoReb(game, Teams, PlayersOnCourt);
@@ -175,39 +176,39 @@ public static class OffenseActions
      {
 
          int p = PlayersOnCourt[game.Offense][shooter];
-         RecordStat(game.Offense, p, "Fga", Teams);
-         RecordStat(game.Offense, p, "Fg", Teams);
-         RecordStat(game.Offense, p, "Pts", Teams, 2);
+         PlayerActions.RecordStat(game, game.Offense, p, "Fga", Teams);
+         PlayerActions.RecordStat(game, game.Offense, p, "Fg", Teams);
+         PlayerActions.RecordStat(game, game.Offense, p, "Pts", Teams, 2);
 
          if (type == "AtRim")
          {
-             RecordStat(game.Offense, p, "FgaAtRim", Teams);
-             RecordStat(game.Offense, p, "FgAtRim", Teams);
+             PlayerActions.RecordStat(game, game.Offense, p, "FgaAtRim", Teams);
+             PlayerActions.RecordStat(game, game.Offense, p, "FgAtRim", Teams);
              
          }
          else if (type == "LowPost")
          {
-             RecordStat(game.Offense, p, "FgaLowPost", Teams);
-             RecordStat(game.Offense, p, "FgLowPost", Teams);
+             PlayerActions.RecordStat(game, game.Offense, p, "FgaLowPost", Teams);
+             PlayerActions.RecordStat(game, game.Offense, p, "FgLowPost", Teams);
 
          }
          else if (type == "MidRange")
          {
-             RecordStat(game.Offense, p, "FgaMidRange", Teams);
-             RecordStat(game.Offense, p, "FgMidRange", Teams);
+             PlayerActions.RecordStat(game, game.Offense, p, "FgaMidRange", Teams);
+             PlayerActions.RecordStat(game, game.Offense, p, "FgMidRange", Teams);
              
          }
          else if (type == "ThreePointer")
          {
-             RecordStat(game.Offense, p, "Pts", Teams);
-             RecordStat(game.Offense, p, "Tpa", Teams);
-             RecordStat(game.Offense, p, "Tp", Teams);
+             PlayerActions.RecordStat(game, game.Offense, p, "Pts", Teams);
+             PlayerActions.RecordStat(game, game.Offense, p, "Tpa", Teams);
+             PlayerActions.RecordStat(game, game.Offense, p, "Tp", Teams);
          }
 
          if (passer.HasValue)
          {
              int p2 = PlayersOnCourt[game.Offense][passer.Value];
-             RecordStat(game.Offense, p2, "Ast", Teams);
+             PlayerActions.RecordStat(game, game.Offense, p2, "Ast", Teams);
          }
 
          if (andOne)
@@ -230,11 +231,11 @@ public static class OffenseActions
          string outcome = null;
          for (int i = 0; i < amount; i++)
          {
-             RecordStat(game.Offense, p, "Fta", Teams);
+             PlayerActions.RecordStat(game, game.Offense, p, "Fta", Teams);
              if (new Random().NextDouble() < ftp)
              {
-                 RecordStat(game.Offense, p, "Ft", Teams);
-                 RecordStat(game.Offense, p, "Pts", Teams);
+                 PlayerActions.RecordStat(game, game.Offense, p, "Ft", Teams);
+                 PlayerActions.RecordStat(game, game.Offense, p, "Pts", Teams);
                  outcome = "Fg";
              }
              else
@@ -253,11 +254,11 @@ public static class OffenseActions
      
      public static string DoTov(Game game, Team[] Teams, int[][] PlayersOnCourt)
      {
-         double[] ratios = RatingArray(Teams, "Turnovers", game.Offense, PlayersOnCourt, 2);
-         int playerIndex = PickPlayer(ratios);
+         double[] ratios = PlayerActions.RatingArray(game, Teams, "Turnovers", game.Offense, PlayersOnCourt, 2);
+         int playerIndex = PlayerActions.PickPlayer(ratios);
          var p = PlayersOnCourt[game.Offense][playerIndex];
 
-         RecordStat(game.Offense, p, "Tov", Teams);
+         PlayerActions.RecordStat(game, game.Offense, p, "Tov", Teams);
 
          if (ProbabilityActions.ProbStl(game, Teams) > new Random().NextDouble())
          {

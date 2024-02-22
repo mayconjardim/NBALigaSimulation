@@ -1,3 +1,5 @@
+using NBALigaSimulation.Shared.Engine.GameSim.CourtManager;
+using NBALigaSimulation.Shared.Engine.GameSim.PlayerManager;
 using NBALigaSimulation.Shared.Models.Games;
 using NBALigaSimulation.Shared.Models.Teams;
 
@@ -10,29 +12,29 @@ public static class DefenseActions
     {
         int p = PlayersOnCourt[game.Offense][shooter];
 
-        double[] blockingRatios = RatingArray(Teams, "Blocking", game.Defense, PlayersOnCourt, 10);
-        int p2 = PlayersOnCourt[game.Defense][PickPlayer(blockingRatios)];
+        double[] blockingRatios = PlayerActions.RatingArray(game, Teams, "Blocking", game.Defense, PlayersOnCourt, 10);
+        int p2 = PlayersOnCourt[game.Defense][PlayerActions.PickPlayer(blockingRatios)];
 
-        RecordStat(game.Offense, p, "Fga", Teams);
+        PlayerActions.RecordStat(game, game.Offense, p, "Fga", Teams);
 
         if (type == "AtRim")
         {
-            RecordStat(game.Offense, p, "FgaAtRim", Teams);
+            PlayerActions.RecordStat(game, game.Offense, p, "FgaAtRim", Teams);
         }
         else if (type == "LowPost")
         {
-            RecordStat(game.Offense, p, "FgaLowPost", Teams);
+            PlayerActions.RecordStat(game, game.Offense, p, "FgaLowPost", Teams);
         }
         else if (type == "MidRange")
         {
-            RecordStat(game.Offense, p, "FgaMidRange", Teams);
+            PlayerActions.RecordStat(game, game.Offense, p, "FgaMidRange", Teams);
         }
         else if (type == "ThreePointer")
         {
-            RecordStat(game.Offense, p, "Tpa", Teams);
+            PlayerActions.RecordStat(game, game.Offense, p, "Tpa", Teams);
         }
 
-        RecordStat(game.Defense, p2, "Blk", Teams);
+        PlayerActions.RecordStat(game, game.Defense, p2, "Blk", Teams);
 
         return DoReb(game, Teams, PlayersOnCourt);
     }
@@ -52,20 +54,20 @@ public static class DefenseActions
 
         if (defensiveReboundChance > new Random().NextDouble())
         {
-            ratios = RatingArray(Teams, "Rebounding", game.Defense, PlayersOnCourt, 10);
-            p = PlayersOnCourt[game.Defense][PickPlayer(ratios)];
-            RecordStat(game.Defense, p, "Drb", Teams);
-            RecordStat(game.Defense, p, "Trb", Teams);
+            ratios = PlayerActions.RatingArray(game, Teams, "Rebounding", game.Defense, PlayersOnCourt, 10);
+            p = PlayersOnCourt[game.Defense][PlayerActions.PickPlayer(ratios)];
+            PlayerActions.RecordStat(game, game.Defense, p, "Drb", Teams);
+            PlayerActions.RecordStat(game, game.Defense, p, "Trb", Teams);
 
             string[] name = { Teams[game.Defense].Players[p].Name };
 
             return "Drb";
         }
 
-        ratios = RatingArray(Teams, "Rebounding", game.Offense, PlayersOnCourt, 5);
-        int oP = PlayersOnCourt[game.Offense][PickPlayer(ratios)];
-        RecordStat(Offense, oP, "Orb", Teams);
-        RecordStat(Offense, oP, "Trb", Teams);
+        ratios = PlayerActions.RatingArray(game, Teams, "Rebounding", game.Offense, PlayersOnCourt, 5);
+        int oP = PlayersOnCourt[game.Offense][PlayerActions.PickPlayer(ratios)];
+        PlayerActions.RecordStat(game, game.Offense, oP, "Orb", Teams);
+        PlayerActions.RecordStat(game, game.Offense, oP, "Trb", Teams);
 
         string[] names = { Teams[game.Offense].Players[oP].Name };
 
@@ -75,9 +77,9 @@ public static class DefenseActions
     public static void DoPf(Game game, int t, Team[] Teams, int[][] PlayersOnCourt)
     {
 
-        double[] ratios = RatingArray(Teams, "Fouling", t, PlayersOnCourt, 2);
-        int p = PlayersOnCourt[t][PickPlayer(ratios)];
-        RecordStat(game.Defense, p, "Pf", Teams);
+        double[] ratios = PlayerActions.RatingArray(game, Teams, "Fouling", t, PlayersOnCourt, 2);
+        int p = PlayersOnCourt[t][PlayerActions.PickPlayer(ratios)];
+        PlayerActions.RecordStat(game, game.Defense, p, "Pf", Teams);
 
         string[] names = { Teams[game.Defense].Players[p].Name };
 
@@ -85,18 +87,18 @@ public static class DefenseActions
 
         if (player.Stats.Find(s => s.GameId == game.Id).Pf >= 6)
         {
-            UpdatePlayersOnCourt(Teams, PlayersOnCourt);
-            UpdateSynergy(Teams, PlayersOnCourt);
+            CourtActions.UpdatePlayersOnCourt(game, Teams, PlayersOnCourt);
+            CourtActions.UpdateSynergy(game, Teams, PlayersOnCourt);
         }
     }
     
     public static string DoStl(Game game,int pStoleFrom, Team[] Teams, int[][] PlayersOnCourt)
     {
-        double[] ratios = RatingArray(Teams, "Stealing", game.Defense, PlayersOnCourt, 4);
-        int playerIndex = PickPlayer(ratios);
+        double[] ratios = PlayerActions.RatingArray(game, Teams, "Stealing", game.Defense, PlayersOnCourt, 4);
+        int playerIndex = PlayerActions.PickPlayer(ratios);
         var p = PlayersOnCourt[game.Defense][playerIndex];
 
-        RecordStat(game.Defense, p, "Stl", Teams);
+        PlayerActions.RecordStat(game, game.Defense, p, "Stl", Teams);
 
         return "Stl";
     }

@@ -1,4 +1,5 @@
-﻿using NBALigaSimulation.Shared.Engine.Utils;
+﻿using NBALigaSimulation.Shared.Engine.GameSim.PlayerManager;
+using NBALigaSimulation.Shared.Engine.Utils;
 using NBALigaSimulation.Shared.Models.Games;
 using NBALigaSimulation.Shared.Models.Players;
 using NBALigaSimulation.Shared.Models.Teams;
@@ -286,7 +287,7 @@ namespace NBALigaSimulation.Shared.Engine.Ratings
             }
 
         }
-        public void UpdateTeamCompositeRatings(Game game, Team[] teams, int[][] playersOnCourt)
+        public static void UpdateTeamCompositeRatings(Game game, Team[] teams, int[][] playersOnCourt)
         {
             string[] toUpdate = { "GameDribbling", "GamePassing", "GameRebounding", "GameDefense", "GameDefensePerimeter", "GameBlocking", "GamePace" };
 
@@ -335,7 +336,7 @@ namespace NBALigaSimulation.Shared.Engine.Ratings
                             ratingValue = playerRatings.Ratings["Blocking"];
                         }
 
-                        teams[i].CompositeRating.Ratings[rating] += ratingValue * Fatigue(teams[i].Players.Find(player 
+                        teams[i].CompositeRating.Ratings[rating] += ratingValue * PlayerActions.Fatigue(teams[i].Players.Find(player 
                             => player.RosterOrder == playerRosterOrder).Stats.Find(s => s.GameId == game.Id).Energy);
                         rats = rating;
                     }

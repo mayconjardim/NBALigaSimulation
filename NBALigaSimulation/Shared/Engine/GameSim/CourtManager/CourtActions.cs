@@ -1,3 +1,4 @@
+using NBALigaSimulation.Shared.Engine.GameSim.PlayerManager;
 using NBALigaSimulation.Shared.Engine.Utils;
 using NBALigaSimulation.Shared.Models.Games;
 using NBALigaSimulation.Shared.Models.Players;
@@ -38,7 +39,7 @@ public static class CourtActions
 
                     if (teams[t].Players[p].Stats.Find(s => s.GameId == game.Id)?.Pf < 6)
                     {
-                        ovrs[p] = teams[t].Players[p].Ratings.LastOrDefault().CalculateOvr * Fatigue(teams[t].Players[p].Stats.Find(s => 
+                        ovrs[p] = teams[t].Players[p].Ratings.LastOrDefault().CalculateOvr * PlayerActions.Fatigue(teams[t].Players[p].Stats.Find(s => 
                                       s.GameId == game.Id).Energy) *
                               teams[t].Players[p].PtModifier * RandomUtils.RandomUniform(0.9, 1.1);
                     }
@@ -97,7 +98,7 @@ public static class CourtActions
                             }
                             if ((numG < 2 && numPG == 0) || (numF < 2 && numC == 0))
                             {
-                                if (Fatigue(teams[t].Players[p].Stats.Find(s => s.GameId == game.Id).Energy) > 0.7)
+                                if (PlayerActions.Fatigue(teams[t].Players[p].Stats.Find(s => s.GameId == game.Id).Energy) > 0.7)
                                 {
                                     continue;
                                 }
@@ -136,7 +137,7 @@ public static class CourtActions
 
                         if (PlayersOnCourt[z].Any(play => play == playerRosterOrder))
                         {
-                            RecordStat(z, playerRosterOrder, "Gs", teams);
+                            PlayerActions.RecordStat(game, z, playerRosterOrder, "Gs", teams);
                         }
                     }
                 }

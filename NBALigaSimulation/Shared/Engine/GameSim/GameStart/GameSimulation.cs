@@ -1,4 +1,5 @@
 using NBALigaSimulation.Shared.Engine.Gameplan;
+using NBALigaSimulation.Shared.Engine.GameSim.CourtManager;
 using NBALigaSimulation.Shared.Engine.GameSim.PossessionManager;
 using NBALigaSimulation.Shared.Engine.Ratings;
 using NBALigaSimulation.Shared.Engine.Utils;
@@ -27,9 +28,9 @@ public static class GameSimulation
 
         int[][] PlayersOnCourt = new int[][] { new int[] { 0, 1, 2, 3, 4 }, new int[] { 0, 1, 2, 3, 4 } };
 
-        game.UpdatePlayersOnCourt(Teams, PlayersOnCourt);
-        game.UpdateSynergy(Teams, PlayersOnCourt);
-        game.HomeCourtAdvantage(Teams, PlayersOnCourt);
+        CourtActions.UpdatePlayersOnCourt(game, Teams, PlayersOnCourt);
+        CourtActions.UpdateSynergy(game, Teams, PlayersOnCourt);
+        CourtActions.HomeCourtAdvantage(Teams, PlayersOnCourt);
 
 
         PossessionActions.SimPossessions(game, Teams, PlayersOnCourt);

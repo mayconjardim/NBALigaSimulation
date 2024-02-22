@@ -1,7 +1,4 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
-using NBALigaSimulation.Shared.Engine.Gameplan;
-using NBALigaSimulation.Shared.Engine.GameSim.ProbabilityManager;
-using NBALigaSimulation.Shared.Engine.Utils;
 using NBALigaSimulation.Shared.Models.Players;
 using NBALigaSimulation.Shared.Models.Seasons;
 using NBALigaSimulation.Shared.Models.Teams;
@@ -48,33 +45,6 @@ namespace NBALigaSimulation.Shared.Models.Games
         public double Dt = 0; // Tempo decorrido por posse
         [NotMapped]
         public List<List<int>> PtsQrts = new List<List<int>> { new List<int>(), new List<int>() };
-
-      
-
-   
-
-        
-
- 
-
-
-  
-        
-        
-        
-        
-    
-
-       
-
-       
-        
-   
-
-
-     
-
-       
 
     }
 

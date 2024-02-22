@@ -67,7 +67,7 @@ public static class PlayerActions
                 }
             }
 
-            array[i] = Math.Pow(compositeRating * Fatigue(Teams[t].Players[p].Stats.Find(s => s.GameId == game.Id).Energy), power);
+            array[i] = Math.Pow(compositeRating * PlayerActions.Fatigue(Teams[t].Players[p].Stats.Find(s => s.GameId == game.Id).Energy), power);
             total += array[i];
         }
 
@@ -107,7 +107,7 @@ public static class PlayerActions
                 }
                 else
                 {
-                    RecordStat(game, t, p, "BenchTime", Teams, 1, game.Dt);
+                    RecordStat( game, t, p, "BenchTime", Teams, 1, game.Dt);
                     RecordStat(game, t, p, "Energy", Teams, 1, (game.Dt * 0.1));
                     if (Teams[t].Players[p].Stats.Find(s => s.GameId == game.Id)?.Energy > 1)
                     {
