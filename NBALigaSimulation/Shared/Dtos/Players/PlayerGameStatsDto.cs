@@ -36,5 +36,8 @@
         public double CourtTime { get; set; }
         public double BenchTime { get; set; }
         public int Energy { get; set; }
+        
+   
+        
     }
 }

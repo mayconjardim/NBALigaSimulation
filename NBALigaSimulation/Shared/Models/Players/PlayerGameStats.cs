@@ -41,7 +41,7 @@ namespace NBALigaSimulation.Shared.Models.Players
         public double CourtTime { get; set; }
         public double BenchTime { get; set; }
         public double Energy { get; set; }
-
+        
         public double GameScore
         {
             get
@@ -51,6 +51,7 @@ namespace NBALigaSimulation.Shared.Models.Players
                 return gs;
             }
         }
+        
     }
 }
 

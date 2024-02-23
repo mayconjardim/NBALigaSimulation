@@ -15,7 +15,8 @@
 .nav-item a {
     padding: 0.625rem;
     color: white;
-    font-weight: 600;
+    font-size: 0.875rem;
+    font-weight: 500;
 }
 
 .nav-item a:hover {
@@ -26,7 +27,7 @@
 }
 
 .search {
-    width: 45%; 
+    width: 50%; 
 }
 
 .search .form-control {

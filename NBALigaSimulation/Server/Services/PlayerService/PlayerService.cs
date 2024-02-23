@@ -49,7 +49,6 @@ namespace NBALigaSimulation.Server.Services.PlayerService
             return response;
         }
 
-
         public async Task<ServiceResponse<List<PlayerCompleteDto>>> GetAllPlayers()
         {
             var players = await _context.Players.Include(p => p.Ratings).ToListAsync();
