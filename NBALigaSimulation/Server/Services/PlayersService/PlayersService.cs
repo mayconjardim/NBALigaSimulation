@@ -5,17 +5,53 @@ using NBALigaSimulation.Shared.Models.Players;
 using NBALigaSimulation.Shared.Models.Seasons;
 using NBALigaSimulation.Shared.Models.Utils;
 
-namespace NBALigaSimulation.Server.Services.PlayerService
+namespace NBALigaSimulation.Server.Services.PlayersService
 {
-    public class PlayerService : IPlayerService
+    public class PlayersService : IPlayersService
     {
         private readonly DataContext _context;
         private readonly IMapper _mapper;
 
-        public PlayerService(DataContext context, IMapper mapper)
+        public PlayersService(DataContext context, IMapper mapper)
         {
             _context = context;
             _mapper = mapper;
+        }
+        
+        public async Task<ServiceResponse<PlayerCompleteDto>> GetPlayerById(int playerId)
+        {
+            var response = new ServiceResponse<PlayerCompleteDto>();
+
+            try
+            {
+                var player = await _context.Players
+                    .Where(p => p.Id == playerId)
+                    .Include(p => p.Team)
+                    .Include(p => p.Ratings)
+                    .Include(p => p.Contract)
+                    .Include(p => p.RegularStats)
+                    .Include(p => p.Stats)
+                    .Include(p => p.PlayoffsStats)
+                    .Include(p => p.PlayerAwards)
+                    .FirstOrDefaultAsync();
+
+                if (player == null) 
+                {
+                    response.Success = false;
+                    response.Message = $"O Player com o Id {playerId} não existe!";
+                }
+                else
+                {
+                    response.Data = _mapper.Map<PlayerCompleteDto>(player);
+                }
+                
+            }
+            catch (Exception ex)
+            {
+                throw new ArgumentException($"Ocorreu um erro ao buscar o jogador com o ID {playerId}: {ex.Message}");
+            }
+
+            return response;
         }
 
         public async Task<ServiceResponse<PlayerCompleteDto>> CreatePlayer(CreatePlayerDto request)
@@ -82,33 +118,6 @@ namespace NBALigaSimulation.Server.Services.PlayerService
             {
                 Data = _mapper.Map<List<PlayerCompleteDto>>(players)
             };
-
-            return response;
-        }
-
-        public async Task<ServiceResponse<PlayerCompleteDto>> GetPlayerById(int playerId)
-        {
-            var response = new ServiceResponse<PlayerCompleteDto>();
-            var player = await _context.Players
-                .Include(t => t.Team)
-                .Include(p => p.Ratings)
-                .Include(p => p.Contract)
-                .Include(p => p.RegularStats)
-                .Include(p => p.Stats)
-                .Include(p => p.PlayoffsStats)
-                .Include(p => p.PlayerAwards)
-                .FirstOrDefaultAsync(p => p.Id == playerId);
-
-            if (player == null)
-            {
-                response.Success = false;
-                response.Message = $"O Player com o Id {playerId} não existe!";
-            }
-            else
-            {
-
-                response.Data = _mapper.Map<PlayerCompleteDto>(player);
-            }
 
             return response;
         }

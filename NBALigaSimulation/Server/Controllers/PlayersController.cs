@@ -6,13 +6,33 @@ namespace NBALigaSimulation.Server.Controllers
 {
     [Route("api/players")]
     [ApiController]
-    public class PlayerController : ControllerBase
+    public class PlayersController : ControllerBase
     {
-        private readonly IPlayerService _playerService;
+        private readonly IPlayersService _playerService;
 
-        public PlayerController(IPlayerService playerService)
+        public PlayersController(IPlayersService playersService)
         {
-            _playerService = playerService;
+            _playerService = playersService;
+        }
+        
+        [HttpGet("{playerId}")]
+        public async Task<ActionResult<ServiceResponse<PlayerCompleteDto>>> GetPlayerById(int playerId)
+        {
+            try
+            {
+                var result = await _playerService.GetPlayerById(playerId);
+
+                if (!result.Success)
+                {
+                    return NotFound(result);
+                }
+
+                return Ok(result);
+            }
+            catch (ArgumentException ex) 
+            {
+                return StatusCode(500, ex.Message); 
+            }
         }
 
         [HttpGet]
@@ -38,21 +58,6 @@ namespace NBALigaSimulation.Server.Controllers
         {
 
             var result = await _playerService.GetAllDraftPlayers();
-            return Ok(result);
-
-        }
-
-        [HttpGet("{playerId}")]
-        public async Task<ActionResult<ServiceResponse<PlayerCompleteDto>>> GetPlayerById(int playerId)
-        {
-
-            var result = await _playerService.GetPlayerById(playerId);
-
-            if (!result.Success)
-            {
-                return NotFound(result);
-            }
-
             return Ok(result);
 
         }

@@ -1,13 +1,13 @@
 ﻿using NBALigaSimulation.Shared.Dtos.Players;
 using NBALigaSimulation.Shared.Models.Utils;
 
-namespace NBALigaSimulation.Server.Services.PlayerService
+namespace NBALigaSimulation.Server.Services.PlayersService
 {
-    public interface IPlayerService
+    public interface IPlayersService
     {
 
-        Task<ServiceResponse<List<PlayerCompleteDto>>> GetAllPlayers();
         Task<ServiceResponse<PlayerCompleteDto>> GetPlayerById(int playerId);
+        Task<ServiceResponse<List<PlayerCompleteDto>>> GetAllPlayers();
         Task<ServiceResponse<List<PlayerCompleteDto>>> GetAllFAPlayers();
         Task<ServiceResponse<List<PlayerCompleteDto>>> GetAllDraftPlayers();
         Task<ServiceResponse<PlayerCompleteDto>> CreatePlayer(CreatePlayerDto request);

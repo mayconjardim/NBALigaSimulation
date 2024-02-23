@@ -3,7 +3,7 @@ global using NBALigaSimulation.Shared.Dtos;
 global using NBALigaSimulation.Shared.Engine;
 global using NBALigaSimulation.Server.Data;
 global using Microsoft.EntityFrameworkCore;
-global using NBALigaSimulation.Server.Services.PlayerService;
+global using NBALigaSimulation.Server.Services.PlayersService;
 global using NBALigaSimulation.Server.Services.TeamService;
 global using NBALigaSimulation.Server.Services.GameService;
 global using NBALigaSimulation.Server.Services.SeasonService;
@@ -39,7 +39,7 @@ builder.Services.AddSwaggerGen(c =>
 });
 builder.Services.AddAutoMapper(typeof(Program).Assembly);
 
-builder.Services.AddScoped<IPlayerService, PlayerService>();
+builder.Services.AddScoped<IPlayersService, PlayersService>();
 builder.Services.AddScoped<ITeamService, TeamService>();
 builder.Services.AddScoped<IGameService, GameService>();
 builder.Services.AddScoped<ISeasonService, SeasonService>();
