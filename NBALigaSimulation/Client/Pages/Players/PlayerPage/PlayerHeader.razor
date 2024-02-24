@@ -1,5 +1,22 @@
-<div class="player-header">
+@if (player != null)
+{
     
+    <div class="player-header @player.TeamAbrv">
+        
+        <div class="player-header-card">
+        
+            <div class="player-header-card-img">
+                <img src="@player.ImgUrl" alt="Foto do jogador">
+            </div>
+        
+            <div class="player-header-card-info">
+                <h2>@player.Name</h2>
+                <p>@player.TeamName - @player.Pos</p>
+            </div>
+
+        </div>
     
+    </div>
     
-</div>
+}
+

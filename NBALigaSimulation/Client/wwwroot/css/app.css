@@ -1,6 +1,7 @@
 ﻿:root {
     --primary-color: #391463;
     --secondary-color: #940B92;
+    --white: white;
 }
 
 #app {

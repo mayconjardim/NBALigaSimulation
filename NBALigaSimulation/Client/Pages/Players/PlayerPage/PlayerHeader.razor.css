@@ -1,0 +1,49 @@
+.player-header {
+    height: 9rem;
+    width: 100%;
+    box-sizing: border-box;
+    border-bottom: 0.068rem solid #c9c4c4;
+    display: flex; 
+    align-items: center;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+}
+
+.player-header-card {
+    display: flex;
+    margin-left: 2rem;
+    align-items: center; 
+    flex: 1; 
+}
+
+.player-header-card-img {
+    width: 6rem; 
+    height: 6rem;
+    border-bottom: 0.068rem solid #c9c4c4;
+    border-radius: 50%; 
+    overflow: hidden;
+}
+
+.player-header-card-img img {
+    width: 100%; 
+    height: 100%; 
+    object-fit: cover; 
+    object-position: center;
+    border-radius: 50%;
+}
+
+.player-header-card-info {
+    margin-left: 1rem;
+}
+
+.player-header-card-info h2 {
+    margin: 0; 
+    font-weight: 800;
+}
+
+.player-header-card-info p {
+    margin: 0; 
+    font-size: 0.875rem;
+    font-weight: 600;
+}
