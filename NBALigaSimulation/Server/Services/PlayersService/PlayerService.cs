@@ -7,12 +7,12 @@ using NBALigaSimulation.Shared.Models.Utils;
 
 namespace NBALigaSimulation.Server.Services.PlayersService
 {
-    public class PlayersService : IPlayersService
+    public class PlayerService : IPlayerService
     {
         private readonly DataContext _context;
         private readonly IMapper _mapper;
 
-        public PlayersService(DataContext context, IMapper mapper)
+        public PlayerService(DataContext context, IMapper mapper)
         {
             _context = context;
             _mapper = mapper;

@@ -1,5 +1,6 @@
 ﻿.page {
-    position: relative;
+    width: 100%; 
+    box-sizing: border-box; 
     display: flex;
     flex-direction: column;
 }
@@ -12,9 +13,3 @@ main {
     flex: 1;
 }
 
-@media (min-width: 641px) {
-    .page {
-        flex-direction: row;
-    }
-
-}

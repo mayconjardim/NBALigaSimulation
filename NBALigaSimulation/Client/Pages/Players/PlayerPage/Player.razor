@@ -1,0 +1,11 @@
+@page "/players/{PlayerId:int}"
+@inject IPlayerService PlayerService
+
+@if (_player != null)
+{
+      <PlayerHeader player="@_player" />
+}
+else
+{
+    <h5 class="message">@_message</h5>
+}

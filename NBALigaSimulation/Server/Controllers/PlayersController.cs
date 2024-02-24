@@ -8,11 +8,11 @@ namespace NBALigaSimulation.Server.Controllers
     [ApiController]
     public class PlayersController : ControllerBase
     {
-        private readonly IPlayersService _playerService;
+        private readonly IPlayerService _playerService;
 
-        public PlayersController(IPlayersService playersService)
+        public PlayersController(IPlayerService playerService)
         {
-            _playerService = playersService;
+            _playerService = playerService;
         }
         
         [HttpGet("{playerId}")]

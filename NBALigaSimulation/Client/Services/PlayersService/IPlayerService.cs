@@ -3,7 +3,7 @@ using NBALigaSimulation.Shared.Models.Utils;
 
 namespace NBALigaSimulation.Client.Services.PlayersService;
 
-public interface IPlayersService
+public interface IPlayerService
 {
     
     Task<ServiceResponse<PlayerCompleteDto>> GetPlayerById(int playerId);
