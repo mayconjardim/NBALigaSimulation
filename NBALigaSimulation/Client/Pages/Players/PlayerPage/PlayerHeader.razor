@@ -5,18 +5,54 @@
         
         <div class="player-header-card">
         
-            <div class="player-header-card-img">
-                <img src="@player.ImgUrl" alt="Foto do jogador">
-            </div>
+            <div class="player-header-card-bio">
         
-            <div class="player-header-card-info">
-                <h2>@player.Name</h2>
-                <p>@player.TeamName - @player.Pos</p>
+                <div class="player-header-card-img">
+                    <img src="@player.ImgUrl" alt="Foto do jogador">
+                </div>
+            
+                <div class="player-header-card-info">
+                    <h3>@player.Name</h3>
+                    <p>@player.TeamName - @player.Pos</p>
+                </div>
+            
             </div>
-
+            
+            <div class="player-header-stats">
+                <table class="stats">
+                    <thead>
+                    <tr>
+                        <th colspan="4">SEASON STATS</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>
+                            <span>PTS</span>
+                            24.8
+                        </td>
+                        <td>
+                            <span>REB</span>
+                            7.2
+                        </td>
+                        <td>
+                            <span>AST</span>
+                            7.8
+                        </td>
+                        <td>
+                            <span>FG%</span>
+                            52.0
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            
         </div>
-    
+        
     </div>
+    
+    
     
 }
 

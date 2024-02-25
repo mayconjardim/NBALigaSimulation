@@ -1,8 +1,45 @@
-.tabbable .nav-tabs {
-    overflow-x: auto;
-    overflow-y:hidden;
-    flex-wrap: nowrap;
+.tabs-container {
+    width: 100%; 
+    overflow-x: auto; 
 }
-.tabbable .nav-tabs .nav-link {
+
+.nav-tabs {
+    display: flex;
+    flex-wrap: nowrap;
+    padding: 0; 
+    margin: 0; 
+    list-style-type: none; 
+    background: var(--white);
+    border-bottom: 0.068rem solid #c9c4c4;
+    
+}
+
+
+.nav-link {
+    border: 0 solid transparent;
+}
+
+.nav-tabs .nav-item .nav-link {
+    color: #212529;
+    font-weight: 600;
+    border: 0 solid #c9c4c4;
+    
+}
+
+.nav-link {
     white-space: nowrap;
+}
+
+.nav-link.active {
+    border: none;
+    color: #212529;
+    text-decoration: none;
+}
+
+.nav-link.active::after {
+    content: ""; 
+    display: block;
+    width: 100%; 
+    border-bottom: 2px solid var(--primary-color); 
+    padding-top: 5px; 
 }
