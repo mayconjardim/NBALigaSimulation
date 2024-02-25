@@ -1,41 +1,57 @@
-.ratings {
+.card-ratings{
     display: flex;
+    justify-content: center;
 }
 
 .chart {
-    height: 180px;
-    width: 250px;
-    margin: 10px;
+    display: inline-block;
+    height: 11.25rem; 
+    width: 15.625rem; 
+    margin: 0.625rem; 
     padding: 0;
 }
 
+table {
+    background-color: var(--white);
+    width: 50%;
+    margin: 0.625rem;
+    border-collapse: collapse;
+    -webkit-border-radius: 0.625rem;
+    -moz-border-radius: 0.625rem;
+    border-radius: 0.625rem;
+    overflow: hidden;
+    text-align: center;
+}
+table td{
+    margin: auto;
+    padding: 0 0.825rem;
+}
+table tbody td {
+    font-size: 1.75rem;
+    font-weight: 600;
+}
+
+table thead {
+    background: var(--primary-color);
+}
+table thead th {
+    font-size: 0.625rem;
+    color: var(--white);
+}
+
+
 @media (max-width: 640px) {
 
-    .card-ratings {
-        display: flex;
-        flex-wrap: wrap;
+    table {
+        margin: 0.625rem;
     }
-
     .ratings {
         justify-content: space-around;
     }
 
-    .badges {
-        display: flex;
-        flex-wrap: wrap;
-    }
-
     .chart {
-        height: 120px;
-        width: 160px;
+        height: 7.5rem; 
+        width: 10rem; 
     }
 
-    .badges img {
-        margin: 2px;
-        width: 30px;
-    }
-
-    .card-info {
-        flex-direction: column;
-    }
 }
