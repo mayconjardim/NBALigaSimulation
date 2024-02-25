@@ -1,0 +1,41 @@
+.ratings {
+    display: flex;
+}
+
+.chart {
+    height: 180px;
+    width: 250px;
+    margin: 10px;
+    padding: 0;
+}
+
+@media (max-width: 640px) {
+
+    .card-ratings {
+        display: flex;
+        flex-wrap: wrap;
+    }
+
+    .ratings {
+        justify-content: space-around;
+    }
+
+    .badges {
+        display: flex;
+        flex-wrap: wrap;
+    }
+
+    .chart {
+        height: 120px;
+        width: 160px;
+    }
+
+    .badges img {
+        margin: 2px;
+        width: 30px;
+    }
+
+    .card-info {
+        flex-direction: column;
+    }
+}

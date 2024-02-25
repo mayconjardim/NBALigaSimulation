@@ -1,2 +1,14 @@
-<h3>PlayerRating</h3>
-
+@using pax.BlazorChartJs
+@if (_rating != null)
+{
+    
+    <div class="ratings">
+        <div class="chart">
+            <ChartComponent @ref="_chartComponent" ChartJsConfig="_chartJsConfig"></ChartComponent>
+        </div>
+        <div class="chart">
+            <ChartComponent @ref="_chartComponent2" ChartJsConfig="_chartJsConfig2"></ChartComponent>
+        </div>
+    </div>
+    
+}
