@@ -3,7 +3,7 @@
 
 @if (_player != null)
 {
-    <PlayerHeader player="@_player" />
+    <PlayerHeader _player="@_player" />
     
     <div class="tabs-container">
       <ul class="nav nav-tabs justify-content-center" id="myTab" role="tablist">
@@ -21,7 +21,7 @@
         </li>
       </ul>
       <div class="tab-content" id="myTabContent">
-        <div class="tab-pane fade show active" id="bio-tab-pane" role="tabpanel" aria-labelledby="bio-tab" tabindex="0">    <PlayerRating player="@_player" /> </div>
+        <div class="tab-pane fade show active" id="bio-tab-pane" role="tabpanel" aria-labelledby="bio-tab" tabindex="0">    <PlayerRating _player="@_player" /> </div>
         <div class="tab-pane fade" id="profile-tab-pane" role="tabpanel" aria-labelledby="profile-tab" tabindex="0">Stats</div>
         <div class="tab-pane fade" id="contact-tab-pane" role="tabpanel" aria-labelledby="contact-tab" tabindex="0">LOgs</div>
         <div class="tab-pane fade" id="disabled-tab-pane" role="tabpanel" aria-labelledby="disabled-tab" tabindex="0">Ratings</div>

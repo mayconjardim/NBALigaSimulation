@@ -1,52 +1,58 @@
-@if (player != null)
+@if (_player != null)
 {
     
-    <div class="player-header @player.TeamAbrv">
+    <div class="player-header @_player.TeamAbrv">
         
         <div class="player-header-card">
         
             <div class="player-header-card-bio">
         
                 <div class="player-header-card-img">
-                    <img src="@player.ImgUrl" alt="Foto do jogador">
+                    <img src="@_player.ImgUrl" alt="Foto do jogador">
                 </div>
             
                 <div class="player-header-card-info">
-                    <h3>@player.Name</h3>
-                    <p>@player.TeamName - @player.Pos</p>
+                    <h3>@_player.Name</h3>
+                    <p>@_player.TeamName - @_player.Pos</p>
                 </div>
             
             </div>
             
-            <div class="player-header-stats">
-                <table class="stats">
-                    <thead>
-                    <tr>
-                        <th colspan="4">SEASON STATS</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr>
-                        <td>
-                            <span>PTS</span>
-                            24.8
-                        </td>
-                        <td>
-                            <span>REB</span>
-                            7.2
-                        </td>
-                        <td>
-                            <span>AST</span>
-                            7.8
-                        </td>
-                        <td>
-                            <span>FG%</span>
-                            52.0
-                        </td>
-                    </tr>
-                    </tbody>
-                </table>
-            </div>
+            @if (_stats != null)
+            {
+                
+                <div class="player-header-stats">
+                    <table class="stats">
+                        <thead>
+                        <tr>
+                            <th colspan="4">SEASON STATS</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td>
+                                <span>PTS</span>
+                                @_stats.PtsPG
+                            </td>
+                            <td>
+                                <span>REB</span>
+                                @_stats.TRebPG
+                            </td>
+                            <td>
+                                <span>AST</span>
+                                @_stats.AstPG
+                            </td>
+                            <td>
+                                <span>FG%</span>
+                                @_stats.FgPct
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+                
+            }
+           
             
         </div>
         

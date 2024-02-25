@@ -7,6 +7,6 @@ public partial class PlayerRating
 {
     
     [Parameter]
-    public PlayerCompleteDto? player { get; set; }
+    public PlayerCompleteDto _player { get; set; }
     
 }

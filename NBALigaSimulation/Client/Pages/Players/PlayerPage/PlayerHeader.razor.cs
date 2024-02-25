@@ -7,8 +7,18 @@ public partial class PlayerHeader
 {
     
     [Parameter]
-    public PlayerCompleteDto? player { get; set; }
+    public PlayerCompleteDto _player { get; set; }
 
-    private PlayerRegularStatsDto stats = null;
+    private PlayerRegularStatsDto _stats;
     
+    protected override async Task OnInitializedAsync()
+    {
+
+        if (_player.RegularStats != null)
+        {
+            _stats = _player.RegularStats.LastOrDefault();
+        }
+       
+    }
+
 }
