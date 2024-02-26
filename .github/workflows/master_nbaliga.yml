@@ -1,7 +1,7 @@
 # Docs for the Azure Web Apps Deploy action: https://github.com/Azure/webapps-deploy
 # More GitHub Actions for Azure: https://github.com/Azure/actions
 
-name: Build and deploy ASP.Net Core app to Azure Web App - nbaliga
+name: Build and deploy ASP.Net Core app to Azure Web App - NBALIGA
 
 on:
   push:
@@ -19,7 +19,7 @@ jobs:
       - name: Set up .NET Core
         uses: actions/setup-dotnet@v1
         with:
-          dotnet-version: '6.0.x'
+          dotnet-version: '8.x'
           include-prerelease: true
 
       - name: Build with dotnet
@@ -51,7 +51,7 @@ jobs:
         id: deploy-to-webapp
         uses: azure/webapps-deploy@v2
         with:
-          app-name: 'nbaliga'
+          app-name: 'NBALIGA'
           slot-name: 'Production'
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_24E4ACA7AFFF4163B78D80557EDC2476 }}
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_3813836DBC294D03B9F0825BAACF86A3 }}
           package: .
