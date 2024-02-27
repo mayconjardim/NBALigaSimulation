@@ -69,14 +69,14 @@
                               </li>
                               <li class="list-group-item d-flex justify-content-between align-items-center">
                                   <div class="ms-2 me-auto">
-                                      <div class="title">DRAFTED</div>
+                                      <div class="title">Draft</div>
                                       @if (_player.Draft?.Team?.Length > 0 || _player.Draft?.Pick > 0)
                                       {
-                                          <span>Draft - @(_player.Draft.Year) - R @(_player.Draft.Round) (Pick @(_player.Draft.Pick)) by @(_player.Draft.Team)</span>
+                                          <span>@(_player.Draft.Year) - R @(_player.Draft.Round) (Pick @(_player.Draft.Pick)) by @(_player.Draft.Team)</span>
                                       }
                                       else
                                       {
-                                          <span>Draft - Undrafted</span>
+                                          <span>Undrafted</span>
                                       }
                                   </div>
                               </li>
