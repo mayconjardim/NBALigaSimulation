@@ -3,55 +3,95 @@
     justify-content: center;
 }
 
+.charts {
+    display: flex;
+    justify-content: center;
+}
+
 .chart {
     display: inline-block;
     height: 11.25rem; 
     width: 15.625rem; 
-    margin: 0.625rem; 
+    margin: 0;
     padding: 0;
 }
 
-table {
+.ratings {
     background-color: var(--white);
-    width: 50%;
+    width: 100%;
     margin: 0.625rem;
-    border-collapse: collapse;
-    -webkit-border-radius: 0.625rem;
-    -moz-border-radius: 0.625rem;
     border-radius: 0.625rem;
     overflow: hidden;
     text-align: center;
 }
-table td{
-    margin: auto;
-    padding: 0 0.825rem;
+
+.ratings .header {
+    background: var(--primary-color);
+    font-size: 0.625rem;
+    font-weight: 800;
+    color: var(--white);
 }
-table tbody td {
-    font-size: 1.75rem;
+
+.ratings .row {
+    display: flex;
+    margin: 0.625rem;
+}
+
+.ratings .chart-component {
+    height: 7.5rem;
+    width: 10rem;
+}
+.badges {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+}
+
+.badges img {
+    margin: 0.313rem;
+    width: 3.75rem;
+}
+
+.disabled-image {
+    opacity: 0.3;
+    pointer-events: none;
+}
+
+.group {
+    display: flex;
+    flex: 1;
+}
+
+.custom-list-group {
+    border: 0; 
+    padding: 0;
+    text-align: left; 
+}
+
+.title {
+    font-size: 1rem;
     font-weight: 600;
 }
 
-table thead {
-    background: var(--primary-color);
-}
-table thead th {
-    font-size: 0.625rem;
-    color: var(--white);
+.custom-list-group .list-group-item {
+    border: 0;
+    padding: 0;
+    font-size: 0.8rem; 
 }
 
 
 @media (max-width: 640px) {
 
-    table {
-        margin: 0.625rem;
+    .card-ratings {
+     flex-wrap: wrap;
     }
-    .ratings {
-        justify-content: space-around;
-    }
-
+    
     .chart {
-        height: 7.5rem; 
-        width: 10rem; 
+        height: 7.5rem;
+        width: 10rem;
     }
-
+    
+    .ratings .row {
+        justify-content: center;
+    }
 }

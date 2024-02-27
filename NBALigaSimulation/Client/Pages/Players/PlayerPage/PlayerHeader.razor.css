@@ -1,5 +1,5 @@
 .player-header {
-    min-height: 9rem;
+    min-height: 10rem;
     width: 100%;
     box-sizing: border-box;
     border-bottom: 0.068rem solid #c9c4c4;
@@ -60,6 +60,11 @@
     font-weight: 600;
 }
 
+.player-header-card-info span {
+    font-size: 0.475rem;
+    font-weight: 600;
+}
+
 .player-header-stats {
     margin-right: 2rem;
 }
@@ -94,6 +99,7 @@ table thead {
 }
 table thead th {
     font-size: 0.625rem;
+    font-weight: 800;
     color: var(--white);
 }
 

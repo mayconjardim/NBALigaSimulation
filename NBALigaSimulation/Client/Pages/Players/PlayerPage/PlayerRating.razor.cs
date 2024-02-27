@@ -9,8 +9,9 @@ public partial class PlayerRating
     
     [Parameter]
     public PlayerCompleteDto _player { get; set; }
-
     private PlayerRatingDto _rating;
+    private List<string> _badgesSkills = new List<string> { "Po", "3", "Ps", "B" };
+    private List<string> _badgesPhysical = new List<string> { "Dp", "Di", "R", "A" };
     
     ChartComponent _chartComponent;
     ChartJsConfig _chartJsConfig = null!;
@@ -18,12 +19,17 @@ public partial class PlayerRating
     ChartComponent _chartComponent2;
     ChartJsConfig _chartJsConfig2 = null!;
 
+    private int _season = 0;
+    private int _age = 0;
+    
      protected override void OnInitialized()
      {
 
          if (_player != null)
          {
              _rating = _player.Ratings.LastOrDefault();
+             _season = _rating.Season;
+             _age = (_season - _player.Born.Year);
          }
          
             var Options = new ChartJsOptions()
@@ -140,6 +146,29 @@ public partial class PlayerRating
 
             base.OnInitialized();
 
-        }
+     }
+     
+     private string GetBadgeName(string badge)
+     {
+         switch (badge)
+         {
+             case "Po":
+                 return "Post Scorer";
+             case "3":
+                 return "3-Point Shooter";
+             case "Ps":
+                 return "Passer";
+             case "B":
+                 return "Ball-Handler";
+             case "Dp":
+                 return "Perimeter Defender";
+             case "Di":
+                 return "Interior Defender";
+             case "R":
+                 return "Rebounder";
+             default:
+                 return "Athlete";
+         }
+     }
     
 }

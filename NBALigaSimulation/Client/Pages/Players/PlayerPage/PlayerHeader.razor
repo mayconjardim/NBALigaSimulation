@@ -1,3 +1,4 @@
+@using NBALigaSimulation.Client.Utilities
 @if (_player != null)
 {
     
@@ -13,7 +14,7 @@
             
                 <div class="player-header-card-info">
                     <h3>@_player.Name</h3>
-                    <p>@_player.TeamName - @_player.Pos</p>
+                    <p>@_player.TeamName - @Util.Position(_player.Pos)</p>
                 </div>
             
             </div>
