@@ -64,65 +64,63 @@
         
           <div class="table-responsive">
                     <div class="stats">
-                      
-                             @if (_regularStats != null)
-                                                        {
-                                                            <table>
-                                                                <thead>
-                                                                <tr>
-                                                                    <th colspan="25">REGULAR SEASON TOTALS</th>
-                                                                </tr>
-                                                                </thead>
-                                                                <tbody>
-                                                                <tr >
-                                                                    <td colspan="5" style="text-align: center"></td>
-                                                                    <td colspan="3" style="text-align: center">FG</td>
-                                                                    <td colspan="3" style="text-align: center">3PT</td>
-                                                                    <td colspan="3" style="text-align: center">FT</td>
-                                                                    <td colspan="3" style="text-align: center">REB</td>
-                                                                    <td colspan="8" style="text-align: center"></td>
-                                                                </tr>
-                                                                <tr >
-                                                                    @foreach (var h in stats)
-                                                                    {
-                                                                        <td>@h</td>
-                                                                    }
-                                                                </tr>
-                                                                </tbody>
-                                                                <tbody>
-                                                                @foreach (var regularStats in _regularStats)
-                                                                {
-                                                                    <tr >
-                                                                        <td>@regularStats.Season</td>
-                                                                        <td> <img src=@($"../Images/Logos/{regularStats.TeamAbrv}.svg") alt="Girl in a jacket" width="25"> </td>
-                                                                        <td>@regularStats.Games</td>
-                                                                        <td>@regularStats.Gs</td>
-                                                                        <td>@Math.Round(regularStats.Min)</td>
-                                                                        <td>@regularStats.Fg</td>
-                                                                        <td>@regularStats.Fga</td>
-                                                                        <td>@regularStats.FgPct</td>
-                                                                        <td>@regularStats.Tp</td>
-                                                                        <td>@regularStats.Tp</td>
-                                                                        <td>@regularStats.TpPct</td>
-                                                                        <td>@regularStats.Ft</td>
-                                                                        <td>@regularStats.Fta</td>
-                                                                        <td>@regularStats.FtPct</td>
-                                                                        <td>@regularStats.Orb</td>
-                                                                        <td>@regularStats.Drb</td>
-                                                                        <td>@regularStats.Trb</td>
-                                                                        <td>@regularStats.Ast</td>
-                                                                        <td>@regularStats.Tov</td>
-                                                                        <td>@regularStats.Stl</td>
-                                                                        <td>@regularStats.Blk</td>
-                                                                        <td>@regularStats.Pf</td>
-                                                                        <td>@regularStats.Pts</td>
-                                                                        <td>@regularStats.PER</td>
-                                                                    </tr>
-                                                                }
-                                                                </tbody>
-                                                            </table>
-                                                        }
-                        
+                        @if (_regularStats != null)
+                        {
+                            <table>
+                                <thead>
+                                <tr>
+                                    <th colspan="25">REGULAR SEASON TOTALS</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr >
+                                    <td colspan="5" style="text-align: center"></td>
+                                    <td colspan="3" style="text-align: center">FG</td>
+                                    <td colspan="3" style="text-align: center">3PT</td>
+                                    <td colspan="3" style="text-align: center">FT</td>
+                                    <td colspan="3" style="text-align: center">REB</td>
+                                    <td colspan="8" style="text-align: center"></td>
+                                </tr>
+                                <tr >
+                                    @foreach (var h in stats)
+                                    {
+                                        <td>@h</td>
+                                    }
+                                </tr>
+                                </tbody>
+                                <tbody>
+                                @foreach (var regularStats in _regularStats)
+                                {
+                                    <tr >
+                                        <td>@regularStats.Season</td>
+                                        <td> <img src=@($"../Images/Logos/{regularStats.TeamAbrv}.svg") alt="Girl in a jacket" width="25"> </td>
+                                        <td>@regularStats.Games</td>
+                                        <td>@regularStats.Gs</td>
+                                        <td>@regularStats.MinPG</td>
+                                        <td>@regularStats.FgPG</td>
+                                        <td>@regularStats.FgaPG</td>
+                                        <td>@regularStats.FgPct</td>
+                                        <td>@regularStats.TpPG</td>
+                                        <td>@regularStats.TpaPG</td>
+                                        <td>@regularStats.TpPct</td>
+                                        <td>@regularStats.FtPG</td>
+                                        <td>@regularStats.FtaPG</td>
+                                        <td>@regularStats.FtPct</td>
+                                        <td>@regularStats.ORebPG</td>
+                                        <td>@regularStats.DRebPG</td>
+                                        <td>@regularStats.TRebPG</td>
+                                        <td>@regularStats.AstPG</td>
+                                        <td>@regularStats.TovPG</td>
+                                        <td>@regularStats.StlPG</td>
+                                        <td>@regularStats.BlkPG</td>
+                                        <td>@regularStats.PfPG</td>
+                                        <td>@regularStats.PtsPG</td>
+                                        <td>@regularStats.PER</td>
+                                    </tr>
+                                }
+                                </tbody>
+                            </table>
+                        }
                     </div>
                 </div>
         
