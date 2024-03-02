@@ -13,9 +13,8 @@
     width: 100%;
     white-space: nowrap;
 }
-
-.stats table {
-    background-color: var(--white);
+ table {
+     background-color: var(--white);
     width: 100%;
     text-align: center;
     border-collapse: collapse;
@@ -41,7 +40,7 @@
 }
 
 .stats td {
-    padding: 0.375rem;
+    padding: 0.350rem;
     font-size: 0.625rem;
     text-align: center;
     border: 0.063rem solid #c9c4c4;
