@@ -18,6 +18,41 @@ namespace NBALigaSimulation.Server.Services.TeamService
             _mapper = mapper;
             _authService = authService;
         }
+        
+        public async Task<ServiceResponse<TeamCompleteDto>> GetTeamById(int teamId)
+        {
+            var response = new ServiceResponse<TeamCompleteDto>();
+
+            try
+            {
+                var team = await _context.Teams
+                    .Include(t => t.Players)
+                    .ThenInclude(p => p.Ratings)
+                    .Include(t => t.Players)
+                    .ThenInclude(p => p.Contract)
+                    .Include(t => t.Players)
+                    .ThenInclude(p => p.RegularStats)
+                    .Include(t => t.DraftPicks)
+                    .FirstOrDefaultAsync(t => t.Id == teamId);
+
+                if (team == null)
+                {
+                    response.Success = false;
+                    response.Message = $"O Time com o Id {teamId} não existe!";
+                }
+                else
+                {
+                    response.Data = _mapper.Map<TeamCompleteDto>(team);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new ArgumentException($"Ocorreu um erro ao buscar o time com o ID {teamId}: {ex.Message}");
+            }
+
+            return response;
+        }
+
 
         public async Task<ServiceResponse<List<TeamSimpleDto>>> GetAllTeams()
         {
@@ -41,32 +76,7 @@ namespace NBALigaSimulation.Server.Services.TeamService
             return response;
         }
 
-        public async Task<ServiceResponse<TeamCompleteDto>> GetTeamById(int teamId)
-        {
-            var response = new ServiceResponse<TeamCompleteDto>();
-            var team = await _context.Teams
-             .Include(t => t.Players)
-                 .ThenInclude(p => p.Ratings)
-             .Include(p => p.Players)
-                 .ThenInclude(p => p.Contract)
-             .Include(p => p.Players)
-                 .ThenInclude(p => p.RegularStats)
-             .Include(t => t.DraftPicks)
-             .FirstOrDefaultAsync(t => t.Id == teamId);
-
-            if (team == null)
-            {
-                response.Success = false;
-                response.Message = $"O Time com o Id {teamId} não existe!";
-            }
-            else
-            {
-                response.Data = _mapper.Map<TeamCompleteDto>(team);
-            }
-
-            return response;
-        }
-
+      
         public async Task<ServiceResponse<TeamCompleteDto>> GetTeamByUser()
         {
 

@@ -31,4 +31,8 @@
 		</Content>
 	</ItemGroup>
 
+	<ItemGroup>
+	  <_ContentIncludedByDefault Remove="Pages\Teams\TeamPage\Team.razor" />
+	</ItemGroup>
+
 </Project>

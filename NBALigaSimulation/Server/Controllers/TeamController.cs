@@ -16,6 +16,28 @@ namespace NBALigaSimulation.Server.Controllers
         {
             _teamService = teamService;
         }
+        
+        [HttpGet("{teamId}")]
+        public async Task<ActionResult<ServiceResponse<TeamCompleteDto>>> GetTeamById(int teamId)
+        {
+
+            try
+            {
+                var result = await _teamService.GetTeamById(teamId);
+
+                if (!result.Success)
+                {
+                    return NotFound(result);
+                }
+
+                return Ok(result);
+            }
+            catch (ArgumentException ex) 
+            {
+                return StatusCode(500, ex.Message); 
+            }
+
+        }
 
         [HttpGet]
         public async Task<ActionResult<ServiceResponse<List<TeamSimpleDto>>>> GetAllTeams()
@@ -31,21 +53,6 @@ namespace NBALigaSimulation.Server.Controllers
         {
 
             var result = await _teamService.GetAllTeamsWithPlayers();
-            return Ok(result);
-
-        }
-
-        [HttpGet("{teamId}")]
-        public async Task<ActionResult<ServiceResponse<TeamCompleteDto>>> GetTeamById(int teamId)
-        {
-
-            var result = await _teamService.GetTeamById(teamId);
-
-            if (!result.Success)
-            {
-                return NotFound(result);
-            }
-
             return Ok(result);
 
         }
