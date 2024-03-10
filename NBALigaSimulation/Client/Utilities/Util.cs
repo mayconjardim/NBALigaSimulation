@@ -1,4 +1,6 @@
-﻿namespace NBALigaSimulation.Client.Utilities
+﻿using System.Globalization;
+
+namespace NBALigaSimulation.Client.Utilities
 {
     public static class Util
     {
@@ -89,6 +91,12 @@
             {
                 return "";
             }
+        }
+        
+        public static string FormatNumber(double numero)
+        {
+            string numeroFormatado = numero.ToString("0.0", CultureInfo.InvariantCulture);
+            return numeroFormatado;
         }
 
 

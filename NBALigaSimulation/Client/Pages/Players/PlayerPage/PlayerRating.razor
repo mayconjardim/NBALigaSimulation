@@ -27,7 +27,7 @@
                     {
                         bool playerHasBadge = _rating.Skills.Contains(badge);
                         <div data-bs-placement="top" data-toggle="tooltip" title="@GetBadgeName(badge)">
-                            <img src=@($"Images/Badges/{badge}.svg") class=" @(playerHasBadge ? "" : "disabled-image")"/>
+                            <img src=@($"Images/Badges/{badge}.svg") class=" @(playerHasBadge ? "" : "disabled-image")" alt="player badge"/>
                         </div>
                     }
                 </div>
@@ -37,7 +37,7 @@
                     {
                         bool playerHasBadge = _rating.Skills.Contains(badge);
                         <div data-bs-placement="top" data-toggle="tooltip" title="@GetBadgeName(badge)">
-                            <img src=@($"Images/Badges/{badge}.svg") class=" @(playerHasBadge ? "" : "disabled-image")"/>
+                            <img src=@($"Images/Badges/{badge}.svg") class=" @(playerHasBadge ? "" : "disabled-image")" alt="player badge"/>
                         </div>
                     }
                 </div>

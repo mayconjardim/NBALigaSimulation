@@ -9,7 +9,9 @@ public partial class PlayerLogs
     [Parameter]
     public PlayerCompleteDto _player { get; set; }
 
-    public List<PlayerGameStatsDto> _gameLogs;
+    private List<PlayerGameStatsDto> _gameLogs;
+
+    string[] _headings = { "DATE", "OPP", "MIN", "FG", "3PT", "FT", "OFF", "REB", "AST", "TO", "STL", "BLK", "PF", "PTS" };
     
     protected override void OnInitialized()
     {

@@ -1,0 +1,43 @@
+@using NBALigaSimulation.Client.Utilities
+<div class="container-fluid">
+    @if (_gameLogs != null)
+    {
+        <div class="table-responsive">
+            <table class="table caption-top">
+                <caption>Game Logs</caption>
+                <thead>
+                <tr>
+                    @foreach (var th in _headings)
+                    {
+                        <th>@th</th>
+                    }
+                </tr>
+                </thead>
+                <tbody>
+                @foreach (var stats in _gameLogs)
+                {
+                    <tr>
+                        <td>@stats.GameDate.ToShortDateString()</td>
+                        <td ><img src=@($"../Images/Logos/{stats.OppAbrev}.svg") alt="Team logo" width="25"> </td>
+                        <td>@Util.FormatNumber(@stats.Min)</td>
+                        <td>@stats.Fg-@stats.Fga</td>
+                        <td>@stats.Tp-@stats.Tpa</td>
+                        <td>@stats.Ft-@stats.Fta</td>
+                        <td>@stats.Orb</td>
+                        <td>@stats.Trb</td>
+                        <td>@stats.Ast</td>
+                        <td>@stats.Tov</td>
+                        <td>@stats.Stl</td>
+                        <td>@stats.Blk</td>
+                        <td>@stats.Pf</td>
+                        <td>@stats.Pts</td>
+                    </tr>
+                }
+                </tbody>
+            </table>
+        </div>
+    }
+</div>
+
+
+
