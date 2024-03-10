@@ -11,7 +11,7 @@ public partial class Player
 
     [Parameter]
     public int PlayerId { get; set; }
-
+    
     protected override async Task OnInitializedAsync()
     {
      

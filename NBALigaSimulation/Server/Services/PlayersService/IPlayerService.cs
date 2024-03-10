@@ -8,7 +8,7 @@ namespace NBALigaSimulation.Server.Services.PlayersService
 
         Task<ServiceResponse<PlayerCompleteDto>> GetPlayerById(int playerId);
         Task<ServiceResponse<List<PlayerCompleteDto>>> GetAllPlayers();
-        Task<ServiceResponse<List<PlayerCompleteDto>>> GetAllFAPlayers();
+        Task<ServiceResponse<List<PlayerCompleteDto>>> GetAllFaPlayers();
         Task<ServiceResponse<List<PlayerCompleteDto>>> GetAllDraftPlayers();
         Task<ServiceResponse<PlayerCompleteDto>> CreatePlayer(CreatePlayerDto request);
         Task<ServiceResponse<List<PlayerCompleteDto>>> CreatePlayers(List<CreatePlayerDto> request);

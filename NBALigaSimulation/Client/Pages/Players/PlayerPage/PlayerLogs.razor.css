@@ -26,3 +26,7 @@ table, th, td {
     border-radius: 10px;
     white-space: nowrap
 }
+
+tr:nth-child(even) {
+    background-color: #FBFBFB;
+}

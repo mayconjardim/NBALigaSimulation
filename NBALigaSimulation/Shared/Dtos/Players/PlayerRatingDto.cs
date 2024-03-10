@@ -5,6 +5,7 @@ namespace NBALigaSimulation.Shared.Dtos.Players
     public class PlayerRatingDto
     {
         public int PlayerId { get; set; }
+        public string TeamAbrv { get; set; }
         public int Season { get; set; }
         public int Diq { get; set; }
         public int Dnk { get; set; }
