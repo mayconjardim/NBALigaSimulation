@@ -2,6 +2,12 @@
 {
     public static class Util
     {
+
+        public static int Age(int season, int born)
+        {
+            return season - born;
+        }
+        
         public static int InchesToCm(double inches)
         {
             const double cmPerInch = 2.54;
