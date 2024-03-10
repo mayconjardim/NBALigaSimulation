@@ -1,16 +1,21 @@
 table {
-     background-color: var(--white);
+    background-color: var(--white);
     width: 100%;
     text-align: center;
     border-collapse: collapse;
     border-radius: 0.625rem;
     margin: 0.625rem 0;
 }
+table caption {
+    color: var(--primary-color);
+}
 
 table th {
     font-size: 0.625rem;
+    border: 1px solid #c9c4c4;
 }
 
 table td {
     font-size: 0.8rem;
+    border: 1px solid #c9c4c4;
 }

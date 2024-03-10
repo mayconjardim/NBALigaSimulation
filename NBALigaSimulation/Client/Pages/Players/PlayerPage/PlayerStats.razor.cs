@@ -15,7 +15,7 @@ public partial class PlayerStats
     string[] _stats = { "YEAR", "AGE", "TEAM", "GP", "GS" ,"MIN", "M" , "A", "%", "M", "A" , "%", "M" , "A", "%" ,
         "OFF", "DEF" , "TOT", "AST", "TO", "STL",  "BLK", "PF" , "PTS", "PER"};
 
-    string[] _locations = { "YEAR", "TEAM", "GP", "GS" ,"MIN", "M" , "A", "%", "M" , "A", "%", "M" , "A", "%", "M" , "A", "%",};
+    string[] _locations = { "YEAR", "AGE", "TEAM", "GP", "GS" ,"MIN", "M" , "A", "%", "M" , "A", "%", "M" , "A", "%", "M" , "A", "%",};
     
     protected override void OnInitialized()
     {
