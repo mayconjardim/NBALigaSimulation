@@ -1,0 +1,7 @@
+@page "/teams/{TeamId:int}"
+@inject ITeamService TeamService
+
+@if (_team != null)
+{
+    @_team.Name
+}
