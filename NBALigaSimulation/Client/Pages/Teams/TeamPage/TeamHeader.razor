@@ -1,0 +1,59 @@
+@using NBALigaSimulation.Client.Utilities
+@if (_team != null)
+{
+    
+    <div class="team-header @_team.Abrv">
+        
+        <div class="team-header-card">
+        
+            <div class="team-header-card-bio">
+        
+                <div class="team-header-card-img">
+                    <img src=@($"../Images/Logos/{_team.Abrv}.svg")  alt="Logo do time">
+                </div>
+            
+                <div class="team-header-card-info">
+                    <h3>@_team.Region @_team.Name</h3>
+                    <p> - </p>
+                </div>
+            
+            </div>
+            
+            @if (_team != null)
+            {
+                
+                <div class="team-header-stats">
+                    <table class="stats">
+                        <thead>
+                        <tr>
+                            <th colspan="4">SEASON STATS</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td>
+                                <span>PPG</span>
+                                111.5
+                            </td>
+                            <td>
+                                <span>RPG</span>
+                                40.0
+                            </td>
+                            <td>
+                                <span>APG</span>
+                                37.2
+                            </td>
+                            <td>
+                                <span>OPPG</span>
+                                99.8
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+                
+            }
+        </div>
+    </div>
+    
+}
