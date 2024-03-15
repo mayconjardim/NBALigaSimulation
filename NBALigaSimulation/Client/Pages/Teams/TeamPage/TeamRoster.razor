@@ -1,5 +1,33 @@
-<h3>TeamRoster</h3>
-
-@code {
-    
-}
+@using NBALigaSimulation.Client.Utilities
+<div class="container-fluid">
+    @if (_team != null)
+    {
+        <div class="table-responsive">
+            <table class="table caption-top">
+                <caption>Roster</caption>
+                <thead>
+                <tr>
+                    @foreach (var th in _headings)
+                    {
+                        <th>@th</th>
+                    }
+                </tr> 1A
+                </thead>
+                <tbody>
+                @foreach (var player in _roster)
+                {
+                    <tr>
+                        <td>
+                            <div class="player-header-card-img">
+                                <img src="@player.ImgUrl" alt="Foto do jogador">
+                            </div>
+                            @player.Name
+                        </td>
+                        <td>@player.Pos</td>
+                    </tr>
+                }
+                </tbody>
+            </table>
+        </div>
+    }
+</div>
