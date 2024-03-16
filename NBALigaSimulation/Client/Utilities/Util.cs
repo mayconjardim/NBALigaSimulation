@@ -93,6 +93,25 @@ namespace NBALigaSimulation.Client.Utilities
             }
         }
         
+        public static string GetBadgeClass(int number)
+        {
+            switch (number)
+            {
+                case int n when n > 85:
+                    return "rating-roxo";
+                case int n when n > 75:
+                    return "rating-azul";
+                case int n when n > 65:
+                    return "rating-verde";
+                case int n when n > 55:
+                    return "rating-amarelo";
+                case int n when n > 45:
+                    return "rating-laranja";
+                default:
+                    return "rating-vermelho";
+            }
+        }
+        
         public static string FormatNumber(double numero)
         {
             string numeroFormatado = numero.ToString("0.0", CultureInfo.InvariantCulture);

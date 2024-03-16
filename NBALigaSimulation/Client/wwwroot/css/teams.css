@@ -109,3 +109,27 @@
 .FA {
     background: linear-gradient(rgba(255,255,255,.8), rgba(255,255,255,.8)), url("../Images/Logos/FA.svg");
 }
+
+.rating-roxo {
+    background: #9000C0;
+}
+
+.rating-azul {
+    background: #094ECB;
+}
+
+.rating-verde {
+    background: #377C00;
+}
+
+.rating-amarelo{
+    background: #EBBF00;
+}
+
+.rating-laranja {
+    background: #EB8500;
+}
+
+.rating-vermelho {
+    background: #C33306;
+}

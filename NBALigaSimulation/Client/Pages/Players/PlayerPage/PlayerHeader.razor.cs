@@ -11,15 +11,18 @@ public partial class PlayerHeader
     private PlayerRegularStatsDto _stats;
     private int _season = 0;
     private int _age = 0;
-    
+    private int _ovr = 0;
+    private int _pot = 0;
     protected override async Task OnInitializedAsync()
     {
 
-        if (_player.RegularStats != null)
+        if (_player.RegularStats != null && _player.Ratings != null)
         {
             _stats = _player.RegularStats.LastOrDefault();
-            _season = _stats.Season;
+            _season = _stats!.Season;
             _age = (_stats.Season - _player.Born.Year);
+            _ovr = _player.Ratings.LastOrDefault()!.CalculateOvr;
+            _pot = _player.Ratings.LastOrDefault()!.Pot;
         }
        
     }

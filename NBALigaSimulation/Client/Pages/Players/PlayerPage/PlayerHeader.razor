@@ -14,7 +14,10 @@
             
                 <div class="player-header-card-info">
                     <h3>@_player.Name</h3>
-                    <p>@_player.TeamName - @Util.Position(_player.Pos)</p>
+                    <p>@_player.TeamName - @Util.Position(_player.Pos)
+                    <span class="badge @Util.GetBadgeClass(@_ovr)">@_ovr</span>
+                    <span class="badge  @Util.GetBadgeClass(@_pot)">@_pot</span>
+                    </p>
                 </div>
             
             </div>

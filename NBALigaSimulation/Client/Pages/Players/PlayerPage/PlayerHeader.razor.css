@@ -104,3 +104,6 @@ table thead th {
     color: var(--white);
 }
 
+.player-header-card-info span {
+    vertical-align: middle;
+}
