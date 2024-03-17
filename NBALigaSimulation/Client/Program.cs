@@ -1,6 +1,7 @@
 global using Microsoft.AspNetCore.Components.Authorization;
 global using NBALigaSimulation.Client.Services.PlayersService;
 global using NBALigaSimulation.Client.Services.TeamsService;
+global using NBALigaSimulation.Client.Services.GameService;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using NBALigaSimulation.Client;
@@ -15,6 +16,7 @@ builder.RootComponents.Add<HeadOutlet>("head::after");
 
 builder.Services.AddScoped<IPlayerService, PlayerService>();
 builder.Services.AddScoped<ITeamService, TeamService>();
+builder.Services.AddScoped<IGameService, GameService>();
 
 builder.Services.AddChartJs(options =>
 {

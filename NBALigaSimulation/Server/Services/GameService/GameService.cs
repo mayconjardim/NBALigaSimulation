@@ -26,6 +26,31 @@ namespace NBALigaSimulation.Server.Services.GameService
             _teamService = teamService;
             _playoffsService = playoffsService;
         }
+        
+        public async Task<ServiceResponse<List<GameCompleteDto>>> GetGamesByTeamId(int teamId)
+        {
+            var response = new ServiceResponse<List<GameCompleteDto>>();
+
+            try
+            {
+                var games = await _context.Games
+                    .Where(g => g.HomeTeamId == teamId || g.AwayTeamId == teamId)
+                    .OrderBy(g => g.GameDate)
+                    .Include(p => p.HomeTeam)
+                    .Include(p => p.AwayTeam)
+                    .Include(p => p.TeamGameStats)
+                    .ToListAsync();
+
+                response.Data = _mapper.Map<List<GameCompleteDto>>(games);
+            }
+            catch (Exception ex)
+            {
+                response.Success = false;
+                response.Message = $"Ocorreu um erro ao buscar os jogos para o Time com o ID {teamId}: {ex.Message}";
+            }
+
+            return response;
+        }
 
         public async Task<ServiceResponse<GameCompleteDto>> CreateGame(CreateGameDto request)
         {
@@ -153,22 +178,7 @@ namespace NBALigaSimulation.Server.Services.GameService
             return response;
         }
 
-        public async Task<ServiceResponse<List<GameCompleteDto>>> GetGamesByTeamId(int teamId)
-        {
 
-            var games = await _context.Games.OrderBy(g => g.GameDate)
-            .Include(p => p.HomeTeam)
-            .Include(p => p.AwayTeam)
-            .Include(p => p.TeamGameStats)
-            .Where(g => g.HomeTeamId == teamId || g.AwayTeamId == teamId).ToListAsync();
-
-            var response = new ServiceResponse<List<GameCompleteDto>>
-            {
-                Data = _mapper.Map<List<GameCompleteDto>>(games)
-            };
-
-            return response;
-        }
 
         public async Task<ServiceResponse<bool>> SimGameByDateRegular()
         {
