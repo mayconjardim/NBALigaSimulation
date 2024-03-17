@@ -11,10 +11,12 @@ public partial class TeamRoster
     public TeamCompleteDto _team { get; set; }
 
     List<PlayerCompleteDto> _roster { get; set; }
+
+    private int season = 0;
     
     string[] _headings =
     {
-        "PLAYER", "POS"
+        "PLAYER", "CUR", "POT", "POS", "HEIGHT", "WEIGHT", "AGE", "EXP", "COLLEGE"
     };
     
     protected override async Task OnInitializedAsync()
@@ -24,7 +26,13 @@ public partial class TeamRoster
         {
             _roster = _team.Players;
         }
-       
+
+        season = _roster.LastOrDefault().Ratings.LastOrDefault().Season;
+
     }
     
+    private  void NavigateToPlayerPage(int playerId)
+    {
+        NavigationManager.NavigateTo($"/players/{playerId}");
+    }
 }

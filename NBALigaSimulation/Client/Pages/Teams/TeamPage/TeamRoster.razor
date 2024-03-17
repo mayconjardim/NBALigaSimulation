@@ -1,33 +1,41 @@
 @using NBALigaSimulation.Client.Utilities
-<div class="container-fluid">
-    @if (_team != null)
-    {
-        <div class="table-responsive">
-            <table class="table caption-top">
-                <caption>Roster</caption>
-                <thead>
-                <tr>
-                    @foreach (var th in _headings)
-                    {
-                        <th>@th</th>
-                    }
-                </tr> 1A
-                </thead>
-                <tbody> 
-                @foreach (var player in _roster)
-                {
-                    <tr>
-                        <td>
-                            <div class="player-header-card-img">
-                                <img src="@player.ImgUrl" alt="Foto do jogador">
-                            </div>
-                            @player.Name
-                        </td>
-                        <td>@player.Pos</td>
-                    </tr>
-                }
-                </tbody>
-            </table>
-        </div>
-    }
-</div>
+@using NBALigaSimulation.Client.Pages.Players.PlayerPage
+@inject NavigationManager NavigationManager
+@if(_team.Players.Count > 0)
+{
+    <div class="container">
+        @foreach (var _player in _team.Players)
+        {  
+   
+            <div class="card mb-4" style="width: 10rem;" @onclick="() => NavigateToPlayerPage(_player.Id)">
+                <div class="player-header-card-img @_player.TeamAbrv">
+                     <img src="@_player.ImgUrl" alt="Foto do jogador">
+                </div>
+                <div class="card-body">
+                    <h5 class="card-title">@_player.Name</h5>
+                    <h6 class="card-subtitle mb-2 text-muted">@Util.Position(_player.Pos)</h6>
+                    <div class="card-player-info">
+                        <p><span class="text-muted">Age:</span> @Util.Age(season, _player.Born.Year)</p>
+                        <p><span class="text-muted">HT/WT:</span> @Util.InchesToCm(_player.Hgt)cm, @Util.LbsToKg(_player.Weight)kg </p>
+                        <p><span class="text-muted">Experience:</span> @_player.Ratings.Count Season</p>
+                        @if (_player.Contract != null)
+                        {
+                            <p><span class="text-muted">Contract:</span> $ @_player.Contract.Amount.ToString("N0")</p>
+                        }
+                        <p>
+                            <span class="badge @Util.GetBadgeClass(_player.Ratings.LastOrDefault().CalculateOvr)">@_player.Ratings.LastOrDefault().CalculateOvr</span>
+                            <span class="badge @Util.GetBadgeClass(@_player.Ratings.LastOrDefault().Pot)">@_player.Ratings.LastOrDefault().Pot</span>
+                        </p>
+                    </div>
+                    <div class="card-player-stats">
+                        @if (_player.RegularStats.Count > 0 && _player.RegularStats.LastOrDefault().Min > 0)
+                        {
+                            <p>@_player.RegularStats.Last().PtsPG PPG @_player.RegularStats.Last().TRebPG RPG @_player.RegularStats.Last().AstPG APG</p>
+                        }
+                    </div>
+                       
+                </div>
+            </div>
+        }   
+    </div>
+}

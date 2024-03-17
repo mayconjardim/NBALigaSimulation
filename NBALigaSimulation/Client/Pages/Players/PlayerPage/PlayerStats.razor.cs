@@ -12,10 +12,16 @@ public partial class PlayerStats
     public List<PlayerRegularStatsDto> _regularStats;
     
     
-    string[] _stats = { "YEAR", "AGE", "TEAM", "GP", "GS" ,"MIN", "M" , "A", "%", "M", "A" , "%", "M" , "A", "%" ,
-        "OFF", "DEF" , "TOT", "AST", "TO", "STL",  "BLK", "PF" , "PTS", "PER"};
+    string[] _stats = { "YEAR", "AGE", "TEAM", "GP", "GS" ,"MIN",
+        "A" ,"M", "%",
+        "A" ,"M", "%",
+        "A" ,"M", "%",
+        "OFF", "DEF" , "TOT",
+        "AST", "TO", "STL", 
+        "BLK", "PF" , "PTS",
+        "PER"};
 
-    string[] _locations = { "YEAR", "AGE", "TEAM", "GP", "GS" ,"MIN", "M" , "A", "%", "M" , "A", "%", "M" , "A", "%", "M" , "A", "%",};
+    string[] _locations = { "YEAR", "AGE", "TEAM", "GP", "GS" ,"MIN", "A" , "M", "%", "A" , "M", "%", "A" , "M", "%", "A" , "M", "%",};
     
     protected override void OnInitialized()
     {

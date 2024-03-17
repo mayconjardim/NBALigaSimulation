@@ -1,4 +1,5 @@
 ﻿using System.Globalization;
+using Microsoft.AspNetCore.Components;
 
 namespace NBALigaSimulation.Client.Utilities
 {
@@ -117,7 +118,6 @@ namespace NBALigaSimulation.Client.Utilities
             string numeroFormatado = numero.ToString("0.0", CultureInfo.InvariantCulture);
             return numeroFormatado;
         }
-
 
     }
 

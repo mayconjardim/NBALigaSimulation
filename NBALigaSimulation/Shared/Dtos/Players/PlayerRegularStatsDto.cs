@@ -42,17 +42,16 @@ namespace NBALigaSimulation.Shared.Dtos.Players
             get
             {
                 double min = (double)Min / Games;
-                return min.ToString("0.0", CultureInfo.InvariantCulture);
+                return min > 0 ? min.ToString("0.0", CultureInfo.InvariantCulture) : "-";
             }
         }
 
-        // FG
         public string FgPG
         {
             get
             {
                 double fg = (double)Fg / Games;
-                return fg.ToString("0.0", CultureInfo.InvariantCulture);
+                return fg > 0 ? fg.ToString("0.0", CultureInfo.InvariantCulture) : "-";
             }
         }
 
@@ -61,7 +60,7 @@ namespace NBALigaSimulation.Shared.Dtos.Players
             get
             {
                 double fga = (double)Fga / Games;
-                return fga.ToString("0.0", CultureInfo.InvariantCulture);
+                return fga > 0 ? fga.ToString("0.0", CultureInfo.InvariantCulture) : "-";
             }
         }
 
@@ -79,13 +78,12 @@ namespace NBALigaSimulation.Shared.Dtos.Players
             }
         }
 
-        // 3PT
         public string TpPG
         {
             get
             {
                 double tpPg = (double)Tp / Games;
-                return tpPg.ToString("0.0", CultureInfo.InvariantCulture);
+                return tpPg > 0 ? tpPg.ToString("0.0", CultureInfo.InvariantCulture) : "-";
             }
         }
 
@@ -94,9 +92,10 @@ namespace NBALigaSimulation.Shared.Dtos.Players
             get
             {
                 double tpaPg = (double)Tpa / Games;
-                return tpaPg.ToString("0.0", CultureInfo.InvariantCulture);
+                return tpaPg > 0 ? tpaPg.ToString("0.0", CultureInfo.InvariantCulture) : "-";
             }
         }
+
 
         public string TpPct
         {
@@ -112,13 +111,12 @@ namespace NBALigaSimulation.Shared.Dtos.Players
             }
         }
 
-        // FT
         public string FtPG
         {
             get
             {
                 double ftPg = (double)Ft / Games;
-                return ftPg.ToString("0.0", CultureInfo.InvariantCulture);
+                return ftPg > 0 ? ftPg.ToString("0.0", CultureInfo.InvariantCulture) : "-";
             }
         }
 
@@ -126,8 +124,8 @@ namespace NBALigaSimulation.Shared.Dtos.Players
         {
             get
             {
-                double FtaPg = (double)Fta / Games;
-                return FtaPg.ToString("0.0", CultureInfo.InvariantCulture);
+                double ftaPg = (double)Fta / Games;
+                return ftaPg > 0 ? ftaPg.ToString("0.0", CultureInfo.InvariantCulture) : "-";
             }
         }
 
@@ -145,13 +143,12 @@ namespace NBALigaSimulation.Shared.Dtos.Players
             }
         }
 
-        // Reb
         public string ORebPG
         {
             get
             {
-                double OrebPg = (double)Orb / Games;
-                return OrebPg.ToString("0.0", CultureInfo.InvariantCulture);
+                double oRebPg = (double)Orb / Games;
+                return oRebPg > 0 ? oRebPg.ToString("0.0", CultureInfo.InvariantCulture) : "-";
             }
         }
 
@@ -159,8 +156,8 @@ namespace NBALigaSimulation.Shared.Dtos.Players
         {
             get
             {
-                double DrebPg = (double)Drb / Games;
-                return DrebPg.ToString("0.0", CultureInfo.InvariantCulture);
+                double dRebPg = (double)Drb / Games;
+                return dRebPg > 0 ? dRebPg.ToString("0.0", CultureInfo.InvariantCulture) : "-";
             }
         }
 
@@ -168,58 +165,53 @@ namespace NBALigaSimulation.Shared.Dtos.Players
         {
             get
             {
-                double TRebpg = (double)Trb / Games;
-                return TRebpg.ToString("0.0", CultureInfo.InvariantCulture);
+                double tRebPg = (double)Trb / Games;
+                return tRebPg > 0 ? tRebPg.ToString("0.0", CultureInfo.InvariantCulture) : "-";
             }
         }
 
-        // Ast
         public string AstPG
         {
             get
             {
                 double astPg = (double)Ast / Games;
-                return astPg.ToString("0.0", CultureInfo.InvariantCulture);
+                return astPg > 0 ? astPg.ToString("0.0", CultureInfo.InvariantCulture) : "-";
             }
         }
 
-        // TO
         public string TovPG
         {
             get
             {
                 double tovPg = (double)Tov / Games;
-                return tovPg.ToString("0.0", CultureInfo.InvariantCulture);
+                return tovPg > 0 ? tovPg.ToString("0.0", CultureInfo.InvariantCulture) : "-";
             }
         }
 
-        // Steal
         public string StlPG
         {
             get
             {
                 double stlPg = (double)Stl / Games;
-                return stlPg.ToString("0.0", CultureInfo.InvariantCulture);
+                return stlPg > 0 ? stlPg.ToString("0.0", CultureInfo.InvariantCulture) : "-";
             }
         }
 
-        // Block
         public string BlkPG
         {
             get
             {
                 double blkPg = (double)Blk / Games;
-                return blkPg.ToString("0.0", CultureInfo.InvariantCulture);
+                return blkPg > 0 ? blkPg.ToString("0.0", CultureInfo.InvariantCulture) : "-";
             }
         }
 
-        // Fouls
         public string PfPG
         {
             get
             {
                 double pfPg = (double)Pf / Games;
-                return pfPg.ToString("0.0", CultureInfo.InvariantCulture);
+                return pfPg > 0 ? pfPg.ToString("0.0", CultureInfo.InvariantCulture) : "-";
             }
         }
 
@@ -268,16 +260,20 @@ namespace NBALigaSimulation.Shared.Dtos.Players
             }
         }
 
-
-
         //Points
         public string PtsPG
         {
             get
             {
                 double PtsPg = (double)Pts / Games;
-                return PtsPg.ToString("0.0", CultureInfo.InvariantCulture);
-
+                if (PtsPg > 0)
+                {
+                    return PtsPg.ToString("0.0", CultureInfo.InvariantCulture);
+                }
+                else
+                {
+                    return "-";
+                }
             }
         }
 
