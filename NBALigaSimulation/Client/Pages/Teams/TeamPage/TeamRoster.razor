@@ -28,9 +28,31 @@
                         </p>
                     </div>
                     <div class="card-player-stats">
-                        @if (_player.RegularStats.Count > 0 && _player.RegularStats.LastOrDefault().Min > 0)
+                        @if (_player.RegularStats.Count > 0 )
                         {
-                            <p>@_player.RegularStats.Last().PtsPG PPG @_player.RegularStats.Last().TRebPG RPG @_player.RegularStats.Last().AstPG APG</p>
+                                <table class="stats">
+                                    <thead>
+                                    <tr>
+                                        <th colspan="3">SEASON STATS</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr>
+                                        <td>
+                                            <span>PTS</span>
+                                            @_player.RegularStats.LastOrDefault().PtsPG
+                                        </td>
+                                        <td>
+                                            <span>REB</span>
+                                            @_player.RegularStats.LastOrDefault().TRebPG
+                                        </td>
+                                        <td>
+                                            <span>AST</span>
+                                            @_player.RegularStats.LastOrDefault().AstPG
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
                         }
                     </div>
                        

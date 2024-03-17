@@ -44,10 +44,60 @@
     font-weight: 600;
 }
 
+.card .card-player-stats {
+    font-size: 0.8rem;
+    font-weight: 600;
+}
+
+.card-player-stats {
+    display: flex;
+    justify-content: center;
+}
+
+table {
+    background-color: var(--white);
+    width: 100%;
+    text-align: center;
+    margin: 0.625rem;
+    border-collapse: collapse;
+    -webkit-border-radius: 0.625rem;
+    -moz-border-radius: 0.625rem;
+    border-radius: 0.625rem;
+    overflow: hidden;
+}
+
+table tbody td {
+    font-size: 0.8rem;
+    font-weight: 600;
+}
+table tbody td span {
+    display: block;
+    font-size: 0.4rem;
+    font-weight: 600;
+    padding-top: 0.200rem;
+}
+
+table thead {
+    background: var(--primary-color);
+}
+
+table thead th {
+    font-size: 0.625rem;
+    font-weight: 800;
+    color: var(--white);
+}
+
+.player-header-card-info span {
+    vertical-align: middle;
+    color: black;
+}
+
 @media (max-width: 390px) {
     
     .card {
         margin: 0.325rem;
     }
+    
+    
     
 }
