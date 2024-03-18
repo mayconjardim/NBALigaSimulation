@@ -16,7 +16,7 @@ public class GameService : IGameService
     
     public async Task<ServiceResponse<List<GameCompleteDto>>> GetGamesByTeamId(int teamId)
     {
-        var response = await _http.GetFromJsonAsync<ServiceResponse<List<GameCompleteDto>>>($"api/games/{teamId}");
+        var response = await _http.GetFromJsonAsync<ServiceResponse<List<GameCompleteDto>>>($"api/games/teams/{teamId}");
         return response;
     }
 }

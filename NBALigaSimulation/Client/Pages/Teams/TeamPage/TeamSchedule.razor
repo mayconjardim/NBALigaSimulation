@@ -1,0 +1,68 @@
+@using NBALigaSimulation.Client.Utilities
+@inject IGameService GameService
+
+   <div class="container">
+        @if (_team != null & _games != null)
+        {
+            <table>
+                <thead>
+                <tr>
+                    @foreach (var h in headings)
+                    {
+                        <th>@h</th>
+                    }
+                </tr>
+                </thead>
+                <tbody>
+                @foreach (var (index, game) in _games.Select((g, i) => (i, g)))
+                {
+                    
+                    <tr>
+                        <td>@game.GameDate.ToShortDateString()</td>
+                        <td>
+                            <a href="team/@game.HomeTeamId">
+                                <img src=@($"../Images/Logos/{game.HomeTeam}.svg") Style="vertical-align: middle; background: none" alt="Team logo" width="35"> </a>
+                        </td>
+                        <td>
+                            <a href="team/@game.AwayTeamId">
+                                <img src=@($"../Images/Logos/{game.AwayTeam}.svg") Style="vertical-align: middle; background: none" alt="Team logo" width="35">
+                            </a>
+                        </td>
+                      @if (game.HomeTeamScore != 0)
+                      {
+                          <td>
+                              <text>@GetWinLossNumber(game)</text>
+                          </td>
+                      }
+                      else
+                      {
+                          <td>
+                          </td>
+                      }
+                        @if (@game.HomeTeamScore > 0)
+                        {
+                            <td>
+                                <span class="@GetScoreClass(game)">
+                                    @GetWinLoss(game)
+                                </span>
+                                <a href="game/@game.Id">
+                                    <span class="@GetScoreClass(game)">
+                                        @game.HomeTeamScore
+                                    </span>
+                                    :
+                                    <span class="@GetScoreClass(game)">
+                                        @game.AwayTeamScore
+                                    </span>
+                                </a>
+                            </td>
+                        }
+                        else
+                        {
+                            <td>TBD</td>
+                        }
+                    </tr>
+                }
+                </tbody>
+            </table>
+         }
+    </div>

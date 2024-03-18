@@ -133,3 +133,11 @@
 .rating-vermelho {
     background: #C33306;
 }
+
+.text-win {
+    color: green;
+}
+
+.text-loss {
+    color: red;
+}

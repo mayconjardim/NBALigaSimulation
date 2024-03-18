@@ -5,6 +5,7 @@ namespace NBALigaSimulation.Client.Services.GameService;
 
 public interface IGameService
 {
+    
     Task<ServiceResponse<List<GameCompleteDto>>> GetGamesByTeamId(int teamId);
 
 }

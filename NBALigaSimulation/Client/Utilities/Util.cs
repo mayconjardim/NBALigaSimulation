@@ -1,5 +1,4 @@
 ﻿using System.Globalization;
-using Microsoft.AspNetCore.Components;
 
 namespace NBALigaSimulation.Client.Utilities
 {
@@ -76,22 +75,6 @@ namespace NBALigaSimulation.Client.Utilities
             }
 
             return x.ToString() + suffix;
-        }
-
-        public static string GetScoreClass(int homeScore, int awayScore)
-        {
-            if (homeScore > awayScore)
-            {
-                return "text-green";
-            }
-            else if (awayScore > homeScore)
-            {
-                return "text-red";
-            }
-            else
-            {
-                return "";
-            }
         }
         
         public static string GetBadgeClass(int number)

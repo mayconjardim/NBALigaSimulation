@@ -74,17 +74,23 @@ namespace NBALigaSimulation.Server.Controllers
 		}
 
 		[HttpGet("teams/{teamId}")]
-		public async Task<ActionResult<ServiceResponse<GameCompleteDto>>> GetGamesByTeamId(int teamId)
+		public async Task<ActionResult<ServiceResponse<List<GameCompleteDto>>>> GetGamesByTeamId(int teamId)
 		{
-
-			var result = await _gameService.GetGamesByTeamId(teamId);
-
-			if (!result.Success)
+			try
 			{
-				return NotFound(result);
-			}
+				var result = await _gameService.GetGamesByTeamId(teamId);
 
-			return Ok(result);
+				if (!result.Success)
+				{
+					return NotFound(result);
+				}
+
+				return Ok(result);
+			}
+			catch (Exception ex)
+			{
+				return StatusCode(500, $"Ocorreu um erro ao buscar os jogos para o Time com o ID {teamId}: {ex.Message}");
+			}
 		}
 
 		[HttpPut("update/date/playoffs")]
