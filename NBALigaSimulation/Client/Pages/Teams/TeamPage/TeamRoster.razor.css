@@ -50,6 +50,7 @@
 }
 
 .card-player-stats {
+    display: flex;
     justify-content: center;
 }
 
