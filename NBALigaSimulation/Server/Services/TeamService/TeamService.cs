@@ -56,14 +56,30 @@ namespace NBALigaSimulation.Server.Services.TeamService
 
         public async Task<ServiceResponse<List<TeamSimpleDto>>> GetAllTeams()
         {
-            var teams = await _context.Teams.Where(t => t.IsHuman == true).ToListAsync();
-            var response = new ServiceResponse<List<TeamSimpleDto>>
+            try
             {
-                Data = _mapper.Map<List<TeamSimpleDto>>(teams)
-            };
+                var teams = await _context.Teams
+                    .Where(t => t.IsHuman)
+                    .ToListAsync();
 
-            return response;
+                var teamDtos = _mapper.Map<List<TeamSimpleDto>>(teams);
+
+                return new ServiceResponse<List<TeamSimpleDto>>
+                {
+                    Data = teamDtos,
+                    Success = true
+                };
+            }
+            catch (Exception ex)
+            {
+                return new ServiceResponse<List<TeamSimpleDto>>
+                {
+                    Success = false,
+                    Message = $"Ocorreu um erro ao obter todos os times: {ex.Message}"
+                };
+            }
         }
+
 
         public async Task<ServiceResponse<List<TeamSimpleWithPlayersDto>>> GetAllTeamsWithPlayers()
         {

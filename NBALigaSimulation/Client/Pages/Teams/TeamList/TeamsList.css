@@ -1,6 +1,5 @@
 .container {
     display: flex;
-    flex-wrap: wrap;
     justify-content: center;
 }
 
@@ -91,11 +90,11 @@ table thead th {
 }
 
 @media (max-width: 390px) {
-    
+
     .card {
         margin: 0.325rem;
     }
-    
-    
-    
+
+
+
 }

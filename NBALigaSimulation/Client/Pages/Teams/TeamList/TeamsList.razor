@@ -1,0 +1,18 @@
+@page "/teams"
+@inject ITeamService TeamService
+
+@if (_teams != null)
+{
+<div class="container">
+    
+    @foreach (var team in _teams)
+    {
+        <div class="card mb-4s " style="width: 8rem;">
+            <div class="player-header-card-info">
+                <img src=@($"../Images/Logos/{team.Abrv}.svg") alt="team logo">
+            </div>
+        </div>
+    }
+    
+</div>
+}
