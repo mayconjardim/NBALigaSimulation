@@ -1,18 +1,17 @@
 @page "/teams"
 @inject ITeamService TeamService
+@inject NavigationManager NavigationManager
 
-@if (_teams != null)
+@if (_teams != null && _east != null && _west != null)
 {
-<div class="container">
-    
-    @foreach (var team in _teams)
-    {
-        <div class="card mb-4s " style="width: 8rem;">
-            <div class="player-header-card-info">
-                <img src=@($"../Images/Logos/{team.Abrv}.svg") alt="team logo">
-            </div>
-        </div>
-    }
-    
-</div>
+    <div class="container">
+    <div class="image-container">
+        @foreach (var team in _east)
+        {
+            <img src="@($"../Images/Logos/{team.Abrv}.svg")" width="60" alt="Foto do jogador">
+        }
+    </div>
+    </div>
+
 }
+

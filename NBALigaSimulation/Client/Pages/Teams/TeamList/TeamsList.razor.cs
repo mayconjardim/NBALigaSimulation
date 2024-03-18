@@ -24,5 +24,11 @@ public partial class TeamsList
         }
 
     }
+    
+    
+    private  void NavigateToTeamPage(int teamId)
+    {
+        NavigationManager.NavigateTo($"/teams/{teamId}");
+    }
 
 }
