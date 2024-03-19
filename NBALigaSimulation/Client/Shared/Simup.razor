@@ -3,154 +3,162 @@
 @inject IGameService GameService
 @using System.Globalization;
 
-<div class="container">
-
-    <div class="row">
-        <div class="col">
-            <label for="homeTeamSelect" class="form-label">Times 1</label>
-            <select id="homeTeamSelect" class="form-select" style="width: 150px; margin: 10px;" @onchange="HandleHomeTeamChange">
+@if (teams != null)
+{
+    <div class="container">
+    
+        <div class="teams">
+            
+            <select @onchange="OnHomeTeamSelected" class="form-select-sm" style="margin-top: 10px; height: 38px; width: 100%;">
+                <option selected value="0">Escolha um time!</option>
                 @foreach (var team in teams)
                 {
                     <option value="@team.Id">@team.Name</option>
                 }
-            </select>
-        </div>
-        <div class="col">
-            <label for="awayTeamSelect" class="form-label">Times 2</label>
-            <select id="awayTeamSelect" class="form-select" style="width: 150px; margin: 10px;" @onchange="HandleAwayTeamChange">
+            </select> 
+                  
+            <select @onchange="OnAwayTeamSelected" class="form-select-sm" style="margin-top: 10px; height: 38px; width: 100%;">
+                <option selected value="0">Escolha um time!</option>
                 @foreach (var team in teams)
                 {
                     <option value="@team.Id">@team.Name</option>
                 }
-            </select>
-
+            </select> 
         </div>
-    </div>
-
-    <div class="row">
-        <div class="col">
-            <button type="button" class="btn btn-outline-primary" disabled="@((homeTeamId == 99 || awayTeamId == 99))" @onclick="CreateGame">Simular</button>
+        
+        <div class="simular">
+            <button type="button" class="btn btn-primary" disabled="@(homeTeamId == 99 || awayTeamId == 99)" @onclick="CreateGame">Simular Partida</button>
         </div>
-    </div>
-
-    <div class="row">
-        <div class="col">
-            @if (homeTeam != null)
-            {
-                <img src="Images/logos/@(homeTeam.Abrv).svg" class="img-fluid rounded" alt="@homeTeam.Name Logo">
-                @foreach (var player in homeTeam.Players)
-                {
-                    <div class="info">
-                        <a href="player/@player.Id">@player.Name</a>
-                        <span>OVR: @player.Ratings.Last().CalculateOvr | POT: @player.Ratings.Last().Pot</span>
-                        <p>Skills:
-                            @foreach (string skill in player.Ratings.Last().Skills)
-                            {
-                                <span>@skill</span>
-                            }
-                        </p>
+        
+        @if (newGame != null)
+        {
+            
+            <div class="boxscore">
+            
+                <div class="boxscore-header">
+                    
+                    <div class="boxscore-header-logo">
+                        <img src=@($"../Images/Logos/{newGame.HomeTeam}.svg") alt="Team logo" width="90">
                     </div>
-                }
-            }
-        </div>
-        <div class="col">
-            @if (awayTeam != null)
-            {
-                <img src="Images/logos/@(awayTeam.Abrv).svg" class="img-fluid rounded" alt="@awayTeam.Name Logo">
-                @foreach (var player in awayTeam.Players)
-                {
-                    <div class="info">
-                        <a href="player/@player.Id">@player.Name</a>
-                        <span>OVR: @player.Ratings.Last().CalculateOvr | POT: @player.Ratings.Last().Pot</span>
-                        <p>Skills:
-                            @foreach (string skill in player.Ratings.Last().Skills)
-                            {
-                                <span>@skill</span>
-                            }
-                        </p>
+                  
+                    <div class="boxscore-header-score">
+                        <span>@newGame.HomeTeamScore</span> -   <span>@newGame.AwayTeamScore</span>
                     </div>
-                }
-            }
-        </div>
+                    
+                    <div class="boxscore-header-logo">
+                        <img src=@($"../Images/Logos/{newGame.AwayTeam}.svg") alt="Team logo" width="90">
+                    </div>
+                    
+                </div>
+            </div>
+            
+            <div class="tabs-container">
+                <ul class="nav nav-tabs justify-content-center" id="myTab" role="tablist">
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link active" id="bio-tab" data-bs-toggle="tab" data-bs-target="#bio-tab-pane" type="button" role="tab" aria-controls="bio-tab-pane" aria-selected="true">@newGame.HomeTeam</button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="profile-tab" data-bs-toggle="tab" data-bs-target="#profile-tab-pane" type="button" role="tab" aria-controls="profile-tab-pane" aria-selected="false">@newGame.AwayTeam</button>
+                    </li>
+                </ul>
+                <div class="tab-content" id="myTabContent">
+                    <div class="tab-pane fade show active" id="bio-tab-pane" role="tabpanel" aria-labelledby="bio-tab" tabindex="0">
+                  
+                        <div class="table-responsive">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        @foreach (var h in headings)
+                                        {
+                                        <th>@h</th>
+                                        }
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var row in newGame.HomePlayerGameStats.Select((value, index) => new { Value = value, Index = index }))
+                                    {
+                                    <tr>
+                                        <td><a href="player/@row.Value.PlayerId">@NomeAbvr(@row.Value.Name)</a></td>
+                                        <td>@Format(row.Value.Min)</td>
+                                        <td>@row.Value.Fg-@row.Value.Fga</td>
+                                        <td>@row.Value.Tp-@row.Value.Tpa</td>
+                                        <td>@row.Value.Ft-@row.Value.Fta</td>
+                                        <td>@row.Value.Orb</td>
+                                        <td>@row.Value.Trb</td>
+                                        <td>@row.Value.Ast</td>
+                                        <td>@row.Value.Tov</td>
+                                        <td>@row.Value.Stl</td>
+                                        <td>@row.Value.Blk</td>
+                                        <td>@row.Value.Pf</td>
+                                        <td>@row.Value.Pts</td>
+                                    </tr>
+                                    @if (row.Index == 4)
+                                    {
+                                    <tr>
+                                        <td colspan="14">
+                                            <hr style="border-top: 1px solid #e0e0e0; margin: 0;">
+                                        </td>
+                                    </tr>
+                                    }
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                        
+                        
+                    </div>
+                    <div class="tab-pane fade" id="profile-tab-pane" role="tabpanel" aria-labelledby="profile-tab" tabindex="0">
+                        
+                         <div class="table-responsive">
+                                                    <table class="table" >
+                                                        <thead>
+                                                            <tr>
+                                                                @foreach (var h in headings)
+                                                                {
+                                                                <th>@h</th>
+                                                                }
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            @foreach (var row in newGame.AwayPlayerGameStats.Select((value, index) => new { Value = value, Index = index }))
+                                                            {
+                                                            <tr>
+                                                                <td><a href="player/@row.Value.PlayerId">@NomeAbvr(@row.Value.Name)</a></td>
+                                                                <td>@Format(row.Value.Min)</td>
+                                                                <td>@row.Value.Fg-@row.Value.Fga</td>
+                                                                <td>@row.Value.Tp-@row.Value.Tpa</td>
+                                                                <td>@row.Value.Ft-@row.Value.Fta</td>
+                                                                <td>@row.Value.Orb</td>
+                                                                <td>@row.Value.Trb</td>
+                                                                <td>@row.Value.Ast</td>
+                                                                <td>@row.Value.Tov</td>
+                                                                <td>@row.Value.Stl</td>
+                                                                <td>@row.Value.Blk</td>
+                                                                <td>@row.Value.Pf</td>
+                                                                <td>@row.Value.Pts</td>
+                                                            </tr>
+                                                            @if (row.Index == 4)
+                                                            {
+                                                            <tr>
+                                                                <td colspan="14">
+                                                                    <hr style="border-top: 1px solid #e0e0e0; margin: 0;">
+                                                                </td>
+                                                            </tr>
+                                                            }
+                                                            }
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                        
+                        
+                    </div>
+                </div>
+            </div>
+            
+            
+            
+        }
+  
     </div>
-
-    <div class="row">
-        <div class="col">
-            @if (newGame != null)
-            {
-                <div class="score">
-                    <p>@newGame.AwayTeam <span>@newGame.AwayTeamScore,</span> @newGame.HomeTeam <span>@newGame.HomeTeamScore</span></p>
-                </div>
-
-                <div class="boxscore-teams">
-                    <img src=@($"../Images/Logos/{newGame.AwayTeam}.svg") class="img-fluid rounded" alt="@newGame.AwayTeam Logo">
-                    <table class="table table-bordered table-striped">
-                        <thead>
-                            <tr>
-                                @foreach (var h in headings)
-                                {
-                                    <th>@h</th>
-                                }
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach (var row in newGame.AwayPlayerGameStats.Take(5))
-                            {
-                                <tr>
-                                    <td><a href="player/@row.PlayerId">@NomeAbvr(row.Name)</a></td>
-                                    <td>@Format(row.Min)</td>
-                                    <td>@row.Fg-@row.Fga</td>
-                                    <td>@row.Tp-@row.Tpa</td>
-                                    <td>@row.Ft-@row.Fta</td>
-                                    <td>@row.Orb</td>
-                                    <td>@row.Trb</td>
-                                    <td>@row.Ast</td>
-                                    <td>@row.Tov</td>
-                                    <td>@row.Stl</td>
-                                    <td>@row.Blk</td>
-                                    <td>@row.Pf</td>
-                                    <td>@row.Pts</td>
-                                </tr>
-                            }
-                        </tbody>
-                    </table>
-                </div>
-
-                <div class="boxscore-teams">
-                    <img src=@($"../Images/Logos/{newGame.HomeTeam}.svg") class="img-fluid rounded" alt="@newGame.HomeTeam Logo">
-                    <table class="table table-bordered table-striped">
-                        <thead>
-                            <tr>
-                                @foreach (var h in headings)
-                                {
-                                    <th>@h</th>
-                                }
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach (var row in newGame.HomePlayerGameStats.Take(5))
-                            {
-                                <tr>
-                                    <td><a href="player/@row.PlayerId">@NomeAbvr(row.Name)</a></td>
-                                    <td>@Format(row.Min)</td>
-                                    <td>@row.Fg-@row.Fga</td>
-                                    <td>@row.Tp-@row.Tpa</td>
-                                    <td>@row.Ft-@row.Fta</td>
-                                    <td>@row.Orb</td>
-                                    <td>@row.Trb</td>
-                                    <td>@row.Ast</td>
-                                    <td>@row.Tov</td>
-                                    <td>@row.Stl</td>
-                                    <td>@row.Blk</td>
-                                    <td>@row.Pf</td>
-                                    <td>@row.Pts</td>
-                                </tr>
-                            }
-                        </tbody>
-                    </table>
-                </div>
-            }
-        </div>
-    </div>
-
-</div>
+    
+}

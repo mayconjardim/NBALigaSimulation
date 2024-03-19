@@ -38,54 +38,24 @@ namespace NBALigaSimulation.Client.Shared
             }
         }
 
-        private async Task OnAwayTeamSelected(int value)
+        private async Task OnHomeTeamSelected(ChangeEventArgs e)
         {
-            message = "Carregando Time...";
-            var result = await TeamService.GetTeamById(value);
-            homeTeamId = value;
-            if (!result.Success)
+
+            if (int.TryParse(e.Value.ToString(), out var value))
             {
-                message = result.Message;
-            }
-            else
-            {
-                awayTeam = result.Data;
+                homeTeamId = value;
             }
         }
-
-        void HandleHomeTeamChange(ChangeEventArgs e)
+        
+        private async Task OnAwayTeamSelected(ChangeEventArgs e)
         {
-            // Attempt to parse the selected value to an integer
-            if (int.TryParse(e.Value.ToString(), out int selectedValue))
+
+            if (int.TryParse(e.Value.ToString(), out var value))
             {
-                // Call your method with the parsed integer value
-                OnHomeTeamSelected(selectedValue);
+                awayTeamId = value;
             }
         }
-
-        void HandleAwayTeamChange(ChangeEventArgs e)
-        {
-            if (int.TryParse(e.Value.ToString(), out int selectedValue))
-            {
-                OnAwayTeamSelected(selectedValue);
-            }
-        }
-
-            private async Task OnHomeTeamSelected(int value)
-        {
-            message = "Carregando Time...";
-            var result = await TeamService.GetTeamById(value);
-            awayTeamId = value;
-            if (!result.Success)
-            {
-                message = result.Message;
-            }
-            else
-            {
-                homeTeam = result.Data;
-            }
-        }
-
+        
         private async Task CreateGame()
         {
 
