@@ -1,0 +1,22 @@
+.container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+
+.title {
+    text-align: center;
+    margin-top: 0.800rem;
+    margin-bottom: 0.800rem;
+}
+
+.team-img {
+    vertical-align: middle;
+}
+img {
+    margin: 0 auto;
+    width: 6rem;
+    height: 6rem;
+    border-bottom: 0.068rem solid #c9c4c4;
+    border-radius: 50%;
+}

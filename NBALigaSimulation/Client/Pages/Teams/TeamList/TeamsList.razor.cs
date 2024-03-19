@@ -5,11 +5,12 @@ namespace NBALigaSimulation.Client.Pages.Teams.TeamList;
 public partial class TeamsList
 {
     private List<TeamSimpleDto> _teams = new List<TeamSimpleDto>();
-
+    
     protected List<TeamSimpleDto> _east;
     protected List<TeamSimpleDto> _west;
     
-    string[] headings = { "EAST", "WEST" };
+    string[] headings = { "NAME", "CONFERENCE" };
+
     
     protected override async Task OnInitializedAsync()
     {
@@ -24,7 +25,6 @@ public partial class TeamsList
         }
 
     }
-    
     
     private  void NavigateToTeamPage(int teamId)
     {
