@@ -1,4 +1,5 @@
-﻿using NBALigaSimulation.Shared.Dtos.Games;
+﻿using Microsoft.AspNetCore.Components;
+using NBALigaSimulation.Shared.Dtos.Games;
 using NBALigaSimulation.Shared.Dtos.Teams;
 using System.Globalization;
 
@@ -52,7 +53,25 @@ namespace NBALigaSimulation.Client.Shared
             }
         }
 
-        private async Task OnHomeTeamSelected(int value)
+        void HandleHomeTeamChange(ChangeEventArgs e)
+        {
+            // Attempt to parse the selected value to an integer
+            if (int.TryParse(e.Value.ToString(), out int selectedValue))
+            {
+                // Call your method with the parsed integer value
+                OnHomeTeamSelected(selectedValue);
+            }
+        }
+
+        void HandleAwayTeamChange(ChangeEventArgs e)
+        {
+            if (int.TryParse(e.Value.ToString(), out int selectedValue))
+            {
+                OnAwayTeamSelected(selectedValue);
+            }
+        }
+
+            private async Task OnHomeTeamSelected(int value)
         {
             message = "Carregando Time...";
             var result = await TeamService.GetTeamById(value);

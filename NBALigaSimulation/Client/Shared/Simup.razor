@@ -3,177 +3,154 @@
 @inject IGameService GameService
 @using System.Globalization;
 
- <div class="teams">
-      <MudSelect Style="width: 150px; margin: 10px;" Dense="true" T="int" Label="Times 1" Variant="Variant.Text" 
-        ValueChanged="value => OnHomeTeamSelected(value)">
-            @foreach (var team in teams)
+<div class="container">
+
+    <div class="row">
+        <div class="col">
+            <label for="homeTeamSelect" class="form-label">Times 1</label>
+            <select id="homeTeamSelect" class="form-select" style="width: 150px; margin: 10px;" @onchange="HandleHomeTeamChange">
+                @foreach (var team in teams)
+                {
+                    <option value="@team.Id">@team.Name</option>
+                }
+            </select>
+        </div>
+        <div class="col">
+            <label for="awayTeamSelect" class="form-label">Times 2</label>
+            <select id="awayTeamSelect" class="form-select" style="width: 150px; margin: 10px;" @onchange="HandleAwayTeamChange">
+                @foreach (var team in teams)
+                {
+                    <option value="@team.Id">@team.Name</option>
+                }
+            </select>
+
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col">
+            <button type="button" class="btn btn-outline-primary" disabled="@((homeTeamId == 99 || awayTeamId == 99))" @onclick="CreateGame">Simular</button>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col">
+            @if (homeTeam != null)
             {
-                <MudSelectItem Value="@(team.Id)">@team.Name</MudSelectItem>
-            }
-      </MudSelect>
-      
-      <MudSelect Style="width: 150px; margin: 10px;" Dense="true" T="int" Label="Times 2" Variant="Variant.Text" 
-           ValueChanged="value => OnAwayTeamSelected(value)">
-            @foreach (var team in teams)
-            {
-                <MudSelectItem Value="@(team.Id)" >@team.Name</MudSelectItem>
-            }
-      </MudSelect>
-
-      <MudButton Variant="Variant.Outlined" disabled="@(homeTeamId == 99 || awayTeamId == 99)" OnClick="CreateGame">Simular</MudButton>
-
-</div>
-
-<div class="player">
-
-      <div class="players-home">
-        
-        @if (homeTeam != null) {
-
-             <MudAvatar Style="vertical-align: middle; background: none; margin: 5px"
-             Size="Size.Large" Image=@($"Images/logos/{homeTeam.Abrv}.svg") Square="true" />
-
-            @foreach (var player in homeTeam.Players)
-            {
-               <div class="info">
-                    <a href="player/@player.Id" style="display: inline-block; margin-right: 10px;">@player.Name</a>
-                    <span style="display: inline-block; margin-right: 10px;">OVR: @player.Ratings.Last().CalculateOvr | POT: @player.Ratings.Last().Pot</span>
-                    <p style="display: inline-block; margin-bottom: 0;">
-                        Skills:
-                        @foreach (string skills in @player.Ratings.Last().Skills)
-                        {
-                            <span style="padding: 2px; margin-right: 5px;">@skills</span>
-                        }
-                    </p>
-                </div>
-            }
-        }
-       
-      </div>
-
-      <div class="players-away">
-            @if (awayTeam != null)
-            {
-                 <MudAvatar Style="vertical-align: middle; background: none; margin: 5px"
-                  Size="Size.Large" Image=@($"..//Images/logos/{awayTeam.Abrv}.svg") Square="true" />
-
-                foreach (var player in awayTeam.Players)
+                <img src="Images/logos/@(homeTeam.Abrv).svg" class="img-fluid rounded" alt="@homeTeam.Name Logo">
+                @foreach (var player in homeTeam.Players)
                 {
                     <div class="info">
-                        <a href="player/@player.Id" style="display: inline-block; margin-right: 10px;">@player.Name</a>
-                        <span style="display: inline-block; margin-right: 10px;">OVR: @player.Ratings.Last().CalculateOvr | POT: @player.Ratings.Last().Pot</span>
-                        <p style="display: inline-block; margin-bottom: 0;">
-                            Skills:
-                            @foreach (string skills in @player.Ratings.Last().Skills)
+                        <a href="player/@player.Id">@player.Name</a>
+                        <span>OVR: @player.Ratings.Last().CalculateOvr | POT: @player.Ratings.Last().Pot</span>
+                        <p>Skills:
+                            @foreach (string skill in player.Ratings.Last().Skills)
                             {
-                                <span style="padding: 2px; margin-right: 5px;">@skills</span>
+                                <span>@skill</span>
                             }
                         </p>
                     </div>
                 }
             }
-          
-      </div>
+        </div>
+        <div class="col">
+            @if (awayTeam != null)
+            {
+                <img src="Images/logos/@(awayTeam.Abrv).svg" class="img-fluid rounded" alt="@awayTeam.Name Logo">
+                @foreach (var player in awayTeam.Players)
+                {
+                    <div class="info">
+                        <a href="player/@player.Id">@player.Name</a>
+                        <span>OVR: @player.Ratings.Last().CalculateOvr | POT: @player.Ratings.Last().Pot</span>
+                        <p>Skills:
+                            @foreach (string skill in player.Ratings.Last().Skills)
+                            {
+                                <span>@skill</span>
+                            }
+                        </p>
+                    </div>
+                }
+            }
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col">
+            @if (newGame != null)
+            {
+                <div class="score">
+                    <p>@newGame.AwayTeam <span>@newGame.AwayTeamScore,</span> @newGame.HomeTeam <span>@newGame.HomeTeamScore</span></p>
+                </div>
+
+                <div class="boxscore-teams">
+                    <img src=@($"../Images/Logos/{newGame.AwayTeam}.svg") class="img-fluid rounded" alt="@newGame.AwayTeam Logo">
+                    <table class="table table-bordered table-striped">
+                        <thead>
+                            <tr>
+                                @foreach (var h in headings)
+                                {
+                                    <th>@h</th>
+                                }
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var row in newGame.AwayPlayerGameStats.Take(5))
+                            {
+                                <tr>
+                                    <td><a href="player/@row.PlayerId">@NomeAbvr(row.Name)</a></td>
+                                    <td>@Format(row.Min)</td>
+                                    <td>@row.Fg-@row.Fga</td>
+                                    <td>@row.Tp-@row.Tpa</td>
+                                    <td>@row.Ft-@row.Fta</td>
+                                    <td>@row.Orb</td>
+                                    <td>@row.Trb</td>
+                                    <td>@row.Ast</td>
+                                    <td>@row.Tov</td>
+                                    <td>@row.Stl</td>
+                                    <td>@row.Blk</td>
+                                    <td>@row.Pf</td>
+                                    <td>@row.Pts</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="boxscore-teams">
+                    <img src=@($"../Images/Logos/{newGame.HomeTeam}.svg") class="img-fluid rounded" alt="@newGame.HomeTeam Logo">
+                    <table class="table table-bordered table-striped">
+                        <thead>
+                            <tr>
+                                @foreach (var h in headings)
+                                {
+                                    <th>@h</th>
+                                }
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var row in newGame.HomePlayerGameStats.Take(5))
+                            {
+                                <tr>
+                                    <td><a href="player/@row.PlayerId">@NomeAbvr(row.Name)</a></td>
+                                    <td>@Format(row.Min)</td>
+                                    <td>@row.Fg-@row.Fga</td>
+                                    <td>@row.Tp-@row.Tpa</td>
+                                    <td>@row.Ft-@row.Fta</td>
+                                    <td>@row.Orb</td>
+                                    <td>@row.Trb</td>
+                                    <td>@row.Ast</td>
+                                    <td>@row.Tov</td>
+                                    <td>@row.Stl</td>
+                                    <td>@row.Blk</td>
+                                    <td>@row.Pf</td>
+                                    <td>@row.Pts</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+        </div>
+    </div>
 
 </div>
-
-<div class="game">
-      @if (newGame != null) {
-          
-          <div class="score"> 
-
-              <p>@newGame.AwayTeam <span>@newGame.AwayTeamScore,</span> @newGame.HomeTeam <span>@newGame.HomeTeamScore</span></p>
-
-          </div>
-
-           <div class="boxscore-teams">
-
-            <MudAvatar Style="vertical-align: middle; background: none; margin: 5px" Size="Size.Medium" Image=@($"Images/logos/{newGame.AwayTeam}.svg") Square="true" />
-       
-            <MudSimpleTable Elevation="0" Outlined="true"  Dense="true" Hover="false" Bordered="true" Striped="true" Style="overflow-x: auto;">
-               <thead>
-                  <tr>
-                     @foreach (var h in headings)
-                     {
-                     <th>@h</th>
-                     }
-                  </tr>
-               </thead>
-               <tbody>
-                  @foreach (var row in newGame.AwayPlayerGameStats.Select((value, index) => new { Value = value, Index = index }))
-                  {
-                  <tr>
-                     <td><a href="player/@row.Value.PlayerId">@NomeAbvr(@row.Value.Name)</a></td>
-                     <td>@Format(row.Value.Min)</td>
-                     <td>@row.Value.Fg-@row.Value.Fga</td>
-                     <td>@row.Value.Tp-@row.Value.Tpa</td>
-                     <td>@row.Value.Ft-@row.Value.Fta</td>
-                     <td>@row.Value.Orb</td>
-                     <td>@row.Value.Trb</td>
-                     <td>@row.Value.Ast</td>
-                     <td>@row.Value.Tov</td>
-                     <td>@row.Value.Stl</td>
-                     <td>@row.Value.Blk</td>
-                     <td>@row.Value.Pf</td>
-                     <td>@row.Value.Pts</td>
-                  </tr>
-                  @if (row.Index == 4)
-                  {
-                  <tr>
-                     <td colspan="14">
-                        <hr style="border-top: 1px solid #e0e0e0; margin: 0;">
-                     </td>
-                  </tr>
-                  }
-                  }
-               </tbody>
-            </MudSimpleTable>
-         </div>
-
-          
-          <div class="boxscore-teams">
-            <MudAvatar Style="vertical-align: middle; background: none; margin: 5px" Size="Size.Medium" Image=@($"Images/logos/{newGame.HomeTeam}.svg") Square="true" />
-
-            <MudSimpleTable Elevation="0" Outlined="true"  Dense="true" Hover="false" Bordered="true" Striped="true" Style="overflow-x: auto;">
-               <thead>
-                  <tr>
-                     @foreach (var h in headings)
-                     {
-                     <th>@h</th>
-                     }
-                  </tr>
-               </thead>
-               <tbody>
-                  @foreach (var row in newGame.HomePlayerGameStats.Select((value, index) => new { Value = value, Index = index }))
-                  {
-                  <tr>
-                     <td><a href="player/@row.Value.PlayerId">@NomeAbvr(@row.Value.Name)</a></td>
-                     <td>@Format(@row.Value.Min)</td>
-                     <td>@row.Value.Fg-@row.Value.Fga</td>
-                     <td>@row.Value.Tp-@row.Value.Tpa</td>
-                     <td>@row.Value.Ft-@row.Value.Fta</td>
-                     <td>@row.Value.Orb</td>
-                     <td>@row.Value.Trb</td>
-                     <td>@row.Value.Ast</td>
-                     <td>@row.Value.Tov</td>
-                     <td>@row.Value.Stl</td>
-                     <td>@row.Value.Blk</td>
-                     <td>@row.Value.Pf</td>
-                     <td>@row.Value.Pts</td>
-                  </tr>
-                  @if (row.Index == 4)
-                  {
-                  <tr>
-                     <td colspan="14">
-                        <hr style="border-top: 1px solid #e0e0e0; margin: 0;">
-                     </td>
-                  </tr>
-                  }
-                  }
-               </tbody>
-            </MudSimpleTable>
-         </div>
-
-      }
-</div>
-
