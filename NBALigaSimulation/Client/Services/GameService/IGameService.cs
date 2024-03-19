@@ -7,5 +7,12 @@ public interface IGameService
 {
     
     Task<ServiceResponse<List<GameCompleteDto>>> GetGamesByTeamId(int teamId);
+    //
+
+    Task<ServiceResponse<GameCompleteDto>> GetGameById(int gameId);
+    Task<GameCompleteDto> CreateGame(CreateGameDto game);
+    Task<ServiceResponse<bool>> UpdateGame(int gameId);
+    Task<ServiceResponse<bool>> SimGameByDateRegular();
+    Task<ServiceResponse<bool>> SimGameByDatePlayoffs();
 
 }
