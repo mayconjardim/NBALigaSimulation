@@ -78,7 +78,7 @@
                                     @foreach (var row in newGame.HomePlayerGameStats.Select((value, index) => new { Value = value, Index = index }))
                                     {
                                     <tr>
-                                        <td><a href="player/@row.Value.PlayerId">@NomeAbvr(@row.Value.Name)</a></td>
+                                        <td><a href="players/@row.Value.PlayerId">@NomeAbvr(@row.Value.Name)</a></td>
                                         <td>@Format(row.Value.Min)</td>
                                         <td>@row.Value.Fg-@row.Value.Fga</td>
                                         <td>@row.Value.Tp-@row.Value.Tpa</td>
@@ -123,7 +123,7 @@
                                                             @foreach (var row in newGame.AwayPlayerGameStats.Select((value, index) => new { Value = value, Index = index }))
                                                             {
                                                             <tr>
-                                                                <td><a href="player/@row.Value.PlayerId">@NomeAbvr(@row.Value.Name)</a></td>
+                                                                <td><a href="players/@row.Value.PlayerId">@NomeAbvr(@row.Value.Name)</a></td>
                                                                 <td>@Format(row.Value.Min)</td>
                                                                 <td>@row.Value.Fg-@row.Value.Fga</td>
                                                                 <td>@row.Value.Tp-@row.Value.Tpa</td>
