@@ -127,7 +127,7 @@
         @foreach (var (stats, index) in categoryLists["FGPct"].Select((s, i) => (s, i)))
         {
             <tr>
-                <td>@(index + 1). <a href=@("/player/" + stats.PlayerId)>@stats.Name</a>, <a href=@("/team/" + stats.TeamId)>@stats.TeamAbrv</a></td>
+                <td>@(index + 1). <a href=@("/players/" + stats.PlayerId)>@stats.Name</a>, <a href=@("/teams/" + stats.TeamId)>@stats.TeamAbrv</a></td>
                 <td>@stats.FgPct</td>
             </tr>
         }
