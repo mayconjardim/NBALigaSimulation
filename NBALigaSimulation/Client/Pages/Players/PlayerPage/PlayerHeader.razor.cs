@@ -13,10 +13,11 @@ public partial class PlayerHeader
     private int _age = 0;
     private int _ovr = 0;
     private int _pot = 0;
+    
     protected override async Task OnInitializedAsync()
     {
 
-        if (_player.RegularStats != null && _player.Ratings != null)
+        if (_player.RegularStats != null && _player.RegularStats.Any() && _player.Ratings != null && _player.Ratings.Any())
         {
             _stats = _player.RegularStats.LastOrDefault();
             _season = _stats!.Season;
