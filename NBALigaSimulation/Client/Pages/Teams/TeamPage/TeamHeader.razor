@@ -1,4 +1,5 @@
 @using NBALigaSimulation.Client.Utilities
+@inject IStatsService StatsService
 @if (_team != null)
 {
     
@@ -33,23 +34,23 @@
                         <tr>
                             <td>
                                 <span>PPG</span>
-                                111.5
-                                <p class="rank">8TH</p>
+                                @ppg
+                                <p class="rank">@(Util.GetOrdinal(ppgRank))</p>
                             </td>
                             <td>
                                 <span>RPG</span>
-                                40.0
-                                <p class="rank">18TH</p>
+                                @rpg
+                                <p class="rank">@(Util.GetOrdinal(rpgRank))</p>
                             </td>
                             <td>
                                 <span>APG</span>
-                                37.2
-                                <p class="rank">10TH</p>
+                                @apg
+                                <p class="rank">@(Util.GetOrdinal(apgRank))</p>
                             </td>
                             <td>
                                 <span>OPPG</span>
-                                99.8
-                                <p class="rank">13TH</p>
+                                @oppg
+                                <p class="rank">(Util.GetOrdinal(oppgRank))</p>
                             </td>
                         </tr>
                         </tbody>

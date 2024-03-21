@@ -9,6 +9,7 @@ public interface IStatsService
     
     Task<ServiceResponse<List<TeamRegularStatsDto>>> GetAllTeamRegularStats();
     Task<ServiceResponse<List<PlayerRegularStatsDto>>> GetAllPlayerRegularStats();
- 
-    
+    Task<ServiceResponse<List<TeamRegularStatsRankDto>>> GetAllTeamRegularStatsRank();
+
+
 }
