@@ -19,7 +19,7 @@
         @foreach (var (stats, index) in categoryLists["Pts"].Select((s, i) => (s, i)))
         {
             <tr>
-                <td>@(index + 1). <a href=@("/player/" + stats.PlayerId)>@stats.Name</a>, <a href=@("/team/" + stats.TeamId)>@stats.TeamAbrv</a></td>
+                <td>@(index + 1). <a href=@("/players/" + stats.PlayerId)>@stats.Name</a>, <a href=@("/teams/" + stats.TeamId)>@stats.TeamAbrv</a></td>
                 <td>@stats.PtsPG</td>
             </tr>
         }
@@ -37,7 +37,7 @@
         @foreach (var (stats, index) in categoryLists["Reb"].Select((s, i) => (s, i)))
         {
             <tr>
-               <td>@(index + 1). <a href=@("/player/" + stats.PlayerId)>@stats.Name</a>, <a href=@("/team/" + stats.TeamId)>@stats.TeamAbrv</a></td>
+               <td>@(index + 1). <a href=@("/players/" + stats.PlayerId)>@stats.Name</a>, <a href=@("/teams/" + stats.TeamId)>@stats.TeamAbrv</a></td>
                 <td>@stats.TRebPG</td>
             </tr>
         }
@@ -55,7 +55,7 @@
         @foreach (var (stats, index) in categoryLists["Ast"].Select((s, i) => (s, i)))
         {
             <tr>
-                <td>@(index + 1). <a href=@("/player/" + stats.PlayerId)>@stats.Name</a>, <a href=@("/team/" + stats.TeamId)>@stats.TeamAbrv</a></td>
+                <td>@(index + 1). <a href=@("/players/" + stats.PlayerId)>@stats.Name</a>, <a href=@("/teams/" + stats.TeamId)>@stats.TeamAbrv</a></td>
                 <td>@stats.AstPG</td>
             </tr>
         }
@@ -73,7 +73,7 @@
         @foreach (var (stats, index) in categoryLists["Blk"].Select((s, i) => (s, i)))
         {
             <tr>
-                <td>@(index + 1). <a href=@("/player/" + stats.PlayerId)>@stats.Name</a>, <a href=@("/team/" + stats.TeamId)>@stats.TeamAbrv</a></td>
+                <td>@(index + 1). <a href=@("/players/" + stats.PlayerId)>@stats.Name</a>, <a href=@("/teams/" + stats.TeamId)>@stats.TeamAbrv</a></td>
                 <td>@stats.BlkPG</td>
             </tr>
         }
@@ -91,7 +91,7 @@
         @foreach (var (stats, index) in categoryLists["Stl"].Select((s, i) => (s, i)))
         {
             <tr>
-                <td>@(index + 1). <a href=@("/player/" + stats.PlayerId)>@stats.Name</a>, <a href=@("/team/" + stats.TeamId)>@stats.TeamAbrv</a></td>
+                <td>@(index + 1). <a href=@("/players/" + stats.PlayerId)>@stats.Name</a>, <a href=@("/teams/" + stats.TeamId)>@stats.TeamAbrv</a></td>
                 <td>@stats.StlPG</td>
             </tr>
         }
@@ -109,7 +109,7 @@
         @foreach (var (stats, index) in categoryLists["Min"].Select((s, i) => (s, i)))
         {
             <tr>
-                <td>@(index + 1). <a href=@("/player/" + stats.PlayerId)>@stats.Name</a>, <a href=@("/team/" + stats.TeamId)>@stats.TeamAbrv</a></td>
+                <td>@(index + 1). <a href=@("/players/" + stats.PlayerId)>@stats.Name</a>, <a href=@("/teams/" + stats.TeamId)>@stats.TeamAbrv</a></td>
                 <td>@stats.MinPG</td>
             </tr>
         }
@@ -145,7 +145,7 @@
         @foreach (var (stats, index) in categoryLists["TPPct"].Select((s, i) => (s, i)))
         {
             <tr>
-                <td>@(index + 1). <a href=@("/player/" + stats.PlayerId)>@stats.Name</a>, <a href=@("/team/" + stats.TeamId)>@stats.TeamAbrv</a></td>
+                <td>@(index + 1). <a href=@("/players/" + stats.PlayerId)>@stats.Name</a>, <a href=@("/teams/" + stats.TeamId)>@stats.TeamAbrv</a></td>
                 <td>@stats.TpPct</td>
             </tr>
         }
@@ -163,7 +163,7 @@
         @foreach (var (stats, index) in categoryLists["FTPct"].Select((s, i) => (s, i)))
         {
             <tr>
-                <td>@(index + 1). <a href=@("/player/" + stats.PlayerId)>@stats.Name</a>, <a href=@("/team/" + stats.TeamId)>@stats.TeamAbrv</a></td>
+                <td>@(index + 1). <a href=@("/players/" + stats.PlayerId)>@stats.Name</a>, <a href=@("/teams/" + stats.TeamId)>@stats.TeamAbrv</a></td>
                 <td>@stats.FtPct</td>
             </tr>
         }
