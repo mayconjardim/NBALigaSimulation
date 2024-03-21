@@ -1,0 +1,50 @@
+.standings {
+    display: flex;
+    flex-direction: column;
+    margin: 5px;
+}
+
+.standings-table {
+    overflow-x: auto;
+}
+
+table {
+    margin: 5px;
+    border-collapse: collapse;
+    table-layout: fixed;
+    box-shadow: rgba(9, 30, 66, 0.25) 0px 4px 8px -2px, rgba(9, 30, 66, 0.08) 0px 0px 0px 1px;
+}
+
+table th {
+    font-size: 0.8rem;
+    border: 1px solid #c9c4c4;
+    white-space: nowrap;
+}
+
+table td {
+    font-size: 1rem;
+    border: 1px solid #c9c4c4;
+    white-space: nowrap
+}
+
+th {
+    background-color: #f2f2f2;
+}
+
+tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+
+td:first-child {
+    min-width: 260px;
+    text-align: left;
+    white-space: nowrap !important;
+}
+
+@media (max-width: 640px) {
+
+    td:nth-child(2) {
+        white-space: nowrap !important;
+    }
+}

@@ -1,0 +1,88 @@
+@inject IStatsService StatsService
+
+@if (statsEast != null && statsWest != null)
+{
+    <div class="container">
+ <div class="table-responsive">
+    <div class="standings-table">
+        <table>
+            <thead>
+                <tr>
+                    <th style="width: 20%;">EAST</th> 
+                    @foreach (var h in east.Skip(1)) 
+                    {
+                        <th style="width: 13%;">@h</th>
+                    }
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var (team, index) in statsEast.Select((value, index) => (Value: value, Index: index)))
+                {
+                    <tr>
+                        <td>
+                            <img src=@($"../Images/Logos/{team.TeamAbrv}.svg") Style="vertical-align: middle; background: none" alt="Team logo" width="25"> 
+                            <a style="color: #0000EE" href="team/@team.TeamId">@team.TeamRegion @team.TeamName</a>
+                        </td>
+                        <td>@team.Wins-@team.Losses</td>
+                        <td>@team.WinPct</td>
+                        <td>@team.PF</td>
+                        <td>@team.PA</td>
+                        <td><span style="@GetDiffStyle(team.DIFF)">@GetFormattedDiff(team.DIFF)</span></td>
+                        <td>@GetStreak(team.Streak)</td>
+                    </tr>
+
+                    @if (index == 7) // 8ª equipe
+                    {
+                        <tr>
+                            <td colspan="14">
+                                <hr style="border-top: 1px solid #e0e0e0; margin: 0;">
+                            </td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+
+    <div class="standings-table">
+        <table>
+            <thead>
+                <tr>
+                    <th style="width: 20%;">WEST</th> 
+                    @foreach (var h in west.Skip(1)) 
+                    {
+                        <th style="width: 13%;">@h</th>
+                    }
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var (team, index) in statsWest.Select((value, index) => (Value: value, Index: index)))
+                {
+                    <tr>
+                        <td>
+                            <img src=@($"../Images/Logos/{team.TeamAbrv}.svg") Style="vertical-align: middle; background: none" alt="Team logo" width="25"> 
+                            <a style="color: #0000EE" href="team/@team.TeamId">@team.TeamRegion @team.TeamName</a>
+                        </td>
+                        <td>@team.Wins-@team.Losses</td>
+                        <td>@team.WinPct</td>
+                        <td>@team.PF</td>
+                        <td>@team.PA</td>
+                        <td><span style="@GetDiffStyle(team.DIFF)">@GetFormattedDiff(team.DIFF)</span></td>
+                        <td>@GetStreak(team.Streak)</td>
+                    </tr>
+
+                    @if (index == 7) // 8ª equipe
+                    {
+                        <tr>
+                            <td colspan="14">
+                                <hr style="border-top: 1px solid #e0e0e0; margin: 0;">
+                            </td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+</div>  
+}

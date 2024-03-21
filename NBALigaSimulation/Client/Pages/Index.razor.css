@@ -2,9 +2,3 @@
     display: flex;
     flex-wrap: wrap;
 }
-
-@media screen and (max-width: 1333px) {
-    .news {
-        display: none;
-    }
-}
