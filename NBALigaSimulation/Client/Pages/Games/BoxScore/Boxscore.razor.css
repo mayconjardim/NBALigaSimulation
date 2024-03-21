@@ -1,0 +1,58 @@
+.boxscore{
+    margin-top: 0.500rem;
+    background: var(--primary-color);
+}
+
+.boxscore-header{
+    display: flex;
+    justify-content: center;
+    color: white;
+    font-size: 2.0rem;
+}
+
+.boxscore-header-score {
+    margin: 1.2rem;
+    vertical-align: bottom;
+}
+
+tbody {
+    white-space: nowrap;
+}
+
+tfoot td {
+    border: 1px solid #e0e0e0;
+    white-space: nowrap;
+}
+
+.game :hover {
+    text-decoration: underline;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th,
+td {
+    padding: 6px;
+    text-align: center;
+    border: 1px solid #ddd;
+}
+
+th {
+    background-color: #f2f2f2;
+}
+
+tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+.playbyplay {
+    margin-top: 15px;
+}
+
+.pos {
+    font-size: 10px;
+    vertical-align: top;
+}

@@ -1,52 +1,22 @@
-﻿
-@inject ITeamService TeamService
+@page "/game/{id:int}"
 @inject IGameService GameService
-@using System.Globalization;
 
-@if (teams != null)
+@if (game !=  null)
 {
-    <div class="container">
-    
-        <div class="teams">
-            
-            <select @onchange="OnHomeTeamSelected" class="form-select-sm" style="margin-top: 10px; height: 38px; width: 100%;">
-                <option selected value="0">Escolha um time!</option>
-                @foreach (var team in teams)
-                {
-                    <option value="@team.Id">@team.Name</option>
-                }
-            </select> 
-                  
-            <select @onchange="OnAwayTeamSelected" class="form-select-sm" style="margin-top: 10px; height: 38px; width: 100%;">
-                <option selected value="0">Escolha um time!</option>
-                @foreach (var team in teams)
-                {
-                    <option value="@team.Id">@team.Name</option>
-                }
-            </select> 
-        </div>
-        
-        <div class="simular">
-            <button type="button" class="btn btn-primary" disabled="@(homeTeamId == 99 || awayTeamId == 99)" @onclick="CreateGame">Simular Partida</button>
-        </div>
-        
-        @if (newGame != null)
-        {
-            
             <div class="boxscore">
             
                 <div class="boxscore-header">
                     
                     <div class="boxscore-header-logo">
-                        <img src=@($"../Images/Logos/{newGame.HomeTeam}.svg") alt="Team logo" width="90">
+                        <img src=@($"../Images/Logos/{game.HomeTeam}.svg") alt="Team logo" width="90">
                     </div>
                   
                     <div class="boxscore-header-score">
-                        <span>@newGame.HomeTeamScore</span> -   <span>@newGame.AwayTeamScore</span>
+                        <span>@game.HomeTeamScore</span> -   <span>@game.AwayTeamScore</span>
                     </div>
                     
                     <div class="boxscore-header-logo">
-                        <img src=@($"../Images/Logos/{newGame.AwayTeam}.svg") alt="Team logo" width="90">
+                        <img src=@($"../Images/Logos/{game.AwayTeam}.svg") alt="Team logo" width="90">
                     </div>
                     
                 </div>
@@ -55,10 +25,10 @@
             <div class="tabs-container">
                 <ul class="nav nav-tabs justify-content-center" id="myTab" role="tablist">
                     <li class="nav-item" role="presentation">
-                        <button class="nav-link active" id="bio-tab" data-bs-toggle="tab" data-bs-target="#bio-tab-pane" type="button" role="tab" aria-controls="bio-tab-pane" aria-selected="true">@newGame.HomeTeam</button>
+                        <button class="nav-link active" id="bio-tab" data-bs-toggle="tab" data-bs-target="#bio-tab-pane" type="button" role="tab" aria-controls="bio-tab-pane" aria-selected="true">@game.HomeTeam</button>
                     </li>
                     <li class="nav-item" role="presentation">
-                        <button class="nav-link" id="profile-tab" data-bs-toggle="tab" data-bs-target="#profile-tab-pane" type="button" role="tab" aria-controls="profile-tab-pane" aria-selected="false">@newGame.AwayTeam</button>
+                        <button class="nav-link" id="profile-tab" data-bs-toggle="tab" data-bs-target="#profile-tab-pane" type="button" role="tab" aria-controls="profile-tab-pane" aria-selected="false">@game.AwayTeam</button>
                     </li>
                 </ul>
                 <div class="tab-content" id="myTabContent">
@@ -75,7 +45,7 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach (var row in newGame.HomePlayerGameStats.Select((value, index) => new { Value = value, Index = index }))
+                                    @foreach (var row in game.HomePlayerGameStats.Select((value, index) => new { Value = value, Index = index }))
                                     {
                                     <tr>
                                         <td><a href="players/@row.Value.PlayerId">@NomeAbvr(@row.Value.Name)</a></td>
@@ -120,7 +90,7 @@
                                                             </tr>
                                                         </thead>
                                                         <tbody>
-                                                            @foreach (var row in newGame.AwayPlayerGameStats.Select((value, index) => new { Value = value, Index = index }))
+                                                            @foreach (var row in game.AwayPlayerGameStats.Select((value, index) => new { Value = value, Index = index }))
                                                             {
                                                             <tr>
                                                                 <td><a href="players/@row.Value.PlayerId">@NomeAbvr(@row.Value.Name)</a></td>
@@ -149,16 +119,7 @@
                                                         </tbody>
                                                     </table>
                                                 </div>
-                        
-                        
                     </div>
                 </div>
             </div>
-            
-            
-            
-        }
-  
-    </div>
-    
 }
