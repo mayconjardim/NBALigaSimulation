@@ -39,11 +39,18 @@ namespace NBALigaSimulation.Server.Controllers
 		}
 
 		[HttpGet("players")]
-		public async Task<ActionResult<ServiceResponse<List<PlayerRegularStatsDto>>>> GetAllPlayerRegularStats()
+		public async Task<ActionResult<ServiceResponse<PlayerStatsResponse>>> GetAllPlayerRegularStats(int page, int pageSize, int season, string stat = null)
 		{
-			var result = await _statsService.GetAllPlayerRegularStats();
-			return Ok(result);
+			var result = await _statsService.GetAllPlayerRegularStats(page, pageSize, season, stat);
+
+			if (!result.Success)
+			{
+				return StatusCode(500, result); 
+			}
+
+			return Ok(result); 
 		}
+
 
 		[HttpGet("playoffs/players")]
 		public async Task<ActionResult<ServiceResponse<List<PlayerRegularStatsDto>>>> GetAllPlayerPlayoffsStats()
