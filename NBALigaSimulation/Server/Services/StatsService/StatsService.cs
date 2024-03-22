@@ -24,7 +24,7 @@ namespace NBALigaSimulation.Server.Services.StatsService
 
 	    try
 	    {
-	        IQueryable<PlayerRegularStats> query = _context.PlayerRegularStats;
+	        IQueryable<PlayerRegularStats> query = _context.PlayerRegularStats.Include(p => p.Player);
 
 	        var orderByExpression = query.OrderByDescending(p => (p.Pts / p.Games));
 

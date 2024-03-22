@@ -82,8 +82,10 @@ namespace NBALigaSimulation.Server.Profiles
             CreateMap<PlayerRatings, PlayerRatings>();
             CreateMap<PlayerRatings, PlayerRatingDto>();
 
-            CreateMap<PlayerRegularStats, PlayerRegularStatsDto>().ReverseMap();
-            CreateMap<PlayerPlayoffsStats, PlayerPlayoffsStatsDto>().ReverseMap();
+            CreateMap<PlayerRegularStats, PlayerRegularStatsDto>().ForMember(dest => dest.ImgUrl,
+                opt => opt.MapFrom(p => p.Player.ImgUrl));
+
+            CreateMap<PlayerPlayoffsStats, PlayerPlayoffsStatsDto>();
 
             CreateMap<TeamGameStats, TeamGameStatsDto>();
             CreateMap<TeamPlayoffsStats, TeamPlayoffsStatsDto>().ReverseMap();

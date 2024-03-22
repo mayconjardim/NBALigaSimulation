@@ -1,5 +1,4 @@
 using System.Net.Http.Json;
-using NBALigaSimulation.Shared.Dtos.Players;
 using NBALigaSimulation.Shared.Dtos.Teams;
 using NBALigaSimulation.Shared.Models.Utils;
 
@@ -15,12 +14,18 @@ public class StatsService : IStatsService
         _http = http;
     }
     
-       
-    public async Task<ServiceResponse<List<PlayerRegularStatsDto>>> GetAllPlayerRegularStats()
+    public async Task<ServiceResponse<PlayerStatsResponse>> GetAllPlayerRegularStats(int page, int pageSize, int season, string stat = null)
     {
-        var result = await _http.GetFromJsonAsync<ServiceResponse<List<PlayerRegularStatsDto>>>($"api/stats/players");
-        return result;
+        var url = $"api/stats/players?page={page}&pageSize={pageSize}&season={season}";
+
+        if (!string.IsNullOrEmpty(stat))
+        {
+            url += $"&stat={Uri.EscapeDataString(stat)}";
+        }
+
+        return await _http.GetFromJsonAsync<ServiceResponse<PlayerStatsResponse>>(url);
     }
+
     
     public async Task<ServiceResponse<List<TeamRegularStatsDto>>> GetAllTeamRegularStats()
     {

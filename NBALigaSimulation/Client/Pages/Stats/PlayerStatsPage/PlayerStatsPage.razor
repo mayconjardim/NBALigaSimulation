@@ -1,0 +1,51 @@
+@page "/stats"
+@inject IStatsService StatsService
+
+<div class="container">
+    @if (_playerStats != null)
+    {
+        <div class="table-responsive">
+            <table class="table caption-top">
+                <caption>@_season Regular Season Stats</caption>
+                <thead>
+                <tr>
+                    @foreach (var th in _statsColumns)
+                    {
+                        <th>@th</th>
+                    }
+                </tr>
+                </thead>
+                <tbody>
+                @foreach (var stats in _playerStats)
+                {
+                    <tr>
+                        <td>
+                            <div class="player-pic @stats.TeamAbrv">
+                                <img src=@($"{stats.ImgUrl}") alt="Team logo" width="35">
+                            </div>
+                        </td>
+                        <td><span>@stats.Pos</span> @stats.Name</td>
+                        <td><img src=@($"../Images/Logos/{stats.TeamAbrv}.svg") alt="Team logo" width="25">
+                        </td>
+                        <td>@stats.Games</td>
+                        <td>@stats.MinPG</td>
+                        <td>@stats.PtsPG</td>
+                        <td>@stats.AstPG</td>
+                        <td>@stats.TRebPG</td>
+                        <td>@stats.ORebPG</td>
+                        <td>@stats.DRebPG</td>
+                        <td>@stats.StlPG</td>
+                        <td>@stats.BlkPG</td>
+                        <td>@stats.TovPG</td>
+                        <td>@stats.PfPG</td>
+                        <td>@stats.FgPct</td>
+                        <td>@stats.FtPct</td>
+                        <td>@stats.TpPct</td>
+                        <td>@stats.TrueShooting</td>
+                    </tr>
+                }
+                </tbody>
+            </table>
+        </div>
+    }
+</div>

@@ -8,7 +8,7 @@ public interface IStatsService
 {
     
     Task<ServiceResponse<List<TeamRegularStatsDto>>> GetAllTeamRegularStats();
-    Task<ServiceResponse<List<PlayerRegularStatsDto>>> GetAllPlayerRegularStats();
+    Task<ServiceResponse<PlayerStatsResponse>> GetAllPlayerRegularStats(int page, int pageSize, int season, string stat = null);
     Task<ServiceResponse<List<TeamRegularStatsRankDto>>> GetAllTeamRegularStatsRank();
 
 
