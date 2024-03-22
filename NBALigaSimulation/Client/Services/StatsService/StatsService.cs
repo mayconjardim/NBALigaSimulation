@@ -14,9 +14,9 @@ public class StatsService : IStatsService
         _http = http;
     }
     
-    public async Task<ServiceResponse<PlayerStatsResponse>> GetAllPlayerRegularStats(int page, int pageSize, int season, string stat = null)
+    public async Task<ServiceResponse<PlayerStatsResponse>> GetAllPlayerRegularStats(int page, int pageSize, int season, bool isAscending, string stat = null)
     {
-        var url = $"api/stats/players?page={page}&pageSize={pageSize}&season={season}";
+        var url = $"api/stats/players?page={page}&pageSize={pageSize}&season={season}&isAscending={isAscending}";
 
         if (!string.IsNullOrEmpty(stat))
         {

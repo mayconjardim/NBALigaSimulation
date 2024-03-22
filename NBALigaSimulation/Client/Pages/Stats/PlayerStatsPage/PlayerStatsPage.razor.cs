@@ -8,21 +8,21 @@ public partial class PlayerStatsPage
     private PlayerStatsResponse _statsResponse = new PlayerStatsResponse();
     private List<PlayerRegularStatsDto> _playerStats;
     private int _currentPage = 1;
-    private int _pageSize = 20;
+    private int _pageSize = 50;
     private string _stat;
     private string _message = string.Empty;
     private int _season = 2007;
-
-    private string[] _statsColumns = { "PLAYER", "NAME", "TEAM", "GP", "MPG", "PPG", "APG", "RPG", "ORB", "DRB", "SPG", "BPG", "TPG", "FPG", "FG%", "FT%", "3P%", "TS%" };
+    private string sortedColumn = "PPG";
+    private bool isAscending = false;
 
     protected override async Task OnInitializedAsync()
     {
-        await GetAllPlayerRegularStats();
+        await GetAllPlayerRegularStatsOrdered();
     }
     
-    private async Task GetAllPlayerRegularStats()
+    private async Task GetAllPlayerRegularStatsOrdered()
     {
-        var result = await StatsService.GetAllPlayerRegularStats(_currentPage, _pageSize, _season, _stat);
+        var result = await StatsService.GetAllPlayerRegularStats(_currentPage, _pageSize, _season, isAscending, sortedColumn);
 
         if (result.Success)
         {
@@ -35,6 +35,34 @@ public partial class PlayerStatsPage
             _message = result.Message;
         }
     }
+    
+    private string GetSortIcon(string columnName)
+    {
+        if (columnName == sortedColumn)
+        {
+            return isAscending ? "bi-sort-up" : "bi-sort-down";
+        }
+        return string.Empty;
+    }
+
+    private async void SortTable(string columnName)
+    {
+        if (columnName == sortedColumn)
+        {
+            isAscending = !isAscending;
+            await GetAllPlayerRegularStatsOrdered();
+        }
+        else
+        {
+            sortedColumn = columnName;
+            isAscending = true;
+            await GetAllPlayerRegularStatsOrdered();
+        }
+        StateHasChanged(); 
+    }
+
 }
+
+
 
     

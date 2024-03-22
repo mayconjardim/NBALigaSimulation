@@ -24,8 +24,26 @@ table td {
     white-space: nowrap
 }
 
+table td span {
+    font-size: 0.6rem;
+    margin: 0.2rem;
+    white-space: nowrap;
+    color: #c9c4c4;
+}
+
 tr:nth-child(even) {
     background-color: #FBFBFB;
+}
+
+a {
+    text-decoration: none;
+}
+
+
+.player-pic {
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
 }
 
 .player-pic img {

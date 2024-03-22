@@ -193,7 +193,7 @@ namespace NBALigaSimulation.Shared.Dtos.Players
         {
             get
             {
-                double stlPg = (double)Stl / Games;
+                double stlPg = (double) Stl / Games;
                 return stlPg > 0 ? stlPg.ToString("0.0", CultureInfo.InvariantCulture) : "-";
             }
         }

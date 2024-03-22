@@ -39,9 +39,9 @@ namespace NBALigaSimulation.Server.Controllers
 		}
 
 		[HttpGet("players")]
-		public async Task<ActionResult<ServiceResponse<PlayerStatsResponse>>> GetAllPlayerRegularStats(int page, int pageSize, int season, string stat = null)
+		public async Task<ActionResult<ServiceResponse<PlayerStatsResponse>>> GetAllPlayerRegularStats(int page, int pageSize, int season, bool isAscending,  string stat = null)
 		{
-			var result = await _statsService.GetAllPlayerRegularStats(page, pageSize, season, stat);
+			var result = await _statsService.GetAllPlayerRegularStats(page, pageSize, season, isAscending, stat);
 
 			if (!result.Success)
 			{

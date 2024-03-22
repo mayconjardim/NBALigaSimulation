@@ -7,8 +7,7 @@ namespace NBALigaSimulation.Server.Services.StatsService
 	public interface IStatsService
 	{
 
-		Task<ServiceResponse<PlayerStatsResponse>> GetAllPlayerRegularStats(int page, int pageSize, int season, string stat = null);
-		
+		Task<ServiceResponse<PlayerStatsResponse>> GetAllPlayerRegularStats(int page, int pageSize, int season, bool isAscending, string stat = null);
 		Task<ServiceResponse<List<TeamRegularStatsDto>>> GetAllTeamRegularStats();
 		Task<ServiceResponse<List<TeamPlayoffsStatsDto>>> GetAllTeamPlayoffsStats();
 		Task<ServiceResponse<List<TeamRegularStatsRankDto>>> GetAllTeamRegularStatsRank();
