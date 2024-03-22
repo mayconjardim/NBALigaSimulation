@@ -43,6 +43,7 @@ namespace NBALigaSimulation.Server.Services.StatsService
 	                "SPG" => query.OrderByDescending(p => (p.Stl / p.Games)),
 	                "BPG" => query.OrderByDescending(p => (p.Blk / p.Games)),
 	                "TPG" => query.OrderByDescending(p => (p.Tov / p.Games)),
+	                "TS%" => query.OrderByDescending(p => ((p.Pts / (2.0 * (p.Fga + (0.44 * p.Fta)))) * 100)),
 	                _ => orderByExpression
 	            };
 	        }

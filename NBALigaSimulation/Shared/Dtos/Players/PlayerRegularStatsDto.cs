@@ -290,8 +290,7 @@ namespace NBALigaSimulation.Shared.Dtos.Players
         {
             get
             {
-                double tsa = (double)(Pts + (0.44 * Fta));
-                double ts = (double)(Pts / (2 * tsa));
+                double ts = (Pts / (2.0 * (Fga + (0.44 * Fta)))) * 100;
                 return ts.ToString("00.0", CultureInfo.InvariantCulture);
             }
         }
