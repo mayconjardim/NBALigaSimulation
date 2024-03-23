@@ -1,0 +1,149 @@
+.container-fluid {
+    display: flex;
+    justify-content: center;
+}
+
+.container-header {
+    display: flex;
+    justify-content: center;
+}
+
+.card {
+    width: 18rem;
+    margin: 0.658rem;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+}
+
+.card-img {
+    display: flex;
+    justify-content: center;
+}
+
+.card-title {
+    text-align: center;
+    font-weight: 600;
+}
+
+.input-group {
+    width: 18rem;
+    margin: 0.658rem;
+}
+
+.card .card-img-top {
+    margin: 0.658rem;
+    width: 6rem;
+    height: 6rem;
+    object-fit: cover;
+    object-position: center;
+    border-radius: 50%;
+}
+
+.player-header-stats {
+    display: flex;
+    justify-content: center;
+}
+
+table {
+    background-color: var(--white);
+    max-width: 100%;
+    width: auto;
+    text-align: center;
+    margin: 0.625rem;
+    border-collapse: collapse;
+    -webkit-border-radius: 0.625rem;
+    -moz-border-radius: 0.625rem;
+    border-radius: 0.625rem;
+    overflow: hidden;
+}
+
+table td{
+    padding: 0 0.825rem;
+}
+table tbody td {
+    font-size: 1rem;
+    font-weight: 600;
+}
+table tbody td span {
+    display: block;
+    font-size: 0.5rem;
+    font-weight: 600;
+    padding-top: 0.200rem;
+}
+
+table thead {
+    background: var(--primary-color);
+}
+table thead th {
+    font-size: 0.625rem;
+    font-weight: 800;
+    color: var(--white);
+}
+
+.badge  {
+    font-size: 0.475rem;
+    font-weight: 600;
+}
+
+.card-ratings{
+    width: 18rem;
+    display: flex;
+    justify-content: center;
+}
+
+.charts {
+    display: flex;
+    justify-content: center;
+}
+
+.chart {
+    display: inline-block;
+    height: 15rem;
+    width: 15rem;
+    margin: 0 2rem;
+    padding: 0;
+}
+
+
+
+
+@media only screen and (max-width: 650px) {
+    .card {
+        width: 11rem;
+        margin: 0.158rem;
+    }
+
+    .card-title{
+        font-size: 0.850rem;
+    }
+    
+    .input-group {
+        width: 11rem;
+        margin: 0.158rem;
+    }
+    
+    table {
+        max-width: 80%;
+    }
+
+    table td{
+        padding: 0 0.425rem;
+    }
+    
+    table tbody td {
+        font-size: 0.6rem;
+        font-weight: 600;
+    }
+
+    .ratings {
+        margin: 0 auto;
+        width: 20rem;
+    }
+    
+    .charts {
+        display: flex;
+        justify-content: center;
+        flex-direction: column;
+    }
+}

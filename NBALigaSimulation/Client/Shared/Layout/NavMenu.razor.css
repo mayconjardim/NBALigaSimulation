@@ -39,6 +39,19 @@
     text-decoration: none;
 }
 
+.dropdown-menu {
+    background: var(--primary-color);
+    color: white;
+    font-size: 0.875rem;
+}
+
+.dropdown-menu a:hover {
+    background: var(--primary-color);
+    color: white;
+    font-size: 0.875rem;
+}
+
+
 @media only screen and (min-width: 601px) {
     .navbar-brand  {
         margin: 0.3rem 1rem;

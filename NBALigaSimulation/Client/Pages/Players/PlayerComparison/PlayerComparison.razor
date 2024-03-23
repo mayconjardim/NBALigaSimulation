@@ -1,0 +1,183 @@
+@page "/comparison"
+@using pax.BlazorChartJs
+@using NBALigaSimulation.Client.Utilities
+@inject NavigationManager NavigationManager
+@inject IPlayerService PlayerService
+@inject IJSRuntime JSRuntime
+
+
+<div class="container-fluid">
+    <div class="container-header">
+        <div class="player1">
+            <div class="card @(_player1 != null ? _player1.TeamAbrv : string.Empty)">
+               <div class="card-img">
+                @if (_player1 != null)
+                {
+                    <img src="@_player1.ImgUrl" class="card-img-top" alt="player img">
+                    <p><span class="badge @Util.GetBadgeClass(_playerRating1.CalculateOvr)">@_playerRating1.CalculateOvr</span>
+                        <span class="badge  @Util.GetBadgeClass(_playerRating1.Pot)">@_playerRating1.Pot</span>
+                    </p>
+                }
+                else
+                {
+                    <img src="./Images/Utils/blank.png" class="card-img-top" alt="...">
+                }
+                </div>
+                <div class="card-body">
+                    <h5 class="card-title">
+                        @if (_player1 != null)
+                        {
+                            @_player1.Name
+                        }
+                    </h5>
+                    
+                    @if (_player1Stats != null )
+                    {
+                                    
+                                    <div class="player-header-stats">
+                                        <table class="stats">
+                                            <thead>
+                                            <tr>
+                                                <th colspan="4">SEASON STATS</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            <tr>
+                                                <td>
+                                                    <span>PTS</span>
+                                                    @_player1Stats.PtsPG
+                                                </td>
+                                                <td>
+                                                    <span>REB</span>
+                                                    @_player1Stats.TRebPG
+                                                </td>
+                                                <td>
+                                                    <span>AST</span>
+                                                    @_player1Stats.AstPG
+                                                </td>
+                                                <td>
+                                                    <span>FG%</span>
+                                                    @_player1Stats.FgPct
+                                                </td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                   }
+                    
+                </div>
+            </div>
+            <div class="procura">
+                <div class="input-group">
+                    <input @bind-value="searchText" @bind-value:event="oninput"
+                           type="search" list="players" @onkeyup="HandleSearchOne"
+                           class="form-control"
+                           placeholder="Procure um Jogador..."
+                           @ref="searchInput"/>
+                    <datalist id="players">
+                        @foreach (var suggestion in suggestions)
+                        {
+                            <option value="@suggestion.Id" label="@suggestion.Name">@suggestion.Name</option>
+                        }
+                    </datalist>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="player2">
+        <div class="card @(_player2 != null ? _player2.TeamAbrv : string.Empty)" >
+            <div class="card-img">
+                @if (_player2 != null)
+                {
+                    <img src="@_player2.ImgUrl" class="card-img-top" alt="player img">
+                    <p><span class="badge @Util.GetBadgeClass(_playerRating2.CalculateOvr)">@_playerRating2.CalculateOvr</span>
+                    <span class="badge  @Util.GetBadgeClass(_playerRating2.Pot)">@_playerRating2.Pot</span>
+                    </p>
+                }
+                else
+                {
+                    <img src="./Images/Utils/blank.png" class="card-img-top" alt="...">
+
+                }
+            </div>
+            <div class="card-body">
+                <h5 class="card-title">
+                    @if (_player2 != null)
+                    {
+                        @_player2.Name
+                    }
+                </h5>
+                <div class="stats">
+                    @if (_player2Stats != null )
+                    {
+                        <div class="player-header-stats">
+                         
+                            <table class="stats">
+                             
+                                <thead style="background: #FF6384">
+                                <tr>
+                                    <th colspan="4" >SEASON STATS</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr>
+                                    <td>
+                                        <span>PTS</span>
+                                        @_player2Stats.PtsPG
+                                    </td>
+                                    <td>
+                                        <span>REB</span>
+                                        @_player2Stats.TRebPG
+                                    </td>
+                                    <td>
+                                        <span>AST</span>
+                                        @_player2Stats.AstPG
+                                    </td>
+                                    <td>
+                                        <span>FG%</span>
+                                        @_player2Stats.FgPct
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    }
+                </div>       
+                
+            </div>
+        </div>
+        <div class="procura">
+            <div class="input-group">
+                <input @bind-value="searchText2" @bind-value:event="oninput"
+                       type="search" list="players" @onkeyup="HandleSearchTwo"
+                       class="form-control"
+                       placeholder="Procure um Jogador..."
+                       @ref="searchInput"/>
+                <datalist id="players">
+                    @foreach (var suggestion in suggestions)
+                    {
+                        <option value="@suggestion.Id" label="@suggestion.Name">@suggestion.Name</option>
+                    }
+                </datalist>
+            </div>
+        </div>
+    </div>
+    
+</div>
+
+@if (_player1 != null && _playerRating1 != null && _player2 != null && _playerRating2 != null)
+{
+    <div class="ratings">
+        <div class="row">
+            <div class="charts">
+                <div class="chart">
+                    <ChartComponent @ref="_chartComponent" ChartJsConfig="_chartJsConfig"></ChartComponent>
+                </div>
+                <div class="chart">
+                    <ChartComponent @ref="_chartComponent2" ChartJsConfig="_chartJsConfig2"></ChartComponent>
+                </div>
+            </div>
+        </div>
+    </div>
+
+}

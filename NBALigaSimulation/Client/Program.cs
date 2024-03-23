@@ -4,6 +4,7 @@ global using NBALigaSimulation.Client.Services.TeamsService;
 global using NBALigaSimulation.Client.Services.GameService;
 global using NBALigaSimulation.Client.Services.StatsService;
 global using NBALigaSimulation.Client.Services.NewsService;
+global using NBALigaSimulation.Client.Services.DataService;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using NBALigaSimulation.Client;
@@ -16,11 +17,13 @@ builder.RootComponents.Add<App>("#app");
 
 builder.RootComponents.Add<HeadOutlet>("head::after");
 
+builder.Services.AddScoped<IDataService, DataService>();
+builder.Services.AddScoped<INewsService, NewsService>();
 builder.Services.AddScoped<IPlayerService, PlayerService>();
 builder.Services.AddScoped<ITeamService, TeamService>();
 builder.Services.AddScoped<IGameService, GameService>();
 builder.Services.AddScoped<IStatsService, StatsService>();
-builder.Services.AddScoped<INewsService, NewsService>();
+
 
 
 builder.Services.AddChartJs(options =>
