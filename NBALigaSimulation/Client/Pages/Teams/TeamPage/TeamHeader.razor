@@ -15,7 +15,10 @@
             
                 <div class="team-header-card-info">
                     <h3>@_team.Region @_team.Name</h3>
-                    <p> - </p>
+                    @if (_stats != null)
+                    {
+                      <p>@(_stats.HomeWins + _stats.RoadWins) - @(_stats.HomeLosses + _stats.RoadLosses) | @(Util.GetOrdinal(winPctRank)) in @_team.Conference </p>
+                    }
                 </div>
             
             </div>

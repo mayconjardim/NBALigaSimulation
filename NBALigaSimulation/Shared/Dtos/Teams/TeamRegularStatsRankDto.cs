@@ -7,6 +7,7 @@ namespace NBALigaSimulation.Shared.Dtos.Teams
         public int Id { get; set; }
         public int TeamId { get; set; }
         public int Season { get; set; }
+        public string Conference { get; set; }
         public int HomeWins { get; set; }
         public int HomeLosses { get; set; }
         public int RoadWins { get; set; }
@@ -55,6 +56,24 @@ namespace NBALigaSimulation.Shared.Dtos.Teams
                 int games = HomeWins + HomeLosses + RoadWins + RoadLosses;
                 double reb = (double)Rebounds / games;
                 return reb.ToString("0.0", CultureInfo.InvariantCulture);
+            }
+        }
+        
+        public double WinPct
+        {
+            get
+            {
+                int totalGames = HomeWins + HomeLosses + RoadWins + RoadLosses;
+
+                if (totalGames != 0)
+                {
+                    double winPct = (double)(HomeWins + RoadWins) / totalGames;
+                    return winPct;
+                }
+                else
+                {
+                    return 0.0; 
+                }
             }
         }
 

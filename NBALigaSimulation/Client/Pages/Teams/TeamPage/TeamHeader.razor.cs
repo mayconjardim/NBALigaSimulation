@@ -20,6 +20,7 @@ public partial class TeamHeader
     private int apgRank;
     private string oppg = string.Empty;
     private int oppgRank;
+    private int winPctRank;
     
     protected override async Task OnInitializedAsync()
     {
@@ -45,6 +46,8 @@ public partial class TeamHeader
                 rpgRank = sortedStats.OrderByDescending(t => Convert.ToDouble(t.Rpg)).ToList().FindIndex(t => t.TeamId == _team.Id) + 1;
                 apgRank = sortedStats.OrderByDescending(t => Convert.ToDouble(t.Apg)).ToList().FindIndex(t => t.TeamId == _team.Id) + 1;
                 oppgRank = sortedStats.OrderBy(t => Convert.ToDouble(t.Oppg)).ToList().FindIndex(t => t.TeamId == _team.Id) + 1;
+                winPctRank = sortedStats.Where(t => t.Conference == _team.Conference).OrderByDescending(t => Convert.ToDouble(t.WinPct)).ToList().FindIndex(t => t.TeamId == _team.Id) + 1;
+
             }
         }
     }
