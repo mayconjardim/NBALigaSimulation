@@ -178,8 +178,6 @@ namespace NBALigaSimulation.Server.Services.GameService
             return response;
         }
 
-
-
         public async Task<ServiceResponse<bool>> SimGameByDateRegular()
         {
             ServiceResponse<bool> response = new ServiceResponse<bool>();

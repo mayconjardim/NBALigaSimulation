@@ -370,6 +370,7 @@ namespace NBALigaSimulation.Shared.Engine.Utils
 
             string winningTeam = homeTeamStats.Pts > awayTeamStats.Pts ? game.HomeTeam.Name : game.AwayTeam.Name;
             string losingTeam = homeTeamStats.Pts > awayTeamStats.Pts ? game.AwayTeam.Name : game.HomeTeam.Name;
+            string winAbrv = homeTeamStats.Pts > awayTeamStats.Pts ? game.HomeTeam.Abrv : game.AwayTeam.Abrv;
 
             var random = new Random();
             var titleTemplates = new List<string>
@@ -387,7 +388,8 @@ namespace NBALigaSimulation.Shared.Engine.Utils
             var news = new News
             {
                 GameId = game.Id,
-                Title = selectedTitle
+                Title = selectedTitle,
+                Winner = winAbrv
             };
             return news;
         }

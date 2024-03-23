@@ -2,3 +2,22 @@
     display: flex;
     flex-wrap: wrap;
 }
+
+.Standings,
+.News {
+    flex: 1; 
+}
+
+.Standings {
+    padding: 10px; 
+}
+
+.News {
+    padding: 10px; 
+}
+
+@media only screen and (max-width: 650px) {
+    .News {
+        display: none;
+    }
+}

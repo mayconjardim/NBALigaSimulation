@@ -5,15 +5,12 @@ namespace NBALigaSimulation.Client.Shared.Components;
 
 public partial class Standings
 {
-    
-          private List<TeamRegularStatsDto> statsEast = new List<TeamRegularStatsDto>();
-        private List<TeamRegularStatsDto> statsWest = new List<TeamRegularStatsDto>();
+
+    private List<TeamRegularStatsDto> statsEast;
+    private List<TeamRegularStatsDto> statsWest;
 
         private string message = string.Empty;
 
-        string[] east = { "EAST", "W-L", "PCT", "PF", "PA", "DIFF", "STRK" };
-        string[] west = { "WEST", "W-L", "PCT", "PF", "PA", "DIFF", "STRK" };
-        
         protected override async Task OnInitializedAsync()
         {
             message = "Carregando Stats...";

@@ -1,0 +1,10 @@
+.list-group {
+    height: 20rem;
+    margin: 0.625rem ;
+    width: 100%;
+    
+}
+.list-group-item {
+    word-wrap: break-word;
+    font-size: 0.8rem;
+}
