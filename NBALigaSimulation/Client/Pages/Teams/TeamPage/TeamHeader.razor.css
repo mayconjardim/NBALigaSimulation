@@ -32,8 +32,9 @@
 .team-header-card-img {
     width: 6rem;
     height: 6rem;
+    border-bottom: 0.068rem solid #c9c4c4;
+    border-radius: 50%;
     overflow: hidden;
-    vertical-align: top;
 }
 
 .team-header-card-img img {
@@ -64,11 +65,6 @@
     font-weight: 600;
 }
 
-table .rank {   
-    font-size: 0.475rem;
-    font-weight: 600;
-}
-
 .team-header-stats {
     margin-right: 2rem;
 }
@@ -77,7 +73,7 @@ table {
     background-color: var(--white);
     width: 100%;
     text-align: center;
-    margin: 0.625rem;
+    margin: 0.600rem;
     border-collapse: collapse;
     -webkit-border-radius: 0.625rem;
     -moz-border-radius: 0.625rem;
@@ -86,7 +82,7 @@ table {
 }
 
 table td{
-    padding: 0 0.825rem;
+    padding: 0 0.380rem;
 }
 table tbody td {
     font-size: 1.75rem;
@@ -108,3 +104,11 @@ table thead th {
     color: var(--white);
 }
 
+.team-header-card-info span {
+    vertical-align: middle;
+    color: black;
+}
+
+.team-header-stats p {
+    font-size: 0.5rem;
+ }

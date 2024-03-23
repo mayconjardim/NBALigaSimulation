@@ -4,8 +4,8 @@ namespace NBALigaSimulation.Client.Shared.Components;
 
 public partial class News
 {
-    
-    private List<NewsDto> news = new List<NewsDto>();
+
+    private List<NewsDto> news;
 
     private string message = string.Empty;
 

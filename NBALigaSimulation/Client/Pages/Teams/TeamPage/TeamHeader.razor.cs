@@ -10,7 +10,8 @@ public partial class TeamHeader
     public TeamCompleteDto _team { get; set; }
     
     private string message;
-    
+
+    public TeamRegularStatsRankDto _stats;
     private string ppg = string.Empty;
     private int ppgRank;
     private string rpg = string.Empty;
@@ -30,14 +31,14 @@ public partial class TeamHeader
         }
         else
         {
-            var teamStats = result.Data.FirstOrDefault(t => t.TeamId == _team.Id);
+            _stats = result.Data.FirstOrDefault(t => t.TeamId == _team.Id);
 
-            if (teamStats != null)
+            if (_stats != null)
             {
-                ppg = teamStats.Ppg;
-                rpg = teamStats.Rpg;
-                apg = teamStats.Apg;
-                oppg = teamStats.Oppg;
+                ppg = _stats.Ppg;
+                rpg = _stats.Rpg;
+                apg = _stats.Apg;
+                oppg = _stats.Oppg;
 
                 var sortedStats = result.Data.ToList();
                 ppgRank = sortedStats.OrderByDescending(t => Convert.ToDouble(t.Ppg)).ToList().FindIndex(t => t.TeamId == _team.Id) + 1;
@@ -47,6 +48,6 @@ public partial class TeamHeader
             }
         }
     }
-    
+   
     
 }

@@ -1,16 +1,20 @@
 @page "/news"
 @inject INewsService NewsService
 
-<div class="cards">
- @foreach (var n in news)
- {
-    <div class="card" >
-          <div class="card-header">
-              <p>NBALIGA News </p><img src=@($"../Images/Logos/{n.Winner}.svg") alt="Team logo" width="40"> 
-          </div>
-          <div class="card-body @n.Winner">
-              <p class="card-text"> <a href="@($"players/{n.GameId}")"> @n.Title </a></p>
-          </div>
-    </div>
- }
- </div>
+@if (news != null)
+{ 
+     <div class="cards">
+     @foreach (var n in news)
+     {
+        <div class="card" >
+              <div class="card-header">
+                  <p>NBALIGA News </p><img src=@($"../Images/Logos/NBA_Logo.svg") alt="Team logo" width="35"> 
+              </div>
+              <div class="card-body @n.Winner">
+                  <p class="card-text"> <a href="@($"players/{n.GameId}")"> @n.Title </a></p>
+              </div>
+        </div>
+     }
+ </div>  
+}
+

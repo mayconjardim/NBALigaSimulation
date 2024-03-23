@@ -10,7 +10,7 @@
             <div class="team-header-card-bio">
         
                 <div class="team-header-card-img">
-                    <img src=@($"../Images/Logos/{_team.Abrv}.svg")  alt="Logo do time">
+                    <img src=@($"../Images/Logos/{_team.Abrv}.svg") alt="Foto do jogador" width="25">
                 </div>
             
                 <div class="team-header-card-info">
@@ -20,7 +20,7 @@
             
             </div>
             
-            @if (_team != null)
+            @if (_stats != null )
             {
                 
                 <div class="team-header-stats">
@@ -34,23 +34,23 @@
                         <tr>
                             <td>
                                 <span>PPG</span>
-                                @ppg
+                                @_stats.Ppg
                                 <p class="rank">@(Util.GetOrdinal(ppgRank))</p>
                             </td>
                             <td>
-                                <span>RPG</span>
-                                @rpg
+                                <span>REB</span>
+                                @_stats.Rpg
                                 <p class="rank">@(Util.GetOrdinal(rpgRank))</p>
                             </td>
                             <td>
-                                <span>APG</span>
-                                @apg
+                                <span>AST</span>
+                                @_stats.Apg
                                 <p class="rank">@(Util.GetOrdinal(apgRank))</p>
                             </td>
                             <td>
                                 <span>OPPG</span>
-                                @oppg
-                                <p class="rank">@(Util.GetOrdinal(oppgRank))</p>
+                                @_stats.Oppg
+                                <p class="rank">@(Util.GetOrdinal(apgRank))</p>
                             </td>
                         </tr>
                         </tbody>
@@ -58,7 +58,13 @@
                 </div>
                 
             }
+           
+            
         </div>
+        
     </div>
     
+    
+    
 }
+

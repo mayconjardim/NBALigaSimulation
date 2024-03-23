@@ -1,6 +1,7 @@
 .cards {
     display: flex;
     flex-wrap: wrap;
+    height: 40rem;
 }
 
 .card {
@@ -10,24 +11,14 @@
     font-size: 0.8rem;
 }
 
-
 .card-header {
-    height: 2.5rem;
-    color: var(--primary-color);
-    font-weight: 600;
+    height: 2rem;
     display: flex;
-    align-items: center;
-    justify-content: space-between;
-}
-
-.card-header p {
-    vertical-align: middle;
-    padding: 0;
-    margin: 0;
+    justify-content: space-around;
+    vertical-align: top;
 }
 
 .card-header img {
-  vertical-align: middle;
     padding: 0;
     margin: 0;
 }

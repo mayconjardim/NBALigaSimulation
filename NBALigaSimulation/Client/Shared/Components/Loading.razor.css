@@ -1,0 +1,10 @@
+.container {
+    height: 100%;
+    margin: 0 auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.spinner-container {
+    text-align: center;
+}

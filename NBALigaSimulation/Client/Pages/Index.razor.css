@@ -1,23 +1,29 @@
-﻿.main {
+﻿.index {
+    margin: 0 auto;
+}
+.container-fluid {
+    height: 40rem;
     display: flex;
-    flex-wrap: wrap;
+    flex-direction: row;
+    align-content: flex-start;
+    justify-content: center;
 }
 
-.Standings,
-.News {
-    flex: 1; 
+.standings {
+    margin: 0.625rem;
+    flex-grow: 1; 
+    flex-basis: 45%; 
 }
 
-.Standings {
-    padding: 10px; 
-}
-
-.News {
-    padding: 10px; 
+.news {
+    margin: 0.625rem;
+    flex-grow: 1; 
+    flex-basis: 55%;
+    flex-shrink: 1;
 }
 
 @media only screen and (max-width: 650px) {
-    .News {
+    .news {
         display: none;
     }
 }

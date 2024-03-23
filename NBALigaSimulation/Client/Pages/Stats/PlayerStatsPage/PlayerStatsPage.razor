@@ -1,77 +1,78 @@
 @page "/stats"
 @inject IStatsService StatsService
 
-<div class="container">
-    @if (_playerStats != null)
-    {
+@if (_playerStats != null) 
+{
+    <div class="container">
+      
         <div class="table-responsive">
             <table class="table" id="statsTable">
                 <thead>
                 <tr>
-                      <th>PLAYER</th>
-                      <th>NAME</th>
-                      <th>TEAM</th>
-                      
-                          <th @onclick='() => SortTable("GP")'>GP
-                              <i class="bi @GetSortIcon("GP")"></i>
-                          </th>
-                      
-                           <th @onclick='() => SortTable("MIN")'>MPG
-                             <i class="bi @GetSortIcon("MIN")"></i>
-                          </th>
-                      
-                          <th @onclick='() => SortTable("PPG")'>PPG
-                              <i class="bi @GetSortIcon("PPG")"></i>
-                          </th>
-                      
-                        <th @onclick='() => SortTable("APG")'>APG
-                          <i class="bi @GetSortIcon("APG")"></i>
-                        </th>
-                      
-                        <th @onclick='() => SortTable("RPG")'>RPG
-                            <i class="bi @GetSortIcon("RPG")"></i>
-                        </th>
-                        
-                         <th @onclick='() => SortTable("ORB")'>ORB
-                           <i class="bi @GetSortIcon("ORB")"></i>
-                         </th>
-                        
-                         <th @onclick='() => SortTable("DRB")'>DRB
-                             <i class="bi @GetSortIcon("DRB")"></i>
-                         </th>
-                         
-                         <th @onclick='() => SortTable("SPG")'>SPG
-                             <i class="bi @GetSortIcon("SPG")"></i>
-                         </th>
-                         
-                         <th @onclick='() => SortTable("BPG")'>BPG
-                             <i class="bi @GetSortIcon("BPG")"></i>
-                         </th>
-                         
-                         <th @onclick='() => SortTable("TPG")'>TPG
-                             <i class="bi @GetSortIcon("TPG")"></i>
-                         </th>
-                                   
-                         <th @onclick='() => SortTable("FPG")'>FPG
-                             <i class="bi @GetSortIcon("FPG")"></i>
-                         </th>
-                         
-                         <th @onclick='() => SortTable("FG%")'>FG%
-                             <i class="bi @GetSortIcon("FG%")"></i>
-                         </th>
-                         
-                          <th @onclick='() => SortTable("FT%")'>FT%%
-                             <i class="bi @GetSortIcon("FT%")"></i>
-                          </th>
-                     
-                          <th @onclick='() => SortTable("3P%")'>3P%
-                              <i class="bi @GetSortIcon("3P%")"></i>
-                          </th>
+                    <th>PLAYER</th>
+                    <th>NAME</th>
+                    <th>TEAM</th>
                           
-                           <th @onclick='() => SortTable("TS%")'>TS%
-                            <i class="bi @GetSortIcon("TS%")"></i>
-                           </th>
-                        
+                    <th @onclick='() => SortTable("GP")'>GP
+                        <i class="bi @GetSortIcon("GP")"></i>
+                    </th>
+                          
+                    <th @onclick='() => SortTable("MIN")'>MPG
+                        <i class="bi @GetSortIcon("MIN")"></i>
+                    </th>
+                          
+                    <th @onclick='() => SortTable("PPG")'>PPG
+                        <i class="bi @GetSortIcon("PPG")"></i>
+                    </th>
+                          
+                    <th @onclick='() => SortTable("APG")'>APG
+                        <i class="bi @GetSortIcon("APG")"></i>
+                    </th>
+                          
+                    <th @onclick='() => SortTable("RPG")'>RPG
+                        <i class="bi @GetSortIcon("RPG")"></i>
+                    </th>
+                            
+                    <th @onclick='() => SortTable("ORB")'>ORB
+                        <i class="bi @GetSortIcon("ORB")"></i>
+                    </th>
+                            
+                    <th @onclick='() => SortTable("DRB")'>DRB
+                        <i class="bi @GetSortIcon("DRB")"></i>
+                    </th>
+                             
+                    <th @onclick='() => SortTable("SPG")'>SPG
+                        <i class="bi @GetSortIcon("SPG")"></i>
+                    </th>
+                             
+                    <th @onclick='() => SortTable("BPG")'>BPG
+                        <i class="bi @GetSortIcon("BPG")"></i>
+                    </th>
+                             
+                    <th @onclick='() => SortTable("TPG")'>TPG
+                        <i class="bi @GetSortIcon("TPG")"></i>
+                    </th>
+                                       
+                    <th @onclick='() => SortTable("FPG")'>FPG
+                        <i class="bi @GetSortIcon("FPG")"></i>
+                    </th>
+                             
+                    <th @onclick='() => SortTable("FG%")'>FG%
+                        <i class="bi @GetSortIcon("FG%")"></i>
+                    </th>
+                             
+                    <th @onclick='() => SortTable("FT%")'>FT%%
+                        <i class="bi @GetSortIcon("FT%")"></i>
+                    </th>
+                         
+                    <th @onclick='() => SortTable("3P%")'>3P%
+                        <i class="bi @GetSortIcon("3P%")"></i>
+                    </th>
+                              
+                    <th @onclick='() => SortTable("TS%")'>TS%
+                        <i class="bi @GetSortIcon("TS%")"></i>
+                    </th>
+                            
                 </tr>
                 </thead>
                 <tbody>
@@ -106,5 +107,10 @@
                 </tbody>
             </table>
         </div>
-    }
-</div>
+        
+    </div>
+}
+else
+{
+    <Loading></Loading>
+}
