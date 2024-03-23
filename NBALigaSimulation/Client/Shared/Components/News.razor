@@ -1,18 +1,17 @@
 @page "/news"
+@inject INewsService NewsService
+
 
 <div>
  
     <ul class="list-group">
-        <li class="list-group-item">   <h5>HEADLINES</h5></li>
-        <li class="list-group-item">Andre Miller marca 17 pontos contra o Pistons na vitória por 114-89.</li>
-        <li class="list-group-item">Amar'e Stoudemire marca 28 pontos contra o Hornets na vitória por 135-88.</li>
-        <li class="list-group-item">Dwyane Wade marca 28 pontos contra o Hornets na vitória por 116-128.</li>
-        <li class="list-group-item">Steve Nash marca 34 pontos contra o 76ers na vitória por 95-119.</li>
-        <li class="list-group-item">Rashard Lewis lidera o Spurs com 25 contra Rockets.</li>
-        <li class="list-group-item">Andre Miller marca 17 pontos contra o Pistons na vitória por 114-89.</li>
-        <li class="list-group-item">Amar'e Stoudemire marca 28 pontos contra o Hornets na vitória por 135-88.</li>
-        <li class="list-group-item">Dwyane Wade marca 28 pontos contra o Hornets na vitória por 116-128.</li>
-        <li class="list-group-item">Steve Nash marca 34 pontos contra o 76ers na vitória por 95-119.</li>
-        <li class="list-group-item">Rashard Lewis lidera o Spurs com 25 contra Rockets.</li>
+        <li class="list-group-item"><h5>HEADLINES</h5></li>
+        @foreach (var n in news)
+        {
+            <li class="list-group-item">
+                <img src=@($"../Images/Logos/{n.Winner}.svg") alt="Team logo" width="25"> 
+                <a href="games/@n.GameId">@n.Title</a>
+            </li>
+        }
     </ul>
 </div>
