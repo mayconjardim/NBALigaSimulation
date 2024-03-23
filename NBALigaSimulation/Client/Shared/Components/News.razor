@@ -1,17 +1,16 @@
 @page "/news"
 @inject INewsService NewsService
 
-
-<div>
- 
-    <ul class="list-group">
-        <li class="list-group-item"><h5>HEADLINES</h5></li>
-        @foreach (var n in news)
-        {
-            <li class="list-group-item">
-                <img src=@($"../Images/Logos/{n.Winner}.svg") alt="Team logo" width="25"> 
-                <a href="games/@n.GameId">@n.Title</a>
-            </li>
-        }
-    </ul>
-</div>
+<div class="cards">
+ @foreach (var n in news)
+ {
+    <div class="card" >
+          <div class="card-header">
+              <p>NBALIGA News </p><img src=@($"../Images/Logos/{n.Winner}.svg") alt="Team logo" width="40"> 
+          </div>
+          <div class="card-body @n.Winner">
+              <p class="card-text"> <a href="@($"players/{n.GameId}")"> @n.Title </a></p>
+          </div>
+    </div>
+ }
+ </div>
