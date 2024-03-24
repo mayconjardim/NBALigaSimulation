@@ -20,6 +20,11 @@ public class GameService : IGameService
         return response;
     }
 
+    public async Task<ServiceResponse<List<GameCompleteDto>>> GetAllGames()
+    {
+        var result = await _http.GetFromJsonAsync<ServiceResponse<List<GameCompleteDto>>>($"api/games");
+        return result;
+    }
 
     public string Message { get; set; } = "Carregando jogo...";
 

@@ -146,7 +146,12 @@ namespace NBALigaSimulation.Server.Services.GameService
 
         public async Task<ServiceResponse<List<GameCompleteDto>>> GetAllGames()
         {
-            var games = await _context.Games.ToListAsync();
+            var games = await _context.Games.
+                 Include(g => g.HomeTeam)
+                .Include(g => g.AwayTeam)
+                .Include(g => g.TeamGameStats)
+                 .ToListAsync();
+          
             var response = new ServiceResponse<List<GameCompleteDto>>
             {
                 Data = _mapper.Map<List<GameCompleteDto>>(games)
