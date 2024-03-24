@@ -1,0 +1,58 @@
+@page "/calendar"
+@inject IGameService GameService
+
+@if (_games != null)
+{
+    <div class="container">
+        
+      @foreach (var kvp in gamesByDate)
+      {
+          <table>
+              <thead>
+                  <tr>
+                      @foreach (var h in headings)
+                      {
+                          <th>@h</th>
+                      }
+                  </tr>
+              </thead>
+              <tbody>
+                  @foreach (var game in kvp.Value)
+                  {
+                      <tr>
+                          <td>@game.GameDate.ToShortDateString()</td>
+                          <td>
+                              <a href="team/@game.HomeTeamId">
+                                  <img src="@($"../Images/Logos/{game.HomeTeam}.svg")" style="vertical-align: middle; background: none" alt="Team logo" width="35" />
+                              </a>
+                          </td>
+                          <td>
+                              <a href="team/@game.AwayTeamId">
+                                  <img src="@($"../Images/Logos/{game.AwayTeam}.svg")" style="vertical-align: middle; background: none" alt="Team logo" width="35" />
+                              </a>
+                          </td>
+                          @if (game.HomeTeamScore > 0)
+                          {
+                              <td>
+                                  <a href="game/@game.Id">
+                                          @game.HomeTeamScore
+                                      :
+                                          @game.AwayTeamScore
+                                  </a>
+                              </td>
+                          }
+                          else
+                          {
+                              <td>TBD</td>
+                          }
+                      </tr>
+                  }
+              </tbody>
+          </table>
+      }
+    </div>
+}
+else
+{
+    <Loading></Loading>
+}

@@ -35,7 +35,7 @@ namespace NBALigaSimulation.Server.Services.GameService
             {
                 var games = await _context.Games
                     .Where(g => g.HomeTeamId == teamId || g.AwayTeamId == teamId)
-                    .OrderBy(g => g.GameDate)
+                    .OrderBy(g => g.GameDate.Date)
                     .Include(p => p.HomeTeam)
                     .Include(p => p.AwayTeam)
                     .Include(p => p.TeamGameStats)

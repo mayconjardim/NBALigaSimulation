@@ -1,0 +1,33 @@
+.container {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+table {
+    background-color: var(--white);
+    width: 100%;
+    text-align: center;
+    margin: 0.625rem;
+    border-collapse: collapse;
+    -webkit-border-radius: 0.625rem;
+    -moz-border-radius: 0.625rem;
+    border-radius: 0.625rem;
+    overflow: hidden;
+}
+
+table td{
+    padding: 0 0.825rem;
+}
+table tbody td {
+    font-size: 0.625rem;
+    font-weight: 600;
+}
+
+table thead {
+    background: var(--primary-color);
+}
+table thead th {
+    font-size: 0.625rem;
+    font-weight: 800;
+    color: var(--white);
+}
