@@ -1,25 +1,12 @@
 ﻿.index {
-    margin: 0 auto;
-}
-.container-fluid {
-    height: 40rem;
+    width: 100%;
     display: flex;
     flex-direction: row;
-    align-content: flex-start;
-    justify-content: center;
 }
 
-.standings {
+.standings, .news {
+    flex: 1; /* Define a largura flexível para dividir igualmente */
     margin: 0.625rem;
-    flex-grow: 1; 
-    flex-basis: 45%; 
-}
-
-.news {
-    margin: 0.625rem;
-    flex-grow: 1; 
-    flex-basis: 55%;
-    flex-shrink: 1;
 }
 
 @media only screen and (max-width: 650px) {

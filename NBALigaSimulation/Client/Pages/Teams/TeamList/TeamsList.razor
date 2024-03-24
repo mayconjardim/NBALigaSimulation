@@ -5,13 +5,13 @@
 <div class="container">
     @if (_teams != null && _east != null && _west != null)
     {
-        @foreach (var team in _east)
-        {
-            <div class="team-img" @onclick="() => NavigateToTeamPage(team.Id)">
-                <img src=@($"../Images/Logos/{team.Abrv}.svg") alt="Team logo">
-            </div>
-        }
-
+            @foreach (var team in _east)
+            {
+                <div class="team-img" @onclick="() => NavigateToTeamPage(team.Id)">
+                    <img src=@($"../Images/Logos/{team.Abrv}.svg") alt="Team logo">
+                </div>
+            }
+        
         @foreach (var team in _west)
         {
             <div class="team-img" @onclick="() => NavigateToTeamPage(team.Id)">

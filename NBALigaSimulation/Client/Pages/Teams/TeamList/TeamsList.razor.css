@@ -1,12 +1,14 @@
 .container {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); 
-    gap: 10px; 
+    gap: 10px;
+    justify-content: center; 
+    align-items: center;
 }
 
 .team-img {
     width: 100%;
-    text-align: center; 
+    align-content: center;
 }
 
 .team-img img {

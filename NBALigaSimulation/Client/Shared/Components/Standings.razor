@@ -6,84 +6,95 @@
      <div class="table-responsive">
         <div class="standings-table">
             <table>
+                        <thead style="background: var(--primary-color); color: white; text-align: center;">
+                       <tr>
+                           <th colspan="7" style="text-align: center">EAST</th>
+                       </tr>
+                       </thead>
                 <thead>
-                    <tr>
-                        <th  style="width: 50%;">EAST</th> 
-                        <th style="width: 8.3%;">W-L</th>
-                            <th style="width:  8.3%;">PCT</th>
-                            <th class="mobile" style="width:  8.3%;">PF</th>
-                            <th class="mobile" style="width:  8.3%;">PA</th>
-                            <th style="width:  8.3%;">DIFF</th>
-                            <th style="width:  8.3%;">STRK</th>
-                    </tr>
+                <tr>
+                    <th style="width: 50%;"></th>
+                    <th style="width: 8.3%;">W-L</th>
+                    <th style="width:  8.3%;">PCT</th>
+                    <th class="mobile" style="width:  8.3%;">PF</th>
+                    <th class="mobile" style="width:  8.3%;">PA</th>
+                    <th style="width:  8.3%;">DIFF</th>
+                    <th style="width:  8.3%;">STRK</th>
+                </tr>
                 </thead>
                 <tbody>
-                    @foreach (var (team, index) in statsEast.Select((value, index) => (Value: value, Index: index)))
+                @foreach (var (team, index) in statsEast.Select((value, index) => (Value: value, Index: index)))
+                {
+                    <tr>
+                        <td>
+                            <img src=@($"../Images/Logos/{team.TeamAbrv}.svg") Style="vertical-align: middle; background: none" alt="Team logo" width="25">
+                            <a style="color: #0000EE" href="teams/@team.TeamId">@team.TeamRegion @team.TeamName</a>
+                        </td>
+                        <td>@team.Wins-@team.Losses</td>
+                        <td>@team.WinPct</td>
+                        <td class="mobile">@team.PF</td>
+                        <td class="mobile">@team.PA</td>
+                        <td><span style="@GetDiffStyle(team.DIFF)">@GetFormattedDiff(team.DIFF)</span></td>
+                        <td>@GetStreak(team.Streak)</td>
+                    </tr>
+
+                    @if (index == 7) // 8ª equipe
                     {
                         <tr>
-                            <td>
-                                <img src=@($"../Images/Logos/{team.TeamAbrv}.svg") Style="vertical-align: middle; background: none" alt="Team logo" width="25"> 
-                                <a style="color: #0000EE" href="teams/@team.TeamId">@team.TeamRegion @team.TeamName</a>
+                            <td colspan="14">
+                                <hr style="border-top: 1px solid #e0e0e0; margin: 0;">
                             </td>
-                            <td>@team.Wins-@team.Losses</td>
-                            <td>@team.WinPct</td>
-                            <td class="mobile">@team.PF</td>
-                            <td class="mobile">@team.PA</td>
-                            <td><span style="@GetDiffStyle(team.DIFF)">@GetFormattedDiff(team.DIFF)</span></td>
-                            <td>@GetStreak(team.Streak)</td>
                         </tr>
-
-                        @if (index == 7) // 8ª equipe
-                        {
-                            <tr>
-                                <td colspan="14">
-                                    <hr style="border-top: 1px solid #e0e0e0; margin: 0;">
-                                </td>
-                            </tr>
-                        }
                     }
+                }
                 </tbody>
             </table>
         </div>
 
         <div class="standings-table">
             <table>
+                
+                  <thead style="background: var(--primary-color); color: white; text-align: center;">
+                      <tr>
+                        <th colspan="7" style="text-align: center">WEST</th>
+                    </tr>
+                </thead>
                 <thead>
-                          <tr>
-                                         <th  style="width: 50%;">EAST</th> 
-                                         <th style="width: 8.3%;">W-L</th>
-                                             <th style="width:  8.3%;">PCT</th>
-                                             <th class="mobile" style="width:  8.3%;">PF</th>
-                                             <th class="mobile" style="width:  8.3%;">PA</th>
-                                             <th style="width:  8.3%;">DIFF</th>
-                                             <th style="width:  8.3%;">STRK</th>
-                                     </tr>
+                <tr>
+                    <th style="width: 50%;"></th>
+                    <th style="width: 8.3%;">W-L</th>
+                    <th style="width:  8.3%;">PCT</th>
+                    <th class="mobile" style="width:  8.3%;">PF</th>
+                    <th class="mobile" style="width:  8.3%;">PA</th>
+                    <th style="width:  8.3%;">DIFF</th>
+                    <th style="width:  8.3%;">STRK</th>
+                </tr>
                 </thead>
                 <tbody>
-                    @foreach (var (team, index) in statsWest.Select((value, index) => (Value: value, Index: index)))
+                @foreach (var (team, index) in statsWest.Select((value, index) => (Value: value, Index: index)))
+                {
+                    <tr>
+                        <td>
+                            <img src=@($"../Images/Logos/{team.TeamAbrv}.svg") Style="vertical-align: middle; background: none" alt="Team logo" width="25">
+                            <a style="color: #0000EE" href="teams/@team.TeamId">@team.TeamRegion @team.TeamName</a>
+                        </td>
+                        <td>@team.Wins-@team.Losses</td>
+                        <td>@team.WinPct</td>
+                        <td class="mobile">@team.PF</td>
+                        <td class="mobile">@team.PA</td>
+                        <td><span style="@GetDiffStyle(team.DIFF)">@GetFormattedDiff(team.DIFF)</span></td>
+                        <td>@GetStreak(team.Streak)</td>
+                    </tr>
+
+                    @if (index == 7) // 8ª equipe
                     {
                         <tr>
-                            <td>
-                                <img src=@($"../Images/Logos/{team.TeamAbrv}.svg") Style="vertical-align: middle; background: none" alt="Team logo" width="25"> 
-                                <a style="color: #0000EE" href="teams/@team.TeamId">@team.TeamRegion @team.TeamName</a>
+                            <td colspan="14">
+                                <hr style="border-top: 1px solid #e0e0e0; margin: 0;">
                             </td>
-                            <td>@team.Wins-@team.Losses</td>
-                            <td>@team.WinPct</td>
-                            <td class="mobile">@team.PF</td>
-                            <td class="mobile">@team.PA</td>
-                            <td><span style="@GetDiffStyle(team.DIFF)">@GetFormattedDiff(team.DIFF)</span></td>
-                            <td>@GetStreak(team.Streak)</td>
                         </tr>
-
-                        @if (index == 7) // 8ª equipe
-                        {
-                            <tr>
-                                <td colspan="14">
-                                    <hr style="border-top: 1px solid #e0e0e0; margin: 0;">
-                                </td>
-                            </tr>
-                        }
                     }
+                }
                 </tbody>
             </table>
         </div>

@@ -22,7 +22,7 @@ public partial class News
         {
             news = result.Data.ToList();
             news = news.OrderByDescending(n => n.Id).ToList();
-            news = news.Take(12).ToList();
+            news = news.Take(16).ToList();
         }
 
     }

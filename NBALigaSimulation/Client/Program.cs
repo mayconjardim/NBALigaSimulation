@@ -5,11 +5,11 @@ global using NBALigaSimulation.Client.Services.GameService;
 global using NBALigaSimulation.Client.Services.StatsService;
 global using NBALigaSimulation.Client.Services.NewsService;
 global using NBALigaSimulation.Client.Services.DataService;
+global using NBALigaSimulation.Client.Services.SeasonsService;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using NBALigaSimulation.Client;
 using Blazored.LocalStorage;
-using NBALigaSimulation.Client.Services.SeasonsService;
 using pax.BlazorChartJs;
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);

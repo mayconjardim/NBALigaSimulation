@@ -1,13 +1,9 @@
-h5 {
-    margin: 0.625rem ;
-    font-weight: 900;
-}
-
 table {
     background-color: var(--white);
     width: 100%;
+    text-align: center;
+    border-radius: 0.625rem;
     margin: 0.625rem 0;
-    padding: 2rem;
 }
 table caption {
     color: #212529;
@@ -15,24 +11,21 @@ table caption {
 }
 
 table th {
+    border-top-right-radius: 0.625rem;
+    border-top-left-radius: 0.625rem;
     font-size: 0.625rem;
-    white-space: nowrap;
     text-align: left;
-    margin-left: 0.500rem;
 }
 
 table td {
     font-size: 0.8rem;
     white-space: nowrap;
     text-align: left;
-    margin-left: 0.500rem;
+    
 }
 
-table td span {
-    font-size: 0.6rem;
-    margin: 0.2rem;
-    white-space: nowrap;
-    color: #c9c4c4;
+table, th, td {
+    white-space: nowrap
 }
 
 tr:nth-child(even) {
@@ -42,7 +35,6 @@ tr:nth-child(even) {
 a {
     text-decoration: none;
 }
-
 
 .player-pic {
     background-repeat: no-repeat;

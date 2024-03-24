@@ -1,4 +1,8 @@
-﻿
+﻿@using NBALigaSimulation.Shared.Dtos.Teams
+@inject NavigationManager NavigationManager
+@inject ISeasonService SeasonService
+@inject ITeamService TeamService
+
 
 <nav class="navbar navbar-expand-lg bg-body-tertiary">
     <div class="container-fluid">
@@ -19,10 +23,19 @@
                 <li class="nav-item">
                     <a class="nav-link" href="/">Home</a>
                 </li>
-
-                <li class="nav-item">
-                    <a class="nav-link" href="/teams" >Times</a>
+                
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        Liga
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="/comparison">Sobre</a></li>
+                    </ul>
                 </li>
+                
+               <li class="nav-item">
+                              <a class="nav-link" href="/teams">Times</a>
+               </li>
                 
                 <li class="nav-item">
                     <a class="nav-link" href="#">Calendário</a>
@@ -45,10 +58,6 @@
                     </ul>
                 </li>
                 
-                <li class="nav-item">
-                    <a class="nav-link" href="">Sobre</a>
-                </li>
-                
             </ul>
             
             <form class="d-none d-lg-block d-xl-block search ml-auto" role="search">
@@ -62,8 +71,27 @@
 
 @code {
 
+    private List<TeamSimpleDto> _teams = new List<TeamSimpleDto>();
+    protected List<TeamSimpleDto> _east;
+    protected List<TeamSimpleDto> _west;
+
+    protected override async Task OnInitializedAsync()
+    {
+
+        var result = await TeamService.GetAllTeams();
+        
+        if (result.Success)
+        {
+            _teams = result.Data;
+            _east = _teams.Where(t => t.Conference == "East").ToList();
+            _west = _teams.Where(t => t.Conference == "West").ToList();
+        }
+    }
     
-    
+    private  void NavigateToTeamPage(int teamId)
+    {
+        NavigationManager.NavigateTo($"/teams/{teamId}");
+    }
     
 
 }
