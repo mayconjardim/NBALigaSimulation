@@ -24,7 +24,7 @@ table td {
     white-space: nowrap
 }
 
-table, th, td {
+table{
     border-radius: 10px;
 }
 

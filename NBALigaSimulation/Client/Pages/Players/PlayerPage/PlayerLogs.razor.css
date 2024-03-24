@@ -12,18 +12,14 @@ table caption {
 
 table th {
     font-size: 0.625rem;
-    border: 1px solid #c9c4c4;
 }
 
 table td {
     font-size: 0.8rem;
-    border: 1px solid #c9c4c4;
     white-space: nowrap
 }
 
 table, th, td {
-    border: 1px solid black;
-    border-radius: 10px;
     white-space: nowrap
 }
 

@@ -1,8 +1,3 @@
-h5 {
-    margin: 0.625rem ;
-    font-weight: 900;
-}
-
 table {
     background-color: var(--white);
     width: 100%;
@@ -24,11 +19,16 @@ table td {
     white-space: nowrap
 }
 
-table td span {
+table span {
     font-size: 0.6rem;
-    margin: 0.2rem;
-    white-space: nowrap;
-    color: #c9c4c4;
+    color: grey;
+    margin: 0.100rem;
+    
+}
+
+
+table{
+    border-radius: 10px;
 }
 
 tr:nth-child(even) {
@@ -38,7 +38,6 @@ tr:nth-child(even) {
 a {
     text-decoration: none;
 }
-
 
 .player-pic {
     background-repeat: no-repeat;
