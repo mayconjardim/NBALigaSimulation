@@ -38,10 +38,8 @@ namespace NBALigaSimulation.Server.Controllers
         [HttpGet]
         public async Task<ActionResult<ServiceResponse<List<PlayerSimpleDto>>>> GetAllPlayers()
         {
-
             var result = await _playerService.GetAllPlayers();
             return Ok(result);
-
         }
 
         [HttpGet("fa")]

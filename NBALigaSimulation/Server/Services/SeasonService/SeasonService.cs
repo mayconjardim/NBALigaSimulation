@@ -20,6 +20,46 @@ namespace NBALigaSimulation.Server.Services.SeasonService
             _mapper = mapper;
         }
 
+        public async Task<ServiceResponse<CompleteSeasonDto>> GetLastSeason()
+        {
+            var response = new ServiceResponse<CompleteSeasonDto>();
+            var season = await _context.Seasons.OrderBy(s => s.Year).LastOrDefaultAsync();
+
+            if (season == null)
+            {
+                response.Success = false;
+                response.Message = $"Temporada não econtrada!";
+            }
+            else
+            {
+                response.Data = _mapper.Map<CompleteSeasonDto>(season);
+            }
+
+            return response;
+        }
+        
+        public async Task<ServiceResponse<List<CompleteSeasonDto>>> GetALlSeason()
+        {
+            ServiceResponse<List<CompleteSeasonDto>> response = new ServiceResponse<List<CompleteSeasonDto>>();
+            
+            var seasons = await _context.Seasons.OrderBy(s => s.Year).ToListAsync();
+            
+            if (seasons.Count == 0)
+            {
+                response.Success = false;
+                response.Message = $"Não existem temporadas!";
+            }
+            else
+            {
+                response.Success = true;
+                response.Data = _mapper.Map<List<CompleteSeasonDto>>(seasons);
+                response.Message = $"Temporadas retornadas com sucesso!";
+
+            }
+            
+            return response;
+        }
+
         public async Task<ServiceResponse<CompleteSeasonDto>> CreateSeason()
         {
             ServiceResponse<CompleteSeasonDto> response = new ServiceResponse<CompleteSeasonDto>();
@@ -75,25 +115,6 @@ namespace NBALigaSimulation.Server.Services.SeasonService
             response.Data = _mapper.Map<CompleteSeasonDto>(season);
             return response;
         }
-
-        public async Task<ServiceResponse<CompleteSeasonDto>> GetLastSeason()
-        {
-            var response = new ServiceResponse<CompleteSeasonDto>();
-            var season = await _context.Seasons.OrderBy(s => s.Year).LastOrDefaultAsync();
-
-            if (season == null)
-            {
-                response.Success = false;
-                response.Message = $"Temporada não econtrada!";
-            }
-            else
-            {
-                response.Data = _mapper.Map<CompleteSeasonDto>(season);
-            }
-
-            return response;
-        }
-
 
         public async Task<ServiceResponse<CompleteSeasonDto>> GenerateSchedule()
         {

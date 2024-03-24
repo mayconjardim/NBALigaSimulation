@@ -17,16 +17,23 @@ namespace NBALigaSimulation.Server.Controllers
             _seasonService = seasonService;
         }
 
-        [HttpPost]
-        [SwaggerOperation(Summary = "CreateSeason", Description = "Cria uma nova temporada.")]
-
-        public async Task<ActionResult<ServiceResponse<CompleteSeasonDto>>> CreateSeason()
+        [HttpGet("all")]
+        [SwaggerOperation(Summary = "GetLastSeason", Description = "Retorna todas as temporadas.")]
+        public async Task<ActionResult<ServiceResponse<List<CompleteSeasonDto>>>> GetALlSeason()
         {
-            return Ok(await _seasonService.CreateSeason());
-        }
 
+            var result = await _seasonService.GetALlSeason();
+
+            if (!result.Success)
+            {
+                return NotFound(result);
+            }
+
+            return Ok(result);
+        }
+        
         [HttpGet]
-        [SwaggerOperation(Summary = "GetLastSeason", Description = "Retorna a temporada atual.")]
+        [SwaggerOperation(Summary = "GetAllSeason", Description = "Retorna a temporada atual.")]
         public async Task<ActionResult<ServiceResponse<CompleteSeasonDto>>> GetLastSeason()
         {
 
@@ -38,7 +45,14 @@ namespace NBALigaSimulation.Server.Controllers
             }
 
             return Ok(result);
+        }
+        
+        [HttpPost]
+        [SwaggerOperation(Summary = "CreateSeason", Description = "Cria uma nova temporada.")]
 
+        public async Task<ActionResult<ServiceResponse<CompleteSeasonDto>>> CreateSeason()
+        {
+            return Ok(await _seasonService.CreateSeason());
         }
 
         [HttpPut("schedule")]
@@ -51,7 +65,6 @@ namespace NBALigaSimulation.Server.Controllers
             {
                 return BadRequest(response);
             }
-
             return Ok(response);
         }
 
@@ -65,7 +78,6 @@ namespace NBALigaSimulation.Server.Controllers
             {
                 return BadRequest(response);
             }
-
             return Ok(response);
         }
 

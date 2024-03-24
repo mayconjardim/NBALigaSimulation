@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using NBALigaSimulation.Client;
 using Blazored.LocalStorage;
+using NBALigaSimulation.Client.Services.SeasonsService;
 using pax.BlazorChartJs;
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
@@ -23,8 +24,7 @@ builder.Services.AddScoped<IPlayerService, PlayerService>();
 builder.Services.AddScoped<ITeamService, TeamService>();
 builder.Services.AddScoped<IGameService, GameService>();
 builder.Services.AddScoped<IStatsService, StatsService>();
-
-
+builder.Services.AddScoped<ISeasonService, SeasonService>();
 
 builder.Services.AddChartJs(options =>
 {
