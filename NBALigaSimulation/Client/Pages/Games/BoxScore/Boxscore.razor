@@ -1,8 +1,9 @@
 @page "/game/{id:int}"
 @inject IGameService GameService
 
+<div class="container">
 @if (game !=  null)
-{
+{   
             <div class="boxscore">
             
                 <div class="boxscore-header">
@@ -12,7 +13,7 @@
                     </div>
                   
                     <div class="boxscore-header-score">
-                        <span>@game.HomeTeamScore</span> -   <span>@game.AwayTeamScore</span>
+                        <span>@game.HomeTeamScore - @game.AwayTeamScore</span>
                     </div>
                     
                     <div class="boxscore-header-logo">
@@ -35,20 +36,65 @@
                     <div class="tab-pane fade show active" id="bio-tab-pane" role="tabpanel" aria-labelledby="bio-tab" tabindex="0">
                   
                         <div class="table-responsive">
-                            <table class="table">
+                        <table class="table" >
+                                                                           <thead>
+                                                                               <tr>
+                                                                                   @foreach (var h in headings)
+                                                                                   {
+                                                                                   <th>@h</th>
+                                                                                   }
+                                                                               </tr>
+                                                                           </thead>
+                                                                           <tbody>
+                                                                               @foreach (var row in game.AwayPlayerGameStats.Select((value, index) => new { Value = value, Index = index }))
+                                                                               {
+                                                                               <tr>
+                                                                                  <td style="text-align: left">  <a href="@($"players/{@row.Value.PlayerId}")"> @row.Value.Name </a><span>@row.Value.Pos</span></td>
+                                                                                   <td>@Format(row.Value.Min)</td>
+                                                                                   <td>@row.Value.Fg-@row.Value.Fga</td>
+                                                                                   <td>@row.Value.Tp-@row.Value.Tpa</td>
+                                                                                   <td>@row.Value.Ft-@row.Value.Fta</td>
+                                                                                   <td>@row.Value.Orb</td>
+                                                                                   <td>@row.Value.Trb</td>
+                                                                                   <td>@row.Value.Ast</td>
+                                                                                   <td>@row.Value.Tov</td>
+                                                                                   <td>@row.Value.Stl</td>
+                                                                                   <td>@row.Value.Blk</td>
+                                                                                   <td>@row.Value.Pf</td>
+                                                                                   <td>@row.Value.Pts</td>
+                                                                               </tr>
+                                                                               @if (row.Index == 4)
+                                                                               {
+                                                                               <tr>
+                                                                                   <td colspan="14">
+                                                                                       <hr style="border-top: 1px solid #e0e0e0; margin: 0;">
+                                                                                   </td>
+                                                                               </tr>
+                                                                               }
+                                                                               }
+                                                                           </tbody>
+                                                                       </table>
+                        </div>
+                        
+                        
+                    </div>
+                    <div class="tab-pane fade" id="profile-tab-pane" role="tabpanel" aria-labelledby="profile-tab" tabindex="0">
+                        
+                        <div class="table-responsive">
+                            <table class="table" >
                                 <thead>
-                                    <tr>
-                                        @foreach (var h in headings)
-                                        {
+                                <tr>
+                                    @foreach (var h in headings)
+                                    {
                                         <th>@h</th>
-                                        }
-                                    </tr>
+                                    }
+                                </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach (var row in game.HomePlayerGameStats.Select((value, index) => new { Value = value, Index = index }))
-                                    {
+                                @foreach (var row in game.AwayPlayerGameStats.Select((value, index) => new { Value = value, Index = index }))
+                                {
                                     <tr>
-                                        <td><a href="players/@row.Value.PlayerId">@NomeAbvr(@row.Value.Name)</a></td>
+                                        <td style="text-align: left"> <a href="@($"players/{@row.Value.PlayerId}")"> @row.Value.Name </a><span>@row.Value.Pos</span></td>
                                         <td>@Format(row.Value.Min)</td>
                                         <td>@row.Value.Fg-@row.Value.Fga</td>
                                         <td>@row.Value.Tp-@row.Value.Tpa</td>
@@ -64,62 +110,18 @@
                                     </tr>
                                     @if (row.Index == 4)
                                     {
-                                    <tr>
-                                        <td colspan="14">
-                                            <hr style="border-top: 1px solid #e0e0e0; margin: 0;">
-                                        </td>
-                                    </tr>
+                                        <tr>
+                                            <td colspan="14">
+                                                <hr style="border-top: 1px solid #e0e0e0; margin: 0;">
+                                            </td>
+                                        </tr>
                                     }
-                                    }
+                                }
                                 </tbody>
                             </table>
                         </div>
-                        
-                        
                     </div>
-                    <div class="tab-pane fade" id="profile-tab-pane" role="tabpanel" aria-labelledby="profile-tab" tabindex="0">
-                        
-                         <div class="table-responsive">
-                                                    <table class="table" >
-                                                        <thead>
-                                                            <tr>
-                                                                @foreach (var h in headings)
-                                                                {
-                                                                <th>@h</th>
-                                                                }
-                                                            </tr>
-                                                        </thead>
-                                                        <tbody>
-                                                            @foreach (var row in game.AwayPlayerGameStats.Select((value, index) => new { Value = value, Index = index }))
-                                                            {
-                                                            <tr>
-                                                                <td><a href="players/@row.Value.PlayerId">@NomeAbvr(@row.Value.Name)</a></td>
-                                                                <td>@Format(row.Value.Min)</td>
-                                                                <td>@row.Value.Fg-@row.Value.Fga</td>
-                                                                <td>@row.Value.Tp-@row.Value.Tpa</td>
-                                                                <td>@row.Value.Ft-@row.Value.Fta</td>
-                                                                <td>@row.Value.Orb</td>
-                                                                <td>@row.Value.Trb</td>
-                                                                <td>@row.Value.Ast</td>
-                                                                <td>@row.Value.Tov</td>
-                                                                <td>@row.Value.Stl</td>
-                                                                <td>@row.Value.Blk</td>
-                                                                <td>@row.Value.Pf</td>
-                                                                <td>@row.Value.Pts</td>
-                                                            </tr>
-                                                            @if (row.Index == 4)
-                                                            {
-                                                            <tr>
-                                                                <td colspan="14">
-                                                                    <hr style="border-top: 1px solid #e0e0e0; margin: 0;">
-                                                                </td>
-                                                            </tr>
-                                                            }
-                                                            }
-                                                        </tbody>
-                                                    </table>
-                                                </div>
                     </div>
                 </div>
-            </div>
 }
+</div>

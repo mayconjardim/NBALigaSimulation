@@ -1,58 +1,70 @@
-.boxscore{
-    margin-top: 0.500rem;
-    background: var(--primary-color);
+.boxscore {
+    background-color: var(--primary-color);
+    margin: 0.625rem;
+    border-radius: 0.625rem;
 }
 
-.boxscore-header{
+.boxscore-header {
+  
     display: flex;
     justify-content: center;
-    color: white;
-    font-size: 2.0rem;
+    align-items: center; 
 }
 
 .boxscore-header-score {
-    margin: 1.2rem;
-    vertical-align: bottom;
-}
-
-tbody {
-    white-space: nowrap;
-}
-
-tfoot td {
-    border: 1px solid #e0e0e0;
-    white-space: nowrap;
-}
-
-.game :hover {
-    text-decoration: underline;
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: white;
+    margin: 0 1rem; 
 }
 
 table {
+    background-color: var(--white);
     width: 100%;
-    border-collapse: collapse;
-}
-
-th,
-td {
-    padding: 6px;
     text-align: center;
-    border: 1px solid #ddd;
+    margin: 0.625rem 0;
+}
+table caption {
+    color: #212529;
+    font-weight: 900;
 }
 
-th {
-    background-color: #f2f2f2;
+table th {
+    font-size: 0.625rem;
+    white-space: nowrap;
+}
+
+table td {
+    font-size: 0.8rem;
+    white-space: nowrap
+}
+
+table span {
+    font-size: 0.6rem;
+    color: grey;
+    margin: 0.100rem;
+}
+
+
+table{
+    border-radius: 10px;
 }
 
 tr:nth-child(even) {
-    background-color: #f9f9f9;
+    background-color: #FBFBFB;
 }
 
-.playbyplay {
-    margin-top: 15px;
+a {
+    text-decoration: none;
 }
 
-.pos {
-    font-size: 10px;
-    vertical-align: top;
+.player-pic {
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+}
+
+.player-pic img {
+    border-radius: 50%;
+    object-fit: cover;
 }
