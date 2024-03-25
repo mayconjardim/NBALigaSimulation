@@ -46,7 +46,7 @@
                                                                                </tr>
                                                                            </thead>
                                                                            <tbody>
-                                                                               @foreach (var row in game.AwayPlayerGameStats.Select((value, index) => new { Value = value, Index = index }))
+                                                                               @foreach (var row in game.HomePlayerGameStats.Select((value, index) => new { Value = value, Index = index }))
                                                                                {
                                                                                <tr>
                                                                                   <td style="text-align: left">  <a href="@($"players/{@row.Value.PlayerId}")"> @row.Value.Name </a><span>@row.Value.Pos</span></td>
