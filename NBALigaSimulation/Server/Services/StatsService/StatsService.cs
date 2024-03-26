@@ -32,21 +32,21 @@ namespace NBALigaSimulation.Server.Services.StatsService
 		        {
 		            orderByExpression = stat switch
 		            {
-			            "PPG" => isAscending ? query.OrderBy(p => ((double)p.Pts / p.Games)) : query.OrderByDescending(p => ((double)p.Pts / p.Games)),
-		                "GP" => isAscending ? query.OrderBy(p => p.Games) : query.OrderByDescending(p => p.Games),
-		                "MIN" => isAscending ? query.OrderBy(p => ((double)p.Min / p.Games)) : query.OrderByDescending(p => ((double)p.Min / p.Games)),
-		                "FG%" => isAscending ? query.OrderBy(p => ((double)p.Fg / p.Fga * 100)) : query.OrderByDescending(p => ((double)p.Fg / p.Fga * 100)),
-		                "3P%" => isAscending ? query.OrderBy(p => ((double)p.Tp / p.Tpa * 100)) : query.OrderByDescending(p => ((double)p.Tp / p.Tpa * 100)),
-			            "FT%" => isAscending ? query.OrderBy(p => ((double)p.Ft / p.Fta * 100)) : query.OrderByDescending(p => ((double)p.Ft / p.Fta * 100)),
-		                "ORB" => isAscending ? query.OrderBy(p => ((double)p.Orb / p.Games)) : query.OrderByDescending(p => ((double)p.Orb / p.Games)),
-		                "DRB" => isAscending ? query.OrderBy(p => ((double)p.Drb / p.Games)) : query.OrderByDescending(p => ((double)p.Drb / p.Games)),
-		                "RPG" => isAscending ? query.OrderBy(p => ((double)p.Trb / p.Games)) : query.OrderByDescending(p => ((double)p.Trb / p.Games)),
-		                "APG" => isAscending ? query.OrderBy(p => ((double)p.Ast / p.Games)) : query.OrderByDescending(p => ((double)p.Ast / p.Games)),
-		                "SPG" => isAscending ? query.OrderBy(p => ((double)p.Stl / p.Games)) : query.OrderByDescending(p => ((double)p.Stl / p.Games)),
-		                "BPG" => isAscending ? query.OrderBy(p => ((double)p.Blk / p.Games)) : query.OrderByDescending(p => ((double)p.Blk / p.Games)),
-		                "TPG" => isAscending ? query.OrderBy(p => ((double)p.Tov / p.Games)) : query.OrderByDescending(p => ((double)p.Tov / p.Games)),
-			            "FPG" => isAscending ? query.OrderBy(p => ((double)p.Pf / p.Games)) : query.OrderByDescending(p => ((double)p.Pf / p.Games)),
-		                "TS%" => isAscending ? query.OrderBy(p => (((double)p.Pts / (2.0 * (p.Fga + (0.44 * p.Fta)))) * 100)) : query.OrderByDescending(p => ((p.Pts / (2.0 * (p.Fga + (0.44 * p.Fta)))) * 100)),
+			            "PPG" => isAscending ? query.OrderByDescending(p => ((double)p.Pts / p.Games)) : query.OrderByDescending(p => ((double)p.Pts / p.Games)),
+		                "GP" => isAscending ? query.OrderByDescending(p => p.Games) : query.OrderByDescending(p => p.Games),
+		                "MIN" => isAscending ? query.OrderByDescending(p => ((double)p.Min / p.Games)) : query.OrderByDescending(p => ((double)p.Min / p.Games)),
+		                "FG%" => isAscending ? query.OrderByDescending(p => ((double)p.Fg / p.Fga * 100)) : query.OrderByDescending(p => ((double)p.Fg / p.Fga * 100)),
+		                "3P%" => isAscending ? query.OrderByDescending(p => ((double)p.Tp / p.Tpa * 100)) : query.OrderByDescending(p => ((double)p.Tp / p.Tpa * 100)),
+			            "FT%" => isAscending ? query.OrderByDescending(p => ((double)p.Ft / p.Fta * 100)) : query.OrderByDescending(p => ((double)p.Ft / p.Fta * 100)),
+		                "ORB" => isAscending ? query.OrderByDescending(p => ((double)p.Orb / p.Games)) : query.OrderByDescending(p => ((double)p.Orb / p.Games)),
+		                "DRB" => isAscending ? query.OrderByDescending(p => ((double)p.Drb / p.Games)) : query.OrderByDescending(p => ((double)p.Drb / p.Games)),
+		                "RPG" => isAscending ? query.OrderByDescending(p => ((double)p.Trb / p.Games)) : query.OrderByDescending(p => ((double)p.Trb / p.Games)),
+		                "APG" => isAscending ? query.OrderByDescending(p => ((double)p.Ast / p.Games)) : query.OrderByDescending(p => ((double)p.Ast / p.Games)),
+		                "SPG" => isAscending ? query.OrderByDescending(p => ((double)p.Stl / p.Games)) : query.OrderByDescending(p => ((double)p.Stl / p.Games)),
+		                "BPG" => isAscending ? query.OrderByDescending(p => ((double)p.Blk / p.Games)) : query.OrderByDescending(p => ((double)p.Blk / p.Games)),
+		                "TPG" => isAscending ? query.OrderByDescending(p => ((double)p.Tov / p.Games)) : query.OrderByDescending(p => ((double)p.Tov / p.Games)),
+			            "FPG" => isAscending ? query.OrderByDescending(p => ((double)p.Pf / p.Games)) : query.OrderByDescending(p => ((double)p.Pf / p.Games)),
+		                "TS%" => isAscending ? query.OrderByDescending(p => (((double)p.Pts / (2.0 * (p.Fga + (0.44 * p.Fta)))) * 100)) : query.OrderByDescending(p => ((p.Pts / (2.0 * (p.Fga + (0.44 * p.Fta)))) * 100)),
 		                _ => orderByExpression
 		            };
 		        }
