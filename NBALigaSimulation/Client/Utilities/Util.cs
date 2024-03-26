@@ -102,6 +102,18 @@ namespace NBALigaSimulation.Client.Utilities
             return numeroFormatado;
         }
 
+        public static string GetRatingColor(int value1, int value2)
+        {
+            if (value1 > value2)
+            {
+                return "rating-up";
+            }
+            else
+            {
+                return "rating-down";
+            }
+        }
+
     }
 
 }

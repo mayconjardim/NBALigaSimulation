@@ -105,6 +105,20 @@ table thead th {
     padding: 0;
 }
 
+.ratings {
+    display: flex;
+    justify-content: center;
+}
+
+.ratings-table{
+    width: 18rem;
+}
+
+.skills {
+    margin: 2px;
+    display: flex;
+    flex-direction: row;
+}
 
 
 
@@ -134,11 +148,6 @@ table thead th {
     table tbody td {
         font-size: 0.6rem;
         font-weight: 600;
-    }
-
-    .ratings {
-        margin: 0 auto;
-        width: 20rem;
     }
     
     .charts {

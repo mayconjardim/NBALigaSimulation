@@ -168,16 +168,117 @@
 @if (_player1 != null && _playerRating1 != null && _player2 != null && _playerRating2 != null)
 {
     <div class="ratings">
-        <div class="row">
-            <div class="charts">
-                <div class="chart">
-                    <ChartComponent @ref="_chartComponent" ChartJsConfig="_chartJsConfig"></ChartComponent>
-                </div>
-                <div class="chart">
-                    <ChartComponent @ref="_chartComponent2" ChartJsConfig="_chartJsConfig2"></ChartComponent>
-                </div>
-            </div>
-        </div>
+
+        <table class="ratings-table">
+        <tbody>
+        <tr>
+            <td class="player" >@Util.Age(1994, _player1.Born.Year)</td>
+            <td>AGE</td>
+            <td class="player">@Util.Age(1994, _player2.Born.Year)</td>
+        </tr>
+        <tr>
+            
+          <td class="player @Util.GetRatingColor(_playerRating1.CalculateOvr, _playerRating2.CalculateOvr)">@_playerRating1.CalculateOvr</td>
+          <td>OVR</td>
+          <td class="player @Util.GetRatingColor(_playerRating1.CalculateOvr, _playerRating2.CalculateOvr)">@_playerRating2.CalculateOvr</td>
+
+        </tr>
+        <tr>
+            
+            <td class="player @Util.GetRatingColor(@_playerRating1.Pot, @_playerRating2.Pot)">@_playerRating1.Pot</td>
+            <td class="player">POT</td>
+            <td class="player @Util.GetRatingColor(@_playerRating1.Pot, @_playerRating2.Pot)">@_playerRating2.Pot</td>
+        </tr>
+        <tr>
+            
+            <td class="player @Util.GetRatingColor(@_playerRating1.Hgt, @_playerRating2.Hgt)">@_playerRating1.Hgt</td>
+            <td>HGT</td>
+            <td class="player @Util.GetRatingColor(@_playerRating1.Hgt, @_playerRating2.Hgt)">@_playerRating2.Hgt</td>
+        </tr>
+        <tr>
+            
+            <td class="player @Util.GetRatingColor(@_playerRating1.Stre, @_playerRating2.Stre)">@_playerRating1.Stre</td>
+            <td>STR</td>
+            <td class="player @Util.GetRatingColor(@_playerRating1.Stre, @_playerRating2.Stre)">@_playerRating2.Stre</td>
+        </tr>
+        <tr>
+            
+            <td class="player @Util.GetRatingColor(@_playerRating1.Spd, @_playerRating2.Spd)">@_playerRating1.Spd</td>
+            <td>SPD</td>
+            <td class="player @Util.GetRatingColor(@_playerRating1.Spd, @_playerRating2.Spd)">@_playerRating2.Spd</td>
+        </tr>
+        <tr>
+            
+            <td class="player @Util.GetRatingColor(@_playerRating1.Jmp, @_playerRating2.Jmp)">@_playerRating1.Jmp</td>
+            <td>JMP</td>
+            <td class="player @Util.GetRatingColor(@_playerRating1.Jmp, @_playerRating2.Jmp)">@_playerRating2.Jmp</td>
+        </tr>
+        <tr>
+            
+            <td class="player @Util.GetRatingColor(@_playerRating1.Endu, @_playerRating2.Endu)">@_playerRating1.Endu</td>
+            <td>END</td>
+            <td class="player @Util.GetRatingColor(@_playerRating1.Endu, @_playerRating2.Endu)">@_playerRating2.Endu</td>
+        </tr>
+        <tr>
+            
+            <td class="player @Util.GetRatingColor(@_playerRating1.Ins, @_playerRating2.Ins)">@_playerRating1.Ins</td>
+            <td>INS</td>
+            <td class="player @Util.GetRatingColor(@_playerRating1.Ins, @_playerRating2.Ins)">@_playerRating2.Ins</td>
+        </tr>
+        <tr>
+            
+            <td class="player @Util.GetRatingColor(@_playerRating1.Dnk, @_playerRating2.Dnk)">@_playerRating1.Dnk</td>
+            <td>DNK</td>
+            <td class="player @Util.GetRatingColor(@_playerRating1.Dnk, @_playerRating2.Dnk)">@_playerRating2.Dnk</td>
+        </tr>
+        <tr>
+            
+            <td class="player @Util.GetRatingColor(@_playerRating1.Ft, @_playerRating2.Ft)">@_playerRating1.Ft</td>
+            <td>FT</td>
+            <td class="player @Util.GetRatingColor(@_playerRating1.Ft, @_playerRating2.Ft)">@_playerRating2.Ft</td>
+        </tr>
+        <tr>
+            
+            <td class="player @Util.GetRatingColor(@_playerRating1.Fg, @_playerRating2.Fg)">@_playerRating1.Fg</td>
+            <td>2PT</td>
+            <td class="player @Util.GetRatingColor(@_playerRating1.Fg, @_playerRating2.Fg)">@_playerRating2.Fg</td>
+        </tr>
+        
+        <tr>
+            <td class="player @Util.GetRatingColor(@_playerRating1.Tp, @_playerRating2.Tp)">@_playerRating1.Tp</td>
+            <td>3PT</td>
+            <td class="player @Util.GetRatingColor(@_playerRating1.Tp, @_playerRating2.Tp)">@_playerRating2.Tp</td>
+        </tr>
+        
+        <tr>
+            <td class="player @Util.GetRatingColor(@_playerRating1.Oiq, @_playerRating2.Oiq)">@_playerRating1.Oiq</td>
+            <td>OIQ</td>
+            <td class="player @Util.GetRatingColor(@_playerRating1.Oiq, @_playerRating2.Oiq)">@_playerRating2.Oiq</td>
+        </tr>
+        <tr>
+            <td class="player @Util.GetRatingColor(@_playerRating1.Diq, @_playerRating2.Diq)">@_playerRating1.Diq</td>
+            <td>DIQ</td>
+            <td class="player @Util.GetRatingColor(@_playerRating1.Diq, @_playerRating2.Diq)">@_playerRating2.Diq</td>
+        </tr>
+        <tr>
+           <td class="player @Util.GetRatingColor(@_playerRating1.Drb, @_playerRating2.Drb)">@_playerRating1.Drb</td>
+            <td>DRB</td>
+            <td class="player @Util.GetRatingColor(@_playerRating1.Drb, @_playerRating2.Drb)">@_playerRating2.Drb</td>
+        </tr>
+        <tr>
+            <td class="player @Util.GetRatingColor(@_playerRating1.Pss, @_playerRating2.Pss)">@_playerRating1.Pss</td>
+            <td>PSS</td>
+            <td class="player @Util.GetRatingColor(@_playerRating1.Pss, @_playerRating2.Pss)">@_playerRating2.Pss</td>
+        </tr>
+        <tr>
+            <td class="player @Util.GetRatingColor(@_playerRating1.Reb, @_playerRating2.Reb)">@_playerRating1.Reb</td>
+            <td class="player">REB</td>
+            <td class="player @Util.GetRatingColor(@_playerRating1.Reb, @_playerRating2.Reb)">@_playerRating2.Reb</td>
+        </tr>
+        </tbody>
+        </table>
+        
     </div>
 
 }
+
