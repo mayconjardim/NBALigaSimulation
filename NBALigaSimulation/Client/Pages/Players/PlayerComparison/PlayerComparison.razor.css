@@ -51,7 +51,6 @@ table {
     width: auto;
     text-align: center;
     margin: 0.625rem;
-    border-collapse: collapse;
     -webkit-border-radius: 0.625rem;
     -moz-border-radius: 0.625rem;
     border-radius: 0.625rem;
@@ -120,6 +119,22 @@ table thead th {
     flex-direction: row;
 }
 
+.rating-up {
+    background-color: rgba(203, 255, 203, 0.77);
+}
+
+.rating-down {
+    background: none;
+}
+
+.ratings-table td {
+    border: 1px solid lightgrey;
+}
+
+.ratings-table tr > td:nth-child(2) {
+    background: var(--primary-color);
+    color: white;
+}
 
 
 @media only screen and (max-width: 650px) {
@@ -155,4 +170,14 @@ table thead th {
         justify-content: center;
         flex-direction: column;
     }
+    
+    .ratings-table td {
+        border: 1px solid lightgrey;
+    }
+    
+    .ratings-table tr > td:nth-child(2) {
+        background: var(--primary-color);
+        color: white;
+    }
+    
 }

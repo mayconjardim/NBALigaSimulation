@@ -76,5 +76,10 @@ public partial class PlayerComparison
         }
     }
     
+    private  void NavigateToPlayerPage(int playerId)
+    {
+        NavigationManager.NavigateTo($"/players/{playerId}");
+    }
+    
  
 }

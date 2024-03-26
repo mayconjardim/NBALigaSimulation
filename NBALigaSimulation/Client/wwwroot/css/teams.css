@@ -142,17 +142,6 @@
     color: red;
 }
 
-.rating-up {
-    background-color: #aaffaa; /* Verde claro para value1 maior que value2 */
-}
-
-.rating-down {
-    background-color: transparent; /* Sem cor para value2 maior que value1 */
-}
-
-.no-rating {
-    background-color: transparent; /* Sem cor se ambos os valores forem iguais */
-}
 
 
 

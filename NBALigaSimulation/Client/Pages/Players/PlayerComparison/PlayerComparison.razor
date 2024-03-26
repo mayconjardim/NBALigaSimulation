@@ -1,15 +1,13 @@
 @page "/comparison"
-@using pax.BlazorChartJs
 @using NBALigaSimulation.Client.Utilities
 @inject NavigationManager NavigationManager
 @inject IPlayerService PlayerService
-@inject IJSRuntime JSRuntime
 
 
 <div class="container-fluid">
     <div class="container-header">
-        <div class="player1">
-            <div class="card @(_player1 != null ? _player1.TeamAbrv : string.Empty)">
+        <div class="1">
+            <div class="card @(_player1 != null ? _player1.TeamAbrv : string.Empty)" @onclick="() => NavigateToPlayerPage(_player1.Id)">
                <div class="card-img">
                 @if (_player1 != null)
                 {
@@ -34,7 +32,7 @@
                     @if (_player1Stats != null )
                     {
                                     
-                                    <div class="player-header-stats">
+                                    <div class="-header-stats">
                                         <table class="stats">
                                             <thead>
                                             <tr>
@@ -84,8 +82,8 @@
             </div>
         </div>
     </div>
-    <div class="player2">
-        <div class="card @(_player2 != null ? _player2.TeamAbrv : string.Empty)" >
+    <div class="2">
+        <div class="card @(_player2 != null ? _player2.TeamAbrv : string.Empty)"  @onclick="() => NavigateToPlayerPage(_player2.Id)">
             <div class="card-img">
                 @if (_player2 != null)
                 {
@@ -110,7 +108,7 @@
                 <div class="stats">
                     @if (_player2Stats != null )
                     {
-                        <div class="player-header-stats">
+                        <div class="-header-stats">
                          
                             <table class="stats">
                              
@@ -169,112 +167,288 @@
 {
     <div class="ratings">
 
+        @if (_playerRating1.CalculateOvr > _playerRating2.CalculateOvr)
+        {
+        }
+        
+        
         <table class="ratings-table">
-        <tbody>
-        <tr>
-            <td class="player" >@Util.Age(1994, _player1.Born.Year)</td>
+            <tbody>
+            
+                <tr>
+                    @if (_player1.Born.Year > _player2.Born.Year)
+                    {
+                        <td style="background: greenyellow">@Util.Age(1994, _player1.Born.Year)</td>
+                        <td>OVR</td>
+                        <td>@Util.Age(1994, _player2.Born.Year)</td>
+                    }
+                    else
+                    {
+                        <td>@Util.Age(1994, _player1.Born.Year)</td>
+                        <td>OVR</td>
+                        <td style="background: greenyellow">@Util.Age(1994, _player2.Born.Year)</td>
+                    }
+                </tr>
+            <tr>
+            <td class="" >@Util.Age(1994, _player1.Born.Year)</td>
             <td>AGE</td>
-            <td class="player">@Util.Age(1994, _player2.Born.Year)</td>
+            <td class="">@Util.Age(1994, _player2.Born.Year)</td>
         </tr>
-        <tr>
+        
+    <tr>
+        @if (_playerRating1.CalculateOvr > _playerRating2.CalculateOvr)
+        {
+            <td style="background: greenyellow">@_playerRating1.CalculateOvr</td>
+            <td>OVR</td>
+            <td>@_playerRating2.CalculateOvr</td>
+        }
+        else
+        {
+            <td>@_playerRating1.CalculateOvr</td>
+            <td>OVR</td>
+            <td style="background: greenyellow">@_playerRating2.CalculateOvr</td>
+        }
+    </tr>
+      <tr>
+                  @if (_playerRating1.Pot > _playerRating2.Pot)
+                  {
+                      <td style="background: greenyellow">@_playerRating1.Pot</td>
+                      <td>POT</td>
+                      <td>@_playerRating2.Pot</td>
+                   }
+                  else
+                  {
+                      <td>@_playerRating1.CalculateOvr</td>
+                      <td>POT</td>
+                      <td style="background: greenyellow">@_playerRating2.CalculateOvr</td>
+                  }
+       </tr>
+      
+            <tr>
+                        @if (_playerRating1.Hgt > _playerRating2.Hgt)
+                        {
+                            <td style="background: greenyellow">@_playerRating1.Hgt</td>
+                            <td>HGT</td>
+                            <td>@_playerRating2.Hgt</td>
+                         }
+                        else
+                        {
+                            <td>@_playerRating1.CalculateOvr</td>
+                            <td>HGT</td>
+                            <td style="background: greenyellow">@_playerRating2.CalculateOvr</td>
+                        }
+             </tr>
             
-          <td class="player @Util.GetRatingColor(_playerRating1.CalculateOvr, _playerRating2.CalculateOvr)">@_playerRating1.CalculateOvr</td>
-          <td>OVR</td>
-          <td class="player @Util.GetRatingColor(_playerRating1.CalculateOvr, _playerRating2.CalculateOvr)">@_playerRating2.CalculateOvr</td>
-
-        </tr>
-        <tr>
+                  <tr>
+                                @if (_playerRating1.Stre > _playerRating2.Stre)
+                                {
+                                    <td style="background: greenyellow">@_playerRating1.Stre</td>
+                                    <td>STR</td>
+                                    <td>@_playerRating2.Stre</td>
+                                 }
+                                else
+                                {
+                                    <td>@_playerRating1.Stre</td>
+                                    <td>STR</td>
+                                    <td style="background: greenyellow">@_playerRating2.Stre</td>
+                                }
+                     </tr>
             
-            <td class="player @Util.GetRatingColor(@_playerRating1.Pot, @_playerRating2.Pot)">@_playerRating1.Pot</td>
-            <td class="player">POT</td>
-            <td class="player @Util.GetRatingColor(@_playerRating1.Pot, @_playerRating2.Pot)">@_playerRating2.Pot</td>
-        </tr>
-        <tr>
-            
-            <td class="player @Util.GetRatingColor(@_playerRating1.Hgt, @_playerRating2.Hgt)">@_playerRating1.Hgt</td>
-            <td>HGT</td>
-            <td class="player @Util.GetRatingColor(@_playerRating1.Hgt, @_playerRating2.Hgt)">@_playerRating2.Hgt</td>
-        </tr>
-        <tr>
-            
-            <td class="player @Util.GetRatingColor(@_playerRating1.Stre, @_playerRating2.Stre)">@_playerRating1.Stre</td>
-            <td>STR</td>
-            <td class="player @Util.GetRatingColor(@_playerRating1.Stre, @_playerRating2.Stre)">@_playerRating2.Stre</td>
-        </tr>
-        <tr>
-            
-            <td class="player @Util.GetRatingColor(@_playerRating1.Spd, @_playerRating2.Spd)">@_playerRating1.Spd</td>
+    <tr>
+        @if (_playerRating1.Spd > _playerRating2.Spd)
+        {
+            <td style="background: greenyellow">@_playerRating1.Spd</td>
             <td>SPD</td>
-            <td class="player @Util.GetRatingColor(@_playerRating1.Spd, @_playerRating2.Spd)">@_playerRating2.Spd</td>
-        </tr>
-        <tr>
-            
-            <td class="player @Util.GetRatingColor(@_playerRating1.Jmp, @_playerRating2.Jmp)">@_playerRating1.Jmp</td>
+            <td>@_playerRating2.Spd</td>
+        }
+        else
+        {
+            <td>@_playerRating1.Spd</td>
+            <td>SPD</td>
+            <td style="background: greenyellow">@_playerRating2.Spd</td>
+        }
+    </tr>
+        
+    <tr>
+        @if (_playerRating1.Jmp > _playerRating2.Jmp)
+        {
+            <td style="background: greenyellow">@_playerRating1.Jmp</td>
             <td>JMP</td>
-            <td class="player @Util.GetRatingColor(@_playerRating1.Jmp, @_playerRating2.Jmp)">@_playerRating2.Jmp</td>
-        </tr>
-        <tr>
-            
-            <td class="player @Util.GetRatingColor(@_playerRating1.Endu, @_playerRating2.Endu)">@_playerRating1.Endu</td>
+            <td>@_playerRating2.Jmp</td>
+        }
+        else
+        {
+            <td>@_playerRating1.Jmp</td>
+            <td>JMP</td>
+            <td style="background: greenyellow">@_playerRating2.Jmp</td>
+        }
+    </tr>
+        
+    <tr>
+        @if (_playerRating1.Endu > _playerRating2.Endu)
+        {
+            <td style="background: greenyellow">@_playerRating1.Endu</td>
             <td>END</td>
-            <td class="player @Util.GetRatingColor(@_playerRating1.Endu, @_playerRating2.Endu)">@_playerRating2.Endu</td>
-        </tr>
-        <tr>
-            
-            <td class="player @Util.GetRatingColor(@_playerRating1.Ins, @_playerRating2.Ins)">@_playerRating1.Ins</td>
+            <td>@_playerRating2.Endu</td>
+        }
+        else
+        {
+            <td>@_playerRating1.Endu</td>
+            <td>END</td>
+            <td style="background: greenyellow">@_playerRating2.Endu</td>
+        }
+    </tr>
+        
+    <tr>
+        @if (_playerRating1.Ins > _playerRating2.Ins)
+        {
+            <td style="background: greenyellow">@_playerRating1.Ins</td>
             <td>INS</td>
-            <td class="player @Util.GetRatingColor(@_playerRating1.Ins, @_playerRating2.Ins)">@_playerRating2.Ins</td>
-        </tr>
-        <tr>
-            
-            <td class="player @Util.GetRatingColor(@_playerRating1.Dnk, @_playerRating2.Dnk)">@_playerRating1.Dnk</td>
+            <td>@_playerRating2.Ins</td>
+        }
+        else
+        {
+            <td>@_playerRating1.Ins</td>
+            <td>INS</td>
+            <td style="background: greenyellow">@_playerRating2.Ins</td>
+        }
+    </tr>
+    <tr>
+        @if (_playerRating1.Dnk > _playerRating2.Dnk)
+        {
+            <td style="background: greenyellow">@_playerRating1.Dnk</td>
             <td>DNK</td>
-            <td class="player @Util.GetRatingColor(@_playerRating1.Dnk, @_playerRating2.Dnk)">@_playerRating2.Dnk</td>
-        </tr>
-        <tr>
-            
-            <td class="player @Util.GetRatingColor(@_playerRating1.Ft, @_playerRating2.Ft)">@_playerRating1.Ft</td>
+            <td>@_playerRating2.Dnk</td>
+        }
+        else
+        {
+            <td>@_playerRating1.Dnk</td>
+            <td>DNK</td>
+            <td style="background: greenyellow">@_playerRating2.Dnk</td>
+        }
+    </tr>
+        
+    <tr>
+        @if (_playerRating1.Ft > _playerRating2.Ft)
+        {
+            <td style="background: greenyellow">@_playerRating1.Ft</td>
             <td>FT</td>
-            <td class="player @Util.GetRatingColor(@_playerRating1.Ft, @_playerRating2.Ft)">@_playerRating2.Ft</td>
-        </tr>
-        <tr>
-            
-            <td class="player @Util.GetRatingColor(@_playerRating1.Fg, @_playerRating2.Fg)">@_playerRating1.Fg</td>
+            <td>@_playerRating2.Ft</td>
+        }
+        else
+        {
+            <td>@_playerRating1.Ft</td>
+            <td>FT</td>
+            <td style="background: greenyellow">@_playerRating2.Ft</td>
+        }
+    </tr>
+    <tr>
+        @if (_playerRating1.Fg > _playerRating2.Fg)
+        {
+            <td style="background: greenyellow">@_playerRating1.Fg</td>
             <td>2PT</td>
-            <td class="player @Util.GetRatingColor(@_playerRating1.Fg, @_playerRating2.Fg)">@_playerRating2.Fg</td>
-        </tr>
+            <td>@_playerRating2.Fg</td>
+        }
+        else
+        {
+            <td>@_playerRating1.Fg</td>
+            <td>2PT</td>
+            <td style="background: greenyellow">@_playerRating2.Fg</td>
+        }
+    </tr>
         
-        <tr>
-            <td class="player @Util.GetRatingColor(@_playerRating1.Tp, @_playerRating2.Tp)">@_playerRating1.Tp</td>
-            <td>3PT</td>
-            <td class="player @Util.GetRatingColor(@_playerRating1.Tp, @_playerRating2.Tp)">@_playerRating2.Tp</td>
-        </tr>
+            <tr>
+                @if (_playerRating1.Tp > _playerRating2.Tp)
+                {
+                    <td style="background: greenyellow">@_playerRating1.Tp</td>
+                    <td>3PT</td>
+                    <td>@_playerRating2.Tp</td>
+                }
+                else
+                {
+                    <td>@_playerRating1.Tp</td>
+                    <td>3PT</td>
+                    <td style="background: greenyellow">@_playerRating2.Tp</td>
+                }
+            </tr>
         
-        <tr>
-            <td class="player @Util.GetRatingColor(@_playerRating1.Oiq, @_playerRating2.Oiq)">@_playerRating1.Oiq</td>
+    <tr>
+        @if (_playerRating1.Oiq > _playerRating2.Oiq)
+        {
+            <td style="background: greenyellow">@_playerRating1.Oiq</td>
             <td>OIQ</td>
-            <td class="player @Util.GetRatingColor(@_playerRating1.Oiq, @_playerRating2.Oiq)">@_playerRating2.Oiq</td>
-        </tr>
-        <tr>
-            <td class="player @Util.GetRatingColor(@_playerRating1.Diq, @_playerRating2.Diq)">@_playerRating1.Diq</td>
+            <td>@_playerRating2.Oiq</td>
+        }
+        else
+        {
+            <td>@_playerRating1.Oiq</td>
+            <td>OIQ</td>
+            <td style="background: greenyellow">@_playerRating2.Oiq</td>
+        }
+    </tr>
+        
+    <tr>
+        @if (_playerRating1.Diq > _playerRating2.Diq)
+        {
+            <td style="background: greenyellow">@_playerRating1.Diq</td>
             <td>DIQ</td>
-            <td class="player @Util.GetRatingColor(@_playerRating1.Diq, @_playerRating2.Diq)">@_playerRating2.Diq</td>
-        </tr>
-        <tr>
-           <td class="player @Util.GetRatingColor(@_playerRating1.Drb, @_playerRating2.Drb)">@_playerRating1.Drb</td>
+            <td>@_playerRating2.Diq</td>
+        }
+        else
+        {
+            <td>@_playerRating1.Diq</td>
+            <td>DIQ</td>
+            <td style="background: greenyellow">@_playerRating2.Diq</td>
+        }
+    </tr>
+        
+    <tr>
+        @if (_playerRating1.Drb > _playerRating2.Drb)
+        {
+            <td style="background: greenyellow">@_playerRating1.Drb</td>
             <td>DRB</td>
-            <td class="player @Util.GetRatingColor(@_playerRating1.Drb, @_playerRating2.Drb)">@_playerRating2.Drb</td>
-        </tr>
-        <tr>
-            <td class="player @Util.GetRatingColor(@_playerRating1.Pss, @_playerRating2.Pss)">@_playerRating1.Pss</td>
+            <td>@_playerRating2.Drb</td>
+        }
+        else
+        {
+            <td>@_playerRating1.Drb</td>
+            <td>DRB</td>
+            <td style="background: greenyellow">@_playerRating2.Drb</td>
+        }
+    </tr>
+        
+    <tr>
+        @if (_playerRating1.Pss > _playerRating2.Pss)
+        {
+            <td style="background: greenyellow">@_playerRating1.Pss</td>
             <td>PSS</td>
-            <td class="player @Util.GetRatingColor(@_playerRating1.Pss, @_playerRating2.Pss)">@_playerRating2.Pss</td>
-        </tr>
-        <tr>
-            <td class="player @Util.GetRatingColor(@_playerRating1.Reb, @_playerRating2.Reb)">@_playerRating1.Reb</td>
-            <td class="player">REB</td>
-            <td class="player @Util.GetRatingColor(@_playerRating1.Reb, @_playerRating2.Reb)">@_playerRating2.Reb</td>
-        </tr>
+            <td>@_playerRating2.Pss</td>
+        }
+        else
+        {
+            <td>@_playerRating1.Pss</td>
+            <td>PSS</td>
+            <td style="background: greenyellow">@_playerRating2.Pss</td>
+        }
+    </tr>
+        
+     <tr>
+            
+            @if (_playerRating1.Reb > _playerRating2.Reb)
+             {
+                <td style="background: greenyellow">@_playerRating1.Reb</td>
+                 <td>REB</td>
+                 <td>@_playerRating2.Reb</td>
+             }
+             else
+             {
+                 <td>@_playerRating1.Reb</td>
+                 <td>REB</td>
+                 <td style="background: greenyellow">@_playerRating2.Reb</td>
+             }
+        
+            </tr>
+    
         </tbody>
         </table>
         
