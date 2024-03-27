@@ -1,3 +1,5 @@
+using BlazorBootstrap;
+using Microsoft.AspNetCore.Components;
 using NBALigaSimulation.Shared.Dtos.Players;
 using NBALigaSimulation.Shared.Models.Utils;
 
@@ -14,6 +16,9 @@ public partial class PlayerStatsPage
     private int _season = 2007;
     private string sortedColumn = "PPG";
     private bool isAscending = false;
+    private string position = string.Empty;
+
+    List<string> positions = new List<string> { "C", "FC", "PF", "F", "SF", "GF", "G", "SG", "PG" };
 
     protected override async Task OnInitializedAsync()
     {
@@ -22,7 +27,7 @@ public partial class PlayerStatsPage
     
     private async Task GetAllPlayerRegularStatsOrdered()
     {
-        var result = await StatsService.GetAllPlayerRegularStats(_currentPage, _pageSize, _season, isAscending, sortedColumn);
+        var result = await StatsService.GetAllPlayerRegularStats(_currentPage, _pageSize, _season, isAscending, sortedColumn, position);
 
         if (result.Success)
         {
@@ -34,6 +39,8 @@ public partial class PlayerStatsPage
         {
             _message = result.Message;
         }
+
+        StateHasChanged();
     }
     
     private string GetSortIcon(string columnName)
@@ -60,6 +67,15 @@ public partial class PlayerStatsPage
         }
         StateHasChanged(); 
     }
+
+    private async void FilterByPosition(ChangeEventArgs e)
+    {
+        position = e.Value.ToString();
+        await GetAllPlayerRegularStatsOrdered();
+        StateHasChanged();
+
+    }
+
 
 }
 

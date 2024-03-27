@@ -4,7 +4,18 @@
 @if (_playerStats != null) 
 {
     <div class="container">
-      
+
+
+        <select class="form-select"@onchange="(e) => FilterByPosition(e)">
+            >
+            <option value="">Filtrar por uma posição</option>
+            @foreach(string pos in positions)
+            {
+                <option value="@pos" >@pos</option>
+            }
+        </select>
+
+
         <div class="table-responsive">
             <table class="table" id="statsTable">
                 <thead>
