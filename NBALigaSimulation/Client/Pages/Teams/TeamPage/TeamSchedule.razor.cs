@@ -11,6 +11,7 @@ public partial class TeamSchedule
     public TeamCompleteDto _team { get; set; }
 
     private List<GameCompleteDto> _games = new List<GameCompleteDto>();
+    Dictionary<DateTime, List<GameCompleteDto>> gamesByDate = new Dictionary<DateTime, List<GameCompleteDto>>();
     
     string[] headings = { "DATE", "HOME", "AWAY", "W-L", "RESULT" };
     int totalWins = 0;
@@ -23,6 +24,16 @@ public partial class TeamSchedule
         if (result.Success)
         {
             _games = result.Data;
+        
+            var uniqueDates = _games.Select(game => game.GameDate.Date).Distinct().OrderBy(date => date).ToList();
+            gamesByDate = new Dictionary<DateTime, List<GameCompleteDto>>();
+        
+            foreach (var date in uniqueDates)
+            {
+                var gamesOnDate = _games.Where(game => game.GameDate.Date == date).ToList();
+                gamesByDate.Add(date, gamesOnDate);
+            }
+        
         }
     }
 

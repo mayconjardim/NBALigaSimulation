@@ -8,7 +8,7 @@ public partial class Calendar
     private List<GameCompleteDto> _games = null;
     Dictionary<DateTime, List<GameCompleteDto>> gamesByDate = new Dictionary<DateTime, List<GameCompleteDto>>();
         
-    string[] headings = { "DATE", "HOME", "AWAY", "W-L", "RESULT" };
+    string[] headings = { "DAY", "HOME", "AWAY", "W-L", "RESULT" };
     
     protected override async Task OnInitializedAsync()
     {
