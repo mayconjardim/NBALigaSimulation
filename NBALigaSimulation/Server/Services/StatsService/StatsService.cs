@@ -24,16 +24,7 @@ namespace NBALigaSimulation.Server.Services.StatsService
 
 		    try
 		    {
-		        IQueryable<PlayerRegularStats> query = _context.PlayerRegularStats.Include(p => p.Player);
-
-
-                if (!string.IsNullOrEmpty(position))
-                {
-                    query = query.Where(p => p.Pos == position);
-                }
-
-
-                await Console.Out.WriteLineAsync(position + "=>> Posição");
+			    IQueryable<PlayerRegularStats> query = _context.PlayerRegularStats.Include(p => p.Player);
 
                 var orderByExpression = query.OrderByDescending(p => (p.Pts / p.Games));
 
@@ -58,8 +49,14 @@ namespace NBALigaSimulation.Server.Services.StatsService
 		                _ => orderByExpression
 		            };
 		        }
-
+		        
 		        query = orderByExpression.Where(s => s.Season == season && s.Min > 5 && s.Fg > 10);
+		        
+		        if (!string.IsNullOrEmpty(position))
+		        {
+			        query = orderByExpression.Where(s => s.Season == season && s.Min > 5 && s.Fg > 10 && s.Pos == position);
+		        }
+
 
 		        var stats = await query
 		            .Skip((page - 1) * pageSize)

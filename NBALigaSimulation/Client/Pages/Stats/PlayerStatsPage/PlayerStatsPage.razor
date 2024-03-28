@@ -1,17 +1,17 @@
 @page "/stats"
 @inject IStatsService StatsService
+@inject NavigationManager NavigationManager
+
 
 @if (_playerStats != null) 
 {
     <div class="container">
-
-
-        <select class="form-select"@onchange="(e) => FilterByPosition(e)">
-            >
-            <option value="">Filtrar por uma posição</option>
-            @foreach(string pos in positions)
+        
+        <select @onchange="HandleCategoryChange" class="form-select">
+            <option value="">Filtrar por uma posiÃ§Ã£o</option>
+            @foreach (string pos in positions)
             {
-                <option value="@pos" >@pos</option>
+                <option value="@pos">@pos</option>
             }
         </select>
 
@@ -120,6 +120,16 @@
         </div>
         
     </div>
+    
+    
+    @if (_playerStats2 != null)
+    {
+        @foreach (var player in _playerStats2)
+        {
+            <p>@player.Name - @player.Pos</p>
+        }
+    }
+    
 }
 else
 {

@@ -13,20 +13,22 @@ public class StatsService : IStatsService
     {
         _http = http;
     }
-    
-    public async Task<ServiceResponse<PlayerStatsResponse>> GetAllPlayerRegularStats(int page, int pageSize, int season, bool isAscending, string stat = null, string position = null)
-    {
-        var url = $"api/stats/players?page={page}&pageSize={pageSize}&season={season}&isAscending={isAscending}&position{position}";
 
+    public async Task<ServiceResponse<PlayerStatsResponse>> GetAllPlayerRegularStats(int page, int pageSize, int season,
+        bool isAscending, string position, string stat = null)
+    {
+        var url = $"api/stats/players?page={page}&pageSize={pageSize}&season={season}&isAscending={isAscending}";
+
+        if (!string.IsNullOrEmpty(position))
+        {
+            url += $"&stat={Uri.EscapeDataString(position)}";
+        }  
+            
         if (!string.IsNullOrEmpty(stat))
         {
             url += $"&stat={Uri.EscapeDataString(stat)}";
         }
 
-        if (!string.IsNullOrEmpty(position))
-        {
-            url += $"&stat={Uri.EscapeDataString(position)}";
-        }
 
         return await _http.GetFromJsonAsync<ServiceResponse<PlayerStatsResponse>>(url);
     }

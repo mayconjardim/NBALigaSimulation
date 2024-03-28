@@ -7,40 +7,35 @@ namespace NBALigaSimulation.Client.Pages.Stats.PlayerStatsPage;
 
 public partial class PlayerStatsPage
 {
-    private PlayerStatsResponse _statsResponse = new PlayerStatsResponse();
+    private PlayerStatsResponse _statsResponse;
     private List<PlayerRegularStatsDto> _playerStats;
+    private List<PlayerRegularStatsDto> _playerStats2;
+
     private int _currentPage = 1;
     private int _pageSize = 50;
-    private string _stat;
+    private string _stat = null;
     private string _message = string.Empty;
     private int _season = 2007;
     private string sortedColumn = "PPG";
     private bool isAscending = false;
-    private string position = string.Empty;
+    public string position = string.Empty;
 
     List<string> positions = new List<string> { "C", "FC", "PF", "F", "SF", "GF", "G", "SG", "PG" };
 
     protected override async Task OnInitializedAsync()
     {
-        await GetAllPlayerRegularStatsOrdered();
-    }
-    
-    private async Task GetAllPlayerRegularStatsOrdered()
-    {
-        var result = await StatsService.GetAllPlayerRegularStats(_currentPage, _pageSize, _season, isAscending, sortedColumn, position);
+        var result = await StatsService.GetAllPlayerRegularStats(_currentPage, _pageSize, _season, isAscending, position);
 
         if (result.Success)
         {
-            _statsResponse = result.Data ?? new PlayerStatsResponse();
-            _playerStats = _statsResponse.Stats ?? new List<PlayerRegularStatsDto>();
+            _statsResponse = result.Data;
+            _playerStats = _statsResponse.Stats;
             _currentPage = _statsResponse.CurrentPage;
         }
         else
         {
             _message = result.Message;
         }
-
-        StateHasChanged();
     }
     
     private string GetSortIcon(string columnName)
@@ -57,24 +52,31 @@ public partial class PlayerStatsPage
         if (columnName == sortedColumn)
         {
             isAscending = !isAscending;
-            await GetAllPlayerRegularStatsOrdered();
+            await StatsService.GetAllPlayerRegularStats(_currentPage, _pageSize, _season, isAscending, position);
         }
         else
         {
             sortedColumn = columnName;
             isAscending = true;
-            await GetAllPlayerRegularStatsOrdered();
+            await StatsService.GetAllPlayerRegularStats(_currentPage, _pageSize, _season, isAscending, position);
         }
+        
+        StateHasChanged();
+    }
+
+    private async Task HandleCategoryChange(ChangeEventArgs e)
+    {
+        position = e.Value?.ToString();
+
+        if (!string.IsNullOrEmpty(position))
+        {
+          var result = await StatsService.GetAllPlayerRegularStats(_currentPage, _pageSize, _season, isAscending, "PG");
+          _playerStats2 = result.Data.Stats;
+        }
+
         StateHasChanged(); 
     }
-
-    private async void FilterByPosition(ChangeEventArgs e)
-    {
-        position = e.Value.ToString();
-        await GetAllPlayerRegularStatsOrdered();
-        StateHasChanged();
-
-    }
+    
 
 
 }
