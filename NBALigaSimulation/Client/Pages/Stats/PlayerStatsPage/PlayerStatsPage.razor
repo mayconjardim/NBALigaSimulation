@@ -7,7 +7,7 @@
 {
     <div class="container">
         
-        <select class="form-select">
+        <select class="form-select" @onchange="HandleCategoryChange" >
             <option value="">Filtrar por uma posição</option>
             @foreach (string pos in positions)
             {

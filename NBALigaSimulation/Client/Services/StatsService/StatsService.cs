@@ -21,7 +21,7 @@ public class StatsService : IStatsService
 
         if (!string.IsNullOrEmpty(position))
         {
-            url += $"&stat={Uri.EscapeDataString(position)}";
+            url += $"&position={Uri.EscapeDataString(position)}";
         }  
             
         if (!string.IsNullOrEmpty(stat))

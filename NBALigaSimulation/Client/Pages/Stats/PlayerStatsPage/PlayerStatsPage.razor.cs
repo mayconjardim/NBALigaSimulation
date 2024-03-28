@@ -9,8 +9,6 @@ public partial class PlayerStatsPage
 {
     private PlayerStatsResponse _statsResponse;
     private List<PlayerRegularStatsDto> _playerStats;
-    private List<PlayerRegularStatsDto> _playerStats2;
-
     private int _currentPage = 1;
     private int _pageSize = 50;
     private string _stat = null;
@@ -64,16 +62,18 @@ public partial class PlayerStatsPage
         StateHasChanged();
     }
 
-    private async Task HandleCategoryChange(string e)
+    private async Task HandleCategoryChange(ChangeEventArgs e)
     {
-        var selectedValue = e.ToString();
-        Console.WriteLine("Valor selecionado: " + selectedValue);
-        Console.WriteLine("Valor fixo: " + value1);
-
+        position = e.Value?.ToString();
+        
         if (!string.IsNullOrEmpty(position))
         {
-          var result = await StatsService.GetAllPlayerRegularStats(_currentPage, _pageSize, _season, isAscending, "PG");
-          _playerStats2 = result.Data.Stats;
+          var result = await StatsService.GetAllPlayerRegularStats(_currentPage, _pageSize, _season, isAscending, position);
+          if (result.Success)
+          {
+              _playerStats = result.Data.Stats;
+              _currentPage = result.Data.CurrentPage; 
+          }
         }
 
         StateHasChanged(); 
