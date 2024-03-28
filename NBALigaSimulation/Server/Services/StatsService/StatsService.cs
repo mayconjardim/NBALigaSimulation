@@ -57,7 +57,6 @@ namespace NBALigaSimulation.Server.Services.StatsService
 			        query = orderByExpression.Where(s => s.Season == season && s.Min > 5 && s.Fg > 10 && s.Pos == position);
 		        }
 
-
 		        var stats = await query
 		            .Skip((page - 1) * pageSize)
 		            .Take(pageSize)

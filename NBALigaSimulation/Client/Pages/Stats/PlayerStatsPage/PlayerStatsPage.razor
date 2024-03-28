@@ -7,13 +7,24 @@
 {
     <div class="container">
         
-        <select class="form-select" @onchange="HandleCategoryChange" >
-            <option value="">Filtrar por uma posição</option>
-            @foreach (string pos in positions)
-            {
-                <option value="@pos">@pos</option>
-            }
-        </select>
+        <div class="filters">
+            <select class="form-select" @onchange="HandlePositionChange" >
+                <option value="">Filtrar por uma posição</option>
+                @foreach (string pos in positions)
+                {
+                    <option value="@pos">@pos</option>
+                }
+            </select>
+            
+            
+            <select class="form-select" @onchange="HandleSizeChange">
+                 <option value="">Limite da lista</option>
+                @foreach (var item in limit)
+                {
+                    <option value="@item">@item</option>
+                }
+            </select>
+        </div>
 
 
         <div class="table-responsive">
@@ -120,16 +131,6 @@
         </div>
         
     </div>
-    
-    
-    @if (_playerStats2 != null)
-    {
-        @foreach (var player in _playerStats2)
-        {
-            <p>@player.Name - @player.Pos</p>
-        }
-    }
-    
 }
 else
 {

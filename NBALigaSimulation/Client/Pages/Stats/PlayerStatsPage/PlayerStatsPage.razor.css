@@ -1,3 +1,12 @@
+.filters {
+    display: flex;
+   flex-direction: row;
+}
+
+.form-select {
+    margin: 0.625rem;
+}
+
 table {
     background-color: var(--white);
     width: 100%;
@@ -48,3 +57,4 @@ a {
     border-radius: 50%;
     object-fit: cover; 
 }
+

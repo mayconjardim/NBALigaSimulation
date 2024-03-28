@@ -19,6 +19,8 @@ public partial class PlayerStatsPage
     public string position = string.Empty;
 
     List<string> positions = new List<string> { "C", "FC", "PF", "F", "SF", "GF", "G", "SG", "PG" };
+    List<int> limit = new List<int> { 10, 25, 50};
+
 
     protected override async Task OnInitializedAsync()
     {
@@ -50,19 +52,31 @@ public partial class PlayerStatsPage
         if (columnName == sortedColumn)
         {
             isAscending = !isAscending;
-            await StatsService.GetAllPlayerRegularStats(_currentPage, _pageSize, _season, isAscending, position);
+            var result = await StatsService.GetAllPlayerRegularStats(_currentPage, _pageSize, _season, isAscending, position, sortedColumn);
+            if (result.Success)
+            {
+                _playerStats = result.Data.Stats;
+                _currentPage = result.Data.CurrentPage; 
+            }
+            StateHasChanged();
         }
         else
         {
             sortedColumn = columnName;
             isAscending = true;
-            await StatsService.GetAllPlayerRegularStats(_currentPage, _pageSize, _season, isAscending, position);
+            var result = await StatsService.GetAllPlayerRegularStats(_currentPage, _pageSize, _season, isAscending, position, sortedColumn);
+            if (result.Success)
+            {
+                _playerStats = result.Data.Stats;
+                _currentPage = result.Data.CurrentPage; 
+            }
+            StateHasChanged();
         }
         
-        StateHasChanged();
+       
     }
 
-    private async Task HandleCategoryChange(ChangeEventArgs e)
+    private async Task HandlePositionChange(ChangeEventArgs e)
     {
         position = e.Value?.ToString();
         
@@ -78,7 +92,24 @@ public partial class PlayerStatsPage
 
         StateHasChanged(); 
     }
-    
+        
+    private async Task HandleSizeChange(ChangeEventArgs e)
+    {
+            string sizeString = e.Value?.ToString();
+            if (int.TryParse(sizeString, out int newPageSize))
+            {
+                _pageSize = newPageSize;
+                
+                var result = await StatsService.GetAllPlayerRegularStats(_currentPage, _pageSize, _season, isAscending, position);
+                if (result.Success)
+                {
+                    _playerStats = result.Data.Stats;
+                    _currentPage = result.Data.CurrentPage; 
+                }
+            }
+      
+          StateHasChanged(); 
+    }
 
 
 }
