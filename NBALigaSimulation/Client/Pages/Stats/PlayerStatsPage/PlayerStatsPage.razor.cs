@@ -64,9 +64,11 @@ public partial class PlayerStatsPage
         StateHasChanged();
     }
 
-    private async Task HandleCategoryChange(ChangeEventArgs e)
+    private async Task HandleCategoryChange(string e)
     {
-        position = e.Value?.ToString();
+        var selectedValue = e.ToString();
+        Console.WriteLine("Valor selecionado: " + selectedValue);
+        Console.WriteLine("Valor fixo: " + value1);
 
         if (!string.IsNullOrEmpty(position))
         {
