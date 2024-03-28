@@ -69,7 +69,7 @@
                 <div class="input-group">
                     <input @bind-value="searchText" @bind-value:event="oninput"
                            type="search" list="players" @onkeyup="HandleSearchOne"
-                           class="form-control"
+                           class="form-control awesomplete"
                            placeholder="Procure um Jogador..."
                            @ref="searchInput"/>
                     <datalist id="players">
@@ -145,13 +145,13 @@
             </div>
         </div>
         <div class="procura">
-            <div class="input-group">
+            <div class="input-group ">
                 <input @bind-value="searchText2" @bind-value:event="oninput"
                        type="search" list="players" @onkeyup="HandleSearchTwo"
-                       class="form-control"
+                       class="form-control awesomplete"
                        placeholder="Procure um Jogador..."
                        @ref="searchInput"/>
-                <datalist id="players">
+                <datalist id="players" >
                     @foreach (var suggestion in suggestions)
                     {
                         <option value="@suggestion.Id" label="@suggestion.Name">@suggestion.Name</option>
