@@ -54,6 +54,8 @@ namespace NBALigaSimulation.Server.Services.PlayersService
             return response;
         }
 
+    
+
         public async Task<ServiceResponse<PlayerCompleteDto>> CreatePlayer(CreatePlayerDto request)
         {
 
@@ -82,6 +84,17 @@ namespace NBALigaSimulation.Server.Services.PlayersService
 
             response.Success = true;
             response.Data = _mapper.Map<List<PlayerCompleteDto>>(players);
+            return response;
+        }
+        
+        public async Task<ServiceResponse<List<PlayerSimpleDto>>> GetAllSimplePlayers()
+        {
+            var players = await _context.Players.ToListAsync();
+            var response = new ServiceResponse<List<PlayerSimpleDto>>
+            {
+                Data = _mapper.Map<List<PlayerSimpleDto>>(players)
+            };
+
             return response;
         }
 
