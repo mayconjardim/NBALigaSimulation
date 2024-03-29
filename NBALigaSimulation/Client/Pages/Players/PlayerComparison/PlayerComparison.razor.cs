@@ -23,6 +23,8 @@ public partial class PlayerComparison
     
     protected override async Task OnInitializedAsync()
     {
+        
+        _season = _season = int.Parse(await LocalStorage.GetItemAsync<string>("season"));
         var result = await PlayerService.GetAllSimplePlayers();
         if (result.Success)
         {
