@@ -68,7 +68,7 @@
             </div>
             <div class="input-group ">
                 <div class="procura">
-                    <input id="tags1" @bind="searchText" @oninput="() => SearchPlayers(1)"  />
+                    <input id="tags1" @bind="searchText"  />
                     <button style="background: var(--primary-color); color: white"  @onclick="() => SearchPlayers(1)"><i class="bi bi-search"></i></button>
                 </div>
             </div>
@@ -140,8 +140,8 @@
         </div>
         <div class="input-group ">
            <div class="procura">
-                                                      <input id="tags2" @bind="searchText2" @oninput="() => SearchPlayers(2)"  />
-                                                       <button style="background: var(--primary-color); color: white"  @onclick="() => SearchPlayers(2)"><i class="bi bi-search"></i></button>
+              <input id="tags2" @bind="searchText2"   />
+              <button style="background: var(--primary-color); color: white"  @onclick="() => SearchPlayers(2)"><i class="bi bi-search"></i></button>
            </div>
           </div>
     </div>
