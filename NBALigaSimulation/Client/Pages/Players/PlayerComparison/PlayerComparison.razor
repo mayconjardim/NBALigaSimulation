@@ -2,7 +2,7 @@
 @using NBALigaSimulation.Client.Utilities
 @inject NavigationManager NavigationManager
 @inject IPlayerService PlayerService
-
+@inject IJSRuntime JSRuntime
 
 <div class="container-fluid">
     <div class="container-header">
@@ -32,54 +32,46 @@
                     @if (_player1Stats != null )
                     {
                                     
-                                    <div class="-header-stats">
-                                        <table class="stats">
-                                            <thead>
-                                            <tr>
-                                                <th colspan="4">SEASON STATS</th>
-                                            </tr>
-                                            </thead>
-                                            <tbody>
-                                            <tr>
-                                                <td>
-                                                    <span>PTS</span>
-                                                    @_player1Stats.PtsPG
-                                                </td>
-                                                <td>
-                                                    <span>REB</span>
-                                                    @_player1Stats.TRebPG
-                                                </td>
-                                                <td>
-                                                    <span>AST</span>
-                                                    @_player1Stats.AstPG
-                                                </td>
-                                                <td>
-                                                    <span>FG%</span>
-                                                    @_player1Stats.FgPct
-                                                </td>
-                                            </tr>
-                                            </tbody>
-                                        </table>
-                                    </div>
-                   }
+                        <div class="-header-stats">
+                            <table class="stats">
+                                <thead>
+                                <tr>
+                                    <th colspan="4">SEASON STATS</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr>
+                                    <td>
+                                        <span>PTS</span>
+                                        @_player1Stats.PtsPG
+                                    </td>
+                                    <td>
+                                        <span>REB</span>
+                                        @_player1Stats.TRebPG
+                                    </td>
+                                    <td>
+                                        <span>AST</span>
+                                        @_player1Stats.AstPG
+                                    </td>
+                                    <td>
+                                        <span>FG%</span>
+                                        @_player1Stats.FgPct
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    }
                     
                 </div>
             </div>
-            <div class="procura">
-                <div class="input-group">
-                    <input @bind-value="searchText" @bind-value:event="oninput"
-                           type="search" list="players" @onkeyup="HandleSearchOne"
-                           class="form-control awesomplete"
-                           placeholder="Procure um Jogador..."
-                           @ref="searchInput"/>
-                    <datalist id="players">
-                        @foreach (var suggestion in suggestions)
-                        {
-                            <option value="@suggestion.Id" label="@suggestion.Name">@suggestion.Name</option>
-                        }
-                    </datalist>
+            <div class="input-group ">
+                <div class="procura">
+                    <input id="tags1" @bind="searchText" @oninput="() => SearchPlayers(1)"  />
+                    <button style="background: var(--primary-color); color: white"  @onclick="() => SearchPlayers(1)"><i class="bi bi-search"></i></button>
                 </div>
             </div>
+             
         </div>
     </div>
     <div class="2">
@@ -89,7 +81,7 @@
                 {
                     <img src="@_player2.ImgUrl" class="card-img-top" alt="player img">
                     <p><span class="badge @Util.GetBadgeClass(_playerRating2.CalculateOvr)">@_playerRating2.CalculateOvr</span>
-                    <span class="badge  @Util.GetBadgeClass(_playerRating2.Pot)">@_playerRating2.Pot</span>
+                        <span class="badge  @Util.GetBadgeClass(_playerRating2.Pot)">@_playerRating2.Pot</span>
                     </p>
                 }
                 else
@@ -141,24 +133,16 @@
                         </div>
                     }
                 </div>       
-                
             </div>
+            
+             
         </div>
-        <div class="procura">
-            <div class="input-group ">
-                <input @bind-value="searchText2" @bind-value:event="oninput"
-                       type="search" list="players" @onkeyup="HandleSearchTwo"
-                       class="form-control awesomplete"
-                       placeholder="Procure um Jogador..."
-                       @ref="searchInput"/>
-                <datalist id="players" >
-                    @foreach (var suggestion in suggestions)
-                    {
-                        <option value="@suggestion.Id" label="@suggestion.Name">@suggestion.Name</option>
-                    }
-                </datalist>
-            </div>
-        </div>
+        <div class="input-group ">
+           <div class="procura">
+                                                      <input id="tags2" @bind="searchText2" @oninput="() => SearchPlayers(2)"  />
+                                                       <button style="background: var(--primary-color); color: white"  @onclick="() => SearchPlayers(2)"><i class="bi bi-search"></i></button>
+           </div>
+          </div>
     </div>
     
 </div>
@@ -166,29 +150,9 @@
 @if (_player1 != null && _playerRating1 != null && _player2 != null && _playerRating2 != null)
 {
     <div class="ratings">
-
-        @if (_playerRating1.CalculateOvr > _playerRating2.CalculateOvr)
-        {
-        }
-        
-        
         <table class="ratings-table">
             <tbody>
             
-                <tr>
-                    @if (_player1.Born.Year > _player2.Born.Year)
-                    {
-                        <td style="background: greenyellow">@Util.Age(1994, _player1.Born.Year)</td>
-                        <td>OVR</td>
-                        <td>@Util.Age(1994, _player2.Born.Year)</td>
-                    }
-                    else
-                    {
-                        <td>@Util.Age(1994, _player1.Born.Year)</td>
-                        <td>OVR</td>
-                        <td style="background: greenyellow">@Util.Age(1994, _player2.Born.Year)</td>
-                    }
-                </tr>
             <tr>
             <td class="" >@Util.Age(1994, _player1.Born.Year)</td>
             <td>AGE</td>
@@ -198,7 +162,7 @@
     <tr>
         @if (_playerRating1.CalculateOvr > _playerRating2.CalculateOvr)
         {
-            <td style="background: greenyellow">@_playerRating1.CalculateOvr</td>
+            <td style="background: #E4F1E4">@_playerRating1.CalculateOvr</td>
             <td>OVR</td>
             <td>@_playerRating2.CalculateOvr</td>
         }
@@ -206,13 +170,13 @@
         {
             <td>@_playerRating1.CalculateOvr</td>
             <td>OVR</td>
-            <td style="background: greenyellow">@_playerRating2.CalculateOvr</td>
+            <td style="background: #E4F1E4">@_playerRating2.CalculateOvr</td>
         }
     </tr>
       <tr>
                   @if (_playerRating1.Pot > _playerRating2.Pot)
                   {
-                      <td style="background: greenyellow">@_playerRating1.Pot</td>
+                      <td style="background: #E4F1E4">@_playerRating1.Pot</td>
                       <td>POT</td>
                       <td>@_playerRating2.Pot</td>
                    }
@@ -220,14 +184,14 @@
                   {
                       <td>@_playerRating1.CalculateOvr</td>
                       <td>POT</td>
-                      <td style="background: greenyellow">@_playerRating2.CalculateOvr</td>
+                      <td style="background: #E4F1E4">@_playerRating2.CalculateOvr</td>
                   }
        </tr>
       
             <tr>
                         @if (_playerRating1.Hgt > _playerRating2.Hgt)
                         {
-                            <td style="background: greenyellow">@_playerRating1.Hgt</td>
+                            <td style="background: #E4F1E4">@_playerRating1.Hgt</td>
                             <td>HGT</td>
                             <td>@_playerRating2.Hgt</td>
                          }
@@ -235,14 +199,14 @@
                         {
                             <td>@_playerRating1.CalculateOvr</td>
                             <td>HGT</td>
-                            <td style="background: greenyellow">@_playerRating2.CalculateOvr</td>
+                            <td style="background: #E4F1E4">@_playerRating2.CalculateOvr</td>
                         }
              </tr>
             
                   <tr>
                                 @if (_playerRating1.Stre > _playerRating2.Stre)
                                 {
-                                    <td style="background: greenyellow">@_playerRating1.Stre</td>
+                                    <td style="background: #E4F1E4">@_playerRating1.Stre</td>
                                     <td>STR</td>
                                     <td>@_playerRating2.Stre</td>
                                  }
@@ -250,14 +214,14 @@
                                 {
                                     <td>@_playerRating1.Stre</td>
                                     <td>STR</td>
-                                    <td style="background: greenyellow">@_playerRating2.Stre</td>
+                                    <td style="background: #E4F1E4">@_playerRating2.Stre</td>
                                 }
                      </tr>
             
     <tr>
         @if (_playerRating1.Spd > _playerRating2.Spd)
         {
-            <td style="background: greenyellow">@_playerRating1.Spd</td>
+            <td style="background: #E4F1E4">@_playerRating1.Spd</td>
             <td>SPD</td>
             <td>@_playerRating2.Spd</td>
         }
@@ -265,14 +229,14 @@
         {
             <td>@_playerRating1.Spd</td>
             <td>SPD</td>
-            <td style="background: greenyellow">@_playerRating2.Spd</td>
+            <td style="background: #E4F1E4">@_playerRating2.Spd</td>
         }
     </tr>
         
     <tr>
         @if (_playerRating1.Jmp > _playerRating2.Jmp)
         {
-            <td style="background: greenyellow">@_playerRating1.Jmp</td>
+            <td style="background: #E4F1E4">@_playerRating1.Jmp</td>
             <td>JMP</td>
             <td>@_playerRating2.Jmp</td>
         }
@@ -280,14 +244,14 @@
         {
             <td>@_playerRating1.Jmp</td>
             <td>JMP</td>
-            <td style="background: greenyellow">@_playerRating2.Jmp</td>
+            <td style="background: #E4F1E4">@_playerRating2.Jmp</td>
         }
     </tr>
         
     <tr>
         @if (_playerRating1.Endu > _playerRating2.Endu)
         {
-            <td style="background: greenyellow">@_playerRating1.Endu</td>
+            <td style="background: #E4F1E4">@_playerRating1.Endu</td>
             <td>END</td>
             <td>@_playerRating2.Endu</td>
         }
@@ -295,14 +259,14 @@
         {
             <td>@_playerRating1.Endu</td>
             <td>END</td>
-            <td style="background: greenyellow">@_playerRating2.Endu</td>
+            <td style="background: #E4F1E4">@_playerRating2.Endu</td>
         }
     </tr>
         
     <tr>
         @if (_playerRating1.Ins > _playerRating2.Ins)
         {
-            <td style="background: greenyellow">@_playerRating1.Ins</td>
+            <td style="background: #E4F1E4">@_playerRating1.Ins</td>
             <td>INS</td>
             <td>@_playerRating2.Ins</td>
         }
@@ -310,13 +274,13 @@
         {
             <td>@_playerRating1.Ins</td>
             <td>INS</td>
-            <td style="background: greenyellow">@_playerRating2.Ins</td>
+            <td style="background: #E4F1E4">@_playerRating2.Ins</td>
         }
     </tr>
     <tr>
         @if (_playerRating1.Dnk > _playerRating2.Dnk)
         {
-            <td style="background: greenyellow">@_playerRating1.Dnk</td>
+            <td style="background: #E4F1E4">@_playerRating1.Dnk</td>
             <td>DNK</td>
             <td>@_playerRating2.Dnk</td>
         }
@@ -324,14 +288,14 @@
         {
             <td>@_playerRating1.Dnk</td>
             <td>DNK</td>
-            <td style="background: greenyellow">@_playerRating2.Dnk</td>
+            <td style="background: #E4F1E4">@_playerRating2.Dnk</td>
         }
     </tr>
         
     <tr>
         @if (_playerRating1.Ft > _playerRating2.Ft)
         {
-            <td style="background: greenyellow">@_playerRating1.Ft</td>
+            <td style="background: #E4F1E4">@_playerRating1.Ft</td>
             <td>FT</td>
             <td>@_playerRating2.Ft</td>
         }
@@ -339,13 +303,13 @@
         {
             <td>@_playerRating1.Ft</td>
             <td>FT</td>
-            <td style="background: greenyellow">@_playerRating2.Ft</td>
+            <td style="background: #E4F1E4">@_playerRating2.Ft</td>
         }
     </tr>
     <tr>
         @if (_playerRating1.Fg > _playerRating2.Fg)
         {
-            <td style="background: greenyellow">@_playerRating1.Fg</td>
+            <td style="background: #E4F1E4">@_playerRating1.Fg</td>
             <td>2PT</td>
             <td>@_playerRating2.Fg</td>
         }
@@ -353,14 +317,14 @@
         {
             <td>@_playerRating1.Fg</td>
             <td>2PT</td>
-            <td style="background: greenyellow">@_playerRating2.Fg</td>
+            <td style="background: #E4F1E4">@_playerRating2.Fg</td>
         }
     </tr>
         
             <tr>
                 @if (_playerRating1.Tp > _playerRating2.Tp)
                 {
-                    <td style="background: greenyellow">@_playerRating1.Tp</td>
+                    <td style="background: #E4F1E4">@_playerRating1.Tp</td>
                     <td>3PT</td>
                     <td>@_playerRating2.Tp</td>
                 }
@@ -368,14 +332,14 @@
                 {
                     <td>@_playerRating1.Tp</td>
                     <td>3PT</td>
-                    <td style="background: greenyellow">@_playerRating2.Tp</td>
+                    <td style="background: #E4F1E4">@_playerRating2.Tp</td>
                 }
             </tr>
         
     <tr>
         @if (_playerRating1.Oiq > _playerRating2.Oiq)
         {
-            <td style="background: greenyellow">@_playerRating1.Oiq</td>
+            <td style="background: #E4F1E4">@_playerRating1.Oiq</td>
             <td>OIQ</td>
             <td>@_playerRating2.Oiq</td>
         }
@@ -383,14 +347,14 @@
         {
             <td>@_playerRating1.Oiq</td>
             <td>OIQ</td>
-            <td style="background: greenyellow">@_playerRating2.Oiq</td>
+            <td style="background: #E4F1E4">@_playerRating2.Oiq</td>
         }
     </tr>
         
     <tr>
         @if (_playerRating1.Diq > _playerRating2.Diq)
         {
-            <td style="background: greenyellow">@_playerRating1.Diq</td>
+            <td style="background: #E4F1E4">@_playerRating1.Diq</td>
             <td>DIQ</td>
             <td>@_playerRating2.Diq</td>
         }
@@ -398,14 +362,14 @@
         {
             <td>@_playerRating1.Diq</td>
             <td>DIQ</td>
-            <td style="background: greenyellow">@_playerRating2.Diq</td>
+            <td style="background: #E4F1E4">@_playerRating2.Diq</td>
         }
     </tr>
         
     <tr>
         @if (_playerRating1.Drb > _playerRating2.Drb)
         {
-            <td style="background: greenyellow">@_playerRating1.Drb</td>
+            <td style="background: #E4F1E4">@_playerRating1.Drb</td>
             <td>DRB</td>
             <td>@_playerRating2.Drb</td>
         }
@@ -413,14 +377,14 @@
         {
             <td>@_playerRating1.Drb</td>
             <td>DRB</td>
-            <td style="background: greenyellow">@_playerRating2.Drb</td>
+            <td style="background: #E4F1E4">@_playerRating2.Drb</td>
         }
     </tr>
         
     <tr>
         @if (_playerRating1.Pss > _playerRating2.Pss)
         {
-            <td style="background: greenyellow">@_playerRating1.Pss</td>
+            <td style="background: #E4F1E4">@_playerRating1.Pss</td>
             <td>PSS</td>
             <td>@_playerRating2.Pss</td>
         }
@@ -428,7 +392,7 @@
         {
             <td>@_playerRating1.Pss</td>
             <td>PSS</td>
-            <td style="background: greenyellow">@_playerRating2.Pss</td>
+            <td style="background: #E4F1E4">@_playerRating2.Pss</td>
         }
     </tr>
         
@@ -436,7 +400,7 @@
             
             @if (_playerRating1.Reb > _playerRating2.Reb)
              {
-                <td style="background: greenyellow">@_playerRating1.Reb</td>
+                <td style="background: #E4F1E4">@_playerRating1.Reb</td>
                  <td>REB</td>
                  <td>@_playerRating2.Reb</td>
              }
@@ -444,7 +408,7 @@
              {
                  <td>@_playerRating1.Reb</td>
                  <td>REB</td>
-                 <td style="background: greenyellow">@_playerRating2.Reb</td>
+                 <td style="background: #E4F1E4">@_playerRating2.Reb</td>
              }
         
             </tr>

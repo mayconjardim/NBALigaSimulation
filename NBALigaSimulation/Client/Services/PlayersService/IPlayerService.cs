@@ -8,5 +8,7 @@ public interface IPlayerService
     
     Task<ServiceResponse<PlayerCompleteDto>> GetPlayerById(int playerId);
     Task<ServiceResponse<List<PlayerSimpleDto>>> GetPlayersSearchSuggestions(string searchText);
+    Task<ServiceResponse<List<PlayerSimpleDto>>> GetAllSimplePlayers();
+
     
 }

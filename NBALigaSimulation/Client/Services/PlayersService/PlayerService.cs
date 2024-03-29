@@ -26,4 +26,9 @@ public class PlayerService : IPlayerService
         return result;
     }
 
+    public async Task<ServiceResponse<List<PlayerSimpleDto>>> GetAllSimplePlayers()
+    {
+        var result = await _http.GetFromJsonAsync<ServiceResponse<List<PlayerSimpleDto>>>($"api/players/simple");
+        return result;
+    }
 }

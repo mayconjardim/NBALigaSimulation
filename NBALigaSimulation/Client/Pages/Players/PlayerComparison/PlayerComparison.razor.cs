@@ -1,10 +1,6 @@
-using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.Components.Web;
+using System.Text.RegularExpressions;
 using Microsoft.JSInterop;
 using NBALigaSimulation.Shared.Dtos.Players;
-using NBALigaSimulation.Shared.Models.Utils;
-using pax.BlazorChartJs;
-
 namespace NBALigaSimulation.Client.Pages.Players.PlayerComparison;
 
 public partial class PlayerComparison
@@ -21,59 +17,20 @@ public partial class PlayerComparison
     private string _message = string.Empty;
     private string searchText = string.Empty;
     private string searchText2 = string.Empty;
-    protected ElementReference searchInput;
+    private int player1Id = 0;
+    private int player2Id = 0;
     
- 
-    public async Task HandleSearchOne(KeyboardEventArgs args)
+    protected override async Task OnInitializedAsync()
     {
-        if (args.Key == null || args.Key.Equals("Enter"))
+        var result = await PlayerService.GetAllSimplePlayers();
+        if (result.Success)
         {
-            if (!string.IsNullOrEmpty(searchText) && int.TryParse(searchText, out int selectedPlayerId))
-            {
-                var response = await PlayerService.GetPlayerById(selectedPlayerId);
-                if (response.Success)
-                {
-                    _player1 = response.Data;
-                    _player1Stats = _player1.RegularStats.LastOrDefault();
-                    _playerRating1 = _player1.Ratings.LastOrDefault();
-                }
-            }
+            suggestions = result.Data;
         }
-        else if (searchText.Length > 1)
-        {
-
-            ServiceResponse<List<PlayerSimpleDto>> response = await PlayerService.GetPlayersSearchSuggestions(searchText);
-            if (response.Success) 
-            {
-                suggestions = response.Data; 
-            }
-        }
-    }
-    
-    public async Task HandleSearchTwo(KeyboardEventArgs args)
-    {
-        if (args.Key == null || args.Key.Equals("Enter"))
-        {
-            if (!string.IsNullOrEmpty(searchText2) && int.TryParse(searchText2, out int selectedPlayerId))
-            {
-                var response = await PlayerService.GetPlayerById(selectedPlayerId);
-                if (response.Success)
-                {
-                    _player2 = response.Data;
-                    _player2Stats = _player2.RegularStats.LastOrDefault();
-                    _playerRating2 = _player2.Ratings.LastOrDefault(); 
-                }
-            }
-        }
-        else if (searchText2.Length > 1)
-        {
-
-            ServiceResponse<List<PlayerSimpleDto>> response = await PlayerService.GetPlayersSearchSuggestions(searchText2);
-            if (response.Success) 
-            {
-                suggestions = response.Data; 
-            }
-        }
+       
+        await JSRuntime.InvokeVoidAsync("initializeAutocomplete", suggestions, "tags1");
+        await JSRuntime.InvokeVoidAsync("initializeAutocomplete", suggestions, "tags2");
+        
     }
     
     private  void NavigateToPlayerPage(int playerId)
@@ -81,5 +38,41 @@ public partial class PlayerComparison
         NavigationManager.NavigateTo($"/players/{playerId}");
     }
     
- 
+    public async Task SearchPlayers(int number)
+    {
+        int playerId = number == 1 ? ExtractPlayerId(searchText) : ExtractPlayerId(searchText2);
+
+        if (playerId != 0)
+        {
+            var response  = await PlayerService.GetPlayerById(playerId);
+            if (response.Success)
+            {
+                if (number == 1)
+                {
+                    _player1 = response.Data;
+                    _player1Stats = _player1.RegularStats.LastOrDefault();
+                    _playerRating1 = _player1.Ratings.LastOrDefault();
+                }
+                else if (number == 2)
+                {
+                    _player2 = response.Data;
+                    _player2Stats = _player2.RegularStats.LastOrDefault();
+                    _playerRating2 = _player2.Ratings.LastOrDefault();
+                }
+
+                StateHasChanged();
+            }
+        }
+    }
+
+    private int ExtractPlayerId(string searchText)
+    {
+        Match match = Regex.Match(searchText, @"\((\d+)\)");
+        if (match.Success)
+        {
+            return int.Parse(match.Groups[1].Value);
+        }
+        return 0;
+    }
+
 }

@@ -1,6 +1,9 @@
-const navLinks = document.querySelectorAll('.nav-item')
-const menuToggle = document.getElementById('navbarSupportedContent')
-const bsCollapse = new bootstrap.Collapse(menuToggle, {toggle:false})
-navLinks.forEach((l) => {
-    l.addEventListener('click', () => { bsCollapse.toggle() })
-})
+function initializeAutocomplete(availableTags, inputId) {
+    var tagNames = availableTags.map(function(player) {
+        return player.name + " " + "(" + player.id + ")";
+    });
+
+    $("#" + inputId).autocomplete({
+        source: tagNames
+    });
+}

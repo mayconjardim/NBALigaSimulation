@@ -29,6 +29,12 @@
 .input-group {
     width: 18rem;
     margin: 0.658rem;
+    display: flex;
+    justify-content: space-around;
+}
+
+.procura {
+    display: flex;
 }
 
 .card .card-img-top {
@@ -146,12 +152,22 @@ table thead th {
     .card-title{
         font-size: 0.850rem;
     }
-    
+
     .input-group {
         width: 11rem;
         margin: 0.158rem;
     }
+
+    .input-group input {
+        width: 80%;
+    }
     
+    .procura button {
+        width: 20%;
+
+    }
+    
+
     table {
         max-width: 80%;
     }
@@ -159,25 +175,25 @@ table thead th {
     table td{
         padding: 0 0.425rem;
     }
-    
+
     table tbody td {
         font-size: 0.6rem;
         font-weight: 600;
     }
-    
+
     .charts {
         display: flex;
         justify-content: center;
         flex-direction: column;
     }
-    
+
     .ratings-table td {
         border: 1px solid lightgrey;
     }
-    
+
     .ratings-table tr > td:nth-child(2) {
         background: var(--primary-color);
         color: white;
     }
-    
+
 }
