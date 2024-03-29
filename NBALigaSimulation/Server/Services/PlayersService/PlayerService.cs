@@ -220,12 +220,18 @@ namespace NBALigaSimulation.Server.Services.PlayersService
         {
             var response = new ServiceResponse<List<PlayerSimpleDto>>();
 
-            var players = await _context.Players.Where(p => p.Name.ToLower().Contains(searchText.ToLower())).ToListAsync();
-
+            List<Player> cleanList = new List<Player>();
+            
+            if (string.IsNullOrEmpty(searchText))
+            {
+                response.Data = _mapper.Map<List<PlayerSimpleDto>>(cleanList);
+                return response;  
+            }
+            
+            var players = await _context.Players.Where(p => EF.Functions.Like(p.Name, $"%{searchText}%")).ToListAsync();
             response.Data = _mapper.Map<List<PlayerSimpleDto>>(players);
-
-            response.Success = true;
-            return response;
+            return response;  
+           
         }
     }
 }
