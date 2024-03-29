@@ -13,6 +13,7 @@ public partial class PlayerComparison
     private PlayerRatingDto _playerRating1;
     private PlayerRatingDto _playerRating2;
     private List<PlayerSimpleDto> suggestions = new List<PlayerSimpleDto>();
+    private int _season = 0;
     private string _playerName = string.Empty;
     private string _message = string.Empty;
     private string searchText = string.Empty;

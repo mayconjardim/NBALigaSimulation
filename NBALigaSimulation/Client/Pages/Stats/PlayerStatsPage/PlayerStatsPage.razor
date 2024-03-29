@@ -1,5 +1,7 @@
 @page "/stats"
 @inject IStatsService StatsService
+@inject ISeasonService SeasonService
+ @inject ILocalStorageService LocalStorage
 @inject NavigationManager NavigationManager
 
 
@@ -16,6 +18,13 @@
                 }
             </select>
             
+             <select class="form-select" @onchange="HandleYearChange">
+                 <option value="">Filtrar por Season</option>
+                 @foreach (var year in _seasonsList)
+                 {
+                     <option value="@year.Year">@year.Year</option>
+                 }
+             </select>
             
             <select class="form-select" @onchange="HandleSizeChange">
                  <option value="">Limite da lista</option>

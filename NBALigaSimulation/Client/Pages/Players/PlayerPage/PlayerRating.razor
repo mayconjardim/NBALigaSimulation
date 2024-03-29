@@ -1,5 +1,6 @@
 @using pax.BlazorChartJs
 @using NBALigaSimulation.Client.Utilities
+@inject ILocalStorageService LocalStorage
 @if (_rating != null)
 {
 
@@ -57,7 +58,7 @@
                               <li class="list-group-item d-flex justify-content-between align-items-center">
                                   <div class="ms-2 me-auto">
                                       <div class="title">Birth</div>
-                                      @_player.Born.Year (@_age)
+                                      @_player.Born.Year (@Util.Age(_season, _player.Born.Year))
                                   </div>
                               </li>
                               <li class="list-group-item d-flex justify-content-between align-items-center">

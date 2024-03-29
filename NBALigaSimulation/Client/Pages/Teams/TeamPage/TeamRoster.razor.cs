@@ -12,7 +12,7 @@ public partial class TeamRoster
 
     List<PlayerCompleteDto> _roster { get; set; }
 
-    private int season = 0;
+    private int _season = 0;
     
     string[] _headings =
     {
@@ -26,8 +26,8 @@ public partial class TeamRoster
         {
             _roster = _team.Players;
         }
-
-        season = _roster.LastOrDefault().Ratings.LastOrDefault().Season;
+        
+        _season = int.Parse(await LocalStorage.GetItemAsync<string>("season"));
 
     }
     

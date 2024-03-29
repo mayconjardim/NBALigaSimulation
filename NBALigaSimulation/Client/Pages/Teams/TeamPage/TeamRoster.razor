@@ -1,5 +1,6 @@
 @using NBALigaSimulation.Client.Utilities
 @using NBALigaSimulation.Client.Pages.Players.PlayerPage
+@inject ILocalStorageService LocalStorage
 @inject NavigationManager NavigationManager
 @if(_team.Players.Count > 0)
 {
@@ -15,7 +16,7 @@
                     <h5 class="card-title">@_player.Name</h5>
                     <h6 class="card-subtitle mb-2 text-muted">@Util.Position(_player.Pos)</h6>
                     <div class="card-player-info">
-                        <p><span class="text-muted">Age:</span> @Util.Age(season, _player.Born.Year)</p>
+                        <p><span class="text-muted">Age:</span> @Util.Age(_season, _player.Born.Year)</p>
                         <p><span class="text-muted">HT/WT:</span> @Util.InchesToCm(_player.Hgt)cm, @Util.LbsToKg(_player.Weight)kg </p>
                         <p><span class="text-muted">Experience:</span> @_player.Ratings.Count Season</p>
                         @if (_player.Contract != null)

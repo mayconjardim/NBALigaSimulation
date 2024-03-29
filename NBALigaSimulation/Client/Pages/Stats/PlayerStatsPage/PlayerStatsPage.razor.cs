@@ -1,6 +1,7 @@
 using BlazorBootstrap;
 using Microsoft.AspNetCore.Components;
 using NBALigaSimulation.Shared.Dtos.Players;
+using NBALigaSimulation.Shared.Dtos.Seasons;
 using NBALigaSimulation.Shared.Models.Utils;
 
 namespace NBALigaSimulation.Client.Pages.Stats.PlayerStatsPage;
@@ -9,11 +10,12 @@ public partial class PlayerStatsPage
 {
     private PlayerStatsResponse _statsResponse;
     private List<PlayerRegularStatsDto> _playerStats;
+    private List<CompleteSeasonDto> _seasonsList;
     private int _currentPage = 1;
     private int _pageSize = 50;
     private string _stat = null;
     private string _message = string.Empty;
-    private int _season = 2007;
+    private int _season = 0;
     private string sortedColumn = "PPG";
     private bool isAscending = false;
     public string position = string.Empty;
@@ -24,8 +26,10 @@ public partial class PlayerStatsPage
 
     protected override async Task OnInitializedAsync()
     {
+        
+        _season = int.Parse(await LocalStorage.GetItemAsync<string>("season"));
+ 
         var result = await StatsService.GetAllPlayerRegularStats(_currentPage, _pageSize, _season, isAscending, position);
-
         if (result.Success)
         {
             _statsResponse = result.Data;
@@ -36,6 +40,13 @@ public partial class PlayerStatsPage
         {
             _message = result.Message;
         }
+
+        var response = await SeasonService.GetALlSeason();
+        if (response.Success)
+        {
+            _seasonsList = response.Data;
+        }
+
     }
     
     private string GetSortIcon(string columnName)
@@ -109,6 +120,24 @@ public partial class PlayerStatsPage
             }
       
           StateHasChanged(); 
+    }
+    
+    private async Task HandleYearChange(ChangeEventArgs e)
+    {
+        string sizeString = e.Value?.ToString();
+        if (int.TryParse(sizeString, out int season))
+        {
+            _season = season;
+                
+            var result = await StatsService.GetAllPlayerRegularStats(_currentPage, _pageSize, _season, isAscending, position);
+            if (result.Success)
+            {
+                _playerStats = result.Data.Stats;
+                _currentPage = result.Data.CurrentPage; 
+            }
+        }
+      
+        StateHasChanged(); 
     }
 
 

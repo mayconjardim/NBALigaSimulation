@@ -10,6 +10,7 @@ public partial class PlayerRating
     [Parameter]
     public PlayerCompleteDto _player { get; set; }
     private PlayerRatingDto _rating;
+    private int _season = 0;
     private List<string> _badgesSkills = new List<string> { "Po", "3", "Ps", "B" };
     private List<string> _badgesPhysical = new List<string> { "Dp", "Di", "R", "A" };
     
@@ -19,17 +20,16 @@ public partial class PlayerRating
     ChartComponent _chartComponent2;
     ChartJsConfig _chartJsConfig2 = null!;
 
-    private int _season = 0;
-    private int _age = 0;
     
-     protected override void OnInitialized()
+     protected override async Task OnInitializedAsync()
      {
 
+         _season = int.Parse(await LocalStorage.GetItemAsync<string>("season"));
+         
          if (_player != null)
          {
              _rating = _player.Ratings.LastOrDefault();
              _season = _rating.Season;
-             _age = (_season - _player.Born.Year);
          }
          
             var Options = new ChartJsOptions()
