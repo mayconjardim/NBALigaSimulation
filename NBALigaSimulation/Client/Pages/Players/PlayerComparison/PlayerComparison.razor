@@ -1,5 +1,6 @@
 @page "/comparison"
 @using NBALigaSimulation.Client.Utilities
+@using NBALigaSimulation.Shared.Dtos.Players
 @inject NavigationManager NavigationManager
 @inject ILocalStorageService LocalStorage
 @inject IPlayerService PlayerService
@@ -67,10 +68,13 @@
                 </div>
             </div>
             <div class="input-group ">
-                <div class="procura">
-                    <input id="tags1" @bind="searchText"  />
-                    <button style="background: var(--primary-color); color: white"  @onclick="() => SearchPlayers(1)"><i class="bi bi-search"></i></button>
-                </div>
+                      <AutoComplete @bind-Value="searchText"
+                      TItem="PlayerSimpleDto"
+                      DataProvider="CustomersDataProvider"
+                      PropertyName="Name"
+                      Placeholder="Procure um jogador.."
+                      OnChanged="(PlayerSimpleDto player) => OnAutoCompleteChanged(player)" />                
+                
             </div>
              
         </div>
@@ -139,10 +143,7 @@
              
         </div>
         <div class="input-group ">
-           <div class="procura">
-              <input id="tags2" @bind="searchText2"   />
-              <button style="background: var(--primary-color); color: white"  @onclick="() => SearchPlayers(2)"><i class="bi bi-search"></i></button>
-           </div>
+         
           </div>
     </div>
     
