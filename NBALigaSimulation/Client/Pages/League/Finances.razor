@@ -1,0 +1,29 @@
+﻿@page "/finances"
+@inject ITeamService TeamService
+
+<div class="container">
+    @if (teams != null )
+    {
+
+        <table>
+            <thead>
+            <tr>
+                @foreach (var h in headings)
+                {
+                    <th>@h</th>
+                }
+            </tr>
+            </thead>
+            <tbody>
+            @foreach (var team in teams)
+            {
+                <tr>
+                    <td><MudAvatar Style="background: none;height:25px;width:25px;vertical-align:middle;margin-right: 5px" Image=@($"Images/logos/{team.Abrv}.svg") />@team.Region @team.Name</td>
+                    <td>$@team.Players.Sum(player => player.Contract.Amount).ToString("N0")</td>
+                    <td>$@((capSpace - team.Players.Sum(player => player.Contract.Amount)).ToString("N0"))</td>
+                </tr>
+            }
+            </tbody>
+        </table>
+    }
+</div>

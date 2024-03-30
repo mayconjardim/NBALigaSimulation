@@ -25,4 +25,11 @@ public class TeamService : ITeamService
         var response = await _http.GetFromJsonAsync<ServiceResponse<List<TeamSimpleDto>>>($"api/teams");
         return response;
     }
+    
+    public async Task<ServiceResponse<List<TeamSimpleWithPlayersDto>>> GetAllTeamsWithPlayers()
+    {
+        var result = await _http.GetFromJsonAsync<ServiceResponse<List<TeamSimpleWithPlayersDto>>>($"api/teams/players");
+        return result;
+    }   
+    
 }
