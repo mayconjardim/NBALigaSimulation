@@ -56,6 +56,10 @@
     flex-wrap: wrap;
 }
 
+.login-nav i {
+    font-weight: 800;
+    color: white;
+}
 
 @media only screen and (min-width: 601px) {
     .navbar-brand  {
@@ -66,3 +70,4 @@
         width: 35%; 
     }
 }
+

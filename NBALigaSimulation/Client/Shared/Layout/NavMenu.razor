@@ -3,78 +3,101 @@
 @inject ISeasonService SeasonService
 @inject ITeamService TeamService
 
-
 <nav class="navbar navbar-expand-lg bg-body-tertiary">
     <div class="container-fluid">
-    
-        <a class="navbar-brand" >
-            <img  src="Images/Utils/basketball.svg" height="25">
+        <a class="navbar-brand" href="#">
+            <img src="Images/Utils/basketball.svg" height="25">
             NBALIGA
         </a>
-        
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
+        <div class="d-flex flex-row align-items-center">
+            <button class="navbar-toggler me-2" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <!-- Ícone de login -->
+            <div class="d-lg-none">
+                <a class="btn btn-outline-light" href="#" type="button" data-bs-toggle="modal" data-bs-target="#exampleModal"><i class="bi bi-person"></i></a>
+            </div>
+        </div>
         
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                
                 <li class="nav-item">
                     <a class="nav-link" href="/">Home</a>
                 </li>
-                
                 <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        Liga
-                    </a>
+                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Liga</a>
                     <ul class="dropdown-menu">
                         <li><a class="dropdown-item" href="/comparison">Sobre</a></li>
                     </ul>
                 </li>
-                
-               <li class="nav-item">
-                              <a class="nav-link" href="/teams">Times</a>
-               </li>
-                
+                <li class="nav-item">
+                    <a class="nav-link" href="/teams">Times</a>
+                </li>
                 <li class="nav-item">
                     <a class="nav-link" href="/calendar">Calendário</a>
                 </li>
-                
-                 <li class="nav-item dropdown">
-                     <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                         Estatísticas
-                     </a>
-                     <ul class="dropdown-menu">
-                         <li><a class="dropdown-item" href="/stats">Players Estatísticas</a></li>
-                         <li><a class="dropdown-item" href="/stats/teams">Team Estatísticas</a></li>
-                     </ul>
-                    
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Estatísticas</a>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="/stats">Players Estatísticas</a></li>
+                        <li><a class="dropdown-item" href="/stats/teams">Team Estatísticas</a></li>
+                    </ul>
                 </li>
-                
                 <li class="nav-item">
                     <a class="nav-link" href="#">Draft</a>
                 </li>
-                
                 <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        Jogadores
-                    </a>
+                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Jogadores</a>
                     <ul class="dropdown-menu">
                         <li><a class="dropdown-item" href="/comparison">Comparação</a></li>
                     </ul>
                 </li>
-                
             </ul>
-            
-            <form class="d-none d-lg-block d-xl-block search ml-auto" role="search">
-                <input class="form-control me-2" type="search" placeholder="Procurar Jogador" aria-label="Search">
-            </form>
-            
+            <!-- Ícone de login para telas maiores -->
+            <div class="d-none d-lg-block">
+                <a class="btn btn-outline-light me-2" type="button" data-bs-toggle="modal" data-bs-target="#exampleModal"><i class="bi bi-person"></i></a>
+            </div>
         </div>
-        
     </div>
 </nav>
+
+<!-- Modal Logado-->
+<div class="modal fade" id="loginModel" tabindex="-1" aria-labelledby="loginModel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="loginModel">Manager Painel</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                ...
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger">Logout</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Modal Logado-->
+
+<!-- Modal Login-->
+<div class="modal fade" id="loginModel" tabindex="-1" aria-labelledby="loginModel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="loginModel">Manager Painel</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                ...
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn" style="background: var(--primary-color); color: white">Login</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Modal Login-->
 
 @code {
 
@@ -99,6 +122,11 @@
     {
         NavigationManager.NavigateTo($"/teams/{teamId}");
     }
-    
+
+ 
+    private async Task Logout()
+    {
+        NavigationManager.NavigateTo("");
+    }
 
 }
