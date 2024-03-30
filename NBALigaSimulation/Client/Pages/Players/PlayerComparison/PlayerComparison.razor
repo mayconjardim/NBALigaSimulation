@@ -1,10 +1,13 @@
 @page "/comparison"
 @using NBALigaSimulation.Client.Utilities
-@using NBALigaSimulation.Shared.Dtos.Players
 @inject NavigationManager NavigationManager
 @inject ILocalStorageService LocalStorage
 @inject IPlayerService PlayerService
 @inject IJSRuntime JSRuntime
+
+@if (players != null)
+{
+    
 
 <div class="container-fluid">
     <div class="container-header">
@@ -68,8 +71,8 @@
                 </div>
             </div>
             <div class="input-group ">
-                     
-                
+                    <RadzenAutoComplete @bind-Value=@searchText Placeholder="Selecione um jogador.."  Change=@OnChange Data=@players TextProperty="NameAndId" Style="width: 13rem" InputAttributes="@(new Dictionary<string,object>(){ { "aria-label", "Name" }})">
+                    </RadzenAutoComplete>
             </div>
              
         </div>
@@ -138,8 +141,9 @@
              
         </div>
         <div class="input-group ">
-         
-          </div>
+      <RadzenAutoComplete @bind-Value=@searchText2 Placeholder="Selecione um jogador.."  Change=@OnChange2 Data=@players TextProperty="NameAndId" Style="width: 13rem" InputAttributes="@(new Dictionary<string,object>(){ { "aria-label", "Name" }})">
+                          </RadzenAutoComplete>
+        </div>
     </div>
     
 </div>
@@ -417,3 +421,4 @@
 
 }
 
+}

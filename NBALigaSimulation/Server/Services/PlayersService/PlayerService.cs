@@ -53,9 +53,7 @@ namespace NBALigaSimulation.Server.Services.PlayersService
 
             return response;
         }
-
-    
-
+        
         public async Task<ServiceResponse<PlayerCompleteDto>> CreatePlayer(CreatePlayerDto request)
         {
 

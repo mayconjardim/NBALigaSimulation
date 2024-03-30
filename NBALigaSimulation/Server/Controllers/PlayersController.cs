@@ -34,7 +34,7 @@ namespace NBALigaSimulation.Server.Controllers
                 return StatusCode(500, ex.Message); 
             }
         }
-
+        
         [HttpGet]
         public async Task<ActionResult<ServiceResponse<List<PlayerSimpleDto>>>> GetAllPlayers()
         {
