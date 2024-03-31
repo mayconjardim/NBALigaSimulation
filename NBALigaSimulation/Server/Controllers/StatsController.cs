@@ -20,8 +20,21 @@ namespace NBALigaSimulation.Server.Controllers
 		[HttpGet("teams")]
 		public async Task<ActionResult<ServiceResponse<List<TeamRegularStatsDto>>>> GetAllTeamRegularStats(int season, bool isAscending, string stat = null)
 		{
-			var result = await _statsService.GetAllTeamRegularStats( season,isAscending,stat);
-			return Ok(result);
+			try
+			{
+				var result = await _statsService.GetAllTeamRegularStats(season, isAscending, stat);
+
+				if (!result.Success)
+				{
+					return StatusCode(500, result);
+				}
+
+				return Ok(result);
+			}
+			catch (Exception ex)
+			{
+				return StatusCode(500, new ServiceResponse<PageableStatsResponse<TeamRegularStatsDto>> { Success = false, Message = ex.Message });
+			}
 		}
 
 		[HttpGet("playoffs/teams")]

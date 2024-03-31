@@ -1086,6 +1086,9 @@ namespace NBALigaSimulation.Server.Migrations
                     b.Property<int>("AllowedFTM")
                         .HasColumnType("INTEGER");
 
+                    b.Property<int>("AllowedFouls")
+                        .HasColumnType("INTEGER");
+
                     b.Property<int>("AllowedPoints")
                         .HasColumnType("INTEGER");
 
@@ -1117,6 +1120,9 @@ namespace NBALigaSimulation.Server.Migrations
                         .HasColumnType("INTEGER");
 
                     b.Property<int>("FTM")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("Fouls")
                         .HasColumnType("INTEGER");
 
                     b.Property<int>("HomeLosses")
