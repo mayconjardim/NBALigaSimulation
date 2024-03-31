@@ -1,0 +1,60 @@
+.filters {
+    display: flex;
+    flex-direction: row;
+}
+
+.form-select {
+    margin: 0.625rem;
+}
+
+table {
+    background-color: var(--white);
+    width: 100%;
+    text-align: center;
+    margin: 0.625rem 0;
+}
+table caption {
+    color: #212529;
+    font-weight: 900;
+}
+
+table th {
+    font-size: 0.625rem;
+    white-space: nowrap;
+}
+
+table td {
+    font-size: 0.8rem;
+    white-space: nowrap
+}
+
+table span {
+    font-size: 0.6rem;
+    color: grey;
+    margin: 0.100rem;
+}
+
+
+table{
+    border-radius: 10px;
+}
+
+tr:nth-child(even) {
+    background-color: #FBFBFB;
+}
+
+a {
+    text-decoration: none;
+}
+
+.player-pic {
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+}
+
+.player-pic img {
+    border-radius: 50%;
+    object-fit: cover;
+}
+

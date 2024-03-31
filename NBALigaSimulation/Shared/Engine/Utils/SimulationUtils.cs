@@ -100,6 +100,9 @@ namespace NBALigaSimulation.Shared.Engine.Utils
 
                 HomeGame.Steals += HomeGameStat.Stl;
                 HomeGame.AllowedStealS += AwayGameStat.Stl;
+                
+                HomeGame.Fouls += HomeGameStat.Pf;
+                HomeGame.AllowedFouls += AwayGameStat.Pf;
 
                 HomeGame.Rebounds += HomeGameStat.Trb;
                 HomeGame.AllowedRebounds += AwayGameStat.Trb;
@@ -134,6 +137,9 @@ namespace NBALigaSimulation.Shared.Engine.Utils
 
                 AwayGame.Steals += AwayGameStat.Stl;
                 AwayGame.AllowedStealS += HomeGameStat.Stl;
+                
+                AwayGame.Fouls += AwayGameStat.Pf;
+                AwayGame.AllowedFouls += HomeGameStat.Pf;
 
                 AwayGame.Rebounds += AwayGameStat.Trb;
                 AwayGame.AllowedRebounds += HomeGameStat.Trb;

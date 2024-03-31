@@ -1,8 +1,9 @@
 ﻿using AutoMapper;
+using NBALigaSimulation.Shared.Models.Teams;
 using NBALigaSimulation.Shared.Dtos.Players;
 using NBALigaSimulation.Shared.Dtos.Teams;
-using NBALigaSimulation.Shared.Models.Players;
 using NBALigaSimulation.Shared.Models.Utils;
+using PlayerRegularStats = NBALigaSimulation.Shared.Models.Players.PlayerRegularStats;
 
 namespace NBALigaSimulation.Server.Services.StatsService
 {
@@ -85,24 +86,87 @@ namespace NBALigaSimulation.Server.Services.StatsService
 		    return response;
 		}
 
-
-
-		public async Task<ServiceResponse<List<TeamRegularStatsDto>>> GetAllTeamRegularStats()
+		public async Task<ServiceResponse<List<TeamRegularStatsDto>>> GetAllTeamRegularStats(int season, bool isAscending, string stat = null)
 		{
+			 var response = new ServiceResponse<List<TeamRegularStatsDto>>();
 
-			var season = _context.Seasons.OrderBy(s => s.Year).Last();
+		    try
+		    {
+			    IQueryable<TeamRegularStats> query = _context.TeamRegularStats.Include(p => p.Team);
 
-			var teamRegularStatsList = await _context.TeamRegularStats
-				.Where(t => t.Season == season.Year)
-				.Include(t => t.Team)
-				.ToListAsync();
+                var orderByExpression = query.OrderByDescending(p => (p.WinPct));
 
-			var response = new ServiceResponse<List<TeamRegularStatsDto>>
-			{
-				Data = _mapper.Map<List<TeamRegularStatsDto>>(teamRegularStatsList)
-			};
+		        if (!string.IsNullOrEmpty(stat))
+		        {
+		            orderByExpression = stat switch
+		            {
+		                "GP" => isAscending ? query.OrderByDescending(p => p.Games) : query.OrderBy(p => p.Games),
+		                
+		                "W" => isAscending ? query.OrderByDescending(p => ((double)p.HomeWins / p.RoadWins)) : query.OrderBy(p => ((double)p.HomeWins / p.RoadWins)),
+		                "L" => isAscending ? query.OrderByDescending(p => ((double)p.RoadWins / p.RoadWins)) : query.OrderBy(p => ((double)p.RoadWins / p.RoadWins)),
+		                
+		                "PTS" => isAscending ? query.OrderByDescending(p => ((double)p.Points / p.Games)) : query.OrderBy(p => ((double)p.Points / p.Games)),
+		               
+		                "FGM" => isAscending ? query.OrderByDescending(p => ((double)p.FGM / p.Games)) : query.OrderBy(p => ((double)p.FGM / p.Games)),
+		                "FGA" => isAscending ? query.OrderByDescending(p => ((double)p.FGA / p.Games)) : query.OrderBy(p => ((double)p.FGA / p.Games)) ,
+		                "FG%" => isAscending ? query.OrderByDescending(p => ((double)p.FGM / p.FGA * 100)) : query.OrderBy(p => ((double)p.FGM / p.FGA * 100)),
+		                
+		                "3PM" => isAscending ? query.OrderByDescending(p => ((double)p.TPM / p.Games)) : query.OrderBy(p => ((double)p.TPM / p.Games)),
+		                "3PA" => isAscending ? query.OrderByDescending(p => ((double)p.TPA / p.Games)) : query.OrderBy(p => ((double)p.TPA / p.Games)),
+		                "3P%" => isAscending ? query.OrderByDescending(p => ((double)p.TPM / p.TPA * 100)) : query.OrderBy(p => ((double)p.TPM / p.TPA * 100)),
+		                
+		                "FTM" => isAscending ? query.OrderByDescending(p => ((double)p.FTM / p.Games)) : query.OrderBy(p => ((double)p.FTM / p.Games)) ,
+		                "FTA" => isAscending ? query.OrderByDescending(p => ((double)p.FTA / p.Games))  : query.OrderBy(p => ((double)p.FTA / p.Games)),
+		                "FT%" => isAscending ? query.OrderByDescending(p => ((double)p.FTM / p.FTA * 100)) : query.OrderBy(p => ((double)p.FTM / p.FTA * 100)),
+  
+		                
+		                "REB" => isAscending ? query.OrderByDescending(p => ((double)p.Rebounds / p.Games)) : query.OrderBy(p => ((double)p.Rebounds / p.Games)),
+		                "AREB" => isAscending ? query.OrderByDescending(p => ((double)p.AllowedRebounds / p.Games)) : query.OrderBy(p => ((double)p.AllowedRebounds / p.Games)),
+		                
+		                "APG" => isAscending ? query.OrderByDescending(p => ((double)p.Assists / p.Games)) : query.OrderBy(p => ((double)p.Assists / p.Games)),
+		                "AAPG" => isAscending ? query.OrderByDescending(p => ((double)p.AllowedAssists / p.Games)) : query.OrderBy(p => ((double)p.AllowedAssists / p.Games)),
 
-			return response;
+		                "SPG" => isAscending ? query.OrderByDescending(p => ((double)p.Steals / p.Games)) : query.OrderBy(p => ((double)p.Steals / p.Games)),
+		                "ASPG" => isAscending ? query.OrderByDescending(p => ((double)p.AllowedStealS / p.Games)) : query.OrderBy(p => ((double)p.AllowedStealS / p.Games)),
+
+			            "BPG" => isAscending ? query.OrderByDescending(p => ((double)p.Blocks / p.Games)) : query.OrderBy(p => ((double)p.Blocks / p.Games)),
+			            "ABPG" => isAscending ? query.OrderByDescending(p => ((double)p.AllowedBlocks / p.Games)) : query.OrderBy(p => ((double)p.AllowedBlocks / p.Games)),
+		                
+			            "TPG" => isAscending ? query.OrderByDescending(p => ((double)p.Turnovers / p.Games)) : query.OrderBy(p => ((double)p.Turnovers / p.Games)),
+			            "ATPG" => isAscending ? query.OrderByDescending(p => ((double)p.AllowedTurnovers / p.Games)) : query.OrderBy(p => ((double)p.AllowedTurnovers / p.Games)),
+
+		                "FPG" => isAscending ? query.OrderByDescending(p => ((double)p.Fouls / p.Games)) : query.OrderBy(p => ((double)p.Fouls / p.Games)),
+		                "AFPG" => isAscending ? query.OrderByDescending(p => ((double)p.AllowedFouls / p.Games)) : query.OrderBy(p => ((double)p.AllowedFouls / p.Games)),
+
+		                "DRAT" => isAscending ? query.OrderByDescending(p => ((double) (1.0 / p.Games) * ((p.Points * 85.910) + (p.Rebounds * 53.840) + (p.Assists * 34.677) + (p.Steals * 53.840) +
+			                (p.Blocks * 53.840) - (p.FGA * 39.190) - (p.FTA * 20.091) - (p.Turnovers * 53.840)) / 100)) : query.OrderBy(p => ((double) (1.0 / p.Games) * ((p.Points * 85.910) + (p.Rebounds * 53.840) 
+							+ (p.Assists * 34.677) + (p.Steals * 53.840) +
+			                (p.Blocks * 53.840) - (p.FGA * 39.190) - (p.FTA * 20.091) - (p.Turnovers * 53.840)) / 100)),
+		                
+		                "OFAT" => isAscending ? query.OrderByDescending(p => ((double) (1.0 / p.Games)) * ((p.AllowedPoints * 85.910) + (p.AllowedRebounds * 53.840) + (p.AllowedAssists * 34.677) + (p.AllowedStealS * 53.840) + (p.AllowedBlocks * 53.840) -
+			                (p.AllowedFGA * 39.190) - (p.AllowedFTA * 20.091) - (p.AllowedTurnovers * 53.840))/ 100) : query.OrderBy(p => ((double) (1.0 / p.Games)) * ((p.AllowedPoints * 85.910) + (p.AllowedRebounds * 53.840) + (p.AllowedAssists * 34.677) + 
+							(p.AllowedStealS * 53.840) + (p.AllowedBlocks * 53.840) -
+			                (p.AllowedFGA * 39.190) - (p.AllowedFTA * 20.091) - (p.AllowedTurnovers * 53.840))/ 100),
+		                
+		                _ => orderByExpression
+		            };
+		        }
+		        
+		        var stats = await query.ToListAsync();
+
+		        var teamStatsDtoList = _mapper.Map<List<TeamRegularStatsDto>>(stats);
+		        
+		        response.Data = teamStatsDtoList;
+		        response.Success = true;
+		    }
+		    catch (Exception ex)
+		    {
+		        response.Success = false;
+		        response.Message = $"Ocorreu um erro ao recuperar estatísticas dos jogadores: {ex.Message}";
+		    }
+
+		    return response;
+	
 		}
 
 		public async Task<ServiceResponse<List<TeamPlayoffsStatsDto>>> GetAllTeamPlayoffsStats()

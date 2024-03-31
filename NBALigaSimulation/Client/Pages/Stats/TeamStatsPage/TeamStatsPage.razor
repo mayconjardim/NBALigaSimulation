@@ -1,0 +1,132 @@
+@page "/stats/teams"
+@inject IStatsService StatsService
+@inject ISeasonService SeasonService
+ @inject ILocalStorageService LocalStorage
+@inject NavigationManager NavigationManager
+
+
+@if (_teamStats != null) 
+{
+    <div class="container">
+        
+        <div class="filters">
+            
+             <select class="form-select" @onchange="HandleYearChange">
+                 <option value="">Filtrar por Season</option>
+                 @foreach (var year in _seasonsList)
+                 {
+                     <option value="@year.Year">@year.Year</option>
+                 }
+             </select>
+        </div>
+
+
+        <div class="table-responsive">
+            <table class="table" id="statsTable">
+                <thead>
+                <tr>
+                    <th>PLAYER</th>
+                    <th>NAME</th>
+                    <th>TEAM</th>
+                          
+                    <th @onclick='() => SortTable("GP")'>GP
+                        <i class="bi @GetSortIcon("GP")"></i>
+                    </th>
+                          
+                    <th @onclick='() => SortTable("MIN")'>MPG
+                        <i class="bi @GetSortIcon("MIN")"></i>
+                    </th>
+                          
+                    <th @onclick='() => SortTable("PPG")'>PPG
+                        <i class="bi @GetSortIcon("PPG")"></i>
+                    </th>
+                          
+                    <th @onclick='() => SortTable("APG")'>APG
+                        <i class="bi @GetSortIcon("APG")"></i>
+                    </th>
+                          
+                    <th @onclick='() => SortTable("RPG")'>RPG
+                        <i class="bi @GetSortIcon("RPG")"></i>
+                    </th>
+                            
+                    <th @onclick='() => SortTable("ORB")'>ORB
+                        <i class="bi @GetSortIcon("ORB")"></i>
+                    </th>
+                            
+                    <th @onclick='() => SortTable("DRB")'>DRB
+                        <i class="bi @GetSortIcon("DRB")"></i>
+                    </th>
+                             
+                    <th @onclick='() => SortTable("SPG")'>SPG
+                        <i class="bi @GetSortIcon("SPG")"></i>
+                    </th>
+                             
+                    <th @onclick='() => SortTable("BPG")'>BPG
+                        <i class="bi @GetSortIcon("BPG")"></i>
+                    </th>
+                             
+                    <th @onclick='() => SortTable("TPG")'>TPG
+                        <i class="bi @GetSortIcon("TPG")"></i>
+                    </th>
+                                       
+                    <th @onclick='() => SortTable("FPG")'>FPG
+                        <i class="bi @GetSortIcon("FPG")"></i>
+                    </th>
+                             
+                    <th @onclick='() => SortTable("FG%")'>FG%
+                        <i class="bi @GetSortIcon("FG%")"></i>
+                    </th>
+                             
+                    <th @onclick='() => SortTable("FT%")'>FT%%
+                        <i class="bi @GetSortIcon("FT%")"></i>
+                    </th>
+                         
+                    <th @onclick='() => SortTable("3P%")'>3P%
+                        <i class="bi @GetSortIcon("3P%")"></i>
+                    </th>
+                              
+                    <th @onclick='() => SortTable("TS%")'>TS%
+                        <i class="bi @GetSortIcon("TS%")"></i>
+                    </th>
+                            
+                </tr>
+                </thead>
+                <tbody>
+                @foreach (var stats in _playerStats)
+                {
+                    <tr>
+                        <td>
+                            <div class="player-pic @stats.TeamAbrv">
+                                <img src=@($"{stats.ImgUrl}") alt="Team logo" width="35">
+                            </div>
+                        </td>
+                        <td><a href="@($"players/{stats.PlayerId}")"> @stats.Name </a><span>@stats.Pos</span></td>
+                        <td><img src=@($"../Images/Logos/{stats.TeamAbrv}.svg") alt="Team logo" width="25">
+                        </td>
+                        <td >@stats.Games</td>
+                        <td>@stats.MinPG</td>
+                        <td >@stats.PtsPG</td>
+                        <td>@stats.AstPG</td>
+                        <td>@stats.TRebPG</td>
+                        <td>@stats.ORebPG</td>
+                        <td>@stats.DRebPG</td>
+                        <td>@stats.StlPG</td>
+                        <td>@stats.BlkPG</td>
+                        <td>@stats.TovPG</td>
+                        <td>@stats.PfPG</td>
+                        <td>@stats.FgPct</td>
+                        <td>@stats.FtPct</td>
+                        <td>@stats.TpPct</td>
+                        <td>@stats.TrueShooting</td>
+                    </tr>
+                }
+                </tbody>
+            </table>
+        </div>
+        
+    </div>
+}
+else
+{
+    <Loading></Loading>
+}

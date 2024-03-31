@@ -24,6 +24,9 @@
 
         public int Steals { get; set; }
         public int AllowedStealS { get; set; }
+        
+        public int Fouls { get; set; }
+        public int AllowedFouls { get; set; }
 
         public int Rebounds { get; set; }
         public int AllowedRebounds { get; set; }
@@ -51,15 +54,26 @@
         public int FTA { get; set; }
         public int AllowedFTM { get; set; }
         public int AllowedFTA { get; set; }
+        
 
-        public double WinPct
+        public double Games
         {
             get
             {
                 int games = (HomeWins + HomeLosses + RoadWins + RoadLosses);
-                double winPct = (double)(HomeWins + RoadWins) / games;
+                return games;
+            }
+        }
+        
+        
+        public double WinPct
+        {
+            get
+            {
+                double winPct = (double)(HomeWins + RoadWins) / Games;
                 return winPct;
             }
         }
+    
     }
 }
