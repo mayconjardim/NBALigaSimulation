@@ -34,6 +34,7 @@
 
 	<ItemGroup>
 	  <_ContentIncludedByDefault Remove="Pages\Teams\TeamPage\Team.razor" />
+	  <_ContentIncludedByDefault Remove="Pages\Stats\TeamStatsPage\TeamStatsPage.razor" />
 	</ItemGroup>
 
 </Project>

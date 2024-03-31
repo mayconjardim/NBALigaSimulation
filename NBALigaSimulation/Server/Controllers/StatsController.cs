@@ -39,7 +39,7 @@ namespace NBALigaSimulation.Server.Controllers
 		}
 
 		[HttpGet("players")]
-		public async Task<ActionResult<ServiceResponse<PlayerStatsResponse>>> GetAllPlayerRegularStats(int page, int pageSize, int season, bool isAscending, string position, string stat = null)
+		public async Task<ActionResult<ServiceResponse<PageableStatsResponse<PlayerRegularStatsDto>>>> GetAllPlayerRegularStats(int page, int pageSize, int season, bool isAscending, string position, string stat = null)
 		{
 			try
 			{
@@ -54,7 +54,7 @@ namespace NBALigaSimulation.Server.Controllers
 			}
 			catch (Exception ex)
 			{
-				return StatusCode(500, new ServiceResponse<PlayerStatsResponse> { Success = false, Message = ex.Message });
+				return StatusCode(500, new ServiceResponse<PageableStatsResponse<PlayerRegularStatsDto>> { Success = false, Message = ex.Message });
 			}
 		}
 

@@ -8,7 +8,7 @@ namespace NBALigaSimulation.Client.Pages.Stats.PlayerStatsPage;
 
 public partial class PlayerStatsPage
 {
-    private PlayerStatsResponse _statsResponse;
+    private PageableStatsResponse<PlayerRegularStatsDto> _statsResponse;
     private List<PlayerRegularStatsDto> _playerStats;
     private List<CompleteSeasonDto> _seasonsList;
     private int _currentPage = 1;

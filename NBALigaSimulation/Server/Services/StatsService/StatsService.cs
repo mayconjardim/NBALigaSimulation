@@ -18,9 +18,9 @@ namespace NBALigaSimulation.Server.Services.StatsService
 			_mapper = mapper;
 		}
 		
-       public async Task<ServiceResponse<PlayerStatsResponse>> GetAllPlayerRegularStats(int page, int pageSize, int season, bool isAscending, string position, string stat = null)
+       public async Task<ServiceResponse<PageableStatsResponse<PlayerRegularStatsDto>>> GetAllPlayerRegularStats(int page, int pageSize, int season, bool isAscending, string position, string stat = null)
 		{
-		    var response = new ServiceResponse<PlayerStatsResponse>();
+		    var response = new ServiceResponse<PageableStatsResponse<PlayerRegularStatsDto>>();
 
 		    try
 		    {
@@ -66,7 +66,7 @@ namespace NBALigaSimulation.Server.Services.StatsService
 
 		        var playerStatsDtoList = _mapper.Map<List<PlayerRegularStatsDto>>(stats);
 
-		        var playerStatsResponse = new PlayerStatsResponse
+		        var playerStatsResponse = new PageableStatsResponse<PlayerRegularStatsDto>()
 		        {
 		            Stats = playerStatsDtoList,
 		            Pages = totalPages,
