@@ -94,100 +94,102 @@ namespace NBALigaSimulation.Server.Services.StatsService
 			 {
 				 IQueryable<TeamRegularStats> query = _context.TeamRegularStats.Include(p => p.Team);
 				 
-				 var orderByExpression = query.OrderByDescending(p => ((p.HomeWins + p.RoadWins) / (double)(p.HomeWins + p.RoadWins + p.HomeLosses + p.RoadLosses)));
+				 var orderByExpression = query.OrderByDescending(p => ( (double) (p.HomeWins + p.RoadWins) / (p.HomeWins + p.RoadWins + p.HomeLosses + p.RoadLosses)));
 
 				 if (!string.IsNullOrEmpty(stat))
 				 {
 					  orderByExpression = stat switch
 					 {
 
-						 "GP" => isAscending ? query.OrderByDescending(p => (p.HomeWins + p.RoadWins + p. RoadLosses + p.RoadWins)) : query.OrderBy(p => (p.HomeWins + p.RoadWins + p. RoadLosses + p.RoadWins)),
+						 "GP" => isAscending ? query.OrderByDescending(p => (p.HomeWins + p.HomeLosses + p.RoadWins + p.RoadLosses)) : query.OrderBy(p => (p.HomeWins + p.HomeLosses + p.RoadWins + p.RoadLosses)),
+						 "WIN%" => isAscending ? query.OrderByDescending(p => ( (double) (p.HomeWins + p.RoadWins) / (p.HomeWins + p.RoadWins + p.HomeLosses + p.RoadLosses))): query.OrderBy(p => ( (double) (p.HomeWins + p.RoadWins) / (p.HomeWins + p.RoadWins + p.HomeLosses + p.RoadLosses))),
 						 "W" => isAscending
-							 ? query.OrderByDescending(p => ((double)p.HomeWins / p.RoadWins))
-							 : query.OrderBy(p => ((double)p.HomeWins / p.RoadWins)),
+							 ? query.OrderByDescending(p => (p.HomeWins + p.RoadWins))
+							 : query.OrderBy(p => (p.HomeWins + p.RoadWins)),
 						 "L" => isAscending
-							 ? query.OrderByDescending(p => ((double)p.RoadWins / p.RoadWins))
-							 : query.OrderBy(p => ((double)p.RoadWins / p.RoadWins)),
+							 ? query.OrderByDescending(p => (p.HomeLosses + p.RoadLosses))
+							 : query.OrderBy(p => (p.HomeLosses + p.RoadLosses)),
 						 "PTS" => isAscending
-							 ? query.OrderByDescending(p => ((double)p.Points / (p.HomeWins + p.RoadWins + p. RoadLosses + p.RoadWins)))
-							 : query.OrderBy(p => ((double)p.Points / (p.HomeWins + p.RoadWins + p. RoadLosses + p.RoadWins))),
+							 ? query.OrderByDescending(p => ((double)p.Points / (p.HomeWins + p.HomeLosses + p.RoadWins + p.RoadLosses)))
+							 : query.OrderBy(p => ((double)p.Points / (p.HomeWins + p.HomeLosses + p.RoadWins + p.RoadLosses))),
 						 "FGM" => isAscending
-							 ? query.OrderByDescending(p => ((double)p.FGM / (p.HomeWins + p.RoadWins + p. RoadLosses + p.RoadWins)))
-							 : query.OrderBy(p => ((double)p.FGM / (p.HomeWins + p.RoadWins + p. RoadLosses + p.RoadWins))),
+							 ? query.OrderByDescending(p => ((double)p.FGM / (p.HomeWins + p.HomeLosses + p.RoadWins + p.RoadLosses)))
+							 : query.OrderBy(p => ((double)p.FGM / (p.HomeWins + p.HomeLosses + p.RoadWins + p.RoadLosses))),
 						 "FGA" => isAscending
-							 ? query.OrderByDescending(p => ((double)p.FGA / (p.HomeWins + p.RoadWins + p. RoadLosses + p.RoadWins)))
-							 : query.OrderBy(p => ((double)p.FGA / (p.HomeWins + p.RoadWins + p. RoadLosses + p.RoadWins))),
+							 ? query.OrderByDescending(p => ((double)p.FGA / (p.HomeWins + p.HomeLosses + p.RoadWins + p.RoadLosses)))
+							 : query.OrderBy(p => ((double)p.FGA / (p.HomeWins + p.HomeLosses + p.RoadWins + p.RoadLosses))),
 						 "FG%" => isAscending
 							 ? query.OrderByDescending(p => ((double)p.FGM / p.FGA * 100))
 							 : query.OrderBy(p => ((double)p.FGM / p.FGA * 100)),
+						 
 						 "3PM" => isAscending
-							 ? query.OrderByDescending(p => ((double)p.TPM / (p.HomeWins + p.RoadWins + p. RoadLosses + p.RoadWins)))
-							 : query.OrderBy(p => ((double)p.TPM / (p.HomeWins + p.RoadWins + p. RoadLosses + p.RoadWins))),
+							 ? query.OrderByDescending(p => ((double)p.TPM / (p.HomeWins + p.HomeLosses + p.RoadWins + p.RoadLosses)))
+							 : query.OrderBy(p => ((double)p.TPM / (p.HomeWins + p.HomeLosses + p.RoadWins + p.RoadLosses))),
 						 "3PA" => isAscending
-							 ? query.OrderByDescending(p => ((double)p.TPA / (p.HomeWins + p.RoadWins + p. RoadLosses + p.RoadWins)))
-							 : query.OrderBy(p => ((double)p.TPA / (p.HomeWins + p.RoadWins + p. RoadLosses + p.RoadWins))),
+							 ? query.OrderByDescending(p => ((double)p.TPA / (p.HomeWins + p.HomeLosses + p.RoadWins + p.RoadLosses)))
+							 : query.OrderBy(p => ((double)p.TPA / (p.HomeWins + p.HomeLosses + p.RoadWins + p.RoadLosses))),
 						 "3P%" => isAscending
 							 ? query.OrderByDescending(p => ((double)p.TPM / p.TPA * 100))
 							 : query.OrderBy(p => ((double)p.TPM / p.TPA * 100)),
 						 "FTM" => isAscending
-							 ? query.OrderByDescending(p => ((double)p.FTM / (p.HomeWins + p.RoadWins + p. RoadLosses + p.RoadWins)))
-							 : query.OrderBy(p => ((double)p.FTM / (p.HomeWins + p.RoadWins + p. RoadLosses + p.RoadWins))),
+							 ? query.OrderByDescending(p => ((double)p.FTM / (p.HomeWins + p.HomeLosses + p.RoadWins + p.RoadLosses)))
+							 : query.OrderBy(p => ((double)p.FTM / (p.HomeWins + p.HomeLosses + p.RoadWins + p.RoadLosses))),
 						 "FTA" => isAscending
-							 ? query.OrderByDescending(p => ((double)p.FTA / (p.HomeWins + p.RoadWins + p. RoadLosses + p.RoadWins)))
-							 : query.OrderBy(p => ((double)p.FTA / (p.HomeWins + p.RoadWins + p. RoadLosses + p.RoadWins))),
+							 ? query.OrderByDescending(p => ((double)p.FTA / (p.HomeWins + p.HomeLosses + p.RoadWins + p.RoadLosses)))
+							 : query.OrderBy(p => ((double)p.FTA / (p.HomeWins + p.HomeLosses + p.RoadWins + p.RoadLosses))),
 						 "FT%" => isAscending
 							 ? query.OrderByDescending(p => ((double)p.FTM / p.FTA * 100))
 							 : query.OrderBy(p => ((double)p.FTM / p.FTA * 100)),
 						 "REB" => isAscending
-							 ? query.OrderByDescending(p => ((double)p.Rebounds / (p.HomeWins + p.RoadWins + p. RoadLosses + p.RoadWins)))
-							 : query.OrderBy(p => ((double)p.Rebounds / (p.HomeWins + p.RoadWins + p. RoadLosses + p.RoadWins))),
+							 ? query.OrderByDescending(p => ((double)p.Rebounds / (p.HomeWins + p.HomeLosses + p.RoadWins + p.RoadLosses)))
+							 : query.OrderBy(p => ((double)p.Rebounds / (p.HomeWins + p.HomeLosses + p.RoadWins + p.RoadLosses))),
 						 "AREB" => isAscending
-							 ? query.OrderByDescending(p => ((double)p.AllowedRebounds / (p.HomeWins + p.RoadWins + p. RoadLosses + p.RoadWins)))
-							 : query.OrderBy(p => ((double)p.AllowedRebounds / (p.HomeWins + p.RoadWins + p. RoadLosses + p.RoadWins))),
+							 ? query.OrderByDescending(p => ((double)p.AllowedRebounds / (p.HomeWins + p.HomeLosses + p.RoadWins + p.RoadLosses)))
+							 : query.OrderBy(p => ((double)p.AllowedRebounds / (p.HomeWins + p.HomeLosses + p.RoadWins + p.RoadLosses))),
 						 "APG" => isAscending
-							 ? query.OrderByDescending(p => ((double)p.Assists / (p.HomeWins + p.RoadWins + p. RoadLosses + p.RoadWins)))
-							 : query.OrderBy(p => ((double)p.Assists / (p.HomeWins + p.RoadWins + p. RoadLosses + p.RoadWins))),
+							 ? query.OrderByDescending(p => ((double)p.Assists / (p.HomeWins + p.HomeLosses + p.RoadWins + p.RoadLosses)))
+							 : query.OrderBy(p => ((double)p.Assists / (p.HomeWins + p.HomeLosses + p.RoadWins + p.RoadLosses))),
 						 "AAPG" => isAscending
-							 ? query.OrderByDescending(p => ((double)p.AllowedAssists / (p.HomeWins + p.RoadWins + p. RoadLosses + p.RoadWins)))
-							 : query.OrderBy(p => ((double)p.AllowedAssists / (p.HomeWins + p.RoadWins + p. RoadLosses + p.RoadWins))),
+							 ? query.OrderByDescending(p => ((double)p.AllowedAssists / (p.HomeWins + p.HomeLosses + p.RoadWins + p.RoadLosses)))
+							 : query.OrderBy(p => ((double)p.AllowedAssists / (p.HomeWins + p.HomeLosses + p.RoadWins + p.RoadLosses))),
 						 "SPG" => isAscending
-							 ? query.OrderByDescending(p => ((double)p.Steals / (p.HomeWins + p.RoadWins + p. RoadLosses + p.RoadWins)))
-							 : query.OrderBy(p => ((double)p.Steals / (p.HomeWins + p.RoadWins + p. RoadLosses + p.RoadWins))),
+							 ? query.OrderByDescending(p => ((double)p.Steals / (p.HomeWins + p.HomeLosses + p.RoadWins + p.RoadLosses)))
+							 : query.OrderBy(p => ((double)p.Steals / (p.HomeWins + p.HomeLosses + p.RoadWins + p.RoadLosses))),
 						 "ASPG" => isAscending
-							 ? query.OrderByDescending(p => ((double)p.AllowedStealS / (p.HomeWins + p.RoadWins + p. RoadLosses + p.RoadWins)))
-							 : query.OrderBy(p => ((double)p.AllowedStealS / (p.HomeWins + p.RoadWins + p. RoadLosses + p.RoadWins))),
+							 ? query.OrderByDescending(p => ((double)p.AllowedStealS / (p.HomeWins + p.HomeLosses + p.RoadWins + p.RoadLosses)))
+							 : query.OrderBy(p => ((double)p.AllowedStealS / (p.HomeWins + p.HomeLosses + p.RoadWins + p.RoadLosses))),
 						 "BPG" => isAscending
-							 ? query.OrderByDescending(p => ((double)p.Blocks / (p.HomeWins + p.RoadWins + p. RoadLosses + p.RoadWins)))
-							 : query.OrderBy(p => ((double)p.Blocks / (p.HomeWins + p.RoadWins + p. RoadLosses + p.RoadWins))),
+							 ? query.OrderByDescending(p => ((double)p.Blocks / (p.HomeWins + p.HomeLosses + p.RoadWins + p.RoadLosses)))
+							 : query.OrderBy(p => ((double)p.Blocks / (p.HomeWins + p.HomeLosses + p.RoadWins + p.RoadLosses))),
 						 "ABPG" => isAscending
-							 ? query.OrderByDescending(p => ((double)p.AllowedBlocks / (p.HomeWins + p.RoadWins + p. RoadLosses + p.RoadWins)))
-							 : query.OrderBy(p => ((double)p.AllowedBlocks / (p.HomeWins + p.RoadWins + p. RoadLosses + p.RoadWins))),
+							 ? query.OrderByDescending(p => ((double)p.AllowedBlocks / (p.HomeWins + p.HomeLosses + p.RoadWins + p.RoadLosses)))
+							 : query.OrderBy(p => ((double)p.AllowedBlocks / (p.HomeWins + p.HomeLosses + p.RoadWins + p.RoadLosses))),
 						 "TPG" => isAscending
-							 ? query.OrderByDescending(p => ((double)p.Turnovers / (p.HomeWins + p.RoadWins + p. RoadLosses + p.RoadWins)))
-							 : query.OrderBy(p => ((double)p.Turnovers / (p.HomeWins + p.RoadWins + p. RoadLosses + p.RoadWins))),
+							 ? query.OrderByDescending(p => ((double)p.Turnovers / (p.HomeWins + p.HomeLosses + p.RoadWins + p.RoadLosses)))
+							 : query.OrderBy(p => ((double)p.Turnovers / (p.HomeWins + p.HomeLosses + p.RoadWins + p.RoadLosses))),
 						 "ATPG" => isAscending
-							 ? query.OrderByDescending(p => ((double)p.AllowedTurnovers / (p.HomeWins + p.RoadWins + p. RoadLosses + p.RoadWins)))
-							 : query.OrderBy(p => ((double)p.AllowedTurnovers / (p.HomeWins + p.RoadWins + p. RoadLosses + p.RoadWins))),
+							 ? query.OrderByDescending(p => ((double)p.AllowedTurnovers / (p.HomeWins + p.HomeLosses + p.RoadWins + p.RoadLosses)))
+							 : query.OrderBy(p => ((double)p.AllowedTurnovers / (p.HomeWins + p.HomeLosses + p.RoadWins + p.RoadLosses))),
 						 "FPG" => isAscending
-							 ? query.OrderByDescending(p => ((double)p.Fouls / (p.HomeWins + p.RoadWins + p. RoadLosses + p.RoadWins)))
-							 : query.OrderBy(p => ((double)p.Fouls / (p.HomeWins + p.RoadWins + p. RoadLosses + p.RoadWins))),
+							 ? query.OrderByDescending(p => ((double)p.Fouls / (p.HomeWins + p.HomeLosses + p.RoadWins + p.RoadLosses)))
+							 : query.OrderBy(p => ((double)p.Fouls / (p.HomeWins + p.HomeLosses + p.RoadWins + p.RoadLosses))),
 						 "AFPG" => isAscending
-							 ? query.OrderByDescending(p => ((double)p.AllowedFouls / (p.HomeWins + p.RoadWins + p. RoadLosses + p.RoadWins)))
-							 : query.OrderBy(p => ((double)p.AllowedFouls / (p.HomeWins + p.RoadWins + p. RoadLosses + p.RoadWins))),
+							 ? query.OrderByDescending(p => ((double)p.AllowedFouls / (p.HomeWins + p.HomeLosses + p.RoadWins + p.RoadLosses)))
+							 : query.OrderBy(p => ((double)p.AllowedFouls / (p.HomeWins + p.HomeLosses + p.RoadWins + p.RoadLosses))),
 						 _ => orderByExpression
 					 };
-					 
-					 query = orderByExpression.Where(s => s.Season == season);
-					  
-					 var stats = await query
-						 .ToListAsync();
-
-					 var teamStats = _mapper.Map<List<TeamRegularStatsDto>>(stats);
-
-					 response.Data = teamStats;
-					 response.Message = "Stats carregadas com sucesso!";
-					 response.Success = true;
 				 }
+				 
+				 query = orderByExpression.Where(s => s.Season == season);
+					  
+				 var stats = await query
+					 .ToListAsync();
+
+				 var teamStats = _mapper.Map<List<TeamRegularStatsDto>>(stats);
+
+				 response.Data = teamStats;
+				 response.Message = "Stats carregadas com sucesso!";
+				 response.Success = true;
 			 }
 			 catch (Exception ex)
 			 {
