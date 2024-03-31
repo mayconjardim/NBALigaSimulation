@@ -1,5 +1,31 @@
-<h3>DraftPicks</h3>
+@page "/picks"
+@inject ILeagueService LeagueService
 
-@code {
-    
-}
+    <div class="container">
+        @if (picks != null )
+        {
+
+            <table>
+                <thead>
+                <tr>
+                    @foreach (var h in headings)
+                    {
+                        <th>@h</th>
+                    }
+                </tr>
+                </thead>
+                <tbody>
+                @foreach (var pick in picks)
+                {
+                    <tr>
+                        <td>@pick.Year</td>
+                        <td>@pick.Round</td>
+                        <td><img src=@($"../Images/Logos/{pick.TeamName}.svg") Style="vertical-align: middle; background: none" alt="Team logo" width="25"></td>
+                        <td><img src=@($"../Images/Logos/{pick.Original}.svg") Style="vertical-align: middle; background: none" alt="Team logo" width="25"></td>
+                    </tr>
+                }
+                </tbody>
+            </table>
+
+        }
+    </div>
