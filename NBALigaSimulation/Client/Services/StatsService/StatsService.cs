@@ -35,9 +35,16 @@ public class StatsService : IStatsService
     }
 
     
-    public async Task<ServiceResponse<List<TeamRegularStatsDto>>> GetAllTeamRegularStats()
+    public async Task<ServiceResponse<List<TeamRegularStatsDto>>> GetAllTeamRegularStats(int season, bool isAscending, string stat = null)
     {
-        var result = await _http.GetFromJsonAsync<ServiceResponse<List<TeamRegularStatsDto>>>($"api/stats/teams");
+        var url = $"api/stats/teams?season={season}&isAscending={isAscending}";
+
+        if (!string.IsNullOrEmpty(stat))
+        {
+            url += $"&stat={Uri.EscapeDataString(stat)}";
+        }
+        
+        var result = await _http.GetFromJsonAsync<ServiceResponse<List<TeamRegularStatsDto>>>(url);
         return result;
     }
     

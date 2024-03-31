@@ -1,15 +1,12 @@
 using Microsoft.AspNetCore.Components;
-using NBALigaSimulation.Shared.Dtos.Players;
 using NBALigaSimulation.Shared.Dtos.Seasons;
 using NBALigaSimulation.Shared.Dtos.Teams;
-using NBALigaSimulation.Shared.Models.Utils;
 
 namespace NBALigaSimulation.Client.Pages.Stats.TeamStatsPage;
 
 public partial class  TeamStatsPage
 {
 
-    private PageableStatsResponse<PlayerRegularStatsDto> _statsResponse;
     private List<TeamRegularStatsDto> _teamStats;
     private List<CompleteSeasonDto> _seasonsList;
     private string _stat = null;
@@ -23,11 +20,10 @@ public partial class  TeamStatsPage
         
         _season = int.Parse(await LocalStorage.GetItemAsync<string>("season"));
  
-        var result = await StatsService.GetAllTeamRegularStats(_season, isAscending);
+        var result = await StatsService.GetAllTeamRegularStats(_season, isAscending, _stat);
         if (result.Success)
         {
-            _statsResponse = result.Data;
-            _teamStats = _statsResponse.Stats;
+            _teamStats = result.Data;
         }
         else
         {
@@ -56,11 +52,10 @@ public partial class  TeamStatsPage
         if (columnName == sortedColumn)
         {
             isAscending = !isAscending;
-            var result = await StatsService.GetAllPlayerRegularStats(_currentPage, _pageSize, _season, isAscending, position, sortedColumn);
+            var result = await StatsService.GetAllTeamRegularStats( _season, isAscending, sortedColumn);
             if (result.Success)
             {
-                _playerStats = result.Data.Stats;
-                _currentPage = result.Data.CurrentPage; 
+                _teamStats = result.Data;
             }
             StateHasChanged();
         }
@@ -68,15 +63,13 @@ public partial class  TeamStatsPage
         {
             sortedColumn = columnName;
             isAscending = true;
-            var result = await StatsService.GetAllPlayerRegularStats(_currentPage, _pageSize, _season, isAscending, position, sortedColumn);
+            var result = await StatsService.GetAllTeamRegularStats( _season, isAscending, sortedColumn);
             if (result.Success)
             {
-                _playerStats = result.Data.Stats;
-                _currentPage = result.Data.CurrentPage; 
+                _teamStats = result.Data;
             }
             StateHasChanged();
         }
-        
        
     }
     
@@ -87,11 +80,10 @@ public partial class  TeamStatsPage
         {
             _season = season;
                 
-            var result = await StatsService.GetAllPlayerRegularStats(_currentPage, _pageSize, _season, isAscending, position);
+            var result = await StatsService.GetAllTeamRegularStats( _season, isAscending, sortedColumn);
             if (result.Success)
             {
-                _playerStats = result.Data.Stats;
-                _currentPage = result.Data.CurrentPage; 
+                _teamStats = result.Data;
             }
         }
       

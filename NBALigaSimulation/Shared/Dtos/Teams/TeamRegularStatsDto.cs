@@ -28,6 +28,9 @@ namespace NBALigaSimulation.Shared.Dtos.Teams
 
         public int Steals { get; set; }
         public int AllowedStealS { get; set; }
+        
+        public int Fouls { get; set; }
+        public int AllowedFouls { get; set; }
 
         public int Rebounds { get; set; }
         public int AllowedRebounds { get; set; }
@@ -56,6 +59,14 @@ namespace NBALigaSimulation.Shared.Dtos.Teams
         public int AllowedFTM { get; set; }
         public int AllowedFTA { get; set; }
 
+        public int Games
+        {
+            get
+            {
+                return (HomeWins + RoadWins + RoadWins + RoadLosses);
+            }
+        }
+        
         public int Wins
         {
             get
@@ -128,6 +139,76 @@ namespace NBALigaSimulation.Shared.Dtos.Teams
             {
                 int games = HomeWins + HomeLosses + RoadWins + RoadLosses;
                 double diff = (double)AllowedPoints / games;
+                return diff.ToString("0.0", CultureInfo.InvariantCulture);
+            }
+        }
+        
+        public string AllowedRebPG
+        {
+            get
+            {
+                int games = HomeWins + HomeLosses + RoadWins + RoadLosses;
+                double diff = (double)AllowedRebounds / games;
+                return diff.ToString("0.0", CultureInfo.InvariantCulture);
+            }
+        }
+        
+        public string AllowedAstPG
+        {
+            get
+            {
+                int games = HomeWins + HomeLosses + RoadWins + RoadLosses;
+                double diff = (double)AllowedAssists / games;
+                return diff.ToString("0.0", CultureInfo.InvariantCulture);
+            }
+        }
+        
+        public string AllowedStlPG
+        {
+            get
+            {
+                int games = HomeWins + HomeLosses + RoadWins + RoadLosses;
+                double diff = (double)AllowedStealS / games;
+                return diff.ToString("0.0", CultureInfo.InvariantCulture);
+            }
+        }
+        
+        public string AllowedBlkPG
+        {
+            get
+            {
+                int games = HomeWins + HomeLosses + RoadWins + RoadLosses;
+                double diff = (double)AllowedBlocks / games;
+                return diff.ToString("0.0", CultureInfo.InvariantCulture);
+            }
+        }
+        
+        public string AllowedTOPG
+        {
+            get
+            {
+                int games = HomeWins + HomeLosses + RoadWins + RoadLosses;
+                double diff = (double)AllowedTurnovers / games;
+                return diff.ToString("0.0", CultureInfo.InvariantCulture);
+            }
+        }
+        
+        public string AllowedFoulsPG
+        {
+            get
+            {
+                int games = HomeWins + HomeLosses + RoadWins + RoadLosses;
+                double diff = (double)AllowedFouls / games;
+                return diff.ToString("0.0", CultureInfo.InvariantCulture);
+            }
+        }
+
+        public string FlsPg
+        {
+            get
+            {
+                int games = HomeWins + HomeLosses + RoadWins + RoadLosses;
+                double diff = (double)Fouls / games;
                 return diff.ToString("0.0", CultureInfo.InvariantCulture);
             }
         }

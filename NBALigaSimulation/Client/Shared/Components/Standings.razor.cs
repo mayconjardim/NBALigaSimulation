@@ -8,14 +8,20 @@ public partial class Standings
 
     private List<TeamRegularStatsDto> statsEast;
     private List<TeamRegularStatsDto> statsWest;
-
+    private int _season = 0;
+    private bool isAscending = false;
+    private string? stat;
+    
+    
         private string message = string.Empty;
 
         protected override async Task OnInitializedAsync()
         {
+            _season = int.Parse(await LocalStorage.GetItemAsync<string>("season"));
+            
             message = "Carregando Stats...";
 
-            var result = await StatsService.GetAllTeamRegularStats();
+            var result = await StatsService.GetAllTeamRegularStats(_season, isAscending, stat);
             if (!result.Success)
             {
                 message = result.Message;

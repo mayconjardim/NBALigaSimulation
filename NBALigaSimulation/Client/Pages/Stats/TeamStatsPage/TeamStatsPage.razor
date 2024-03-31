@@ -25,99 +25,157 @@
             <table class="table" id="statsTable">
                 <thead>
                 <tr>
-                    <th>PLAYER</th>
-                    <th>NAME</th>
                     <th>TEAM</th>
+                    <th>NANE</th>
                           
                     <th @onclick='() => SortTable("GP")'>GP
                         <i class="bi @GetSortIcon("GP")"></i>
                     </th>
                           
-                    <th @onclick='() => SortTable("MIN")'>MPG
-                        <i class="bi @GetSortIcon("MIN")"></i>
+                    <th @onclick='() => SortTable("W")'>WIN
+                        <i class="bi @GetSortIcon("W")"></i>
                     </th>
                           
-                    <th @onclick='() => SortTable("PPG")'>PPG
-                        <i class="bi @GetSortIcon("PPG")"></i>
+                    <th @onclick='() => SortTable("L")'>LOSS
+                        <i class="bi @GetSortIcon("L")"></i>
                     </th>
                           
-                    <th @onclick='() => SortTable("APG")'>APG
-                        <i class="bi @GetSortIcon("APG")"></i>
+                    <th @onclick='() => SortTable("PTS")'>PTS
+                        <i class="bi @GetSortIcon("PTS")"></i>
                     </th>
                           
-                    <th @onclick='() => SortTable("RPG")'>RPG
-                        <i class="bi @GetSortIcon("RPG")"></i>
+                    <th @onclick='() => SortTable("FGM")'>FGM
+                        <i class="bi @GetSortIcon("FGM")"></i>
                     </th>
-                            
-                    <th @onclick='() => SortTable("ORB")'>ORB
-                        <i class="bi @GetSortIcon("ORB")"></i>
+                    
+                    <th @onclick='() => SortTable("FGA")'>FGA
+                        <i class="bi @GetSortIcon("FGA")"></i>
                     </th>
-                            
-                    <th @onclick='() => SortTable("DRB")'>DRB
-                        <i class="bi @GetSortIcon("DRB")"></i>
+                    
+                       <th @onclick='() => SortTable("FG%")'>FG%
+                           <i class="bi @GetSortIcon("FG%")"></i>
+                       </th>
+                    
+                    
+                      <th @onclick='() => SortTable("3PM")'>3PM
+                          <i class="bi @GetSortIcon("3PM")"></i>
+                     </th>
+                    
+                    <th @onclick='() => SortTable("3PA")'>3PA
+                        <i class="bi @GetSortIcon("3PA")"></i>
                     </th>
-                             
-                    <th @onclick='() => SortTable("SPG")'>SPG
-                        <i class="bi @GetSortIcon("SPG")"></i>
-                    </th>
-                             
-                    <th @onclick='() => SortTable("BPG")'>BPG
-                        <i class="bi @GetSortIcon("BPG")"></i>
-                    </th>
-                             
-                    <th @onclick='() => SortTable("TPG")'>TPG
-                        <i class="bi @GetSortIcon("TPG")"></i>
-                    </th>
-                                       
-                    <th @onclick='() => SortTable("FPG")'>FPG
-                        <i class="bi @GetSortIcon("FPG")"></i>
-                    </th>
-                             
-                    <th @onclick='() => SortTable("FG%")'>FG%
-                        <i class="bi @GetSortIcon("FG%")"></i>
-                    </th>
-                             
-                    <th @onclick='() => SortTable("FT%")'>FT%%
-                        <i class="bi @GetSortIcon("FT%")"></i>
-                    </th>
-                         
+                    
                     <th @onclick='() => SortTable("3P%")'>3P%
                         <i class="bi @GetSortIcon("3P%")"></i>
                     </th>
-                              
-                    <th @onclick='() => SortTable("TS%")'>TS%
-                        <i class="bi @GetSortIcon("TS%")"></i>
+                    
+                    <th @onclick='() => SortTable("FTM")'>FTM
+                        <i class="bi @GetSortIcon("FTM")"></i>
+                    </th>
+                                        
+                    <th @onclick='() => SortTable("FTA")'>FTA
+                        <i class="bi @GetSortIcon("FTA")"></i>
+                    </th>
+                                        
+                    <th @onclick='() => SortTable("FT%")'>FT%
+                        <i class="bi @GetSortIcon("FT%")"></i>
+                    </th>
+                    
+                    <th @onclick='() => SortTable("REB")'>REB
+                        <i class="bi @GetSortIcon("REB")"></i>
+                    </th>
+                    
+                    <th @onclick='() => SortTable("AREB")'>AREB
+                        <i class="bi @GetSortIcon("AREB")"></i>
+                    </th>
+                    
+                    <th @onclick='() => SortTable("APG")'>APG
+                        <i class="bi @GetSortIcon("APG")"></i>
+                    </th>
+                    
+                    <th @onclick='() => SortTable("AAPG")'>AAPG
+                        <i class="bi @GetSortIcon("AAPG")"></i>
+                    </th>
+                    
+                    <th @onclick='() => SortTable("SPG")'>SPG
+                        <i class="bi @GetSortIcon("SPG")"></i>
+                    </th>
+                    
+                    <th @onclick='() => SortTable("ASPG")'>ASPG
+                        <i class="bi @GetSortIcon("ASPG")"></i>
+                    </th>
+                    
+                    
+                    <th @onclick='() => SortTable("BPG")'>BPG
+                        <i class="bi @GetSortIcon("BPG")"></i>
+                    </th>
+                    
+                                                
+                    <th @onclick='() => SortTable("ABPG")'>ABPG
+                        <i class="bi @GetSortIcon("ABPG")"></i>
+                    </th>
+                    
+                    <th @onclick='() => SortTable("TPG")'>TPG
+                        <i class="bi @GetSortIcon("TPG")"></i>
+                    </th>
+                    
+                    <th @onclick='() => SortTable("ATPG")'>ATPG
+                        <i class="bi @GetSortIcon("ATPG")"></i>
+                    </th>
+                    
+                    <th @onclick='() => SortTable("FPG")'>FPG
+                        <i class="bi @GetSortIcon("FPG")"></i>
+                    </th>
+                    
+                    <th @onclick='() => SortTable("AFPG")'>AFPG
+                        <i class="bi @GetSortIcon("AFPG")"></i>
+                    </th>
+                    
+                    
+                    <th @onclick='() => SortTable("DRAT")'>DRAT
+                        <i class="bi @GetSortIcon("DRAT")"></i>
+                    </th>
+                    
+                                                 
+                    <th @onclick='() => SortTable("OFAT")'>OFAT
+                        <i class="bi @GetSortIcon("OFAT")"></i>
                     </th>
                             
                 </tr>
                 </thead>
                 <tbody>
-                @foreach (var stats in _playerStats)
+                @foreach (var stats in _teamStats)
                 {
                     <tr>
-                        <td>
-                            <div class="player-pic @stats.TeamAbrv">
-                                <img src=@($"{stats.ImgUrl}") alt="Team logo" width="35">
-                            </div>
-                        </td>
-                        <td><a href="@($"players/{stats.PlayerId}")"> @stats.Name </a><span>@stats.Pos</span></td>
                         <td><img src=@($"../Images/Logos/{stats.TeamAbrv}.svg") alt="Team logo" width="25">
-                        </td>
+                        <td><a href="@($"teams/{stats.TeamId}")"> @stats.TeamRegion @stats.TeamName </a></td>
                         <td >@stats.Games</td>
-                        <td>@stats.MinPG</td>
+                        <td >@stats.Wins</td>
+                        <td>@stats.Losses</td>
                         <td >@stats.PtsPG</td>
-                        <td>@stats.AstPG</td>
-                        <td>@stats.TRebPG</td>
-                        <td>@stats.ORebPG</td>
-                        <td>@stats.DRebPG</td>
-                        <td>@stats.StlPG</td>
-                        <td>@stats.BlkPG</td>
-                        <td>@stats.TovPG</td>
-                        <td>@stats.PfPG</td>
+                        <td>@stats.FgPg</td>
+                        <td>@stats.FgaPg</td>
                         <td>@stats.FgPct</td>
-                        <td>@stats.FtPct</td>
-                        <td>@stats.TpPct</td>
-                        <td>@stats.TrueShooting</td>
+                        <td>@stats.TPPg</td>
+                        <td>@stats.TPaPg</td>
+                        <td>@stats.TPPct</td>
+                        <td>@stats.FTPg</td>
+                        <td>@stats.FTaPg</td>
+                        <td>@stats.FTPct</td>
+                        <td>@stats.RebPg</td>
+                        <td>@stats.AllowedRebPG</td>
+                        <td>@stats.AstPg</td>
+                        <td>@stats.AllowedAstPG</td>
+                        <td>@stats.StlPg</td>
+                        <td>@stats.AllowedStlPG</td>
+                        <td>@stats.BlkPg</td>
+                        <td>@stats.AllowedBlkPG</td>             
+                        <td>@stats.TOPg</td>
+                        <td>@stats.AllowedTOPG</td>
+                        <td>@stats.FlsPg</td>    
+                        <td>@stats.AllowedFoulsPG</td>
+                        <td>@stats.OffensiveEfficiency</td>
+                        <td>@stats.DefensiveEfficiency</td>    
                     </tr>
                 }
                 </tbody>
