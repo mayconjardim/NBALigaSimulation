@@ -63,7 +63,7 @@ namespace NBALigaSimulation.Shared.Dtos.Teams
         {
             get
             {
-                return (HomeWins + RoadWins + RoadWins + RoadLosses);
+                return (HomeWins + HomeLosses + RoadWins + RoadLosses);
             }
         }
         

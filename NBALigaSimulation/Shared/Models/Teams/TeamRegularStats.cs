@@ -56,7 +56,7 @@
         public int AllowedFTA { get; set; }
         
 
-        public double Games
+        public int Games
         {
             get
             {

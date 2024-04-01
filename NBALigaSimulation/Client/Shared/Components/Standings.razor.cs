@@ -10,7 +10,7 @@ public partial class Standings
     private List<TeamRegularStatsDto> statsWest;
     private int _season = 0;
     private bool isAscending = false;
-    private string? stat;
+    private string stat = "WIN%";
     
     
         private string message = string.Empty;

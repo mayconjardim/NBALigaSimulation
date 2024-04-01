@@ -7,7 +7,7 @@
 
 @if (_teamStats != null) 
 {
-    <div class="container">
+    <div class="container-fluid">
         
         <div class="filters">
             
@@ -26,8 +26,6 @@
                 <thead>
                 <tr>
                     <th>TEAM</th>
-                    <th>NANE</th>
-                          
                     <th @onclick='() => SortTable("GP")'>GP
                         <i class="bi @GetSortIcon("GP")"></i>
                     </th>
@@ -39,6 +37,10 @@
                     <th @onclick='() => SortTable("L")'>LOSS
                         <i class="bi @GetSortIcon("L")"></i>
                     </th>
+                    
+                   <th @onclick='() => SortTable("WIN%")'>WIN%
+                      <i class="bi @GetSortIcon("WIN%")"></i>
+                   </th>
                           
                     <th @onclick='() => SortTable("PTS")'>PTS
                         <i class="bi @GetSortIcon("PTS")"></i>
@@ -85,7 +87,7 @@
                         <i class="bi @GetSortIcon("REB")"></i>
                     </th>
                     
-                    <th @onclick='() => SortTable("AREB")'>AREB
+                    <th @onclick='() => SortTable("AREB")'>OREB
                         <i class="bi @GetSortIcon("AREB")"></i>
                     </th>
                     
@@ -93,7 +95,7 @@
                         <i class="bi @GetSortIcon("APG")"></i>
                     </th>
                     
-                    <th @onclick='() => SortTable("AAPG")'>AAPG
+                    <th @onclick='() => SortTable("AAPG")'>OAPG
                         <i class="bi @GetSortIcon("AAPG")"></i>
                     </th>
                     
@@ -101,7 +103,7 @@
                         <i class="bi @GetSortIcon("SPG")"></i>
                     </th>
                     
-                    <th @onclick='() => SortTable("ASPG")'>ASPG
+                    <th @onclick='() => SortTable("ASPG")'>OSPG
                         <i class="bi @GetSortIcon("ASPG")"></i>
                     </th>
                     
@@ -111,7 +113,7 @@
                     </th>
                     
                                                 
-                    <th @onclick='() => SortTable("ABPG")'>ABPG
+                    <th @onclick='() => SortTable("ABPG")'>OBPG
                         <i class="bi @GetSortIcon("ABPG")"></i>
                     </th>
                     
@@ -119,7 +121,7 @@
                         <i class="bi @GetSortIcon("TPG")"></i>
                     </th>
                     
-                    <th @onclick='() => SortTable("ATPG")'>ATPG
+                    <th @onclick='() => SortTable("ATPG")'>OTPG
                         <i class="bi @GetSortIcon("ATPG")"></i>
                     </th>
                     
@@ -127,7 +129,7 @@
                         <i class="bi @GetSortIcon("FPG")"></i>
                     </th>
                     
-                    <th @onclick='() => SortTable("AFPG")'>AFPG
+                    <th @onclick='() => SortTable("AFPG")'>OFPG
                         <i class="bi @GetSortIcon("AFPG")"></i>
                     </th>
                     
@@ -145,13 +147,13 @@
                 </thead>
                 <tbody>
                 @foreach (var stats in _teamStats)
-                {
+                { 
                     <tr>
-                        <td><img src=@($"../Images/Logos/{stats.TeamAbrv}.svg") alt="Team logo" width="25">
-                        <td><a href="@($"teams/{stats.TeamId}")"> @stats.TeamRegion @stats.TeamName </a></td>
+                        <td style="text-align: left"><img src=@($"../Images/Logos/{stats.TeamAbrv}.svg") alt="Team logo" width="25"> <a href="@($"teams/{stats.TeamId}")"> @stats.TeamRegion @stats.TeamName </a> </td>
                         <td >@stats.Games</td>
                         <td >@stats.Wins</td>
                         <td>@stats.Losses</td>
+                        <td >@stats.WinPct</td>
                         <td >@stats.PtsPG</td>
                         <td>@stats.FgPg</td>
                         <td>@stats.FgaPg</td>
