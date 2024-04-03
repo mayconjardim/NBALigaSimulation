@@ -148,7 +148,7 @@ namespace NBALigaSimulation.Server.Services.SeasonService
                 return response;
             }
 
-            List<Game> newSchedule = ScheduleHelp.GenerateSchedule(teams);
+            List<Game> newSchedule = ScheduleHelp.GenerateSchedule(teams, season);
   
             if (newSchedule.Count == 0)
             {
@@ -157,9 +157,10 @@ namespace NBALigaSimulation.Server.Services.SeasonService
                 return response;
             }
 
-            foreach (var game in newSchedule)
-            {
-                game.SeasonId = season.Id; 
+            foreach (Game game in newSchedule) {
+
+                await Console.Out.WriteLineAsync(game.GameDate.ToString());
+
             }
 
             _context.Games.AddRange(newSchedule);
