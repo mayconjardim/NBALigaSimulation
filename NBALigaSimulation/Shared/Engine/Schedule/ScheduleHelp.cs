@@ -188,7 +188,7 @@ public static class ScheduleHelp
             }
             RandomUtils.Shuffle(week9);
             
-            DateTime startDate  = DateTime.UtcNow;
+            DateTime startDate  = DateTime.Now;
             int daysBetweenWeeks = 2;
 
             List<List<Game>> weeks = new List<List<Game>> { week1, week2, week3, week4, week5, week6, week7, week8, week9 };
