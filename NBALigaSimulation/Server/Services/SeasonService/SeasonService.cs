@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using NBALigaSimulation.Shared.Dtos.Seasons;
+using NBALigaSimulation.Shared.Engine.Schedule;
 using NBALigaSimulation.Shared.Engine.Utils;
 using NBALigaSimulation.Shared.Models.Games;
 using NBALigaSimulation.Shared.Models.Players;
@@ -129,27 +130,49 @@ namespace NBALigaSimulation.Server.Services.SeasonService
                 return response;
             }
 
-            List<Game> games = await _context.Games.Where(s => s.SeasonId == season.Id).ToListAsync();
+            List<Game> existingGames = await _context.Games.Where(g => g.SeasonId == season.Id).ToListAsync();
 
-            if (games.Count > 0)
+            if (existingGames.Count > 0)
             {
                 response.Success = false;
-                response.Message = "Já existe um jogos pra essa temporada.";
+                response.Message = "Já existem jogos para esta temporada.";
                 return response;
             }
 
-            List<Team> teams = await _context.Teams.Where(t => t.IsHuman == true).ToListAsync();
+            List<Team> teams = await _context.Teams.Where(t => t.IsHuman).ToListAsync();
 
-            season.NewSchedule(teams);
+            if (teams.Count == 0)
+            {
+                response.Success = false;
+                response.Message = "Não há equipes disponíveis para criar o cronograma.";
+                return response;
+            }
 
+            List<Game> newSchedule = ScheduleHelp.GenerateSchedule(teams);
+  
+            if (newSchedule.Count == 0)
+            {
+                response.Success = false;
+                response.Message = "Não foram criados jogos para esta temporada.";
+                return response;
+            }
+
+            foreach (var game in newSchedule)
+            {
+                game.SeasonId = season.Id; 
+            }
+
+            _context.Games.AddRange(newSchedule);
+    
             await _context.SaveChangesAsync();
 
-            response.Message = "Schedule criado com sucesso!";
+            response.Message = "Cronograma criado com sucesso!";
             response.Success = true;
             response.Data = _mapper.Map<CompleteSeasonDto>(season);
 
             return response;
         }
+
 
         public async Task<ServiceResponse<CompleteSeasonDto>> GenerateTrainingCamp()
         {
