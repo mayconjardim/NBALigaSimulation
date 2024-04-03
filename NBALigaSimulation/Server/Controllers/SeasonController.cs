@@ -81,5 +81,19 @@ namespace NBALigaSimulation.Server.Controllers
             return Ok(response);
         }
 
+        [HttpDelete("clean-schedule")]
+        public async Task<ActionResult<ServiceResponse<CompleteSeasonDto>>> CleanSchedule()
+        {
+            {
+                ServiceResponse<CompleteSeasonDto> response = await _seasonService.CleanSchedule();
+
+                if (!response.Success)
+                {
+                    return BadRequest(response);
+                }
+
+                return Ok(response);
+            }
+        }
     }
 }

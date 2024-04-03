@@ -11,6 +11,7 @@ namespace NBALigaSimulation.Server.Services.SeasonService
         Task<ServiceResponse<List<CompleteSeasonDto>>> GetALlSeason();
         Task<ServiceResponse<CompleteSeasonDto>> CreateSeason();
         Task<ServiceResponse<CompleteSeasonDto>> GenerateSchedule();
+        Task<ServiceResponse<CompleteSeasonDto>> CleanSchedule();
         Task<ServiceResponse<CompleteSeasonDto>> GenerateTrainingCamp();
 
     }

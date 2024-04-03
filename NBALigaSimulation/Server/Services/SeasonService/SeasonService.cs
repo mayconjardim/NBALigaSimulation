@@ -173,7 +173,6 @@ namespace NBALigaSimulation.Server.Services.SeasonService
             return response;
         }
 
-
         public async Task<ServiceResponse<CompleteSeasonDto>> GenerateTrainingCamp()
         {
             ServiceResponse<CompleteSeasonDto> response = new ServiceResponse<CompleteSeasonDto>();
@@ -210,7 +209,31 @@ namespace NBALigaSimulation.Server.Services.SeasonService
 
             return response;
         }
+        
+        public async Task<ServiceResponse<CompleteSeasonDto>> CleanSchedule()
+        {
+            
+            ServiceResponse<CompleteSeasonDto> response = new ServiceResponse<CompleteSeasonDto>();
+            
+            Season season = await _context.Seasons.OrderBy(s => s.Id).LastOrDefaultAsync();
+            
+            List<Game> existingGames = await _context.Games.Where(g => g.SeasonId == season.Id).ToListAsync();
 
+            if (existingGames.Count <= 0)
+            {
+                response.Success = false;
+                response.Message = "Não existem jogos!";
+                return response;
+            }
+
+            _context.Games.RemoveRange(existingGames);
+            await _context.SaveChangesAsync();
+            
+            response.Success = true;
+            response.Message = "Jogos deletados com sucesso!";
+            return response;
+          
+        }
 
 
     }
