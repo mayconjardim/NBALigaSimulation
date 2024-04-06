@@ -148,28 +148,26 @@ namespace NBALigaSimulation.Server.Services.SeasonService
                 return response;
             }
 
-            List<Game> newSchedule = ScheduleHelp.GenerateSchedule(teams, season);
-            
-            if (newSchedule.Count == 0)
-            {
-                response.Success = false;
-                response.Message = "Não foram criados jogos para esta temporada.";
-                return response;
-            }
-            
-            List<Game> EditedGames = ScheduleHelp.GamesDates(newSchedule);
-            
-            if (EditedGames.Count == 0)
-            {
-                response.Success = false;
-                response.Message = "Não foram criados jogos para esta temporada.";
-                return response;
-            }
+            List<Game> generatingSeasonGames = ScheduleHelp.GenerateSchedule(teams, season);
 
-            _context.Games.AddRange(EditedGames);
-    
+            if (generatingSeasonGames.Count == 0)
+            {
+                response.Success = false;
+                response.Message = "Não foram gerador jogos para a temporada.";
+                return response;
+            }
+            
+            _context.Games.AddRange(generatingSeasonGames);
             await _context.SaveChangesAsync();
 
+            List<Game> savedGames = await _context.Games
+                .Include(t => t.HomeTeam)
+                .Include(t => t.AwayTeam)
+                .ToListAsync();
+            
+            var games = ScheduleHelp.UpdateDates(savedGames, teams);
+            await _context.SaveChangesAsync();
+            
             response.Message = "Cronograma criado com sucesso!";
             response.Success = true;
             response.Data = _mapper.Map<CompleteSeasonDto>(season);

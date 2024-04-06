@@ -184,8 +184,8 @@ namespace NBALigaSimulation.Server.Migrations
                     b.Property<int>("Type")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("Week")
-                        .HasColumnType("INTEGER");
+                    b.Property<string>("Week")
+                        .HasColumnType("TEXT");
 
                     b.HasKey("Id");
 

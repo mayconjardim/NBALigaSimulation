@@ -1,4 +1,5 @@
-﻿using NBALigaSimulation.Shared.Models.Players;
+﻿using NBALigaSimulation.Shared.Models.Games;
+using NBALigaSimulation.Shared.Models.Players;
 using NBALigaSimulation.Shared.Models.Seasons;
 
 namespace NBALigaSimulation.Shared.Engine.Utils
@@ -196,6 +197,15 @@ namespace NBALigaSimulation.Shared.Engine.Utils
                 return 0;
             }
             return (int)Math.Floor(rating);
+        }
+        
+        public static void RemoveGames(List<Game> games, Func<Game, bool> condition, int limit)
+        {
+            var itemsToRemove = games.Where(condition).Take(limit).ToList();
+            foreach (var item in itemsToRemove)
+            {
+                games.Remove(item);
+            }
         }
 
 

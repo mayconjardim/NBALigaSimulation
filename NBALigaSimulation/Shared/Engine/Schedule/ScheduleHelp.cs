@@ -58,7 +58,8 @@ public static class ScheduleHelp
         // Gerando jogos entre conferências
         foreach (Team homeTeam in teams)
         {
-            List<Team> opponents = teams.Where(t => t.Conference != homeTeam.Conference && t != homeTeam && t.IsHuman == true).ToList();
+            List<Team> opponents = teams.Where(t => t.Conference != homeTeam.Conference && t != homeTeam && t.IsHuman 
+                == true).ToList();
 
             foreach (Team awayTeam in opponents)
             {
@@ -73,132 +74,226 @@ public static class ScheduleHelp
                 games.Add(game);
             }
         }
+        
+        return games;
+    }
 
-        RandomUtils.Shuffle(games);
-
+    public static List<Game> UpdateDates(List<Game> games, List<Team> teams)
+    {
+        
+        HashSet<int> addedGameIds = new HashSet<int>();
+        
         //1
         List<Game> week1 = new List<Game>();
-
-        foreach (int teamId in teams.Select(t => t.Id))
+        foreach (var teamId in teams.Select(t => t.Id))
         {
-            var homeGames = games.Where(g => g.HomeTeam.Id == teamId).Take(4);
-            var awayGames = games.Where(g => g.AwayTeam.Id == teamId).Take(4);
+            List<Game> homeGames = new List<Game>();  
+            homeGames.AddRange(games.Where(g => g.HomeTeam.Id == teamId && !addedGameIds.Contains(g.Id)).Take(2));
+            
+            List<Game> awayGames = new List<Game>(); 
+            awayGames.AddRange(games.Where(g => g.AwayTeam.Id == teamId && !addedGameIds.Contains(g.Id)).Take(2));
+       
             week1.AddRange(homeGames);
             week1.AddRange(awayGames);
+            
+            foreach (var game in homeGames.Concat(awayGames))
+            {
+                addedGameIds.Add(game.Id);
+                game.Week = "1";
+            }
         }
-
-        RandomUtils.Shuffle(week1);
 
         //2
         List<Game> week2 = new List<Game>();
 
-        foreach (int teamId in teams.Select(t => t.Id))
+        foreach (var teamId in teams.Select(t => t.Id))
         {
-            var homeGames = games.Where(g => g.HomeTeam.Id == teamId).Take(4);
-            var awayGames = games.Where(g => g.AwayTeam.Id == teamId).Take(4);
+            List<Game> homeGames = new List<Game>();  
+            homeGames.AddRange(games.Where(g => g.HomeTeam.Id == teamId && !addedGameIds.Contains(g.Id)).Take(2));
+          
+            List<Game> awayGames = new List<Game>(); 
+            awayGames.AddRange(games.Where(g => g.AwayTeam.Id == teamId && !addedGameIds.Contains(g.Id)).Take(2));
+            
             week2.AddRange(homeGames);
             week2.AddRange(awayGames);
-        }
+            
+            foreach (var game in homeGames.Concat(awayGames))
+            {
+                addedGameIds.Add(game.Id);
+                game.Week = "2";
 
-        RandomUtils.Shuffle(week2);
+            }
+        }
 
         //3
         List<Game> week3 = new List<Game>();
 
-        foreach (int teamId in teams.Select(t => t.Id))
+        foreach (var teamId in teams.Select(t => t.Id))
         {
-            var homeGames = games.Where(g => g.HomeTeam.Id == teamId).Take(4);
-            var awayGames = games.Where(g => g.AwayTeam.Id == teamId).Take(4);
+            List<Game> homeGames = new List<Game>();  
+            homeGames.AddRange(games.Where(g => g.HomeTeam.Id == teamId && !addedGameIds.Contains(g.Id)).Take(2));
+         
+            List<Game> awayGames = new List<Game>(); 
+            awayGames.AddRange(games.Where(g => g.AwayTeam.Id == teamId && !addedGameIds.Contains(g.Id)).Take(2));
+            
             week3.AddRange(homeGames);
             week3.AddRange(awayGames);
-        }
+            
+            foreach (var game in homeGames.Concat(awayGames))
+            {
+                addedGameIds.Add(game.Id);
+                game.Week = "3";
 
-        RandomUtils.Shuffle(week3);
+            }
+        }
 
         //4
         List<Game> week4 = new List<Game>();
 
-        foreach (int teamId in teams.Select(t => t.Id))
+        foreach (var teamId in teams.Select(t => t.Id))
         {
-            var homeGames = games.Where(g => g.HomeTeam.Id == teamId).Take(4);
-            var awayGames = games.Where(g => g.AwayTeam.Id == teamId).Take(4);
+            List<Game> homeGames = new List<Game>();  
+            homeGames.AddRange(games.Where(g => g.HomeTeam.Id == teamId && !addedGameIds.Contains(g.Id)).Take(2));
+         
+            List<Game> awayGames = new List<Game>(); 
+            awayGames.AddRange(games.Where(g => g.AwayTeam.Id == teamId && !addedGameIds.Contains(g.Id)).Take(2));
+            
             week4.AddRange(homeGames);
             week4.AddRange(awayGames);
-        }
+            
+            foreach (var game in homeGames.Concat(awayGames))
+            {
+                addedGameIds.Add(game.Id);
+                game.Week = "4";
 
-        RandomUtils.Shuffle(week4);
+            }
+        }
 
         //5
         List<Game> week5 = new List<Game>();
 
-        foreach (int teamId in teams.Select(t => t.Id))
+        foreach (var teamId in teams.Select(t => t.Id))
         {
-            var homeGames = games.Where(g => g.HomeTeam.Id == teamId).Take(4);
-            var awayGames = games.Where(g => g.AwayTeam.Id == teamId).Take(4);
+            List<Game> homeGames = new List<Game>();  
+            homeGames.AddRange(games.Where(g => g.HomeTeam.Id == teamId && !addedGameIds.Contains(g.Id)).Take(2));
+         
+            List<Game> awayGames = new List<Game>(); 
+            awayGames.AddRange(games.Where(g => g.AwayTeam.Id == teamId && !addedGameIds.Contains(g.Id)).Take(2));
+          
             week5.AddRange(homeGames);
             week5.AddRange(awayGames);
+            
+            foreach (var game in homeGames.Concat(awayGames))
+            {
+                addedGameIds.Add(game.Id);
+                game.Week = "5";
+            }
         }
-
-        RandomUtils.Shuffle(week5);
 
         //6
         List<Game> week6 = new List<Game>();
 
-        foreach (int teamId in teams.Select(t => t.Id))
+        foreach (var teamId in teams.Select(t => t.Id))
         {
-            var homeGames = games.Where(g => g.HomeTeam.Id == teamId).Take(4);
-            var awayGames = games.Where(g => g.AwayTeam.Id == teamId).Take(4);
+            List<Game> homeGames = new List<Game>();  
+            homeGames.AddRange(games.Where(g => g.HomeTeam.Id == teamId && !addedGameIds.Contains(g.Id)).Take(2));
+          
+            List<Game> awayGames = new List<Game>(); 
+            awayGames.AddRange(games.Where(g => g.AwayTeam.Id == teamId && !addedGameIds.Contains(g.Id)).Take(2));
+           
             week6.AddRange(homeGames);
             week6.AddRange(awayGames);
+            
+            foreach (var game in homeGames.Concat(awayGames))
+            {
+                addedGameIds.Add(game.Id);
+                game.Week = "6";
+            }
         }
-
-        RandomUtils.Shuffle(week6);
 
         //7
         List<Game> week7 = new List<Game>();
 
-        foreach (int teamId in teams.Select(t => t.Id))
+        foreach (var teamId in teams.Select(t => t.Id))
         {
-            var homeGames = games.Where(g => g.HomeTeam.Id == teamId).Take(4);
-            var awayGames = games.Where(g => g.AwayTeam.Id == teamId).Take(4);
+            List<Game> homeGames = new List<Game>();  
+            homeGames.AddRange(games.Where(g => g.HomeTeam.Id == teamId && !addedGameIds.Contains(g.Id)).Take(2));
+          
+            List<Game> awayGames = new List<Game>(); 
+            awayGames.AddRange(games.Where(g => g.AwayTeam.Id == teamId && !addedGameIds.Contains(g.Id)).Take(2));
+         
             week7.AddRange(homeGames);
             week7.AddRange(awayGames);
+            
+            foreach (var game in homeGames.Concat(awayGames))
+            {
+                addedGameIds.Add(game.Id);
+                game.Week = "7";
+            }
         }
-
-        RandomUtils.Shuffle(week7);
 
         //8
         List<Game> week8 = new List<Game>();
 
-        foreach (int teamId in teams.Select(t => t.Id))
+        foreach (var teamId in teams.Select(t => t.Id))
         {
-            var homeGames = games.Where(g => g.HomeTeam.Id == teamId).Take(4);
-            var awayGames = games.Where(g => g.AwayTeam.Id == teamId).Take(4);
+            List<Game> homeGames = new List<Game>();  
+            homeGames.AddRange(games.Where(g => g.HomeTeam.Id == teamId && !addedGameIds.Contains(g.Id)).Take(3));
+        
+            List<Game> awayGames = new List<Game>(); 
+            awayGames.AddRange(games.Where(g => g.AwayTeam.Id == teamId && !addedGameIds.Contains(g.Id)).Take(3));
+          
             week8.AddRange(homeGames);
             week8.AddRange(awayGames);
+            
+            foreach (var game in homeGames.Concat(awayGames))
+            {
+                addedGameIds.Add(game.Id);
+                game.Week = "8";
+            }
         }
-
-        RandomUtils.Shuffle(week8);
 
         //9
         List<Game> week9 = new List<Game>();
 
-        foreach (int teamId in teams.Select(t => t.Id))
+        foreach (var teamId in teams.Select(t => t.Id))
         {
-            var homeGames = games.Where(g => g.HomeTeam.Id == teamId).Take(5);
-            var awayGames = games.Where(g => g.AwayTeam.Id == teamId).Take(5);
+            List<Game> homeGames = new List<Game>();  
+            homeGames.AddRange(games.Where(g => g.HomeTeam.Id == teamId && !addedGameIds.Contains(g.Id)).Take(5));
+            
+            List<Game> awayGames = new List<Game>(); 
+            awayGames.AddRange(games.Where(g => g.AwayTeam.Id == teamId && !addedGameIds.Contains(g.Id)).Take(5));
+            
             week9.AddRange(homeGames);
             week9.AddRange(awayGames);
+            
+            foreach (var game in homeGames.Concat(awayGames))
+            {
+                addedGameIds.Add(game.Id);
+                game.Week = "9";
+            }
         }
-        RandomUtils.Shuffle(week9);
+        DateTime startDate = DateTime.Now;
+        int daysBetweenWeeks = 2;
 
         List<List<Game>> weeks = new List<List<Game>> { week1, week2, week3, week4, week5, week6, week7, week8, week9 };
 
         for (int i = 0; i < weeks.Count; i++)
         {
-            Console.WriteLine($"A semana {i + 1} tem {weeks[i].Count}");
+
+            foreach (Game game in weeks[i])
+            {
+                game.GameDate = startDate.AddDays((i + 1) * daysBetweenWeeks);
+            }
         }
-        
+              
+        for (int i = 0; i < weeks.Count; i++)
+        {
+            Console.WriteLine($"Semana {i + 1} contem {weeks[i].Count} jogos!");
+        }
+
+        Console.WriteLine("Ids contados: " + addedGameIds.Count);
+
         games.AddRange(week1);
         games.AddRange(week2);
         games.AddRange(week3);
@@ -209,51 +304,7 @@ public static class ScheduleHelp
         games.AddRange(week8);
         games.AddRange(week9);
 
-
         return games;
     }
 
-    public static List<Game> GamesDates(List<Game> newSchedule)
-    {
-        List<Game> editedGames = new List<Game>();
-        
-        List<Game> week1 = newSchedule.Take(160).ToList();
-        List<Game> week2 = newSchedule.Skip(160).Take(160).ToList();
-        List<Game> week3 = newSchedule.Skip(320).Take(160).ToList();
-        List<Game> week4 = newSchedule.Skip(480).Take(160).ToList();
-        List<Game> week5 = newSchedule.Skip(640).Take(160).ToList();
-        List<Game> week6 = newSchedule.Skip(800).Take(160).ToList();
-        List<Game> week7 = newSchedule.Skip(960).Take(160).ToList();
-        List<Game> week8 = newSchedule.Skip(1120).Take(160).ToList();
-        List<Game> week9 = newSchedule.Skip(1280).Take(200).ToList();
-        
-        List<List<Game>> weeks = new List<List<Game>> { week1, week2, week3, week4, week5, week6, week7, week8, week9 };
-        
-        DateTime weekStartDate = DateTime.Today.AddDays(2); 
-
-        for (int i = 0; i < weeks.Count; i++)
-        {
-            List<Game> week = weeks[i]; 
-            foreach (var game in week)
-            {
-                game.GameDate = weekStartDate; 
-            }
-            
-            weekStartDate = weekStartDate.AddDays(2); 
-        }
-     
-        editedGames.AddRange(week1);
-        editedGames.AddRange(week2);
-        editedGames.AddRange(week3);
-        editedGames.AddRange(week4); 
-        editedGames.AddRange(week5);
-        editedGames.AddRange(week6);
-        editedGames.AddRange(week7);
-        editedGames.AddRange(week8); 
-        editedGames.AddRange(week9); 
-
-        return editedGames;
-    }
-
 }
-
