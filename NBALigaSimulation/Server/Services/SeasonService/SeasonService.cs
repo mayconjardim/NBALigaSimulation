@@ -149,21 +149,24 @@ namespace NBALigaSimulation.Server.Services.SeasonService
             }
 
             List<Game> newSchedule = ScheduleHelp.GenerateSchedule(teams, season);
-  
+            
             if (newSchedule.Count == 0)
             {
                 response.Success = false;
                 response.Message = "Não foram criados jogos para esta temporada.";
                 return response;
             }
-
-            foreach (Game game in newSchedule) {
-
-                await Console.Out.WriteLineAsync(game.GameDate.ToString());
-
+            
+            List<Game> EditedGames = ScheduleHelp.GamesDates(newSchedule);
+            
+            if (EditedGames.Count == 0)
+            {
+                response.Success = false;
+                response.Message = "Não foram criados jogos para esta temporada.";
+                return response;
             }
 
-            _context.Games.AddRange(newSchedule);
+            _context.Games.AddRange(EditedGames);
     
             await _context.SaveChangesAsync();
 

@@ -192,21 +192,13 @@ public static class ScheduleHelp
         }
         RandomUtils.Shuffle(week9);
 
-        DateTime startDate = DateTime.Now;
-        int daysBetweenWeeks = 2;
-
         List<List<Game>> weeks = new List<List<Game>> { week1, week2, week3, week4, week5, week6, week7, week8, week9 };
 
         for (int i = 0; i < weeks.Count; i++)
         {
-
-            foreach (Game game in weeks[i])
-            {
-                game.GameDate = startDate.AddDays((i + 1) * daysBetweenWeeks);
-            }
+            Console.WriteLine($"A semana {i + 1} tem {weeks[i].Count}");
         }
-
-
+        
         games.AddRange(week1);
         games.AddRange(week2);
         games.AddRange(week3);
@@ -219,6 +211,48 @@ public static class ScheduleHelp
 
 
         return games;
+    }
+
+    public static List<Game> GamesDates(List<Game> newSchedule)
+    {
+        List<Game> editedGames = new List<Game>();
+        
+        List<Game> week1 = newSchedule.Take(160).ToList();
+        List<Game> week2 = newSchedule.Skip(160).Take(160).ToList();
+        List<Game> week3 = newSchedule.Skip(320).Take(160).ToList();
+        List<Game> week4 = newSchedule.Skip(480).Take(160).ToList();
+        List<Game> week5 = newSchedule.Skip(640).Take(160).ToList();
+        List<Game> week6 = newSchedule.Skip(800).Take(160).ToList();
+        List<Game> week7 = newSchedule.Skip(960).Take(160).ToList();
+        List<Game> week8 = newSchedule.Skip(1120).Take(160).ToList();
+        List<Game> week9 = newSchedule.Skip(1280).Take(200).ToList();
+        
+        List<List<Game>> weeks = new List<List<Game>> { week1, week2, week3, week4, week5, week6, week7, week8, week9 };
+        
+        DateTime weekStartDate = DateTime.Today.AddDays(2); 
+
+        for (int i = 0; i < weeks.Count; i++)
+        {
+            List<Game> week = weeks[i]; 
+            foreach (var game in week)
+            {
+                game.GameDate = weekStartDate; 
+            }
+            
+            weekStartDate = weekStartDate.AddDays(2); 
+        }
+     
+        editedGames.AddRange(week1);
+        editedGames.AddRange(week2);
+        editedGames.AddRange(week3);
+        editedGames.AddRange(week4); 
+        editedGames.AddRange(week5);
+        editedGames.AddRange(week6);
+        editedGames.AddRange(week7);
+        editedGames.AddRange(week8); 
+        editedGames.AddRange(week9); 
+
+        return editedGames;
     }
 
 }

@@ -11,6 +11,7 @@ namespace NBALigaSimulation.Shared.Models.Games
         public int SeasonId { get; set; }
         public Season Season { get; set; }
         public int Type { get; set; }
+        public int Week { get; set; }
         public int HomeTeamId { get; set; }
         [ForeignKey("HomeTeamId")]
         public Team? HomeTeam { get; set; }
