@@ -23,11 +23,11 @@
                             <td>@game.Week</td>
                             <td>@game.GameDate.ToShortDateString()</td>
                             <td>
-                                <a href="team/@game.HomeTeamId">
+                                <a href="teams/@game.HomeTeamId">
                                     <img src=@($"../Images/Logos/{game.HomeTeam}.svg") Style="vertical-align: middle; background: none" alt="Team logo" width="35"> </a>
                             </td>
                             <td>
-                                <a href="team/@game.AwayTeamId">
+                                <a href="teams/@game.AwayTeamId">
                                     <img src=@($"../Images/Logos/{game.AwayTeam}.svg") Style="vertical-align: middle; background: none" alt="Team logo" width="35">
                                 </a>
                             </td>
