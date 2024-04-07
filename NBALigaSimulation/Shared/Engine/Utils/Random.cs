@@ -37,15 +37,51 @@
             Random random = new Random();
 
             int n = list.Count;
+            int maxConsecutiveDuplicates = 4; 
+            int consecutiveDuplicatesCount = 0; 
+
             while (n > 1)
             {
                 n--;
                 int k = random.Next(n + 1);
                 T value = list[k];
-                list[k] = list[n];
-                list[n] = value;
+
+                if (k < n && value.Equals(list[k + 1]))
+                {
+                    for (int i = 0; i < list.Count; i++)
+                    {
+                        int newK = random.Next(n + 1);
+                        if (!value.Equals(list[newK]))
+                        {
+                            k = newK;
+                            break;
+                        }
+                    }
+                }
+
+                // Atualiza o contador de elementos repetidos consecutivos
+                if (value.Equals(list[k]))
+                {
+                    consecutiveDuplicatesCount++;
+                }
+                else
+                {
+                    consecutiveDuplicatesCount = 0;
+                }
+
+                // Se o número máximo de elementos repetidos consecutivos for atingido, reinicia o contador
+                if (consecutiveDuplicatesCount == maxConsecutiveDuplicates)
+                {
+                    consecutiveDuplicatesCount = 0;
+                }
+                else
+                {
+                    list[k] = list[n];
+                    list[n] = value;
+                }
             }
         }
+
 
         public static string Ordinal(int x)
         {

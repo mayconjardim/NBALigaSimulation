@@ -75,236 +75,136 @@ public static class ScheduleHelp
             }
         }
         
+        RandomUtils.Shuffle(games);
         return games;
     }
-
-    public static List<Game> UpdateDates(List<Game> games, List<Team> teams)
+    
+    public static List<Game> GenerateWeeksAndDates(List<Game> games, List<Team> Team)
     {
+
+        List<Game> updateGames = new List<Game>();
+        List<Game> homeGames = new List<Game>();
+        List<Game> awayGames = new List<Game>();
         
-        HashSet<int> addedGameIds = new HashSet<int>();
-        
-        //1
-        List<Game> week1 = new List<Game>();
-        foreach (var teamId in teams.Select(t => t.Id))
+        foreach (var team  in Team)
         {
-            List<Game> homeGames = new List<Game>();  
-            homeGames.AddRange(games.Where(g => g.HomeTeam.Id == teamId && !addedGameIds.Contains(g.Id)).Take(2));
+            homeGames = games.Where(t => t.HomeTeam.Id == team.Id).ToList();
+
+            DateTime startDate = DateTime.Today.AddDays(2);
             
-            List<Game> awayGames = new List<Game>(); 
-            awayGames.AddRange(games.Where(g => g.AwayTeam.Id == teamId && !addedGameIds.Contains(g.Id)).Take(2));
-       
-            week1.AddRange(homeGames);
-            week1.AddRange(awayGames);
-            
-            foreach (var game in homeGames.Concat(awayGames))
+            for (int i = 0; i < homeGames.Count; i++)
             {
-                addedGameIds.Add(game.Id);
-                game.Week = "1";
+                if (i <= 4)
+                {
+                    homeGames[i].Week = "1";
+                    homeGames[i].GameDate = startDate.AddDays(4);
+
+                }
+                else if (i <= 8)
+                {
+                    homeGames[i].Week = "2";
+                    homeGames[i].GameDate = startDate.AddDays(6);
+                }
+                else if (i <= 12)
+                {
+                    homeGames[i].Week = "3";
+                    homeGames[i].GameDate = startDate.AddDays(8);
+                }
+                else if (i <= 16)
+                {
+                    homeGames[i].Week = "4";
+                    homeGames[i].GameDate = startDate.AddDays(10);
+                }
+                else if (i <= 20)
+                {
+                    homeGames[i].Week = "5";
+                    homeGames[i].GameDate = startDate.AddDays(12);
+                }
+                else if (i <= 24)
+                {
+                    homeGames[i].Week = "6";
+                    homeGames[i].GameDate = startDate.AddDays(14);
+                }
+                else if (i <= 28)
+                {
+                    homeGames[i].Week = "7";
+                    homeGames[i].GameDate = startDate.AddDays(16);
+                }
+                else if (i <= 32)
+                {
+                    homeGames[i].Week = "8";
+                    homeGames[i].GameDate = startDate.AddDays(18);
+                }
+                else 
+                {
+                    homeGames[i].Week = "9";
+                    homeGames[i].GameDate = startDate.AddDays(20);
+                }
+            
             }
         }
 
-        //2
-        List<Game> week2 = new List<Game>();
-
-        foreach (var teamId in teams.Select(t => t.Id))
+        foreach (var team in Team)
         {
-            List<Game> homeGames = new List<Game>();  
-            homeGames.AddRange(games.Where(g => g.HomeTeam.Id == teamId && !addedGameIds.Contains(g.Id)).Take(2));
+            awayGames = games.Where(t => t.AwayTeam.Id == team.Id).ToList();
+            DateTime startDate = DateTime.Today.AddDays(2);
+
+            for (int i = 0; i < awayGames.Count; i++)
+            {
+                if (i <= 4)
+                {
+                    awayGames[i].Week = "1";
+                    awayGames[i].GameDate = startDate.AddDays(4);
+
+                }
+                else if (i <= 8)
+                {
+                    awayGames[i].Week = "2";
+                    awayGames[i].GameDate = startDate.AddDays(6);
+                }
+                else if (i <= 12)
+                {
+                    awayGames[i].Week = "3";
+                    awayGames[i].GameDate = startDate.AddDays(8);
+                }
+                else if (i <= 16)
+                {
+                    awayGames[i].Week = "4";
+                    awayGames[i].GameDate = startDate.AddDays(10);
+                }
+                else if (i <= 20)
+                {
+                    awayGames[i].Week = "5";
+                    awayGames[i].GameDate = startDate.AddDays(12);
+                }
+                else if (i <= 24)
+                {
+                    awayGames[i].Week = "6";
+                    awayGames[i].GameDate = startDate.AddDays(14);
+                }
+                else if (i <= 28)
+                {
+                    awayGames[i].Week = "7";
+                    awayGames[i].GameDate = startDate.AddDays(16);
+                }
+                else if (i <= 32)
+                {
+                    awayGames[i].Week = "8";
+                    awayGames[i].GameDate = startDate.AddDays(18);
+                }
+                else 
+                {
+                    awayGames[i].Week = "9";
+                    awayGames[i].GameDate = startDate.AddDays(20);
+                }
           
-            List<Game> awayGames = new List<Game>(); 
-            awayGames.AddRange(games.Where(g => g.AwayTeam.Id == teamId && !addedGameIds.Contains(g.Id)).Take(2));
-            
-            week2.AddRange(homeGames);
-            week2.AddRange(awayGames);
-            
-            foreach (var game in homeGames.Concat(awayGames))
-            {
-                addedGameIds.Add(game.Id);
-                game.Week = "2";
-
             }
         }
 
-        //3
-        List<Game> week3 = new List<Game>();
-
-        foreach (var teamId in teams.Select(t => t.Id))
-        {
-            List<Game> homeGames = new List<Game>();  
-            homeGames.AddRange(games.Where(g => g.HomeTeam.Id == teamId && !addedGameIds.Contains(g.Id)).Take(2));
-         
-            List<Game> awayGames = new List<Game>(); 
-            awayGames.AddRange(games.Where(g => g.AwayTeam.Id == teamId && !addedGameIds.Contains(g.Id)).Take(2));
-            
-            week3.AddRange(homeGames);
-            week3.AddRange(awayGames);
-            
-            foreach (var game in homeGames.Concat(awayGames))
-            {
-                addedGameIds.Add(game.Id);
-                game.Week = "3";
-
-            }
-        }
-
-        //4
-        List<Game> week4 = new List<Game>();
-
-        foreach (var teamId in teams.Select(t => t.Id))
-        {
-            List<Game> homeGames = new List<Game>();  
-            homeGames.AddRange(games.Where(g => g.HomeTeam.Id == teamId && !addedGameIds.Contains(g.Id)).Take(2));
-         
-            List<Game> awayGames = new List<Game>(); 
-            awayGames.AddRange(games.Where(g => g.AwayTeam.Id == teamId && !addedGameIds.Contains(g.Id)).Take(2));
-            
-            week4.AddRange(homeGames);
-            week4.AddRange(awayGames);
-            
-            foreach (var game in homeGames.Concat(awayGames))
-            {
-                addedGameIds.Add(game.Id);
-                game.Week = "4";
-
-            }
-        }
-
-        //5
-        List<Game> week5 = new List<Game>();
-
-        foreach (var teamId in teams.Select(t => t.Id))
-        {
-            List<Game> homeGames = new List<Game>();  
-            homeGames.AddRange(games.Where(g => g.HomeTeam.Id == teamId && !addedGameIds.Contains(g.Id)).Take(2));
-         
-            List<Game> awayGames = new List<Game>(); 
-            awayGames.AddRange(games.Where(g => g.AwayTeam.Id == teamId && !addedGameIds.Contains(g.Id)).Take(2));
-          
-            week5.AddRange(homeGames);
-            week5.AddRange(awayGames);
-            
-            foreach (var game in homeGames.Concat(awayGames))
-            {
-                addedGameIds.Add(game.Id);
-                game.Week = "5";
-            }
-        }
-
-        //6
-        List<Game> week6 = new List<Game>();
-
-        foreach (var teamId in teams.Select(t => t.Id))
-        {
-            List<Game> homeGames = new List<Game>();  
-            homeGames.AddRange(games.Where(g => g.HomeTeam.Id == teamId && !addedGameIds.Contains(g.Id)).Take(2));
-          
-            List<Game> awayGames = new List<Game>(); 
-            awayGames.AddRange(games.Where(g => g.AwayTeam.Id == teamId && !addedGameIds.Contains(g.Id)).Take(2));
-           
-            week6.AddRange(homeGames);
-            week6.AddRange(awayGames);
-            
-            foreach (var game in homeGames.Concat(awayGames))
-            {
-                addedGameIds.Add(game.Id);
-                game.Week = "6";
-            }
-        }
-
-        //7
-        List<Game> week7 = new List<Game>();
-
-        foreach (var teamId in teams.Select(t => t.Id))
-        {
-            List<Game> homeGames = new List<Game>();  
-            homeGames.AddRange(games.Where(g => g.HomeTeam.Id == teamId && !addedGameIds.Contains(g.Id)).Take(2));
-          
-            List<Game> awayGames = new List<Game>(); 
-            awayGames.AddRange(games.Where(g => g.AwayTeam.Id == teamId && !addedGameIds.Contains(g.Id)).Take(2));
-         
-            week7.AddRange(homeGames);
-            week7.AddRange(awayGames);
-            
-            foreach (var game in homeGames.Concat(awayGames))
-            {
-                addedGameIds.Add(game.Id);
-                game.Week = "7";
-            }
-        }
-
-        //8
-        List<Game> week8 = new List<Game>();
-
-        foreach (var teamId in teams.Select(t => t.Id))
-        {
-            List<Game> homeGames = new List<Game>();  
-            homeGames.AddRange(games.Where(g => g.HomeTeam.Id == teamId && !addedGameIds.Contains(g.Id)).Take(3));
-        
-            List<Game> awayGames = new List<Game>(); 
-            awayGames.AddRange(games.Where(g => g.AwayTeam.Id == teamId && !addedGameIds.Contains(g.Id)).Take(3));
-          
-            week8.AddRange(homeGames);
-            week8.AddRange(awayGames);
-            
-            foreach (var game in homeGames.Concat(awayGames))
-            {
-                addedGameIds.Add(game.Id);
-                game.Week = "8";
-            }
-        }
-
-        //9
-        List<Game> week9 = new List<Game>();
-
-        foreach (var teamId in teams.Select(t => t.Id))
-        {
-            List<Game> homeGames = new List<Game>();  
-            homeGames.AddRange(games.Where(g => g.HomeTeam.Id == teamId && !addedGameIds.Contains(g.Id)).Take(5));
-            
-            List<Game> awayGames = new List<Game>(); 
-            awayGames.AddRange(games.Where(g => g.AwayTeam.Id == teamId && !addedGameIds.Contains(g.Id)).Take(5));
-            
-            week9.AddRange(homeGames);
-            week9.AddRange(awayGames);
-            
-            foreach (var game in homeGames.Concat(awayGames))
-            {
-                addedGameIds.Add(game.Id);
-                game.Week = "9";
-            }
-        }
-        DateTime startDate = DateTime.Now;
-        int daysBetweenWeeks = 2;
-
-        List<List<Game>> weeks = new List<List<Game>> { week1, week2, week3, week4, week5, week6, week7, week8, week9 };
-
-        for (int i = 0; i < weeks.Count; i++)
-        {
-
-            foreach (Game game in weeks[i])
-            {
-                game.GameDate = startDate.AddDays((i + 1) * daysBetweenWeeks);
-            }
-        }
-              
-        for (int i = 0; i < weeks.Count; i++)
-        {
-            Console.WriteLine($"Semana {i + 1} contem {weeks[i].Count} jogos!");
-        }
-
-        Console.WriteLine("Ids contados: " + addedGameIds.Count);
-
-        games.AddRange(week1);
-        games.AddRange(week2);
-        games.AddRange(week3);
-        games.AddRange(week4);
-        games.AddRange(week5);
-        games.AddRange(week6);
-        games.AddRange(week7);
-        games.AddRange(week8);
-        games.AddRange(week9);
-
-        return games;
+        updateGames.AddRange(homeGames);
+        updateGames.AddRange(awayGames);
+        return updateGames;
     }
+  
 
 }

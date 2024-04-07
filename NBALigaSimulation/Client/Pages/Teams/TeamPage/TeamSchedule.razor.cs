@@ -13,7 +13,7 @@ public partial class TeamSchedule
     private List<GameCompleteDto> _games = new List<GameCompleteDto>();
     Dictionary<DateTime, List<GameCompleteDto>> gamesByDate = new Dictionary<DateTime, List<GameCompleteDto>>();
     
-    string[] headings = { "DATE", "HOME", "AWAY", "W-L", "RESULT" };
+    string[] headings = { "WEEK", "DATE", "HOME", "AWAY", "W-L", "RESULT" };
     int totalWins = 0;
     int totalLosses = 0;
     
