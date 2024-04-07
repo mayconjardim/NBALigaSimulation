@@ -126,7 +126,10 @@ public partial class TeamSchedule
 
         return "";
     }
-
     
+    private  void NavigateToTeamPage(int teamID)
+    {
+        NavigationManager.NavigateTo($"/teams/{teamID}");
+    }
     
 }

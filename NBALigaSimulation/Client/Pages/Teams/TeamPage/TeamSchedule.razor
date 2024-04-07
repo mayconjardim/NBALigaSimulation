@@ -1,5 +1,6 @@
 @using NBALigaSimulation.Client.Utilities
 @inject IGameService GameService
+@inject NavigationManager NavigationManager
 
    <div class="container">
         @if (_team != null & _games != null)
@@ -22,14 +23,12 @@
                         <tr>
                             <td>@game.Week</td>
                             <td>@game.GameDate.ToShortDateString()</td>
-                            <td>
-                                <a href="teams/@game.HomeTeamId">
-                                    <img src=@($"../Images/Logos/{game.HomeTeam}.svg") Style="vertical-align: middle; background: none" alt="Team logo" width="35"> </a>
+                            <td  @onclick="() => NavigateToTeamPage(game.HomeTeamId)">
+                                <img src=@($"../Images/Logos/{game.HomeTeam}.svg") Style="vertical-align: middle; background: none" alt="Team logo" width="35" >
                             </td>
-                            <td>
-                                <a href="teams/@game.AwayTeamId">
-                                    <img src=@($"../Images/Logos/{game.AwayTeam}.svg") Style="vertical-align: middle; background: none" alt="Team logo" width="35">
-                                </a>
+                            <td @onclick="() => NavigateToTeamPage(game.AwayTeamId)">
+                                <img src=@($"../Images/Logos/{game.AwayTeam}.svg") Style="vertical-align: middle; background: none" alt="Team logo" width="35"
+                                     @onclick="() => NavigateToTeamPage(game.AwayTeamId)">
                             </td>
                             @if (game.HomeTeamScore != 0)
                             {
