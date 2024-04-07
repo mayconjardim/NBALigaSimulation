@@ -1,7 +1,11 @@
 ﻿@using NBALigaSimulation.Shared.Dtos.Teams
+@using NBALigaSimulation.Client.Services.AuthService
+@inject AuthenticationStateProvider AuthenticationStateProvider
+@inject ILocalStorageService LocalStorage
 @inject NavigationManager NavigationManager
 @inject ISeasonService SeasonService
 @inject ITeamService TeamService
+@inject IAuthService AuthService
 
 <nav class="navbar navbar-expand-lg bg-body-tertiary">
     <div class="container-fluid">
@@ -63,72 +67,62 @@
     </div>
 </nav>
 
-<!-- Modal Logado-->
-<div class="modal fade" id="loginModel" tabindex="-1" aria-labelledby="loginModel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
+@if (!_isLogged)
+{
+    <!-- Modal login-->
+    <div class="modal fade" id="loginModel" tabindex="-1" aria-labelledby="loginModel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
             <div class="modal-header">
-                <h1 class="modal-title fs-5" id="loginModel">Manager Painel</h1>
+                <h1 class="modal-title fs-5" id="loginModel">Iniciar Sessão</h1>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <div class="modal-body">
-                ...
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-danger">Logout</button>
+            <form @onsubmit="HandleLogin">
+                <div class="modal-body">
+                       <div class="form-group">
+                           <label for="username">Usuário</label>
+                           <input type="text" class="form-control" id="username" placeholder="Digite seu usuário" @bind="user.Username" required>
+                           <div class="invalid-feedback">Nome de usuário é requerido!</div>
+                       </div>
+                   
+                       <div class="form-group">
+                           <label for="password">Senha</label>
+                           <input type="password" class="form-control" id="password" placeholder="Digite sua senha" @bind="user.Password" required>
+                           <div class="invalid-feedback">Senha requerida!</div>
+                       </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-success">Logar-se</button>
+                </div>
+               </form>
             </div>
         </div>
     </div>
-</div>
-<!-- Modal Logado-->
-
-<!-- Modal Login-->
-<div class="modal fade" id="loginModel" tabindex="-1" aria-labelledby="loginModel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h1 class="modal-title fs-5" id="loginModel">Manager Painel</h1>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                ...
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn" style="background: var(--primary-color); color: white">Login</button>
-            </div>
-        </div>
-    </div>
-</div>
-<!-- Modal Login-->
-
-@code {
-
-    private List<TeamSimpleDto> _teams = new List<TeamSimpleDto>();
-    protected List<TeamSimpleDto> _east;
-    protected List<TeamSimpleDto> _west;
-
-    protected override async Task OnInitializedAsync()
-    {
-
-        var result = await TeamService.GetAllTeams();
-        
-        if (result.Success)
-        {
-            _teams = result.Data;
-            _east = _teams.Where(t => t.Conference == "East").ToList();
-            _west = _teams.Where(t => t.Conference == "West").ToList();
-        }
-    }
-    
-    private  void NavigateToTeamPage(int teamId)
-    {
-        NavigationManager.NavigateTo($"/teams/{teamId}");
-    }
-
- 
-    private async Task Logout()
-    {
-        NavigationManager.NavigateTo("");
-    }
-
+    <!-- Modal login-->
 }
+
+@if (_isLogged)
+{
+    <!-- Modal logado-->
+    <div class="modal fade" id="loginModel" tabindex="-1" aria-labelledby="loginModel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="loginModel">Manager Painel</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" @onclick="Logout">Logout</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Modal logado-->
+}
+
+
+
+

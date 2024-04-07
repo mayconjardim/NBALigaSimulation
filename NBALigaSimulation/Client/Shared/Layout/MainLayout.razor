@@ -1,6 +1,4 @@
 ﻿@inherits LayoutComponentBase
-@inject ILocalStorageService LocalStorage
-@inject ISeasonService SeasonService
 <div class="page">
 
     <div class="navigation">
@@ -11,20 +9,3 @@
         @Body
     </main>
 </div>
-
-@code {
-
-    protected override async Task OnInitializedAsync()
-    {
-
-        var result = await SeasonService.GetLastSeason();
-        if (!result.Success)
-        {
-        }
-        else
-        {
-            await LocalStorage.SetItemAsync("season", result.Data.Year.ToString());
-        }
-    }
-
-}

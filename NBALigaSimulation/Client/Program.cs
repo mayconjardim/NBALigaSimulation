@@ -1,4 +1,5 @@
 global using Microsoft.AspNetCore.Components.Authorization;
+global using NBALigaSimulation.Client.Services.AuthService;
 global using NBALigaSimulation.Client.Services.PlayersService;
 global using NBALigaSimulation.Client.Services.TeamsService;
 global using NBALigaSimulation.Client.Services.GameService;
@@ -11,7 +12,6 @@ using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using NBALigaSimulation.Client;
 using Blazored.LocalStorage;
-using NBALigaSimulation.Client.Services.AuthService;
 using pax.BlazorChartJs;
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
