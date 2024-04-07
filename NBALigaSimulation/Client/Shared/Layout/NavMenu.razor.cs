@@ -48,11 +48,6 @@ public partial class NavMenu
         }
        
     }
-    
-    private  void NavigateToTeamPage(int teamId)
-    {
-        NavigationManager.NavigateTo($"/teams/{teamId}");
-    }
  
     private async Task Logout()
     {
