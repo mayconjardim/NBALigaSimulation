@@ -10,26 +10,20 @@ public static class ProbabilityActions
     
     public static double ProbTov(Game game, Team[] Teams)
     {
-        double turnoverFactor = 1;
-        double defenseRating = 0.14 * Teams[game.Defense].CompositeRating.Ratings["GameDefense"];
-        double dribblingRating = Teams[game.Offense].CompositeRating.Ratings["GameDribbling"];
-        double passingRating = Teams[game.Offense].CompositeRating.Ratings["GamePassing"];
-
-        double probability = turnoverFactor * (defenseRating) / (0.5 * (dribblingRating + passingRating));
-
-        return BoundProb(probability);
+        double defenseRating = Teams[game.Defense].CompositeRating.Ratings["GameDefense"];
+        double offenseRating = Teams[game.Offense].CompositeRating.Ratings["GameDribbling"] 
+                               + Teams[game.Offense].CompositeRating.Ratings["GamePassing"];
+        
+        return 0.15 * (1 + defenseRating) / (1 + 0.5 * offenseRating)  ;
     }
-
+    
+    
     public static double ProbStl(Game game, Team[] Teams)
     {
-        double stealFactor = 1.09;
         double defensePerimeter = Teams[game.Defense].CompositeRating.Ratings["GameDefensePerimeter"];
-        double dribbling = Teams[game.Offense].CompositeRating.Ratings["GameDribbling"];
-        double passing = Teams[game.Offense].CompositeRating.Ratings["GamePassing"];
-
-        double probability = stealFactor * ((0.45 * defensePerimeter) / (0.5 * (dribbling + passing)));
-
-        return BoundProb(probability);
+        double offenseRating = Teams[game.Offense].CompositeRating.Ratings["GameDribbling"] +
+                               Teams[game.Offense].CompositeRating.Ratings["GamePassing"];
+        return 0.55 * defensePerimeter / (0.5 * offenseRating);
     }
     
     public static double ProbBlk(Game game, Team[] Teams)
@@ -39,10 +33,8 @@ public static class ProbabilityActions
     
     public static double ProbAst(Game game, Team[] Teams)
     {
-        double numerator = (0.9 * (2 + Teams[game.Offense].CompositeRating.Ratings["GamePassing"]) +
-                            GameplanUtils.GameplanMotion(Teams[game.Offense].Gameplan.Pace));
+        double numerator = (0.7 * (2 + Teams[game.Offense].CompositeRating.Ratings["GamePassing"]));
         double denominator = (2 + Teams[game.Defense].CompositeRating.Ratings["GameDefense"]);
-
         return (numerator / denominator) * 1;
     }
 

@@ -110,7 +110,7 @@ namespace NBALigaSimulation.Shared.Engine.Ratings
                     passing.Add("pss", player.Ratings.LastOrDefault().Pss);
                     passing.Add("oiq", player.Ratings.LastOrDefault().Oiq);
                     List<string> passingAttributes = new List<string> { "drb", "pss", "oiq" };
-                    List<double> passingWeights = new List<double> { 0.4, 1.5, 0.5 };
+                    List<double> passingWeights = new List<double> { 0.2, 3.0, 0.2 };
                     player.CompositeRating.Ratings["Passing"] = Converter.Composite(passing, passingAttributes, passingWeights);
 
                     //Turnovers
@@ -131,7 +131,7 @@ namespace NBALigaSimulation.Shared.Engine.Ratings
                     shootingAtRim.Add("dnk", player.Ratings.LastOrDefault().Dnk);
                     shootingAtRim.Add("oiq", player.Ratings.LastOrDefault().Oiq);
                     List<string> shootingAtRimAttributes = new List<string> { "hgt", "stre", "dnk", "oiq" };
-                    List<double> shootingAtRimWeights = new List<double> { 2, 0.3, 0.3, 0.2 };
+                    List<double> shootingAtRimWeights = new List<double> { 0.75, 0.2, 0.6, 0.4, 0.2};
                     player.CompositeRating.Ratings["ShootingAtRim"] = Converter.Composite(shootingAtRim, shootingAtRimAttributes, shootingAtRimWeights);
 
                     //ShootingLowPost
@@ -143,7 +143,7 @@ namespace NBALigaSimulation.Shared.Engine.Ratings
                     shootingLowPost.Add("ins", player.Ratings.LastOrDefault().Ins);
                     shootingLowPost.Add("oiq", player.Ratings.LastOrDefault().Oiq);
                     List<string> shootingLowPostAttributes = new List<string> { "hgt", "stre", "spd", "ins", "oiq" };
-                    List<double> shootingLowPostWeights = new List<double> { 1, 0.6, 0.2, 1, 0.4 };
+                    List<double> shootingLowPostWeights = new List<double> { 2, 0.6, 0.2, 1, 0.2};
                     player.CompositeRating.Ratings["ShootingLowPost"] = Converter.Composite(shootingLowPost, shootingLowPostAttributes, shootingLowPostWeights);
 
                     //ShootingMidRange

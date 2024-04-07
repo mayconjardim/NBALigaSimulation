@@ -33,14 +33,21 @@ public static class OffenseActions
             {
                 shootingThreePointerScaled = 0.55 + (shootingThreePointerScaled - 0.55) * (0.3 / 0.45);
 
+                Console.WriteLine($"antes if: {shootingThreePointerScaled}");
                 if (Teams[game.Offense].Gameplan.Focus == 3)
                 {
+                    Console.WriteLine($"antes 3: {shootingThreePointerScaled}");
                     shootingThreePointerScaled += GameplanUtils.GameplanFocus(Teams[game.Offense].Gameplan.Focus);
+                    Console.WriteLine($"depois 3: {shootingThreePointerScaled}");
+
                 }
 
                 if (Teams[game.Offense].Gameplan.Focus == 1)
                 {
+                    Console.WriteLine($"antes 1: {shootingThreePointerScaled}");
                     shootingThreePointerScaled += GameplanUtils.GameplanFocus(Teams[game.Offense].Gameplan.Focus);
+                    Console.WriteLine($"depois 1: {shootingThreePointerScaled}");
+
                 }
 
             }
@@ -86,21 +93,21 @@ public static class OffenseActions
                 if (r1 > r2 && r1 > r3)
                 {
                     type = "MidRange";
-                    probMissAndFoul = 0.07;
+                    probMissAndFoul = 0.09;
                     probMake = player.CompositeRating.Ratings["ShootingMidRange"] * 0.48 + 0.42;
                     probAndOne = 0.05;
                 }
                 else if (r2 > r3)
                 {
                     type = "AtRim";
-                    probMissAndFoul = 0.37;
+                    probMissAndFoul = 0.39;
                     probMake = player.CompositeRating.Ratings["ShootingAtRim"] * 1.58 + 0.54;
                     probAndOne = 0.25;
                 }
                 else
                 {
                     type = "LowPost";
-                    probMissAndFoul = 0.33;
+                    probMissAndFoul = 0.35;
                     probMake = player.CompositeRating.Ratings["ShootingLowPost"] * 0.43 + 0.34;
                     probAndOne = 0.15;
                 }
@@ -109,7 +116,7 @@ public static class OffenseActions
                 probMake *= 1;
             }
 
-            double foulFactor = 0.65 * (Math.Pow(player.CompositeRating.Ratings["DrawingFouls"] / 0.5, 2)) * 1;
+            double foulFactor = 0.69 * (Math.Pow(player.CompositeRating.Ratings["DrawingFouls"] / 0.5, 2)) * 1;
 
             probMissAndFoul *= foulFactor;
             probAndOne *= foulFactor;
