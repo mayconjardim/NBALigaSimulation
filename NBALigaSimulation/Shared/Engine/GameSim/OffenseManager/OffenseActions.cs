@@ -29,12 +29,12 @@ public static class OffenseActions
 
             double shootingThreePointerScaled = player.CompositeRating.Ratings["ShootingThreePointer"];
 
-            if (Teams[game.Offense].Gameplan.Focus == 3)
+            if (Teams[game.Offense].Gameplan.Focus == 1)
             {
                 shootingThreePointerScaled += GameplanUtils.GameplanFocus(Teams[game.Offense].Gameplan.Focus);
             }
             
-            if (Teams[game.Offense].Gameplan.Focus == 1)
+            if (Teams[game.Offense].Gameplan.Focus == 3)
             {
                 shootingThreePointerScaled += GameplanUtils.GameplanFocus(Teams[game.Offense].Gameplan.Focus);
             }
