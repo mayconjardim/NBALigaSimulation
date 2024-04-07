@@ -165,7 +165,7 @@ namespace NBALigaSimulation.Server.Services.SeasonService
                 .Include(t => t.AwayTeam)
                 .ToListAsync();
             
-            var games = ScheduleHelp.UpdateDates(savedGames, teams);
+            var games = ScheduleHelp.GenerateWeeksAndDates(savedGames, teams);
             await _context.SaveChangesAsync();
             
             response.Message = "Cronograma criado com sucesso!";
