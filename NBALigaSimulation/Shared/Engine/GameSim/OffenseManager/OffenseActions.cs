@@ -29,27 +29,19 @@ public static class OffenseActions
 
             double shootingThreePointerScaled = player.CompositeRating.Ratings["ShootingThreePointer"];
 
+            if (Teams[game.Offense].Gameplan.Focus == 3)
+            {
+                shootingThreePointerScaled += GameplanUtils.GameplanFocus(Teams[game.Offense].Gameplan.Focus);
+            }
+            
+            if (Teams[game.Offense].Gameplan.Focus == 1)
+            {
+                shootingThreePointerScaled += GameplanUtils.GameplanFocus(Teams[game.Offense].Gameplan.Focus);
+            }
+
             if (shootingThreePointerScaled > 0.55)
             {
                 shootingThreePointerScaled = 0.55 + (shootingThreePointerScaled - 0.55) * (0.3 / 0.45);
-
-                Console.WriteLine($"antes if: {shootingThreePointerScaled}");
-                if (Teams[game.Offense].Gameplan.Focus == 3)
-                {
-                    Console.WriteLine($"antes 3: {shootingThreePointerScaled}");
-                    shootingThreePointerScaled += GameplanUtils.GameplanFocus(Teams[game.Offense].Gameplan.Focus);
-                    Console.WriteLine($"depois 3: {shootingThreePointerScaled}");
-
-                }
-
-                if (Teams[game.Offense].Gameplan.Focus == 1)
-                {
-                    Console.WriteLine($"antes 1: {shootingThreePointerScaled}");
-                    shootingThreePointerScaled += GameplanUtils.GameplanFocus(Teams[game.Offense].Gameplan.Focus);
-                    Console.WriteLine($"depois 1: {shootingThreePointerScaled}");
-
-                }
-
             }
 
             double shootingThreePointerScaled2 = shootingThreePointerScaled;

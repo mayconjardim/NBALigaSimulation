@@ -34,11 +34,11 @@
             switch (value)
             {
                 case 1:
-                    return -0.5;
+                    return -0.1;
                 case 2:
                     return 0.0;
                 default:
-                    return 0.5;
+                    return 0.1;
             }
         }
 
