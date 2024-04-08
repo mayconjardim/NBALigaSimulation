@@ -12,7 +12,6 @@ public partial class Standings
     private bool isAscending = false;
     private string stat = "WIN%";
     
-    
         private string message = string.Empty;
 
         protected override async Task OnInitializedAsync()
@@ -20,9 +19,9 @@ public partial class Standings
 
              if (!(await LocalStorage.ContainKeyAsync("season")))
             {
-               _season = int.Parse(await LocalStorage.GetItemAsync<string>("season"));
+               await LocalStorage.SetItemAsync("season", _season);;
             }
-            
+
             message = "Carregando Stats...";
 
             var result = await StatsService.GetAllTeamRegularStats(_season, isAscending, stat);
