@@ -17,7 +17,11 @@ public partial class Standings
 
         protected override async Task OnInitializedAsync()
         {
-            _season = int.Parse(await LocalStorage.GetItemAsync<string>("season"));
+
+             if (!(await LocalStorage.ContainKeyAsync("season")))
+            {
+               _season = int.Parse(await LocalStorage.GetItemAsync<string>("season"));
+            }
             
             message = "Carregando Stats...";
 
