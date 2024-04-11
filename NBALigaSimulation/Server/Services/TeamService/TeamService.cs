@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using System.Security.Claims;
+using AutoMapper;
 using NBALigaSimulation.Shared.Dtos.Players;
 using NBALigaSimulation.Shared.Dtos.Teams;
 using NBALigaSimulation.Shared.Models.Utils;
@@ -10,14 +11,17 @@ namespace NBALigaSimulation.Server.Services.TeamService
 
         private readonly DataContext _context;
         private readonly IMapper _mapper;
-        private readonly IAuthService _authService;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public TeamService(DataContext context, IMapper mapper, IAuthService authService)
+
+        public TeamService(DataContext context, IMapper mapper, IHttpContextAccessor httpContextAccessor)
         {
             _context = context;
             _mapper = mapper;
-            _authService = authService;
+            _httpContextAccessor = httpContextAccessor;
         }
+        
+        public int GetUserId() => int.Parse(_httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier));
         
         public async Task<ServiceResponse<TeamCompleteDto>> GetTeamById(int teamId)
         {
@@ -92,12 +96,12 @@ namespace NBALigaSimulation.Server.Services.TeamService
             return response;
         }
 
-      
+        
         public async Task<ServiceResponse<TeamCompleteDto>> GetTeamByUser()
         {
 
             var response = new ServiceResponse<TeamCompleteDto>();
-            var userId = _authService.GetUserId();
+            var userId = GetUserId();
 
             var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == userId);
 

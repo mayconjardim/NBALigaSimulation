@@ -73,7 +73,8 @@ namespace NBALigaSimulation.Server.Controllers
 
         }
 
-        [HttpGet("profile")]
+        
+        [HttpGet("byUser")]
         public async Task<ActionResult<ServiceResponse<TeamCompleteDto>>> GetTeamByUser()
         {
 
