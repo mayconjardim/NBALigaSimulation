@@ -36,7 +36,7 @@ namespace NBALigaSimulation.Server.Controllers
         }
 
         [HttpPost("login")]
-        public async Task<ActionResult<ServiceResponse<string>>> Login(UserLogin request)
+        public async Task<ActionResult<ServiceResponse<SuccessfullyLogin>>> Login(UserLogin request)
         {
             var response = await _authService.Login(request.Username, request.Password);
 

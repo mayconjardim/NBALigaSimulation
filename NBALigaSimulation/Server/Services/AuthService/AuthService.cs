@@ -51,10 +51,10 @@ namespace NBALigaSimulation.Server.Services.AuthService
             throw new NotImplementedException();
         }
 
-        public async Task<ServiceResponse<string>> Login(string username, string password)
+        public async Task<ServiceResponse<SuccessfullyLogin>> Login(string username, string password)
         {
-            var response = new ServiceResponse<string>();
-            var user = await _context.Users.FirstOrDefaultAsync(x => x.Username.ToLower().Equals(username.ToLower()));
+            var response = new ServiceResponse<SuccessfullyLogin>();
+            var user = await _context.Users.Include(t => t.Team).FirstOrDefaultAsync(x => x.Username.ToLower().Equals(username.ToLower()));
 
             if (user == null)
             {
@@ -68,9 +68,12 @@ namespace NBALigaSimulation.Server.Services.AuthService
             }
             else
             {
-                response.Data = CreateToken(user);
+                SuccessfullyLogin login = new SuccessfullyLogin();
+                login.Token = CreateToken(user);
+                login.TeamId = user.TeamId;
+                login.Team = user.Team.Abrv;
+                response.Data = login;
                 response.Message = "Logado com sucesso!";
-
             }
 
             return response;

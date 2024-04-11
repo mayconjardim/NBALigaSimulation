@@ -14,10 +14,10 @@ public class AuthService : IAuthService
         _http = http;
     }
 
-    public async Task<ServiceResponse<string>> Login(UserLogin request)
+    public async Task<ServiceResponse<SuccessfullyLogin>> Login(UserLogin request)
     {
         var result = await _http.PostAsJsonAsync("api/auth/login", request);
-        return await result.Content.ReadFromJsonAsync<ServiceResponse<string>>();
+        return await result.Content.ReadFromJsonAsync<ServiceResponse<SuccessfullyLogin>>();
     }
 
     public async Task<ServiceResponse<bool>> ChangePassword(UserChangePassword request)
