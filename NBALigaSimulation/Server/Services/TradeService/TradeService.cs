@@ -32,7 +32,7 @@ namespace NBALigaSimulation.Server.Services.TradeService
 
             return response;
         }
-
+        
         public async Task<ServiceResponse<List<TradeDto>>> GetTradesByTeamId()
         {
             var response = new ServiceResponse<List<TradeDto>>();

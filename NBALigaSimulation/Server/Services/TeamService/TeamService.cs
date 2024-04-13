@@ -1,5 +1,6 @@
 ﻿using System.Security.Claims;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using NBALigaSimulation.Shared.Dtos.Players;
 using NBALigaSimulation.Shared.Dtos.Teams;
 using NBALigaSimulation.Shared.Models.Utils;
@@ -11,17 +12,14 @@ namespace NBALigaSimulation.Server.Services.TeamService
 
         private readonly DataContext _context;
         private readonly IMapper _mapper;
-        private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly IAuthService _authService;
 
-
-        public TeamService(DataContext context, IMapper mapper, IHttpContextAccessor httpContextAccessor)
+        public TeamService(DataContext context, IMapper mapper, IAuthService authService)
         {
             _context = context;
             _mapper = mapper;
-            _httpContextAccessor = httpContextAccessor;
+            _authService = authService;
         }
-        
-        public int GetUserId() => int.Parse(_httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier));
         
         public async Task<ServiceResponse<TeamCompleteDto>> GetTeamById(int teamId)
         {
@@ -96,12 +94,12 @@ namespace NBALigaSimulation.Server.Services.TeamService
             return response;
         }
 
-        
-        public async Task<ServiceResponse<TeamCompleteDto>> GetTeamByUser()
+        [Authorize]
+        public async Task<ServiceResponse<TeamCompleteDto>> GetTeamByLoggedUser()
         {
 
             var response = new ServiceResponse<TeamCompleteDto>();
-            var userId = GetUserId();
+            var userId = _authService.GetUserId();
 
             var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == userId);
 
@@ -122,11 +120,11 @@ namespace NBALigaSimulation.Server.Services.TeamService
             }
 
             var team = await _context.Teams
-            .Include(t => t.Players.OrderBy(p => p.RosterOrder))
+                .Include(t => t.Players.OrderBy(p => p.RosterOrder))
                 .ThenInclude(p => p.Ratings).Include(t => t.Gameplan)
                 .Include(p => p.Players).ThenInclude(p => p.Contract)
                 .Include(t => t.DraftPicks)
-            .FirstOrDefaultAsync(t => t.Id == teamId);
+                .FirstOrDefaultAsync(t => t.Id == teamId);
 
             if (team == null)
             {

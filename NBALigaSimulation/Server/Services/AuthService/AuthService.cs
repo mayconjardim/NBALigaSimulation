@@ -4,7 +4,6 @@ using System.Security.Claims;
 using System.Security.Cryptography;
 using NBALigaSimulation.Shared.Models.Users;
 using NBALigaSimulation.Shared.Models.Utils;
-using System.Linq; 
 
 namespace NBALigaSimulation.Server.Services.AuthService
 {
@@ -44,11 +43,6 @@ namespace NBALigaSimulation.Server.Services.AuthService
             _context.Users.Add(user);
             await _context.SaveChangesAsync();
             return new ServiceResponse<int> { Data = user.Id, Message = "Registrado com sucesso!" };
-        }
-
-        public Task<ServiceResponse<int>> Register(Migrations.User user, string password)
-        {
-            throw new NotImplementedException();
         }
 
         public async Task<ServiceResponse<SuccessfullyLogin>> Login(string username, string password)
@@ -152,3 +146,4 @@ namespace NBALigaSimulation.Server.Services.AuthService
 
     }
 }
+

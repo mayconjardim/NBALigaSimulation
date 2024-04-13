@@ -34,7 +34,7 @@ public class TeamService : ITeamService
 
     public async Task<ServiceResponse<TeamCompleteDto>> GetTeamByUser()
     {
-        var result = await _http.GetFromJsonAsync<ServiceResponse<TeamCompleteDto>>($"api/teams/players");
+        var result = await _http.GetFromJsonAsync<ServiceResponse<TeamCompleteDto>>($"api/teams/GetTeamByLoggedUser");
         return result;
     }
 }

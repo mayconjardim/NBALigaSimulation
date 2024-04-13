@@ -74,11 +74,11 @@ namespace NBALigaSimulation.Server.Controllers
         }
 
         
-        [HttpGet("byUser")]
-        public async Task<ActionResult<ServiceResponse<TeamCompleteDto>>> GetTeamByUser()
+        [HttpGet("GetTeamByLoggedUser")]
+        public async Task<ActionResult<ServiceResponse<TeamCompleteDto>>> GetTeamByLoggedUser()
         {
 
-            var result = await _teamService.GetTeamByUser();
+            var result = await _teamService.GetTeamByLoggedUser();
 
             if (!result.Success)
             {

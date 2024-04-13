@@ -42,6 +42,7 @@ builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.
 builder.Services.AddOptions();
 
 builder.Services.AddAuthorizationCore();
+builder.Services.AddCascadingAuthenticationState();
 
 builder.Services.AddScoped<AuthenticationStateProvider, CustomAuthStateProvider>();
 

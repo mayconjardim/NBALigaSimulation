@@ -10,7 +10,7 @@ namespace NBALigaSimulation.Server.Services.TeamService
         Task<ServiceResponse<TeamCompleteDto>> GetTeamById(int teamId);
         Task<ServiceResponse<List<TeamSimpleDto>>> GetAllTeams();
         Task<ServiceResponse<List<TeamSimpleWithPlayersDto>>> GetAllTeamsWithPlayers();
-        Task<ServiceResponse<TeamCompleteDto>> GetTeamByUser();
+        Task<ServiceResponse<TeamCompleteDto>> GetTeamByLoggedUser();
         Task<ServiceResponse<bool>> UpdateTeamGameplan(int teamId, TeamGameplanDto teamGameplanDto);
         Task<ServiceResponse<bool>> UpdateKeyPlayers(int teamId, List<PlayerCompleteDto> players);
 

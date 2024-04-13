@@ -1,0 +1,19 @@
+@page "/teams/rotation"
+@attribute [Authorize]
+@inject IAuthService AuthService
+@inject ITeamService TeamService
+@inject IPlayerService PlayerService
+@inject NavigationManager NavigationManager
+@inject ILocalStorageService LocalStorage
+
+@if (team != null)
+{
+<CascadingAuthenticationState>
+  <AuthorizeView>
+    <div class="container">
+        <p>@team.Name</p>
+    </div>
+  </AuthorizeView>
+</CascadingAuthenticationState>
+
+}

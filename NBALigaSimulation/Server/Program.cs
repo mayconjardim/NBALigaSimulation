@@ -17,6 +17,8 @@ using Microsoft.AspNetCore.Hosting.StaticWebAssets;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Globalization;
+using System.Security.Claims;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using NBALigaSimulation.Server.Services.LeagueService;
 using NBALigaSimulation.Server.Services.PlayoffsService;
 
@@ -67,7 +69,6 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     });
 
 builder.Services.AddHttpContextAccessor();
-
 
 var cultureInfo = new CultureInfo("en-US");
 cultureInfo.NumberFormat.NumberDecimalSeparator = ".";
