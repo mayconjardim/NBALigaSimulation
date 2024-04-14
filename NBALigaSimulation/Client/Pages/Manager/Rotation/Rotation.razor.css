@@ -1,8 +1,3 @@
-h5 {
-    margin: 0.625rem ;
-    font-weight: 900;
-}
-
 table {
     background-color: var(--white);
     width: 100%;
@@ -24,6 +19,13 @@ table td {
     white-space: nowrap
 }
 
+table span {
+    font-size: 0.6rem;
+    color: grey;
+    margin: 0.100rem;
+}
+
+
 table{
     border-radius: 10px;
 }
@@ -32,9 +34,6 @@ tr:nth-child(even) {
     background-color: #FBFBFB;
 }
 
-@media screen and (max-width: 600px) {
-    
-    select{
-        width: 80px;
-    }
+a {
+    text-decoration: none;
 }

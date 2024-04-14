@@ -52,7 +52,7 @@
                   <button class="btn btn-info" @onclick="(e) => ChangeRosterOrder(player)"></button>
                 }
               </td>
-              <td style="text-align: left">@Util.NomeAbvr(player.Name)</td>
+              <td style="text-align: left"><a href="@($"players/{player.Id}")">@Util.NomeAbvr(player.Name)</a></td>
               <td>@player.Pos</td>
               <td>@Util.Age(_season, player.Born.Year)</td>
               <td>
