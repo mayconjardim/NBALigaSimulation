@@ -73,7 +73,7 @@
               <td>@(player.RegularStats?.LastOrDefault()?.AstPG.ToString() ?? "-")</td>
               <td>@(player.RegularStats?.LastOrDefault()?.TrueShooting.ToString() ?? "-")</td>
               <td >
-                <select style="background: @Util.GetPtBackground(player.PtModifier)" class="form-select form-select-sm timer" id="ptModifierSelect" bind="@player.PtModifier" @onchange="@(e => UpdatePtModifier(e.Value, player.Id))">
+                <select style="background: @Util.GetPtBackground(player.PtModifier)" class="form-select form-select-sm" id="ptModifierSelect" bind="@player.PtModifier" @onchange="@(e => UpdatePtModifier(e.Value, player.Id))">
                   <option selected hidden>@GetOptionLabel(@player.PtModifier)</option>
                   @foreach (var pt in PtOptions)
                   {

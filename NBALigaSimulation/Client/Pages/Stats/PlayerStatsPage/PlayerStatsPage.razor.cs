@@ -26,7 +26,6 @@ public partial class PlayerStatsPage
 
     protected override async Task OnInitializedAsync()
     {
-        
         _season = int.Parse(await LocalStorage.GetItemAsync<string>("season"));
  
         var result = await StatsService.GetAllPlayerRegularStats(_currentPage, _pageSize, _season, isAscending, position);
