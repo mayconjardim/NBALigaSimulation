@@ -10,7 +10,6 @@ public partial class Standings
     private List<TeamRegularStatsDto> statsWest;
     private int _season = 0;
     private bool isAscending = false;
-    private string stat = "WIN%";
     
         private string message = string.Empty;
 
@@ -22,17 +21,19 @@ public partial class Standings
                await LocalStorage.SetItemAsync("season", _season);;
             }
 
+            _season = int.Parse(await LocalStorage.GetItemAsync<string>("season"));
+
             message = "Carregando Stats...";
 
-            var result = await StatsService.GetAllTeamRegularStats(_season, isAscending, stat);
+            var result = await StatsService.GetAllTeamRegularStats(_season, isAscending, null);
             if (!result.Success)
             {
                 message = result.Message;
             }
             else
             {
-                statsEast = result.Data.OrderByDescending(t => t.WinPct).Where(t => t.TeamConference == "East").ToList();
-                statsWest = result.Data.OrderByDescending(t => t.WinPct).Where(t => t.TeamConference == "West").ToList();
+                statsEast = result.Data.Where(t => t.TeamConference == "East").ToList();
+                statsWest = result.Data.Where(t => t.TeamConference == "West").ToList();
             }
 
         }

@@ -102,7 +102,7 @@ namespace NBALigaSimulation.Server.Services.StatsService
 					 {
 
 						 "GP" => isAscending ? query.OrderByDescending(p => (p.HomeWins + p.HomeLosses + p.RoadWins + p.RoadLosses)) : query.OrderBy(p => (p.HomeWins + p.HomeLosses + p.RoadWins + p.RoadLosses)),
-						 "WIN%" => isAscending ? query.OrderByDescending(p => ( (double) (p.HomeWins + p.RoadWins) / (p.HomeWins + p.RoadWins + p.HomeLosses + p.RoadLosses))): query.OrderBy(p => ( (double) (p.HomeWins + p.RoadWins) / (p.HomeWins + p.RoadWins + p.HomeLosses + p.RoadLosses))),
+						 "WIN%" => isAscending ? query.OrderByDescending(p => ( (double) (p.HomeWins + p.RoadWins) / (+ p.HomeWins + p.RoadWins +p.HomeLosses + p.RoadLosses))): query.OrderBy(p => ( (double) (p.HomeWins + p.RoadWins) / (+ p.HomeWins + p.RoadWins +p.HomeLosses + p.RoadLosses))),
 						 "W" => isAscending
 							 ? query.OrderByDescending(p => (p.HomeWins + p.RoadWins))
 							 : query.OrderBy(p => (p.HomeWins + p.RoadWins)),
