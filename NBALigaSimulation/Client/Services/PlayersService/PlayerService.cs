@@ -31,4 +31,22 @@ public class PlayerService : IPlayerService
         var result = await _http.GetFromJsonAsync<ServiceResponse<List<PlayerSimpleDto>>>($"api/players/simple");
         return result;
     }
+
+    public async Task<ServiceResponse<bool>> UpdatePlayerPtModifier(int playerId, double newPtModifier)
+    {
+
+        var result = await _http.PutAsJsonAsync($"api/players/{playerId}/ptmodifier", newPtModifier);
+
+        bool success = result.IsSuccessStatusCode;
+
+        var response = new ServiceResponse<bool>
+        {
+            Success = success,
+            Data = success,
+            Message = success ? "Player updated successfully." : "Failed to update player."
+        };
+
+        return response;
+    }
+
 }

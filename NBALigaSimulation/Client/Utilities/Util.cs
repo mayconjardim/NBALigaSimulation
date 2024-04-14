@@ -113,6 +113,24 @@ namespace NBALigaSimulation.Client.Utilities
                 return "rating-down";
             }
         }
+        
+        public static string NomeAbvr(string nomeCompleto)
+        {
+            string[] partesNome = nomeCompleto.Split(' ');
+
+            if (partesNome.Length < 2)
+            {
+                return nomeCompleto;
+            }
+
+            string primeiroNome = partesNome[0];
+            string sobrenome = partesNome[partesNome.Length - 1];
+
+            string primeiraLetra = primeiroNome.Substring(0, 1);
+
+            return $"{primeiraLetra}. {sobrenome}";
+        }
+
 
     }
 

@@ -1,18 +1,114 @@
 @page "/teams/rotation"
+@using NBALigaSimulation.Client.Utilities
 @attribute [Authorize]
 @inject IAuthService AuthService
 @inject ITeamService TeamService
 @inject IPlayerService PlayerService
 @inject NavigationManager NavigationManager
 @inject ILocalStorageService LocalStorage
+@inject IJSRuntime JSRuntime;
 
-@if (team != null)
+@if (_team != null)
 {
 <CascadingAuthenticationState>
   <AuthorizeView>
     <div class="container">
-        <p>@team.Name</p>
+      
+      <div class="title"><h5></h5></div>
+
+      <div class="table-responsive">
+        <table class="table" id="statsTable">
+          <thead>
+          <tr>
+            <td> </td>
+            <td>NAME</td>
+            <td>POS</td>
+            <td>AGE</td>
+            <td>OVR</td>
+            <td>POT</td>
+            <td>CONTRACT</td>
+            <td>GP</td>
+            <td>MIN</td>
+            <td>PPG</td>
+            <td>RPG</td>
+            <td>APG</td>
+            <td>TS%</td>
+            <td style="display: flex">PT
+              <i class="bi bi-question-square-fill " style="margin-left: 5px" type="button"  data-bs-toggle="modal" data-bs-target="#rotation"></i>
+              </td>
+          </tr>
+          </thead>
+          <tbody>
+          @foreach (var player in _players  )
+          {
+            <tr>
+              <td>
+                  <button class="btn btn-info" @onclick="(e) => ChangeRosterOrder(player)"></button>
+              </td>
+              <td style="text-align: left">@Util.NomeAbvr(player.Name)</td>
+              <td>@player.Pos</td>
+              <td>@Util.Age(_season, player.Born.Year)</td>
+              <td>
+                @(player.Ratings?.LastOrDefault()?.CalculateOvr.ToString() ?? "N/A")
+              </td>
+              <td>
+                @(player.Ratings?.LastOrDefault()?.Pot.ToString() ?? "N/A")
+              </td>
+              <td>$6.80M até 2014</td>
+              <td>@(player.RegularStats?.LastOrDefault()?.Games.ToString() ?? "N/A")</td>
+              <td>@(player.RegularStats?.LastOrDefault()?.MinPG.ToString() ?? "N/A")</td>
+              <td>@(player.RegularStats?.LastOrDefault()?.PtsPG.ToString() ?? "N/A")</td>
+              <td>@(player.RegularStats?.LastOrDefault()?.TRebPG.ToString() ?? "N/A")</td>
+              <td>@(player.RegularStats?.LastOrDefault()?.AstPG.ToString() ?? "N/A")</td>
+              <td>@(player.RegularStats?.LastOrDefault()?.TrueShooting.ToString() ?? "N/A")</td>
+              <td>
+                <select class="form-select" bind="@player.PtModifier" @onchange="@(e => UpdatePtModifier(e.Value, player.Id))">
+                  <option selected>@GetOptionLabel(@player.PtModifier)</option>
+                  @foreach (var pt in PtOptions)
+                  {
+                    <option value="@pt">@GetOptionLabel(pt)</option>
+                  }
+                </select>
+
+              </td>
+            </tr>
+            @if (_players.IndexOf(player) == 4)
+            {
+              <tr class="thin-border"> 
+                <td colspan="14" style="height: 1px"></td>
+              </tr>
+            }
+          }
+          </tbody>
+        </table>
+      </div>
     </div>
+
+
+    <div class="modal fade" id="rotation" tabindex="-1" aria-labelledby="rotation" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h1 class="modal-title fs-5" id="exampleModalLabel">Controle de minutos</h1>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <p>
+              O jogo dividirá o tempo de jogo com base na habilidade e (endurance).
+              Se você quiser influenciar o julgamento dele, suas opções são:</p>
+            <p style="background: red; color: white">0 Sem tempo de jogo</p>
+            <p style="background: yellow; color: black">- Menos tempo de jogo</p>
+            <p style="background: grey; color: black">&nbsp; &nbsp; Deixe o jogo decidir</p>
+            <p style="background: blue; color: white">+ Mais tempo de jogo</p>
+            <p style="background: greenyellow; color: black">++ Muito Mais tempo de jogo</p>
+            <p style="background: green; color: white">+++ Jogará o máximo que o jogador aguentar (Endurance)</p>
+          </div>
+     
+        </div>
+      </div>
+    </div>
+    
+    
   </AuthorizeView>
 </CascadingAuthenticationState>
 

@@ -1,9 +1,10 @@
-﻿using NBALigaSimulation.Shared.Models.Players;
+﻿using System.ComponentModel;
+using NBALigaSimulation.Shared.Models.Players;
 using Newtonsoft.Json;
 
 namespace NBALigaSimulation.Shared.Dtos.Players
 {
-    public class PlayerCompleteDto
+    public class PlayerCompleteDto 
     {
         public int Id { get; set; }
         public string Name { get; set; } = string.Empty;
