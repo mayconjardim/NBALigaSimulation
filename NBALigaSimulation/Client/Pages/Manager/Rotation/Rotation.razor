@@ -20,7 +20,9 @@
         <table class="table" id="statsTable">
           <thead>
           <tr>
-            <td style="background-color: white">NAME</td>
+            <td style="background-color: white">NAME
+              <i class="bi bi-question-square-fill " style="margin-left: 5px" type="button"  data-bs-toggle="modal" data-bs-target="#sub"></i>
+              </td>
             <td>POS</td>
             <td>AGE</td>
             <td>OVR</td>
@@ -116,7 +118,24 @@
         </div>
       </div>
     </div>
-    
+
+    <div class="modal fade" id="sub" tabindex="-1" aria-labelledby="sub" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h1 class="modal-title fs-5" id="exampleModalLabel">Substituição de jogadores</h1>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <p>
+              Clique no ícone à esquerda para selecionar o jogador que deseja substituir
+              Em seguida clique no mesmo ícone do jogador que deseja levar ao time titular
+            </p>
+          </div>
+
+        </div>
+      </div>
+    </div>
     
   </AuthorizeView>
 </CascadingAuthenticationState>
