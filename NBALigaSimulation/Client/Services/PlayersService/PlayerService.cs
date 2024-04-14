@@ -1,3 +1,4 @@
+using System.Net;
 using System.Net.Http.Json;
 using NBALigaSimulation.Shared.Dtos.Players;
 using NBALigaSimulation.Shared.Models.Utils;
@@ -16,9 +17,19 @@ public class PlayerService : IPlayerService
 
     public async Task<ServiceResponse<PlayerCompleteDto>> GetPlayerById(int playerId)
     {
-        var response = await _http.GetFromJsonAsync<ServiceResponse<PlayerCompleteDto>>($"api/players/{playerId}");
-        return response;
+        var response = await _http.GetAsync($"api/players/{playerId}");
+
+        if (response.IsSuccessStatusCode)
+        {
+            var player = await response.Content.ReadFromJsonAsync<PlayerCompleteDto>();
+            return new ServiceResponse<PlayerCompleteDto> { Data = player, Success = true};
+        }
+        else
+        {
+            return new ServiceResponse<PlayerCompleteDto> { Success = false, Message = "Não foi possivel encontrar o jogador!"};
+        }
     }
+
 
     public async Task<ServiceResponse<List<PlayerSimpleDto>>> GetPlayersSearchSuggestions(string searchText)
     {

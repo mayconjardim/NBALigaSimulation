@@ -1,7 +1,6 @@
 @page "/players/{PlayerId:int}"
 @inject IPlayerService PlayerService
 
-
 @if (_player != null)
 {
     <PlayerHeader _player="@_player" />
@@ -40,5 +39,5 @@
 }
 else
 {
-  <Loading></Loading>
+  @_message;
 }
