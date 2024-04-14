@@ -1,11 +1,13 @@
-﻿@using NBALigaSimulation.Shared.Dtos.Teams
-@using NBALigaSimulation.Client.Services.AuthService
+﻿@using NBALigaSimulation.Client.Services.AuthService
 @inject AuthenticationStateProvider AuthenticationStateProvider
 @inject ILocalStorageService LocalStorage
 @inject NavigationManager NavigationManager
 @inject ISeasonService SeasonService
 @inject ITeamService TeamService
+@inject IGameService GameService
 @inject IAuthService AuthService
+@inject IJSRuntime JSRuntime;
+
 
 <nav class="navbar navbar-expand-lg bg-body-tertiary">
     <div class="container-fluid">
@@ -114,14 +116,26 @@
                 <div class="modal-body">
                     <ul class="list-group list-group-flush">
                         <li class="list-group-item">
-                        <a href="/teams/rotation" class="list-group-item list-group-item-action" aria-current="true">
+                            <a href="/teams/rotation" class="list-group-item list-group-item-action" aria-current="true">
                                 Verificar Rotação
                             </a></li>
                         <li class="list-group-item">A second item</li>
                         <li class="list-group-item">A third item</li>
                         <li class="list-group-item">A fourth item</li>
                     </ul>
+                    @if (_isAdmin)
+                    {
+                        <hr/>
+
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item">
+                                <a @onclick="@SimGameByDateRegular" class="list-group-item list-group-item-action" aria-current="true">
+                                    Simular uma semana
+                                </a></li>
+                        </ul> 
+                    }
                 </div>
+                
                 <div class="modal-footer">
                     <button type="button" class="btn btn-danger" @onclick="Logout">Logout</button>
                 </div>

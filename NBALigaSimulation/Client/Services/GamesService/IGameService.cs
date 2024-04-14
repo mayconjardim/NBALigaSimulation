@@ -14,4 +14,6 @@ public interface IGameService
     Task<ServiceResponse<bool>> SimGameByDateRegular();
     Task<ServiceResponse<bool>> SimGameByDatePlayoffs();
 
+    
+    
 }

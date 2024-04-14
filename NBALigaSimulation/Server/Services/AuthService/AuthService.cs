@@ -66,6 +66,7 @@ namespace NBALigaSimulation.Server.Services.AuthService
                 login.Token = CreateToken(user);
                 login.TeamId = user.TeamId;
                 login.Team = user.Team.Abrv;
+                login.IsAdmin = user.IsAdmin;
                 response.Data = login;
                 response.Message = "Logado com sucesso!";
             }
