@@ -23,11 +23,13 @@ namespace NBALigaSimulation.Shared.Dtos.Players
         public int RosterOrder { get; set; }
         public PlayerDraft? Draft { get; set; }
         public PlayerContractDto? Contract { get; set; }
-        public List<PlayerRatingDto> Ratings { get; set; } = new List<PlayerRatingDto>();
-        public List<PlayerRegularStatsDto> RegularStats { get; set; } = new List<PlayerRegularStatsDto>();
-        public List<PlayerPlayoffsStatsDto> PlayoffsStats { get; set; } = new List<PlayerPlayoffsStatsDto>();
-        public List<PlayerGameStatsDto> Stats { get; set; } = new List<PlayerGameStatsDto>();
-        public List<PlayerAwardsDto> PlayerAwards { get; set; } = new List<PlayerAwardsDto>();
+        public List<PlayerRatingDto> Ratings { get; set; } 
+        public List<PlayerRegularStatsDto> RegularStats { get; set; } 
+        public List<PlayerPlayoffsStatsDto> PlayoffsStats { get; set; } 
+        
+        [JsonProperty("GameLogs")]
+        public List<PlayerGameStatsDto> Stats { get; set; } 
+        public List<PlayerAwardsDto> PlayerAwards { get; set; } 
 
     }
 }

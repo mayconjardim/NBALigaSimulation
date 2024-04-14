@@ -1,4 +1,6 @@
-﻿namespace NBALigaSimulation.Shared.Dtos.Players
+﻿using NBALigaSimulation.Shared.Dtos.Teams;
+
+namespace NBALigaSimulation.Shared.Dtos.Players
 {
     public class PlayerGameStatsDto
     {
@@ -36,8 +38,5 @@
         public double CourtTime { get; set; }
         public double BenchTime { get; set; }
         public int Energy { get; set; }
-        
-   
-        
     }
 }

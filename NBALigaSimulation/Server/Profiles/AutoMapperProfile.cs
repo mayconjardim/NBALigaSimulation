@@ -60,8 +60,6 @@ namespace NBALigaSimulation.Server.Profiles
                   opt.MapFrom(src => src.PlayerGameStats.Where(p => p.TeamId == src.AwayTeamId).ToList()));
 
             CreateMap<PlayerGameStats, PlayerGameStatsDto>();
-
-
             CreateMap<GameCompleteDto, Game>();
             CreateMap<CreateGameDto, GameCompleteDto>().ReverseMap();
             CreateMap<CreateGameDto, Game>().ReverseMap();
@@ -88,8 +86,8 @@ namespace NBALigaSimulation.Server.Profiles
             CreateMap<PlayerPlayoffsStats, PlayerPlayoffsStatsDto>();
 
             CreateMap<TeamGameStats, TeamGameStatsDto>();
+            CreateMap<TeamGameStats, TeamGameStatsSimple>();
             CreateMap<TeamPlayoffsStats, TeamPlayoffsStatsDto>().ReverseMap();
-
 
             CreateMap<TeamRegularStats, TeamRegularStatsDto>()
               .ForMember(dest => dest.TeamName, 

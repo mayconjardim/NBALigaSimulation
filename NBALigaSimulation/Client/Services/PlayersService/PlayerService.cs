@@ -1,4 +1,3 @@
-using System.Net;
 using System.Net.Http.Json;
 using NBALigaSimulation.Shared.Dtos.Players;
 using NBALigaSimulation.Shared.Models.Utils;
@@ -17,19 +16,28 @@ public class PlayerService : IPlayerService
 
     public async Task<ServiceResponse<PlayerCompleteDto>> GetPlayerById(int playerId)
     {
-        var response = await _http.GetAsync($"api/players/{playerId}");
-
-        if (response.IsSuccessStatusCode)
+        var response = await _http.GetFromJsonAsync<ServiceResponse<PlayerCompleteDto>>($"api/players/{playerId}");
+        if (response.Success == false)
         {
-            var player = await response.Content.ReadFromJsonAsync<PlayerCompleteDto>();
-            return new ServiceResponse<PlayerCompleteDto> { Data = player, Success = true};
+            return new ServiceResponse<PlayerCompleteDto>() { Message = "Jogador não encontrado!" };
         }
-        else
-        {
-            return new ServiceResponse<PlayerCompleteDto> { Success = false, Message = "Não foi possivel encontrar o jogador!"};
-        }
+        
+        return response;
     }
 
+    public async Task<ServiceResponse<bool>> UpdateRosterOrder(List<PlayerCompleteDto> updatedPlayerList)
+    {
+        var result = await _http.PutAsJsonAsync("api/players/rosterorder", updatedPlayerList);
+        bool success = result.IsSuccessStatusCode;
+        var response = new ServiceResponse<bool>
+        {
+            Success = success,
+            Data = success,
+            Message = success ? "Player updated successfully." : "Failed to update game."
+        };
+
+        return response;
+    }
 
     public async Task<ServiceResponse<List<PlayerSimpleDto>>> GetPlayersSearchSuggestions(string searchText)
     {
@@ -60,18 +68,6 @@ public class PlayerService : IPlayerService
         return response;
     }
     
-    public async Task<ServiceResponse<bool>> UpdateRosterOrder(List<PlayerCompleteDto> updatedPlayerList)
-    {
-        var result = await _http.PutAsJsonAsync("api/players/rosterorder", updatedPlayerList);
-        bool success = result.IsSuccessStatusCode;
-        var response = new ServiceResponse<bool>
-        {
-            Success = success,
-            Data = success,
-            Message = success ? "Player updated successfully." : "Failed to update game."
-        };
-
-        return response;
-    }
+    
 
 }

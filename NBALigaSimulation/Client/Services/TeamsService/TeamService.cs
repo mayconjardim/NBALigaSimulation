@@ -16,19 +16,12 @@ public class TeamService : ITeamService
     
     public async Task<ServiceResponse<TeamCompleteDto>> GetTeamById(int teamId)
     {
-        
-        var response = await _http.GetAsync($"api/teams/{teamId}");
-
-        if (response.IsSuccessStatusCode)
+        var response = await _http.GetFromJsonAsync<ServiceResponse<TeamCompleteDto>>($"api/teams/{teamId}");
+        if (response.Success == false)
         {
-            var team = await response.Content.ReadFromJsonAsync<TeamCompleteDto>();
-            return new ServiceResponse<TeamCompleteDto> { Data = team, Success = true};
+            return new ServiceResponse<TeamCompleteDto>() { Message = "Time não encontrado!" };
         }
-        else
-        {
-            return new ServiceResponse<TeamCompleteDto> { Success = false, Message = "Não foi possivel encontrar o time!"};
-        }
-      
+        return response;
     }
 
     public async Task<ServiceResponse<List<TeamSimpleDto>>> GetAllTeams()
