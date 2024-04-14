@@ -119,12 +119,14 @@ namespace NBALigaSimulation.Server.Services.TeamService
                 return response;
             }
 
-            var team = await _context.Teams
-                .Include(t => t.Players.OrderBy(p => p.RosterOrder))
-                .ThenInclude(p => p.Ratings).Include(t => t.Gameplan)
-                .Include(p => p.Players).ThenInclude(p => p.Contract)
-                .Include(t => t.DraftPicks)
-                .FirstOrDefaultAsync(t => t.Id == teamId);
+           var team = await _context.Teams
+            .Include(t => t.Players.OrderBy(p => p.RosterOrder))
+                .ThenInclude(p => p.Ratings)
+            .Include(t => t.Gameplan)
+            .Include(t => t.Players)
+                .ThenInclude(p => p.RegularStats)
+            .Include(t => t.DraftPicks)
+            .FirstOrDefaultAsync(t => t.Id == teamId);
 
             if (team == null)
             {

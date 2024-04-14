@@ -39,6 +39,8 @@ public partial class Rotation
         {
             _team = result.Data;
             _players = result.Data.Players;
+            await JSRuntime.InvokeVoidAsync("console.log", _players);
+
         }
     }
     
@@ -69,16 +71,13 @@ public partial class Rotation
         {
             player1Selected = player;
             StateHasChanged();
-            await JSRuntime.InvokeVoidAsync("console.log", "entrou player1");
-            await JSRuntime.InvokeVoidAsync("console.log", player1Selected.Name);
-            
+    
         }
         else if (player2Selected == null && player1Selected != player)
         {
             player2Selected = player;
             StateHasChanged();
-            await JSRuntime.InvokeVoidAsync("console.log", "entrou player2");
-            await JSRuntime.InvokeVoidAsync("console.log", player2Selected.Name);
+ 
 
             var player1Order = player1Selected.RosterOrder;
             var player2Order = player2Selected.RosterOrder;
@@ -88,7 +87,6 @@ public partial class Rotation
             
             UpdatedPlayerList = new List<PlayerCompleteDto>(_players.OrderBy(p => p.RosterOrder));
             
-            await JSRuntime.InvokeVoidAsync("console.log", UpdatedPlayerList);
 
             await UpdateRoster();
             StateHasChanged();
