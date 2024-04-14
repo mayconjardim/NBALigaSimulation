@@ -48,5 +48,19 @@ public class PlayerService : IPlayerService
 
         return response;
     }
+    
+    public async Task<ServiceResponse<bool>> UpdateRosterOrder(List<PlayerCompleteDto> updatedPlayerList)
+    {
+        var result = await _http.PutAsJsonAsync("api/players/rosterorder", updatedPlayerList);
+        bool success = result.IsSuccessStatusCode;
+        var response = new ServiceResponse<bool>
+        {
+            Success = success,
+            Data = success,
+            Message = success ? "Player updated successfully." : "Failed to update game."
+        };
+
+        return response;
+    }
 
 }

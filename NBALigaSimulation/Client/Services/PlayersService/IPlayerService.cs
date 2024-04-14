@@ -7,6 +7,7 @@ public interface IPlayerService
 {
     
     Task<ServiceResponse<PlayerCompleteDto>> GetPlayerById(int playerId);
+    Task<ServiceResponse<bool>> UpdateRosterOrder(List<PlayerCompleteDto> updatedPlayerList);
     Task<ServiceResponse<List<PlayerSimpleDto>>> GetPlayersSearchSuggestions(string searchText);
     Task<ServiceResponse<List<PlayerSimpleDto>>> GetAllSimplePlayers();
     Task<ServiceResponse<bool>> UpdatePlayerPtModifier(int playerId, double newPtModifier);

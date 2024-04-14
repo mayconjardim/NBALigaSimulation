@@ -7,3 +7,4 @@ function initializeAutocomplete(availableTags, inputId) {
         source: tagNames
     });
 }
+

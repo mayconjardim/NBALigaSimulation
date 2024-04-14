@@ -32,6 +32,9 @@ tr:nth-child(even) {
     background-color: #FBFBFB;
 }
 
-.thin-border {
-    border-top: 1px solid var(--primary-color);
+@media screen and (max-width: 600px) {
+    
+    select{
+        width: 80px;
+    }
 }

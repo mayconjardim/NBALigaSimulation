@@ -9,7 +9,7 @@ namespace NBALigaSimulation.Client.Utilities
         {
             return season - born;
         }
-        
+
         public static int InchesToCm(double inches)
         {
             const double cmPerInch = 2.54;
@@ -76,7 +76,7 @@ namespace NBALigaSimulation.Client.Utilities
 
             return x.ToString() + suffix;
         }
-        
+
         public static string GetBadgeClass(int number)
         {
             switch (number)
@@ -95,7 +95,7 @@ namespace NBALigaSimulation.Client.Utilities
                     return "rating-vermelho";
             }
         }
-        
+
         public static string FormatNumber(double numero)
         {
             string numeroFormatado = numero.ToString("0.0", CultureInfo.InvariantCulture);
@@ -113,7 +113,7 @@ namespace NBALigaSimulation.Client.Utilities
                 return "rating-down";
             }
         }
-        
+
         public static string NomeAbvr(string nomeCompleto)
         {
             string[] partesNome = nomeCompleto.Split(' ');
@@ -130,8 +130,37 @@ namespace NBALigaSimulation.Client.Utilities
 
             return $"{primeiraLetra}. {sobrenome}";
         }
+        
+        public static string GetPtBackground(double value)
+        {
+            string background = string.Empty;
+    
+            switch (value)
+            {
+                case 0.0:
+                    background = "red";
+                    break;
+                case 0.75:
+                    background = "yellow";
+                    break;
+                case 1.25:
+                    background = "blue";
+                    break;
+                case 1.75:
+                    background = "greenyellow";
+                    break;
+                case 2.0:
+                    background = "green";
+                    break;
+                default:
+                    background = "white";
+                    break;
+            }
+
+            return background;
+        }
 
 
+     
     }
-
 }
