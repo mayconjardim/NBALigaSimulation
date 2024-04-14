@@ -20,8 +20,7 @@
         <table class="table" id="statsTable">
           <thead>
           <tr>
-            <td> </td>
-            <td>NAME</td>
+            <td style="background-color: white">NAME</td>
             <td>POS</td>
             <td>AGE</td>
             <td>OVR</td>
@@ -42,17 +41,18 @@
           @foreach (var player in _players  )
           {
             <tr>
-              <td>
+              <td style="text-align: left; background-color: white">
                 @if (_players.IndexOf(player) < 5)
                 {
-                  <button class="btn btn-success" @onclick="(e) => ChangeRosterOrder(player)"></button>
+                  <button class="btn" style="background-color: var(--primary-color); color: white; font-size: 0.650rem;" @onclick="(e) => ChangeRosterOrder(player)">TIT</button>
+                  <a href="@($"players/{player.Id}")" style="margin-left: 5px;">@Util.NomeAbvr(player.Name)</a>
                 }
                 else
                 {
-                  <button class="btn btn-info" @onclick="(e) => ChangeRosterOrder(player)"></button>
+                  <button  class="btn btn-secondary" style="font-size: 0.650rem;" @onclick="(e) => ChangeRosterOrder(player)">RES</button>
+                  <a href="@($"players/{player.Id}")" style="margin-left: 5px;">@Util.NomeAbvr(player.Name)</a>
                 }
               </td>
-              <td style="text-align: left"><a href="@($"players/{player.Id}")">@Util.NomeAbvr(player.Name)</a></td>
               <td>@player.Pos</td>
               <td>@Util.Age(_season, player.Born.Year)</td>
               <td>

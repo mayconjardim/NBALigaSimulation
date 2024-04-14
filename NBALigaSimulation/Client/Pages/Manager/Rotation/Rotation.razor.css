@@ -34,6 +34,12 @@ tr:nth-child(even) {
     background-color: #FBFBFB;
 }
 
+th:first-child, td:first-child
+{
+    position:sticky;
+    left:0px;
+}
+
 a {
     text-decoration: none;
 }
