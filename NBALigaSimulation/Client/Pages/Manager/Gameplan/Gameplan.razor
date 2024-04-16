@@ -1,7 +1,67 @@
 @page "/teams/gameplan"
 @attribute [Authorize]
 @inject IAuthService AuthService
+@inject IPlayerService PlayerService
 @inject ITeamService TeamService
 @inject NavigationManager NavigationManager
 @inject ILocalStorageService LocalStorage
 @inject IJSRuntime JSRuntime;
+
+@if (_team != null && _gameplan != null)
+{
+<CascadingAuthenticationState>
+   <AuthorizeView>
+      
+      <div class="container">
+         
+         <div class="gameplan">
+            <h5>PACE</h5>
+            <select class="form-select" bind="@_gameplan.Pace" @onchange="@(e => UpdateGameplan(e.Value, _team.Id))">
+               <option selected hidden="">@GetGPace(_gameplan.Pace)</option>
+               @foreach (var option in GPaceOptions)
+               {
+                  <option value="@option">@GetGPace(option)</option>
+               }
+            </select>
+         </div>
+
+         <div class="gameplan">
+            <h5>MOTION</h5>
+            <select class="form-select" bind="@_gameplan.Motion" @onchange="@(e => UpdateGameplan(e.Value, _team.Id))">
+               <option selected hidden="">@GetGPace(_gameplan.Pace)</option>
+               @foreach (var option in GPaceOptions)
+               {
+               <option value="@option">@GetGPace(option)</option>
+               }
+            </select>
+         </div>
+
+         <div class="gameplan">
+            <h5>FOCUS</h5>
+            <select class="form-select" bind="@_gameplan.Focus" @onchange="@(e => UpdateGameplan(e.Value, _team.Id))">
+               <option selected hidden="">@GetGPace(_gameplan.Pace)</option>
+               @foreach (var option in GPaceOptions)
+               {
+               <option value="@option">@GetFocus(option)</option>
+               }
+            </select>
+         </div>
+
+         <div class="gameplan">
+            <h5>DEFENSE</h5>
+            <select class="form-select" bind="@_gameplan.Defense" @onchange="@(e => UpdateGameplan(e.Value, _team.Id))">
+               <option selected hidden="">@GetDefense(_gameplan.Defense)</option>
+               @foreach (var option in DefenseOptions)
+               {
+               <option value="@option">@GetDefense(option)</option>
+               }
+            </select>
+         </div>
+         
+      </div>
+            
+            
+   </AuthorizeView>
+</CascadingAuthenticationState>
+
+}
