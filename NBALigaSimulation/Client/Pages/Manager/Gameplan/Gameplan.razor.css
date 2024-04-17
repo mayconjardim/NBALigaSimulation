@@ -1,9 +1,8 @@
-.container{
+.gameplans {
     display: flex;
     justify-content: center;
     flex-wrap: wrap;
 }
-
-.gameplan {
+.gameplan{
     margin: 1rem;
 }

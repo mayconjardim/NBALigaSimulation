@@ -15,6 +15,7 @@ public partial class Gameplan
     private List<PlayerCompleteDto> keyPlayers;
     private string _message;
     private bool isDirty = false;
+    private bool isDirtySaveKeyPlayers = false;
     
     [Inject] protected ToastService ToastService { get; set; } = default!;
     
@@ -32,13 +33,7 @@ public partial class Gameplan
             _gameplan = _team.Gameplan;
         }
     }
-    
-    private void HandleEventChanged(ChangeEventArgs e)
-    {
-        isDirty = true;
-        StateHasChanged();
-    }
-    
+
     private async Task UpdateGameplan(object value, string gameplan)
     {
         int result = Convert.ToInt32(value);
@@ -127,5 +122,35 @@ public partial class Gameplan
             default:
                 return string.Empty;
         }
+    }
+    
+    private async Task SaveKeyPlayers()
+    {
+        keyPlayers = _team.Players.ToList();
+        var response = await TeamService.UpdateKeyPlayers(_team.Id, keyPlayers);
+
+        if (response.Success)
+        {
+            isDirtySaveKeyPlayers = false;
+            StateHasChanged();
+            ToastService.Notify(new(ToastType.Success, $"JOGADORES CHAVES ATUALIIZADOS COM SUCESSO"));
+        }
+        else
+        {
+            _message = response.Message;
+        }
+    }
+    
+        
+    private void HandleEventChanged(ChangeEventArgs e)
+    {
+        isDirty = true;
+        StateHasChanged();
+    }
+    
+    private void HandleCheckboxKeyChange()
+    {
+        isDirtySaveKeyPlayers = true;
+        StateHasChanged();
     }
 }

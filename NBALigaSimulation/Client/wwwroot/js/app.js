@@ -8,3 +8,10 @@ function initializeAutocomplete(availableTags, inputId) {
     });
 }
 
+$('#closemodal').click(function() {
+    $('#loginModel').modal('hide');
+});
+
+$('.nav-link').on('click',function() {
+    $('.navbar-collapse').collapse('hide');
+});
