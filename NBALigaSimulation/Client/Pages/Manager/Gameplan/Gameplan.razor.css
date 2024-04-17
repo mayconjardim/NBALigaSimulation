@@ -1,4 +1,9 @@
 .container{
     display: flex;
+    justify-content: center;
     flex-wrap: wrap;
+}
+
+.gameplan {
+    margin: 1rem;
 }

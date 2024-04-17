@@ -1,4 +1,6 @@
+using BlazorBootstrap;
 using Microsoft.AspNetCore.Components;
+using Microsoft.JSInterop;
 using NBALigaSimulation.Shared.Dtos.Players;
 using NBALigaSimulation.Shared.Dtos.Teams;
 
@@ -13,6 +15,8 @@ public partial class Gameplan
     private List<PlayerCompleteDto> keyPlayers;
     private string _message;
     private bool isDirty = false;
+    
+    [Inject] protected ToastService ToastService { get; set; } = default!;
     
     protected override async Task OnInitializedAsync()
     {
@@ -35,16 +39,36 @@ public partial class Gameplan
         StateHasChanged();
     }
     
-    private async Task UpdateGameplan()
+    private async Task UpdateGameplan(object value, string gameplan)
     {
-        var response = await TeamService.UpdateTeamGameplan(team.Id, teamGameplan);
+        int result = Convert.ToInt32(value);
+        int gp = result;
+        switch(gameplan) 
+        {
+            case "PACE":
+                _gameplan.Pace = gp;
+                break;
+            case "MOTION":
+                _gameplan.Motion = gp;
+                break;
+            case  "FOCUS":
+                _gameplan.Focus = gp;
+                break;
+            case "DEFENSE":
+                _gameplan.Defense = gp;
+                break;
+            default:
+                break;
+        }
+        
+        var response = await TeamService.UpdateTeamGameplan(_team.Id, _gameplan);
 
         if (response.Success)
         {
             isDirty = false;
             StateHasChanged();
-           // Snackbar.Add("GAMEPLAN ATUALIIZADO COM SUCESSO", Severity.Success);
-
+            await JSRuntime.InvokeVoidAsync("console.log", _gameplan);
+            ToastService.Notify(new(ToastType.Success, $"{gameplan} ATUALIIZADO COM SUCESSO"));
         }
         else
         {
