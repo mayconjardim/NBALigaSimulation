@@ -84,4 +84,16 @@ public partial class NavMenu
         await LocalStorage.SetItemAsync("_isAdmin", false);
         NavigationManager.Refresh();
     }
+    
+    
+    private async Task FecharMenu()
+    {
+        await JSRuntime.InvokeVoidAsync("fecharmenu");
+    }
+    
+    private async Task FecharMOdal()
+    {
+        await JSRuntime.InvokeVoidAsync("fecharmodal");
+    }
+    
 }

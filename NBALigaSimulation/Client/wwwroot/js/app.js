@@ -8,10 +8,16 @@ function initializeAutocomplete(availableTags, inputId) {
     });
 }
 
-$('#closemodal').click(function() {
-    $('#loginModel').modal('hide');
-});
+function fecharmodal() {
+    var navbarTogglerButton = document.getElementById("modalButton");
+    navbarTogglerButton.click();
+}
 
-$('.nav-link').on('click',function() {
-    $('.navbar-collapse').collapse('hide');
-});
+function fecharmenu() {
+    var navbarTogglerButton = document.getElementById("navbarTogglerButton");
+
+    var navbarSupportedContent = document.getElementById("navbarSupportedContent");
+    if (navbarSupportedContent.classList.contains('show')) {
+        navbarTogglerButton.click();
+    }
+}

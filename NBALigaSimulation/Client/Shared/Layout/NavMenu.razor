@@ -16,9 +16,10 @@
             NBALIGA
         </a>
         <div class="d-flex flex-row align-items-center">
-            <button class="navbar-toggler me-2" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <button id="navbarTogglerButton" class="navbar-toggler me-2" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
+            
             <!-- Ícone de login -->
             <div class="d-lg-none">
                 <a class="btn btn-outline-light" href="#" type="button" data-bs-toggle="modal" data-bs-target="#loginModel"><i class="bi bi-person"></i></a>
@@ -28,27 +29,27 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                 <li class="nav-item">
-                    <a class="nav-link" href="/">Home</a>
+                    <a class="nav-link" href="#" @onclick="FecharMenu">Home</a>
                 </li>
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Liga</a>
                     <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="/finances">Finanças</a></li>
-                        <li><a class="dropdown-item" href="/picks">Draft Picks</a></li>
-                        <li><a class="dropdown-item" href="/comparison">Sobre</a></li>
+                        <li><a class="dropdown-item" href="/finances" @onclick="FecharMenu">Finanças</a></li>
+                        <li><a class="dropdown-item" href="/picks" @onclick="FecharMenu">Draft Picks</a></li>
+                        <li><a class="dropdown-item" href="/comparison" @onclick="FecharMenu">Sobre</a></li>
                     </ul>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/teams">Times</a>
+                    <a class="nav-link" href="/teams" @onclick="FecharMenu"> Times</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/calendar">Calendário</a>
+                    <a class="nav-link" href="/calendar" @onclick="FecharMenu">Calendário</a>
                 </li>
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Estatísticas</a>
                     <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="/stats">Players Estatísticas</a></li>
-                        <li><a class="dropdown-item" href="/stats/teams">Team Estatísticas</a></li>
+                        <li><a class="dropdown-item" href="/stats" @onclick="FecharMenu">Players Estatísticas</a></li>
+                        <li><a class="dropdown-item" href="/stats/teams" @onclick="FecharMenu">Team Estatísticas</a></li>
                     </ul>
                 </li>
                 <li class="nav-item">
@@ -57,7 +58,7 @@
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Jogadores</a>
                     <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="/comparison">Comparação</a></li>
+                        <li><a class="dropdown-item" href="/comparison" @onclick="FecharMenu">Comparação</a></li>
                     </ul>
                 </li>
             </ul>
@@ -111,16 +112,16 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h1 class="modal-title fs-5" id="loginModel">Bem vindo, @userName  <img src=@($"../Images/Logos/{userTeam}.svg") Style="vertical-align: middle; background: none" alt="Team logo" width="35" ></h1>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <button type="button" id="modalButton" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     <ul class="list-group list-group-flush">
-                        <li class="list-group-item">
-                            <a href="/teams/rotation" class="list-group-item list-group-item-action" aria-current="true">
+                        <li class="list-group-item" data-bs-dismiss="modal" >
+                            <a href="/teams/rotation" class="list-group-item list-group-item-action" aria-current="true" @onclick="FecharMOdal" >
                                 Verificar Rotação
                             </a></li>
                         <li class="list-group-item">
-                            <a href="/teams/gameplan" class="list-group-item list-group-item-action" aria-current="true">
+                            <a href="/teams/gameplan" class="list-group-item list-group-item-action" aria-current="true" @onclick="FecharMOdal" >
                                 Verificar Gameplan
                             </a></li>
                         <li class="list-group-item">A third item</li>

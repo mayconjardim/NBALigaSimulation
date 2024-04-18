@@ -62,7 +62,6 @@ public partial class Gameplan
         {
             isDirty = false;
             StateHasChanged();
-            await JSRuntime.InvokeVoidAsync("console.log", _gameplan);
             ToastService.Notify(new(ToastType.Success, $"{gameplan} ATUALIIZADO COM SUCESSO"));
         }
         else
@@ -153,4 +152,5 @@ public partial class Gameplan
         isDirtySaveKeyPlayers = true;
         StateHasChanged();
     }
+
 }

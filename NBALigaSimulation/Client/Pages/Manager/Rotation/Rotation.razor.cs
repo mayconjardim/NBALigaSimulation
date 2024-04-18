@@ -39,8 +39,6 @@ public partial class Rotation
         {
             _team = result.Data;
             _players = result.Data.Players;
-            await JSRuntime.InvokeVoidAsync("console.log", _players);
-
         }
     }
     
