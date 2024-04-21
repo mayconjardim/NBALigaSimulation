@@ -35,12 +35,7 @@ namespace NBALigaSimulation.Server.Controllers
             }
         }
         
-        [HttpGet]
-        public async Task<ActionResult<ServiceResponse<List<PlayerSimpleDto>>>> GetAllPlayers()
-        {
-            var result = await _playerService.GetAllPlayers();
-            return Ok(result);
-        }
+ 
         
         [HttpGet("simple")]
         public async Task<ActionResult<ServiceResponse<List<PlayerSimpleDto>>>> GetAllSimplePlayers()
@@ -50,10 +45,10 @@ namespace NBALigaSimulation.Server.Controllers
         }
 
         [HttpGet("FAPlayers")]
-        public async Task<ActionResult<ServiceResponse<List<PlayerSimpleDto>>>> GetAllFAPlayers()
+        public async Task<ActionResult<ServiceResponse<PageableResponse<PlayerCompleteDto>>>> GetAllFaPlayers(int page, int pageSize, int season, bool isAscending, string sortedColumn,
+            string position = null)
         {
-
-            var result = await _playerService.GetAllFaPlayers();
+            var result = await _playerService.GetAllFaPlayers(page, pageSize, season, isAscending, sortedColumn, position);
             return Ok(result);
 
         }

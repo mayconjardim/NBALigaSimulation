@@ -8,7 +8,7 @@ namespace NBALigaSimulation.Client.Pages.Stats.PlayerStatsPage;
 
 public partial class PlayerStatsPage
 {
-    private PageableStatsResponse<PlayerRegularStatsDto> _statsResponse;
+    private PageableResponse<PlayerRegularStatsDto> _statsResponse;
     private List<PlayerRegularStatsDto> _playerStats;
     private List<CompleteSeasonDto> _seasonsList;
     private int _currentPage = 1;
@@ -32,7 +32,7 @@ public partial class PlayerStatsPage
         if (result.Success)
         {
             _statsResponse = result.Data;
-            _playerStats = _statsResponse.Stats;
+            _playerStats = _statsResponse.Response;
             _currentPage = _statsResponse.CurrentPage;
         }
         else
@@ -65,7 +65,7 @@ public partial class PlayerStatsPage
             var result = await StatsService.GetAllPlayerRegularStats(_currentPage, _pageSize, _season, isAscending, position, sortedColumn);
             if (result.Success)
             {
-                _playerStats = result.Data.Stats;
+                _playerStats = result.Data.Response;
                 _currentPage = result.Data.CurrentPage; 
             }
             StateHasChanged();
@@ -77,7 +77,7 @@ public partial class PlayerStatsPage
             var result = await StatsService.GetAllPlayerRegularStats(_currentPage, _pageSize, _season, isAscending, position, sortedColumn);
             if (result.Success)
             {
-                _playerStats = result.Data.Stats;
+                _playerStats = result.Data.Response;
                 _currentPage = result.Data.CurrentPage; 
             }
             StateHasChanged();
@@ -93,7 +93,7 @@ public partial class PlayerStatsPage
           var result = await StatsService.GetAllPlayerRegularStats(_currentPage, _pageSize, _season, isAscending, position);
           if (result.Success)
           {
-              _playerStats = result.Data.Stats;
+              _playerStats = result.Data.Response;
               _currentPage = result.Data.CurrentPage; 
           }
         }
@@ -111,7 +111,7 @@ public partial class PlayerStatsPage
                 var result = await StatsService.GetAllPlayerRegularStats(_currentPage, _pageSize, _season, isAscending, position);
                 if (result.Success)
                 {
-                    _playerStats = result.Data.Stats;
+                    _playerStats = result.Data.Response;
                     _currentPage = result.Data.CurrentPage; 
                 }
             }
@@ -129,7 +129,7 @@ public partial class PlayerStatsPage
             var result = await StatsService.GetAllPlayerRegularStats(_currentPage, _pageSize, _season, isAscending, position);
             if (result.Success)
             {
-                _playerStats = result.Data.Stats;
+                _playerStats = result.Data.Response;
                 _currentPage = result.Data.CurrentPage; 
             }
         }

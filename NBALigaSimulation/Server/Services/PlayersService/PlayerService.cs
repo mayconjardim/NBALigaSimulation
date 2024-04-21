@@ -95,18 +95,7 @@ namespace NBALigaSimulation.Server.Services.PlayersService
 
             return response;
         }
-
-        public async Task<ServiceResponse<List<PlayerCompleteDto>>> GetAllPlayers()
-        {
-            var players = await _context.Players.Include(p => p.Ratings).ToListAsync();
-            var response = new ServiceResponse<List<PlayerCompleteDto>>
-            {
-                Data = _mapper.Map<List<PlayerCompleteDto>>(players)
-            };
-
-            return response;
-        }
-
+        
         public async Task<ServiceResponse<List<PlayerCompleteDto>>> GetAllFaPlayers()
         {
             var players = await _context.Players.Where(t => t.TeamId == 21)
@@ -118,6 +107,79 @@ namespace NBALigaSimulation.Server.Services.PlayersService
             };
 
             return response;
+        }
+
+        public async Task<ServiceResponse<PageableResponse<PlayerCompleteDto>>> GetAllFaPlayers(int page, int pageSize, int season, bool isAscending, string sortedColumn,
+            string position = null)
+        {
+          
+              var response = new ServiceResponse<PageableResponse<PlayerCompleteDto>>();
+
+		    try
+            {
+                
+                IQueryable<Player> query = _context.Players.Where(t => t.TeamId == 21)
+                    .Include(p => p.Ratings);
+
+                var orderByExpression = query.OrderByDescending(p => p.Ratings.LastOrDefault().CalculateOvr);
+
+		        if (!string.IsNullOrEmpty(sortedColumn))
+		        {
+		            orderByExpression= sortedColumn switch
+		            {
+		                "OVR" => isAscending ? query.OrderByDescending(p => p.Ratings.LastOrDefault().CalculateOvr) : query.OrderBy(p => p.Ratings.LastOrDefault().CalculateOvr),
+		                "POT" => isAscending ? query.OrderByDescending(p => p.Ratings.LastOrDefault().Pot) : query.OrderBy(p => p.Ratings.LastOrDefault().Pot),
+		                "HGT" => isAscending ? query.OrderByDescending(p => p.Ratings.LastOrDefault().Hgt) : query.OrderBy(p => p.Ratings.LastOrDefault().Hgt),
+		                "STR" => isAscending ? query.OrderByDescending(p => p.Ratings.LastOrDefault().Stre) : query.OrderBy(p => p.Ratings.LastOrDefault().Stre),
+			            "SPD" => isAscending ? query.OrderByDescending(p => p.Ratings.LastOrDefault().Spd) : query.OrderBy(p => p.Ratings.LastOrDefault().Spd),
+		                "JMP" => isAscending ? query.OrderByDescending(p => p.Ratings.LastOrDefault().Jmp) : query.OrderBy(p => p.Ratings.LastOrDefault().Jmp),
+		                "END" => isAscending ? query.OrderByDescending(p => p.Ratings.LastOrDefault().Endu) : query.OrderBy(p => p.Ratings.LastOrDefault().Endu),
+		                "INS" => isAscending ? query.OrderByDescending(p => p.Ratings.LastOrDefault().Ins) : query.OrderBy(p => p.Ratings.LastOrDefault().Ins),
+		                "DNK" => isAscending ? query.OrderByDescending(p => p.Ratings.LastOrDefault().Dnk) : query.OrderBy(p => p.Ratings.LastOrDefault().Dnk),
+		                "FT" =>  isAscending ? query.OrderByDescending(p => p.Ratings.LastOrDefault().Ft) : query.OrderBy(p => p.Ratings.LastOrDefault().Ft),
+		                "2PT" => isAscending ? query.OrderByDescending(p => p.Ratings.LastOrDefault().Fg) : query.OrderBy(p => p.Ratings.LastOrDefault().Fg),
+		                "3PT" => isAscending ? query.OrderByDescending(p => p.Ratings.LastOrDefault().Tp) : query.OrderBy(p => p.Ratings.LastOrDefault().Tp),
+			            "OIQ" => isAscending ? query.OrderByDescending(p => p.Ratings.LastOrDefault().Oiq) : query.OrderBy(p => p.Ratings.LastOrDefault().Oiq),
+		                "DIQ" => isAscending ? query.OrderByDescending(p => p.Ratings.LastOrDefault().Diq) : query.OrderBy(p => p.Ratings.LastOrDefault().Diq),
+                        "DRB" => isAscending ? query.OrderByDescending(p => p.Ratings.LastOrDefault().Drb) : query.OrderBy(p => p.Ratings.LastOrDefault().Drb),
+                        "PSS" => isAscending ? query.OrderByDescending(p => p.Ratings.LastOrDefault().Pss) : query.OrderBy(p => p.Ratings.LastOrDefault().Pss),
+                        "REB" => isAscending ? query.OrderByDescending(p => p.Ratings.LastOrDefault().Reb) : query.OrderBy(p => p.Ratings.LastOrDefault().Reb),
+                        _ => orderByExpression
+		            };
+		        }
+		        
+		        if (!string.IsNullOrEmpty(position))
+		        {
+			        query = orderByExpression.Where(p => p.Pos == position);
+		        }
+
+		        var players = await query
+		            .Skip((page - 1) * pageSize)
+		            .Take(pageSize)
+		            .ToListAsync();
+
+		        var totalPages = (int)Math.Ceiling(await query.CountAsync() / (double)pageSize);
+
+		        var playerFAtoList = _mapper.Map<List<PlayerCompleteDto>>(players);
+
+		        var playerFAResponse = new PageableResponse<PlayerCompleteDto>()
+		        {
+		            Response = playerFAtoList,
+		            Pages = totalPages,
+		            CurrentPage = page
+		        };
+
+		        response.Data = playerFAResponse;
+		        response.Success = true;
+		    }
+		    catch (Exception ex)
+		    {
+		        response.Success = false;
+		        response.Message = $"Ocorreu um erro ao recuperar os jogadores: {ex.Message}";
+		    }
+
+		    return response; 
+            
         }
 
         public async Task<ServiceResponse<List<PlayerCompleteDto>>> GetAllDraftPlayers()

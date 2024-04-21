@@ -16,58 +16,58 @@
             <table class="table" id="statsTable">
                 <thead>
                 <tr>
-                    <th>PLAYER</th>
+                    <th style="text-align: center">PLAYER</th>
                     <th>AGE</th>
                     <th>EXP</th>
-                          
+
                     <th @onclick='() => SortTable("OVR")'>OVR
                         <i class="bi @GetSortIcon("OVR")"></i>
                     </th>
-                          
+
                     <th @onclick='() => SortTable("POT")'>POT
                         <i class="bi @GetSortIcon("POT")"></i>
                     </th>
-                          
+
                     <th @onclick='() => SortTable("HGT")'>HGT
                         <i class="bi @GetSortIcon("HGT")"></i>
                     </th>
-                          
+
                     <th @onclick='() => SortTable("STR")'>STR
                         <i class="bi @GetSortIcon("STR")"></i>
                     </th>
-                          
+
                     <th @onclick='() => SortTable("SPD")'>SPD
                         <i class="bi @GetSortIcon("SPD")"></i>
                     </th>
-                            
+
                     <th @onclick='() => SortTable("JMP")'>JMP
                         <i class="bi @GetSortIcon("JMP")"></i>
                     </th>
-                            
+
                     <th @onclick='() => SortTable("END")'>END
                         <i class="bi @GetSortIcon("END")"></i>
                     </th>
-                             
+
                     <th @onclick='() => SortTable("INS")'>INS
                         <i class="bi @GetSortIcon("INS")"></i>
                     </th>
-                             
+
                     <th @onclick='() => SortTable("DNK")'>DNK
                         <i class="bi @GetSortIcon("DNK")"></i>
                     </th>
-                             
+
                     <th @onclick='() => SortTable("FT")'>FT
                         <i class="bi @GetSortIcon("FT")"></i>
                     </th>
-                                       
+
                     <th @onclick='() => SortTable("2PT")'>2PT
                         <i class="bi @GetSortIcon("2PT")"></i>
                     </th>
-                             
+
                     <th @onclick='() => SortTable("3PT")'>3PT
                         <i class="bi @GetSortIcon("3PT")"></i>
                     </th>
-                         
+
                     <th @onclick='() => SortTable("OIQ")'>OIQ
                         <i class="bi @GetSortIcon("OIQ")"></i>
                     </th>
@@ -77,7 +77,7 @@
                     <th @onclick='() => SortTable("DRB")'>DRB
                         <i class="bi @GetSortIcon("DRB")"></i>
                     </th>
-                              
+
                     <th @onclick='() => SortTable("PSS")'>PSS
                         <i class="bi @GetSortIcon("PSS")"></i>
                     </th>
@@ -85,38 +85,43 @@
                     <th @onclick='() => SortTable("REB")'>REB
                         <i class="bi @GetSortIcon("REB")"></i>
                     </th>
-                            
+
                 </tr>
                 </thead>
                 <tbody>
-                @foreach (var rating in _playersRatings)
+                @foreach (var player in _faPlayers)
                 {
-                    <tr>
-                        <td>
-                            <div class="player-pic NBA">
-                                <img src=@($"{ratings.ImgUrl}") alt="Team logo" width="35">
-                            </div>
-                        </td>
-                        <td>@rating.Season</td>
-                        <td>@Util.Age(@rating.Season, _player.Born.Year)</td>
-                        <td>@rating.CalculateOvr</td>
-                        <td>@rating.Pot</td>
-                        <td>@rating.Hgt</td>
-                        <td>@rating.Stre</td>
-                        <td>@rating.Spd</td>
-                        <td>@rating.Jmp</td>
-                        <td>@rating.Endu</td>
-                        <td>@rating.Ins</td>
-                        <td>@rating.Dnk</td>
-                        <td>@rating.Ft</td>
-                        <td>@rating.Fg</td>
-                        <td>@rating.Tp</td>
-                        <td>@rating.Oiq</td>
-                        <td>@rating.Diq</td>
-                        <td>@rating.Drb</td>
-                        <td>@rating.Pss</td>
-                        <td>@rating.Reb</td>
-                    </tr>
+                    @if (player.Ratings != null)
+                    {
+                        <tr>
+                            <td>
+                                <div class="player-pic @player.TeamAbrv">
+                                    <i class="bi bi-person-add" style="color: green; font-size: 27rem; margin-right: 0.5rem"></i>
+                                    <img src=@($"{player.ImgUrl}") alt="Team logo" width="35">
+                                    @player.Name, <span>@player.Pos</span>
+                                </div>
+                            </td>
+                            <td>@Util.Age(@player.Ratings.LastOrDefault().Season, player.Born.Year)</td>
+                            <td>@player.Ratings.Count</td>
+                            <td>@player.Ratings.LastOrDefault()?.CalculateOvr</td>
+                            <td>@player.Ratings.LastOrDefault()?.Pot</td>
+                            <td>@player.Ratings.LastOrDefault()?.Hgt</td>
+                            <td>@player.Ratings.LastOrDefault()?.Stre</td>
+                            <td>@player.Ratings.LastOrDefault()?.Spd</td>
+                            <td>@player.Ratings.LastOrDefault()?.Jmp</td>
+                            <td>@player.Ratings.LastOrDefault()?.Endu</td>
+                            <td>@player.Ratings.LastOrDefault()?.Ins</td>
+                            <td>@player.Ratings.LastOrDefault()?.Dnk</td>
+                            <td>@player.Ratings.LastOrDefault()?.Ft</td>
+                            <td>@player.Ratings.LastOrDefault()?.Fg</td>
+                            <td>@player.Ratings.LastOrDefault()?.Tp</td>
+                            <td>@player.Ratings.LastOrDefault()?.Oiq</td>
+                            <td>@player.Ratings.LastOrDefault()?.Diq</td>
+                            <td>@player.Ratings.LastOrDefault()?.Drb</td>
+                            <td>@player.Ratings.LastOrDefault()?.Pss</td>
+                            <td>@player.Ratings.LastOrDefault()?.Reb</td>
+                        </tr>
+                    }
                 }
                 </tbody>
             </table>
@@ -124,6 +129,10 @@
             
             
             
+        }
+        else
+        {
+            <p>Nenhum FA player disponivel</p>
         }
         </div>
     </div>

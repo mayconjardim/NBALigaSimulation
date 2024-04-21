@@ -4,8 +4,8 @@ namespace NBALigaSimulation.Client.Pages.Manager.FreeAgency.FAList;
 
 public partial class FAPlayers
 {
-    private List<PlayerCompleteDto> _faPlayers = new List<PlayerCompleteDto>();
-    private List<PlayerCompleteDto> _playersRatings = new List<PlayerCompleteDto>();
+    private List<PlayerCompleteDto> _faPlayers;
+    private List<PlayerRatingDto> _playersRatings;
     private int _season;
     private string sortedColumn = "OVR";
     private bool isAscending = false;
@@ -17,17 +17,19 @@ public partial class FAPlayers
     protected override async Task OnInitializedAsync()
     {
         message = "Carregando FA...";
-
-        var result = await PlayerService.GetAllFAPlayers();
+            
+        _season = int.Parse(await LocalStorage.GetItemAsync<string>("season"));   
+            
+        var result = await PlayerService.GetAllFaPlayers(_currentPage, _pageSize, _season, isAscending, sortedColumn, _position);
+        
         if (!result.Success)
         {
             message = result.Message;
         }
         else
         {
-            _faPlayers = result.Data;
-            _playersRatings = _faPlayers;
-           _season = int.Parse(await LocalStorage.GetItemAsync<string>("season"));
+            _faPlayers = result.Data.Response;
+  
         }
 
     }
@@ -46,10 +48,10 @@ public partial class FAPlayers
         if (columnName == sortedColumn)
         {
             isAscending = !isAscending;
-            var result = await PlayerService.GetAllFAPlayers(_currentPage, _pageSize, _season, isAscending, _position, sortedColumn);
+            var result = await PlayerService.GetAllFaPlayers(_currentPage, _pageSize, _season, isAscending, sortedColumn, _position);
             if (result.Success)
             {
-                _faPlayers = result.Data.Players;
+                _faPlayers = result.Data.Response;
                 _currentPage = result.Data.CurrentPage; 
             }
             StateHasChanged();
@@ -58,10 +60,10 @@ public partial class FAPlayers
         {
             sortedColumn = columnName;
             isAscending = true;
-            var result = await PlayerService.GetAllFAPlayers(_currentPage, _pageSize, _season, isAscending, _position, sortedColumn);
+            var result = await PlayerService.GetAllFaPlayers(_currentPage, _pageSize, _season, isAscending, sortedColumn, _position );
             if (result.Success)
             {
-                _faPlayers = result.Data.Players;
+                _faPlayers = result.Data.Response;
                 _currentPage = result.Data.CurrentPage; 
             }
             

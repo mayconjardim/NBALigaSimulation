@@ -15,7 +15,7 @@ public class StatsService : IStatsService
         _http = http;
     }
 
-    public async Task<ServiceResponse<PageableStatsResponse<PlayerRegularStatsDto>>> GetAllPlayerRegularStats(int page, int pageSize, int season,
+    public async Task<ServiceResponse<PageableResponse<PlayerRegularStatsDto>>> GetAllPlayerRegularStats(int page, int pageSize, int season,
         bool isAscending, string position, string stat = null)
     {
         var url = $"api/stats/players?page={page}&pageSize={pageSize}&season={season}&isAscending={isAscending}";
@@ -31,7 +31,7 @@ public class StatsService : IStatsService
         }
 
 
-        return await _http.GetFromJsonAsync<ServiceResponse<PageableStatsResponse<PlayerRegularStatsDto>>>(url);
+        return await _http.GetFromJsonAsync<ServiceResponse<PageableResponse<PlayerRegularStatsDto>>>(url);
     }
 
     
