@@ -68,6 +68,12 @@ public class PlayerService : IPlayerService
         return response;
     }
     
+    public async Task<ServiceResponse<List<PlayerCompleteDto>>> GetAllFAPlayers()
+    {
+        var result = await _http.GetFromJsonAsync<ServiceResponse<List<PlayerCompleteDto>>>($"api/players/FAPlayers");
+        return result;
+    }
+    
     
 
 }

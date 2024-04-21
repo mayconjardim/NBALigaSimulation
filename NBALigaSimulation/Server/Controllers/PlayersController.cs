@@ -49,7 +49,7 @@ namespace NBALigaSimulation.Server.Controllers
             return Ok(result);
         }
 
-        [HttpGet("fa")]
+        [HttpGet("FAPlayers")]
         public async Task<ActionResult<ServiceResponse<List<PlayerSimpleDto>>>> GetAllFAPlayers()
         {
 

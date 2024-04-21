@@ -1,0 +1,131 @@
+@page "/freeagency"
+@using NBALigaSimulation.Client.Utilities
+@attribute [Authorize]
+@inject IPlayerService PlayerService
+@inject ILocalStorageService LocalStorage
+
+<CascadingAuthenticationState>
+    <AuthorizeView>
+    <div class="container">
+       
+        <div class="fa-players">
+        @if (_faPlayers != null)
+        {
+            
+             <div class="table-responsive">
+            <table class="table" id="statsTable">
+                <thead>
+                <tr>
+                    <th>PLAYER</th>
+                    <th>AGE</th>
+                    <th>EXP</th>
+                          
+                    <th @onclick='() => SortTable("OVR")'>OVR
+                        <i class="bi @GetSortIcon("OVR")"></i>
+                    </th>
+                          
+                    <th @onclick='() => SortTable("POT")'>POT
+                        <i class="bi @GetSortIcon("POT")"></i>
+                    </th>
+                          
+                    <th @onclick='() => SortTable("HGT")'>HGT
+                        <i class="bi @GetSortIcon("HGT")"></i>
+                    </th>
+                          
+                    <th @onclick='() => SortTable("STR")'>STR
+                        <i class="bi @GetSortIcon("STR")"></i>
+                    </th>
+                          
+                    <th @onclick='() => SortTable("SPD")'>SPD
+                        <i class="bi @GetSortIcon("SPD")"></i>
+                    </th>
+                            
+                    <th @onclick='() => SortTable("JMP")'>JMP
+                        <i class="bi @GetSortIcon("JMP")"></i>
+                    </th>
+                            
+                    <th @onclick='() => SortTable("END")'>END
+                        <i class="bi @GetSortIcon("END")"></i>
+                    </th>
+                             
+                    <th @onclick='() => SortTable("INS")'>INS
+                        <i class="bi @GetSortIcon("INS")"></i>
+                    </th>
+                             
+                    <th @onclick='() => SortTable("DNK")'>DNK
+                        <i class="bi @GetSortIcon("DNK")"></i>
+                    </th>
+                             
+                    <th @onclick='() => SortTable("FT")'>FT
+                        <i class="bi @GetSortIcon("FT")"></i>
+                    </th>
+                                       
+                    <th @onclick='() => SortTable("2PT")'>2PT
+                        <i class="bi @GetSortIcon("2PT")"></i>
+                    </th>
+                             
+                    <th @onclick='() => SortTable("3PT")'>3PT
+                        <i class="bi @GetSortIcon("3PT")"></i>
+                    </th>
+                         
+                    <th @onclick='() => SortTable("OIQ")'>OIQ
+                        <i class="bi @GetSortIcon("OIQ")"></i>
+                    </th>
+                    <th @onclick='() => SortTable("DIQ")'>DIQ
+                        <i class="bi @GetSortIcon("DIQ")"></i>
+                    </th>
+                    <th @onclick='() => SortTable("DRB")'>DRB
+                        <i class="bi @GetSortIcon("DRB")"></i>
+                    </th>
+                              
+                    <th @onclick='() => SortTable("PSS")'>PSS
+                        <i class="bi @GetSortIcon("PSS")"></i>
+                    </th>
+
+                    <th @onclick='() => SortTable("REB")'>REB
+                        <i class="bi @GetSortIcon("REB")"></i>
+                    </th>
+                            
+                </tr>
+                </thead>
+                <tbody>
+                @foreach (var rating in _playersRatings)
+                {
+                    <tr>
+                        <td>
+                            <div class="player-pic NBA">
+                                <img src=@($"{ratings.ImgUrl}") alt="Team logo" width="35">
+                            </div>
+                        </td>
+                        <td>@rating.Season</td>
+                        <td>@Util.Age(@rating.Season, _player.Born.Year)</td>
+                        <td>@rating.CalculateOvr</td>
+                        <td>@rating.Pot</td>
+                        <td>@rating.Hgt</td>
+                        <td>@rating.Stre</td>
+                        <td>@rating.Spd</td>
+                        <td>@rating.Jmp</td>
+                        <td>@rating.Endu</td>
+                        <td>@rating.Ins</td>
+                        <td>@rating.Dnk</td>
+                        <td>@rating.Ft</td>
+                        <td>@rating.Fg</td>
+                        <td>@rating.Tp</td>
+                        <td>@rating.Oiq</td>
+                        <td>@rating.Diq</td>
+                        <td>@rating.Drb</td>
+                        <td>@rating.Pss</td>
+                        <td>@rating.Reb</td>
+                    </tr>
+                }
+                </tbody>
+            </table>
+        </div>
+            
+            
+            
+        }
+        </div>
+    </div>
+    </AuthorizeView>
+</CascadingAuthenticationState>

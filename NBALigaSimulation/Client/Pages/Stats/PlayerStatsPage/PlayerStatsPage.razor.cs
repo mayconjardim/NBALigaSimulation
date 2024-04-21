@@ -82,8 +82,6 @@ public partial class PlayerStatsPage
             }
             StateHasChanged();
         }
-        
-       
     }
 
     private async Task HandlePositionChange(ChangeEventArgs e)

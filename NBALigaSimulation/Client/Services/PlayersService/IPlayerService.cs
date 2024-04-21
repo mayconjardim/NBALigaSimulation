@@ -11,6 +11,7 @@ public interface IPlayerService
     Task<ServiceResponse<List<PlayerSimpleDto>>> GetPlayersSearchSuggestions(string searchText);
     Task<ServiceResponse<List<PlayerSimpleDto>>> GetAllSimplePlayers();
     Task<ServiceResponse<bool>> UpdatePlayerPtModifier(int playerId, double newPtModifier);
+    Task<ServiceResponse<List<PlayerCompleteDto>>> GetAllFAPlayers();
 
     
 }
