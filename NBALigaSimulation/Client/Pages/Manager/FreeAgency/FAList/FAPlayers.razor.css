@@ -3,6 +3,16 @@ h5 {
     font-weight: 900;
 }
 
+.filters {
+    display: flex;
+    flex-direction: row;
+}
+
+.form-select {
+    margin: 0.625rem;
+}
+
+
 table {
     background-color: var(--white);
     width: 100%;

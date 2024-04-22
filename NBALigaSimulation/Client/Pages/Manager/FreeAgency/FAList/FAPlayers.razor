@@ -7,6 +7,24 @@
 <CascadingAuthenticationState>
     <AuthorizeView>
     <div class="container">
+
+        <div class="filters">
+            <select class="form-select" @onchange="HandlePositionChange" >
+                <option value="">Filtrar por uma posição</option>
+                @foreach (string pos in positions)
+                {
+                <option value="@pos">@pos</option>
+                }
+            </select>
+
+            <select class="form-select" @onchange="HandleSizeChange">
+                <option value="">Limite da lista</option>
+                @foreach (var item in limit)
+                {
+                <option value="@item">@item</option>
+                }
+            </select>
+        </div>
        
         <div class="fa-players">
         @if (_faPlayers != null)
@@ -96,7 +114,7 @@
                         <tr>
                             <td>
                                 <div class="player-pic @player.TeamAbrv">
-                                    <i class="bi bi-person-add" style="color: green; font-size: 27rem; margin-right: 0.5rem"></i>
+                                    <i class="bi bi-person-add" style="color: green; font-size: 1.5rem; margin-right: 0.5rem; vertical-align: middle"></i>
                                     <img src=@($"{player.ImgUrl}") alt="Team logo" width="35">
                                     @player.Name, <span>@player.Pos</span>
                                 </div>

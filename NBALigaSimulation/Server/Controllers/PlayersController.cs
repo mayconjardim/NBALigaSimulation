@@ -48,8 +48,21 @@ namespace NBALigaSimulation.Server.Controllers
         public async Task<ActionResult<ServiceResponse<PageableResponse<PlayerCompleteDto>>>> GetAllFaPlayers(int page, int pageSize, int season, bool isAscending, string sortedColumn,
             string position = null)
         {
-            var result = await _playerService.GetAllFaPlayers(page, pageSize, season, isAscending, sortedColumn, position);
-            return Ok(result);
+            try
+            {
+                var result = await _playerService.GetAllFaPlayers(page, pageSize, season, isAscending, sortedColumn, position);
+
+                if (!result.Success)
+                {
+                    return StatusCode(500, result);
+                }
+
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new ServiceResponse<PageableResponse<PlayerRegularStatsDto>> { Success = false, Message = ex.Message });
+            }
 
         }
 

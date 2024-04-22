@@ -121,32 +121,103 @@ namespace NBALigaSimulation.Server.Services.PlayersService
                 IQueryable<Player> query = _context.Players.Where(t => t.TeamId == 21)
                     .Include(p => p.Ratings);
 
-                var orderByExpression = query.OrderByDescending(p => p.Ratings.LastOrDefault().CalculateOvr);
+                var orderByExpression = query.OrderByDescending(p =>
+                    p.Ratings.OrderByDescending(r => r.Season == season).FirstOrDefault().CalculateOvr);
+                
+                if (!string.IsNullOrEmpty(sortedColumn))
+                {
+                    switch (sortedColumn)
+                    {
+                        case "OVR":
+                            orderByExpression = isAscending ?
+                                query.OrderByDescending(p => p.Ratings.OrderByDescending(r => r.Season == season).FirstOrDefault().CalculateOvr) :
+                                query.OrderBy(p => p.Ratings.OrderByDescending(r => r.Season == season).FirstOrDefault().CalculateOvr);
+                            break;
+                        case "POT":
+                            orderByExpression = isAscending ?
+                                query.OrderByDescending(p => p.Ratings.OrderByDescending(r => r.Season == season).FirstOrDefault().Pot) :
+                                query.OrderBy(p => p.Ratings.OrderByDescending(r => r.Season == season).FirstOrDefault().Pot);
+                            break;
+                        case "HGT":
+                            orderByExpression = isAscending ?
+                                query.OrderByDescending(p => p.Ratings.OrderByDescending(r => r.Season == season).FirstOrDefault().Hgt) :
+                                query.OrderBy(p => p.Ratings.OrderByDescending(r => r.Season == season).FirstOrDefault().Hgt);
+                            break;
+                        case "STR":
+                            orderByExpression = isAscending ?
+                                query.OrderByDescending(p => p.Ratings.OrderByDescending(r => r.Season == season).FirstOrDefault().Stre) :
+                                query.OrderBy(p => p.Ratings.OrderByDescending(r => r.Season == season).FirstOrDefault().Stre);
+                            break;
+                        case "SPD":
+                            orderByExpression = isAscending ?
+                                query.OrderByDescending(p => p.Ratings.OrderByDescending(r => r.Season == season).FirstOrDefault().Spd) :
+                                query.OrderBy(p => p.Ratings.OrderByDescending(r => r.Season == season).FirstOrDefault().Spd);
+                            break;
+                        case "JMP":
+                            orderByExpression = isAscending ?
+                                query.OrderByDescending(p => p.Ratings.OrderByDescending(r => r.Season == season).FirstOrDefault().Jmp) :
+                                query.OrderBy(p => p.Ratings.OrderByDescending(r => r.Season == season).FirstOrDefault().Jmp);
+                            break;
+                        case "END":
+                            orderByExpression = isAscending ?
+                                query.OrderByDescending(p => p.Ratings.OrderByDescending(r => r.Season == season).FirstOrDefault().Endu) :
+                                query.OrderBy(p => p.Ratings.OrderByDescending(r => r.Season == season).FirstOrDefault().Endu);
+                            break;
+                        case "INS":
+                            orderByExpression = isAscending ?
+                                query.OrderByDescending(p => p.Ratings.OrderByDescending(r => r.Season == season).FirstOrDefault().Ins) :
+                                query.OrderBy(p => p.Ratings.OrderByDescending(r => r.Season == season).FirstOrDefault().Ins);
+                            break;
+                        case "DNK":
+                            orderByExpression = isAscending ?
+                                query.OrderByDescending(p => p.Ratings.OrderByDescending(r => r.Season == season).FirstOrDefault().Dnk) :
+                                query.OrderBy(p => p.Ratings.OrderByDescending(r => r.Season == season).FirstOrDefault().Dnk);
+                            break;
+                        case "FT":
+                            orderByExpression = isAscending ?
+                                query.OrderByDescending(p => p.Ratings.OrderByDescending(r => r.Season == season).FirstOrDefault().Ft) :
+                                query.OrderBy(p => p.Ratings.OrderByDescending(r => r.Season == season).FirstOrDefault().Ft);
+                            break;
+                        case "2PT":
+                            orderByExpression = isAscending ?
+                                query.OrderByDescending(p => p.Ratings.OrderByDescending(r => r.Season == season).FirstOrDefault().Fg) :
+                                query.OrderBy(p => p.Ratings.OrderByDescending(r => r.Season == season).FirstOrDefault().Fg);
+                            break;
+                        case "3PT":
+                            orderByExpression = isAscending ?
+                                query.OrderByDescending(p => p.Ratings.OrderByDescending(r => r.Season == season).FirstOrDefault().Tp) :
+                                query.OrderBy(p => p.Ratings.OrderByDescending(r => r.Season == season).FirstOrDefault().Tp);
+                            break;
+                        case "OIQ":
+                            orderByExpression = isAscending ?
+                                query.OrderByDescending(p => p.Ratings.OrderByDescending(r => r.Season == season).FirstOrDefault().Oiq) :
+                                query.OrderBy(p => p.Ratings.OrderByDescending(r => r.Season == season).FirstOrDefault().Oiq);
+                            break;
+                        case "DIQ":
+                            orderByExpression = isAscending ?
+                                query.OrderByDescending(p => p.Ratings.OrderByDescending(r => r.Season == season).FirstOrDefault().Diq) :
+                                query.OrderBy(p => p.Ratings.OrderByDescending(r => r.Season == season).FirstOrDefault().Diq);
+                            break;
+                        case "DRB":
+                            orderByExpression = isAscending ?
+                                query.OrderByDescending(p => p.Ratings.OrderByDescending(r => r.Season == season).FirstOrDefault().Drb) :
+                                query.OrderBy(p => p.Ratings.OrderByDescending(r => r.Season == season).FirstOrDefault().Drb);
+                            break;
+                        case "PSS":
+                            orderByExpression = isAscending ?
+                                query.OrderByDescending(p => p.Ratings.OrderByDescending(r => r.Season == season).FirstOrDefault().Pss) :
+                                query.OrderBy(p => p.Ratings.OrderByDescending(r => r.Season == season).FirstOrDefault().Pss);
+                            break;
+                        case "REB":
+                            orderByExpression = isAscending ?
+                                query.OrderByDescending(p => p.Ratings.OrderByDescending(r => r.Season == season).FirstOrDefault().Reb) :
+                                query.OrderBy(p => p.Ratings.OrderByDescending(r => r.Season == season).FirstOrDefault().Reb);
+                            break;
+                        default:
+                            break;
+                    }
+                }
 
-		        if (!string.IsNullOrEmpty(sortedColumn))
-		        {
-		            orderByExpression= sortedColumn switch
-		            {
-		                "OVR" => isAscending ? query.OrderByDescending(p => p.Ratings.LastOrDefault().CalculateOvr) : query.OrderBy(p => p.Ratings.LastOrDefault().CalculateOvr),
-		                "POT" => isAscending ? query.OrderByDescending(p => p.Ratings.LastOrDefault().Pot) : query.OrderBy(p => p.Ratings.LastOrDefault().Pot),
-		                "HGT" => isAscending ? query.OrderByDescending(p => p.Ratings.LastOrDefault().Hgt) : query.OrderBy(p => p.Ratings.LastOrDefault().Hgt),
-		                "STR" => isAscending ? query.OrderByDescending(p => p.Ratings.LastOrDefault().Stre) : query.OrderBy(p => p.Ratings.LastOrDefault().Stre),
-			            "SPD" => isAscending ? query.OrderByDescending(p => p.Ratings.LastOrDefault().Spd) : query.OrderBy(p => p.Ratings.LastOrDefault().Spd),
-		                "JMP" => isAscending ? query.OrderByDescending(p => p.Ratings.LastOrDefault().Jmp) : query.OrderBy(p => p.Ratings.LastOrDefault().Jmp),
-		                "END" => isAscending ? query.OrderByDescending(p => p.Ratings.LastOrDefault().Endu) : query.OrderBy(p => p.Ratings.LastOrDefault().Endu),
-		                "INS" => isAscending ? query.OrderByDescending(p => p.Ratings.LastOrDefault().Ins) : query.OrderBy(p => p.Ratings.LastOrDefault().Ins),
-		                "DNK" => isAscending ? query.OrderByDescending(p => p.Ratings.LastOrDefault().Dnk) : query.OrderBy(p => p.Ratings.LastOrDefault().Dnk),
-		                "FT" =>  isAscending ? query.OrderByDescending(p => p.Ratings.LastOrDefault().Ft) : query.OrderBy(p => p.Ratings.LastOrDefault().Ft),
-		                "2PT" => isAscending ? query.OrderByDescending(p => p.Ratings.LastOrDefault().Fg) : query.OrderBy(p => p.Ratings.LastOrDefault().Fg),
-		                "3PT" => isAscending ? query.OrderByDescending(p => p.Ratings.LastOrDefault().Tp) : query.OrderBy(p => p.Ratings.LastOrDefault().Tp),
-			            "OIQ" => isAscending ? query.OrderByDescending(p => p.Ratings.LastOrDefault().Oiq) : query.OrderBy(p => p.Ratings.LastOrDefault().Oiq),
-		                "DIQ" => isAscending ? query.OrderByDescending(p => p.Ratings.LastOrDefault().Diq) : query.OrderBy(p => p.Ratings.LastOrDefault().Diq),
-                        "DRB" => isAscending ? query.OrderByDescending(p => p.Ratings.LastOrDefault().Drb) : query.OrderBy(p => p.Ratings.LastOrDefault().Drb),
-                        "PSS" => isAscending ? query.OrderByDescending(p => p.Ratings.LastOrDefault().Pss) : query.OrderBy(p => p.Ratings.LastOrDefault().Pss),
-                        "REB" => isAscending ? query.OrderByDescending(p => p.Ratings.LastOrDefault().Reb) : query.OrderBy(p => p.Ratings.LastOrDefault().Reb),
-                        _ => orderByExpression
-		            };
-		        }
 		        
 		        if (!string.IsNullOrEmpty(position))
 		        {
