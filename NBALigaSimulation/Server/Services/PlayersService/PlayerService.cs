@@ -4,6 +4,7 @@ using NBALigaSimulation.Shared.Engine.Utils;
 using NBALigaSimulation.Shared.Models.Players;
 using NBALigaSimulation.Shared.Models.Seasons;
 using NBALigaSimulation.Shared.Models.Utils;
+using Radzen;
 
 namespace NBALigaSimulation.Server.Services.PlayersService
 {
@@ -114,133 +115,68 @@ namespace NBALigaSimulation.Server.Services.PlayersService
         {
           
               var response = new ServiceResponse<PageableResponse<PlayerCompleteDto>>();
-
-		    try
+		    try 
             {
                 
-                IQueryable<Player> query = _context.Players.Where(t => t.TeamId == 21)
+                IQueryable<Player> query = _context.Players
+                    .Where(p => p.TeamId == 21)
                     .Include(p => p.Ratings);
 
-                var orderByExpression = query.OrderByDescending(p =>
-                    p.Ratings.OrderByDescending(r => r.Season == season).FirstOrDefault().CalculateOvr);
+                List<Player> players;
                 
-                if (!string.IsNullOrEmpty(sortedColumn))
+                if (!string.IsNullOrEmpty(position))
                 {
-                    switch (sortedColumn)
-                    {
-                        case "OVR":
-                            orderByExpression = isAscending ?
-                                query.OrderByDescending(p => p.Ratings.OrderByDescending(r => r.Season == season).FirstOrDefault().CalculateOvr) :
-                                query.OrderBy(p => p.Ratings.OrderByDescending(r => r.Season == season).FirstOrDefault().CalculateOvr);
-                            break;
-                        case "POT":
-                            orderByExpression = isAscending ?
-                                query.OrderByDescending(p => p.Ratings.OrderByDescending(r => r.Season == season).FirstOrDefault().Pot) :
-                                query.OrderBy(p => p.Ratings.OrderByDescending(r => r.Season == season).FirstOrDefault().Pot);
-                            break;
-                        case "HGT":
-                            orderByExpression = isAscending ?
-                                query.OrderByDescending(p => p.Ratings.OrderByDescending(r => r.Season == season).FirstOrDefault().Hgt) :
-                                query.OrderBy(p => p.Ratings.OrderByDescending(r => r.Season == season).FirstOrDefault().Hgt);
-                            break;
-                        case "STR":
-                            orderByExpression = isAscending ?
-                                query.OrderByDescending(p => p.Ratings.OrderByDescending(r => r.Season == season).FirstOrDefault().Stre) :
-                                query.OrderBy(p => p.Ratings.OrderByDescending(r => r.Season == season).FirstOrDefault().Stre);
-                            break;
-                        case "SPD":
-                            orderByExpression = isAscending ?
-                                query.OrderByDescending(p => p.Ratings.OrderByDescending(r => r.Season == season).FirstOrDefault().Spd) :
-                                query.OrderBy(p => p.Ratings.OrderByDescending(r => r.Season == season).FirstOrDefault().Spd);
-                            break;
-                        case "JMP":
-                            orderByExpression = isAscending ?
-                                query.OrderByDescending(p => p.Ratings.OrderByDescending(r => r.Season == season).FirstOrDefault().Jmp) :
-                                query.OrderBy(p => p.Ratings.OrderByDescending(r => r.Season == season).FirstOrDefault().Jmp);
-                            break;
-                        case "END":
-                            orderByExpression = isAscending ?
-                                query.OrderByDescending(p => p.Ratings.OrderByDescending(r => r.Season == season).FirstOrDefault().Endu) :
-                                query.OrderBy(p => p.Ratings.OrderByDescending(r => r.Season == season).FirstOrDefault().Endu);
-                            break;
-                        case "INS":
-                            orderByExpression = isAscending ?
-                                query.OrderByDescending(p => p.Ratings.OrderByDescending(r => r.Season == season).FirstOrDefault().Ins) :
-                                query.OrderBy(p => p.Ratings.OrderByDescending(r => r.Season == season).FirstOrDefault().Ins);
-                            break;
-                        case "DNK":
-                            orderByExpression = isAscending ?
-                                query.OrderByDescending(p => p.Ratings.OrderByDescending(r => r.Season == season).FirstOrDefault().Dnk) :
-                                query.OrderBy(p => p.Ratings.OrderByDescending(r => r.Season == season).FirstOrDefault().Dnk);
-                            break;
-                        case "FT":
-                            orderByExpression = isAscending ?
-                                query.OrderByDescending(p => p.Ratings.OrderByDescending(r => r.Season == season).FirstOrDefault().Ft) :
-                                query.OrderBy(p => p.Ratings.OrderByDescending(r => r.Season == season).FirstOrDefault().Ft);
-                            break;
-                        case "2PT":
-                            orderByExpression = isAscending ?
-                                query.OrderByDescending(p => p.Ratings.OrderByDescending(r => r.Season == season).FirstOrDefault().Fg) :
-                                query.OrderBy(p => p.Ratings.OrderByDescending(r => r.Season == season).FirstOrDefault().Fg);
-                            break;
-                        case "3PT":
-                            orderByExpression = isAscending ?
-                                query.OrderByDescending(p => p.Ratings.OrderByDescending(r => r.Season == season).FirstOrDefault().Tp) :
-                                query.OrderBy(p => p.Ratings.OrderByDescending(r => r.Season == season).FirstOrDefault().Tp);
-                            break;
-                        case "OIQ":
-                            orderByExpression = isAscending ?
-                                query.OrderByDescending(p => p.Ratings.OrderByDescending(r => r.Season == season).FirstOrDefault().Oiq) :
-                                query.OrderBy(p => p.Ratings.OrderByDescending(r => r.Season == season).FirstOrDefault().Oiq);
-                            break;
-                        case "DIQ":
-                            orderByExpression = isAscending ?
-                                query.OrderByDescending(p => p.Ratings.OrderByDescending(r => r.Season == season).FirstOrDefault().Diq) :
-                                query.OrderBy(p => p.Ratings.OrderByDescending(r => r.Season == season).FirstOrDefault().Diq);
-                            break;
-                        case "DRB":
-                            orderByExpression = isAscending ?
-                                query.OrderByDescending(p => p.Ratings.OrderByDescending(r => r.Season == season).FirstOrDefault().Drb) :
-                                query.OrderBy(p => p.Ratings.OrderByDescending(r => r.Season == season).FirstOrDefault().Drb);
-                            break;
-                        case "PSS":
-                            orderByExpression = isAscending ?
-                                query.OrderByDescending(p => p.Ratings.OrderByDescending(r => r.Season == season).FirstOrDefault().Pss) :
-                                query.OrderBy(p => p.Ratings.OrderByDescending(r => r.Season == season).FirstOrDefault().Pss);
-                            break;
-                        case "REB":
-                            orderByExpression = isAscending ?
-                                query.OrderByDescending(p => p.Ratings.OrderByDescending(r => r.Season == season).FirstOrDefault().Reb) :
-                                query.OrderBy(p => p.Ratings.OrderByDescending(r => r.Season == season).FirstOrDefault().Reb);
-                            break;
-                        default:
-                            break;
-                    }
+                    players = query.Where(p => p.Pos == position).ToList(); 
+                }
+                else
+                {
+                    players = query.ToList(); 
                 }
 
-		        
-		        if (!string.IsNullOrEmpty(position))
-		        {
-			        query = orderByExpression.Where(p => p.Pos == position);
-		        }
+                var orderByExpression = players.OrderByDescending(p => p.Ratings.LastOrDefault()?.CalculateOvr);
 
-		        var players = await query
-		            .Skip((page - 1) * pageSize)
-		            .Take(pageSize)
-		            .ToListAsync();
+                if (!string.IsNullOrEmpty(sortedColumn))
+                {
+                    orderByExpression = sortedColumn switch
+                    {
+                        "OVR" => isAscending ? players.OrderByDescending(p => p.Ratings.LastOrDefault()?.CalculateOvr) : players.OrderBy(p => p.Ratings.LastOrDefault()?.CalculateOvr),
+                        "POT" => isAscending ? players.OrderByDescending(p => p.Ratings.LastOrDefault()?.Pot) : players.OrderBy(p => p.Ratings.LastOrDefault()?.Pot),
+                        "HGT" => isAscending ? players.OrderByDescending(p => p.Ratings.LastOrDefault()?.Hgt) : players.OrderBy(p => p.Ratings.LastOrDefault()?.Hgt),
+                        "STR" => isAscending ? players.OrderByDescending(p => p.Ratings.LastOrDefault()?.Stre) : players.OrderBy(p => p.Ratings.LastOrDefault()?.Stre),
+                        "SPD" => isAscending ? players.OrderByDescending(p => p.Ratings.LastOrDefault()?.Spd) : players.OrderBy(p => p.Ratings.LastOrDefault()?.Spd),
+                        "JMP" => isAscending ? players.OrderByDescending(p => p.Ratings.LastOrDefault()?.Jmp): players.OrderBy(p => p.Ratings.LastOrDefault()?.Jmp),
+                        "END" => isAscending ? players.OrderByDescending(p => p.Ratings.LastOrDefault()?.Endu) : players.OrderBy(p => p.Ratings.LastOrDefault()?.Endu),
+                        "INS" => isAscending ? players.OrderByDescending(p => p.Ratings.LastOrDefault()?.Ins) : players.OrderBy(p => p.Ratings.LastOrDefault()?.Ins),
+                        "DNK" => isAscending ? players.OrderByDescending(p => p.Ratings.LastOrDefault()?.Dnk) : players.OrderBy(p => p.Ratings.LastOrDefault()?.Dnk),
+                        "FT" => isAscending ? players.OrderByDescending(p => p.Ratings.LastOrDefault()?.Ft) : players.OrderBy(p => p.Ratings.LastOrDefault()?.Ft),
+                        "2PT" => isAscending ? players.OrderByDescending(p => p.Ratings.LastOrDefault()?.Fg) : players.OrderBy(p => p.Ratings.LastOrDefault()?.Fg),
+                        "3PT" => isAscending ? players.OrderByDescending(p => p.Ratings.LastOrDefault()?.Tp) : players.OrderBy(p => p.Ratings.LastOrDefault()?.Tp),
+                        "OIQ" => isAscending ? players.OrderByDescending(p => p.Ratings.LastOrDefault()?.Oiq) : players.OrderBy(p => p.Ratings.LastOrDefault()?.Oiq),
+                        "DIQ" => isAscending ? players.OrderByDescending(p => p.Ratings.LastOrDefault()?.Diq) : players.OrderBy(p => p.Ratings.LastOrDefault()?.Diq),
+                        "DRB" => isAscending ? players.OrderByDescending(p => p.Ratings.LastOrDefault()?.Drb) : players.OrderBy(p => p.Ratings.LastOrDefault()?.Drb),
+                        "PSS" => isAscending ? players.OrderByDescending(p => p.Ratings.LastOrDefault()?.Pss) : players.OrderBy(p => p.Ratings.LastOrDefault()?.Pss),
+                        "REB" => isAscending ? players.OrderByDescending(p => p.Ratings.LastOrDefault()?.Reb) : players.OrderBy(p => p.Ratings.LastOrDefault()?.Reb),
+                        _ => orderByExpression
+                    };
+                }
+
+                var playersFiltered = orderByExpression
+                    .Skip((page - 1) * pageSize)
+                    .Take(pageSize)
+                    .ToList();
 
 		        var totalPages = (int)Math.Ceiling(await query.CountAsync() / (double)pageSize);
 
-		        var playerFAtoList = _mapper.Map<List<PlayerCompleteDto>>(players);
+		        var playerFAtoList = _mapper.Map<List<PlayerCompleteDto>>(playersFiltered);
 
-		        var playerFAResponse = new PageableResponse<PlayerCompleteDto>()
+		        var playerFaResponse = new PageableResponse<PlayerCompleteDto>()
 		        {
 		            Response = playerFAtoList,
 		            Pages = totalPages,
 		            CurrentPage = page
 		        };
 
-		        response.Data = playerFAResponse;
+		        response.Data = playerFaResponse;
 		        response.Success = true;
 		    }
 		    catch (Exception ex)
