@@ -136,7 +136,21 @@ public partial class PlayerStatsPage
       
         StateHasChanged(); 
     }
+    
+    private async Task ChangePage(int nextPage)
+    {
 
+        var result = await StatsService.GetAllPlayerRegularStats(nextPage, _pageSize, _season, isAscending, position);
+
+        if (result.Success)
+        {
+            _playerStats = result.Data.Response;
+            _currentPage = result.Data.CurrentPage; 
+        }
+      
+        StateHasChanged(); 
+
+    }
 
 }
 
