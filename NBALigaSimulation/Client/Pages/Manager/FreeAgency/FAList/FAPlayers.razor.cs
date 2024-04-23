@@ -9,13 +9,13 @@ public partial class FAPlayers
     private List<PlayerRatingDto> _playersRatings;
     private int _season;
     private string sortedColumn = "OVR";
-    private bool isAscending = false;
+    private bool isAscending = true;
     private string message = string.Empty;
     private int _currentPage = 1;
     private int _pageSize = 50;
     public string _position = string.Empty;
     
-    List<string> positions = new List<string> { "C", "FC", "PF", "F", "SF", "GF", "G", "SG", "PG" };
+    List<string> positions = new List<string> { "C", "FC", "PF", "F", "SF", "GF", "G", "SG", "PG", "ALL" };
     List<int> limit = new List<int> { 10, 25, 50};
     
     protected override async Task OnInitializedAsync()

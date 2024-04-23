@@ -68,9 +68,10 @@ public class PlayerService : IPlayerService
         return response;
     }
     
-    public async Task<ServiceResponse<PageableResponse<PlayerCompleteDto>>> GetAllFaPlayers(int currentPage, int pageSize, int season, bool isAscending, string sortedColumn, string position = null)
-    {
-        var url = $"api/players/FAPlayers?page={currentPage}&pageSize={pageSize}&season={season}&isAscending={isAscending}&sortedColumn{sortedColumn}";
+    public async Task<ServiceResponse<PageableResponse<PlayerCompleteDto>>> GetAllFaPlayers(int currentPage, int pageSize, int season, bool isAscending, string sortedColumn,
+        string position = null){
+        
+        var url = $"api/players/FAPlayers?page={currentPage}&pageSize={pageSize}&season={season}&isAscending={isAscending}&sortedColumn={sortedColumn}";
 
         if (!string.IsNullOrEmpty(position))
         {

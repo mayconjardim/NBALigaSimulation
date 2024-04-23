@@ -97,19 +97,6 @@ namespace NBALigaSimulation.Server.Services.PlayersService
             return response;
         }
         
-        public async Task<ServiceResponse<List<PlayerCompleteDto>>> GetAllFaPlayers()
-        {
-            var players = await _context.Players.Where(t => t.TeamId == 21)
-                .Include(p => p.Ratings)
-                .ToListAsync();
-            var response = new ServiceResponse<List<PlayerCompleteDto>>
-            {
-                Data = _mapper.Map<List<PlayerCompleteDto>>(players)
-            };
-
-            return response;
-        }
-
         public async Task<ServiceResponse<PageableResponse<PlayerCompleteDto>>> GetAllFaPlayers(int page, int pageSize, int season, bool isAscending, string sortedColumn,
             string position = null)
         {
@@ -126,14 +113,21 @@ namespace NBALigaSimulation.Server.Services.PlayersService
                 
                 if (!string.IsNullOrEmpty(position))
                 {
-                    players = query.Where(p => p.Pos == position).ToList(); 
+                    if (position == "ALL")
+                    {
+                        players = query.ToList(); 
+                    }
+                    else
+                    {
+                        players = query.Where(p => p.Pos == position).ToList(); 
+                    }
                 }
                 else
                 {
                     players = query.ToList(); 
                 }
 
-                var orderByExpression = players.OrderByDescending(p => p.Ratings.LastOrDefault()?.CalculateOvr);
+                var orderByExpression = players.OrderBy(p => p.Ratings.LastOrDefault()?.CalculateOvr);
 
                 if (!string.IsNullOrEmpty(sortedColumn))
                 {
