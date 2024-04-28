@@ -114,7 +114,7 @@
                         <tr>
                             <td style="text-align: left">
                                 <div class="player-pic @player.TeamAbrv">
-                                    <i class="bi bi-person-add" style="color: green; font-size: 1.5rem; margin-right: 0.5rem; vertical-align: middle"></i>
+                                    <a href="@("faoffer/" + player.Id)"> <i class="bi bi-person-add" style="color: green; font-size: 1.5rem; margin-right: 0.5rem; vertical-align: middle"></i></a> 
                                     <img src=@($"{player.ImgUrl}") alt="Team logo" width="35" style="margin-left: 0.8rem">
                                     @player.Name, <span>@player.Pos</span>
                                 </div>

@@ -9,9 +9,91 @@
 <CascadingAuthenticationState>
 <AuthorizeView>
     <div class="container">
-        
-        
 
+        @if (player != null && team != null)
+        {
+        <div class="container">
+            <div class="row justify-content-center">
+                <a href="/freeagency" class="btn btn-primary" style="margin: 20px 0;">FREE AGENCY HQ</a>
+            </div>
+
+            <div class="row fa">
+                <div class="col fa-name">
+                    <p>OFERTA PARA FREE AGENT : <a href="@("player/" + player.Id)">@player.Name</a></p>
+                </div>
+
+                <div class="col fa-pic">
+                    <div style="margin: 10px;">
+                        <img src="@player.ImgUrl" style="width: 120px; height: 100px;"/>
+                    </div>
+                    <div>
+                        <span>OVR: @player.Ratings.Last().CalculateOvr</span>
+                        <span>POT: @player.Ratings.Last().Pot</span>
+                    </div>
+                </div>
+
+                <div class="col fa-cap">
+                    <span>CAP:<span style="font-weight: 800">$@capSpace.ToString("N0")</span></span>
+                    <span>TIME:<span style="font-weight: 800">$@GetTeamTotalSalary().ToString("N0")</span></span>
+                    <span>SPACE:<span style="font-weight: 800; color: green"> $@((capSpace - GetTeamTotalSalary() ).ToString("N0"))</span></span>
+                    <span>ROSTER:<span style="font-weight: 800; color: green"> @(team.Players.Count + "/15")</span></span>
+                </div>
+
+                <div class="col fa-contract">
+                    <form>
+                        <table class="table">
+                            <thead>
+                            <tr>
+                                <th colspan="4"></th>
+                                <th>ANUAL</th>
+                                <th>ANOS</th>
+                                <th>TOTAL</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <td colspan="4"><button type="button" class="btn btn-primary" onclick="MinContractAsync()" disabled="@HasCap(GetMinContract((_season - player.Born.Year)))">OFERECER MIN</button></td>
+                                <td>$@GetMinContract((_season - player.Born.Year)).ToString("N0")</td>
+                                <td>1</td>
+                                <td>$@GetMinContract((_season - player.Born.Year)).ToString("N0")</td>
+                            </tr>
+                            <tr>
+                                <td colspan="4"><button type="button" class="btn btn-primary" onclick="MaxContractAsync()" disabled="@HasCap(GetMaxContract((_season - player.Born.Year)))">OFERECER MAX</button></td>
+                                <td>$@GetMaxContract((_season - player.Born.Year)).ToString("N0")</td>
+                                <td>4</td>
+                                <td>$@((GetMaxContract((_season - player.Born.Year)) * 4).ToString("N0"))</td>
+                            </tr>
+                            <tr>
+                                <td colspan="4"><button type="button" class="btn btn-primary" onclick="PersonalizedContractAsync()" disabled="@HasCap(GetMinContract((_season - player.Born.Year)))">ENVIAR OFERTA</button></td>
+                                <td><input style="width: 80%;" type="text" class="form-control" id="salary" name="salary" placeholder="Digite o Salário" /></td>
+                                <td>
+                                    <select class="form-select" id="years" name="years">
+                                        <option value="1">1</option>
+                                        <option value="2">2</option>
+                                        <option value="3">3</option>
+                                        <option value="4">4</option>
+                                    </select>
+                                </td>
+                                <td>$@((_contract * _years).ToString("N0"))</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </form>
+                </div>
+            </div>
+        </div>
+        }
+        else
+        {
+        <div class="container">
+            <div class="row justify-content-center">
+                <a href="/freeagency" class="btn btn-primary" style="margin: 20px 0;">FREE AGENCY HQ</a>
+            </div>
+            <div class="row justify-content-center">
+                <h3 style="margin: 20px 0;">@message</h3>
+            </div>
+        </div>
+        }
 
     </div>
 </AuthorizeView>

@@ -11,6 +11,8 @@
                     return 95.7;
                 case 2:
                     return 98.0;
+                case 3:
+                    return 101.6;
                 default:
                     return 101.6;
             }
@@ -21,11 +23,13 @@
             switch (value)
             {
                 case 1:
-                    return -0.5;
+                    return -0.2;
                 case 2:
                     return 0.0;
+                case 3:
+                    return 0.2;
                 default:
-                    return 0.9;
+                    return 0.2;
             }
         }
 
@@ -34,11 +38,11 @@
             switch (value)
             {
                 case 1:
-                    return -0.1;
+                    return -0.2;
                 case 2:
                     return 0.0;
                 default:
-                    return 0.1;
+                    return 0.2;
             }
         }
 
@@ -47,13 +51,13 @@
             switch (value)
             {
                 case 1:
-                    return 0.0;
+                    return 0.2;
                 case 2:
-                    return 0.0;
+                    return 0.2;
                 case 3:
-                    return 0.0;
+                    return 0.2;
                 default:
-                    return 0.9;
+                    return 0.2;
             }
         }
 

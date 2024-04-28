@@ -10,11 +10,39 @@ public static class ProbabilityActions
     
     public static double ProbTov(Game game, Team[] Teams)
     {
-        double defenseRating = Teams[game.Defense].CompositeRating.Ratings["GameDefense"];
-        double offenseRating = Teams[game.Offense].CompositeRating.Ratings["GameDribbling"] 
-                               + Teams[game.Offense].CompositeRating.Ratings["GamePassing"];
+        double motionGp = GameplanUtils.GameplanMotion(Teams[game.Offense].Gameplan.Motion);
+        double defenseGp = GameplanUtils.GameplanDefense(Teams[game.Defense].Gameplan.Defense);
+
+        double offenseValue = 0;
+        double defenseValue = 0;
         
-        return 0.15 * (1 + defenseRating) / (1 + 0.5 * offenseRating)  ;
+        //Aumentar/Diminuir prob depdendo do GP Ataque
+        if (Teams[game.Offense].Gameplan.Pace > 1)
+        {
+            if (Teams[game.Offense].Gameplan.Motion == 1)
+            {
+                offenseValue = motionGp;
+            }
+            if (Teams[game.Offense].Gameplan.Motion == 3)
+            {
+                offenseValue += motionGp;
+            }
+        }
+        //Aumentar/Diminuir prob depdendo do GP Defesa
+        var defense = Teams[game.Defense].Gameplan.Defense;
+        if (defense is 2 or 3)
+        {
+            defenseValue = defenseGp;
+        }
+
+        double defenseRating = Teams[game.Defense].CompositeRating.Ratings["GameDefense"] + defenseValue;
+        
+        double offenseRating = Teams[game.Offense].CompositeRating.Ratings["GameDribbling"] 
+                               + Teams[game.Offense].CompositeRating.Ratings["GamePassing"] + offenseValue;
+
+        double result = 0.15 * (1 + defenseRating) / (1 + 0.5 * offenseRating);
+        
+        return result;     
     }
     
     

@@ -6,6 +6,7 @@ global using NBALigaSimulation.Client.Services.GameService;
 global using NBALigaSimulation.Client.Services.StatsService;
 global using NBALigaSimulation.Client.Services.NewsService;
 global using NBALigaSimulation.Client.Services.DataService;
+global using NBALigaSimulation.Client.Services.FAService;
 global using NBALigaSimulation.Client.Services.SeasonsService;
 global using NBALigaSimulation.Client.Services.LeagueService;
 using Microsoft.AspNetCore.Components.Web;
@@ -27,6 +28,7 @@ builder.Services.AddScoped<IPlayerService, PlayerService>();
 builder.Services.AddScoped<ITeamService, TeamService>();
 builder.Services.AddScoped<IGameService, GameService>();
 builder.Services.AddScoped<IStatsService, StatsService>();
+builder.Services.AddScoped<IFAService, FAService>();
 builder.Services.AddScoped<ISeasonService, SeasonService>();
 builder.Services.AddScoped<ILeagueService, LeagueService>();
 
