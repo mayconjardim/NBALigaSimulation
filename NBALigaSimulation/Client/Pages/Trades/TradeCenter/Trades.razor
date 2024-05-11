@@ -1,0 +1,19 @@
+﻿@page "/trades"
+@attribute [Authorize]
+@inject IAuthService AuthService
+@inject ITradeService TradeService
+@inject NavigationManager NavigationManager
+
+ <MudContainer>
+<CascadingAuthenticationState>
+ <AuthorizeView>
+
+     <h1 class="d-flex justify-center" style="margin: 20px;">TRADE CENTER</h1> 
+
+     <div  class="d-flex justify-center" style="margin: 20px;">
+     <button class="d-flex justify-center" Href="/tradecreate" Color="Color.Primary">Iniciar Troca</button>
+     </div>
+   
+ </AuthorizeView>
+ </CascadingAuthenticationState>
+ </MudContainer>
