@@ -35,11 +35,7 @@
 	<ItemGroup>
 	  <_ContentIncludedByDefault Remove="Pages\Teams\TeamPage\Team.razor" />
 	  <_ContentIncludedByDefault Remove="Pages\Stats\TeamStatsPage\TeamStatsPage.razor" />
-	</ItemGroup>
-
-	<ItemGroup>
-	  <Folder Include="Pages\Trades\TradeCreate\" />
-	  <Folder Include="Pages\Trades\TradeOffer\" />
+	  <_ContentIncludedByDefault Remove="Pages\Trades\TradeCenter\Trades.razor" />
 	</ItemGroup>
 
 </Project>

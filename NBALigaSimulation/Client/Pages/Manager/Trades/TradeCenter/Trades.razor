@@ -1,0 +1,76 @@
+@page "/trades"
+@attribute [Authorize]
+@inject IAuthService AuthService
+@inject ITradeService TradeService
+@inject NavigationManager NavigationManager
+
+<CascadingAuthenticationState>
+    <AuthorizeView>
+        <div class="container-fluid">
+
+            <div class="trade-container">
+                <h1 style="margin: 20px;">TRADE CENTER</h1>
+                <button type="button" class="btn fa-central" href="/tradecreate">FA Central</button>
+            </div>
+            
+            <div class="trade-list">
+                @if (trades.Count <= 0)
+                {
+                 <p class="d-flex justify-center" style="margin: 20px;">VOCÊ NÃO TEM NENHUMA PROPOSTA NO MOMENTO</p>
+                }
+                else
+                {
+                    <div class="d-flex justify-center" style="margin: 20px;">
+
+                        <table style="overflow-x: auto;">
+                            <thead>
+                            <tr>
+                                @foreach (var h in headings)
+                                {
+                                <th>@h</th>
+                                }
+                            </tr>
+                            </thead>
+                            <tbody>
+                            @foreach (var trade in trades)
+                            {
+                            <tr>
+                                <td><img src="@($"Images/logos/{trade.TeamOneName}.svg")" style="vertical-align: middle; background: none" /></td>
+                                <td><img src="@($"Images/logos/{trade.TeamTwoName}.svg")" style="vertical-align: middle; background: none" /></td>
+                                <td>
+                                    @if (trade.Response == null)
+                                    {
+                                        <a href="@string.Format("/tradeoffer/{0}", trade.Id)">
+                                            <i class="bi bi-hourglass-split" style="vertical-align: middle; background: none"></i>
+                                        </a>
+                                    }
+                                    else if (trade.Response == true)
+                                    {
+                                        <a href="@string.Format("/tradeoffer/{0}", trade.Id)">
+                                            <i class="bi bi-check-square" style="vertical-align: middle; background: none"></i>
+                                        </a>
+                                    }
+                                    else
+                                    {
+                                        <a href="@string.Format("/tradeoffer/{0}", trade.Id)">
+                                            <i class="bi bi-app" style="vertical-align: middle; background: none"></i>
+                                        </a>
+                                    }
+                                </td>
+                                <td>
+                                    <button onclick="() => DeleteTradeOffer(trade.Id)" >
+                                        <i class="bi bi-trash" style="vertical-align: middle; background: none"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                            }
+                            </tbody>
+                        </table>
+
+                    </div>
+                }
+                </div>
+
+        </div>
+    </AuthorizeView>
+</CascadingAuthenticationState>
