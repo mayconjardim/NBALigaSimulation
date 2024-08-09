@@ -7,6 +7,7 @@ using NBALigaSimulation.Shared.Models.GameNews;
 using NBALigaSimulation.Shared.Models.Games;
 using NBALigaSimulation.Shared.Models.Seasons;
 using NBALigaSimulation.Shared.Models.Utils;
+using System.Diagnostics;
 
 namespace NBALigaSimulation.Server.Services.GameService
 {
@@ -98,13 +99,19 @@ namespace NBALigaSimulation.Server.Services.GameService
                 SimulationUtils.AdjustRosterOrder(game.AwayTeam.Players);
             }
 
-            await _context.SaveChangesAsync();
+			var sw = new Stopwatch();
+			sw.Start();
+
+			await _context.SaveChangesAsync();
 
             GameSimulation.Sim(game);
 
             await _context.SaveChangesAsync();
 
-            response.Success = true;
+			sw.Stop();
+			Console.WriteLine("Tempo gasto : " + sw.ElapsedMilliseconds.ToString() + " milisegundos");
+
+			response.Success = true;
             response.Data = true;
 
             return response;

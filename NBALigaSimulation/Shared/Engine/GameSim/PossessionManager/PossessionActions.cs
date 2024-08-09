@@ -67,10 +67,11 @@ public static class PossessionActions
                     }
     
                     i += 1;
-                }
-            }
-            
-            public static string GetPossessionOutcome(Game game, Team[] Teams, int[][] PlayersOnCourt)
+	        	}
+		         Console.WriteLine("Possessions: " + i);
+	        }
+
+	public static string GetPossessionOutcome(Game game, Team[] Teams, int[][] PlayersOnCourt)
             {
                 if (ProbabilityActions.ProbTov(game, Teams) > new Random().NextDouble())
                 {
@@ -81,5 +82,5 @@ public static class PossessionActions
                 int shooterIndex = PlayerActions.PickPlayer(ratios);
 
                 return OffenseActions.DoShot(game, shooterIndex, Teams, PlayersOnCourt);
-            }
+    }
 }

@@ -31,3 +31,11 @@ table{
 tr:nth-child(even) {
     background-color: #FBFBFB;
 }
+
+.custom-border {
+    border-left: 1px solid #EDEEF2;
+    border-right: 1px solid #EDEEF2;
+    border-top: none;
+    border-bottom: 1px solid #EDEEF2;
+    
+}
