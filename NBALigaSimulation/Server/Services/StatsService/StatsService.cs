@@ -1,4 +1,4 @@
-﻿using AutoMapper;
+using AutoMapper;
 using NBALigaSimulation.Shared.Models.Teams;
 using NBALigaSimulation.Shared.Dtos.Players;
 using NBALigaSimulation.Shared.Dtos.Teams;
@@ -256,7 +256,33 @@ namespace NBALigaSimulation.Server.Services.StatsService
 			return response;
 		}
 
+		public async Task<ServiceResponse<bool>> CleanStats()
+		{
+			var response = new ServiceResponse<bool>();
+            
+			var gameStats = await _context.PlayerGameStats.ToListAsync();
+			_context.PlayerGameStats.RemoveRange(gameStats);
+			
+			var playoffsStats = await _context.PlayerPlayoffsStats.ToListAsync();
+			_context.PlayerPlayoffsStats.RemoveRange(playoffsStats); 
+			
+			var regularStats = await _context.PlayerRegularStats.ToListAsync();
+			_context.PlayerRegularStats.RemoveRange(regularStats);
+			
+			var teamRegularStatsList = await _context.TeamRegularStats.ToListAsync();
+			_context.TeamRegularStats.RemoveRange(teamRegularStatsList);  
+				
+			var teamPlayoffsStats = await _context.TeamPlayoffsStats.ToListAsync();
+			_context.TeamPlayoffsStats.RemoveRange(teamPlayoffsStats); 	
+				
+			await _context.SaveChangesAsync();
+            
+			await _context.SaveChangesAsync();
+			response.Success = true;
+			response.Message = "Stats limpas com sucesso!.";
 
+			return response;
+		}
 
 	}
 }
