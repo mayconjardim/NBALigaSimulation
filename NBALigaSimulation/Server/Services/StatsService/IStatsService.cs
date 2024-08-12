@@ -13,5 +13,6 @@ namespace NBALigaSimulation.Server.Services.StatsService
 		Task<ServiceResponse<List<TeamPlayoffsStatsDto>>> GetAllTeamPlayoffsStats();
 		Task<ServiceResponse<List<TeamRegularStatsRankDto>>> GetAllTeamRegularStatsRank();
 		Task<ServiceResponse<List<PlayerPlayoffsStatsDto>>> GetAllPlayerPlayoffsStats();
+		Task<ServiceResponse<bool>> CleanStats();
 	}
 }
