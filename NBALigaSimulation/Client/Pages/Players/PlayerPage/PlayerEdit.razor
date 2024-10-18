@@ -1,4 +1,203 @@
-﻿<h3>PlayerEdit</h3>
+﻿<div class="container">
+    <h3>Editar Jogador</h3>
 
-@code {
-    ;}
+    <EditForm Model="@_player" OnValidSubmit="HandleValidSubmit">
+        <DataAnnotationsValidator />
+        <ValidationSummary />
+
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="name">Nome</label>
+                    <InputText id="name" class="form-control" @bind-Value="_player.Name" />
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="pos">Posição</label>
+                    <InputText id="pos" class="form-control" @bind-Value="_player.Pos" />
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="bornYear">Nascimento</label>
+                    <InputNumber id="bornYear" class="form-control" @bind-Value="_player.Born.Year" />
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="bornLoc">Local Nascimento</label>
+                    <InputText id="bornLoc" class="form-control" @bind-Value="_player.Born.Loc" />
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="hgt">Altura </label>
+                    <InputNumber id="hgt" class="form-control" @bind-Value="_player.Hgt" />
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="weight">Peso (lbs)</label>
+                    <InputNumber id="weight" class="form-control" @bind-Value="_player.Weight" />
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="imgUrl">Imagem URL</label>
+                    <InputText id="imgUrl" class="form-control" @bind-Value="_player.ImgUrl" />
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="teamId">Time ID</label>
+                    <InputNumber id="teamId" class="form-control" @bind-Value="_player.TeamId" />
+                </div>
+            </div>
+        </div>
+
+        <h4>Ratings</h4>
+        @foreach (var rating in _player.Ratings)
+        {
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label>Season</label>
+                    <InputNumber class="form-control" @bind-Value="rating.Season" />
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label>DIQ (Defensive IQ)</label>
+                    <InputNumber class="form-control" @bind-Value="rating.Diq" />
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label>DNK (Dunk)</label>
+                    <InputNumber class="form-control" @bind-Value="rating.Dnk" />
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label>DRB (Dribbling)</label>
+                    <InputNumber class="form-control" @bind-Value="rating.Drb" />
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label>ENDU (Endurance)</label>
+                    <InputNumber class="form-control" @bind-Value="rating.Endu" />
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label>FG (Field Goals)</label>
+                    <InputNumber class="form-control" @bind-Value="rating.Fg" />
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label>FT (Free Throws)</label>
+                    <InputNumber class="form-control" @bind-Value="rating.Ft" />
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label>HGT (Height)</label>
+                    <InputNumber class="form-control" @bind-Value="rating.Hgt" />
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label>INS (Inside Scoring)</label>
+                    <InputNumber class="form-control" @bind-Value="rating.Ins" />
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label>JMP (Jumping)</label>
+                    <InputNumber class="form-control" @bind-Value="rating.Jmp" />
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label>OIQ (Offensive IQ)</label>
+                    <InputNumber class="form-control" @bind-Value="rating.Oiq" />
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label>POT (Potential)</label>
+                    <InputNumber class="form-control" @bind-Value="rating.Pot" />
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label>PSS (Passing)</label>
+                    <InputNumber class="form-control" @bind-Value="rating.Pss" />
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label>REB (Rebounding)</label>
+                    <InputNumber class="form-control" @bind-Value="rating.Reb" />
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label>SPD (Speed)</label>
+                    <InputNumber class="form-control" @bind-Value="rating.Spd" />
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label>STRE (Strength)</label>
+                    <InputNumber class="form-control" @bind-Value="rating.Stre" />
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label>TP (Three-Point Shooting)</label>
+                    <InputNumber class="form-control" @bind-Value="rating.Tp" />
+                </div>
+            </div>
+        </div>
+        }
+
+        <button type="submit" class="btn btn-primary mt-3">Enviar</button>
+    </EditForm>
+</div>

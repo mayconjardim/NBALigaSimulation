@@ -30,7 +30,6 @@
 		<Content Update="wwwroot\basketball.db">
 			<CopyToPublishDirectory>Never</CopyToPublishDirectory>
 		</Content>
-		<Content Remove="Pages\Players\PlayerPage\PlayerEdit.razor" />
 	</ItemGroup>
 
 	<ItemGroup>

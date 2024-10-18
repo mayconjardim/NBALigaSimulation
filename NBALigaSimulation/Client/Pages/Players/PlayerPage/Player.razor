@@ -19,6 +19,9 @@
         <li class="nav-item" role="presentation">
           <button class="nav-link" id="disabled-tab" data-bs-toggle="tab" data-bs-target="#disabled-tab-pane" type="button" role="tab" aria-controls="disabled-tab-pane" aria-selected="false">Ratings</button>
         </li>
+        <li class="nav-item" role="presentation">
+          <button class="nav-link" id="disabled-tab" data-bs-toggle="tab" data-bs-target="#edit-tab-pane" type="button" role="tab" aria-controls="edit-tab-pane" aria-selected="false">Editar</button>
+        </li>
       </ul>
       <div class="tab-content" id="myTabContent">
         <div class="tab-pane fade show active" id="bio-tab-pane" role="tabpanel" aria-labelledby="bio-tab" tabindex="0">
@@ -32,6 +35,10 @@
         </div>
         <div class="tab-pane fade" id="disabled-tab-pane" role="tabpanel" aria-labelledby="disabled-tab" tabindex="0">
           <PlayerProgression _player="@_player"/>
+        </div>
+
+        <div class="tab-pane fade" id="edit-tab-pane" role="tabpanel" aria-labelledby="edit-tab-pane" tabindex="0">
+          <PlayerEdit _player="@_player"/>
         </div>
       </div>
    </div>
