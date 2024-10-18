@@ -1,4 +1,7 @@
-﻿<div class="container">
+﻿@inject IPlayerService PlayerService
+@inject NavigationManager NavigationManager
+
+<div class="container">
     <h3>Editar Jogador</h3>
 
     <EditForm Model="@_player" OnValidSubmit="HandleValidSubmit">

@@ -82,4 +82,21 @@ public class PlayerService : IPlayerService
         return result;
     }
     
+    public async Task<ServiceResponse<PlayerCompleteDto>> EditPlayer(CreatePlayerDto playerDto)
+    {
+        var response = await _http.PostAsJsonAsync("api/players/edit-player", playerDto);
+
+        if (!response.IsSuccessStatusCode)
+        {
+            return new ServiceResponse<PlayerCompleteDto>
+            {
+                Success = false,
+                Message = "Erro ao editar o jogador."
+            };
+        }
+
+        var result = await response.Content.ReadFromJsonAsync<ServiceResponse<PlayerCompleteDto>>();
+        return result ?? new ServiceResponse<PlayerCompleteDto> { Success = false, Message = "Erro ao receber a resposta do servidor." };
+    }
+    
 }
