@@ -17,6 +17,8 @@ namespace NBALigaSimulation.Server.Services.PlayersService
         Task<ServiceResponse<bool>> UpdateRosterOrder(List<PlayerCompleteDto> updatedPlayerList);
         Task<ServiceResponse<bool>> UpdatePlayerPtModifier(int playerId, double newPtModifier);
         Task<ServiceResponse<bool>> GenerateContracts();
+        Task<ServiceResponse<PlayerCompleteDto>> EditPlayer(CreatePlayerDto request);
+
 
     }
 }

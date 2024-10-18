@@ -80,6 +80,19 @@ namespace NBALigaSimulation.Server.Controllers
         {
             return Ok(await _playerService.CreatePlayer(request));
         }
+        
+        [HttpPost("edit-player")]
+        public async Task<ActionResult<ServiceResponse<PlayerCompleteDto>>> EditPlayer(CreatePlayerDto request)
+        {
+            var response = await _playerService.EditPlayer(request);
+
+            if (!response.Success)
+            {
+                return BadRequest(response); 
+            }
+
+            return Ok(response); 
+        }
 
         [HttpPost("multi")]
         public async Task<ActionResult<ServiceResponse<PlayerCompleteDto>>> CreatePlayers(List<CreatePlayerDto> requests)

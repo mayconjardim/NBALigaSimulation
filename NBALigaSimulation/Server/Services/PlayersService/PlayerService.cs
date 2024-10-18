@@ -277,6 +277,46 @@ namespace NBALigaSimulation.Server.Services.PlayersService
             return response;
         }
 
+        public async Task<ServiceResponse<PlayerCompleteDto>> EditPlayer(CreatePlayerDto playerDto)
+        {
+            var player = await _context.Players
+                .Include(p => p.Ratings) 
+                .Include(p => p.Born)    
+                .FirstOrDefaultAsync(p => p.Id == playerDto.Id);
+
+            if (player == null)
+            {
+                return new ServiceResponse<PlayerCompleteDto>
+                {
+                    Success = false,
+                    Message = "Jogador não encontrado."
+                };
+            }
+
+            _mapper.Map(playerDto, player);
+
+            try
+            {
+                await _context.SaveChangesAsync();
+
+                var updatedPlayer = _mapper.Map<PlayerCompleteDto>(player);
+                return new ServiceResponse<PlayerCompleteDto>
+                {
+                    Success = true,
+                    Data = updatedPlayer,
+                    Message = "Jogador atualizado com sucesso."
+                };
+            }
+            catch (Exception ex)
+            {
+                return new ServiceResponse<PlayerCompleteDto>
+                {
+                    Success = false,
+                    Message = $"Erro ao atualizar o jogador: {ex.Message}"
+                };
+            }
+        }
+
         public async Task<ServiceResponse<List<PlayerSimpleDto>>> GetPlayersSearchSuggestions(string searchText)
         {
             var response = new ServiceResponse<List<PlayerSimpleDto>>();
@@ -294,5 +334,6 @@ namespace NBALigaSimulation.Server.Services.PlayersService
             return response;  
            
         }
+        
     }
 }
