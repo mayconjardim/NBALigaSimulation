@@ -46,7 +46,6 @@ namespace NBALigaSimulation.Server.Profiles
                 // Se precisar mapear Born e Ratings
                 .ForMember(dest => dest.Born, opt => opt.MapFrom(src => src.Born))  
                 .ForMember(dest => dest.Ratings, opt => opt.MapFrom(src => src.Ratings));
-          
 
             CreateMap<BornDto, Born>().ReverseMap();
             CreateMap<PlayerRatingsDto, PlayerRatings>().ReverseMap();
@@ -59,7 +58,6 @@ namespace NBALigaSimulation.Server.Profiles
             CreateMap<Team, TeamSimpleWithPlayersDto>().ReverseMap();
             CreateMap<Team, TeamCompleteDto>().ReverseMap();
             CreateMap<TeamGameplan, TeamGameplanDto>().ReverseMap();
-
 
             CreateMap<Game, GameCompleteDto>()
               .ForMember(dest => dest.HomeTeam, opt => 
