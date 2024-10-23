@@ -1,5 +1,6 @@
 ﻿using NBALigaSimulation.Shared.Dtos.Players;
 using NBALigaSimulation.Shared.Models.Utils;
+using Newtonsoft.Json.Linq;
 
 namespace NBALigaSimulation.Server.Services.PlayersService
 {
@@ -12,7 +13,7 @@ namespace NBALigaSimulation.Server.Services.PlayersService
             int season, bool isAscending, string sortedColumn, string position = null);
         Task<ServiceResponse<List<PlayerCompleteDto>>> GetAllDraftPlayers();
         Task<ServiceResponse<PlayerCompleteDto>> CreatePlayer(CreatePlayerDto request);
-        Task<ServiceResponse<List<PlayerCompleteDto>>> CreatePlayers(List<CreatePlayerDto> request);
+        Task<ServiceResponse<bool>> CreatePlayers(List<CreatePlayersDto> playersDto);
         Task<ServiceResponse<List<PlayerSimpleDto>>> GetPlayersSearchSuggestions(string searchText);
         Task<ServiceResponse<bool>> UpdateRosterOrder(List<PlayerCompleteDto> updatedPlayerList);
         Task<ServiceResponse<bool>> UpdatePlayerPtModifier(int playerId, double newPtModifier);

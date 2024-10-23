@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using NBALigaSimulation.Shared.Dtos.Players;
 using NBALigaSimulation.Shared.Models.Utils;
+using Newtonsoft.Json.Linq;
 
 namespace NBALigaSimulation.Server.Controllers
 {
@@ -95,9 +96,9 @@ namespace NBALigaSimulation.Server.Controllers
         }
 
         [HttpPost("multi")]
-        public async Task<ActionResult<ServiceResponse<PlayerCompleteDto>>> CreatePlayers(List<CreatePlayerDto> requests)
+        public async Task<ActionResult<ServiceResponse<bool>>> CreatePlayers(List<CreatePlayersDto> playersDto)
         {
-            return Ok(await _playerService.CreatePlayers(requests));
+            return Ok(await _playerService.CreatePlayers(playersDto));
         }
 
         [HttpPut("rosterorder")]

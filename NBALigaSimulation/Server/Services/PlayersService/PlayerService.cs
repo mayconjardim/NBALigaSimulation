@@ -1,10 +1,12 @@
 ﻿using AutoMapper;
+using NBALigaSimulation.Client.Pages.Players.PlayerPage;
 using NBALigaSimulation.Shared.Dtos.Players;
 using NBALigaSimulation.Shared.Engine.Utils;
 using NBALigaSimulation.Shared.Models.Players;
 using NBALigaSimulation.Shared.Models.Seasons;
 using NBALigaSimulation.Shared.Models.Utils;
-using Radzen;
+using Newtonsoft.Json.Linq;
+using Player = NBALigaSimulation.Shared.Models.Players.Player;
 
 namespace NBALigaSimulation.Server.Services.PlayersService
 {
@@ -71,20 +73,53 @@ namespace NBALigaSimulation.Server.Services.PlayersService
             return response;
         }
 
-        public async Task<ServiceResponse<List<PlayerCompleteDto>>> CreatePlayers(List<CreatePlayerDto> requests)
+   public async Task<ServiceResponse<bool>> CreatePlayers(List<CreatePlayersDto> playersDto)
+{
+    ServiceResponse<bool> response = new ServiceResponse<bool>();
+
+    // Validação de entrada
+    if (playersDto == null || !playersDto.Any())
+    {
+        response.Success = false;
+        response.Message = "Nenhum jogador foi fornecido para criação.";
+        return response;
+    }
+
+    try
+    {
+        List<Player> players = new List<Player>();
+
+        // Mapeamento dos DTOs para entidades
+        foreach (var playerDto in playersDto)
         {
-            ServiceResponse<List<PlayerCompleteDto>> response = new ServiceResponse<List<PlayerCompleteDto>>();
 
-            List<Player> players = _mapper.Map<List<Player>>(requests);
-
-            _context.AddRange(players);
-
-            await _context.SaveChangesAsync();
-
-            response.Success = true;
-            response.Data = _mapper.Map<List<PlayerCompleteDto>>(players);
-            return response;
+            if (_context.Teams.Any(t => t.Id == playerDto.TeamId))
+            {
+                Player player = _mapper.Map<Player>(playerDto);
+                players.Add(player);
+            }
         }
+
+        // Adiciona todos os jogadores de uma vez
+        _context.AddRange(players);
+        await _context.SaveChangesAsync(); // Salva as mudanças no banco
+
+        response.Data = true;
+        response.Success = true;
+        response.Message = "Jogadores criados com sucesso!";
+    }
+    catch (Exception ex)
+    {
+        // Captura erros do banco de dados
+        response.Data = false;
+        response.Success = false;
+        response.Message = $"Erro ao criar jogadores: {ex.Message}";
+        // Aqui você pode logar a exceção, se necessário
+    }
+
+    return response;
+}
+
         
         public async Task<ServiceResponse<List<PlayerSimpleDto>>> GetAllSimplePlayers()
         {

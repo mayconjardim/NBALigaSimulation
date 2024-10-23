@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using NBALigaSimulation.Client.Pages.Players.PlayerPage;
 using NBALigaSimulation.Shared.Dtos.Drafts;
 using NBALigaSimulation.Shared.Dtos.FA;
 using NBALigaSimulation.Shared.Dtos.GameNews;
@@ -17,6 +18,7 @@ using NBALigaSimulation.Shared.Models.SeasonPlayoffs;
 using NBALigaSimulation.Shared.Models.Seasons;
 using NBALigaSimulation.Shared.Models.Teams;
 using NBALigaSimulation.Shared.Models.Trades;
+using Player = NBALigaSimulation.Shared.Models.Players.Player;
 
 namespace NBALigaSimulation.Server.Profiles
 {
@@ -31,8 +33,24 @@ namespace NBALigaSimulation.Server.Profiles
                 .ForMember(dest => dest.TeamName, opt => opt.MapFrom(src => src.Team.Name))
                 .ForMember(dest => dest.TeamAbrv, opt => opt.MapFrom(src => src.Team.Abrv));
 
-            CreateMap<PlayerCompleteDto, Player>();
+            CreateMap<PlayerCompleteDto, Player>().ReverseMap();
 
+
+
+            CreateMap<CreatePlayersDto, Player>()
+                .ForMember(dest => dest.Draft, opt => opt.Ignore()) 
+                .ForMember(dest => dest.Stats, opt => opt.Ignore())   
+                .ForMember(dest => dest.Contract, opt => opt.Ignore()) 
+                .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.FirstName + " " + src.LastName))
+
+                // Se precisar mapear Born e Ratings
+                .ForMember(dest => dest.Born, opt => opt.MapFrom(src => src.Born))  
+                .ForMember(dest => dest.Ratings, opt => opt.MapFrom(src => src.Ratings));
+          
+
+            CreateMap<BornDto, Born>().ReverseMap();
+            CreateMap<PlayerRatingsDto, PlayerRatings>().ReverseMap();
+            
             CreateMap<PlayerContract, PlayerContractDto>().ReverseMap();
 
             CreateMap<PlayerAwards, PlayerAwardsDto>().ReverseMap();
