@@ -116,7 +116,7 @@
                                 <div class="player-pic @player.TeamAbrv">
                                     <a href="@("faoffer/" + player.Id)"> <i class="bi bi-person-add" style="color: green; font-size: 1.5rem; margin-right: 0.5rem; vertical-align: middle"></i></a> 
                                     <img src=@($"{player.ImgUrl}") alt="Team logo" width="35" style="margin-left: 0.8rem">
-                                    @player.Name, <span>@player.Pos</span>
+                                   <a href="@($"players/{player.Id}")"> @player.Name </a>, <span>@player.Pos</span>
                                 </div>
                             </td>
                             <td>@Util.Age(@player.Ratings.LastOrDefault().Season, player.Born.Year)</td>
