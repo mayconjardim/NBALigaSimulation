@@ -2,24 +2,40 @@
 @inject ITeamService TeamService
 @inject NavigationManager NavigationManager
 
-<div class="container">
-    @if (_teams != null && _east != null && _west != null)
-    {
-            @foreach (var team in _east)
-            {
-                <div class="team-img" @onclick="() => NavigateToTeamPage(team.Id)">
-                    <img src=@($"../Images/Logos/{team.Abrv}.svg") alt="Team logo">
-                </div>
-            }
-        
-        @foreach (var team in _west)
-        {
-            <div class="team-img" @onclick="() => NavigateToTeamPage(team.Id)">
-                <img src=@($"../Images/Logos/{team.Abrv}.svg") alt="Team logo">
+@if (_teams.Any())
+{
+    <div class="teams-container">
+        <div class="conference-section">
+            <h2 class="conference-title">Conferência Leste</h2>
+            <div class="teams-grid">
+                @foreach (var team in _east)
+                {
+                    <div class="team-card" @onclick="() => NavigateToTeamPage(team.Id)">
+                        <img src=@($"../Images/Logos/{team.Abrv}.svg") alt="@team.Name logo">
+                        <span class="team-name">@team.Name</span>
+                    </div>
+                }
             </div>
-        }
-    }
-</div>
+        </div>
+        
+        <div class="conference-section">
+            <h2 class="conference-title">Conferência Oeste</h2>
+            <div class="teams-grid">
+                @foreach (var team in _west)
+                {
+                    <div class="team-card" @onclick="() => NavigateToTeamPage(team.Id)">
+                        <img src=@($"../Images/Logos/{team.Abrv}.svg") alt="@team.Name logo">
+                        <span class="team-name">@team.Name</span>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+}
+else
+{
+    <Loading></Loading>
+}
 
 
 
