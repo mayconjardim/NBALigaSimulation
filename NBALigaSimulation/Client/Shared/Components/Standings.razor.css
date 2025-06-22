@@ -1,39 +1,136 @@
+.standings-table {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.9) 0%, rgba(255, 255, 255, 0.95) 100%);
+    backdrop-filter: blur(10px);
+    border-radius: 16px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    margin: 1rem 0;
+    overflow-x: auto;
+    transition: all 0.3s ease;
+}
+
+.standings-table:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+}
+
 table {
-    background-color: var(--white);
+    background: transparent;
     width: 100%;
     text-align: center;
-    border-radius: 0.625rem;
-    margin: 0.625rem 0;
+    border-radius: 16px;
+    margin: 0;
+    border-collapse: collapse;
+    overflow: hidden;
 }
+
 table caption {
-    color: #212529;
-    font-weight: 900;
+    color: var(--primary-color);
+    font-weight: 700;
+    font-size: 1.2rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    padding: 1rem;
 }
 
 table th {
-    border-top-right-radius: 0.625rem;
-    border-top-left-radius: 0.625rem;
-    font-size: 0.625rem;
+    background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+    color: white;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-align: center;
+    padding: 1rem 0.5rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    border: none;
+    position: relative;
+}
+
+table th:first-child {
     text-align: left;
+    padding-left: 1rem;
+}
+
+table th:last-child {
+    padding-right: 1rem;
 }
 
 table td {
-    font-size: 0.8rem;
+    font-size: 0.85rem;
+    font-weight: 500;
     white-space: nowrap;
+    text-align: center;
+    padding: 0.875rem 0.5rem;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    transition: all 0.3s ease;
+}
+
+table td:first-child {
     text-align: left;
-    
+    padding-left: 1rem;
+    font-weight: 600;
+}
+
+table td:last-child {
+    padding-right: 1rem;
 }
 
 table, th, td {
-    white-space: nowrap
+    white-space: nowrap;
+}
+
+tr {
+    transition: all 0.3s ease;
+}
+
+tr:hover {
+    background: rgba(13, 71, 161, 0.05);
+    transform: scale(1.01);
 }
 
 tr:nth-child(even) {
-    background-color: #FBFBFB;
+    background-color: rgba(248, 249, 250, 0.8);
+}
+
+tr:nth-child(even):hover {
+    background: rgba(13, 71, 161, 0.08);
+}
+
+/* Linha divisória para playoffs */
+tr hr {
+    border: none;
+    height: 2px;
+    background: linear-gradient(90deg, transparent 0%, var(--primary-color) 50%, transparent 100%);
+    margin: 0.5rem 0;
+    opacity: 0.6;
 }
 
 a {
     text-decoration: none;
+    color: var(--primary-color);
+    font-weight: 600;
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+a:hover {
+    color: var(--secondary-color);
+    text-decoration: none;
+}
+
+a::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+    transition: width 0.3s ease;
+}
+
+a:hover::after {
+    width: 100%;
 }
 
 .player-pic {
@@ -45,10 +142,141 @@ a {
 .player-pic img {
     border-radius: 50%;
     object-fit: cover;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Estilos para os logos dos times */
+table img {
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+}
+
+table img:hover {
+    transform: scale(1.1);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+/* Estilos para diferença de pontos */
+.diff-positive {
+    color: #28a745;
+    font-weight: 700;
+    background: rgba(40, 167, 69, 0.1);
+    padding: 0.25rem 0.5rem;
+    border-radius: 6px;
+    border: 1px solid rgba(40, 167, 69, 0.2);
+}
+
+.diff-negative {
+    color: #dc3545;
+    font-weight: 700;
+    background: rgba(220, 53, 69, 0.1);
+    padding: 0.25rem 0.5rem;
+    border-radius: 6px;
+    border: 1px solid rgba(220, 53, 69, 0.2);
+}
+
+.diff-neutral {
+    color: #6c757d;
+    font-weight: 600;
+    background: rgba(108, 117, 125, 0.1);
+    padding: 0.25rem 0.5rem;
+    border-radius: 6px;
+    border: 1px solid rgba(108, 117, 125, 0.2);
+}
+
+/* Estilos para streak */
+.streak-win {
+    color: #28a745;
+    font-weight: 700;
+    background: linear-gradient(135deg, rgba(40, 167, 69, 0.1) 0%, rgba(40, 167, 69, 0.2) 100%);
+    padding: 0.25rem 0.5rem;
+    border-radius: 6px;
+    border: 1px solid rgba(40, 167, 69, 0.3);
+}
+
+.streak-loss {
+    color: #dc3545;
+    font-weight: 700;
+    background: linear-gradient(135deg, rgba(220, 53, 69, 0.1) 0%, rgba(220, 53, 69, 0.2) 100%);
+    padding: 0.25rem 0.5rem;
+    border-radius: 6px;
+    border: 1px solid rgba(220, 53, 69, 0.3);
+}
+
+/* Container responsivo */
+.container {
+    padding: 1rem;
+}
+
+.table-responsive {
+    display: grid;
+    gap: 2rem;
+    grid-template-columns: 1fr;
+}
+
+@media (min-width: 1400px) {
+    .table-responsive {
+        grid-template-columns: 1fr 1fr;
+        gap: 2rem;
+    }
 }
 
 @media only screen and (max-width: 600px) {
-    .mobile {
-        display: none;
+    table th,
+    table td {
+        font-size: 0.75rem;
+        padding: 0.625rem 0.25rem;
     }
+    
+    table th:first-child,
+    table td:first-child {
+        padding-left: 0.5rem;
+    }
+    
+    table th:last-child,
+    table td:last-child {
+        padding-right: 0.5rem;
+    }
+    
+    .standings-table {
+        margin: 0.5rem 0;
+        border-radius: 12px;
+    }
+    
+    .container {
+        padding: 0.5rem;
+    }
+}
+
+/* Animações */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.standings-table {
+    animation: fadeInUp 0.6s ease;
+}
+
+.standings-table:nth-child(2) {
+    animation-delay: 0.2s;
+}
+
+/* Loading state */
+.loading-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 200px;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.9) 0%, rgba(255, 255, 255, 0.95) 100%);
+    backdrop-filter: blur(10px);
+    border-radius: 16px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
 }

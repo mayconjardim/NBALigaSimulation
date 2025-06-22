@@ -70,6 +70,24 @@ public partial class Standings
             return $"{style}; font-weight: bold";
         }
 
+        private string GetDiffClass(string diff)
+        {
+            double diffValue = double.Parse(diff, CultureInfo.InvariantCulture);
+
+            if (diffValue < 0)
+            {
+                return "diff-negative";
+            }
+            else if (diffValue > 0)
+            {
+                return "diff-positive";
+            }
+            else
+            {
+                return "diff-neutral";
+            }
+        }
+
         private string GetStreak(int streak)
         {
 
@@ -86,6 +104,18 @@ public partial class Standings
                 return "L1";
             }
 
+        }
+
+        private string GetStreakClass(int streak)
+        {
+            if (streak > 0)
+            {
+                return "streak-win";
+            }
+            else
+            {
+                return "streak-loss";
+            }
         }
     
 }

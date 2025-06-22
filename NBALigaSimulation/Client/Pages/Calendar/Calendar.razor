@@ -3,53 +3,77 @@
 
 @if (_games != null)
 {
-    <div class="container">
-        
-      @foreach (var kvp in gamesByDate)
-      {
-          <table>
-              <thead>
-                  <tr>
-                      @foreach (var h in headings)
-                      {
-                          <th>@h</th>
-                      }
-                  </tr>
-              </thead>
-              <tbody>
-                  @foreach (var game in kvp.Value)
-                  {
-                      <tr>
-                          <td>@game.GameDate.ToShortDateString()</td>
-                          <td>
-                              <a href="teams/@game.HomeTeamId">
-                                  <img src="@($"../Images/Logos/{game.HomeTeam}.svg")" style="vertical-align: middle; background: none" alt="Team logo" width="35" />
-                              </a>
-                          </td>
-                          <td>
-                              <a href="teams/@game.AwayTeamId">
-                                  <img src="@($"../Images/Logos/{game.AwayTeam}.svg")" style="vertical-align: middle; background: none" alt="Team logo" width="35" />
-                              </a>
-                          </td>
-                          @if (game.HomeTeamScore > 0)
-                          {
-                              <td>
-                                  <a href="game/@game.Id">
-                                          @game.HomeTeamScore
-                                      :
-                                          @game.AwayTeamScore
-                                  </a>
-                              </td>
-                          }
-                          else
-                          {
-                              <td>TBD</td>
-                          }
-                      </tr>
-                  }
-              </tbody>
-          </table>
-      }
+    <div class="schedule-container">
+        <div class="schedule-header">
+            <h1 class="schedule-title">Calendário da NBALiga</h1>
+        </div>
+
+        <div class="date-navigator">
+            <button @onclick="() => ChangeDateView(-1)" class="nav-arrow" aria-label="Semana anterior">
+                <i class="bi bi-chevron-left"></i>
+            </button>
+            <div class="date-strip">
+                @foreach (var date in GetDisplayedGameDates())
+                {
+                    <div @onclick="() => SelectDate(date)" class="date-item @(date == selectedDate ? "active" : "")" role="button">
+                        <span class="day-of-week">@date.ToString("ddd", GetPortugueseCulture())</span>
+                        <span class="day-of-month">@date.ToString("dd MMM", GetPortugueseCulture())</span>
+                    </div>
+                }
+            </div>
+            <button @onclick="() => ChangeDateView(1)" class="nav-arrow" aria-label="Próxima semana">
+                <i class="bi bi-chevron-right"></i>
+            </button>
+        </div>
+
+        <div class="games-for-day">
+            <h2 class="games-date-header">@selectedDate.ToString("dddd, dd 'de' MMMM 'de' yyyy", GetPortugueseCulture())</h2>
+            @if (gamesByDate.ContainsKey(selectedDate))
+            {
+                <table class="games-table">
+                    <thead>
+                        <tr>
+                            <th>Partida</th>
+                            <th style="text-align: right;">Resultado</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var game in gamesByDate[selectedDate])
+                        {
+                            <tr>
+                                <td class="matchup-cell">
+                                    <div class="team">
+                                        <img src="@($"../Images/Logos/{game.AwayTeam}.svg")" alt="@game.AwayTeam logo" />
+                                        <span>@game.AwayTeam</span>
+                                    </div>
+                                    <span class="at-symbol">@@</span>
+                                    <div class="team">
+                                        <img src="@($"../Images/Logos/{game.HomeTeam}.svg")" alt="@game.HomeTeam logo" />
+                                        <span>@game.HomeTeam</span>
+                                    </div>
+                                </td>
+                                <td style="text-align: right;">
+                                    @if (game.HomeTeamScore > 0)
+                                    {
+                                        <a class="result-link" href="game/@game.Id">
+                                            @game.AwayTeamScore - @game.HomeTeamScore
+                                        </a>
+                                    }
+                                    else
+                                    {
+                                        <span class="tbd-text">A definir</span>
+                                    }
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            }
+            else
+            {
+                <p class="no-games-text">Não há jogos agendados para esta data.</p>
+            }
+        </div>
     </div>
 }
 else

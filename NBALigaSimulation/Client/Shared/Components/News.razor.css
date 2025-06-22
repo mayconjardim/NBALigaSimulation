@@ -1,38 +1,96 @@
-.cards {
+.news-container-compact {
+    background: white;
+    border-radius: 16px;
+    padding: 1rem;
+    font-family: 'Inter', sans-serif;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+    border: 1px solid #f0f0f0;
     display: flex;
-    flex-wrap: wrap;
-    height: 40rem;
+    flex-direction: column;
+    height: 100%;
 }
 
-.card {
-    width: 16rem;
-    height: 8rem;
-    margin: 0.425rem;
-    word-wrap: break-word;
-    font-size: 0.8rem;
-    overflow: hidden; 
-}
-
-.card-header {
-    height: 2rem;
+.news-header {
     display: flex;
-    justify-content: space-around;
-    vertical-align: top;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.5rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid #e0e0e0;
+    flex-shrink: 0;
 }
 
-.card-header img {
-    padding: 0;
-    margin: 0;
+.news-header-title {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #333;
 }
 
-.card-body{
-    background-repeat: no-repeat;
-    background-position: center;
-    background-size: cover;
-    vertical-align: middle;
-}
-
-a {
+.news-header-more {
+    font-size: 0.85rem;
+    color: var(--primary-color);
     text-decoration: none;
     font-weight: 600;
+}
+
+.news-header-more:hover {
+    text-decoration: underline;
+}
+
+.news-list {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+    overflow-y: auto;
+    flex-grow: 1;
+    min-height: 0;
+}
+
+.news-item {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.news-item a {
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
+    padding: 0.75rem;
+    border-radius: 10px;
+    transition: background-color 0.2s ease, transform 0.2s ease, color 0.2s ease;
+    color: #444;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.news-item a:hover {
+    background-color: #f8f9fa;
+    transform: translateY(-1px);
+    color: var(--primary-color);
+    cursor: pointer;
+}
+
+.team-logo-news {
+    height: 22px;
+    width: 22px;
+    background-size: contain;
+    background-position: center;
+    background-repeat: no-repeat;
+    flex-shrink: 0;
+}
+
+.news-title {
+    font-size: 0.9rem;
+    line-height: 1.4;
+}
+
+.loading-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 200px;
+    background: white;
+    border-radius: 16px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
 }

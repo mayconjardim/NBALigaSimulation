@@ -7,20 +7,22 @@
      <div class="table-responsive">
         <div class="standings-table">
             <table>
-                        <thead style="background: var(--primary-color); color: white; text-align: center;">
-                       <tr>
-                           <th colspan="7" style="text-align: center">EAST</th>
-                       </tr>
-                       </thead>
+                <thead>
+                    <tr>
+                        <th colspan="7" style="text-align: center; background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%); color: white; font-size: 1.1rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px;">
+                            <i class="bi bi-trophy me-2"></i>EAST
+                        </th>
+                    </tr>
+                </thead>
                 <thead>
                 <tr>
-                    <th style="width: 50%;"></th>
-                    <th style="width: 8.3%;">W-L</th>
-                    <th style="width:  8.3%;">PCT</th>
-                    <th class="mobile" style="width:  8.3%;">PF</th>
-                    <th class="mobile" style="width:  8.3%;">PA</th>
-                    <th style="width:  8.3%;">DIFF</th>
-                    <th style="width:  8.3%;">STRK</th>
+                    <th style="width: 50%;"><i class="bi bi-people me-1"></i>TEAM</th>
+                    <th style="width: 8.3%;"><i class="bi bi-graph-up me-1"></i>W-L</th>
+                    <th style="width:  8.3%;"><i class="bi bi-percent me-1"></i>PCT</th>
+                    <th class="mobile" style="width:  8.3%;"><i class="bi bi-plus-circle me-1"></i>PF</th>
+                    <th class="mobile" style="width:  8.3%;"><i class="bi bi-dash-circle me-1"></i>PA</th>
+                    <th style="width:  8.3%;"><i class="bi bi-arrow-left-right me-1"></i>DIFF</th>
+                    <th style="width:  8.3%;"><i class="bi bi-lightning me-1"></i>STRK</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -29,21 +31,21 @@
                     <tr>
                         <td>
                             <img src=@($"../Images/Logos/{team.TeamAbrv}.svg") Style="vertical-align: middle; background: none" alt="Team logo" width="25">
-                            <a style="color: #0000EE" href="teams/@team.TeamId">@team.TeamRegion @team.TeamName</a>
+                            <a href="teams/@team.TeamId">@team.TeamRegion @team.TeamName</a>
                         </td>
-                        <td>@team.Wins-@team.Losses</td>
-                        <td>@team.WinPct</td>
+                        <td><strong>@team.Wins-@team.Losses</strong></td>
+                        <td><strong>@team.WinPct</strong></td>
                         <td class="mobile">@team.PF</td>
                         <td class="mobile">@team.PA</td>
-                        <td><span style="@GetDiffStyle(team.DIFF)">@GetFormattedDiff(team.DIFF)</span></td>
-                        <td>@GetStreak(team.Streak)</td>
+                        <td><span class="@GetDiffClass(team.DIFF)">@GetFormattedDiff(team.DIFF)</span></td>
+                        <td><span class="@GetStreakClass(team.Streak)">@GetStreak(team.Streak)</span></td>
                     </tr>
 
                     @if (index == 7) // 8ª equipe
                     {
                         <tr>
                             <td colspan="14">
-                                <hr style="border-top: 1px solid #e0e0e0; margin: 0;">
+                                <hr style="border: none; height: 2px; background: linear-gradient(90deg, transparent 0%, var(--primary-color) 50%, transparent 100%); margin: 0.5rem 0; opacity: 0.6;">
                             </td>
                         </tr>
                     }
@@ -54,21 +56,22 @@
 
         <div class="standings-table">
             <table>
-                
-                  <thead style="background: var(--primary-color); color: white; text-align: center;">
-                      <tr>
-                        <th colspan="7" style="text-align: center">WEST</th>
+                <thead>
+                    <tr>
+                        <th colspan="7" style="text-align: center; background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%); color: white; font-size: 1.1rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px;">
+                            <i class="bi bi-trophy me-2"></i>WEST
+                        </th>
                     </tr>
                 </thead>
                 <thead>
                 <tr>
-                    <th style="width: 50%;"></th>
-                    <th style="width: 8.3%;">W-L</th>
-                    <th style="width:  8.3%;">PCT</th>
-                    <th class="mobile" style="width:  8.3%;">PF</th>
-                    <th class="mobile" style="width:  8.3%;">PA</th>
-                    <th style="width:  8.3%;">DIFF</th>
-                    <th style="width:  8.3%;">STRK</th>
+                    <th style="width: 50%;"><i class="bi bi-people me-1"></i>TEAM</th>
+                    <th style="width: 8.3%;"><i class="bi bi-graph-up me-1"></i>W-L</th>
+                    <th style="width:  8.3%;"><i class="bi bi-percent me-1"></i>PCT</th>
+                    <th class="mobile" style="width:  8.3%;"><i class="bi bi-plus-circle me-1"></i>PF</th>
+                    <th class="mobile" style="width:  8.3%;"><i class="bi bi-dash-circle me-1"></i>PA</th>
+                    <th style="width:  8.3%;"><i class="bi bi-arrow-left-right me-1"></i>DIFF</th>
+                    <th style="width:  8.3%;"><i class="bi bi-lightning me-1"></i>STRK</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -77,21 +80,21 @@
                     <tr>
                         <td>
                             <img src=@($"../Images/Logos/{team.TeamAbrv}.svg") Style="vertical-align: middle; background: none" alt="Team logo" width="25">
-                            <a style="color: #0000EE" href="teams/@team.TeamId">@team.TeamRegion @team.TeamName</a>
+                            <a href="teams/@team.TeamId">@team.TeamRegion @team.TeamName</a>
                         </td>
-                        <td>@team.Wins-@team.Losses</td>
-                        <td>@team.WinPct</td>
+                        <td><strong>@team.Wins-@team.Losses</strong></td>
+                        <td><strong>@team.WinPct</strong></td>
                         <td class="mobile">@team.PF</td>
                         <td class="mobile">@team.PA</td>
-                        <td><span style="@GetDiffStyle(team.DIFF)">@GetFormattedDiff(team.DIFF)</span></td>
-                        <td>@GetStreak(team.Streak)</td>
+                        <td><span class="@GetDiffClass(team.DIFF)">@GetFormattedDiff(team.DIFF)</span></td>
+                        <td><span class="@GetStreakClass(team.Streak)">@GetStreak(team.Streak)</span></td>
                     </tr>
 
                     @if (index == 7) // 8ª equipe
                     {
                         <tr>
                             <td colspan="14">
-                                <hr style="border-top: 1px solid #e0e0e0; margin: 0;">
+                                <hr style="border: none; height: 2px; background: linear-gradient(90deg, transparent 0%, var(--primary-color) 50%, transparent 100%); margin: 0.5rem 0; opacity: 0.6;">
                             </td>
                         </tr>
                     }
@@ -104,5 +107,7 @@
 }
 else
 {
-    <Loading></Loading>
+    <div class="loading-container">
+        <Loading></Loading>
+    </div>
 }

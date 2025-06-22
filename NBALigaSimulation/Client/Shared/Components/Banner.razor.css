@@ -1,0 +1,24 @@
+.banner-container {
+    background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+    border-radius: 16px;
+    padding: 2.5rem 2rem;
+    color: white;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+    margin-bottom: 1.5rem;
+    text-align: center;
+}
+
+.banner-content h1 {
+    font-size: 1.8rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    margin-bottom: 0.5rem;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+}
+
+.banner-content p {
+    font-size: 1rem;
+    font-weight: 400;
+    opacity: 0.9;
+} 

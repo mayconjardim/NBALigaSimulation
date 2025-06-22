@@ -41,6 +41,14 @@ public partial class NavMenu
             await LocalStorage.SetItemAsync("season", response.Data.Year.ToString());
         }
     }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await JSRuntime.InvokeVoidAsync("addScrollListener");
+        }
+    }
     
     private async Task SimGameByDateRegular()
     {
