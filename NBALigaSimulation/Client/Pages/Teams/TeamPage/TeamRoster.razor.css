@@ -98,7 +98,7 @@
     transform: translate(-50%, -50%);
     width: 90%;
     max-width: 180px;
-    height: auto;
+    height: 50%;
     z-index: 3;
 }
 
@@ -112,7 +112,7 @@
 
 .player-card-v3 .player-image-container img {
     width: 100%;
-    height: auto;
+    height: 100%;
     object-fit: contain;
     filter: drop-shadow(0 5px 15px rgba(0, 0, 0, 0.5));
 }
