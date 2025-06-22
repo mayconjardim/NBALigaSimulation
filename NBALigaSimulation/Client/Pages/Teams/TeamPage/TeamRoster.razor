@@ -1,64 +1,101 @@
 @using NBALigaSimulation.Client.Utilities
 @using NBALigaSimulation.Client.Pages.Players.PlayerPage
+@using System.Globalization
 @inject ILocalStorageService LocalStorage
 @inject NavigationManager NavigationManager
+
 @if(_team.Players.Count > 0)
 {
-    <div class="container">
-        @foreach (var _player in _team.Players)
-        {  
-   
-            <div class="card mb-4" style="width: 10rem;" @onclick="() => NavigateToPlayerPage(_player.Id)">
-                <div class="player-header-card-img @_player.TeamAbrv">
-                     <img src="@_player.ImgUrl" alt="Foto do jogador">
+    <div class="roster-grid">
+        @foreach (var player in _roster)
+        {
+            var teamColors = $"--team-primary: var(--{player.TeamAbrv}-p); --team-secondary: var(--{player.TeamAbrv}-s);";
+            var lastStats = player.RegularStats?.LastOrDefault();
+            <div class="player-card-v3" style="@teamColors" @onclick="() => NavigateToPlayerPage(player.Id)">
+
+                <div class="card-content">
+                    <div class="card-top">
+                        <div class="player-nameplate">
+                            <h4>@player.Name</h4>
+                        </div>
+                    </div>
                 </div>
-                <div class="card-body">
-                    <h5 class="card-title">@_player.Name</h5>
-                    <h6 class="card-subtitle mb-2 text-muted">@Util.Position(_player.Pos)</h6>
-                    <div class="card-player-info">
-                        <p><span class="text-muted">Age:</span> @Util.Age(_season, _player.Born.Year)</p>
-                        <p><span class="text-muted">HT/WT:</span> @Util.InchesToCm(_player.Hgt)cm, @Util.LbsToKg(_player.Weight)kg </p>
-                        <p><span class="text-muted">Experience:</span> @_player.Ratings.Count Season</p>
-                        @if (_player.Contract != null)
-                        {
-                            <p><span class="text-muted">Contract:</span> $ @_player.Contract.Amount.ToString("N0")</p>
-                        }
-                        <p>
-                            <span class="badge @Util.GetBadgeClass(_player.Ratings.LastOrDefault().CalculateOvr)">@_player.Ratings.LastOrDefault().CalculateOvr</span>
-                            <span class="badge @Util.GetBadgeClass(@_player.Ratings.LastOrDefault().Pot)">@_player.Ratings.LastOrDefault().Pot</span>
-                        </p>
+
+                <div class="player-image-container">
+                    <img src="@player.ImgUrl" alt="Foto do jogador" />
+                </div>
+                
+                <div class="player-stats-box">
+                    <div class="stats-top-row">
+                        <div class="stat-item position-stat">
+                            <span class="label">Pos</span>
+                            <span class="value">@player.Pos</span>
+                        </div>
+                            <div class="stat-item position-stat">
+                            <span class="label">Age</span>
+                            <span class="value">@Util.Age(_season, player.Born.Year)</span>
+                        </div>
+                        <div class="ratings-group">
+                             <div class="stat-item">
+                                <span class="label">CUR</span>
+                                <span class="badge @Util.GetBadgeClass(player.Ratings.LastOrDefault()?.CalculateOvr ?? 0)">
+                                    @(player.Ratings.LastOrDefault()?.CalculateOvr ?? 0)
+                                </span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="label">POT</span>
+                                <span class="badge @Util.GetBadgeClass(player.Ratings.LastOrDefault()?.Pot ?? 0)">
+                                    @(player.Ratings.LastOrDefault()?.Pot ?? 0)
+                                </span>
+                            </div>
+                        </div>
                     </div>
-                    <div class="card-player-stats">
-                        @if (_player.RegularStats.Count > 0 )
-                        {
-                                <table class="stats">
-                                    <thead>
-                                    <tr>
-                                        <th colspan="3">SEASON STATS</th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                    <tr>
-                                        <td>
-                                            <span>PTS</span>
-                                            @_player.RegularStats.LastOrDefault().PtsPG
-                                        </td>
-                                        <td>
-                                            <span>REB</span>
-                                            @_player.RegularStats.LastOrDefault().TRebPG
-                                        </td>
-                                        <td>
-                                            <span>AST</span>
-                                            @_player.RegularStats.LastOrDefault().AstPG
-                                        </td>
-                                    </tr>
-                                    </tbody>
-                                </table>
-                        }
+                    <div class="stats-bottom-row">
+                        <div class="stat-item bottom-stat">
+                            <span class="label">PPG</span>
+                            <span class="value">@FormatStat(lastStats?.PtsPG)</span>
+                        </div>
+                        <div class="stat-item bottom-stat">
+                            <span class="label">RPG</span>
+                            <span class="value">@FormatStat(lastStats?.TRebPG)</span>
+                        </div>
+                        <div class="stat-item bottom-stat">
+                            <span class="label">APG</span>
+                            <span class="value">@FormatStat(lastStats?.AstPG)</span>
+                        </div>
                     </div>
-                       
                 </div>
             </div>
-        }   
+        }
     </div>
 }
+else
+{
+    <div class="container text-center p-4">
+        <p>Nenhum jogador encontrado neste time.</p>
+    </div>
+}
+
+@code {
+
+    private string FormatStat(string stat)
+    {
+        if (string.IsNullOrEmpty(stat))
+        {
+            return "-";
+        }
+
+        if (double.TryParse(stat.Replace(",", "."), NumberStyles.Any, CultureInfo.InvariantCulture, out double value))
+        {
+            if (double.IsNaN(value) || double.IsInfinity(value))
+            {
+                return "-";
+            }
+            return value.ToString("N1", CultureInfo.InvariantCulture);
+        }
+
+        return "-";
+    }
+
+}
+

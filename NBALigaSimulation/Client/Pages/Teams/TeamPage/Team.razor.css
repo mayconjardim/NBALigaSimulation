@@ -1,45 +1,77 @@
 .tabs-container {
-    width: 100%;
-    overflow-x: auto;
+    background-color: #f8f9fa;
+    padding-top: 1rem;
+    position: sticky;
+    top: 60px; /* Adjust based on your NavMenu's height */
+    z-index: 1020;
+    border-bottom: 1px solid #dee2e6;
 }
 
 .nav-tabs {
-    display: flex;
+    border-bottom: none;
+    max-width: 1200px;
+    margin: 0 auto;
     flex-wrap: nowrap;
-    padding: 0;
-    margin: 0;
-    list-style-type: none;
-    background: var(--white);
-    border-bottom: 0.068rem solid #c9c4c4;
-
+    overflow-x: auto;
+    overflow-y: hidden;
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* IE and Edge */
 }
 
-
-.nav-link {
-    border: 0 solid transparent;
+.nav-tabs::-webkit-scrollbar {
+    display: none; /* Chrome, Safari and Opera */
 }
 
-.nav-tabs .nav-item .nav-link {
-    color: #212529;
-    font-weight: 600;
-    border: 0 solid #c9c4c4;
-
-}
-
-.nav-link {
-    white-space: nowrap;
-}
-
-.nav-link.active {
+.nav-tabs .nav-link {
     border: none;
-    color: #212529;
-    text-decoration: none;
+    background: none;
+    color: #6c757d;
+    font-weight: 600;
+    padding: 0.75rem 1.5rem;
+    margin: 0 0.25rem;
+    border-bottom: 3px solid transparent;
+    transition: all 0.2s ease-in-out;
+    white-space: nowrap;
+    flex-shrink: 0;
 }
 
-.nav-link.active::after {
-    content: "";
-    display: block;
-    width: 100%;
-    border-bottom: 2px solid var(--primary-color);
-    padding-top: 5px;
+.nav-tabs .nav-link:hover {
+    color: #343a40;
+}
+
+.nav-tabs .nav-link.active {
+    color: var(--primary-color);
+    background-color: transparent;
+    border-bottom-color: var(--primary-color);
+}
+
+.tab-content {
+    background-color: #EDEEF2;
+    padding: 1.5rem 0;
+}
+
+/* Mobile adjustments for tabs */
+@media (max-width: 768px) {
+    .nav-tabs {
+        padding: 0 1rem;
+        margin: 0;
+        max-width: none;
+    }
+    
+    .nav-tabs .nav-link {
+        padding: 0.75rem 1rem;
+        margin: 0 0.125rem;
+        font-size: 0.9rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .nav-tabs {
+        padding: 0 0.5rem;
+    }
+    
+    .nav-tabs .nav-link {
+        padding: 0.6rem 0.75rem;
+        font-size: 0.85rem;
+    }
 }

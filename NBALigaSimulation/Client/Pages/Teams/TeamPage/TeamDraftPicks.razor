@@ -1,32 +1,36 @@
- <div class="container">
-        @if (_team != null & _picks != null)
-        {
-            <table>
-                <thead>
+@if (_team != null && _picks.Any())
+{
+    <div class="draftpicks-table-wrapper">
+        <table class="draftpicks-table">
+            <thead>
                 <tr>
                     @foreach (var h in headings)
                     {
                         <th>@h</th>
                     }
                 </tr>
-                </thead>
-                <tbody>
+            </thead>
+            <tbody>
                 @foreach (var pick in _picks)
                 {
-                    
                     <tr>
                         <td>@pick.Year</td>
                         <td>@pick.Round</td>
                         <td>
-                            <img src=@($"../Images/Logos/{pick.TeamName}.svg") Style="vertical-align: middle; background: none" alt="Team logo" width="35"> 
+                            <img src=@($"../Images/Logos/{pick.TeamName}.svg") alt="Team logo" />
                         </td>
                         <td>
-                            <img src=@($"../Images/Logos/{pick.Original}.svg") Style="vertical-align: middle; background: none" alt="Team logo" width="35">
+                            <img src=@($"../Images/Logos/{pick.Original}.svg") alt="Team logo" />
                         </td>
                     </tr>
                 }
-                </tbody>
-            </table>
-            
-        }
+            </tbody>
+        </table>
     </div>
+}
+else
+{
+    <div class="container text-center p-4">
+        <p>Nenhuma escolha de draft encontrada para este time.</p>
+    </div>
+}

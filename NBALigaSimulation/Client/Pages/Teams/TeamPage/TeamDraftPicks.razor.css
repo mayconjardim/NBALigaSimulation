@@ -1,28 +1,47 @@
-table {
-    background-color: var(--white);
+.draftpicks-table-wrapper {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 1.5rem 1.5rem;
+    background: white;
+    border-radius: 16px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+    overflow-x: auto;
+}
+
+.draftpicks-table {
     width: 100%;
-    text-align: center;
-    margin: 0.625rem;
     border-collapse: collapse;
-    -webkit-border-radius: 0.625rem;
-    -moz-border-radius: 0.625rem;
-    border-radius: 0.625rem;
-    overflow: hidden;
 }
 
-table td{
-    padding: 0 0.825rem;
-}
-table tbody td {
-    font-size: 0.625rem;
+.draftpicks-table th {
+    background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+    color: white;
+    font-size: 0.75rem;
     font-weight: 600;
+    text-align: center;
+    padding: 1rem 0.5rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
 }
 
-table thead {
-    background: var(--primary-color);
+.draftpicks-table td {
+    font-size: 0.9rem;
+    font-weight: 500;
+    text-align: center;
+    padding: 1rem 0.5rem;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    vertical-align: middle;
 }
-table thead th {
-    font-size: 0.625rem;
-    font-weight: 800;
-    color: var(--white);
+
+.draftpicks-table tr:last-child td {
+    border-bottom: none;
+}
+
+.draftpicks-table tr:hover td {
+    background-color: #f8f9fa;
+}
+
+.draftpicks-table img {
+    height: 32px;
+    width: 32px;
 }

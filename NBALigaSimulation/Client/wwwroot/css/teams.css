@@ -1,4 +1,40 @@
-﻿.PHI {
+﻿:root {
+    /* Team Colors */
+    --ATL-p: #E03A3E; --ATL-s: #C1D32F;
+    --BKN-p: #000000; --BKN-s: #FFFFFF;
+    --BOS-p: #007A33; --BOS-s: #BA9653;
+    --CHA-p: #1D1160; --CHA-s: #00788C;
+    --CHI-p: #CE1141; --CHI-s: #000000;
+    --CLE-p: #860038; --CLE-s: #FDBB30;
+    --DAL-p: #00538C; --DAL-s: #B8C4CA;
+    --DEN-p: #0E2240; --DEN-s: #FEC524;
+    --DET-p: #C8102E; --DET-s: #1D42BA;
+    --GSW-p: #1D428A; --GSW-s: #FFC72C;
+    --HOU-p: #CE1141; --HOU-s: #C4CED4;
+    --IND-p: #002D62; --IND-s: #FDBB30;
+    --LAC-p: #C8102E; --LAC-s: #1D428A;
+    --LAL-p: #552583; --LAL-s: #FDB927;
+    --MEM-p: #5D76A9; --MEM-s: #12173F;
+    --MIA-p: #98002E; --MIA-s: #F9A01B;
+    --MIL-p: #00471B; --MIL-s: #EEE1C6;
+    --MIN-p: #0C2340; --MIN-s: #236192;
+    --NOP-p: #0C2340; --NOP-s: #C8102E;
+    --NYK-p: #006BB6; --NYK-s: #F58426;
+    --OKC-p: #007AC1; --OKC-s: #EF3B24;
+    --ORL-p: #0077C0; --ORL-s: #C4CED4;
+    --PHI-p: #006BB6; --PHI-s: #ED174C;
+    --PHO-p: #1D1160; --PHO-s: #E56020;
+    --POR-p: #E03A3E; --POR-s: #000000;
+    --SAC-p: #5A2D81; --SAC-s: #63727A;
+    --SAS-p: #C4CED4; --SAS-s: #000000;
+    --TOR-p: #CE1141; --TOR-s: #A1A1A4;
+    --UTA-p: #002B5C; --UTA-s: #F9A01B;
+    --WAS-p: #002B5C; --WAS-s: #E31837;
+    --FA-p: #6c757d; --FA-s: #adb5bd;
+    --Draft-p: #343a40; --Draft-s: #ced4da;
+}
+
+.PHI {
     background: url("../Images/Logos/PHI.svg");
 }
 

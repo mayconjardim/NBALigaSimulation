@@ -6,130 +6,84 @@ namespace NBALigaSimulation.Client.Pages.Teams.TeamPage;
 
 public partial class TeamSchedule
 {
-    
-    [Parameter] 
+    public class GameWithRecord
+    {
+        public GameCompleteDto Game { get; set; }
+        public string Record { get; set; }
+    }
+
+    [Parameter]
     public TeamCompleteDto _team { get; set; }
 
-    private List<GameCompleteDto> _games = new List<GameCompleteDto>();
-    Dictionary<DateTime, List<GameCompleteDto>> gamesByDate = new Dictionary<DateTime, List<GameCompleteDto>>();
+    private List<GameWithRecord> _gamesWithRecord = new();
     
-    string[] headings = { "WEEK", "DATE", "HOME", "AWAY", "W-L", "RESULT" };
-    int totalWins = 0;
-    int totalLosses = 0;
+    string[] headings = { "SEMANA", "DATA", "CASA", "VISITANTE", "V-D", "RESULTADO" };
     
     protected override async Task OnInitializedAsync()
     {
         var result = await GameService.GetGamesByTeamId(_team.Id);
         
-        if (result.Success)
+        if (result.Success && result.Data.Any())
         {
-            _games = result.Data;
-        
-            var uniqueDates = _games.Select(game => game.GameDate.Date).Distinct().OrderBy(date => date).ToList();
-            gamesByDate = new Dictionary<DateTime, List<GameCompleteDto>>();
-        
-            foreach (var date in uniqueDates)
-            {
-                var gamesOnDate = _games.Where(game => game.GameDate.Date == date).ToList();
-                gamesByDate.Add(date, gamesOnDate);
-            }
-        
+            var orderedGames = result.Data.OrderBy(g => g.GameDate).ToList();
+            CalculateRecords(orderedGames);
         }
     }
 
-    protected string GetWinLossNumber(GameCompleteDto game)
+    private void CalculateRecords(List<GameCompleteDto> games)
     {
-        var pageTeam = _team.Abrv;
+        _gamesWithRecord.Clear();
+        int currentWins = 0;
+        int currentLosses = 0;
 
-        if (game.HomeTeamScore > game.AwayTeamScore)
+        foreach(var game in games)
         {
-            if (game.HomeTeam == pageTeam)
+            string record = "—";
+            if (game.HomeTeamScore > 0) 
             {
-                totalWins += 1;
+                bool isWinner = (game.HomeTeam == _team.Abrv && game.HomeTeamScore > game.AwayTeamScore) ||
+                                (game.AwayTeam == _team.Abrv && game.AwayTeamScore > game.HomeTeamScore);
+                if (isWinner)
+                {
+                    currentWins++;
+                }
+                else
+                {
+                    currentLosses++;
+                }
+                record = $"{currentWins}-{currentLosses}";
             }
-            else
+            
+            _gamesWithRecord.Add(new GameWithRecord
             {
-                totalLosses += 1;
-            }
+                Game = game,
+                Record = record
+            });
         }
-        else if (game.AwayTeamScore > game.HomeTeamScore)
-        {
-            if (game.AwayTeam == pageTeam)
-            {
-                totalWins += 1;
-            }
-            else
-            {
-                totalLosses += 1;
-            }
-        }
-
-        return totalWins + "-" + totalLosses;
     }
     
-    protected string GetWinLoss(GameCompleteDto game)
+    protected  string GetWinLoss(GameCompleteDto game)
     {
-        var pageTeam = _team.Abrv;
-        
-        if (game.HomeTeamScore > game.AwayTeamScore)
-        {
-            if (game.HomeTeam == pageTeam)
-            {
-                return "W";
-            }
-            else
-            {
-                return "L";
-            }
-        }
-        else if (game.AwayTeamScore > game.HomeTeamScore)
-        {
-            if (game.AwayTeam == pageTeam)
-            {
-                return "W";
-            }
-            else
-            {
-                return "L";
-            }
-        }
+        if (game.HomeTeamScore == 0) return "";
 
-        return totalWins + "-" + totalLosses;
+        bool isWinner = (game.HomeTeam == _team.Abrv && game.HomeTeamScore > game.AwayTeamScore) ||
+                        (game.AwayTeam == _team.Abrv && game.AwayTeamScore > game.HomeTeamScore);
+        
+        return isWinner ? "V" : "D";
     }
     
     protected  string GetScoreClass(GameCompleteDto game)
     {
-        var pageTeam = _team.Abrv;
+        if (game.HomeTeamScore == 0) return "";
         
-        if (game.HomeTeamScore > game.AwayTeamScore)
-        {
-            if (game.HomeTeam == pageTeam)
-            {
-                return "text-win";
-            }
-            else
-            {
-                return "text-loss";
-            }
-        }
-        else if (game.AwayTeamScore > game.HomeTeamScore)
-        {
-            if (game.AwayTeam == pageTeam)
-            {
-                return "text-win";
-            }
-            else
-            {
-                return "text-loss";
-            }
-        }
+        bool isWinner = (game.HomeTeam == _team.Abrv && game.HomeTeamScore > game.AwayTeamScore) ||
+                        (game.AwayTeam == _team.Abrv && game.AwayTeamScore > game.HomeTeamScore);
 
-        return "";
+        return isWinner ? "text-win" : "text-loss";
     }
     
     private  void NavigateToTeamPage(int teamID)
     {
-        NavigationManager.NavigateTo($"/teams/{teamID}");
+        NavigationManager.NavigateTo($"/teams/{teamID}", forceLoad: true);
     }
-    
 }

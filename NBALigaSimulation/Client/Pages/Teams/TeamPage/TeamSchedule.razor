@@ -2,71 +2,54 @@
 @inject IGameService GameService
 @inject NavigationManager NavigationManager
 
-   <div class="container">
-        @if (_team != null & _games != null)
-        {
-            @foreach (var kvp in gamesByDate)
-            {
-                <table>
-                    <thead>
+@if (_gamesWithRecord.Any())
+{
+    <div class="schedule-table-wrapper">
+        <table class="schedule-table">
+            <thead>
+                <tr>
+                    @foreach (var h in headings)
+                    {
+                        <th>@h</th>
+                    }
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in _gamesWithRecord)
+                {
+                    var game = item.Game;
                     <tr>
-                        @foreach (var h in headings)
+                        <td>@game.Week</td>
+                        <td>@game.GameDate.ToShortDateString()</td>
+                        <td @onclick="() => NavigateToTeamPage(game.HomeTeamId)">
+                            <img src=@($"../Images/Logos/{game.HomeTeam}.svg") alt="@game.HomeTeam logo">
+                        </td>
+                        <td @onclick="() => NavigateToTeamPage(game.AwayTeamId)">
+                            <img src=@($"../Images/Logos/{game.AwayTeam}.svg") alt="@game.AwayTeam logo">
+                        </td>
+                        <td>@item.Record</td>
+                        @if (game.HomeTeamScore > 0)
                         {
-                            <th>@h</th>
+                            <td>
+                                <span class="@GetScoreClass(game)">@GetWinLoss(game)</span>
+                                <a class="result-link ms-2" href="game/@game.Id">
+                                    @game.AwayTeamScore - @game.HomeTeamScore
+                                </a>
+                            </td>
+                        }
+                        else
+                        {
+                            <td>TBD</td>
                         }
                     </tr>
-                    </thead>
-                    <tbody>
-                    @foreach (var game in kvp.Value)
-                    {
-
-                        <tr>
-                            <td>@game.Week</td>
-                            <td>@game.GameDate.ToShortDateString()</td>
-                            <td  @onclick="() => NavigateToTeamPage(game.HomeTeamId)">
-                                <img src=@($"../Images/Logos/{game.HomeTeam}.svg") Style="vertical-align: middle; background: none" alt="Team logo" width="35" >
-                            </td>
-                            <td @onclick="() => NavigateToTeamPage(game.AwayTeamId)">
-                                <img src=@($"../Images/Logos/{game.AwayTeam}.svg") Style="vertical-align: middle; background: none" alt="Team logo" width="35"
-                                     @onclick="() => NavigateToTeamPage(game.AwayTeamId)">
-                            </td>
-                            @if (game.HomeTeamScore != 0)
-                            {
-                                <td>
-                                    <text>@GetWinLossNumber(game)</text>
-                                </td>
-                            }
-                            else
-                            {
-                                <td>
-                                    <p>---</p>
-                                </td>
-                            }
-                            @if (@game.HomeTeamScore > 0)
-                            {
-                                <td>
-                                    <span >
-                                        @GetWinLoss(game)
-                                    </span>
-                                    <a href="game/@game.Id">
-                                        <span class="@GetScoreClass(game)">
-                                            @game.HomeTeamScore
-                                        </span>
-                                        :
-                                        <span class="@GetScoreClass(game)">
-                                            @game.AwayTeamScore
-                                        </span>
-                                    </a>
-                                </td>
-                            }
-                            else
-                            {
-                                <td>TBD</td>
-                            }
-                        </tr>
-                    }
-                    </tbody>
-                </table>
-            }
-        }
+                }
+            </tbody>
+        </table>
     </div>
+}
+else
+{
+    <div class="container text-center p-4">
+        <p>Nenhum jogo encontrado para este time.</p>
+    </div>
+}
