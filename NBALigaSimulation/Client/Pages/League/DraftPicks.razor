@@ -1,31 +1,64 @@
 @page "/picks"
 @inject ILeagueService LeagueService
+@using NBALigaSimulation.Shared.Dtos.Teams
 
-    <div class="container">
-        @if (picks != null )
-        {
+@if (_filteredPicks != null)
+{
+    <div class="draft-picks-container">
 
-            <table>
-                <thead>
-                <tr>
-                    @foreach (var h in headings)
+        <div class="year-navigator">
+            @foreach (var year in _availableYears)
+            {
+                <button @onclick="() => SelectYear(year)" class="year-button @(year == _selectedYear ? "active" : "")">
+                    @year
+                </button>
+            }
+        </div>
+
+        <div class="filter-bar">
+            <div class="filter-group">
+                <label for="round-select">Round</label>
+                <select id="round-select" class="form-select" @onchange="SelectRound">
+                    <option value="1">1ª Rodada</option>
+                    <option value="2">2ª Rodada</option>
+                </select>
+            </div>
+            <div class="filter-group">
+                <label for="team-select">Time</label>
+                <select id="team-select" class="form-select" @onchange="SelectTeam">
+                    <option value="0">Todos os Times</option>
+                    @foreach (var team in _availableTeams)
                     {
-                        <th>@h</th>
+                        <option value="@team.Id">@team.Name</option>
                     }
-                </tr>
+                </select>
+            </div>
+        </div>
+
+        <div class="draft-picks-table-wrapper">
+            <table class="draft-picks-table">
+                <thead>
+                    <tr>
+                        <th>Round</th>
+                        <th>Time</th>
+                        <th>Original</th>
+                    </tr>
                 </thead>
                 <tbody>
-                @foreach (var pick in picks)
-                {
-                    <tr>
-                        <td>@pick.Year</td>
-                        <td>@pick.Round</td>
-                        <td><img src=@($"../Images/Logos/{pick.TeamName}.svg") Style="vertical-align: middle; background: none" alt="Team logo" width="25"></td>
-                        <td><img src=@($"../Images/Logos/{pick.Original}.svg") Style="vertical-align: middle; background: none" alt="Team logo" width="25"></td>
-                    </tr>
-                }
+                    @foreach (var pick in _filteredPicks)
+                    {
+                        <tr>
+                            <td>@pick.Round</td>
+                            <td><img src=@($"../Images/Logos/{pick.TeamName}.svg") alt="@pick.TeamName logo" /></td>
+                            <td><img src=@($"../Images/Logos/{pick.Original}.svg") alt="@pick.Original logo" /></td>
+                        </tr>
+                    }
                 </tbody>
             </table>
-
-        }
+        </div>
     </div>
+}
+else
+{
+    <Loading></Loading>
+}
