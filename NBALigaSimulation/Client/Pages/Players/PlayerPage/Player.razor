@@ -6,42 +6,40 @@
     <PlayerHeader _player="@_player" />
     
     <div class="tabs-container">
-      <ul class="nav nav-tabs justify-content-center" id="myTab" role="tablist">
-        <li class="nav-item" role="presentation">
-          <button class="nav-link active" id="bio-tab" data-bs-toggle="tab" data-bs-target="#bio-tab-pane" type="button" role="tab" aria-controls="bio-tab-pane" aria-selected="true">Bio</button>
-        </li>
-        <li class="nav-item" role="presentation">
-          <button class="nav-link" id="profile-tab" data-bs-toggle="tab" data-bs-target="#profile-tab-pane" type="button" role="tab" aria-controls="profile-tab-pane" aria-selected="false">Stats</button>
-        </li>
-        <li class="nav-item" role="presentation">
-          <button class="nav-link" id="contact-tab" data-bs-toggle="tab" data-bs-target="#contact-tab-pane" type="button" role="tab" aria-controls="contact-tab-pane" aria-selected="false">Game Logs</button>
-        </li>
-        <li class="nav-item" role="presentation">
-          <button class="nav-link" id="disabled-tab" data-bs-toggle="tab" data-bs-target="#disabled-tab-pane" type="button" role="tab" aria-controls="disabled-tab-pane" aria-selected="false">Ratings</button>
-        </li>
-        <li class="nav-item" role="presentation">
-          <button class="nav-link" id="disabled-tab" data-bs-toggle="tab" data-bs-target="#edit-tab-pane" type="button" role="tab" aria-controls="edit-tab-pane" aria-selected="false">Editar</button>
-        </li>
-      </ul>
-      <div class="tab-content" id="myTabContent">
-        <div class="tab-pane fade show active" id="bio-tab-pane" role="tabpanel" aria-labelledby="bio-tab" tabindex="0">
+        <ul class="nav nav-tabs">
+            <li class="nav-item">
+                <a class="nav-link @(ActiveTab == "Bio" ? "active" : "")" @onclick='() => SetActiveTab("Bio")'>Bio</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link @(ActiveTab == "Stats" ? "active" : "")" @onclick='() => SetActiveTab("Stats")'>Stats</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link @(ActiveTab == "Game Logs" ? "active" : "")" @onclick='() => SetActiveTab("Game Logs")'>Game Logs</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link @(ActiveTab == "Ratings" ? "active" : "")" @onclick='() => SetActiveTab("Ratings")'>Ratings</a>
+            </li>
+        </ul>
+    </div>
+    
+    <div class="tab-content">
+        @if (ActiveTab == "Bio")
+        {
             <PlayerRating _player="@_player"/>
-        </div>
-        <div class="tab-pane fade" id="profile-tab-pane" role="tabpanel" aria-labelledby="profile-tab" tabindex="0">
-           <PlayerStats _player="@_player"/>
-        </div>
-        <div class="tab-pane fade" id="contact-tab-pane" role="tabpanel" aria-labelledby="contact-tab" tabindex="0">
-          <PlayerLogs _player="@_player"/>
-        </div>
-        <div class="tab-pane fade" id="disabled-tab-pane" role="tabpanel" aria-labelledby="disabled-tab" tabindex="0">
-          <PlayerProgression _player="@_player"/>
-        </div>
-
-        <div class="tab-pane fade" id="edit-tab-pane" role="tabpanel" aria-labelledby="edit-tab-pane" tabindex="0">
-          <PlayerEdit _player="@_player"/>
-        </div>
-      </div>
-   </div>
+        }
+        else if (ActiveTab == "Stats")
+        {
+            <PlayerStats _player="@_player"/>
+        }
+        else if (ActiveTab == "Game Logs")
+        {
+            <PlayerLogs _player="@_player"/>
+        }
+        else if (ActiveTab == "Ratings")
+        {
+            <PlayerProgression _player="@_player"/>
+        }
+    </div>
     
 }
 else

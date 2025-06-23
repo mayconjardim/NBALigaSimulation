@@ -1,10 +1,11 @@
 @using NBALigaSimulation.Client.Utilities
-<div class="container-fluid">
-    @if (_ratings != null)
+
+<div class="table-container">
+    @if (_ratings != null && _ratings.Any())
     {
-        <div class="table-responsive">
-            <table class="table caption-top">
-                <caption>Player Ratings Progressions</caption>
+        <div class="table-responsive-custom">
+            <table class="table-modern">
+                <caption class="caption-modern">Player Ratings Progression</caption>
                 <thead>
                 <tr>
                     @foreach (var th in _headings)
@@ -17,34 +18,41 @@
                 @foreach (var rating in _ratings)
                 {
                     <tr>
-                        <td>@rating.Season</td>
-                        <td>@Util.Age(@rating.Season, _player.Born.Year)</td>
-                        <td>@rating.CalculateOvr</td>
-                        <td>@rating.Pot</td>
-                        <td>@rating.Hgt</td>
-                        <td>@rating.Stre</td>
-                        <td>@rating.Spd</td>
-                        <td>@rating.Jmp</td>
-                        <td>@rating.Endu</td>
-                        <td>@rating.Ins</td>
-                        <td>@rating.Dnk</td>
-                        <td>@rating.Ft</td>
-                        <td>@rating.Fg</td>
-                        <td>@rating.Tp</td>
-                        <td>@rating.Oiq</td>
-                        <td>@rating.Diq</td>
-                        <td>@rating.Drb</td>
-                        <td>@rating.Pss</td>
-                        <td>@rating.Reb</td>
-                        <td>      
+                        <td data-label="Season">@rating.Season</td>
+                        <td data-label="Age">@Util.Age(@rating.Season, _player.Born.Year)</td>
+                        <td data-label="Ovr">@rating.CalculateOvr</td>
+                        <td data-label="Pot">@rating.Pot</td>
+                        <td data-label="Hgt">@rating.Hgt</td>
+                        <td data-label="Stre">@rating.Stre</td>
+                        <td data-label="Spd">@rating.Spd</td>
+                        <td data-label="Jmp">@rating.Jmp</td>
+                        <td data-label="Endu">@rating.Endu</td>
+                        <td data-label="Ins">@rating.Ins</td>
+                        <td data-label="Dnk">@rating.Dnk</td>
+                        <td data-label="Ft">@rating.Ft</td>
+                        <td data-label="Fg">@rating.Fg</td>
+                        <td data-label="Tp">@rating.Tp</td>
+                        <td data-label="Oiq">@rating.Oiq</td>
+                        <td data-label="Diq">@rating.Diq</td>
+                        <td data-label="Drb">@rating.Drb</td>
+                        <td data-label="Pss">@rating.Pss</td>
+                        <td data-label="Reb">@rating.Reb</td>
+                        <td data-label="Skills" class="skills-cell">
                             @foreach(string skill in rating.Skills)
                             {
-                                <span style="margin: 2px">@skill</span>              
-                            }</td>
+                                <span>@skill</span>
+                            }
+                        </td>
                     </tr>
                 }
                 </tbody>
             </table>
+        </div>
+    }
+    else
+    {
+        <div class="text-center p-4">
+            <p>No ratings progression available for this player.</p>
         </div>
     }
 </div>

@@ -1,0 +1,20 @@
+@if (_ratings.Any())
+{
+    <div class="skill-ratings-card">
+        <h3 class="skill-ratings-header">Skill Ratings</h3>
+        <div class="skill-ratings-grid">
+            @foreach (var rating in _ratings)
+            {
+                <div class="skill-item">
+                    <div class="skill-item-header">
+                        <span class="skill-item-name">@rating.Key</span>
+                        <span class="skill-item-value">@rating.Value</span>
+                    </div>
+                    <div class="skill-bar-container">
+                        <div class="skill-bar @GetRatingBarClass(rating.Value)" style="width: @(rating.Value)%;"></div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+} 

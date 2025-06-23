@@ -1,45 +1,63 @@
 .tabs-container {
-    width: 100%; 
-    overflow-x: auto; 
+    position: sticky;
+    top: 60px; /* Adjust based on your NavMenu height */
+    z-index: 1020;
+    background: #ffffff;
+    padding: 0 1.5rem;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.07), 0 2px 4px -1px rgba(0, 0, 0, 0.04);
+    border-bottom: 1px solid #dee2e6;
 }
 
 .nav-tabs {
-    display: flex;
+    border-bottom: none;
+    max-width: 1400px;
+    margin: 0 auto;
+    display: flex; /* Centraliza os itens */
+    justify-content: center; /* Centraliza os itens */
     flex-wrap: nowrap;
-    padding: 0; 
-    margin: 0; 
-    list-style-type: none; 
-    background: var(--white);
-    border-bottom: 0.068rem solid #c9c4c4;
-    
+    overflow-x: auto;
+    overflow-y: hidden;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
 }
 
-
-.nav-link {
-    border: 0 solid transparent;
+.nav-tabs::-webkit-scrollbar {
+    display: none;
 }
 
-.nav-tabs .nav-item .nav-link {
-    color: #212529;
+.nav-tabs .nav-item {
+    flex-shrink: 0;
+}
+
+.nav-tabs .nav-link {
+    border: none;
+    background: none;
+    color: #6c757d;
     font-weight: 600;
-    border: 0 solid #c9c4c4;
-    
-}
-
-.nav-link {
+    padding: 0.75rem 1.5rem;
+    margin: 0 0.25rem;
+    border-bottom: 3px solid transparent;
+    transition: all 0.2s ease-in-out;
     white-space: nowrap;
 }
 
-.nav-link.active {
-    border: none;
-    color: #212529;
-    text-decoration: none;
+.nav-tabs .nav-link:hover {
+    color: #343a40;
+    border-bottom-color: #adb5bd;
 }
 
-.nav-link.active::after {
-    content: ""; 
-    display: block;
-    width: 100%; 
-    border-bottom: 2px solid var(--primary-color); 
-    padding-top: 5px; 
+.nav-tabs .nav-link.active {
+    color: var(--primary-color);
+    background-color: transparent;
+    border-bottom-color: var(--primary-color);
+}
+
+.tab-content {
+    /* O padding agora é controlado pelo .ratings-container */
+}
+
+@media (max-width: 768px) {
+    .nav-tabs {
+        justify-content: flex-start; /* Alinha à esquerda em telas menores */
+    }
 }

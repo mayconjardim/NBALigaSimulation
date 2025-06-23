@@ -1,23 +1,31 @@
 @using NBALigaSimulation.Client.Utilities
+@using System.Globalization
 @inject ILocalStorageService LocalStorage
 @if (_player != null)
 {
+    var teamColors = $"--team-primary: var(--{_player.TeamAbrv}-p); --team-secondary: var(--{_player.TeamAbrv}-s);";
+    var backgroundStyle = $"background-image: url('../Images/Logos/{_player.TeamAbrv}.svg');";
     
-    <div class="player-header @_player.TeamAbrv">
+    <div class="player-header" style="@backgroundStyle @teamColors">
         
         <div class="player-header-card">
-        
+
+            <div class="player-header-photo">
+                <img src="@_player.ImgUrl" alt="@_player.Name"/>
+            </div>
+            
             <div class="player-header-card-bio">
         
-                <div class="player-header-card-img">
-                    <img src="@_player.ImgUrl" alt="Foto do jogador" width="25">
-                </div>
-            
                 <div class="player-header-card-info">
                     <h3>@_player.Name</h3>
-                    <p>@_player.TeamName - @Util.Position(_player.Pos)
-                         <span class="badge @Util.GetBadgeClass(_ratings.CalculateOvr)">@_ratings.CalculateOvr</span>
-                         <span class="badge  @Util.GetBadgeClass(_ratings.Pot)">@_ratings.Pot</span> 
+                    <p>
+                        <img src=@($"../Images/Logos/{_player.TeamAbrv}.svg") class="team-logo" alt="@_player.TeamAbrv"/>
+                        <span>@_player.TeamName.Split(' ').Last()</span>
+                        <span>&bull;</span>
+                        <span>@Util.Position(_player.Pos)</span>
+                        <span>&bull;</span>
+                        <span class="badge @Util.GetBadgeClass(_ratings.CalculateOvr)">@_ratings.CalculateOvr</span>
+                        <span class="badge @Util.GetBadgeClass(_ratings.Pot)">@_ratings.Pot</span>
                     </p>
                 </div>
             
@@ -37,19 +45,27 @@
                         <tr>
                             <td>
                                 <span>PTS</span>
-                                @_stats.PtsPG
+                                @if(!string.IsNullOrEmpty(_stats.PtsPG)) {
+                                    @Util.FormatStat(Convert.ToDouble(_stats.PtsPG, CultureInfo.InvariantCulture))
+                                }
                             </td>
                             <td>
                                 <span>REB</span>
-                                @_stats.TRebPG
+                                @if(!string.IsNullOrEmpty(_stats.TRebPG)) {
+                                    @Util.FormatStat(Convert.ToDouble(_stats.TRebPG, CultureInfo.InvariantCulture))
+                                }
                             </td>
                             <td>
                                 <span>AST</span>
-                                @_stats.AstPG
+                                @if(!string.IsNullOrEmpty(_stats.AstPG)) {
+                                    @Util.FormatStat(Convert.ToDouble(_stats.AstPG, CultureInfo.InvariantCulture))
+                                }
                             </td>
                             <td>
                                 <span>FG%</span>
-                                @_stats.FgPct
+                                @if(!string.IsNullOrEmpty(_stats.FgPct)) {
+                                    @Util.FormatStat(Convert.ToDouble(_stats.FgPct, CultureInfo.InvariantCulture), "F1")
+                                }
                             </td>
                         </tr>
                         </tbody>
@@ -62,8 +78,6 @@
         </div>
         
     </div>
-    
-    
     
 }
 

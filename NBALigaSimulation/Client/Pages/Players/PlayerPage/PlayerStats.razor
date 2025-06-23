@@ -1,19 +1,12 @@
 @using NBALigaSimulation.Client.Utilities
-<div class="container-fluid">
-    @if (_regularStats != null)
+
+<div class="table-container">
+    @if (_regularStats != null && _regularStats.Any())
     {
-        <div class="table-responsive">
-            <table class="table caption-top">
-                <caption>Regular Season Stats</caption>
+        <div class="table-responsive-custom">
+            <table class="table-modern">
+                <caption class="caption-modern">Regular Season Stats</caption>
                 <thead>
-                <tr>
-                    <th colspan="6" style="text-align: center"></th>
-                        <th colspan="3" style="text-align: center;" class="custom-border">FG</th>
-                        <th colspan="3" style="text-align: center" class="custom-border">3PT</th>
-                        <th colspan="3" style="text-align: center" class="custom-border">FT</th>
-                    <th colspan="3" style="text-align: center">REB</th>
-                    <th colspan="8" style="text-align: center"></th>
-                </tr>
                 <tr>
                     @foreach (var th in _stats)
                     {
@@ -25,50 +18,41 @@
                 @foreach (var stats in _regularStats)
                 {
                     <tr>
-                        <td>@stats.Season</td>
-                        <td>@Util.Age(@stats.Season, _player.Born.Year)</td>
-                        <td ><img src=@($"../Images/Logos/{stats.TeamAbrv}.svg") alt="Team logo" width="25"> </td>
-                        <td>@stats.Games</td>
-                        <td>@stats.Gs</td>
-                        <td>@stats.MinPG</td>
-                            <td style=" border-left: 1px solid #EDEEF2;">@stats.FgaPG</td>
-                            <td>@stats.FgPG</td>
-                            <td>@stats.FgPct</td>
-                            <td style=" border-left: 1px solid #EDEEF2;">@stats.TpaPG</td>
-                            <td>@stats.TpPG</td>
-                            <td >@stats.TpPct</td>
-                            <td style=" border-left: 1px solid #EDEEF2;">@stats.FtaPG</td>
-                            <td >@stats.FtPG</td>
-                            <td style=" border-right: 1px solid #EDEEF2;">@stats.FtPct</td>
-                        <td>@stats.ORebPG</td>
-                        <td>@stats.DRebPG</td>
-                        <td>@stats.TRebPG</td>
-                        <td>@stats.AstPG</td>
-                        <td>@stats.TovPG</td>
-                        <td>@stats.StlPG</td>
-                        <td>@stats.BlkPG</td>
-                        <td>@stats.PfPG</td>
-                        <td>@stats.PtsPG</td>
-                        <td>@stats.PER</td>
+                        <td data-label="Season">@stats.Season</td>
+                        <td data-label="Age">@Util.Age(@stats.Season, _player.Born.Year)</td>
+                        <td data-label="Team"><img src=@($"../Images/Logos/{stats.TeamAbrv}.svg") alt="Team logo" class="team-logo"/></td>
+                        <td data-label="Games">@stats.Games</td>
+                        <td data-label="GS">@stats.Gs</td>
+                        <td data-label="MIN">@stats.MinPG</td>
+                        <td data-label="FGA">@stats.FgaPG</td>
+                        <td data-label="FG">@stats.FgPG</td>
+                        <td data-label="FG%">@stats.FgPct</td>
+                        <td data-label="3PA">@stats.TpaPG</td>
+                        <td data-label="3P">@stats.TpPG</td>
+                        <td data-label="3P%">@stats.TpPct</td>
+                        <td data-label="FTA">@stats.FtaPG</td>
+                        <td data-label="FT">@stats.FtPG</td>
+                        <td data-label="FT%">@stats.FtPct</td>
+                        <td data-label="ORB">@stats.ORebPG</td>
+                        <td data-label="DRB">@stats.DRebPG</td>
+                        <td data-label="TRB">@stats.TRebPG</td>
+                        <td data-label="AST">@stats.AstPG</td>
+                        <td data-label="TOV">@stats.TovPG</td>
+                        <td data-label="STL">@stats.StlPG</td>
+                        <td data-label="BLK">@stats.BlkPG</td>
+                        <td data-label="PF">@stats.PfPG</td>
+                        <td data-label="PTS">@stats.PtsPG</td>
+                        <td data-label="PER">@stats.PER</td>
                     </tr>
                 }
                 </tbody>
             </table>
         </div>
 
-        <div class="table-responsive">
-
-            <table class="table caption-top">
-
-                <caption>Regular Season Shot Locations</caption>
+        <div class="table-responsive-custom" style="margin-top: 2rem;">
+            <table class="table-modern">
+                <caption class="caption-modern">Regular Season Shot Locations</caption>
                 <thead>
-                <tr>
-                    <th colspan="6" style="text-align: center"></th>
-                        <th colspan="3" style="text-align: center" class="custom-border">AT RIM</th>
-                        <th colspan="3" style="text-align: center" class="custom-border">LOW POST</th>
-                        <th colspan="3" style="text-align: center" class="custom-border">MID-RANGE</th>
-                        <th colspan="3" style="text-align: center" class="custom-border">3PT</th>
-                </tr>
                 <tr>
                     @foreach (var th in _locations)
                     {
@@ -80,28 +64,34 @@
                 @foreach (var stats in _regularStats)
                 {
                     <tr>
-                        <td>@stats.Season</td>
-                        <td>@Util.Age(@stats.Season, _player.Born.Year)</td>
-                        <td ><img src=@($"../Images/Logos/{stats.TeamAbrv}.svg") alt="Team logo" width="25"> </td>
-                        <td>@stats.Games</td>
-                        <td>@stats.Gs</td>
-                        <td>@stats.MinPG</td>
-                            <td style=" border-left: 1px solid #EDEEF2;">@stats.FgaAtRim</td>
-                        <td>@stats.FgAtRim</td>
-                        <td>@stats.FgAtRimPct</td>
-                            <td style=" border-left: 1px solid #EDEEF2;">@stats.FgaLowPost</td>
-                        <td>@stats.FgLowPost</td>
-                        <td>@stats.FgLowPostPct</td>
-                            <td style=" border-left: 1px solid #EDEEF2;">@stats.FgaMidRange</td>
-                        <td>@stats.FgMidRange</td>
-                        <td>@stats.FgMidRangePct</td>
-                            <td style=" border-left: 1px solid #EDEEF2;">@stats.Tpa</td>
-                        <td>@stats.Tp</td>
-                            <td style=" border-right: 1px solid #EDEEF2;">@stats.TpPct</td>
+                        <td data-label="Season">@stats.Season</td>
+                        <td data-label="Age">@Util.Age(@stats.Season, _player.Born.Year)</td>
+                        <td data-label="Team"><img src=@($"../Images/Logos/{stats.TeamAbrv}.svg") alt="Team logo" class="team-logo"/></td>
+                        <td data-label="Games">@stats.Games</td>
+                        <td data-label="GS">@stats.Gs</td>
+                        <td data-label="MIN">@stats.MinPG</td>
+                        <td data-label="FGA Rim">@stats.FgaAtRim</td>
+                        <td data-label="FG Rim">@stats.FgAtRim</td>
+                        <td data-label="FG% Rim">@stats.FgAtRimPct</td>
+                        <td data-label="FGA LP">@stats.FgaLowPost</td>
+                        <td data-label="FG LP">@stats.FgLowPost</td>
+                        <td data-label="FG% LP">@stats.FgLowPostPct</td>
+                        <td data-label="FGA MR">@stats.FgaMidRange</td>
+                        <td data-label="FG MR">@stats.FgMidRange</td>
+                        <td data-label="FG% MR">@stats.FgMidRangePct</td>
+                        <td data-label="3PA">@stats.Tpa</td>
+                        <td data-label="3P">@stats.Tp</td>
+                        <td data-label="3P%">@stats.TpPct</td>
                     </tr>
                 }
                 </tbody>
             </table>
+        </div>
+    }
+    else
+    {
+        <div class="text-center p-4">
+            <p>No regular season stats available for this player.</p>
         </div>
     }
 </div>

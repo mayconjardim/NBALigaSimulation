@@ -1,0 +1,85 @@
+.skill-ratings-card {
+    background-color: #ffffff; /* Tema claro */
+    border-radius: 12px;
+    padding: 1.5rem;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05); /* Sombra suave */
+    color: #343a40; /* Texto escuro */
+}
+
+.skill-ratings-header {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #343a40; /* Texto escuro */
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 2px solid var(--primary-color); /* Borda com cor primária */
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.skill-ratings-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.8rem 1.5rem; /* Aumentar o espaçamento vertical */
+}
+
+.skill-item {
+    display: flex;
+    flex-direction: column;
+}
+
+.skill-item-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 0.35rem;
+}
+
+.skill-item-name {
+    font-size: 0.7rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    color: #6c757d; /* Cinza para o nome da skill */
+    letter-spacing: 0.5px;
+}
+
+.skill-item-value {
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: #212529; /* Texto bem escuro para o valor */
+    line-height: 1;
+}
+
+.skill-bar-container {
+    height: 6px;
+    width: 100%;
+    background-color: #e9ecef; /* Fundo da barra cinza claro */
+    border-radius: 3px;
+    overflow: hidden;
+}
+
+.skill-bar {
+    height: 100%;
+    border-radius: 3px;
+    transition: width 0.5s ease-in-out;
+}
+
+/* Cores da barra de progresso baseadas na pontuação */
+.skill-bar.rating-low { background-color: #d9534f; } /* Vermelho */
+.skill-bar.rating-medium-low { background-color: #f0ad4e; } /* Laranja */
+.skill-bar.rating-medium { background-color: #e2d969; } /* Amarelo */
+.skill-bar.rating-medium-high { background-color: #addb67; } /* Verde claro */
+.skill-bar.rating-high { background-color: #5cb85c; } /* Verde */
+.skill-bar.rating-elite { background-color: #5bc0de; } /* Azul (para > 95, por exemplo) */
+
+@media (max-width: 1200px) {
+    .skill-ratings-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 480px) {
+    .skill-ratings-grid {
+        grid-template-columns: 1fr;
+    }
+} 

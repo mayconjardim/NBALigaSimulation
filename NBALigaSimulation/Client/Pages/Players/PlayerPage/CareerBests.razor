@@ -1,0 +1,36 @@
+@using NBALigaSimulation.Shared.Dtos.Players
+
+<h3 class="info-card-header">Career Bests & Achievements</h3>
+
+@if (_player != null)
+{
+    <div class="career-bests-grid">
+        <ul class="bests-list">
+            <li><span>Points</span> <strong>34</strong></li>
+            <li><span>Assists</span> <strong>15</strong></li>
+            <li><span>Rebounds</span> <strong>9</strong></li>
+            <li><span>Blocks</span> <strong>2</strong></li>
+            <li><span>Steals</span> <strong>7</strong></li>
+            <li><span>Double Doubles</span> <strong>13</strong></li>
+            <li><span>Triple Doubles</span> <strong>0</strong></li>
+        </ul>
+        <ul class="achievements-list">
+            <li><span>All Star Games</span> <strong>0</strong></li>
+            <li><span>Titles Won</span> <strong>0</strong></li>
+            <li><span>Player of the Game</span> <strong>0</strong></li>
+            <li><span>Player of the Week</span> <strong>0</strong></li>
+            <li><span>Player of the Month</span> <strong>0</strong></li>
+            <li><span>Rookie of the Month</span> <strong>0</strong></li>
+        </ul>
+    </div>
+}
+else
+{
+    <p>No career bests & achievements information available.</p>
+}
+
+
+@code {
+    [Parameter]
+    public PlayerCompleteDto _player { get; set; }
+} 

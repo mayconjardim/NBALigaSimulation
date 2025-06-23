@@ -160,7 +160,14 @@ namespace NBALigaSimulation.Client.Utilities
             return background;
         }
 
+        public static string FormatStat(double stat, string format = "F1")
+        {
+            if (double.IsNaN(stat) || double.IsInfinity(stat))
+            {
+                return "0.0";
+            }
+            return stat.ToString(format, CultureInfo.InvariantCulture);
+        }
 
-     
     }
 }

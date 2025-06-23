@@ -1,109 +1,154 @@
 .player-header {
-    min-height: 10rem;
-    width: 100%;
-    box-sizing: border-box;
-    border-bottom: 0.068rem solid #c9c4c4;
-    display: flex; 
-    flex-wrap: wrap;
-    justify-content: center;
+    padding: 2rem 1.5rem;
+    position: relative;
+    color: white;
+    min-height: 280px;
+    display: flex;
     align-items: center;
     background-repeat: no-repeat;
     background-position: center;
     background-size: cover;
+    background-color: var(--team-primary);
+}
+
+.player-header::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0,0,0,0.6);
+    z-index: 1;
 }
 
 .player-header-card {
+    position: relative;
+    z-index: 2;
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
     display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    margin-left: 2rem;
-    align-items: center; 
-    flex: 1; 
+    align-items: center;
+    gap: 2.5rem;
+}
+
+.player-header-photo {
+    flex-shrink: 0;
+}
+
+.player-header-photo img {
+    width: 180px;
+    height: 180px;
+    border-radius: 50%;
+    object-fit: cover;
+    object-position: center top;
+    border: 5px solid white;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+    background-color: rgba(255,255,255,0.2);
 }
 
 .player-header-card-bio {
-    display: flex;
-    margin: 0.625rem 0.625rem 0 0 ;
-    
-    align-items: center;
-    flex: 1;
-}
-
-.player-header-card-img {
-    width: 6rem; 
-    height: 6rem;
-    border-bottom: 0.068rem solid #c9c4c4;
-    border-radius: 50%; 
-    overflow: hidden;
-}
-
-.player-header-card-img img {
-    width: 100%; 
-    height: 100%; 
-    object-fit: cover; 
-    object-position: center;
-    border-radius: 50%;
-}
-
-.player-header-card-info {
-    margin-left: 1rem;
+    flex-grow: 1;
 }
 
 .player-header-card-info h3 {
-    margin: 0; 
+    font-size: 3.5rem;
     font-weight: 800;
+    margin: 0;
+    text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.7);
+    line-height: 1.1;
 }
 
 .player-header-card-info p {
-    margin: 0; 
-    font-size: 0.875rem;
-    font-weight: 600;
+    font-size: 1.25rem;
+    font-weight: 500;
+    margin: 0.5rem 0 0 0;
+    opacity: 0.95;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
 }
 
-.player-header-card-info span {
-    font-size: 0.475rem;
-    font-weight: 600;
+.player-header-card-info .team-logo {
+    height: 35px;
+    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5));
 }
+
 .player-header-stats {
-    margin-right: 2rem;
+    flex-shrink: 0;
+    align-self: flex-end;
 }
 
-table {
-    background-color: var(--white);
-    width: 100%;
-    text-align: center;
-    margin: 0.625rem;
-    border-collapse: collapse;
-    -webkit-border-radius: 0.625rem;
-    -moz-border-radius: 0.625rem;
-    border-radius: 0.625rem;
+.player-header-stats .stats {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(5px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 12px;
     overflow: hidden;
+    border-collapse: separate;
+    border-spacing: 0;
 }
 
-table td{
-    padding: 0 0.825rem;
+.player-header-stats th {
+    background: rgba(0, 0, 0, 0.2);
+    font-size: 0.7rem;
+    padding: 0.5rem 1rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
 }
-table tbody td {
-    font-size: 1.75rem;
-    font-weight: 600;
+
+.player-header-stats td {
+    padding: 0.75rem 1.25rem;
+    text-align: center;
+    font-size: 1.5rem;
+    font-weight: 700;
 }
-table tbody td span {
+
+.player-header-stats td span {
     display: block;
-    font-size: 0.5rem;
-    font-weight: 600;
-    padding-top: 0.200rem;
+    font-size: 0.7rem;
+    font-weight: 500;
+    opacity: 0.8;
 }
 
-table thead {
-    background: var(--primary-color);
-}
-table thead th {
-    font-size: 0.625rem;
-    font-weight: 800;
-    color: var(--white);
+.player-header-card-info .badge {
+    font-size: 1.1rem;
+    padding: 0.4em 0.6em;
+    min-width: 40px;
 }
 
-.player-header-card-info span {
-    vertical-align: middle;
-    color: black;
+/* Responsive */
+@media (max-width: 768px) {
+    .player-header {
+        padding: 1.5rem 1rem;
+        min-height: auto;
+    }
+
+    .player-header-card {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        gap: 1.5rem;
+    }
+    
+    .player-header-photo img {
+        width: 120px;
+        height: 120px;
+        border-width: 4px;
+    }
+
+    .player-header-stats {
+        align-self: center;
+    }
+
+    .player-header-card-info h3 {
+        font-size: 2.5rem;
+    }
+
+    .player-header-card-info p {
+        font-size: 1.1rem;
+        justify-content: center;
+    }
 }

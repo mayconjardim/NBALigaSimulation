@@ -8,6 +8,13 @@ public partial class Player
     
     private PlayerCompleteDto _player;
     private string _message = string.Empty;
+    
+    public string ActiveTab { get; set; } = "Bio";
+
+    public void SetActiveTab(string tab)
+    {
+        ActiveTab = tab;
+    }
 
     [Parameter]
     public int PlayerId { get; set; }

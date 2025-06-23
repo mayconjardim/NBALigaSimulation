@@ -1,0 +1,39 @@
+.info-card-header {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #343a40;
+    margin-top: 0;
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 2px solid var(--primary-color);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.career-bests-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+}
+
+.bests-list, .achievements-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    font-size: 0.9rem;
+}
+
+.bests-list li, .achievements-list li {
+    display: flex;
+    justify-content: space-between;
+    padding: 0.3rem 0;
+}
+
+.bests-list li span, .achievements-list li span {
+    color: #6c757d;
+}
+
+.bests-list li strong, .achievements-list li strong {
+    color: #343a40;
+    font-weight: 600;
+} 
