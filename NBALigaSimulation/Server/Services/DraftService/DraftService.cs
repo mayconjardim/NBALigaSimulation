@@ -96,41 +96,52 @@ namespace NBALigaSimulation.Server.Services.DraftService
                 .OrderBy(s => s.Year)
                 .LastOrDefaultAsync();
 
-            // Só permite gerar loteria se os playoffs da temporada atual já acabaram
-            if (season == null || !season.IsCompleted)
+            if (season == null)
             {
                 response.Success = false;
-                response.Message = "Não é possível gerar a loteria. Os playoffs da temporada atual ainda não foram finalizados.";
+                response.Message = "Nenhuma temporada encontrada.";
                 return response;
             }
 
-            var year = season.Year - 1;
+            if (!season.IsCompleted)
+            {
+                response.Success = false;
+                response.Message = "Não é possível gerar a loteria. Finalize os playoffs da temporada atual primeiro.";
+                return response;
+            }
 
-            var lottery = await _draftLotteryRepository.Query()
-                .Where(l => l.Season == year)
+            var existingLottery = await _draftLotteryRepository.Query()
+                .Where(l => l.Season == season.Year)
                 .OrderByDescending(l => l.Id)
                 .FirstOrDefaultAsync();
 
-            if (lottery == null)
+            if (existingLottery != null)
             {
                 response.Success = false;
-                response.Message = "Não é possivel criar a loteria!";
+                response.Message = "A loteria do draft desta temporada já foi gerada.";
                 return response;
             }
 
             var teams = await _teamRegularStatsRepository.Query()
-                .Where(t => t.Season == year)
+                .Where(t => t.Season == season.Year)
                 .Include(t => t.Team)
                 .ToListAsync();
 
-            teams = teams.AsEnumerable().OrderByDescending(t => t.ConfRank).Take(6).ToList();
+            if (teams.Count < 4)
+            {
+                response.Success = false;
+                response.Message = $"É necessário ter estatísticas da temporada regular (pelo menos 4 times que não foram aos playoffs). Encontrados: {teams.Count}.";
+                return response;
+            }
+
+            // Os 4 piores (que não foram aos playoffs) entram na loteria
+            teams = teams.AsEnumerable().OrderByDescending(t => t.ConfRank).Take(4).ToList();
             teams = teams.OrderByDescending(t => t.WinPct).ToList();
 
             var order = DraftUtils.RunLottery(teams);
 
             var newLottery = new DraftLottery
             {
-                Id = 1,
                 Season = season.Year,
                 FirstTeam = order[0].Team.Abrv,
                 FirstTeamId = order[0].TeamId,
@@ -140,10 +151,10 @@ namespace NBALigaSimulation.Server.Services.DraftService
                 ThirdTeamId = order[2].TeamId,
                 FourthTeam = order[3].Team.Abrv,
                 FourthTeamId = order[3].TeamId,
-                FifthTeam = order[4].Team.Abrv,
-                FifthTeamId = order[4].TeamId,
-                SixthTeam = order[5].Team.Abrv,
-                SixthTeamId = order[5].TeamId,
+                FifthTeam = order[3].Team.Abrv,
+                FifthTeamId = order[3].TeamId,
+                SixthTeam = order[3].Team.Abrv,
+                SixthTeamId = order[3].TeamId,
             };
 
             await _draftLotteryRepository.AddAsync(newLottery);
@@ -160,30 +171,41 @@ namespace NBALigaSimulation.Server.Services.DraftService
 
         public async Task<ServiceResponse<bool>> GenerateDraft()
         {
-
             var response = new ServiceResponse<bool>();
             var season = await _seasonRepository.Query()
                 .OrderBy(s => s.Year)
                 .LastOrDefaultAsync();
-            var year = season.Year - 1;
 
-            // Só permite gerar o draft se os playoffs já acabaram
-            if (season == null || !season.IsCompleted)
+            if (season == null)
             {
                 response.Success = false;
-                response.Message = "Não é possível criar o draft. Os playoffs da temporada atual ainda não foram finalizados.";
+                response.Message = "Nenhuma temporada encontrada.";
+                return response;
+            }
+
+            if (!season.IsCompleted)
+            {
+                response.Success = false;
+                response.Message = "Não é possível criar o draft. Finalize os playoffs da temporada atual primeiro.";
+                return response;
+            }
+
+            if (!season.LotteryCompleted)
+            {
+                response.Success = false;
+                response.Message = "Gere a loteria do draft antes de gerar o draft.";
                 return response;
             }
 
             var lottery = await _draftLotteryRepository.Query()
-               .Where(l => l.Season == year)
-               .OrderByDescending(l => l.Id)
-               .FirstOrDefaultAsync();
+                .Where(l => l.Season == season.Year)
+                .OrderByDescending(l => l.Id)
+                .FirstOrDefaultAsync();
 
             if (lottery == null)
             {
                 response.Success = false;
-                response.Message = "Não é possivel criar o draft!";
+                response.Message = "Loteria não encontrada para esta temporada. Gere a loteria do draft primeiro.";
                 return response;
             }
 

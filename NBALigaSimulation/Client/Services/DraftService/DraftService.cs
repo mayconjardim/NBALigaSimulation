@@ -41,18 +41,40 @@ public class DraftService : IDraftService
 
     public async Task<ServiceResponse<bool>> GenerateLottery()
     {
-        var payload = new { };
-        var httpResponse = await _http.PostAsJsonAsync("api/draft/generate/lottery", payload);
-        var result = await httpResponse.Content.ReadFromJsonAsync<ServiceResponse<bool>>();
-        return result;
+        try
+        {
+            var payload = new { };
+            var httpResponse = await _http.PostAsJsonAsync("api/draft/generate/lottery", payload);
+            var result = await httpResponse.Content.ReadFromJsonAsync<ServiceResponse<bool>>();
+            if (result == null)
+                return new ServiceResponse<bool> { Success = false, Message = "Resposta inválida do servidor." };
+            if (!httpResponse.IsSuccessStatusCode)
+                result.Success = false;
+            return result;
+        }
+        catch (Exception ex)
+        {
+            return new ServiceResponse<bool> { Success = false, Message = $"Erro ao gerar loteria: {ex.Message}" };
+        }
     }
 
     public async Task<ServiceResponse<bool>> GenerateDraft()
     {
-        var payload = new { };
-        var httpResponse = await _http.PostAsJsonAsync("api/draft/generate/draft", payload);
-        var result = await httpResponse.Content.ReadFromJsonAsync<ServiceResponse<bool>>();
-        return result;
+        try
+        {
+            var payload = new { };
+            var httpResponse = await _http.PostAsJsonAsync("api/draft/generate/draft", payload);
+            var result = await httpResponse.Content.ReadFromJsonAsync<ServiceResponse<bool>>();
+            if (result == null)
+                return new ServiceResponse<bool> { Success = false, Message = "Resposta inválida do servidor." };
+            if (!httpResponse.IsSuccessStatusCode)
+                result.Success = false;
+            return result;
+        }
+        catch (Exception ex)
+        {
+            return new ServiceResponse<bool> { Success = false, Message = $"Erro ao gerar draft: {ex.Message}" };
+        }
     }
 
     public async Task<ServiceResponse<bool>> SelectDraftedPlayer(DraftPlayerDto request)

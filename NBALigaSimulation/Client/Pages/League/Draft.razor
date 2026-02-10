@@ -44,46 +44,39 @@
     {
         @if (_lottery != null)
         {
-            <div class="card mb-4">
+            <div class="card mb-4 lottery-card">
                 <div class="card-header">
                     <strong>Loteria - Temporada @_lottery.Season</strong>
                 </div>
                 <div class="card-body">
+                    <p class="text-muted small mb-3">Os 4 times que não foram aos playoffs. A ordem dos 4 primeiros picks é sorteada.</p>
                     <div class="row g-3">
-                        <div class="col-6 col-md-4 col-lg-2">
+                        <div class="col-6 col-md-3">
                             <div class="lottery-slot">
                                 <span class="slot-label">1º</span>
+                                <img src="@($"../Images/Logos/{_lottery.FirstTeam}.svg")" alt="@_lottery.FirstTeam" class="lottery-logo" />
                                 <span class="slot-team">@_lottery.FirstTeam</span>
                             </div>
                         </div>
-                        <div class="col-6 col-md-4 col-lg-2">
+                        <div class="col-6 col-md-3">
                             <div class="lottery-slot">
                                 <span class="slot-label">2º</span>
+                                <img src="@($"../Images/Logos/{_lottery.SecondTeam}.svg")" alt="@_lottery.SecondTeam" class="lottery-logo" />
                                 <span class="slot-team">@_lottery.SecondTeam</span>
                             </div>
                         </div>
-                        <div class="col-6 col-md-4 col-lg-2">
+                        <div class="col-6 col-md-3">
                             <div class="lottery-slot">
                                 <span class="slot-label">3º</span>
+                                <img src="@($"../Images/Logos/{_lottery.ThirdTeam}.svg")" alt="@_lottery.ThirdTeam" class="lottery-logo" />
                                 <span class="slot-team">@_lottery.ThirdTeam</span>
                             </div>
                         </div>
-                        <div class="col-6 col-md-4 col-lg-2">
+                        <div class="col-6 col-md-3">
                             <div class="lottery-slot">
                                 <span class="slot-label">4º</span>
+                                <img src="@($"../Images/Logos/{_lottery.FourthTeam}.svg")" alt="@_lottery.FourthTeam" class="lottery-logo" />
                                 <span class="slot-team">@_lottery.FourthTeam</span>
-                            </div>
-                        </div>
-                        <div class="col-6 col-md-4 col-lg-2">
-                            <div class="lottery-slot">
-                                <span class="slot-label">5º</span>
-                                <span class="slot-team">@_lottery.FifthTeam</span>
-                            </div>
-                        </div>
-                        <div class="col-6 col-md-4 col-lg-2">
-                            <div class="lottery-slot">
-                                <span class="slot-label">6º</span>
-                                <span class="slot-team">@_lottery.SixthTeam</span>
                             </div>
                         </div>
                     </div>
@@ -93,32 +86,38 @@
 
         @if (_draft != null && _draft.Any())
         {
-            <div class="card">
+            <div class="card draft-table-card">
                 <div class="card-header d-flex justify-content-between align-items-center">
                     <strong>Draft - Temporada @_draft.First().Season</strong>
                     <small class="text-muted">Round @string.Join(", ", _draft.Select(d => d.Round).Distinct().OrderBy(r => r))</small>
                 </div>
                 <div class="card-body p-0">
                     <div class="table-responsive">
-                        <table class="table table-hover table-sm mb-0">
-                            <thead class="table-light">
+                        <table class="table draft-table mb-0">
+                            <thead>
                                 <tr>
-                                    <th style="width:70px;">Pick</th>
-                                    <th style="width:70px;">Round</th>
-                                    <th>Time</th>
-                                    <th>Original</th>
-                                    <th>Jogador</th>
+                                    <th class="col-pick">Pick</th>
+                                    <th class="col-round">Rnd</th>
+                                    <th class="col-team">Time</th>
+                                    <th class="col-original">Original</th>
+                                    <th class="col-player">Jogador</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 @foreach (var pick in _draft.OrderBy(d => d.Pick))
                                 {
                                     <tr>
-                                        <td>@pick.Pick</td>
-                                        <td>@pick.Round</td>
-                                        <td>@pick.TeamAbrv</td>
-                                        <td>@pick.Original</td>
-                                        <td>@(string.IsNullOrEmpty(pick.PlayerName) ? "-" : pick.PlayerName)</td>
+                                        <td class="col-pick"><span class="pick-num">@pick.Pick</span></td>
+                                        <td class="col-round">@pick.Round</td>
+                                        <td class="col-team">
+                                            <img src="@($"../Images/Logos/{pick.TeamAbrv}.svg")" alt="@pick.TeamAbrv" class="draft-team-logo" />
+                                            <span>@pick.TeamAbrv</span>
+                                        </td>
+                                        <td class="col-original">
+                                            <img src="@($"../Images/Logos/{pick.Original}.svg")" alt="@pick.Original" class="draft-team-logo" />
+                                            <span>@pick.Original</span>
+                                        </td>
+                                        <td class="col-player">@(string.IsNullOrEmpty(pick.PlayerName) ? "—" : pick.PlayerName)</td>
                                     </tr>
                                 }
                             </tbody>

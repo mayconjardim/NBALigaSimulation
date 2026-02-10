@@ -1,4 +1,4 @@
-﻿using NBALigaSimulation.Shared.Models;
+using NBALigaSimulation.Shared.Models;
 using NBALigaSimulation.Shared.Models.Drafts;
 using NBALigaSimulation.Shared.Models.Players;
 using NBALigaSimulation.Shared.Models.Teams;
@@ -8,24 +8,22 @@ namespace NBALigaSimulation.Shared.Engine.Utils
     public static class DraftUtils
     {
 
+        /// <summary>Sortea a ordem dos 4 primeiros picks entre os 4 times que não foram aos playoffs (piores 4).</summary>
         public static List<TeamRegularStats> RunLottery(List<TeamRegularStats> teams)
         {
+            if (teams.Count < 4)
+                throw new InvalidOperationException("A loteria precisa de 4 times.");
 
             Dictionary<int, int> LOTTO_BALLS = new Dictionary<int, int>
             {
-
-            {0, 250},
-            {1, 199},
-            {2, 156},
-            {3, 119},
-            {4, 88},
-            {5, 63},
-
+                { 0, 250 },
+                { 1, 199 },
+                { 2, 156 },
+                { 3, 119 },
             };
 
             List<TeamRegularStats> order = new List<TeamRegularStats>();
-
-            Random random = new Random();
+            var random = new Random();
             while (LOTTO_BALLS.Count > 0)
             {
                 double N = LOTTO_BALLS.Values.Sum();
@@ -56,23 +54,25 @@ namespace NBALigaSimulation.Shared.Engine.Utils
         public static List<Draft> GenerateDraft(DraftLottery lottery, int season, List<TeamRegularStats> regularStats, List<TeamDraftPicks> picks, List<Team> teams)
         {
 
+            // Apenas os 4 da loteria são excluídos; o restante entra na ordem por campanha (piores primeiro)
             List<TeamRegularStats> newStatsList = regularStats
                 .OrderBy(stats => stats.WinPct)
                 .ThenBy(stats => stats.Points)
                 .Where(stats => stats.TeamId != lottery.FirstTeamId
                              && stats.TeamId != lottery.SecondTeamId
                              && stats.TeamId != lottery.ThirdTeamId
-                             && stats.TeamId != lottery.FourthTeamId
-                             && stats.TeamId != lottery.FifthTeamId
-                             && stats.TeamId != lottery.SixthTeamId)
-             .ToList();
+                             && stats.TeamId != lottery.FourthTeamId)
+                .ToList();
 
             var firstTeamPick = picks.FirstOrDefault(p => p.Original == lottery.FirstTeam);
-            var SecondTeamPick = picks.FirstOrDefault(p => p.Original == lottery.SecondTeam);
-            var ThirdTeamPick = picks.FirstOrDefault(p => p.Original == lottery.ThirdTeam);
-            var FourthTeamPick = picks.FirstOrDefault(p => p.Original == lottery.FourthTeam);
-            var FifthTeamPick = picks.FirstOrDefault(p => p.Original == lottery.FifthTeam);
-            var SixthTeamPick = picks.FirstOrDefault(p => p.Original == lottery.SixthTeam);
+            var secondTeamPick = picks.FirstOrDefault(p => p.Original == lottery.SecondTeam);
+            var thirdTeamPick = picks.FirstOrDefault(p => p.Original == lottery.ThirdTeam);
+            var fourthTeamPick = picks.FirstOrDefault(p => p.Original == lottery.FourthTeam);
+
+            int pick1TeamId = firstTeamPick?.TeamId ?? lottery.FirstTeamId;
+            int pick2TeamId = secondTeamPick?.TeamId ?? lottery.SecondTeamId;
+            int pick3TeamId = thirdTeamPick?.TeamId ?? lottery.ThirdTeamId;
+            int pick4TeamId = fourthTeamPick?.TeamId ?? lottery.FourthTeamId;
 
             var sortedStats = regularStats
                 .OrderByDescending(stats => stats.WinPct)
@@ -81,89 +81,22 @@ namespace NBALigaSimulation.Shared.Engine.Utils
 
             List<Draft> newDraft = new List<Draft>
             {
-                new Draft
-                {
-                    Original = lottery.FirstTeam,
-                    Pick = 1,
-                    Season = season,
-                    TeamId = firstTeamPick.TeamId,
-                    Round = 1,
-                    DateTime = null,
-                    Player = null,
-                    PlayerId = null,
-                },
-
-                new Draft
-                {
-                    Original = lottery.SecondTeam,
-                    Pick = 2,
-                    Season = season,
-                    TeamId = SecondTeamPick.TeamId,
-                    Round = 1,
-                    DateTime = null,
-                    Player = null,
-                    PlayerId = null,
-                },
-
-                new Draft
-                {
-                    Original = lottery.ThirdTeam,
-                    Pick = 3,
-                    Season = season,
-                    TeamId = ThirdTeamPick.TeamId,
-                    Round = 1,
-                    DateTime = null,
-                    Player = null,
-                    PlayerId = null,
-                },
-
-                new Draft
-                {
-                    Original = lottery.FourthTeam,
-                    Pick = 4,
-                    Season = season,
-                    TeamId = FourthTeamPick.TeamId,
-                    Round = 1,
-                    DateTime = null,
-                    Player = null,
-                    PlayerId = null,
-
-                },
-
-                new Draft
-                {
-                    Original = lottery.FifthTeam,
-                    Pick = 5,
-                    Season = season,
-                    TeamId = FifthTeamPick.TeamId,
-                    Round = 1,
-                    DateTime = null,
-                    Player = null,
-                    PlayerId = null,
-                },
-
-                new Draft
-                {
-                    Original = lottery.SixthTeam,
-                    Pick = 6,
-                    Season = season,
-                    TeamId = SixthTeamPick.TeamId,
-                    Round = 1,
-                    DateTime = null,
-                    Player = null,
-                    PlayerId = null,
-                },
-
+                new Draft { Original = lottery.FirstTeam, Pick = 1, Season = season, TeamId = pick1TeamId, Round = 1, DateTime = null, Player = null, PlayerId = null },
+                new Draft { Original = lottery.SecondTeam, Pick = 2, Season = season, TeamId = pick2TeamId, Round = 1, DateTime = null, Player = null, PlayerId = null },
+                new Draft { Original = lottery.ThirdTeam, Pick = 3, Season = season, TeamId = pick3TeamId, Round = 1, DateTime = null, Player = null, PlayerId = null },
+                new Draft { Original = lottery.FourthTeam, Pick = 4, Season = season, TeamId = pick4TeamId, Round = 1, DateTime = null, Player = null, PlayerId = null },
             };
 
-            int pickNumber = 7;
+            int pickNumber = 5;
+            int countRound1 = Math.Min(16, newStatsList.Count);
 
-            for (int i = 0; i < 16; i++)
+            for (int i = 0; i < countRound1; i++)
             {
-                string teamAbrv = newStatsList[i].Team.Abrv;
+                var stat = newStatsList[i];
+                string teamAbrv = stat.Team?.Abrv ?? "";
                 int? teamId = picks
                     .Where(pick => pick.Original == teamAbrv && pick.Round == 1)
-                    .Select(pick => pick.TeamId)
+                    .Select(pick => (int?)pick.TeamId)
                     .FirstOrDefault();
 
                 newDraft.Add(new Draft
@@ -171,7 +104,7 @@ namespace NBALigaSimulation.Shared.Engine.Utils
                     Original = teamAbrv,
                     Pick = pickNumber++,
                     Season = season,
-                    TeamId = (int)teamId,
+                    TeamId = teamId ?? stat.TeamId,
                     Round = 1,
                     DateTime = null,
                     Player = null,
@@ -179,14 +112,16 @@ namespace NBALigaSimulation.Shared.Engine.Utils
                 });
             }
 
-            int pickNumberRound2 = 23;
+            int pickNumberRound2 = pickNumber;
+            int countRound2 = Math.Min(22, sortedStats.Count);
 
-            for (int i = 0; i < 22; i++)
+            for (int i = 0; i < countRound2; i++)
             {
-                string teamAbrv = sortedStats[i].Team.Abrv;
+                var stat = sortedStats[i];
+                string teamAbrv = stat.Team?.Abrv ?? "";
                 int? teamId = picks
                     .Where(pick => pick.Original == teamAbrv && pick.Round == 2)
-                    .Select(pick => pick.TeamId)
+                    .Select(pick => (int?)pick.TeamId)
                     .FirstOrDefault();
 
                 newDraft.Add(new Draft
@@ -194,7 +129,7 @@ namespace NBALigaSimulation.Shared.Engine.Utils
                     Original = teamAbrv,
                     Pick = pickNumberRound2++,
                     Season = season,
-                    TeamId = (int)teamId,
+                    TeamId = teamId ?? stat.TeamId,
                     Round = 2,
                     DateTime = null,
                     Player = null,

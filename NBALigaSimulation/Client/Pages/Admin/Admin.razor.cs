@@ -268,36 +268,27 @@ public partial class Admin
         }, "GenerateTrainingCamp");
     }
 
-    private async Task GenerateDraftLottery()
+    private async Task GenerateDraftLotteryAndDraft()
     {
         await ExecuteAction(async () =>
         {
-            var response = await DraftService.GenerateLottery();
-            if (response.Success)
+            var lotteryResponse = await DraftService.GenerateLottery();
+            if (!lotteryResponse.Success)
             {
-                await ShowMessage($"Loteria do draft gerada com sucesso! {response.Message}", "success");
+                await ShowMessage($"Erro ao gerar loteria: {lotteryResponse.Message ?? "Erro desconhecido."}", "error");
+                return;
             }
-            else
-            {
-                await ShowMessage($"Erro ao gerar loteria do draft: {response.Message}", "error");
-            }
-        }, "GenerateDraftLottery");
-    }
 
-    private async Task GenerateDraft()
-    {
-        await ExecuteAction(async () =>
-        {
-            var response = await DraftService.GenerateDraft();
-            if (response.Success)
+            var draftResponse = await DraftService.GenerateDraft();
+            if (draftResponse.Success)
             {
-                await ShowMessage($"Draft gerado com sucesso! {response.Message}", "success");
+                await ShowMessage("Loteria e draft gerados com sucesso!", "success");
             }
             else
             {
-                await ShowMessage($"Erro ao gerar draft: {response.Message}", "error");
+                await ShowMessage($"Loteria gerada, mas erro ao gerar draft: {draftResponse.Message ?? "Erro desconhecido."}", "error");
             }
-        }, "GenerateDraft");
+        }, "GenerateDraftLotteryAndDraft");
     }
 
     private async Task GeneratePlayoffsFirstRound()

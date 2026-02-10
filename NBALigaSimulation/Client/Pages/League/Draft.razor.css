@@ -2,24 +2,154 @@
     font-weight: 600;
 }
 
+/* Lottery section */
+.lottery-card .card-header {
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+    color: #fff;
+    font-weight: 600;
+    border: none;
+}
+
 .lottery-slot {
-    background-color: #f8fafc;
-    border-radius: 6px;
-    padding: 0.5rem 0.75rem;
+    background-color: #fff;
+    border-radius: 10px;
+    padding: 0.75rem;
     text-align: center;
-    border: 1px solid rgba(15, 23, 42, 0.08);
+    border: 1px solid #e5e7eb;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+    transition: box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+.lottery-slot:hover {
+    border-color: var(--bs-primary);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
 }
 
 .lottery-slot .slot-label {
     display: block;
-    font-size: 0.75rem;
+    font-size: 0.7rem;
     text-transform: uppercase;
+    letter-spacing: 0.05em;
     color: #6b7280;
-    margin-bottom: 0.15rem;
+    margin-bottom: 0.35rem;
+}
+
+.lottery-logo {
+    width: 36px;
+    height: 36px;
+    object-fit: contain;
+    display: block;
+    margin: 0 auto 0.35rem auto;
 }
 
 .lottery-slot .slot-team {
     font-weight: 600;
     color: #111827;
+    font-size: 0.9rem;
 }
 
+/* Draft table */
+.draft-table-card .card-header {
+    background-color: #f8fafc;
+    border-bottom: 2px solid #e5e7eb;
+    font-weight: 600;
+}
+
+.draft-table {
+    font-size: 0.9rem;
+}
+
+.draft-table thead th {
+    font-weight: 600;
+    color: #475569;
+    text-transform: uppercase;
+    font-size: 0.7rem;
+    letter-spacing: 0.03em;
+    padding: 0.65rem 0.75rem;
+    border-bottom: 2px solid #e2e8f0;
+    background-color: #f8fafc;
+}
+
+.draft-table tbody td {
+    padding: 0.5rem 0.75rem;
+    vertical-align: middle;
+    border-bottom: 1px solid #f1f5f9;
+}
+
+.draft-table tbody tr:hover {
+    background-color: #f8fafc;
+}
+
+.draft-table .col-pick {
+    width: 64px;
+    text-align: center;
+}
+
+.draft-table .pick-num {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 28px;
+    height: 28px;
+    padding: 0 6px;
+    background-color: #e2e8f0;
+    border-radius: 6px;
+    font-weight: 700;
+    color: #334155;
+    font-size: 0.85rem;
+}
+
+.draft-table .col-round {
+    width: 50px;
+    text-align: center;
+    color: #64748b;
+}
+
+.draft-table .col-team,
+.draft-table .col-original {
+    white-space: nowrap;
+}
+
+.draft-table .col-team span,
+.draft-table .col-original span {
+    margin-left: 0.5rem;
+    font-weight: 600;
+    color: #1e293b;
+}
+
+.draft-team-logo {
+    width: 28px;
+    height: 28px;
+    object-fit: contain;
+    vertical-align: middle;
+}
+
+.draft-table .col-player {
+    color: #475569;
+}
+
+.draft-table .col-player a {
+    color: var(--bs-primary);
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.draft-table .col-player a:hover {
+    text-decoration: underline;
+}
+
+@media (max-width: 768px) {
+    .lottery-logo {
+        width: 28px;
+        height: 28px;
+    }
+
+    .draft-team-logo {
+        width: 24px;
+        height: 24px;
+    }
+
+    .draft-table {
+        font-size: 0.8rem;
+    }
+}

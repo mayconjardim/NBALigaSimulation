@@ -241,36 +241,17 @@
                             </td>
                         </tr>
                         
-                        <!-- 11. Gerar Loteria do Draft -->
+                        <!-- 11. Gerar Loteria e Draft -->
                         <tr>
                             <td><strong>11</strong></td>
                             <td>
-                                <i class="bi bi-shuffle text-secondary me-2"></i>
-                                <strong>Gerar Loteria do Draft</strong>
+                                <i class="bi bi-shuffle text-primary me-2"></i>
+                                <strong>Gerar Loteria e Draft</strong>
                             </td>
-                            <td>Gera a loteria do draft para definir a ordem das primeiras escolhas</td>
+                            <td>Gera a loteria (4 primeiros picks) e em seguida a ordem completa do draft</td>
                             <td>
-                                <button class="btn btn-outline-secondary btn-sm w-100" @onclick="GenerateDraftLottery" disabled="@_isLoading">
-                                    @if (_isLoading && _loadingAction == "GenerateDraftLottery")
-                                    {
-                                        <span class="spinner-border spinner-border-sm me-2"></span>
-                                    }
-                                    Executar
-                                </button>
-                            </td>
-                        </tr>
-
-                        <!-- 12. Gerar Draft -->
-                        <tr>
-                            <td><strong>12</strong></td>
-                            <td>
-                                <i class="bi bi-list-ol text-primary me-2"></i>
-                                <strong>Gerar Draft</strong>
-                            </td>
-                            <td>Gera a ordem completa do draft baseada na loteria e nos picks</td>
-                            <td>
-                                <button class="btn btn-outline-primary btn-sm w-100" @onclick="GenerateDraft" disabled="@_isLoading">
-                                    @if (_isLoading && _loadingAction == "GenerateDraft")
+                                <button class="btn btn-outline-primary btn-sm w-100" @onclick="GenerateDraftLotteryAndDraft" disabled="@_isLoading">
+                                    @if (_isLoading && _loadingAction == "GenerateDraftLotteryAndDraft")
                                     {
                                         <span class="spinner-border spinner-border-sm me-2"></span>
                                     }
