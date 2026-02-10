@@ -1,70 +1,214 @@
-.boxscore {
-    background-color: var(--primary-color);
-    margin: 0.625rem;
-    border-radius: 0.625rem;
+.boxscore-page {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 1rem;
 }
 
+/* Header: Away @ Home + score (ESPN style) */
 .boxscore-header {
-  
     display: flex;
+    align-items: center;
     justify-content: center;
-    align-items: center; 
+    gap: 1.5rem;
+    padding: 1.25rem;
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+    border-radius: 12px;
+    margin-bottom: 1.5rem;
+    flex-wrap: wrap;
 }
 
-.boxscore-header-score {
-    font-size: 1.5rem;
-    font-weight: 600;
-    color: white;
-    margin: 0 1rem; 
+.boxscore-team {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    min-width: 140px;
 }
 
-table {
-    background-color: var(--white);
-    width: 100%;
+.boxscore-team-away {
+    justify-content: flex-end;
+}
+
+.boxscore-team-home {
+    justify-content: flex-start;
+}
+
+.boxscore-logo {
+    width: 48px;
+    height: 48px;
+    object-fit: contain;
+}
+
+.boxscore-team-name {
+    font-weight: 700;
+    font-size: 1.1rem;
+    color: #fff;
+}
+
+.boxscore-score {
+    display: flex;
+    align-items: baseline;
+    gap: 0.5rem;
+    padding: 0 1rem;
+}
+
+.boxscore-score-away,
+.boxscore-score-home {
+    font-size: 2rem;
+    font-weight: 800;
+    color: #fff;
+    min-width: 2ch;
     text-align: center;
-    margin: 0.625rem 0;
-}
-table caption {
-    color: #212529;
-    font-weight: 900;
 }
 
-table th {
-    font-size: 0.625rem;
-    white-space: nowrap;
+.boxscore-score-sep {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: rgba(255, 255, 255, 0.7);
 }
 
-table td {
+/* Section title (team name above each table) */
+.boxscore-section-title {
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: #333;
+    margin: 0 0 0.5rem 0;
+    padding-bottom: 0.25rem;
+}
+
+.boxscore-team-section {
+    margin-bottom: 2rem;
+}
+
+.boxscore-tables {
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+    overflow: hidden;
+    padding: 1rem;
+}
+
+/* Table */
+.boxscore-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.875rem;
+}
+
+.boxscore-table th {
+    text-align: center;
+    font-weight: 600;
+    color: #555;
+    padding: 0.5rem 0.35rem;
+    border-bottom: 2px solid #e5e5e5;
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+}
+
+.boxscore-table th.col-name {
+    text-align: left;
+    padding-left: 0.5rem;
+}
+
+.boxscore-table td {
+    text-align: center;
+    padding: 0.45rem 0.35rem;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.boxscore-table td.col-name {
+    text-align: left;
+    padding-left: 0.5rem;
+}
+
+.boxscore-table tbody tr.starter:hover,
+.boxscore-table tbody tr.bench:hover {
+    background-color: #f8f9fa;
+}
+
+.boxscore-table tbody tr.bench {
+    background-color: #fafafa;
+}
+
+.row-divider td {
+    padding: 0;
+    height: 0;
+    border-bottom: 1px solid #e0e0e0;
+    vertical-align: middle;
+}
+
+.row-totals {
+    font-weight: 700;
+    background-color: #f0f4f8 !important;
+    border-top: 2px solid #ddd;
+}
+
+.row-totals td {
+    padding: 0.5rem 0.35rem;
+}
+
+.row-pct {
     font-size: 0.8rem;
-    white-space: nowrap
+    color: #666;
+    background-color: #f8f9fa !important;
 }
 
-table span {
-    font-size: 0.6rem;
-    color: grey;
-    margin: 0.100rem;
+.row-pct td {
+    border: none;
+    padding: 0.2rem 0.35rem;
 }
 
-
-table{
-    border-radius: 10px;
-}
-
-tr:nth-child(even) {
-    background-color: #FBFBFB;
-}
-
-a {
+/* Player name link */
+.player-link {
+    color: #0d6efd;
     text-decoration: none;
+    font-weight: 600;
 }
 
-.player-pic {
-    background-repeat: no-repeat;
-    background-position: center;
-    background-size: cover;
+.player-link:hover {
+    text-decoration: underline;
 }
 
-.player-pic img {
-    border-radius: 50%;
-    object-fit: cover;
+.player-pos {
+    display: inline-block;
+    margin-left: 0.35rem;
+    font-size: 0.75rem;
+    color: #888;
+    font-weight: 400;
+}
+
+.boxscore-loading {
+    text-align: center;
+    padding: 2rem;
+    color: #666;
+}
+
+@media (max-width: 768px) {
+    .boxscore-header {
+        gap: 0.75rem;
+        padding: 1rem;
+    }
+
+    .boxscore-team-name {
+        font-size: 0.95rem;
+    }
+
+    .boxscore-logo {
+        width: 36px;
+        height: 36px;
+    }
+
+    .boxscore-score-away,
+    .boxscore-score-home {
+        font-size: 1.5rem;
+    }
+
+    .boxscore-table {
+        font-size: 0.75rem;
+    }
+
+    .boxscore-table th,
+    .boxscore-table td {
+        padding: 0.35rem 0.2rem;
+    }
 }

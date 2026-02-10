@@ -1,127 +1,189 @@
 @page "/game/{id:int}"
 @inject IGameService GameService
 
-<div class="container">
-@if (game !=  null)
-{   
-            <div class="boxscore">
-            
-                <div class="boxscore-header">
-                    
-                    <div class="boxscore-header-logo">
-                        <img src=@($"../Images/Logos/{game.HomeTeam}.svg") alt="Team logo" width="90">
-                    </div>
-                  
-                    <div class="boxscore-header-score">
-                        <span>@game.HomeTeamScore - @game.AwayTeamScore</span>
-                    </div>
-                    
-                    <div class="boxscore-header-logo">
-                        <img src=@($"../Images/Logos/{game.AwayTeam}.svg") alt="Team logo" width="90">
-                    </div>
-                    
-                </div>
+<div class="boxscore-page">
+@if (game != null)
+{
+    <header class="boxscore-header">
+        <div class="boxscore-team boxscore-team-away">
+            <img src="@($"../Images/Logos/{game.AwayTeam}.svg")" alt="@game.AwayTeam" class="boxscore-logo" />
+            <span class="boxscore-team-name">@game.AwayTeam</span>
+        </div>
+        <div class="boxscore-score">
+            <span class="boxscore-score-away">@game.AwayTeamScore</span>
+            <span class="boxscore-score-sep">-</span>
+            <span class="boxscore-score-home">@game.HomeTeamScore</span>
+        </div>
+        <div class="boxscore-team boxscore-team-home">
+            <img src="@($"../Images/Logos/{game.HomeTeam}.svg")" alt="@game.HomeTeam" class="boxscore-logo" />
+            <span class="boxscore-team-name">@game.HomeTeam</span>
+        </div>
+    </header>
+
+    <section class="boxscore-tables">
+        <div class="boxscore-team-section">
+            <h2 class="boxscore-section-title">@game.AwayTeam</h2>
+            <div class="table-responsive">
+                <table class="boxscore-table">
+                    <thead>
+                        <tr>
+                            <th class="col-name">JOGADOR</th>
+                            <th>MIN</th>
+                            <th>PTS</th>
+                            <th>FG</th>
+                            <th>3PT</th>
+                            <th>FT</th>
+                            <th>REB</th>
+                            <th>AST</th>
+                            <th>TO</th>
+                            <th>STL</th>
+                            <th>BLK</th>
+                            <th>OR</th>
+                            <th>DR</th>
+                            <th>PF</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var row in game.AwayPlayerGameStats.Select((value, index) => new { Value = value, Index = index }))
+                        {
+                            <tr class="@(row.Index < 5 ? "starter" : "bench")">
+                                <td class="col-name">
+                                    <a href="players/@row.Value.PlayerId" class="player-link">@row.Value.Name</a>
+                                    <span class="player-pos">@row.Value.Pos</span>
+                                </td>
+                                <td>@Format(row.Value.Min)</td>
+                                <td>@row.Value.Pts</td>
+                                <td>@row.Value.Fg-@row.Value.Fga</td>
+                                <td>@row.Value.Tp-@row.Value.Tpa</td>
+                                <td>@row.Value.Ft-@row.Value.Fta</td>
+                                <td>@row.Value.Trb</td>
+                                <td>@row.Value.Ast</td>
+                                <td>@row.Value.Tov</td>
+                                <td>@row.Value.Stl</td>
+                                <td>@row.Value.Blk</td>
+                                <td>@row.Value.Orb</td>
+                                <td>@row.Value.Drb</td>
+                                <td>@row.Value.Pf</td>
+                            </tr>
+                            @if (row.Index == 4)
+                            {
+                                <tr class="row-divider"><td colspan="14"></td></tr>
+                            }
+                        }
+                        @if (awayTeamStat != null)
+                        {
+                            <tr class="row-totals">
+                                <td class="col-name">Time</td>
+                                <td>@Format(awayTeamStat.Min)</td>
+                                <td>@awayTeamStat.Pts</td>
+                                <td>@awayTeamStat.Fg-@awayTeamStat.Fga</td>
+                                <td>@awayTeamStat.Tp-@awayTeamStat.Tpa</td>
+                                <td>@awayTeamStat.Ft-@awayTeamStat.Fta</td>
+                                <td>@awayTeamStat.Trb</td>
+                                <td>@awayTeamStat.Ast</td>
+                                <td>@awayTeamStat.Tov</td>
+                                <td>@awayTeamStat.Stl</td>
+                                <td>@awayTeamStat.Blk</td>
+                                <td>@awayTeamStat.Orb</td>
+                                <td>@awayTeamStat.Drb</td>
+                                <td>@awayTeamStat.Pf</td>
+                            </tr>
+                            <tr class="row-pct">
+                                <td class="col-name"></td>
+                                <td colspan="3">@FormatPct(awayTeamStat.Fg, awayTeamStat.Fga) FG%</td>
+                                <td colspan="2">@FormatPct(awayTeamStat.Tp, awayTeamStat.Tpa) 3P%</td>
+                                <td colspan="2">@FormatPct(awayTeamStat.Ft, awayTeamStat.Fta) FT%</td>
+                                <td colspan="6"></td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
             </div>
-            
-            <div class="tabs-container">
-                <ul class="nav nav-tabs justify-content-center" id="myTab" role="tablist">
-                    <li class="nav-item" role="presentation">
-                        <button class="nav-link active" id="bio-tab" data-bs-toggle="tab" data-bs-target="#bio-tab-pane" type="button" role="tab" aria-controls="bio-tab-pane" aria-selected="true">@game.HomeTeam</button>
-                    </li>
-                    <li class="nav-item" role="presentation">
-                        <button class="nav-link" id="profile-tab" data-bs-toggle="tab" data-bs-target="#profile-tab-pane" type="button" role="tab" aria-controls="profile-tab-pane" aria-selected="false">@game.AwayTeam</button>
-                    </li>
-                </ul>
-                <div class="tab-content" id="myTabContent">
-                    <div class="tab-pane fade show active" id="bio-tab-pane" role="tabpanel" aria-labelledby="bio-tab" tabindex="0">
-                  
-                        <div class="table-responsive">
-                        <table class="table" >
-                                                                           <thead>
-                                                                               <tr>
-                                                                                   @foreach (var h in headings)
-                                                                                   {
-                                                                                   <th>@h</th>
-                                                                                   }
-                                                                               </tr>
-                                                                           </thead>
-                                                                           <tbody>
-                                                                               @foreach (var row in game.HomePlayerGameStats.Select((value, index) => new { Value = value, Index = index }))
-                                                                               {
-                                                                               <tr>
-                                                                                  <td style="text-align: left">  <a href="@($"players/{@row.Value.PlayerId}")"> @row.Value.Name </a><span>@row.Value.Pos</span></td>
-                                                                                   <td>@Format(row.Value.Min)</td>
-                                                                                   <td>@row.Value.Fg-@row.Value.Fga</td>
-                                                                                   <td>@row.Value.Tp-@row.Value.Tpa</td>
-                                                                                   <td>@row.Value.Ft-@row.Value.Fta</td>
-                                                                                   <td>@row.Value.Orb</td>
-                                                                                   <td>@row.Value.Trb</td>
-                                                                                   <td>@row.Value.Ast</td>
-                                                                                   <td>@row.Value.Tov</td>
-                                                                                   <td>@row.Value.Stl</td>
-                                                                                   <td>@row.Value.Blk</td>
-                                                                                   <td>@row.Value.Pf</td>
-                                                                                   <td>@row.Value.Pts</td>
-                                                                               </tr>
-                                                                               @if (row.Index == 4)
-                                                                               {
-                                                                               <tr>
-                                                                                   <td colspan="14">
-                                                                                       <hr style="border-top: 1px solid #e0e0e0; margin: 0;">
-                                                                                   </td>
-                                                                               </tr>
-                                                                               }
-                                                                               }
-                                                                           </tbody>
-                                                                       </table>
-                        </div>
-                        
-                        
-                    </div>
-                    <div class="tab-pane fade" id="profile-tab-pane" role="tabpanel" aria-labelledby="profile-tab" tabindex="0">
-                        
-                        <div class="table-responsive">
-                            <table class="table" >
-                                <thead>
-                                <tr>
-                                    @foreach (var h in headings)
-                                    {
-                                        <th>@h</th>
-                                    }
-                                </tr>
-                                </thead>
-                                <tbody>
-                                @foreach (var row in game.AwayPlayerGameStats.Select((value, index) => new { Value = value, Index = index }))
-                                {
-                                    <tr>
-                                        <td style="text-align: left"> <a href="@($"players/{@row.Value.PlayerId}")"> @row.Value.Name </a><span>@row.Value.Pos</span></td>
-                                        <td>@Format(row.Value.Min)</td>
-                                        <td>@row.Value.Fg-@row.Value.Fga</td>
-                                        <td>@row.Value.Tp-@row.Value.Tpa</td>
-                                        <td>@row.Value.Ft-@row.Value.Fta</td>
-                                        <td>@row.Value.Orb</td>
-                                        <td>@row.Value.Trb</td>
-                                        <td>@row.Value.Ast</td>
-                                        <td>@row.Value.Tov</td>
-                                        <td>@row.Value.Stl</td>
-                                        <td>@row.Value.Blk</td>
-                                        <td>@row.Value.Pf</td>
-                                        <td>@row.Value.Pts</td>
-                                    </tr>
-                                    @if (row.Index == 4)
-                                    {
-                                        <tr>
-                                            <td colspan="14">
-                                                <hr style="border-top: 1px solid #e0e0e0; margin: 0;">
-                                            </td>
-                                        </tr>
-                                    }
-                                }
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                    </div>
-                </div>
+        </div>
+
+        <div class="boxscore-team-section">
+            <h2 class="boxscore-section-title">@game.HomeTeam</h2>
+            <div class="table-responsive">
+                <table class="boxscore-table">
+                    <thead>
+                        <tr>
+                            <th class="col-name">JOGADOR</th>
+                            <th>MIN</th>
+                            <th>PTS</th>
+                            <th>FG</th>
+                            <th>3PT</th>
+                            <th>FT</th>
+                            <th>REB</th>
+                            <th>AST</th>
+                            <th>TO</th>
+                            <th>STL</th>
+                            <th>BLK</th>
+                            <th>OR</th>
+                            <th>DR</th>
+                            <th>PF</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var row in game.HomePlayerGameStats.Select((value, index) => new { Value = value, Index = index }))
+                        {
+                            <tr class="@(row.Index < 5 ? "starter" : "bench")">
+                                <td class="col-name">
+                                    <a href="players/@row.Value.PlayerId" class="player-link">@row.Value.Name</a>
+                                    <span class="player-pos">@row.Value.Pos</span>
+                                </td>
+                                <td>@Format(row.Value.Min)</td>
+                                <td>@row.Value.Pts</td>
+                                <td>@row.Value.Fg-@row.Value.Fga</td>
+                                <td>@row.Value.Tp-@row.Value.Tpa</td>
+                                <td>@row.Value.Ft-@row.Value.Fta</td>
+                                <td>@row.Value.Trb</td>
+                                <td>@row.Value.Ast</td>
+                                <td>@row.Value.Tov</td>
+                                <td>@row.Value.Stl</td>
+                                <td>@row.Value.Blk</td>
+                                <td>@row.Value.Orb</td>
+                                <td>@row.Value.Drb</td>
+                                <td>@row.Value.Pf</td>
+                            </tr>
+                            @if (row.Index == 4)
+                            {
+                                <tr class="row-divider"><td colspan="14"></td></tr>
+                            }
+                        }
+                        @if (homeTeamStat != null)
+                        {
+                            <tr class="row-totals">
+                                <td class="col-name">Time</td>
+                                <td>@Format(homeTeamStat.Min)</td>
+                                <td>@homeTeamStat.Pts</td>
+                                <td>@homeTeamStat.Fg-@homeTeamStat.Fga</td>
+                                <td>@homeTeamStat.Tp-@homeTeamStat.Tpa</td>
+                                <td>@homeTeamStat.Ft-@homeTeamStat.Fta</td>
+                                <td>@homeTeamStat.Trb</td>
+                                <td>@homeTeamStat.Ast</td>
+                                <td>@homeTeamStat.Tov</td>
+                                <td>@homeTeamStat.Stl</td>
+                                <td>@homeTeamStat.Blk</td>
+                                <td>@homeTeamStat.Orb</td>
+                                <td>@homeTeamStat.Drb</td>
+                                <td>@homeTeamStat.Pf</td>
+                            </tr>
+                            <tr class="row-pct">
+                                <td class="col-name"></td>
+                                <td colspan="3">@FormatPct(homeTeamStat.Fg, homeTeamStat.Fga) FG%</td>
+                                <td colspan="2">@FormatPct(homeTeamStat.Tp, homeTeamStat.Tpa) 3P%</td>
+                                <td colspan="2">@FormatPct(homeTeamStat.Ft, homeTeamStat.Fta) FT%</td>
+                                <td colspan="6"></td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+}
+else
+{
+    <p class="boxscore-loading">@message</p>
 }
 </div>

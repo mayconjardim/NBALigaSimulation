@@ -7,9 +7,6 @@ namespace NBALigaSimulation.Client.Pages.Games.BoxScore;
 
 public partial class Boxscore
 {
-    
-    string[] headings = { "NAME", "MIN", "FG", "3PT", "FT", "OFF", "REB", "AST", "TO", "STL", "BLK", "PF", "PTS" };
-
     private GameCompleteDto? game = null;
     private string message = string.Empty;
     private TeamGameStatsDto? homeTeamStat = null;
@@ -47,27 +44,15 @@ public partial class Boxscore
         }
     }
 
-    public string NomeAbvr(string nomeCompleto)
-    {
-        string[] partesNome = nomeCompleto.Split(' ');
-
-        if (partesNome.Length < 2)
-        {
-            return nomeCompleto;
-        }
-
-        string primeiroNome = partesNome[0];
-        string sobrenome = partesNome[partesNome.Length - 1];
-
-        string primeiraLetra = primeiroNome.Substring(0, 1);
-
-        return $"{primeiraLetra}. {sobrenome}";
-    }
-
     public string Format(double numero)
     {
-        string numeroFormatado = numero.ToString("0.0", CultureInfo.InvariantCulture);
-        return numeroFormatado;
+        return numero.ToString("0.0", CultureInfo.InvariantCulture);
     }
-    
+
+    public string FormatPct(int made, int attempted)
+    {
+        if (attempted == 0) return "—";
+        var pct = (100.0 * made / attempted);
+        return pct.ToString("0.0", CultureInfo.InvariantCulture) + "%";
+    }
 }
