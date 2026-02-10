@@ -48,6 +48,7 @@
                         {
                             <tr class="@(row.Index < 5 ? "starter" : "bench")">
                                 <td class="col-name">
+                                    <img src="@(string.IsNullOrEmpty(row.Value.ImgUrl) ? "Images/Utils/blank.png" : row.Value.ImgUrl)" alt="@row.Value.Name" class="player-thumb" />
                                     <a href="players/@row.Value.PlayerId" class="player-link">@row.Value.Name</a>
                                     <span class="player-pos">@row.Value.Pos</span>
                                 </td>
@@ -128,6 +129,7 @@
                         {
                             <tr class="@(row.Index < 5 ? "starter" : "bench")">
                                 <td class="col-name">
+                                    <img src="@(string.IsNullOrEmpty(row.Value.ImgUrl) ? "Images/Utils/blank.png" : row.Value.ImgUrl)" alt="@row.Value.Name" class="player-thumb" />
                                     <a href="players/@row.Value.PlayerId" class="player-link">@row.Value.Name</a>
                                     <span class="player-pos">@row.Value.Pos</span>
                                 </td>

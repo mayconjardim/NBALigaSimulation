@@ -1,4 +1,4 @@
-﻿using NBALigaSimulation.Shared.Models.Games;
+using NBALigaSimulation.Shared.Models.Games;
 
 namespace NBALigaSimulation.Shared.Models.Players
 {
@@ -9,6 +9,7 @@ namespace NBALigaSimulation.Shared.Models.Players
         public string Name { get; set; } = string.Empty;
         public string Pos { get; set; } = string.Empty;
         public int PlayerId { get; set; }
+        public Player? Player { get; set; }
         public int TeamId { get; set; }
         public string OppAbrev { get; set; } = string.Empty;
         public DateTime GameDate { get; set; }

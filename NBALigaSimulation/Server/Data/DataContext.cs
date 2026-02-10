@@ -1,4 +1,4 @@
-﻿using NBALigaSimulation.Shared.Models.Drafts;
+using NBALigaSimulation.Shared.Models.Drafts;
 using NBALigaSimulation.Shared.Models.FA;
 using NBALigaSimulation.Shared.Models.GameNews;
 using NBALigaSimulation.Shared.Models.Games;
@@ -74,7 +74,7 @@ namespace NBALigaSimulation.Server.Data
             {
                 entity.HasKey(p => p.Id);
                 entity.HasMany(p => p.Stats)
-                    .WithOne()
+                    .WithOne(pgs => pgs.Player)
                     .HasForeignKey(s => s.PlayerId);
             });
 

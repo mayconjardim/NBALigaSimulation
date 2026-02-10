@@ -1,4 +1,4 @@
-﻿using NBALigaSimulation.Shared.Dtos.Teams;
+using NBALigaSimulation.Shared.Dtos.Teams;
 
 namespace NBALigaSimulation.Shared.Dtos.Players
 {
@@ -7,6 +7,7 @@ namespace NBALigaSimulation.Shared.Dtos.Players
         public int Id { get; set; }
         public string Name { get; set; } = string.Empty;
         public string Pos { get; set; } = string.Empty;
+        public string ImgUrl { get; set; } = string.Empty;
         public int PlayerId { get; set; }
         public int TeamId { get; set; }
         public int GameId { get; set; }

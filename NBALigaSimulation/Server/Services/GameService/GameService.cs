@@ -205,6 +205,7 @@ namespace NBALigaSimulation.Server.Services.GameService
             .Include(p => p.AwayTeam)
             .Include(p => p.TeamGameStats)
             .Include(p => p.PlayerGameStats)
+                .ThenInclude(pgs => pgs.Player)
             .FirstOrDefaultAsync(p => p.Id == gameId);
 
             if (game == null)

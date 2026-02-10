@@ -158,7 +158,22 @@
     padding: 0.2rem 0.35rem;
 }
 
-/* Player name link */
+/* Player thumbnail + name */
+.boxscore-table td.col-name {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.player-thumb {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    object-fit: cover;
+    flex-shrink: 0;
+    background: #eee;
+}
+
 .player-link {
     color: #0d6efd;
     text-decoration: none;

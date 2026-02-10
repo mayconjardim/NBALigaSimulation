@@ -1,4 +1,4 @@
-﻿using AutoMapper;
+using AutoMapper;
 using NBALigaSimulation.Client.Pages.Players.PlayerPage;
 using NBALigaSimulation.Shared.Dtos.Drafts;
 using NBALigaSimulation.Shared.Dtos.FA;
@@ -77,7 +77,8 @@ namespace NBALigaSimulation.Server.Profiles
               .ForMember(dest => dest.AwayPlayerGameStats, opt =>
                   opt.MapFrom(src => src.PlayerGameStats.Where(p => p.TeamId == src.AwayTeamId).ToList()));
 
-            CreateMap<PlayerGameStats, PlayerGameStatsDto>();
+            CreateMap<PlayerGameStats, PlayerGameStatsDto>()
+                .ForMember(dest => dest.ImgUrl, opt => opt.MapFrom(src => src.Player != null ? src.Player.ImgUrl : ""));
             CreateMap<GameCompleteDto, Game>();
             CreateMap<CreateGameDto, GameCompleteDto>().ReverseMap();
             CreateMap<CreateGameDto, Game>().ReverseMap();
