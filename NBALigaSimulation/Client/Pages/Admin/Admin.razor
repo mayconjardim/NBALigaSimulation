@@ -1,0 +1,192 @@
+@page "/admin"
+@using NBALigaSimulation.Client.Services.SeasonsService
+@using NBALigaSimulation.Client.Services.GameService
+@using Blazored.LocalStorage
+@inject ISeasonService SeasonService
+@inject IGameService GameService
+@inject ILocalStorageService LocalStorage
+@inject IJSRuntime JSRuntime
+@inject NavigationManager NavigationManager
+
+<PageTitle>Painel Administrativo</PageTitle>
+
+<div class="admin-container container">
+    <div class="admin-header">
+        <h1><i class="bi bi-shield-check me-2"></i>Painel Administrativo</h1>
+        <p class="text-muted">Gerencie temporadas, cronogramas e simulações</p>
+    </div>
+
+    @if (!_isAdmin)
+    {
+        <div class="alert alert-danger" role="alert">
+            <i class="bi bi-exclamation-triangle me-2"></i>
+            Você não tem permissão para acessar esta página.
+        </div>
+    }
+    else
+    {
+        <div class="admin-content">
+            <div class="admin-table-container">
+                <div class="table-responsive">
+                    <table class="table table-striped table-hover admin-table">
+                    <thead>
+                        <tr>
+                            <th style="width: 50px;">#</th>
+                            <th>Ação</th>
+                            <th>Descrição</th>
+                            <th style="width: 200px;">Ação</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- 1. Criar Temporada -->
+                        <tr>
+                            <td><strong>1</strong></td>
+                            <td>
+                                <i class="bi bi-plus-circle text-primary me-2"></i>
+                                <strong>Criar Temporada</strong>
+                            </td>
+                            <td>Cria uma nova temporada na liga</td>
+                            <td>
+                                <button class="btn btn-primary btn-sm w-100" @onclick="CreateSeason" disabled="@_isLoading">
+                                    @if (_isLoading && _loadingAction == "CreateSeason")
+                                    {
+                                        <span class="spinner-border spinner-border-sm me-2"></span>
+                                    }
+                                    Executar
+                                </button>
+                            </td>
+                        </tr>
+
+                        <!-- 2. Gerar Training Camp -->
+                        <tr>
+                            <td><strong>2</strong></td>
+                            <td>
+                                <i class="bi bi-graph-up-arrow text-success me-2"></i>
+                                <strong>Gerar Training Camp</strong>
+                            </td>
+                            <td>Realiza a evolução/regressão dos jogadores</td>
+                            <td>
+                                <button class="btn btn-success btn-sm w-100" @onclick="GenerateTrainingCamp" disabled="@_isLoading">
+                                    @if (_isLoading && _loadingAction == "GenerateTrainingCamp")
+                                    {
+                                        <span class="spinner-border spinner-border-sm me-2"></span>
+                                    }
+                                    Executar
+                                </button>
+                            </td>
+                        </tr>
+
+                        <!-- 3. Gerar Cronograma -->
+                        <tr>
+                            <td><strong>3</strong></td>
+                            <td>
+                                <i class="bi bi-calendar-plus text-info me-2"></i>
+                                <strong>Gerar Cronograma</strong>
+                            </td>
+                            <td>Gera o cronograma completo com 82 jogos por time</td>
+                            <td>
+                                <button class="btn btn-info btn-sm w-100" @onclick="GenerateSchedule" disabled="@_isLoading">
+                                    @if (_isLoading && _loadingAction == "GenerateSchedule")
+                                    {
+                                        <span class="spinner-border spinner-border-sm me-2"></span>
+                                    }
+                                    Executar
+                                </button>
+                            </td>
+                        </tr>
+
+                        <!-- 4. Simular Próxima Rodada -->
+                        <tr>
+                            <td><strong>4</strong></td>
+                            <td>
+                                <i class="bi bi-arrow-right-circle text-warning me-2"></i>
+                                <strong>Simular Próxima Rodada</strong>
+                            </td>
+                            <td>Simula automaticamente a próxima rodada não simulada da temporada regular</td>
+                            <td>
+                                <button class="btn btn-warning btn-sm w-100" @onclick="SimNextRound" disabled="@_isLoading">
+                                    @if (_isLoading && _loadingAction == "SimNextRound")
+                                    {
+                                        <span class="spinner-border spinner-border-sm me-2"></span>
+                                    }
+                                    Executar
+                                </button>
+                            </td>
+                        </tr>
+
+                        <!-- 5. Simular Playoffs por Rodada -->
+                        <tr>
+                            <td><strong>5</strong></td>
+                            <td>
+                                <i class="bi bi-trophy text-danger me-2"></i>
+                                <strong>Simular Playoffs</strong>
+                            </td>
+                            <td>
+                                <div class="input-group input-group-sm">
+                                    <select class="form-select" @bind="_selectedPlayoffRound">
+                                        <option value="1">Rodada 1 (1ª Rodada)</option>
+                                        <option value="2">Rodada 2 (Semi-Finais de Conferência)</option>
+                                        <option value="3">Rodada 3 (Finais de Conferência)</option>
+                                        <option value="4">Rodada 4 (Final da NBA)</option>
+                                    </select>
+                                </div>
+                            </td>
+                            <td>
+                                <button class="btn btn-danger btn-sm w-100" @onclick="SimPlayoffRound" disabled="@_isLoading">
+                                    @if (_isLoading && _loadingAction == "SimPlayoffRound")
+                                    {
+                                        <span class="spinner-border spinner-border-sm me-2"></span>
+                                    }
+                                    Executar
+                                </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Informações da Temporada -->
+            @if (_currentSeason != null)
+            {
+                <div class="admin-info mt-4">
+                    <div class="card admin-info-card">
+                        <div class="card-body">
+                            <h5 class="card-title"><i class="bi bi-info-circle me-2"></i>Informações da Temporada</h5>
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <p class="mb-1"><strong>Temporada:</strong> @_currentSeason.Year</p>
+                                </div>
+                                <div class="col-md-3">
+                                    <p class="mb-1"><strong>Status:</strong> <span class="badge bg-success">Ativa</span></p>
+                                </div>
+                                <div class="col-md-3">
+                                    <p class="mb-1"><strong>Próxima Rodada:</strong> @(_nextRound > 0 ? _nextRound.ToString() : "N/A")</p>
+                                </div>
+                                <div class="col-md-3">
+                                    <p class="mb-1"><strong>Total de Rodadas:</strong> @_totalRounds</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+</div>
+
+@if (!string.IsNullOrEmpty(_message))
+{
+    <div class="toast-container position-fixed bottom-0 end-0 p-3">
+        <div class="toast show" role="alert">
+            <div class="toast-header @(_messageType == "success" ? "bg-success text-white" : "bg-danger text-white")">
+                <i class="bi @(_messageType == "success" ? "bi-check-circle" : "bi-exclamation-triangle") me-2"></i>
+                <strong class="me-auto">@(_messageType == "success" ? "Sucesso" : "Erro")</strong>
+                <button type="button" class="btn-close btn-close-white" @onclick="ClearMessage"></button>
+            </div>
+            <div class="toast-body">
+                @_message
+            </div>
+        </div>
+    </div>
+}

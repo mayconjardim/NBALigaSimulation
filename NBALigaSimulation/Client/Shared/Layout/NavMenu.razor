@@ -1,10 +1,8 @@
-﻿@using NBALigaSimulation.Client.Services.AuthService
+@using NBALigaSimulation.Client.Services.AuthService
 @inject AuthenticationStateProvider AuthenticationStateProvider
 @inject ILocalStorageService LocalStorage
 @inject NavigationManager NavigationManager
 @inject ISeasonService SeasonService
-@inject ITeamService TeamService
-@inject IGameService GameService
 @inject IAuthService AuthService
 @inject IJSRuntime JSRuntime;
 
@@ -163,9 +161,9 @@
                         <hr class="my-3" style="border-color: rgba(255,255,255,0.2);"/>
 
                         <ul class="list-group list-group-flush">
-                            <li class="list-group-item">
-                                <a @onclick="@SimGameByDateRegular" class="list-group-item list-group-item-action" aria-current="true">
-                                    <i class="bi bi-play-circle me-2"></i>Simular uma semana
+                            <li class="list-group-item" data-bs-dismiss="modal">
+                                <a href="/admin" class="list-group-item list-group-item-action" aria-current="true" @onclick="FecharMOdal">
+                                    <i class="bi bi-shield-check me-2"></i>Painel Administrativo
                                 </a></li>
                         </ul> 
                     }

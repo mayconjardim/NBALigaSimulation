@@ -1,4 +1,4 @@
-﻿using NBALigaSimulation.Shared.Dtos.Games;
+using NBALigaSimulation.Shared.Dtos.Games;
 using NBALigaSimulation.Shared.Models.Utils;
 
 namespace NBALigaSimulation.Server.Services.GameService
@@ -14,6 +14,8 @@ namespace NBALigaSimulation.Server.Services.GameService
 		Task<ServiceResponse<bool>> UpdateGames();
 		Task<ServiceResponse<bool>> SimGameByDateRegular();
 		Task<ServiceResponse<bool>> SimGameByDatePlayoffs();
+		Task<ServiceResponse<bool>> SimGameByRound(int roundNumber);
+		Task<ServiceResponse<bool>> SimPlayoffsByRound(int playoffRound);
 		Task<ServiceResponse<bool>> SimAll();
 
 

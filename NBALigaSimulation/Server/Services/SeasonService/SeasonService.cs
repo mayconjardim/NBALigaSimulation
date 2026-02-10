@@ -169,7 +169,8 @@ namespace NBALigaSimulation.Server.Services.SeasonService
 
             List<Game> savedGames = await _seasonRepository.GetGamesWithTeamsBySeasonAsync(season.Id);
             
-            var games = ScheduleHelp.GenerateWeeksAndDates(savedGames, teams);
+            // Distribui os jogos em rodadas (3 jogos por rodada por time por padrão)
+            var games = ScheduleHelp.GenerateRounds(savedGames, teams, gamesPerRoundPerTeam: 3);
             await _seasonRepository.SaveChangesAsync();
             
             response.Message = "Cronograma criado com sucesso!";

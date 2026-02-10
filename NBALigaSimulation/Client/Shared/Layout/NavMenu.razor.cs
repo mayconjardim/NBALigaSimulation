@@ -50,19 +50,6 @@ public partial class NavMenu
         }
     }
     
-    private async Task SimGameByDateRegular()
-    {
-        var gameResponse = await GameService.SimGameByDateRegular();
-
-        if (gameResponse.Success)
-        {
-            await JSRuntime.InvokeVoidAsync("console.log", "Simulação efetuada!");
-        }
-        else
-        {
-            await JSRuntime.InvokeVoidAsync("console.log", "Erro na Simulação!");
-        }
-    }
     
     private async Task HandleLogin()
     {

@@ -73,4 +73,28 @@ public class GameService : IGameService
         var result = await response.Content.ReadFromJsonAsync<ServiceResponse<bool>>();
         return result;
     }
+
+    public async Task<ServiceResponse<bool>> SimGameByRound(int roundNumber)
+    {
+        var payload = new ServiceResponse<bool>();
+        var response = await _http.PutAsJsonAsync($"api/games/update/round/{roundNumber}", payload);
+        var result = await response.Content.ReadFromJsonAsync<ServiceResponse<bool>>();
+        return result;
+    }
+
+    public async Task<ServiceResponse<bool>> SimPlayoffsByRound(int playoffRound)
+    {
+        var payload = new ServiceResponse<bool>();
+        var response = await _http.PutAsJsonAsync($"api/games/update/playoffs/round/{playoffRound}", payload);
+        var result = await response.Content.ReadFromJsonAsync<ServiceResponse<bool>>();
+        return result;
+    }
+
+    public async Task<ServiceResponse<bool>> SimAll()
+    {
+        var payload = new ServiceResponse<bool>();
+        var response = await _http.PutAsJsonAsync($"api/games/update/date/all", payload);
+        var result = await response.Content.ReadFromJsonAsync<ServiceResponse<bool>>();
+        return result;
+    }
 }

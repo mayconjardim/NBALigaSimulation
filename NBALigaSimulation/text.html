@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Currículo - Maycon Jardim</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            color: #000;
+            background-color: #fff;
+            line-height: 1.5;
+            padding: 20px 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: #fff;
+        }
+
+        /* Cabeçalho */
+        .header {
+            text-align: center;
+            margin-bottom: 18px;
+        }
+
+        .header h1 {
+            font-size: 27px;
+            font-weight: bold;
+            margin-bottom: 6px;
+            letter-spacing: 1px;
+        }
+
+        .header .job-title {
+            font-size: 17px;
+            margin-bottom: 5px;
+        }
+
+        .header .location {
+            font-size: 13px;
+            margin-bottom: 6px;
+        }
+
+        .header .contact {
+            font-size: 13px;
+            margin-bottom: 10px;
+        }
+
+        .header .contact span {
+            margin: 0 20px;
+        }
+
+        .header-separator {
+            border-top: 1px solid #000;
+            margin: 10px 0;
+        }
+
+        /* Seções */
+        .section {
+            margin-bottom: 18px;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 15px;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin: 12px 0 8px 0;
+            position: relative;
+        }
+
+        .section-title::before,
+        .section-title::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            width: 30%;
+            height: 1px;
+            background-color: #000;
+        }
+
+        .section-title::before {
+            left: 0;
+        }
+
+        .section-title::after {
+            right: 0;
+        }
+
+        /* Links */
+        .links {
+            margin-left: 0;
+            list-style: none;
+        }
+
+        .links li {
+            margin-bottom: 6px;
+            font-size: 13px;
+        }
+
+        .links .label {
+            font-weight: normal;
+        }
+
+        .links a {
+            color: #000;
+            text-decoration: none;
+        }
+
+        .links a:hover {
+            text-decoration: underline;
+        }
+
+        /* Summary */
+        .summary {
+            text-align: left;
+            font-size: 13px;
+            line-height: 1.5;
+        }
+
+        /* Experience e Education */
+        .experience-list,
+        .education-list {
+            list-style: none;
+            margin-left: 0;
+        }
+
+        .experience-item,
+        .education-item {
+            margin-bottom: 15px;
+            position: relative;
+            padding-left: 20px;
+        }
+
+        .experience-item::before,
+        .education-item::before {
+            content: '♦';
+            position: absolute;
+            left: 0;
+            font-size: 12px;
+        }
+
+        .work-header,
+        .education-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 6px;
+            position: relative;
+        }
+
+        .work-title,
+        .education-school {
+            font-weight: bold;
+            font-size: 13px;
+            flex: 1;
+        }
+
+        .work-date-location,
+        .education-date {
+            text-align: right;
+            font-size: 13px;
+            white-space: nowrap;
+            margin-left: 10px;
+        }
+
+        .work-location {
+            font-size: 11px;
+            margin-top: 2px;
+        }
+
+        .work-description,
+        .education-degree {
+            font-size: 12px;
+            margin-top: 6px;
+            padding-left: 0;
+            line-height: 1.5;
+        }
+
+        .education-degree {
+            padding-left: 20px;
+        }
+
+        /* Linha pontilhada */
+        .dotted-line {
+            flex: 1;
+            border-bottom: 1px dotted #000;
+            margin: 0 10px;
+            height: 1px;
+            align-self: center;
+        }
+
+        /* Responsivo */
+        @media print {
+            body {
+                padding: 20px 15px;
+            }
+            .section {
+                margin-bottom: 15px;
+            }
+            .experience-item,
+            .education-item {
+                margin-bottom: 12px;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .work-header,
+            .education-header {
+                flex-direction: column;
+            }
+
+            .work-date-location,
+            .education-date {
+                text-align: left;
+                margin-left: 0;
+                margin-top: 5px;
+            }
+
+            .dotted-line {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Cabeçalho -->
+        <div class="header">
+            <h1>MAYCON JARDIM</h1>
+            <div class="job-title">Analista de Sistemas</div>
+            <div class="location">São Gonçalo - RJ, Brasil</div>
+            <div class="contact">
+                <span>mayconpjardim@gmail.com</span>
+                <span>21 99541-8886</span>
+            </div>
+            <div class="header-separator"></div>
+        </div>
+
+        <!-- Sites e Links Sociais -->
+        <div class="section">
+            <h3 class="section-title">Sites e Links Sociais</h3>
+            <ul class="links">
+                <li>
+                    <span class="label">LinkedIn:</span>
+                    <a href="https://linkedin.com/in/mayconjardim" target="_blank">linkedin.com/in/mayconjardim</a>
+                </li>
+            </ul>
+        </div>
+
+        <!-- Resumo -->
+        <div class="section">
+            <h3 class="section-title">Resumo</h3>
+            <div class="summary">
+                <p>Desenvolvedor focado em engenharia de dados e backend, com experiência na construção de sistemas escaláveis para integração, padronização e distribuição de dados de produtos em múltiplas fontes e fornecedores, utilizando .NET, Python e cloud (Azure).</p>
+            </div>
+        </div>
+
+        <!-- Experiência -->
+        <div class="section">
+            <h3 class="section-title">Experiência</h3>
+            <ul class="experience-list">
+                <li class="experience-item">
+                    <div class="work-header">
+                        <div class="work-title">Analista de Sistemas, Microware Tecnologia da Informação</div>
+                        <div class="dotted-line"></div>
+                        <div class="work-date-location">
+                            <div>Nov 2023</div>
+                            <div class="work-location">Niterói - RJ</div>
+                        </div>
+                    </div>
+                    <div class="work-description">
+                        Desenvolvimento de um sistema que centraliza e processa dados de produtos de mais de 50 fornecedores, combinando backend em C#/.NET e pipelines ETL em Python. O sistema integra informações provenientes de diversas fontes — incluindo APIs, arquivos e scraping — e organiza tudo de forma consistente para uso interno e externo. Principais responsabilidades e tecnologias: Implementação de pipelines ETL em Python (Pandas) para coleta, tratamento, normalização e padronização de dados de fornecedores. Desenvolvimento de backend em C#/.NET para processamento, enriquecimento e disponibilização de dados. Enriquecimento de informações e imagens de produtos utilizando SearxNG e Craw4IA via scraping e automação. Integração com diversas APIs externas de fornecedores. Gerenciamento e otimização de filas assíncronas utilizando RabbitMQ para importação e atualização contínua de produtos. Modelagem e manutenção de bancos de dados MongoDB e SQL Server. Criação e manutenção de containers Docker para padronização de ambiente e deploy dos serviços. Deploy e orquestração de serviços em Azure (Azure Container Instances / Azure Container Apps), garantindo escalabilidade e disponibilização contínua das aplicações.
+                    </div>
+                </li>
+
+                <li class="experience-item">
+                    <div class="work-header">
+                        <div class="work-title">Técnico em manutenção de celulares, DN Assistência Técnica</div>
+                        <div class="dotted-line"></div>
+                        <div class="work-date-location">
+                            <div>Apr 2021 — Sep 2023</div>
+                            <div class="work-location">São Gonçalo - RJ</div>
+                        </div>
+                    </div>
+                    <div class="work-description">
+                        Diagnóstico e reparo de hardware e software em dispositivos móveis.
+                    </div>
+                </li>
+
+                <li class="experience-item">
+                    <div class="work-header">
+                        <div class="work-title">Assistente Administrativo, Atacadão Ceaza</div>
+                        <div class="dotted-line"></div>
+                        <div class="work-date-location">
+                            <div>May 2017 — Apr 2021</div>
+                            <div class="work-location">Niterói - RJ</div>
+                        </div>
+                    </div>
+                    <div class="work-description">
+                        Controle de contas a pagar, cadastro de produtos e emissão de relatórios.
+                    </div>
+                </li>
+
+                <li class="experience-item">
+                    <div class="work-header">
+                        <div class="work-title">Técnico de Suporte, Mmarins Informática / BLR Informática</div>
+                        <div class="dotted-line"></div>
+                        <div class="work-date-location">
+                            <div>Dec 2011 — Jul 2016</div>
+                            <div class="work-location">Niterói - RJ</div>
+                        </div>
+                    </div>
+                    <div class="work-description">
+                        Montagem e manutenção de computadores, suporte técnico e diagnóstico eletrônico.
+                    </div>
+                </li>
+            </ul>
+        </div>
+
+        <!-- Educação -->
+        <div class="section">
+            <h3 class="section-title">Educação</h3>
+            <ul class="education-list">
+                <li class="education-item">
+                    <div class="education-header">
+                        <div class="education-school">Centro Universitário IBMR</div>
+                        <div class="dotted-line"></div>
+                        <div class="education-date">2021 — 2025</div>
+                    </div>
+                    <div class="education-degree">
+                        Bacharelado em Ciência da Computação,
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+</body>
+</html>

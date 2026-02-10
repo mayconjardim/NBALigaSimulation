@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc;
 using NBALigaSimulation.Shared.Dtos.Games;
 using NBALigaSimulation.Shared.Models.Utils;
 
@@ -110,6 +110,32 @@ namespace NBALigaSimulation.Server.Controllers
 		public async Task<ActionResult<ServiceResponse<bool>>> SimGameByDateRegular()
 		{
 			ServiceResponse<bool> response = await _gameService.SimGameByDateRegular();
+
+			if (!response.Success)
+			{
+				return BadRequest(response);
+			}
+
+			return Ok(response);
+		}
+
+		[HttpPut("update/round/{roundNumber}")]
+		public async Task<ActionResult<ServiceResponse<bool>>> SimGameByRound(int roundNumber)
+		{
+			ServiceResponse<bool> response = await _gameService.SimGameByRound(roundNumber);
+
+			if (!response.Success)
+			{
+				return BadRequest(response);
+			}
+
+			return Ok(response);
+		}
+
+		[HttpPut("update/playoffs/round/{playoffRound}")]
+		public async Task<ActionResult<ServiceResponse<bool>>> SimPlayoffsByRound(int playoffRound)
+		{
+			ServiceResponse<bool> response = await _gameService.SimPlayoffsByRound(playoffRound);
 
 			if (!response.Success)
 			{

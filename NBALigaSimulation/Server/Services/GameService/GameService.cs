@@ -576,6 +576,215 @@ namespace NBALigaSimulation.Server.Services.GameService
 
         }
 
+        public async Task<ServiceResponse<bool>> SimGameByRound(int roundNumber)
+        {
+            ServiceResponse<bool> response = new ServiceResponse<bool>();
+
+            var season = await _seasonRepository.Query()
+                .OrderBy(s => s.Id)
+                .LastOrDefaultAsync();
+
+            if (season == null)
+            {
+                response.Success = false;
+                response.Message = "Temporada não encontrada.";
+                return response;
+            }
+
+            // Busca todos os jogos da rodada especificada que ainda não foram simulados
+            List<Game> games = await _gameRepository.Query()
+                .Include(p => p.HomeTeam.Players.OrderBy(p => p.RosterOrder)).ThenInclude(p => p.Ratings)
+                .Include(p => p.AwayTeam.Players.OrderBy(p => p.RosterOrder)).ThenInclude(p => p.Ratings)
+                .Include(p => p.HomeTeam.TeamRegularStats)
+                .Include(p => p.AwayTeam.TeamRegularStats)
+                .Include(p => p.HomeTeam.Players.OrderBy(p => p.RosterOrder)).ThenInclude(p => p.RegularStats)
+                .Include(p => p.AwayTeam.Players.OrderBy(p => p.RosterOrder)).ThenInclude(p => p.RegularStats)
+                .Include(t => t.HomeTeam.Gameplan)
+                .Include(t => t.AwayTeam.Gameplan)
+                .Where(g => g.Week == roundNumber.ToString() && !g.Happened && g.SeasonId == season.Id)
+                .ToListAsync();
+
+            if (games.Count == 0)
+            {
+                response.Success = false;
+                response.Message = $"Não há jogos não simulados na rodada {roundNumber}.";
+                return response;
+            }
+
+            foreach (Game game in games)
+            {
+                game.Season = season;
+
+                if (!SimulationUtils.ArePlayersInCorrectOrder(game.HomeTeam.Players))
+                {
+                    SimulationUtils.AdjustRosterOrder(game.HomeTeam.Players);
+                }
+
+                if (!SimulationUtils.ArePlayersInCorrectOrder(game.AwayTeam.Players))
+                {
+                    SimulationUtils.AdjustRosterOrder(game.AwayTeam.Players);
+                }
+
+                await _gameRepository.SaveChangesAsync();
+
+                GameSimulation.Sim(game);
+                game.Happened = true;
+
+                try
+                {
+                    await _gameRepository.SaveChangesAsync();
+                }
+                catch (Exception ex)
+                {
+                    response.Success = false;
+                    response.Message = $"Erro ao salvar alterações para o jogo com ID {game.Id}: {ex.Message}";
+                    return response;
+                }
+
+                try
+                {
+                    SimulationUtils.UpdateTeamStats(game);
+                    SimulationUtils.UpdatePlayerGames(game);
+                    News news = SimulationUtils.NewGenerator(game);
+                    await _newsRepository.AddAsync(news);
+                    await _newsRepository.SaveChangesAsync();
+                }
+                catch (Exception ex)
+                {
+                    response.Success = false;
+                    response.Message = $"Erro ao salvar alterações para o jogo com ID {game.Id}: {ex.Message}";
+                    return response;
+                }
+            }
+
+            await UpdateStandings();
+            response.Success = true;
+            response.Data = true;
+            response.Message = $"Rodada {roundNumber} simulada com sucesso! {games.Count} jogos processados.";
+            return response;
+        }
+
+        public async Task<ServiceResponse<bool>> SimPlayoffsByRound(int playoffRound)
+        {
+            ServiceResponse<bool> response = new ServiceResponse<bool>();
+
+            var season = await _seasonRepository.Query()
+                .OrderBy(s => s.Id)
+                .LastOrDefaultAsync();
+
+            if (season == null)
+            {
+                response.Success = false;
+                response.Message = "Temporada não encontrada.";
+                return response;
+            }
+
+            // Define os SeriesId para cada rodada de playoffs
+            List<int> seriesIds = playoffRound switch
+            {
+                1 => new List<int> { 1, 2, 3, 4, 5, 6, 7, 8 }, // Primeira rodada
+                2 => new List<int> { 9, 10, 11, 12 }, // Semi-finais de conferência
+                3 => new List<int> { 13, 14 }, // Finais de conferência
+                4 => new List<int> { 15 }, // Final da NBA
+                _ => new List<int>()
+            };
+
+            if (seriesIds.Count == 0)
+            {
+                response.Success = false;
+                response.Message = $"Rodada de playoffs inválida: {playoffRound}";
+                return response;
+            }
+
+            // Busca as séries de playoffs da rodada especificada
+            var playoffs = await _playoffsRepository.Query()
+                .Where(p => p.Season == season.Year && seriesIds.Contains(p.SeriesId))
+                .Include(p => p.PlayoffGames)
+                .ToListAsync();
+
+            if (playoffs.Count == 0)
+            {
+                response.Success = false;
+                response.Message = $"Não há séries de playoffs na rodada {playoffRound} para a temporada {season.Year}.";
+                return response;
+            }
+
+            // Coleta todos os IDs de jogos das séries
+            var gameIds = playoffs.SelectMany(p => p.PlayoffGames.Select(g => g.GameId)).ToList();
+
+            // Busca os jogos não simulados
+            List<Game> games = await _gameRepository.Query()
+                .Include(p => p.HomeTeam.Players.OrderBy(p => p.RosterOrder)).ThenInclude(p => p.Ratings)
+                .Include(p => p.AwayTeam.Players.OrderBy(p => p.RosterOrder)).ThenInclude(p => p.Ratings)
+                .Include(p => p.HomeTeam.TeamPlayoffsStats)
+                .Include(p => p.AwayTeam.TeamPlayoffsStats)
+                .Include(p => p.HomeTeam.Players.OrderBy(p => p.RosterOrder)).ThenInclude(p => p.PlayoffsStats)
+                .Include(p => p.AwayTeam.Players.OrderBy(p => p.RosterOrder)).ThenInclude(p => p.PlayoffsStats)
+                .Include(t => t.HomeTeam.Gameplan)
+                .Include(t => t.AwayTeam.Gameplan)
+                .Where(g => gameIds.Contains(g.Id) && !g.Happened && g.Type == 1)
+                .ToListAsync();
+
+            if (games.Count == 0)
+            {
+                response.Success = false;
+                response.Message = $"Não há jogos não simulados na rodada {playoffRound} dos playoffs.";
+                return response;
+            }
+
+            foreach (Game game in games)
+            {
+                game.Season = season;
+
+                if (!SimulationUtils.ArePlayersInCorrectOrder(game.HomeTeam.Players))
+                {
+                    SimulationUtils.AdjustRosterOrder(game.HomeTeam.Players);
+                }
+
+                if (!SimulationUtils.ArePlayersInCorrectOrder(game.AwayTeam.Players))
+                {
+                    SimulationUtils.AdjustRosterOrder(game.AwayTeam.Players);
+                }
+
+                await _gameRepository.SaveChangesAsync();
+
+                GameSimulation.Sim(game);
+                game.Happened = true;
+
+                try
+                {
+                    await _gameRepository.SaveChangesAsync();
+                }
+                catch (Exception ex)
+                {
+                    response.Success = false;
+                    response.Message = $"Erro ao salvar alterações para o jogo com ID {game.Id}: {ex.Message}";
+                    return response;
+                }
+
+                try
+                {
+                    SimulationUtils.UpdateTeamStats(game);
+                    SimulationUtils.UpdatePlayerGames(game);
+                    News news = SimulationUtils.NewGenerator(game);
+                    await _newsRepository.AddAsync(news);
+                    await _newsRepository.SaveChangesAsync();
+                }
+                catch (Exception ex)
+                {
+                    response.Success = false;
+                    response.Message = $"Erro ao salvar alterações para o jogo com ID {game.Id}: {ex.Message}";
+                    return response;
+                }
+            }
+
+            await UpdateStandings();
+            response.Success = true;
+            response.Data = true;
+            response.Message = $"Rodada {playoffRound} dos playoffs simulada com sucesso! {games.Count} jogos processados.";
+            return response;
+        }
+
     }
 }
 

@@ -13,6 +13,9 @@ public interface IGameService
     Task<ServiceResponse<bool>> UpdateGame(int gameId);
     Task<ServiceResponse<bool>> SimGameByDateRegular();
     Task<ServiceResponse<bool>> SimGameByDatePlayoffs();
+    Task<ServiceResponse<bool>> SimGameByRound(int roundNumber);
+    Task<ServiceResponse<bool>> SimPlayoffsByRound(int playoffRound);
+    Task<ServiceResponse<bool>> SimAll();
 
     
     

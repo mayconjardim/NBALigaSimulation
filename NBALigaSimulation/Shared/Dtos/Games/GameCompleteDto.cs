@@ -1,4 +1,4 @@
-﻿using NBALigaSimulation.Shared.Dtos.Players;
+using NBALigaSimulation.Shared.Dtos.Players;
 using NBALigaSimulation.Shared.Dtos.Teams;
 
 namespace NBALigaSimulation.Shared.Dtos.Games
@@ -13,6 +13,7 @@ namespace NBALigaSimulation.Shared.Dtos.Games
         public int AwayTeamId { get; set; }
         public int Season { get; set; }
         public  string Week { get; set; }
+        public bool Happened { get; set; }
         public int HomeTeamScore { get; set; }
         public int AwayTeamScore { get; set; }
         public DateTime GameDate { get; set; }
