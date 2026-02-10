@@ -20,7 +20,6 @@
                     var game = item.Game;
                     <tr>
                         <td>@game.Week</td>
-                        <td>@game.GameDate.ToShortDateString()</td>
                         <td @onclick="() => NavigateToTeamPage(game.HomeTeamId)">
                             <img src=@($"../Images/Logos/{game.HomeTeam}.svg") alt="@game.HomeTeam logo">
                         </td>

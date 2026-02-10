@@ -1,4 +1,4 @@
-﻿using NBALigaSimulation.Shared.Dtos.Playoffs;
+using NBALigaSimulation.Shared.Dtos.Playoffs;
 using NBALigaSimulation.Shared.Models.Utils;
 
 namespace NBALigaSimulation.Server.Services.PlayoffsService
@@ -13,6 +13,5 @@ namespace NBALigaSimulation.Server.Services.PlayoffsService
         Task<ServiceResponse<bool>> Generate3Round();
         Task<ServiceResponse<bool>> Generate4Round();
         Task<ServiceResponse<bool>> EndPlayoffs();
-
     }
 }

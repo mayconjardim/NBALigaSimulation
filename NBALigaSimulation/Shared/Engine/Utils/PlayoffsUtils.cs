@@ -1,4 +1,4 @@
-﻿using NBALigaSimulation.Shared.Models.Games;
+using NBALigaSimulation.Shared.Models.Games;
 using NBALigaSimulation.Shared.Models.SeasonPlayoffs;
 using NBALigaSimulation.Shared.Models.Seasons;
 using NBALigaSimulation.Shared.Models.Teams;
@@ -166,20 +166,35 @@ namespace NBALigaSimulation.Shared.Engine.Utils
                .Select(s => s.WinsTeamOne == 4 ? s.TeamOne : s.TeamTwo)
                .FirstOrDefault();
 
+            var winners = new[] { winnerSerie1, winnerSerie2, winnerSerie3, winnerSerie4, winnerSerie5, winnerSerie6, winnerSerie7, winnerSerie8 };
+            var missing = new List<int>();
+            for (int i = 0; i < winners.Length; i++)
+                if (winners[i] == null) missing.Add(i + 1);
+            if (missing.Count > 0)
+                throw new InvalidOperationException($"Não é possível gerar a 2ª rodada: as séries da 1ª rodada {string.Join(", ", missing)} ainda não estão concluídas (é preciso um time com 4 vitórias em cada uma). Simule os jogos da 1ª rodada dos playoffs antes.");
+
             List<Playoffs> playoffs = new List<Playoffs>();
 
             int teamOneId;
             int teamTwoId;
 
-            if (winnerSerie1.TeamRegularStats.Where(t => t.Season == season).LastOrDefault().ConfRank > winnerSerie2.TeamRegularStats.Where(t => t.Season == season).LastOrDefault().ConfRank)
+            var stat1 = winnerSerie1.TeamRegularStats?.Where(t => t.Season == season).LastOrDefault();
+            var stat2 = winnerSerie2.TeamRegularStats?.Where(t => t.Season == season).LastOrDefault();
+            bool useConfRank = stat1 != null && stat2 != null;
+            if (useConfRank && stat1.ConfRank > stat2.ConfRank)
             {
                 teamOneId = winnerSerie1.Id;
                 teamTwoId = winnerSerie2.Id;
             }
-            else
+            else if (useConfRank)
             {
                 teamOneId = winnerSerie2.Id;
                 teamTwoId = winnerSerie1.Id;
+            }
+            else
+            {
+                teamOneId = winnerSerie1.Id;
+                teamTwoId = winnerSerie2.Id;
             }
 
             var Series9 = new Playoffs
@@ -196,7 +211,9 @@ namespace NBALigaSimulation.Shared.Engine.Utils
             playoffs.Add(Series9);
 
 
-            if (winnerSerie3.TeamRegularStats.Where(t => t.Season == season).LastOrDefault().ConfRank > winnerSerie4.TeamRegularStats.Where(t => t.Season == season).LastOrDefault().ConfRank)
+            var stat3 = winnerSerie3.TeamRegularStats?.Where(t => t.Season == season).LastOrDefault();
+            var stat4 = winnerSerie4.TeamRegularStats?.Where(t => t.Season == season).LastOrDefault();
+            if (stat3 != null && stat4 != null && stat3.ConfRank > stat4.ConfRank)
             {
                 teamOneId = winnerSerie3.Id;
                 teamTwoId = winnerSerie4.Id;
@@ -221,7 +238,9 @@ namespace NBALigaSimulation.Shared.Engine.Utils
             playoffs.Add(Series10);
 
 
-            if (winnerSerie5.TeamRegularStats.Where(t => t.Season == season).LastOrDefault().ConfRank > winnerSerie6.TeamRegularStats.Where(t => t.Season == season).LastOrDefault().ConfRank)
+            var stat5 = winnerSerie5.TeamRegularStats?.Where(t => t.Season == season).LastOrDefault();
+            var stat6 = winnerSerie6.TeamRegularStats?.Where(t => t.Season == season).LastOrDefault();
+            if (stat5 != null && stat6 != null && stat5.ConfRank > stat6.ConfRank)
             {
                 teamOneId = winnerSerie5.Id;
                 teamTwoId = winnerSerie6.Id;
@@ -246,7 +265,9 @@ namespace NBALigaSimulation.Shared.Engine.Utils
             playoffs.Add(Series11);
 
 
-            if (winnerSerie7.TeamRegularStats.Where(t => t.Season == season).LastOrDefault().ConfRank > winnerSerie8.TeamRegularStats.Where(t => t.Season == season).LastOrDefault().ConfRank)
+            var stat7 = winnerSerie7.TeamRegularStats?.Where(t => t.Season == season).LastOrDefault();
+            var stat8 = winnerSerie8.TeamRegularStats?.Where(t => t.Season == season).LastOrDefault();
+            if (stat7 != null && stat8 != null && stat7.ConfRank > stat8.ConfRank)
             {
                 teamOneId = winnerSerie7.Id;
                 teamTwoId = winnerSerie8.Id;
@@ -297,12 +318,19 @@ namespace NBALigaSimulation.Shared.Engine.Utils
                .Select(s => s.WinsTeamOne == 4 ? s.TeamOne : s.TeamTwo)
                .FirstOrDefault();
 
+            if (winnerSerie9 == null || winnerSerie10 == null || winnerSerie11 == null || winnerSerie12 == null)
+                throw new InvalidOperationException("Não é possível gerar a 3ª rodada: todas as séries da 2ª rodada (semi-finais de conferência) precisam estar concluídas (um time com 4 vitórias). Simule os jogos da 2ª rodada dos playoffs antes.");
+
             List<Playoffs> playoffs = new List<Playoffs>();
 
             int teamOneId;
             int teamTwoId;
 
-            if (winnerSerie9.TeamRegularStats.Where(t => t.Season == season).LastOrDefault().ConfRank > winnerSerie10.TeamRegularStats.Where(t => t.Season == season).LastOrDefault().ConfRank)
+            var stat9 = winnerSerie9.TeamRegularStats?.Where(t => t.Season == season).LastOrDefault();
+            var stat10 = winnerSerie10.TeamRegularStats?.Where(t => t.Season == season).LastOrDefault();
+            if (stat9 == null || stat10 == null)
+                throw new InvalidOperationException("Dados de classificação (TeamRegularStats) dos times vencedores não encontrados.");
+            if (stat9.ConfRank > stat10.ConfRank)
             {
                 teamOneId = winnerSerie9.Id;
                 teamTwoId = winnerSerie10.Id;
@@ -327,7 +355,11 @@ namespace NBALigaSimulation.Shared.Engine.Utils
             playoffs.Add(Series13);
 
 
-            if (winnerSerie11.TeamRegularStats.Where(t => t.Season == season).LastOrDefault().ConfRank > winnerSerie12.TeamRegularStats.Where(t => t.Season == season).LastOrDefault().ConfRank)
+            var stat11 = winnerSerie11.TeamRegularStats?.Where(t => t.Season == season).LastOrDefault();
+            var stat12 = winnerSerie12.TeamRegularStats?.Where(t => t.Season == season).LastOrDefault();
+            if (stat11 == null || stat12 == null)
+                throw new InvalidOperationException("Dados de classificação (TeamRegularStats) dos times vencedores não encontrados.");
+            if (stat11.ConfRank > stat12.ConfRank)
             {
                 teamOneId = winnerSerie11.Id;
                 teamTwoId = winnerSerie12.Id;
@@ -367,13 +399,19 @@ namespace NBALigaSimulation.Shared.Engine.Utils
                .Select(s => s.WinsTeamOne == 4 ? s.TeamOne : s.TeamTwo)
                .FirstOrDefault();
 
+            if (winnerSerie13 == null || winnerSerie14 == null)
+                throw new InvalidOperationException("Não é possível gerar as Finais da NBA: as duas séries das Finais de Conferência (3ª rodada) precisam estar concluídas (um time com 4 vitórias). Simule os jogos da 3ª rodada dos playoffs antes.");
 
             List<Playoffs> playoffs = new List<Playoffs>();
 
             int teamOneId;
             int teamTwoId;
 
-            if (winnerSerie13.TeamRegularStats.Where(t => t.Season == season).LastOrDefault().ConfRank > winnerSerie14.TeamRegularStats.Where(t => t.Season == season).LastOrDefault().ConfRank)
+            var stat13 = winnerSerie13.TeamRegularStats?.Where(t => t.Season == season).LastOrDefault();
+            var stat14 = winnerSerie14.TeamRegularStats?.Where(t => t.Season == season).LastOrDefault();
+            if (stat13 == null || stat14 == null)
+                throw new InvalidOperationException("Dados de classificação (TeamRegularStats) dos times vencedores não encontrados.");
+            if (stat13.ConfRank > stat14.ConfRank)
             {
                 teamOneId = winnerSerie13.Id;
                 teamTwoId = winnerSerie14.Id;

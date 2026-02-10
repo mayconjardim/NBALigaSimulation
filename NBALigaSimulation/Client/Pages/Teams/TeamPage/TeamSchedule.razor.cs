@@ -17,7 +17,7 @@ public partial class TeamSchedule
 
     private List<GameWithRecord> _gamesWithRecord = new();
     
-    string[] headings = { "SEMANA", "DATA", "CASA", "VISITANTE", "V-D", "RESULTADO" };
+    string[] headings = { "SEMANA", "CASA", "VISITANTE", "V-D", "RESULTADO" };
     
     protected override async Task OnInitializedAsync()
     {
@@ -25,7 +25,10 @@ public partial class TeamSchedule
         
         if (result.Success && result.Data.Any())
         {
-            var orderedGames = result.Data.OrderBy(g => g.GameDate).ToList();
+            var orderedGames = result.Data
+                .OrderBy(g => int.TryParse(g.Week, out var w) ? w : 0)
+                .ThenBy(g => g.GameDate)
+                .ToList();
             CalculateRecords(orderedGames);
         }
     }

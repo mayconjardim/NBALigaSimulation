@@ -11,6 +11,7 @@ global using NBALigaSimulation.Client.Services.SeasonsService;
 global using NBALigaSimulation.Client.Services.LeagueService;
 global using NBALigaSimulation.Client.Services.TradesService;
 global using NBALigaSimulation.Client.Services.DraftService;
+global using NBALigaSimulation.Client.Services.PlayoffsService;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using NBALigaSimulation.Client;
@@ -35,6 +36,7 @@ builder.Services.AddScoped<ISeasonService, SeasonService>();
 builder.Services.AddScoped<ILeagueService, LeagueService>();
 builder.Services.AddScoped<ITradeService, TradeService>();
 builder.Services.AddScoped<IDraftService, DraftService>();
+builder.Services.AddScoped<IPlayoffsService, PlayoffsService>();
 
 builder.Services.AddChartJs(options =>
 {

@@ -51,21 +51,50 @@ namespace NBALigaSimulation.Server.Services.PlayoffsService
                 .OrderBy(s => s.Year)
                 .LastOrDefaultAsync();
 
+            if (season == null)
+            {
+                response.Success = false;
+                response.Message = "Temporada não encontrada.";
+                return response;
+            }
+
+            // Carrega séries com jogos e estatísticas (Type=1 é playoffs)
             var playoffs = await _playoffsRepository.Query()
                 .Where(p => p.Season == season.Year)
                 .Include(p => p.TeamOne)
                 .Include(p => p.TeamTwo)
+                .Include(p => p.PlayoffGames)
+                .ThenInclude(pg => pg.Game)
+                .ThenInclude(g => g.TeamGameStats)
                 .ToListAsync();
 
-            if (playoffs == null)
+            if (playoffs == null || playoffs.Count == 0)
             {
-                response.Success = false;
-                response.Message = $"Playoffs não econtrado!";
+                response.Success = true;
+                response.Data = new List<PlayoffsDto>();
+                return response;
             }
-            else
-            {
 
-                response.Data = _mapper.Map<List<PlayoffsDto>>(playoffs);
+            response.Data = _mapper.Map<List<PlayoffsDto>>(playoffs);
+
+            // Preenche WinsTeamOne/WinsTeamTwo e Complete a partir dos jogos já salvos (só para exibição)
+            foreach (var dto in response.Data)
+            {
+                var serie = playoffs.FirstOrDefault(p => p.Id == dto.Id);
+                if (serie?.PlayoffGames == null) continue;
+
+                int winsOne = 0, winsTwo = 0;
+                foreach (var pg in serie.PlayoffGames.Where(pg => pg.Game != null && pg.Game.Happened))
+                {
+                    var g = pg.Game;
+                    var ptsOne = g.TeamGameStats?.Where(s => s.TeamId == serie.TeamOneId).Sum(s => s.Pts) ?? 0;
+                    var ptsTwo = g.TeamGameStats?.Where(s => s.TeamId == serie.TeamTwoId).Sum(s => s.Pts) ?? 0;
+                    if (ptsOne > ptsTwo) winsOne++;
+                    else if (ptsTwo > ptsOne) winsTwo++;
+                }
+                dto.WinsTeamOne = winsOne;
+                dto.WinsTeamTwo = winsTwo;
+                dto.Complete = winsOne >= 4 || winsTwo >= 4;
             }
 
             return response;
@@ -119,6 +148,7 @@ namespace NBALigaSimulation.Server.Services.PlayoffsService
                 .Where(t => t.Conference == "West" && t.TeamRegularStats.Any(trs => trs.Season == season.Year))
                 .ToListAsync();
 
+            Console.WriteLine($"[GeneratePlayoffs] Temporada={season.Year}, Times Leste={teamsEast.Count}, Times Oeste={teamsWest.Count}");
 
             var playoffsExists = await _playoffsRepository.Query()
                 .Where(p => p.Season == season.Year)
@@ -128,16 +158,35 @@ namespace NBALigaSimulation.Server.Services.PlayoffsService
             {
                 response.Success = false;
                 response.Message = $"Já existe playoffs da temporada {season.Year}!";
+                Console.WriteLine($"[GeneratePlayoffs] ABORTADO: {response.Message}");
                 return response;
             }
 
             var playoffs = PlayoffsUtils.Generate1stRound(teamsEast, teamsWest, season.Year);
-            var games = PlayoffsUtils.GenerateRoundGames(playoffs, season);
+            Console.WriteLine($"[GeneratePlayoffs] Séries de 1ª rodada geradas: {playoffs.Count}");
             season.RegularCompleted = true;
 
-            await _playoffsGameRepository.AddRangeAsync(games);
+            // 1) Persistir Playoffs primeiro para obter Ids
             await _playoffsRepository.AddRangeAsync(playoffs);
             await _playoffsRepository.SaveChangesAsync();
+
+            // 2) Gerar jogos da rodada (cada PlayoffsGame tem um Game novo)
+            var playoffGames = PlayoffsUtils.GenerateRoundGames(playoffs, season);
+            Console.WriteLine($"[GeneratePlayoffs] Jogos de playoffs (PlayoffsGame) criados: {playoffGames.Count}");
+
+            // 3) Persistir os Games explicitamente e obter Ids (schedule dos playoffs)
+            var gamesToInsert = playoffGames.Select(pg => pg.Game).ToList();
+            foreach (var g in gamesToInsert)
+                g.SeasonId = season.Id;
+            await _gameRepository.AddRangeAsync(gamesToInsert);
+            await _gameRepository.SaveChangesAsync();
+            Console.WriteLine($"[GeneratePlayoffs] Jogos inseridos em Games: {gamesToInsert.Count}");
+
+            // 4) Persistir o vínculo série-jogo (PlayoffsGame)
+            await _playoffsGameRepository.AddRangeAsync(playoffGames);
+            await _playoffsGameRepository.SaveChangesAsync();
+
+            Console.WriteLine($"[GeneratePlayoffs] PlayoffsGame inseridos: {playoffGames.Count}");
 
             response.Success = true;
             return response;
@@ -156,22 +205,59 @@ namespace NBALigaSimulation.Server.Services.PlayoffsService
                 .Include(t => t.TeamTwo).ThenInclude(t => t.TeamRegularStats)
                 .ToListAsync();
 
+            Console.WriteLine($"[Generate2Round] Temporada={season.Year}, séries atuais={playoffs.Count}");
+
             if (playoffs.Any(p => p.SeriesId == 9))
             {
                 response.Success = false;
                 response.Message = "Já existe um 2º round gerado!";
+                Console.WriteLine($"[Generate2Round] ABORTADO: {response.Message}");
                 return response;
             }
 
-            var newPlayoffs = PlayoffsUtils.Generate2ndRound(playoffs, season.Year);
-            var games = PlayoffsUtils.GenerateRoundGames(newPlayoffs, season);
+            List<Playoffs> newPlayoffs;
+            try
+            {
+                newPlayoffs = PlayoffsUtils.Generate2ndRound(playoffs, season.Year);
+                Console.WriteLine($"[Generate2Round] Novas séries (SeriesId 9-12): {newPlayoffs.Count}");
+            }
+            catch (InvalidOperationException ex)
+            {
+                response.Success = false;
+                response.Message = ex.Message;
+                Console.WriteLine($"[Generate2Round] ERRO: {ex.Message}");
+                return response;
+            }
 
-            await _playoffsGameRepository.AddRangeAsync(games);
-            await _playoffsRepository.AddRangeAsync(newPlayoffs);
-            await _playoffsRepository.SaveChangesAsync();
+            try
+            {
+                await _playoffsRepository.AddRangeAsync(newPlayoffs);
+                await _playoffsRepository.SaveChangesAsync();
+                Console.WriteLine($"[Generate2Round] 4 séries (9-12) inseridas no banco. Season={season.Year}.");
+            }
+            catch (Exception ex)
+            {
+                response.Success = false;
+                response.Message = $"Erro ao salvar séries: {ex.Message}";
+                Console.WriteLine($"[Generate2Round] ERRO ao salvar: {ex}");
+                return response;
+            }
+
+            var playoffGames = PlayoffsUtils.GenerateRoundGames(newPlayoffs, season);
+            var gamesToInsert = playoffGames.Select(pg => pg.Game).ToList();
+            foreach (var g in gamesToInsert)
+                g.SeasonId = season.Id;
+            await _gameRepository.AddRangeAsync(gamesToInsert);
+            await _gameRepository.SaveChangesAsync();
+
+            Console.WriteLine($"[Generate2Round] Jogos inseridos em Games: {gamesToInsert.Count}, PlayoffsGame: {playoffGames.Count}");
+
+            await _playoffsGameRepository.AddRangeAsync(playoffGames);
+            await _playoffsGameRepository.SaveChangesAsync();
 
             response.Message = "2º round gerado sucesso!";
             response.Success = true;
+            Console.WriteLine($"[Generate2Round] SUCESSO completo.");
             return response;
         }
 
@@ -188,19 +274,43 @@ namespace NBALigaSimulation.Server.Services.PlayoffsService
                 .Include(t => t.TeamTwo).ThenInclude(t => t.TeamRegularStats)
                 .ToListAsync();
 
+            Console.WriteLine($"[Generate3Round] Temporada={season.Year}, séries atuais={playoffs.Count}");
+
             if (playoffs.Any(p => p.SeriesId == 13))
             {
                 response.Success = false;
                 response.Message = "Já existe um 3º round gerado!";
+                Console.WriteLine($"[Generate3Round] ABORTADO: {response.Message}");
                 return response;
             }
 
-            var newPlayoffs = PlayoffsUtils.Generate3ndRound(playoffs, season.Year);
-            var games = PlayoffsUtils.GenerateRoundGames(newPlayoffs, season);
+            List<Playoffs> newPlayoffs;
+            try
+            {
+                newPlayoffs = PlayoffsUtils.Generate3ndRound(playoffs, season.Year);
+                Console.WriteLine($"[Generate3Round] Novas séries (SeriesId 13-14): {newPlayoffs.Count}");
+            }
+            catch (InvalidOperationException ex)
+            {
+                response.Success = false;
+                response.Message = ex.Message;
+                return response;
+            }
 
-            await _playoffsGameRepository.AddRangeAsync(games);
             await _playoffsRepository.AddRangeAsync(newPlayoffs);
             await _playoffsRepository.SaveChangesAsync();
+
+            var playoffGames = PlayoffsUtils.GenerateRoundGames(newPlayoffs, season);
+            var gamesToInsert = playoffGames.Select(pg => pg.Game).ToList();
+            foreach (var g in gamesToInsert)
+                g.SeasonId = season.Id;
+            await _gameRepository.AddRangeAsync(gamesToInsert);
+            await _gameRepository.SaveChangesAsync();
+
+            await _playoffsGameRepository.AddRangeAsync(playoffGames);
+            await _playoffsGameRepository.SaveChangesAsync();
+
+            Console.WriteLine($"[Generate3Round] Jogos inseridos em Games: {gamesToInsert.Count}, PlayoffsGame: {playoffGames.Count}");
 
             response.Success = true;
             return response;
@@ -219,20 +329,41 @@ namespace NBALigaSimulation.Server.Services.PlayoffsService
                 .Include(t => t.TeamTwo).ThenInclude(t => t.TeamRegularStats)
                 .ToListAsync();
 
-
             if (playoffs.Any(p => p.SeriesId == 15))
             {
                 response.Success = false;
                 response.Message = "Já existe um 4º round gerado!";
+                Console.WriteLine($"[Generate4Round] ABORTADO: {response.Message}");
                 return response;
             }
 
-            var newPlayoffs = PlayoffsUtils.Generate4ndRound(playoffs, season.Year);
-            var games = PlayoffsUtils.GenerateRoundGames(newPlayoffs, season);
+            List<Playoffs> newPlayoffs;
+            try
+            {
+                newPlayoffs = PlayoffsUtils.Generate4ndRound(playoffs, season.Year);
+                Console.WriteLine($"[Generate4Round] Novas séries (SeriesId 15): {newPlayoffs.Count}");
+            }
+            catch (InvalidOperationException ex)
+            {
+                response.Success = false;
+                response.Message = ex.Message;
+                return response;
+            }
 
-            await _playoffsGameRepository.AddRangeAsync(games);
             await _playoffsRepository.AddRangeAsync(newPlayoffs);
             await _playoffsRepository.SaveChangesAsync();
+
+            var playoffGames = PlayoffsUtils.GenerateRoundGames(newPlayoffs, season);
+            var gamesToInsert = playoffGames.Select(pg => pg.Game).ToList();
+            foreach (var g in gamesToInsert)
+                g.SeasonId = season.Id;
+            await _gameRepository.AddRangeAsync(gamesToInsert);
+            await _gameRepository.SaveChangesAsync();
+
+            await _playoffsGameRepository.AddRangeAsync(playoffGames);
+            await _playoffsGameRepository.SaveChangesAsync();
+
+            Console.WriteLine($"[Generate4Round] Jogos inseridos em Games: {gamesToInsert.Count}, PlayoffsGame: {playoffGames.Count}");
 
             response.Success = true;
             return response;

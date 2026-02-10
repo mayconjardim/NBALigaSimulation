@@ -1,0 +1,76 @@
+@page "/playoffs"
+@inject IPlayoffsService PlayoffsService
+
+<PageTitle>Playoffs</PageTitle>
+
+<div class="playoffs-page container py-4">
+    <div class="playoffs-header mb-4">
+        <h1 class="h3 mb-1"><i class="bi bi-trophy me-2"></i>Playoffs</h1>
+        <p class="text-muted mb-0">Séries e resultados dos playoffs da temporada</p>
+    </div>
+
+    @if (_loading)
+    {
+        <div class="text-center py-5">
+            <div class="spinner-border text-primary" role="status"></div>
+            <p class="mt-2 text-muted">Carregando playoffs...</p>
+        </div>
+    }
+    else if (_playoffs == null || !_playoffs.Any())
+    {
+        <div class="alert alert-secondary">
+            <i class="bi bi-info-circle me-2"></i>
+            Nenhum playoff encontrado para a temporada atual. Gere os playoffs pelo painel administrativo.
+        </div>
+    }
+    else
+    {
+        <p class="text-muted small mb-3">Total: @_playoffs.Count série(s) — Gere as próximas rodadas no <a href="/admin">painel administrativo</a>.</p>
+        <div class="playoff-table">
+            <div class="playoff-table-content">
+                @foreach (var round in _roundsOrder)
+                {
+                    var seriesInRound = _seriesByRound.GetValueOrDefault(round.Key);
+                    var hasSeries = seriesInRound != null && seriesInRound.Any();
+
+                    <div class="playoff-table-tour">
+                        <div class="playoff-table-group">
+                            @if (hasSeries)
+                            {
+                                @foreach (var serie in seriesInRound.OrderBy(s => s.SeriesId))
+                                {
+                                    <div class="playoff-table-pair playoff-table-pair-style">
+                                        <div class="playoff-table-left-player">
+                                            <img src="@($"../Images/Logos/{serie.teamOneAbrv}.svg")" alt="@serie.teamOneAbrv" class="playoffs-team-logo me-1" />
+                                            <span class="fw-bold">@serie.teamOneName</span>
+                                            <span class="ms-1 text-muted">( @serie.WinsTeamOne )</span>
+                                        </div>
+                                        <div class="playoff-table-right-player">
+                                            <img src="@($"../Images/Logos/{serie.teamTwoAbrv}.svg")" alt="@serie.teamTwoAbrv" class="playoffs-team-logo me-1" />
+                                            <span class="fw-bold">@serie.teamTwoName</span>
+                                            <span class="ms-1 text-muted">( @serie.WinsTeamTwo )</span>
+                                        </div>
+                                    </div>
+                                }
+                            }
+                            else
+                            {
+                                <div class="playoff-table-pair playoff-table-pair-style bg-light">
+                                    <div class="playoff-table-left-player text-muted small">
+                                        Nenhuma série ainda.
+                                    </div>
+                                    <div class="playoff-table-right-player text-muted small">
+                                        Gere no painel admin (Gerar Playoffs – @round.Value).
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                        <div class="playoff-round-label">
+                            @round.Value
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    }
+</div>

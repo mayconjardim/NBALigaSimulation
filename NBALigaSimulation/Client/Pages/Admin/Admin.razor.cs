@@ -3,6 +3,7 @@ using Microsoft.JSInterop;
 using NBALigaSimulation.Client.Services.GameService;
 using NBALigaSimulation.Client.Services.SeasonsService;
 using NBALigaSimulation.Client.Services.DraftService;
+using NBALigaSimulation.Client.Services.PlayoffsService;
 using NBALigaSimulation.Shared.Dtos.Games;
 using NBALigaSimulation.Shared.Dtos.Seasons;
 using System.Linq;
@@ -297,5 +298,85 @@ public partial class Admin
                 await ShowMessage($"Erro ao gerar draft: {response.Message}", "error");
             }
         }, "GenerateDraft");
+    }
+
+    private async Task GeneratePlayoffsFirstRound()
+    {
+        await ExecuteAction(async () =>
+        {
+            var response = await PlayoffsService.GenerateFirstRound();
+            if (response.Success)
+            {
+                await ShowMessage("Playoffs - 1ª rodada gerada com sucesso!", "success");
+            }
+            else
+            {
+                await ShowMessage($"Erro ao gerar 1ª rodada dos playoffs: {response.Message}", "error");
+            }
+        }, "GeneratePlayoffsFirstRound");
+    }
+
+    private async Task GeneratePlayoffsSecondRound()
+    {
+        await ExecuteAction(async () =>
+        {
+            var response = await PlayoffsService.GenerateSecondRound();
+            if (response.Success)
+            {
+                await ShowMessage("Playoffs - Semis de Conferência geradas com sucesso!", "success");
+            }
+            else
+            {
+                await ShowMessage($"Erro ao gerar semis de conferência: {response.Message}", "error");
+            }
+        }, "GeneratePlayoffsSecondRound");
+    }
+
+    private async Task GeneratePlayoffsThirdRound()
+    {
+        await ExecuteAction(async () =>
+        {
+            var response = await PlayoffsService.GenerateThirdRound();
+            if (response.Success)
+            {
+                await ShowMessage("Playoffs - Finais de Conferência geradas com sucesso!", "success");
+            }
+            else
+            {
+                await ShowMessage($"Erro ao gerar finais de conferência: {response.Message}", "error");
+            }
+        }, "GeneratePlayoffsThirdRound");
+    }
+
+    private async Task GeneratePlayoffsFourthRound()
+    {
+        await ExecuteAction(async () =>
+        {
+            var response = await PlayoffsService.GenerateFourthRound();
+            if (response.Success)
+            {
+                await ShowMessage("Playoffs - Finais da NBA geradas com sucesso!", "success");
+            }
+            else
+            {
+                await ShowMessage($"Erro ao gerar finais da NBA: {response.Message}", "error");
+            }
+        }, "GeneratePlayoffsFourthRound");
+    }
+
+    private async Task EndPlayoffs()
+    {
+        await ExecuteAction(async () =>
+        {
+            var response = await PlayoffsService.EndPlayoffs();
+            if (response.Success)
+            {
+                await ShowMessage("Playoffs finalizados e temporada marcada como concluída!", "success");
+            }
+            else
+            {
+                await ShowMessage($"Erro ao finalizar playoffs: {response.Message}", "error");
+            }
+        }, "EndPlayoffs");
     }
 }

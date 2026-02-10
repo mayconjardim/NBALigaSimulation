@@ -6,26 +6,26 @@
     <div class="schedule-container">
 
         <div class="date-navigator">
-            <button @onclick="() => ChangeDateView(-1)" class="nav-arrow" aria-label="Semana anterior">
+            <button @onclick="() => ChangeRoundView(-1)" class="nav-arrow" aria-label="Rodada anterior">
                 <i class="bi bi-chevron-left"></i>
             </button>
             <div class="date-strip">
-                @foreach (var date in GetDisplayedGameDates())
+                @foreach (var round in GetDisplayedRounds())
                 {
-                    <div @onclick="() => SelectDate(date)" class="date-item @(date == selectedDate ? "active" : "")" role="button">
-                        <span class="day-of-week">@date.ToString("ddd", GetPortugueseCulture())</span>
-                        <span class="day-of-month">@date.ToString("dd MMM", GetPortugueseCulture())</span>
+                    <div @onclick="() => SelectRound(round)" class="date-item @(round == selectedRound ? "active" : "")" role="button">
+                        <span class="day-of-week">Rodada</span>
+                        <span class="day-of-month">@round</span>
                     </div>
                 }
             </div>
-            <button @onclick="() => ChangeDateView(1)" class="nav-arrow" aria-label="Próxima semana">
+            <button @onclick="() => ChangeRoundView(1)" class="nav-arrow" aria-label="Próxima rodada">
                 <i class="bi bi-chevron-right"></i>
             </button>
         </div>
 
         <div class="games-for-day">
-            <h2 class="games-date-header">@selectedDate.ToString("dddd, dd 'de' MMMM 'de' yyyy", GetPortugueseCulture())</h2>
-            @if (gamesByDate.ContainsKey(selectedDate))
+            <h2 class="games-date-header">Rodada @selectedRound</h2>
+            @if (!string.IsNullOrEmpty(selectedRound) && gamesByRound.ContainsKey(selectedRound))
             {
                 <table class="games-table">
                     <thead>
@@ -35,7 +35,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach (var game in gamesByDate[selectedDate])
+                        @foreach (var game in gamesByRound[selectedRound])
                         {
                             <tr>
                                 <td class="matchup-cell">
@@ -68,7 +68,7 @@
             }
             else
             {
-                <p class="no-games-text">Não há jogos agendados para esta data.</p>
+                <p class="no-games-text">Não há jogos agendados para esta rodada.</p>
             }
         </div>
     </div>
