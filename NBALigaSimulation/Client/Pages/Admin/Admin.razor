@@ -1,9 +1,11 @@
 @page "/admin"
 @using NBALigaSimulation.Client.Services.SeasonsService
 @using NBALigaSimulation.Client.Services.GameService
+@using NBALigaSimulation.Client.Services.DraftService
 @using Blazored.LocalStorage
 @inject ISeasonService SeasonService
 @inject IGameService GameService
+@inject IDraftService DraftService
 @inject ILocalStorageService LocalStorage
 @inject IJSRuntime JSRuntime
 @inject NavigationManager NavigationManager
@@ -134,6 +136,44 @@
                             <td>
                                 <button class="btn btn-danger btn-sm w-100" @onclick="SimPlayoffRound" disabled="@_isLoading">
                                     @if (_isLoading && _loadingAction == "SimPlayoffRound")
+                                    {
+                                        <span class="spinner-border spinner-border-sm me-2"></span>
+                                    }
+                                    Executar
+                                </button>
+                            </td>
+                        </tr>
+                        
+                        <!-- 6. Gerar Loteria do Draft -->
+                        <tr>
+                            <td><strong>6</strong></td>
+                            <td>
+                                <i class="bi bi-shuffle text-secondary me-2"></i>
+                                <strong>Gerar Loteria do Draft</strong>
+                            </td>
+                            <td>Gera a loteria do draft para definir a ordem das primeiras escolhas</td>
+                            <td>
+                                <button class="btn btn-outline-secondary btn-sm w-100" @onclick="GenerateDraftLottery" disabled="@_isLoading">
+                                    @if (_isLoading && _loadingAction == "GenerateDraftLottery")
+                                    {
+                                        <span class="spinner-border spinner-border-sm me-2"></span>
+                                    }
+                                    Executar
+                                </button>
+                            </td>
+                        </tr>
+
+                        <!-- 7. Gerar Draft -->
+                        <tr>
+                            <td><strong>7</strong></td>
+                            <td>
+                                <i class="bi bi-list-ol text-primary me-2"></i>
+                                <strong>Gerar Draft</strong>
+                            </td>
+                            <td>Gera a ordem completa do draft baseada na loteria e nos picks</td>
+                            <td>
+                                <button class="btn btn-outline-primary btn-sm w-100" @onclick="GenerateDraft" disabled="@_isLoading">
+                                    @if (_isLoading && _loadingAction == "GenerateDraft")
                                     {
                                         <span class="spinner-border spinner-border-sm me-2"></span>
                                     }

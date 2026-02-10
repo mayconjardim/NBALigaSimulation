@@ -96,6 +96,14 @@ namespace NBALigaSimulation.Server.Services.DraftService
                 .OrderBy(s => s.Year)
                 .LastOrDefaultAsync();
 
+            // Só permite gerar loteria se os playoffs da temporada atual já acabaram
+            if (season == null || !season.IsCompleted)
+            {
+                response.Success = false;
+                response.Message = "Não é possível gerar a loteria. Os playoffs da temporada atual ainda não foram finalizados.";
+                return response;
+            }
+
             var year = season.Year - 1;
 
             var lottery = await _draftLotteryRepository.Query()
@@ -140,6 +148,11 @@ namespace NBALigaSimulation.Server.Services.DraftService
 
             await _draftLotteryRepository.AddAsync(newLottery);
             await _draftLotteryRepository.SaveChangesAsync();
+
+            // Marca flag na temporada
+            season.LotteryCompleted = true;
+            await _seasonRepository.SaveChangesAsync();
+
             response.Message = "Loteria criada com sucesso!";
             response.Success = true;
             return response;
@@ -153,6 +166,14 @@ namespace NBALigaSimulation.Server.Services.DraftService
                 .OrderBy(s => s.Year)
                 .LastOrDefaultAsync();
             var year = season.Year - 1;
+
+            // Só permite gerar o draft se os playoffs já acabaram
+            if (season == null || !season.IsCompleted)
+            {
+                response.Success = false;
+                response.Message = "Não é possível criar o draft. Os playoffs da temporada atual ainda não foram finalizados.";
+                return response;
+            }
 
             var lottery = await _draftLotteryRepository.Query()
                .Where(l => l.Season == year)
@@ -196,6 +217,10 @@ namespace NBALigaSimulation.Server.Services.DraftService
             await _draftRepository.AddRangeAsync(newDraft);
 
             await _draftRepository.SaveChangesAsync();
+
+            season.DraftCompleted = true;
+            await _seasonRepository.SaveChangesAsync();
+
             response.Message = "Draft criado com sucesso!";
             response.Success = true;
             return response;

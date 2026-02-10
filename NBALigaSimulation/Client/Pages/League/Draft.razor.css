@@ -1,0 +1,25 @@
+.draft-page h1 {
+    font-weight: 600;
+}
+
+.lottery-slot {
+    background-color: #f8fafc;
+    border-radius: 6px;
+    padding: 0.5rem 0.75rem;
+    text-align: center;
+    border: 1px solid rgba(15, 23, 42, 0.08);
+}
+
+.lottery-slot .slot-label {
+    display: block;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    color: #6b7280;
+    margin-bottom: 0.15rem;
+}
+
+.lottery-slot .slot-team {
+    font-weight: 600;
+    color: #111827;
+}
+

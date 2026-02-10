@@ -1,0 +1,138 @@
+@page "/draft"
+
+<PageTitle>Draft</PageTitle>
+
+<div class="draft-page container py-4">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <div>
+            <h1 class="h3 mb-1"><i class="bi bi-shield-check me-2"></i>Draft</h1>
+            <p class="text-muted mb-0">Loteria do draft, ordem das escolhas e seleções</p>
+        </div>
+
+        <div class="btn-group">
+            <button class="btn btn-outline-secondary btn-sm" @onclick="OnGenerateLottery" disabled="@_isLoading">
+                @if (_isLoading && _loadingAction == "lottery")
+                {
+                    <span class="spinner-border spinner-border-sm me-1"></span>
+                }
+                <i class="bi bi-shuffle me-1"></i>Loteria
+            </button>
+            <button class="btn btn-outline-primary btn-sm" @onclick="OnGenerateDraft" disabled="@_isLoading">
+                @if (_isLoading && _loadingAction == "draft")
+                {
+                    <span class="spinner-border spinner-border-sm me-1"></span>
+                }
+                <i class="bi bi-list-ol me-1"></i>Gerar Draft
+            </button>
+        </div>
+    </div>
+
+    @if (!string.IsNullOrEmpty(_message))
+    {
+        <div class="alert @( _isError ? "alert-danger" : "alert-success") py-2">
+            @_message
+        </div>
+    }
+
+    @if (_loadingInitial)
+    {
+        <div class="text-center py-5">
+            <div class="spinner-border text-primary" role="status"></div>
+        </div>
+    }
+    else
+    {
+        @if (_lottery != null)
+        {
+            <div class="card mb-4">
+                <div class="card-header">
+                    <strong>Loteria - Temporada @_lottery.Season</strong>
+                </div>
+                <div class="card-body">
+                    <div class="row g-3">
+                        <div class="col-6 col-md-4 col-lg-2">
+                            <div class="lottery-slot">
+                                <span class="slot-label">1º</span>
+                                <span class="slot-team">@_lottery.FirstTeam</span>
+                            </div>
+                        </div>
+                        <div class="col-6 col-md-4 col-lg-2">
+                            <div class="lottery-slot">
+                                <span class="slot-label">2º</span>
+                                <span class="slot-team">@_lottery.SecondTeam</span>
+                            </div>
+                        </div>
+                        <div class="col-6 col-md-4 col-lg-2">
+                            <div class="lottery-slot">
+                                <span class="slot-label">3º</span>
+                                <span class="slot-team">@_lottery.ThirdTeam</span>
+                            </div>
+                        </div>
+                        <div class="col-6 col-md-4 col-lg-2">
+                            <div class="lottery-slot">
+                                <span class="slot-label">4º</span>
+                                <span class="slot-team">@_lottery.FourthTeam</span>
+                            </div>
+                        </div>
+                        <div class="col-6 col-md-4 col-lg-2">
+                            <div class="lottery-slot">
+                                <span class="slot-label">5º</span>
+                                <span class="slot-team">@_lottery.FifthTeam</span>
+                            </div>
+                        </div>
+                        <div class="col-6 col-md-4 col-lg-2">
+                            <div class="lottery-slot">
+                                <span class="slot-label">6º</span>
+                                <span class="slot-team">@_lottery.SixthTeam</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+
+        @if (_draft != null && _draft.Any())
+        {
+            <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <strong>Draft - Temporada @_draft.First().Season</strong>
+                    <small class="text-muted">Round @string.Join(", ", _draft.Select(d => d.Round).Distinct().OrderBy(r => r))</small>
+                </div>
+                <div class="card-body p-0">
+                    <div class="table-responsive">
+                        <table class="table table-hover table-sm mb-0">
+                            <thead class="table-light">
+                                <tr>
+                                    <th style="width:70px;">Pick</th>
+                                    <th style="width:70px;">Round</th>
+                                    <th>Time</th>
+                                    <th>Original</th>
+                                    <th>Jogador</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var pick in _draft.OrderBy(d => d.Pick))
+                                {
+                                    <tr>
+                                        <td>@pick.Pick</td>
+                                        <td>@pick.Round</td>
+                                        <td>@pick.TeamAbrv</td>
+                                        <td>@pick.Original</td>
+                                        <td>@(string.IsNullOrEmpty(pick.PlayerName) ? "-" : pick.PlayerName)</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        }
+        else
+        {
+            <div class="alert alert-secondary mt-3">
+                Nenhum draft encontrado para a temporada atual. Gere a loteria e o draft.
+            </div>
+        }
+    }
+</div>
+

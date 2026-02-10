@@ -2,6 +2,7 @@ using Blazored.LocalStorage;
 using Microsoft.JSInterop;
 using NBALigaSimulation.Client.Services.GameService;
 using NBALigaSimulation.Client.Services.SeasonsService;
+using NBALigaSimulation.Client.Services.DraftService;
 using NBALigaSimulation.Shared.Dtos.Games;
 using NBALigaSimulation.Shared.Dtos.Seasons;
 using System.Linq;
@@ -264,5 +265,37 @@ public partial class Admin
                 await ShowMessage($"Erro ao gerar Training Camp: {response.Message}", "error");
             }
         }, "GenerateTrainingCamp");
+    }
+
+    private async Task GenerateDraftLottery()
+    {
+        await ExecuteAction(async () =>
+        {
+            var response = await DraftService.GenerateLottery();
+            if (response.Success)
+            {
+                await ShowMessage($"Loteria do draft gerada com sucesso! {response.Message}", "success");
+            }
+            else
+            {
+                await ShowMessage($"Erro ao gerar loteria do draft: {response.Message}", "error");
+            }
+        }, "GenerateDraftLottery");
+    }
+
+    private async Task GenerateDraft()
+    {
+        await ExecuteAction(async () =>
+        {
+            var response = await DraftService.GenerateDraft();
+            if (response.Success)
+            {
+                await ShowMessage($"Draft gerado com sucesso! {response.Message}", "success");
+            }
+            else
+            {
+                await ShowMessage($"Erro ao gerar draft: {response.Message}", "error");
+            }
+        }, "GenerateDraft");
     }
 }
