@@ -1,10 +1,12 @@
-﻿using AutoMapper;
+using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using NBALigaSimulation.Client.Pages.Players.PlayerPage;
 using NBALigaSimulation.Shared.Dtos.Players;
 using NBALigaSimulation.Shared.Engine.Utils;
 using NBALigaSimulation.Shared.Models.Players;
 using NBALigaSimulation.Shared.Models.Seasons;
 using NBALigaSimulation.Shared.Models.Utils;
+using NBALigaSimulation.Shared.Models.Teams;
 using Newtonsoft.Json.Linq;
 using Player = NBALigaSimulation.Shared.Models.Players.Player;
 
@@ -12,12 +14,20 @@ namespace NBALigaSimulation.Server.Services.PlayersService
 {
     public class PlayerService : IPlayerService
     {
-        private readonly DataContext _context;
+        private readonly IGenericRepository<Player> _playerRepository;
+        private readonly IGenericRepository<Team> _teamRepository;
+        private readonly ISeasonRepository _seasonRepository;
         private readonly IMapper _mapper;
 
-        public PlayerService(DataContext context, IMapper mapper)
+        public PlayerService(
+            IGenericRepository<Player> playerRepository,
+            IGenericRepository<Team> teamRepository,
+            ISeasonRepository seasonRepository,
+            IMapper mapper)
         {
-            _context = context;
+            _playerRepository = playerRepository;
+            _teamRepository = teamRepository;
+            _seasonRepository = seasonRepository;
             _mapper = mapper;
         }
         
@@ -27,7 +37,7 @@ namespace NBALigaSimulation.Server.Services.PlayersService
 
             try
             {
-                var player = await _context.Players
+                var player = await _playerRepository.Query()
                     .Where(p => p.Id == playerId)
                     .Include(p => p.Team)
                     .Include(p => p.Ratings)
@@ -64,9 +74,8 @@ namespace NBALigaSimulation.Server.Services.PlayersService
 
             Player player = _mapper.Map<Player>(request);
 
-            _context.Add(player);
-
-            await _context.SaveChangesAsync();
+            await _playerRepository.AddAsync(player);
+            await _playerRepository.SaveChangesAsync();
 
             response.Success = true;
             response.Data = _mapper.Map<PlayerCompleteDto>(player);
@@ -92,8 +101,7 @@ namespace NBALigaSimulation.Server.Services.PlayersService
         // Mapeamento dos DTOs para entidades
         foreach (var playerDto in playersDto)
         {
-
-            if (_context.Teams.Any(t => t.Id == playerDto.TeamId))
+            if (await _teamRepository.Query().AnyAsync(t => t.Id == playerDto.TeamId))
             {
                 Player player = _mapper.Map<Player>(playerDto);
                 players.Add(player);
@@ -101,8 +109,8 @@ namespace NBALigaSimulation.Server.Services.PlayersService
         }
 
         // Adiciona todos os jogadores de uma vez
-        _context.AddRange(players);
-        await _context.SaveChangesAsync(); // Salva as mudanças no banco
+        await _playerRepository.AddRangeAsync(players);
+        await _playerRepository.SaveChangesAsync(); // Salva as mudanças no banco
 
         response.Data = true;
         response.Success = true;
@@ -123,7 +131,7 @@ namespace NBALigaSimulation.Server.Services.PlayersService
         
         public async Task<ServiceResponse<List<PlayerSimpleDto>>> GetAllSimplePlayers()
         {
-            var players = await _context.Players.ToListAsync();
+            var players = await _playerRepository.GetAllAsync();
             var response = new ServiceResponse<List<PlayerSimpleDto>>
             {
                 Data = _mapper.Map<List<PlayerSimpleDto>>(players)
@@ -140,7 +148,7 @@ namespace NBALigaSimulation.Server.Services.PlayersService
 		    try 
             {
                 
-                IQueryable<Player> query = _context.Players
+                IQueryable<Player> query = _playerRepository.Query()
                     .Where(p => p.TeamId == 21)
                     .Include(p => p.Ratings);
 
@@ -150,7 +158,7 @@ namespace NBALigaSimulation.Server.Services.PlayersService
                 {
                     if (position == "ALL")
                     {
-                        players = query.ToList(); 
+                        players = query.ToList();
                     }
                     else
                     {
@@ -220,7 +228,8 @@ namespace NBALigaSimulation.Server.Services.PlayersService
 
         public async Task<ServiceResponse<List<PlayerCompleteDto>>> GetAllDraftPlayers()
         {
-            var players = await _context.Players.Where(t => t.TeamId == 22)
+            var players = await _playerRepository.Query()
+                .Where(t => t.TeamId == 22)
                 .Include(p => p.Ratings)
                 .ToListAsync();
             var response = new ServiceResponse<List<PlayerCompleteDto>>
@@ -241,7 +250,7 @@ namespace NBALigaSimulation.Server.Services.PlayersService
                 {
                     var player = updatedPlayerList[i];
 
-                    Player playerDb = await _context.Players.FindAsync(player.Id);
+                    Player playerDb = await _playerRepository.GetByIdAsync(player.Id);
 
                     if (playerDb == null)
                     {
@@ -253,7 +262,7 @@ namespace NBALigaSimulation.Server.Services.PlayersService
                     playerDb.RosterOrder = i;
                 }
 
-                await _context.SaveChangesAsync();
+                await _playerRepository.SaveChangesAsync();
 
                 response.Success = true;
                 response.Message = "Roster order updated successfully.";
@@ -271,7 +280,9 @@ namespace NBALigaSimulation.Server.Services.PlayersService
         {
             var response = new ServiceResponse<bool>();
 
-            var player = await _context.Players.Include(t => t.Team).FirstOrDefaultAsync(p => p.Id == playerId);
+            var player = await _playerRepository.Query()
+                .Include(t => t.Team)
+                .FirstOrDefaultAsync(p => p.Id == playerId);
 
             if (player == null)
             {
@@ -284,7 +295,7 @@ namespace NBALigaSimulation.Server.Services.PlayersService
                 player.PtModifier = newPtModifier;
             }
 
-            await _context.SaveChangesAsync();
+            await _playerRepository.SaveChangesAsync();
             response.Success = true;
             response.Message = "PtModifier updated successfully.";
 
@@ -295,9 +306,14 @@ namespace NBALigaSimulation.Server.Services.PlayersService
         {
             var response = new ServiceResponse<bool>();
 
-            List<Player> players = await _context.Players.OrderBy(p => p.Id).Include(p => p.Ratings).ToListAsync();
+            List<Player> players = await _playerRepository.Query()
+                .OrderBy(p => p.Id)
+                .Include(p => p.Ratings)
+                .ToListAsync();
 
-            Season season = await _context.Seasons.OrderBy(s => s.Id).LastOrDefaultAsync();
+            Season season = await _seasonRepository.Query()
+                .OrderBy(s => s.Id)
+                .LastOrDefaultAsync();
 
             foreach (Player player in players)
             {
@@ -305,7 +321,7 @@ namespace NBALigaSimulation.Server.Services.PlayersService
                 player.Contract = contract;
             }
 
-            await _context.SaveChangesAsync();
+            await _playerRepository.SaveChangesAsync();
             response.Success = true;
             response.Message = "Contracts generated successfully.";
 
@@ -314,7 +330,7 @@ namespace NBALigaSimulation.Server.Services.PlayersService
 
         public async Task<ServiceResponse<PlayerCompleteDto>> EditPlayer(CreatePlayerDto playerDto)
         {
-            var player = await _context.Players
+            var player = await _playerRepository.Query()
                 .Include(p => p.Ratings) 
                 .Include(p => p.Born)    
                 .FirstOrDefaultAsync(p => p.Id == playerDto.Id);
@@ -332,7 +348,7 @@ namespace NBALigaSimulation.Server.Services.PlayersService
 
             try
             {
-                await _context.SaveChangesAsync();
+                await _playerRepository.SaveChangesAsync();
 
                 var updatedPlayer = _mapper.Map<PlayerCompleteDto>(player);
                 return new ServiceResponse<PlayerCompleteDto>
@@ -364,7 +380,9 @@ namespace NBALigaSimulation.Server.Services.PlayersService
                 return response;  
             }
             
-            var players = await _context.Players.Where(p => EF.Functions.Like(p.Name, $"%{searchText}%")).ToListAsync();
+            var players = await _playerRepository.Query()
+                .Where(p => EF.Functions.Like(p.Name, $"%{searchText}%"))
+                .ToListAsync();
             response.Data = _mapper.Map<List<PlayerSimpleDto>>(players);
             return response;  
            

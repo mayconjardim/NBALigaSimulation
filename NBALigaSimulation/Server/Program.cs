@@ -1,4 +1,4 @@
-﻿global using NBALigaSimulation.Shared.Models;
+global using NBALigaSimulation.Shared.Models;
 global using NBALigaSimulation.Shared.Dtos;
 global using NBALigaSimulation.Shared.Engine;
 global using NBALigaSimulation.Server.Data;
@@ -11,6 +11,8 @@ global using NBALigaSimulation.Server.Services.TradeService;
 global using NBALigaSimulation.Server.Services.FAService;
 global using NBALigaSimulation.Server.Services.StatsService;
 global using NBALigaSimulation.Server.Services.DraftService;
+global using NBALigaSimulation.Server.Repositories.Interfaces;
+global using NBALigaSimulation.Server.Repositories.Implementations;
 global using NBALigaSimulation.Server.Services.AuthService;
 using NBALigaSimulation.Server.Services.NewsService;
 using Microsoft.AspNetCore.Hosting.StaticWebAssets;
@@ -64,6 +66,9 @@ builder.Services.AddScoped<IPlayoffsService, PlayoffsService>();
 builder.Services.AddScoped<IDraftService, DraftService>();
 builder.Services.AddScoped<INewsService, NewsService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
+
+builder.Services.AddScoped<ISeasonRepository, SeasonRepository>();
+builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>

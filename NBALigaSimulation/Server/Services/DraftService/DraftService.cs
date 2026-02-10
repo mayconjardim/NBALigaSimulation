@@ -1,8 +1,11 @@
-﻿using AutoMapper;
+using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using NBALigaSimulation.Shared.Engine.Utils;
 using NBALigaSimulation.Shared.Dtos.Drafts;
 using NBALigaSimulation.Shared.Models.Drafts;
 using NBALigaSimulation.Shared.Models.Players;
+using NBALigaSimulation.Shared.Models.Seasons;
+using NBALigaSimulation.Shared.Models.Teams;
 using NBALigaSimulation.Shared.Models.Utils;
 
 namespace NBALigaSimulation.Server.Services.DraftService
@@ -10,19 +13,41 @@ namespace NBALigaSimulation.Server.Services.DraftService
     public class DraftService : IDraftService
     {
 
-        private readonly DataContext _context;
+        private readonly IGenericRepository<DraftLottery> _draftLotteryRepository;
+        private readonly IGenericRepository<Draft> _draftRepository;
+        private readonly IGenericRepository<Season> _seasonRepository;
+        private readonly IGenericRepository<TeamRegularStats> _teamRegularStatsRepository;
+        private readonly IGenericRepository<Team> _teamRepository;
+        private readonly IGenericRepository<TeamDraftPicks> _draftPickRepository;
+        private readonly IGenericRepository<Player> _playerRepository;
         private readonly IMapper _mapper;
 
-        public DraftService(DataContext context, IMapper mapper)
+        public DraftService(
+            IGenericRepository<DraftLottery> draftLotteryRepository,
+            IGenericRepository<Draft> draftRepository,
+            IGenericRepository<Season> seasonRepository,
+            IGenericRepository<TeamRegularStats> teamRegularStatsRepository,
+            IGenericRepository<Team> teamRepository,
+            IGenericRepository<TeamDraftPicks> draftPickRepository,
+            IGenericRepository<Player> playerRepository,
+            IMapper mapper)
         {
-            _context = context;
+            _draftLotteryRepository = draftLotteryRepository;
+            _draftRepository = draftRepository;
+            _seasonRepository = seasonRepository;
+            _teamRegularStatsRepository = teamRegularStatsRepository;
+            _teamRepository = teamRepository;
+            _draftPickRepository = draftPickRepository;
+            _playerRepository = playerRepository;
             _mapper = mapper;
         }
 
         public async Task<ServiceResponse<DraftLotteryDto>> GetLastLottery()
         {
             var response = new ServiceResponse<DraftLotteryDto>();
-            var lottery = await _context.DraftLotteries.OrderBy(s => s.Season).LastOrDefaultAsync();
+            var lottery = await _draftLotteryRepository.Query()
+                .OrderBy(s => s.Season)
+                .LastOrDefaultAsync();
 
             if (lottery == null)
             {
@@ -41,8 +66,15 @@ namespace NBALigaSimulation.Server.Services.DraftService
         public async Task<ServiceResponse<List<DraftDto>>> GetLastDraft()
         {
             var response = new ServiceResponse<List<DraftDto>>();
-            var season = await _context.Seasons.OrderBy(s => s.Year).LastOrDefaultAsync();
-            var draft = await _context.Drafts.OrderBy(s => s.Pick).Where(d => d.Season == season.Year).Include(d => d.Team).Include(d => d.Player).ToListAsync();
+            var season = await _seasonRepository.Query()
+                .OrderBy(s => s.Year)
+                .LastOrDefaultAsync();
+            var draft = await _draftRepository.Query()
+                .OrderBy(s => s.Pick)
+                .Where(d => d.Season == season.Year)
+                .Include(d => d.Team)
+                .Include(d => d.Player)
+                .ToListAsync();
 
             if (draft == null)
             {
@@ -60,11 +92,13 @@ namespace NBALigaSimulation.Server.Services.DraftService
         public async Task<ServiceResponse<bool>> GenerateLottery()
         {
             var response = new ServiceResponse<bool>();
-            var season = await _context.Seasons.OrderBy(s => s.Year).LastOrDefaultAsync();
+            var season = await _seasonRepository.Query()
+                .OrderBy(s => s.Year)
+                .LastOrDefaultAsync();
 
             var year = season.Year - 1;
 
-            var lottery = await _context.DraftLotteries
+            var lottery = await _draftLotteryRepository.Query()
                 .Where(l => l.Season == year)
                 .OrderByDescending(l => l.Id)
                 .FirstOrDefaultAsync();
@@ -76,7 +110,7 @@ namespace NBALigaSimulation.Server.Services.DraftService
                 return response;
             }
 
-            var teams = await _context.TeamRegularStats
+            var teams = await _teamRegularStatsRepository.Query()
                 .Where(t => t.Season == year)
                 .Include(t => t.Team)
                 .ToListAsync();
@@ -104,8 +138,8 @@ namespace NBALigaSimulation.Server.Services.DraftService
                 SixthTeamId = order[5].TeamId,
             };
 
-            _context.Add(newLottery);
-            await _context.SaveChangesAsync();
+            await _draftLotteryRepository.AddAsync(newLottery);
+            await _draftLotteryRepository.SaveChangesAsync();
             response.Message = "Loteria criada com sucesso!";
             response.Success = true;
             return response;
@@ -115,10 +149,12 @@ namespace NBALigaSimulation.Server.Services.DraftService
         {
 
             var response = new ServiceResponse<bool>();
-            var season = await _context.Seasons.OrderBy(s => s.Year).LastOrDefaultAsync();
+            var season = await _seasonRepository.Query()
+                .OrderBy(s => s.Year)
+                .LastOrDefaultAsync();
             var year = season.Year - 1;
 
-            var lottery = await _context.DraftLotteries
+            var lottery = await _draftLotteryRepository.Query()
                .Where(l => l.Season == year)
                .OrderByDescending(l => l.Id)
                .FirstOrDefaultAsync();
@@ -130,7 +166,7 @@ namespace NBALigaSimulation.Server.Services.DraftService
                 return response;
             }
 
-            var newDraft = await _context.Drafts
+            var newDraft = await _draftRepository.Query()
             .Where(l => l.Season == season.Year)
             .OrderByDescending(l => l.Id).ToListAsync();
 
@@ -141,19 +177,25 @@ namespace NBALigaSimulation.Server.Services.DraftService
                 return response;
             }
 
-            var teams = await _context.Teams
+            var teams = await _teamRepository.Query()
                 .Where(t => t.IsHuman == true)
                 .ToListAsync();
 
-            var regularStats = await _context.TeamRegularStats.Where(s => s.Season == season.Year).Include(t => t.Team).ToListAsync();
+            var regularStats = await _teamRegularStatsRepository.Query()
+                .Where(s => s.Season == season.Year)
+                .Include(t => t.Team)
+                .ToListAsync();
 
-            var picks = await _context.TeamDraftPicks.Where(s => s.Year == season.Year).Include(t => t.Team).ToListAsync();
+            var picks = await _draftPickRepository.Query()
+                .Where(s => s.Year == season.Year)
+                .Include(t => t.Team)
+                .ToListAsync();
 
             newDraft = DraftUtils.GenerateDraft(lottery, season.Year, regularStats, picks, teams);
 
-            _context.AddRange(newDraft);
+            await _draftRepository.AddRangeAsync(newDraft);
 
-            await _context.SaveChangesAsync();
+            await _draftRepository.SaveChangesAsync();
             response.Message = "Draft criado com sucesso!";
             response.Success = true;
             return response;
@@ -163,11 +205,17 @@ namespace NBALigaSimulation.Server.Services.DraftService
         {
 
             var response = new ServiceResponse<bool>();
-            var season = await _context.Seasons.OrderBy(s => s.Year).LastOrDefaultAsync();
+            var season = await _seasonRepository.Query()
+                .OrderBy(s => s.Year)
+                .LastOrDefaultAsync();
 
-            var player = await _context.Players.Where(p => p.Id == request.PlayerId).FirstOrDefaultAsync();
+            var player = await _playerRepository.Query()
+                .Where(p => p.Id == request.PlayerId)
+                .FirstOrDefaultAsync();
 
-            var draft = await _context.Drafts.Where(d => d.Pick == request.Pick && d.TeamId == request.TeamId && d.Season == season.Year).FirstOrDefaultAsync();
+            var draft = await _draftRepository.Query()
+                .Where(d => d.Pick == request.Pick && d.TeamId == request.TeamId && d.Season == season.Year)
+                .FirstOrDefaultAsync();
 
             try
             {
@@ -178,7 +226,6 @@ namespace NBALigaSimulation.Server.Services.DraftService
                     draft.Player = player;
                     draft.PlayerId = request.PlayerId;
                     draft.DateTime = DateTime.Now;
-                    _context.Update(draft);
 
                     player.TeamId = request.TeamId;
                     player.Draft = new PlayerDraft
@@ -190,11 +237,9 @@ namespace NBALigaSimulation.Server.Services.DraftService
                     };
 
                     player.Contract = DraftUtils.RookieContracts(request.Pick, season.Year);
-
-                    _context.Update(player);
                 }
 
-                await _context.SaveChangesAsync();
+                await _draftRepository.SaveChangesAsync();
 
 
             }

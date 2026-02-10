@@ -1,4 +1,4 @@
-﻿using AutoMapper;
+using AutoMapper;
 using NBALigaSimulation.Server.Services.PlayoffsService;
 using NBALigaSimulation.Shared.Dtos.Games;
 using NBALigaSimulation.Shared.Engine.GameSim.GameStart;
@@ -6,6 +6,9 @@ using NBALigaSimulation.Shared.Engine.Utils;
 using NBALigaSimulation.Shared.Models.GameNews;
 using NBALigaSimulation.Shared.Models.Games;
 using NBALigaSimulation.Shared.Models.Seasons;
+using NBALigaSimulation.Shared.Models.Teams;
+using NBALigaSimulation.Shared.Models.SeasonPlayoffs;
+using NBALigaSimulation.Shared.Models.Players;
 using NBALigaSimulation.Shared.Models.Utils;
 using System.Diagnostics;
 
@@ -13,16 +16,36 @@ namespace NBALigaSimulation.Server.Services.GameService
 {
     public class GameService : IGameService
     {
-
-        private readonly DataContext _context;
+        private readonly IGenericRepository<Game> _gameRepository;
+        private readonly IGenericRepository<Team> _teamRepository;
+        private readonly IGenericRepository<TeamRegularStats> _teamRegularStatsRepository;
+        private readonly IGenericRepository<Playoffs> _playoffsRepository;
+        private readonly IGenericRepository<PlayoffsGame> _playoffsGameRepository;
+        private readonly IGenericRepository<News> _newsRepository;
+        private readonly ISeasonRepository _seasonRepository;
         private readonly IMapper _mapper;
         private readonly ITeamService _teamService;
         private readonly IPlayoffsService _playoffsService;
 
-
-        public GameService(DataContext context, IMapper mapper, ITeamService teamService, IPlayoffsService playoffsService)
+        public GameService(
+            IGenericRepository<Game> gameRepository,
+            IGenericRepository<Team> teamRepository,
+            IGenericRepository<TeamRegularStats> teamRegularStatsRepository,
+            IGenericRepository<Playoffs> playoffsRepository,
+            IGenericRepository<PlayoffsGame> playoffsGameRepository,
+            IGenericRepository<News> newsRepository,
+            ISeasonRepository seasonRepository,
+            IMapper mapper,
+            ITeamService teamService,
+            IPlayoffsService playoffsService)
         {
-            _context = context;
+            _gameRepository = gameRepository;
+            _teamRepository = teamRepository;
+            _teamRegularStatsRepository = teamRegularStatsRepository;
+            _playoffsRepository = playoffsRepository;
+            _playoffsGameRepository = playoffsGameRepository;
+            _newsRepository = newsRepository;
+            _seasonRepository = seasonRepository;
             _mapper = mapper;
             _teamService = teamService;
             _playoffsService = playoffsService;
@@ -34,7 +57,7 @@ namespace NBALigaSimulation.Server.Services.GameService
 
             try
             {
-                var games = await _context.Games
+                var games = await _gameRepository.Query()
                     .Where(g => g.HomeTeamId == teamId || g.AwayTeamId == teamId)
                     .OrderBy(g => g.GameDate.Date)
                     .Include(p => p.HomeTeam)
@@ -58,11 +81,13 @@ namespace NBALigaSimulation.Server.Services.GameService
             ServiceResponse<GameCompleteDto> response = new ServiceResponse<GameCompleteDto>();
 
             Game game = _mapper.Map<Game>(request);
-            Season season = _context.Seasons.OrderBy(s => s.Id).LastOrDefault();
+            Season season = await _seasonRepository.Query()
+                .OrderBy(s => s.Id)
+                .LastOrDefaultAsync();
             game.Season = season;
 
-            _context.Add(game);
-            await _context.SaveChangesAsync();
+            await _gameRepository.AddAsync(game);
+            await _gameRepository.SaveChangesAsync();
 
             response.Success = true;
             response.Data = _mapper.Map<GameCompleteDto>(game);
@@ -73,14 +98,16 @@ namespace NBALigaSimulation.Server.Services.GameService
         {
             ServiceResponse<bool> response = new ServiceResponse<bool>();
 
-            Game game = await _context.Games
+            Game game = await _gameRepository.Query()
               .Include(p => p.HomeTeam.Players.OrderBy(p => p.RosterOrder)).ThenInclude(p => p.Ratings)
               .Include(p => p.AwayTeam.Players.OrderBy(p => p.RosterOrder)).ThenInclude(p => p.Ratings)
               .Include(t => t.HomeTeam.Gameplan)
               .Include(t => t.AwayTeam.Gameplan)
               .FirstOrDefaultAsync(p => p.Id == gameId);
 
-            game.Season = await _context.Seasons.OrderBy(s => s.Id).LastOrDefaultAsync();
+            game.Season = await _seasonRepository.Query()
+                .OrderBy(s => s.Id)
+                .LastOrDefaultAsync();
 
             if (game == null)
             {
@@ -102,11 +129,11 @@ namespace NBALigaSimulation.Server.Services.GameService
 			var sw = new Stopwatch();
 			sw.Start();
 
-			await _context.SaveChangesAsync();
+			await _gameRepository.SaveChangesAsync();
 
             GameSimulation.Sim(game);
 
-            await _context.SaveChangesAsync();
+            await _gameRepository.SaveChangesAsync();
 
 			sw.Stop();
 			Console.WriteLine("Tempo gasto : " + sw.ElapsedMilliseconds.ToString() + " milisegundos");
@@ -121,12 +148,15 @@ namespace NBALigaSimulation.Server.Services.GameService
         {
             ServiceResponse<bool> response = new ServiceResponse<bool>();
 
-            List<int> gameIds = await _context.Seasons.OrderByDescending(s => s.Id).SelectMany(s => s.Games)
-                .Select(g => g.Id).ToListAsync();
+            List<int> gameIds = await _seasonRepository.Query()
+                .OrderByDescending(s => s.Id)
+                .SelectMany(s => s.Games)
+                .Select(g => g.Id)
+                .ToListAsync();
 
             foreach (int gameId in gameIds)
             {
-                Game game = await _context.Games
+                Game game = await _gameRepository.Query()
                   .Include(p => p.HomeTeam.Players.OrderBy(p => p.RosterOrder)).ThenInclude(p => p.Ratings)
                   .Include(p => p.AwayTeam.Players.OrderBy(p => p.RosterOrder)).ThenInclude(p => p.Ratings)
                   .Include(t => t.HomeTeam.Gameplan)
@@ -142,7 +172,7 @@ namespace NBALigaSimulation.Server.Services.GameService
 
                 GameSimulation.Sim(game);
 
-                await _context.SaveChangesAsync();
+                await _gameRepository.SaveChangesAsync();
             }
 
             response.Success = true;
@@ -153,11 +183,11 @@ namespace NBALigaSimulation.Server.Services.GameService
 
         public async Task<ServiceResponse<List<GameCompleteDto>>> GetAllGames()
         {
-            var games = await _context.Games.
-                 Include(g => g.HomeTeam)
+            var games = await _gameRepository.Query()
+                .Include(g => g.HomeTeam)
                 .Include(g => g.AwayTeam)
                 .Include(g => g.TeamGameStats)
-                 .ToListAsync();
+                .ToListAsync();
           
             var response = new ServiceResponse<List<GameCompleteDto>>
             {
@@ -170,7 +200,7 @@ namespace NBALigaSimulation.Server.Services.GameService
         public async Task<ServiceResponse<GameCompleteDto>> GetGameById(int gameId)
         {
             var response = new ServiceResponse<GameCompleteDto>();
-            var game = await _context.Games
+            var game = await _gameRepository.Query()
             .Include(p => p.HomeTeam)
             .Include(p => p.AwayTeam)
             .Include(p => p.TeamGameStats)
@@ -194,15 +224,17 @@ namespace NBALigaSimulation.Server.Services.GameService
         {
             ServiceResponse<bool> response = new ServiceResponse<bool>();
 
-            var season = await _context.Seasons.OrderBy(s => s.Id).LastOrDefaultAsync();
+            var season = await _seasonRepository.Query()
+                .OrderBy(s => s.Id)
+                .LastOrDefaultAsync();
 
-            DateTime? firstUnsimulatedDate = await _context.Games
+            DateTime? firstUnsimulatedDate = await _gameRepository.Query()
              .Where(g => !g.Happened)
              .OrderBy(g => g.GameDate)
              .Select(g => g.GameDate)
              .FirstOrDefaultAsync();
 
-            var unSimulatedDates = await _context.Games
+            var unSimulatedDates = await _gameRepository.Query()
                 .Where(g => !g.Happened)
                 .OrderBy(g => g.GameDate)
                 .Select(g => g.GameDate)
@@ -211,7 +243,9 @@ namespace NBALigaSimulation.Server.Services.GameService
             if (unSimulatedDates.Count == 0)
             {
 
-                var teamRegularStats = await _context.TeamRegularStats.Where(t => t.Season == season.Year).ToListAsync();
+                var teamRegularStats = await _teamRegularStatsRepository.Query()
+                    .Where(t => t.Season == season.Year)
+                    .ToListAsync();
 
                 bool isRegularSeasonComplete = teamRegularStats.All(t => t.HomeLosses + t.HomeWins + t.RoadLosses + t.RoadWins == 74);
 
@@ -229,7 +263,7 @@ namespace NBALigaSimulation.Server.Services.GameService
                 return response;
             }
 
-            List<Game> games = await _context.Games
+                List<Game> games = await _gameRepository.Query()
                 .Include(p => p.HomeTeam.Players.OrderBy(p => p.RosterOrder)).ThenInclude(p => p.Ratings)
                 .Include(p => p.AwayTeam.Players.OrderBy(p => p.RosterOrder)).ThenInclude(p => p.Ratings)
                 .Include(p => p.HomeTeam.TeamRegularStats)
@@ -255,7 +289,7 @@ namespace NBALigaSimulation.Server.Services.GameService
                     SimulationUtils.AdjustRosterOrder(game.AwayTeam.Players);
                 }
 
-                await _context.SaveChangesAsync();
+                await _gameRepository.SaveChangesAsync();
 
                 GameSimulation.Sim(game);
                 game.Happened = true;
@@ -263,7 +297,7 @@ namespace NBALigaSimulation.Server.Services.GameService
 
                 try
                 {
-                    await _context.SaveChangesAsync();
+                    await _gameRepository.SaveChangesAsync();
 
                 }
                 catch (Exception ex)
@@ -278,9 +312,9 @@ namespace NBALigaSimulation.Server.Services.GameService
                     SimulationUtils.UpdateTeamStats(game);
                     SimulationUtils.UpdatePlayerGames(game);
                     News news = SimulationUtils.NewGenerator(game);
-                    await _context.AddAsync(news);
+                    await _newsRepository.AddAsync(news);
 
-                    await _context.SaveChangesAsync();
+                    await _newsRepository.SaveChangesAsync();
                 }
                 catch (Exception ex)
                 {
@@ -302,12 +336,14 @@ namespace NBALigaSimulation.Server.Services.GameService
         {
             ServiceResponse<bool> response = new ServiceResponse<bool>();
 
-            var season = await _context.Seasons.OrderBy(s => s.Id).LastOrDefaultAsync();
+            var season = await _seasonRepository.Query()
+                .OrderBy(s => s.Id)
+                .LastOrDefaultAsync();
 
-            var playoffs = await _context.Playoffs
-              .Where(p => p.Season == season.Year)
-              .Include(p => p.PlayoffGames)
-              .ToListAsync();
+            var playoffs = await _playoffsRepository.Query()
+                .Where(p => p.Season == season.Year)
+                .Include(p => p.PlayoffGames)
+                .ToListAsync();
 
             DateTime gameDate = DateTime.MinValue;
 
@@ -315,7 +351,7 @@ namespace NBALigaSimulation.Server.Services.GameService
             {
                 var gameIds = playoff.PlayoffGames.Select(g => g.GameId).ToList();
 
-                List<Game> games = await _context.Games
+                List<Game> games = await _gameRepository.Query()
                   .Include(p => p.HomeTeam.Players.OrderBy(p => p.RosterOrder)).ThenInclude(p => p.Ratings)
                   .Include(p => p.AwayTeam.Players.OrderBy(p => p.RosterOrder)).ThenInclude(p => p.Ratings)
                   .Include(p => p.HomeTeam.TeamPlayoffsStats)
@@ -342,17 +378,16 @@ namespace NBALigaSimulation.Server.Services.GameService
                         SimulationUtils.AdjustRosterOrder(game.AwayTeam.Players);
                     }
 
-                    await _context.SaveChangesAsync();
-
-                   
+                    await _gameRepository.SaveChangesAsync();
 
                     game.Happened = true;
 
-                    await _context.SaveChangesAsync();
+                    await _gameRepository.SaveChangesAsync();
 
                     try
                     {
-                        var playoffToUpdate = await _context.Playoffs.FirstOrDefaultAsync(p => p.Id == playoff.Id);
+                        var playoffToUpdate = await _playoffsRepository.Query()
+                            .FirstOrDefaultAsync(p => p.Id == playoff.Id);
 
                         if (playoffToUpdate != null)
                         {
@@ -374,14 +409,14 @@ namespace NBALigaSimulation.Server.Services.GameService
                                 playoffToUpdate.WinsTeamTwo += 1;
                             }
 
-                            _context.Update(playoffToUpdate);
+                            _playoffsRepository.Update(playoffToUpdate);
                         }
 
                         SimulationUtils.UpdateTeamStats(game);
                         SimulationUtils.UpdatePlayerGames(game);
                         News news = SimulationUtils.NewGenerator(game);
-                        await _context.AddAsync(news);
-                        await _context.SaveChangesAsync();
+                        await _newsRepository.AddAsync(news);
+                        await _newsRepository.SaveChangesAsync();
 
                         if (playoffToUpdate.WinsTeamOne >= 4 || playoffToUpdate.WinsTeamTwo >= 4)
                         {
@@ -398,11 +433,16 @@ namespace NBALigaSimulation.Server.Services.GameService
                 }
             }
 
-            List<Game> remaining = await _context.Games
-            .Where(t => t.GameDate == gameDate && !t.Happened)
-            .ToListAsync();
-            _context.Games.RemoveRange(remaining);
-            await _context.SaveChangesAsync();
+            List<Game> remaining = await _gameRepository.Query()
+                .Where(t => t.GameDate == gameDate && !t.Happened)
+                .ToListAsync();
+
+            foreach (var game in remaining)
+            {
+                _gameRepository.Remove(game);
+            }
+
+            await _gameRepository.SaveChangesAsync();
 
             response.Success = true;
             response.Data = true;
@@ -412,13 +452,15 @@ namespace NBALigaSimulation.Server.Services.GameService
         public async Task UpdateStandings()
         {
 
-            var season = await _context.Seasons.OrderBy(s => s.Year).LastOrDefaultAsync();
+            var season = await _seasonRepository.Query()
+                .OrderBy(s => s.Year)
+                .LastOrDefaultAsync();
             if (season == null)
             {
                 return;
             }
 
-            var teams = await _context.Teams
+            var teams = await _teamRepository.Query()
                 .Include(t => t.TeamRegularStats)
                 .Where(t => t.IsHuman)
                 .ToListAsync();
@@ -454,7 +496,7 @@ namespace NBALigaSimulation.Server.Services.GameService
                 }
             }
 
-            await _context.SaveChangesAsync();
+            await _teamRegularStatsRepository.SaveChangesAsync();
 
         }
 
@@ -462,9 +504,11 @@ namespace NBALigaSimulation.Server.Services.GameService
         {
             ServiceResponse<bool> response = new ServiceResponse<bool>();
 
-            var season = await _context.Seasons.OrderBy(s => s.Id).LastOrDefaultAsync();
+            var season = await _seasonRepository.Query()
+                .OrderBy(s => s.Id)
+                .LastOrDefaultAsync();
 
-            List<Game> games = await _context.Games
+            List<Game> games = await _gameRepository.Query()
                 .Include(p => p.HomeTeam.Players.OrderBy(p => p.RosterOrder)).ThenInclude(p => p.Ratings)
                 .Include(p => p.AwayTeam.Players.OrderBy(p => p.RosterOrder)).ThenInclude(p => p.Ratings)
                 .Include(t => t.HomeTeam.Gameplan)
@@ -490,7 +534,7 @@ namespace NBALigaSimulation.Server.Services.GameService
                     SimulationUtils.AdjustRosterOrder(game.AwayTeam.Players);
                 }
 
-                await _context.SaveChangesAsync();
+                await _gameRepository.SaveChangesAsync();
 
                 GameSimulation.Sim(game);
                 game.Happened = true;
@@ -499,7 +543,7 @@ namespace NBALigaSimulation.Server.Services.GameService
                 try
                 {
                     UpdateStandings();
-                    await _context.SaveChangesAsync();
+                    await _teamRegularStatsRepository.SaveChangesAsync();
                 }
                 catch (Exception ex)
                 {
@@ -513,8 +557,8 @@ namespace NBALigaSimulation.Server.Services.GameService
                     SimulationUtils.UpdateTeamStats(game);
                     SimulationUtils.UpdatePlayerGames(game);
                     News news = SimulationUtils.NewGenerator(game);
-                    await _context.AddAsync(news);
-                    await _context.SaveChangesAsync();
+                    await _newsRepository.AddAsync(news);
+                    await _newsRepository.SaveChangesAsync();
                 }
                 catch (Exception ex)
                 {

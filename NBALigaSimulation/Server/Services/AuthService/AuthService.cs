@@ -1,4 +1,5 @@
-﻿using Microsoft.IdentityModel.Tokens;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Security.Cryptography;
@@ -10,15 +11,16 @@ namespace NBALigaSimulation.Server.Services.AuthService
     public class AuthService : IAuthService
     {
 
-        private readonly DataContext _context;
+        private readonly IGenericRepository<User> _userRepository;
         private readonly IConfiguration _configuration;
         private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public AuthService(DataContext context,
+        public AuthService(
+            IGenericRepository<User> userRepository,
             IConfiguration configuration,
             IHttpContextAccessor httpContextAccessor)
         {
-            _context = context;
+            _userRepository = userRepository;
             _configuration = configuration;
             _httpContextAccessor = httpContextAccessor;
         }
@@ -40,15 +42,17 @@ namespace NBALigaSimulation.Server.Services.AuthService
             user.PasswordSalt = passwordSalt;
             user.TeamId = null;
 
-            _context.Users.Add(user);
-            await _context.SaveChangesAsync();
+            await _userRepository.AddAsync(user);
+            await _userRepository.SaveChangesAsync();
             return new ServiceResponse<int> { Data = user.Id, Message = "Registrado com sucesso!" };
         }
 
         public async Task<ServiceResponse<SuccessfullyLogin>> Login(string username, string password)
         {
             var response = new ServiceResponse<SuccessfullyLogin>();
-            var user = await _context.Users.Include(t => t.Team).FirstOrDefaultAsync(x => x.Username.ToLower().Equals(username.ToLower()));
+            var user = await _userRepository.Query()
+                .Include(t => t.Team)
+                .FirstOrDefaultAsync(x => x.Username.ToLower().Equals(username.ToLower()));
 
             if (user == null)
             {
@@ -76,7 +80,8 @@ namespace NBALigaSimulation.Server.Services.AuthService
 
         public async Task<bool> UserExists(string email)
         {
-            if (await _context.Users.AnyAsync(u => u.Username.ToLower().Equals(email.ToLower())))
+            if (await _userRepository.Query()
+                .AnyAsync(u => u.Username.ToLower().Equals(email.ToLower())))
             {
                 return true;
             }
@@ -124,7 +129,7 @@ namespace NBALigaSimulation.Server.Services.AuthService
 
         public async Task<ServiceResponse<bool>> ChangePassword(int userId, string newPassword)
         {
-            var user = await _context.Users.FindAsync(userId);
+            var user = await _userRepository.GetByIdAsync(userId);
             if (user == null)
             {
                 return new ServiceResponse<bool>
@@ -139,7 +144,7 @@ namespace NBALigaSimulation.Server.Services.AuthService
             user.PasswordHash = passwordHash;
             user.PasswordSalt = passwordSalt;
 
-            await _context.SaveChangesAsync();
+            await _userRepository.SaveChangesAsync();
 
             return new ServiceResponse<bool> { Data = true, Message = "A senha foi alterada!" };
 

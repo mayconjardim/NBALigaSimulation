@@ -1,22 +1,29 @@
-﻿using System.Security.Claims;
+using System.Security.Claims;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using NBALigaSimulation.Shared.Dtos.Players;
 using NBALigaSimulation.Shared.Dtos.Teams;
 using NBALigaSimulation.Shared.Models.Utils;
+using NBALigaSimulation.Shared.Models.Teams;
+using NBALigaSimulation.Shared.Models.Users;
 
 namespace NBALigaSimulation.Server.Services.TeamService
 {
     public class TeamService : ITeamService
     {
-
-        private readonly DataContext _context;
+        private readonly IGenericRepository<Team> _teamRepository;
+        private readonly IGenericRepository<User> _userRepository;
         private readonly IMapper _mapper;
         private readonly IAuthService _authService;
 
-        public TeamService(DataContext context, IMapper mapper, IAuthService authService)
+        public TeamService(
+            IGenericRepository<Team> teamRepository,
+            IGenericRepository<User> userRepository,
+            IMapper mapper,
+            IAuthService authService)
         {
-            _context = context;
+            _teamRepository = teamRepository;
+            _userRepository = userRepository;
             _mapper = mapper;
             _authService = authService;
         }
@@ -27,7 +34,7 @@ namespace NBALigaSimulation.Server.Services.TeamService
 
             try
             {
-                var team = await _context.Teams
+                var team = await _teamRepository.Query()
                     .Include(t => t.Players)
                     .ThenInclude(p => p.Ratings)
                     .Include(t => t.Players)
@@ -60,7 +67,7 @@ namespace NBALigaSimulation.Server.Services.TeamService
         {
             try
             {
-                var teams = await _context.Teams
+                var teams = await _teamRepository.Query()
                     .Where(t => t.IsHuman)
                     .ToListAsync();
 
@@ -85,7 +92,11 @@ namespace NBALigaSimulation.Server.Services.TeamService
 
         public async Task<ServiceResponse<List<TeamSimpleWithPlayersDto>>> GetAllTeamsWithPlayers()
         {
-            var teams = await _context.Teams.Where(t => t.IsHuman == true).Include(t => t.Players).ThenInclude(p => p.Contract).ToListAsync();
+            var teams = await _teamRepository.Query()
+                .Where(t => t.IsHuman == true)
+                .Include(t => t.Players)
+                .ThenInclude(p => p.Contract)
+                .ToListAsync();
             var response = new ServiceResponse<List<TeamSimpleWithPlayersDto>>
             {
                 Data = _mapper.Map<List<TeamSimpleWithPlayersDto>>(teams)
@@ -101,7 +112,8 @@ namespace NBALigaSimulation.Server.Services.TeamService
             var response = new ServiceResponse<TeamCompleteDto>();
             var userId = _authService.GetUserId();
 
-            var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == userId);
+            var user = await _userRepository.Query()
+                .FirstOrDefaultAsync(u => u.Id == userId);
 
             if (user == null)
             {
@@ -119,7 +131,7 @@ namespace NBALigaSimulation.Server.Services.TeamService
                 return response;
             }
 
-           var team = await _context.Teams
+           var team = await _teamRepository.Query()
             .Include(t => t.Players.OrderBy(p => p.RosterOrder))
                 .ThenInclude(p => p.Ratings)
             .Include(t => t.Gameplan)
@@ -144,7 +156,9 @@ namespace NBALigaSimulation.Server.Services.TeamService
         {
             ServiceResponse<bool> response = new ServiceResponse<bool>();
 
-            var team = await _context.Teams.Include(t => t.Players).FirstOrDefaultAsync(t => t.Id == teamId);
+            var team = await _teamRepository.Query()
+                .Include(t => t.Players)
+                .FirstOrDefaultAsync(t => t.Id == teamId);
 
             if (team == null)
             {
@@ -161,11 +175,10 @@ namespace NBALigaSimulation.Server.Services.TeamService
                 }
             }
 
-            _context.Update(team);
-
             try
             {
-                await _context.SaveChangesAsync();
+                _teamRepository.Update(team);
+                await _teamRepository.SaveChangesAsync();
                 response.Success = true;
             }
             catch (Exception ex)
@@ -180,7 +193,9 @@ namespace NBALigaSimulation.Server.Services.TeamService
         {
             ServiceResponse<bool> response = new ServiceResponse<bool>();
 
-            var team = await _context.Teams.Include(t => t.Gameplan).FirstOrDefaultAsync(t => t.Id == teamId);
+            var team = await _teamRepository.Query()
+                .Include(t => t.Gameplan)
+                .FirstOrDefaultAsync(t => t.Id == teamId);
 
             if (team == null)
             {
@@ -193,11 +208,10 @@ namespace NBALigaSimulation.Server.Services.TeamService
             team.Gameplan.Focus = teamGameplanDto.Focus;
             team.Gameplan.Defense = teamGameplanDto.Defense;
 
-            _context.Update(team);
-
             try
             {
-                await _context.SaveChangesAsync();
+                _teamRepository.Update(team);
+                await _teamRepository.SaveChangesAsync();
                 response.Success = true;
             }
             catch (Exception ex)

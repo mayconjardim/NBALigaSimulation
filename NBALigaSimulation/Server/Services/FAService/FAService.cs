@@ -1,6 +1,8 @@
-﻿using AutoMapper;
+using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using NBALigaSimulation.Shared.Dtos.FA;
 using NBALigaSimulation.Shared.Models.FA;
+using NBALigaSimulation.Shared.Models.Users;
 using NBALigaSimulation.Shared.Models.Utils;
 
 namespace NBALigaSimulation.Server.Services.FAService
@@ -8,13 +10,19 @@ namespace NBALigaSimulation.Server.Services.FAService
     public class FAService : IFAService
     {
 
-        private readonly DataContext _context;
+        private readonly IGenericRepository<FAOffer> _offerRepository;
+        private readonly IGenericRepository<User> _userRepository;
         private readonly IMapper _mapper;
         private readonly IAuthService _authService;
 
-        public FAService(DataContext context, IMapper mapper, IAuthService authService)
+        public FAService(
+            IGenericRepository<FAOffer> offerRepository,
+            IGenericRepository<User> userRepository,
+            IMapper mapper,
+            IAuthService authService)
         {
-            _context = context;
+            _offerRepository = offerRepository;
+            _userRepository = userRepository;
             _mapper = mapper;
             _authService = authService;
         }
@@ -28,8 +36,8 @@ namespace NBALigaSimulation.Server.Services.FAService
 
                 FAOffer offer = _mapper.Map<FAOffer>(offerDto);
 
-                _context.FAOffers.Add(offer);
-                await _context.SaveChangesAsync();
+                await _offerRepository.AddAsync(offer);
+                await _offerRepository.SaveChangesAsync();
                 response.Success = true;
                 response.Data = _mapper.Map<FAOfferDto>(offer);
 
@@ -48,7 +56,8 @@ namespace NBALigaSimulation.Server.Services.FAService
             var response = new ServiceResponse<List<FAOfferDto>>();
 
             var userId = _authService.GetUserId();
-            var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == userId);
+            var user = await _userRepository.Query()
+                .FirstOrDefaultAsync(u => u.Id == userId);
             int? teamId = null;
 
             if (user != null)
@@ -56,7 +65,7 @@ namespace NBALigaSimulation.Server.Services.FAService
                 teamId = user.TeamId;
             }
 
-            List<FAOffer> offers = await _context.FAOffers
+            List<FAOffer> offers = await _offerRepository.Query()
                 .Include(p => p.Player)
                 .OrderByDescending(o => o.DateCreated)
                 .Where(o => o.TeamId == teamId)
@@ -81,7 +90,7 @@ namespace NBALigaSimulation.Server.Services.FAService
 
             try
             {
-                var offer = await _context.FAOffers.FindAsync(offerId);
+                var offer = await _offerRepository.GetByIdAsync(offerId);
 
                 if (offer == null)
                 {
@@ -90,8 +99,8 @@ namespace NBALigaSimulation.Server.Services.FAService
                     return response;
                 }
 
-                _context.FAOffers.Remove(offer);
-                await _context.SaveChangesAsync();
+                _offerRepository.Remove(offer);
+                await _offerRepository.SaveChangesAsync();
 
                 response.Success = true;
                 response.Data = true;

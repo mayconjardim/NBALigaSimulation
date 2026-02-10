@@ -1,30 +1,50 @@
-﻿using AutoMapper;
+using AutoMapper;
 using Microsoft.EntityFrameworkCore; 
 using NBALigaSimulation.Shared.Dtos.Players;
 using NBALigaSimulation.Shared.Dtos.Teams;
 using NBALigaSimulation.Shared.Dtos.Trades;
 using NBALigaSimulation.Shared.Models.Trades;
+using NBALigaSimulation.Shared.Models.Players;
+using NBALigaSimulation.Shared.Models.Teams;
+using NBALigaSimulation.Shared.Models.Users;
 using NBALigaSimulation.Shared.Models.Utils;
 
 namespace NBALigaSimulation.Server.Services.TradeService
 {
     public class TradeService : ITradeService
     {
-
-        private readonly DataContext _context;
+        private readonly IGenericRepository<Trade> _tradeRepository;
+        private readonly IGenericRepository<Player> _playerRepository;
+        private readonly IGenericRepository<Team> _teamRepository;
+        private readonly IGenericRepository<TeamDraftPicks> _draftPickRepository;
+        private readonly IGenericRepository<User> _userRepository;
         private readonly IMapper _mapper;
         private readonly IAuthService _authService;
 
-        public TradeService(DataContext context, IMapper mapper, IAuthService authService)
+        public TradeService(
+            IGenericRepository<Trade> tradeRepository,
+            IGenericRepository<Player> playerRepository,
+            IGenericRepository<Team> teamRepository,
+            IGenericRepository<TeamDraftPicks> draftPickRepository,
+            IGenericRepository<User> userRepository,
+            IMapper mapper,
+            IAuthService authService)
         {
-            _context = context;
+            _tradeRepository = tradeRepository;
+            _playerRepository = playerRepository;
+            _teamRepository = teamRepository;
+            _draftPickRepository = draftPickRepository;
+            _userRepository = userRepository;
             _mapper = mapper;
             _authService = authService;
         }
 
         public async Task<ServiceResponse<List<TradeDto>>> GetAllTrades()
         {
-            var trades = await _context.Trades.Include(t => t.TeamOne).Include(t => t.TeamTwo).ToListAsync();
+            var trades = await _tradeRepository.Query()
+                .Include(t => t.TeamOne)
+                .Include(t => t.TeamTwo)
+                .ToListAsync();
             var response = new ServiceResponse<List<TradeDto>>
             {
                 Data = _mapper.Map<List<TradeDto>>(trades)
@@ -38,7 +58,8 @@ namespace NBALigaSimulation.Server.Services.TradeService
             var response = new ServiceResponse<List<TradeDto>>();
 
             var userId = _authService.GetUserId();
-            var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == userId);
+            var user = await _userRepository.Query()
+                .FirstOrDefaultAsync(u => u.Id == userId);
             int? teamId = null;
 
             if (user != null)
@@ -46,9 +67,12 @@ namespace NBALigaSimulation.Server.Services.TradeService
                 teamId = user.TeamId;
             }
 
-            List<Trade> trades = await _context.Trades.OrderByDescending(o => o.DateCreated)
-                    .Where(p => p.TeamOneId == teamId || p.TeamTwoId == teamId).Include(t => t.TeamOne).Include(t => t.TeamTwo)
-                    .ToListAsync();
+            List<Trade> trades = await _tradeRepository.Query()
+                .OrderByDescending(o => o.DateCreated)
+                .Where(p => p.TeamOneId == teamId || p.TeamTwoId == teamId)
+                .Include(t => t.TeamOne)
+                .Include(t => t.TeamTwo)
+                .ToListAsync();
 
             if (trades == null)
             {
@@ -67,7 +91,7 @@ namespace NBALigaSimulation.Server.Services.TradeService
         {
             var response = new ServiceResponse<TradeDto>();
 
-            var trade = await _context.Trades
+            var trade = await _tradeRepository.Query()
                 .Include(t => t.TeamOne)
                 .Include(t => t.TeamTwo)
                 .Include(t => t.TradePlayers)
@@ -89,7 +113,7 @@ namespace NBALigaSimulation.Server.Services.TradeService
                 {
                     foreach (var t in trade.TradePlayers)
                     {
-                        var player = await _context.Players
+                        var player = await _playerRepository.Query()
                             .Include(p => p.Ratings)
                             .Include(p => p.Contract)
                             .FirstOrDefaultAsync(p => p.Id == t.PlayerId);
@@ -102,7 +126,7 @@ namespace NBALigaSimulation.Server.Services.TradeService
                 {
                     foreach (var t in trade.TradePicks)
                     {
-                        var pick = await _context.TeamDraftPicks
+                        var pick = await _draftPickRepository.Query()
                             .FirstOrDefaultAsync(p => p.Id == t.DraftPickId);
                         var pickDto = _mapper.Map<TeamDraftPickDto>(pick);
                         tradeWithPlayers.DraftPicks.Add(pickDto);
@@ -147,8 +171,8 @@ namespace NBALigaSimulation.Server.Services.TradeService
                     });
                 }
 
-                _context.Trades.Add(trade);
-                await _context.SaveChangesAsync();
+                await _tradeRepository.AddAsync(trade);
+                await _tradeRepository.SaveChangesAsync();
                 response.Success = true;
                 response.Data = _mapper.Map<TradeDto>(trade);
             }
@@ -165,13 +189,17 @@ namespace NBALigaSimulation.Server.Services.TradeService
         {
             ServiceResponse<bool> response = new ServiceResponse<bool>();
 
-            Trade trade = await _context.Trades
+            Trade trade = await _tradeRepository.Query()
                 .Include(t => t.TradePlayers)
                 .Include(t => t.TradePicks)
                 .FirstOrDefaultAsync(p => p.Id == dto.Id);
 
-            var TeamOne = await _context.Teams.Include(t => t.Players).FirstOrDefaultAsync(t => t.Id == dto.TeamOneId);
-            var TeamTwo = await _context.Teams.Include(t => t.Players).FirstOrDefaultAsync(t => t.Id == dto.TeamTwoId);
+            var TeamOne = await _teamRepository.Query()
+                .Include(t => t.Players)
+                .FirstOrDefaultAsync(t => t.Id == dto.TeamOneId);
+            var TeamTwo = await _teamRepository.Query()
+                .Include(t => t.Players)
+                .FirstOrDefaultAsync(t => t.Id == dto.TeamTwoId);
 
             if (trade == null)
             {
@@ -188,7 +216,8 @@ namespace NBALigaSimulation.Server.Services.TradeService
                 {
                     Random random = new Random();
                     int randomNumber = random.Next(15, 1000);
-                    var playerDb = await _context.Players.FirstOrDefaultAsync(p => p.Id == player.PlayerId);
+                    var playerDb = await _playerRepository.Query()
+                        .FirstOrDefaultAsync(p => p.Id == player.PlayerId);
                     if (playerDb.TeamId == trade.TeamOneId)
                     {
                         playerDb.TeamId = trade.TeamTwoId;
@@ -208,7 +237,8 @@ namespace NBALigaSimulation.Server.Services.TradeService
                 foreach (var pick in trade.TradePicks)
                 {
 
-                    var pickDb = await _context.TeamDraftPicks.FirstOrDefaultAsync(p => p.Id == pick.DraftPickId);
+                    var pickDb = await _draftPickRepository.Query()
+                        .FirstOrDefaultAsync(p => p.Id == pick.DraftPickId);
                     if (pickDb.TeamId == trade.TeamOneId)
                     {
                         pickDb.TeamId = trade.TeamTwoId;
@@ -230,7 +260,7 @@ namespace NBALigaSimulation.Server.Services.TradeService
 
             try
             {
-                await _context.SaveChangesAsync();
+                await _tradeRepository.SaveChangesAsync();
                 await UpdateRosterOrderAfterTrade(TeamOne.Id, TeamTwo.Id);
                 response.Success = true;
                 response.Data = true;
@@ -250,7 +280,7 @@ namespace NBALigaSimulation.Server.Services.TradeService
 
             try
             {
-                var trade = await _context.Trades.FindAsync(tradeId);
+                var trade = await _tradeRepository.GetByIdAsync(tradeId);
 
                 if (trade == null)
                 {
@@ -259,8 +289,8 @@ namespace NBALigaSimulation.Server.Services.TradeService
                     return response;
                 }
 
-                _context.Trades.Remove(trade);
-                await _context.SaveChangesAsync();
+                _tradeRepository.Remove(trade);
+                await _tradeRepository.SaveChangesAsync();
 
                 response.Success = true;
                 response.Data = true;
@@ -278,13 +308,19 @@ namespace NBALigaSimulation.Server.Services.TradeService
         {
             var response = new ServiceResponse<bool>();
 
-            var teamOneList = await _context.Players.OrderBy(p => p.RosterOrder).Where(p => p.TeamId == teamOneId).ToListAsync();
-            var teamTwoList = await _context.Players.OrderBy(p => p.RosterOrder).Where(p => p.TeamId == teamTwoId).ToListAsync();
+            var teamOneList = await _playerRepository.Query()
+                .OrderBy(p => p.RosterOrder)
+                .Where(p => p.TeamId == teamOneId)
+                .ToListAsync();
+            var teamTwoList = await _playerRepository.Query()
+                .OrderBy(p => p.RosterOrder)
+                .Where(p => p.TeamId == teamTwoId)
+                .ToListAsync();
 
 
             foreach (var player in teamOneList)
             {
-                var playerDb = await _context.Players.FirstOrDefaultAsync(p => p.Id == player.Id);
+                var playerDb = await _playerRepository.GetByIdAsync(player.Id);
 
                 if (playerDb == null)
                 {
@@ -303,7 +339,7 @@ namespace NBALigaSimulation.Server.Services.TradeService
 
             foreach (var player in teamTwoList)
             {
-                var playerDb = await _context.Players.FirstOrDefaultAsync(p => p.Id == player.Id);
+                var playerDb = await _playerRepository.GetByIdAsync(player.Id);
 
                 if (playerDb == null)
                 {
@@ -320,7 +356,7 @@ namespace NBALigaSimulation.Server.Services.TradeService
 
             }
 
-            await _context.SaveChangesAsync();
+            await _playerRepository.SaveChangesAsync();
             response.Success = true;
             response.Message = "Roster order updated successfully.";
 

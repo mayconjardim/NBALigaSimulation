@@ -1,7 +1,10 @@
 using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using NBALigaSimulation.Shared.Models.Teams;
 using NBALigaSimulation.Shared.Dtos.Players;
 using NBALigaSimulation.Shared.Dtos.Teams;
+using NBALigaSimulation.Shared.Models.Players;
+using NBALigaSimulation.Shared.Models.Seasons;
 using NBALigaSimulation.Shared.Models.Utils;
 using PlayerRegularStats = NBALigaSimulation.Shared.Models.Players.PlayerRegularStats;
 
@@ -10,12 +13,29 @@ namespace NBALigaSimulation.Server.Services.StatsService
 	public class StatsService : IStatsService
 	{
 
-		private readonly DataContext _context;
+		private readonly IGenericRepository<PlayerRegularStats> _playerRegularStatsRepository;
+		private readonly IGenericRepository<TeamRegularStats> _teamRegularStatsRepository;
+		private readonly IGenericRepository<TeamPlayoffsStats> _teamPlayoffsStatsRepository;
+		private readonly IGenericRepository<PlayerPlayoffsStats> _playerPlayoffsStatsRepository;
+		private readonly IGenericRepository<PlayerGameStats> _playerGameStatsRepository;
+		private readonly IGenericRepository<Season> _seasonRepository;
 		private readonly IMapper _mapper;
 
-		public StatsService(DataContext context, IMapper mapper)
+		public StatsService(
+			IGenericRepository<PlayerRegularStats> playerRegularStatsRepository,
+			IGenericRepository<TeamRegularStats> teamRegularStatsRepository,
+			IGenericRepository<TeamPlayoffsStats> teamPlayoffsStatsRepository,
+			IGenericRepository<PlayerPlayoffsStats> playerPlayoffsStatsRepository,
+			IGenericRepository<PlayerGameStats> playerGameStatsRepository,
+			IGenericRepository<Season> seasonRepository,
+			IMapper mapper)
 		{
-			_context = context;
+			_playerRegularStatsRepository = playerRegularStatsRepository;
+			_teamRegularStatsRepository = teamRegularStatsRepository;
+			_teamPlayoffsStatsRepository = teamPlayoffsStatsRepository;
+			_playerPlayoffsStatsRepository = playerPlayoffsStatsRepository;
+			_playerGameStatsRepository = playerGameStatsRepository;
+			_seasonRepository = seasonRepository;
 			_mapper = mapper;
 		}
 		
@@ -25,7 +45,8 @@ namespace NBALigaSimulation.Server.Services.StatsService
 
 		    try
 		    {
-			    IQueryable<PlayerRegularStats> query = _context.PlayerRegularStats.Include(p => p.Player);
+			    IQueryable<PlayerRegularStats> query = _playerRegularStatsRepository.Query()
+				    .Include(p => p.Player);
 
                 var orderByExpression = query.OrderByDescending(p => (p.Pts / p.Games));
 
@@ -92,7 +113,8 @@ namespace NBALigaSimulation.Server.Services.StatsService
 
 			 try
 			 {
-				 IQueryable<TeamRegularStats> query = _context.TeamRegularStats.Include(p => p.Team);
+				 IQueryable<TeamRegularStats> query = _teamRegularStatsRepository.Query()
+					 .Include(p => p.Team);
 				 
 				 var orderByExpression = query.OrderByDescending(p => ( (double) (p.HomeWins + p.RoadWins) / (p.HomeWins + p.RoadWins + p.HomeLosses + p.RoadLosses)));
 
@@ -204,9 +226,11 @@ namespace NBALigaSimulation.Server.Services.StatsService
 		public async Task<ServiceResponse<List<TeamPlayoffsStatsDto>>> GetAllTeamPlayoffsStats()
 		{
 
-			var season = _context.Seasons.OrderBy(s => s.Year).Last();
+			var season = await _seasonRepository.Query()
+				.OrderBy(s => s.Year)
+				.LastOrDefaultAsync();
 
-			var teamRegularStatsList = await _context.TeamPlayoffsStats
+			var teamRegularStatsList = await _teamPlayoffsStatsRepository.Query()
 				.Where(t => t.Season == season.Year)
 				.Include(t => t.Team)
 				.ToListAsync();
@@ -222,9 +246,11 @@ namespace NBALigaSimulation.Server.Services.StatsService
 
 		public async Task<ServiceResponse<List<TeamRegularStatsRankDto>>> GetAllTeamRegularStatsRank()
 		{
-			var season = _context.Seasons.OrderBy(s => s.Year).Last();
+			var season = await _seasonRepository.Query()
+				.OrderBy(s => s.Year)
+				.LastOrDefaultAsync();
 
-			var teamRegularStatsList = await _context.TeamRegularStats
+			var teamRegularStatsList = await _teamRegularStatsRepository.Query()
 				.Where(t => t.Season == season.Year)
 				.Include(t => t.Team)
 				.ToListAsync();
@@ -242,9 +268,11 @@ namespace NBALigaSimulation.Server.Services.StatsService
 		public async Task<ServiceResponse<List<PlayerPlayoffsStatsDto>>> GetAllPlayerPlayoffsStats()
 		{
 
-			var season = _context.Seasons.OrderBy(s => s.Year).Last();
+			var season = await _seasonRepository.Query()
+				.OrderBy(s => s.Year)
+				.LastOrDefaultAsync();
 
-			var playerRegularStatsList = await _context.PlayerPlayoffsStats
+			var playerRegularStatsList = await _playerPlayoffsStatsRepository.Query()
 				.Where(t => t.Season == season.Year && t.Min > 5)
 				.ToListAsync();
 
@@ -260,24 +288,38 @@ namespace NBALigaSimulation.Server.Services.StatsService
 		{
 			var response = new ServiceResponse<bool>();
             
-			var gameStats = await _context.PlayerGameStats.ToListAsync();
-			_context.PlayerGameStats.RemoveRange(gameStats);
+			var gameStats = await _playerGameStatsRepository.Query().ToListAsync();
+			foreach (var stat in gameStats)
+			{
+				_playerGameStatsRepository.Remove(stat);
+			}
 			
-			var playoffsStats = await _context.PlayerPlayoffsStats.ToListAsync();
-			_context.PlayerPlayoffsStats.RemoveRange(playoffsStats); 
+			var playoffsStats = await _playerPlayoffsStatsRepository.Query().ToListAsync();
+			foreach (var stat in playoffsStats)
+			{
+				_playerPlayoffsStatsRepository.Remove(stat);
+			}
 			
-			var regularStats = await _context.PlayerRegularStats.ToListAsync();
-			_context.PlayerRegularStats.RemoveRange(regularStats);
+			var regularStats = await _playerRegularStatsRepository.Query().ToListAsync();
+			foreach (var stat in regularStats)
+			{
+				_playerRegularStatsRepository.Remove(stat);
+			}
 			
-			var teamRegularStatsList = await _context.TeamRegularStats.ToListAsync();
-			_context.TeamRegularStats.RemoveRange(teamRegularStatsList);  
+			var teamRegularStatsList = await _teamRegularStatsRepository.Query().ToListAsync();
+			foreach (var stat in teamRegularStatsList)
+			{
+				_teamRegularStatsRepository.Remove(stat);
+			}
 				
-			var teamPlayoffsStats = await _context.TeamPlayoffsStats.ToListAsync();
-			_context.TeamPlayoffsStats.RemoveRange(teamPlayoffsStats); 	
+			var teamPlayoffsStats = await _teamPlayoffsStatsRepository.Query().ToListAsync();
+			foreach (var stat in teamPlayoffsStats)
+			{
+				_teamPlayoffsStatsRepository.Remove(stat);
+			}
 				
-			await _context.SaveChangesAsync();
-            
-			await _context.SaveChangesAsync();
+			// Qualquer SaveChanges em um repositório dispara para o mesmo contexto
+			await _playerGameStatsRepository.SaveChangesAsync();
 			response.Success = true;
 			response.Message = "Stats limpas com sucesso!.";
 

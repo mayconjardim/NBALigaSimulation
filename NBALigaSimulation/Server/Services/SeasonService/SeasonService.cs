@@ -1,4 +1,4 @@
-﻿using AutoMapper;
+using AutoMapper;
 using NBALigaSimulation.Shared.Dtos.Seasons;
 using NBALigaSimulation.Shared.Engine.Schedule;
 using NBALigaSimulation.Shared.Engine.Utils;
@@ -12,19 +12,24 @@ namespace NBALigaSimulation.Server.Services.SeasonService
 {
     public class SeasonService : ISeasonService
     {
-        private readonly DataContext _context;
+        private readonly ISeasonRepository _seasonRepository;
+        private readonly IGenericRepository<TeamDraftPicks> _draftPickRepository;
         private readonly IMapper _mapper;
 
-        public SeasonService(DataContext context, IMapper mapper)
+        public SeasonService(
+            ISeasonRepository seasonRepository,
+            IGenericRepository<TeamDraftPicks> draftPickRepository,
+            IMapper mapper)
         {
-            _context = context;
+            _seasonRepository = seasonRepository;
+            _draftPickRepository = draftPickRepository;
             _mapper = mapper;
         }
 
         public async Task<ServiceResponse<CompleteSeasonDto>> GetLastSeason()
         {
             var response = new ServiceResponse<CompleteSeasonDto>();
-            var season = await _context.Seasons.OrderBy(s => s.Year).LastOrDefaultAsync();
+            var season = await _seasonRepository.GetLastSeasonAsync();
 
             if (season == null)
             {
@@ -43,7 +48,7 @@ namespace NBALigaSimulation.Server.Services.SeasonService
         {
             ServiceResponse<List<CompleteSeasonDto>> response = new ServiceResponse<List<CompleteSeasonDto>>();
             
-            var seasons = await _context.Seasons.OrderBy(s => s.Year).ToListAsync();
+            var seasons = await _seasonRepository.GetAllOrderedAsync();
             
             if (seasons.Count == 0)
             {
@@ -65,7 +70,7 @@ namespace NBALigaSimulation.Server.Services.SeasonService
         {
             ServiceResponse<CompleteSeasonDto> response = new ServiceResponse<CompleteSeasonDto>();
 
-            var LastSeason = await _context.Seasons.OrderBy(s => s.Year).LastOrDefaultAsync();
+            var LastSeason = await _seasonRepository.GetLastSeasonAsync();
 
             if (LastSeason == null)
             {
@@ -81,13 +86,15 @@ namespace NBALigaSimulation.Server.Services.SeasonService
                 return response;
             }
 
-            Season season = new Season();
-            season.Year = LastSeason.Year + 1;
+            Season season = new Season
+            {
+                Year = LastSeason.Year + 1
+            };
 
-            _context.Add(season);
-            await _context.SaveChangesAsync();
+            await _seasonRepository.AddAsync(season);
+            await _seasonRepository.SaveChangesAsync();
 
-            List<Team> teams = await _context.Teams.Where(t => t.IsHuman == true).ToListAsync();
+            List<Team> teams = await _seasonRepository.GetHumanTeamsAsync();
 
             foreach (Team team in teams)
             {
@@ -106,10 +113,10 @@ namespace NBALigaSimulation.Server.Services.SeasonService
                     draftPicks.Add(draftPick);
                 }
 
-                _context.AddRange(draftPicks);
+                await _draftPickRepository.AddRangeAsync(draftPicks);
             }
 
-            await _context.SaveChangesAsync();
+            await _draftPickRepository.SaveChangesAsync();
 
             response.Message = $"Temporada criada com sucesso!";
             response.Success = true;
@@ -121,7 +128,7 @@ namespace NBALigaSimulation.Server.Services.SeasonService
         {
             ServiceResponse<CompleteSeasonDto> response = new ServiceResponse<CompleteSeasonDto>();
 
-            Season season = await _context.Seasons.OrderBy(s => s.Year).LastOrDefaultAsync();
+            Season season = await _seasonRepository.GetLastSeasonAsync();
 
             if (season == null)
             {
@@ -130,7 +137,7 @@ namespace NBALigaSimulation.Server.Services.SeasonService
                 return response;
             }
 
-            List<Game> existingGames = await _context.Games.Where(g => g.SeasonId == season.Id).ToListAsync();
+            List<Game> existingGames = await _seasonRepository.GetGamesBySeasonAsync(season.Id);
 
             if (existingGames.Count > 0)
             {
@@ -139,7 +146,7 @@ namespace NBALigaSimulation.Server.Services.SeasonService
                 return response;
             }
 
-            List<Team> teams = await _context.Teams.Where(t => t.IsHuman).ToListAsync();
+            List<Team> teams = await _seasonRepository.GetHumanTeamsAsync();
 
             if (teams.Count == 0)
             {
@@ -157,16 +164,13 @@ namespace NBALigaSimulation.Server.Services.SeasonService
                 return response;
             }
             
-            _context.Games.AddRange(generatingSeasonGames);
-            await _context.SaveChangesAsync();
+            await _seasonRepository.AddGamesAsync(generatingSeasonGames);
+            await _seasonRepository.SaveChangesAsync();
 
-            List<Game> savedGames = await _context.Games
-                .Include(t => t.HomeTeam)
-                .Include(t => t.AwayTeam)
-                .ToListAsync();
+            List<Game> savedGames = await _seasonRepository.GetGamesWithTeamsBySeasonAsync(season.Id);
             
             var games = ScheduleHelp.GenerateWeeksAndDates(savedGames, teams);
-            await _context.SaveChangesAsync();
+            await _seasonRepository.SaveChangesAsync();
             
             response.Message = "Cronograma criado com sucesso!";
             response.Success = true;
@@ -179,7 +183,7 @@ namespace NBALigaSimulation.Server.Services.SeasonService
         {
             ServiceResponse<CompleteSeasonDto> response = new ServiceResponse<CompleteSeasonDto>();
 
-            Season season = await _context.Seasons.OrderBy(s => s.Id).LastOrDefaultAsync();
+            Season season = await _seasonRepository.GetLastSeasonAsync();
 
             if (season == null)
             {
@@ -188,7 +192,7 @@ namespace NBALigaSimulation.Server.Services.SeasonService
                 return response;
             }
 
-            List<Player> players = await _context.Players.Include(p => p.Ratings).ToListAsync();
+            List<Player> players = await _seasonRepository.GetPlayersWithRatingsAsync();
 
             if (players.Any(p => p.Ratings.Where(s => s.Season == season.Year).Any()))
             {
@@ -204,7 +208,7 @@ namespace NBALigaSimulation.Server.Services.SeasonService
                 player.Ratings.Add(newRatings);
             }
 
-            await _context.SaveChangesAsync();
+            await _seasonRepository.SaveChangesAsync();
 
             response.Success = true;
             response.Data = _mapper.Map<CompleteSeasonDto>(season);
@@ -217,9 +221,9 @@ namespace NBALigaSimulation.Server.Services.SeasonService
             
             ServiceResponse<CompleteSeasonDto> response = new ServiceResponse<CompleteSeasonDto>();
             
-            Season season = await _context.Seasons.OrderBy(s => s.Id).LastOrDefaultAsync();
+            Season season = await _seasonRepository.GetLastSeasonAsync();
             
-            List<Game> existingGames = await _context.Games.Where(g => g.SeasonId == season.Id).ToListAsync();
+            List<Game> existingGames = await _seasonRepository.GetGamesBySeasonAsync(season.Id);
 
             if (existingGames.Count <= 0)
             {
@@ -228,8 +232,8 @@ namespace NBALigaSimulation.Server.Services.SeasonService
                 return response;
             }
 
-            _context.Games.RemoveRange(existingGames);
-            await _context.SaveChangesAsync();
+            await _seasonRepository.RemoveGamesAsync(existingGames);
+            await _seasonRepository.SaveChangesAsync();
             
             response.Success = true;
             response.Message = "Jogos deletados com sucesso!";

@@ -1,11 +1,13 @@
-﻿using AutoMapper;
-using NBALigaSimulation.Server.Migrations;
+using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using NBALigaSimulation.Shared.Dtos.Playoffs;
 using NBALigaSimulation.Shared.Engine.Utils;
+using NBALigaSimulation.Shared.Models.Games;
+using NBALigaSimulation.Shared.Models.Players;
+using NBALigaSimulation.Shared.Models.SeasonPlayoffs;
+using NBALigaSimulation.Shared.Models.Seasons;
 using NBALigaSimulation.Shared.Models.Teams;
 using NBALigaSimulation.Shared.Models.Utils;
-using PlayerAwards = NBALigaSimulation.Shared.Models.Players.PlayerAwards;
-using Playoffs = NBALigaSimulation.Shared.Models.SeasonPlayoffs.Playoffs;
 
 
 namespace NBALigaSimulation.Server.Services.PlayoffsService
@@ -13,21 +15,44 @@ namespace NBALigaSimulation.Server.Services.PlayoffsService
     public class PlayoffsService : IPlayoffsService
     {
 
-        private readonly DataContext _context;
+        private readonly IGenericRepository<Season> _seasonRepository;
+        private readonly IGenericRepository<Playoffs> _playoffsRepository;
+        private readonly IGenericRepository<Game> _gameRepository;
+        private readonly IGenericRepository<PlayoffsGame> _playoffsGameRepository;
+        private readonly IGenericRepository<Team> _teamRepository;
+        private readonly IGenericRepository<Player> _playerRepository;
+        private readonly IGenericRepository<PlayerAwards> _playerAwardsRepository;
         private readonly IMapper _mapper;
 
-        public PlayoffsService(DataContext context, IMapper mapper)
+        public PlayoffsService(
+            IGenericRepository<Season> seasonRepository,
+            IGenericRepository<Playoffs> playoffsRepository,
+            IGenericRepository<Game> gameRepository,
+            IGenericRepository<PlayoffsGame> playoffsGameRepository,
+            IGenericRepository<Team> teamRepository,
+            IGenericRepository<Player> playerRepository,
+            IGenericRepository<PlayerAwards> playerAwardsRepository,
+            IMapper mapper)
         {
-            _context = context;
+            _seasonRepository = seasonRepository;
+            _playoffsRepository = playoffsRepository;
+            _gameRepository = gameRepository;
+            _playoffsGameRepository = playoffsGameRepository;
+            _teamRepository = teamRepository;
+            _playerRepository = playerRepository;
+            _playerAwardsRepository = playerAwardsRepository;
             _mapper = mapper;
         }
 
         public async Task<ServiceResponse<List<PlayoffsDto>>> GetPlayoffs()
         {
             var response = new ServiceResponse<List<PlayoffsDto>>();
-            var season = await _context.Seasons.OrderBy(s => s.Year).LastOrDefaultAsync();
+            var season = await _seasonRepository.Query()
+                .OrderBy(s => s.Year)
+                .LastOrDefaultAsync();
 
-            var playoffs = await _context.Playoffs.Where(p => p.Season == season.Year)
+            var playoffs = await _playoffsRepository.Query()
+                .Where(p => p.Season == season.Year)
                 .Include(p => p.TeamOne)
                 .Include(p => p.TeamTwo)
                 .ToListAsync();
@@ -49,9 +74,12 @@ namespace NBALigaSimulation.Server.Services.PlayoffsService
         public async Task<ServiceResponse<PlayoffsDto>> GetPlayoffsById(int Id)
         {
             var response = new ServiceResponse<PlayoffsDto>();
-            var season = await _context.Seasons.OrderBy(s => s.Year).LastOrDefaultAsync();
+            var season = await _seasonRepository.Query()
+                .OrderBy(s => s.Year)
+                .LastOrDefaultAsync();
 
-            var playoff = await _context.Playoffs.Where(p => p.Id == Id && p.Season == season.Year)
+            var playoff = await _playoffsRepository.Query()
+                .Where(p => p.Id == Id && p.Season == season.Year)
                 .OrderBy(p => p.Id)
                 .Include(p => p.TeamOne)
                 .Include(p => p.TeamTwo)
@@ -77,20 +105,24 @@ namespace NBALigaSimulation.Server.Services.PlayoffsService
         public async Task<ServiceResponse<bool>> GeneratePlayoffs()
         {
             var response = new ServiceResponse<bool>();
-            var season = await _context.Seasons.OrderBy(s => s.Year).LastOrDefaultAsync();
+            var season = await _seasonRepository.Query()
+                .OrderBy(s => s.Year)
+                .LastOrDefaultAsync();
 
-            List<Team> teamsEast = await _context.Teams
+            List<Team> teamsEast = await _teamRepository.Query()
                 .Include(t => t.TeamRegularStats)
                 .Where(t => t.Conference == "East" && t.TeamRegularStats.Any(trs => trs.Season == season.Year))
                 .ToListAsync();
 
-            List<Team> teamsWest = await _context.Teams
+            List<Team> teamsWest = await _teamRepository.Query()
                 .Include(t => t.TeamRegularStats)
                 .Where(t => t.Conference == "West" && t.TeamRegularStats.Any(trs => trs.Season == season.Year))
                 .ToListAsync();
 
 
-            var playoffsExists = await _context.Playoffs.Where(p => p.Season == season.Year).ToListAsync();
+            var playoffsExists = await _playoffsRepository.Query()
+                .Where(p => p.Season == season.Year)
+                .ToListAsync();
 
             if (playoffsExists.Count > 0)
             {
@@ -103,9 +135,9 @@ namespace NBALigaSimulation.Server.Services.PlayoffsService
             var games = PlayoffsUtils.GenerateRoundGames(playoffs, season);
             season.RegularCompleted = true;
 
-            _context.AddRange(games);
-            _context.AddRange(playoffs);
-            await _context.SaveChangesAsync();
+            await _playoffsGameRepository.AddRangeAsync(games);
+            await _playoffsRepository.AddRangeAsync(playoffs);
+            await _playoffsRepository.SaveChangesAsync();
 
             response.Success = true;
             return response;
@@ -114,13 +146,15 @@ namespace NBALigaSimulation.Server.Services.PlayoffsService
         public async Task<ServiceResponse<bool>> Generate2Round()
         {
             var response = new ServiceResponse<bool>();
-            var season = await _context.Seasons.OrderBy(s => s.Year).LastOrDefaultAsync();
+            var season = await _seasonRepository.Query()
+                .OrderBy(s => s.Year)
+                .LastOrDefaultAsync();
 
-            List<Playoffs> playoffs = await _context.Playoffs
-            .Where(p => p.Season == season.Year)
-            .Include(t => t.TeamOne).ThenInclude(t => t.TeamRegularStats)
-            .Include(t => t.TeamTwo).ThenInclude(t => t.TeamRegularStats)
-            .ToListAsync();
+            List<Playoffs> playoffs = await _playoffsRepository.Query()
+                .Where(p => p.Season == season.Year)
+                .Include(t => t.TeamOne).ThenInclude(t => t.TeamRegularStats)
+                .Include(t => t.TeamTwo).ThenInclude(t => t.TeamRegularStats)
+                .ToListAsync();
 
             if (playoffs.Any(p => p.SeriesId == 9))
             {
@@ -132,9 +166,9 @@ namespace NBALigaSimulation.Server.Services.PlayoffsService
             var newPlayoffs = PlayoffsUtils.Generate2ndRound(playoffs, season.Year);
             var games = PlayoffsUtils.GenerateRoundGames(newPlayoffs, season);
 
-            _context.AddRange(games);
-            _context.AddRange(newPlayoffs);
-            await _context.SaveChangesAsync();
+            await _playoffsGameRepository.AddRangeAsync(games);
+            await _playoffsRepository.AddRangeAsync(newPlayoffs);
+            await _playoffsRepository.SaveChangesAsync();
 
             response.Message = "2º round gerado sucesso!";
             response.Success = true;
@@ -144,13 +178,15 @@ namespace NBALigaSimulation.Server.Services.PlayoffsService
         public async Task<ServiceResponse<bool>> Generate3Round()
         {
             var response = new ServiceResponse<bool>();
-            var season = await _context.Seasons.OrderBy(s => s.Year).LastOrDefaultAsync();
+            var season = await _seasonRepository.Query()
+                .OrderBy(s => s.Year)
+                .LastOrDefaultAsync();
 
-            List<Playoffs> playoffs = await _context.Playoffs
-            .Where(p => p.Season == season.Year)
-            .Include(t => t.TeamOne).ThenInclude(t => t.TeamRegularStats)
-            .Include(t => t.TeamTwo).ThenInclude(t => t.TeamRegularStats)
-            .ToListAsync();
+            List<Playoffs> playoffs = await _playoffsRepository.Query()
+                .Where(p => p.Season == season.Year)
+                .Include(t => t.TeamOne).ThenInclude(t => t.TeamRegularStats)
+                .Include(t => t.TeamTwo).ThenInclude(t => t.TeamRegularStats)
+                .ToListAsync();
 
             if (playoffs.Any(p => p.SeriesId == 13))
             {
@@ -162,9 +198,9 @@ namespace NBALigaSimulation.Server.Services.PlayoffsService
             var newPlayoffs = PlayoffsUtils.Generate3ndRound(playoffs, season.Year);
             var games = PlayoffsUtils.GenerateRoundGames(newPlayoffs, season);
 
-            _context.AddRange(games);
-            _context.AddRange(newPlayoffs);
-            await _context.SaveChangesAsync();
+            await _playoffsGameRepository.AddRangeAsync(games);
+            await _playoffsRepository.AddRangeAsync(newPlayoffs);
+            await _playoffsRepository.SaveChangesAsync();
 
             response.Success = true;
             return response;
@@ -173,13 +209,15 @@ namespace NBALigaSimulation.Server.Services.PlayoffsService
         public async Task<ServiceResponse<bool>> Generate4Round()
         {
             var response = new ServiceResponse<bool>();
-            var season = await _context.Seasons.OrderBy(s => s.Year).LastOrDefaultAsync();
+            var season = await _seasonRepository.Query()
+                .OrderBy(s => s.Year)
+                .LastOrDefaultAsync();
 
-            List<Playoffs> playoffs = await _context.Playoffs
-            .Where(p => p.Season == season.Year)
-            .Include(t => t.TeamOne).ThenInclude(t => t.TeamRegularStats)
-            .Include(t => t.TeamTwo).ThenInclude(t => t.TeamRegularStats)
-            .ToListAsync();
+            List<Playoffs> playoffs = await _playoffsRepository.Query()
+                .Where(p => p.Season == season.Year)
+                .Include(t => t.TeamOne).ThenInclude(t => t.TeamRegularStats)
+                .Include(t => t.TeamTwo).ThenInclude(t => t.TeamRegularStats)
+                .ToListAsync();
 
 
             if (playoffs.Any(p => p.SeriesId == 15))
@@ -192,9 +230,9 @@ namespace NBALigaSimulation.Server.Services.PlayoffsService
             var newPlayoffs = PlayoffsUtils.Generate4ndRound(playoffs, season.Year);
             var games = PlayoffsUtils.GenerateRoundGames(newPlayoffs, season);
 
-            _context.AddRange(games);
-            _context.AddRange(newPlayoffs);
-            await _context.SaveChangesAsync();
+            await _playoffsGameRepository.AddRangeAsync(games);
+            await _playoffsRepository.AddRangeAsync(newPlayoffs);
+            await _playoffsRepository.SaveChangesAsync();
 
             response.Success = true;
             return response;
@@ -203,7 +241,9 @@ namespace NBALigaSimulation.Server.Services.PlayoffsService
         public async Task<ServiceResponse<bool>> EndPlayoffs()
         {
             var response = new ServiceResponse<bool>();
-            var season = await _context.Seasons.OrderBy(s => s.Year).LastOrDefaultAsync();
+            var season = await _seasonRepository.Query()
+                .OrderBy(s => s.Year)
+                .LastOrDefaultAsync();
 
             if (season.IsCompleted)
             {
@@ -214,7 +254,7 @@ namespace NBALigaSimulation.Server.Services.PlayoffsService
 
             season.IsCompleted = true;
 
-            var playoffs = await _context.Playoffs
+            var playoffs = await _playoffsRepository.Query()
                 .Where(p => p.Season == season.Year && p.SeriesId == 15)
                 .Include(g => g.PlayoffGames)
                 .ToListAsync();
@@ -231,7 +271,9 @@ namespace NBALigaSimulation.Server.Services.PlayoffsService
                 playoffs.FirstOrDefault(t => t.SeriesId == 15).TeamTwoId;
 
 
-            var championTeam = _context.Teams.OrderBy(t => t.Id).LastOrDefault(t => t.Id == championId);
+            var championTeam = await _teamRepository.Query()
+                .OrderBy(t => t.Id)
+                .LastOrDefaultAsync(t => t.Id == championId);
             if (championTeam != null)
             {
                 championTeam.Championships += 1;
@@ -239,7 +281,10 @@ namespace NBALigaSimulation.Server.Services.PlayoffsService
 
             var gamesList = playoffs.SelectMany(t => t.PlayoffGames).ToList();
             var gamesId = gamesList.Select(game => game.GameId).ToList();
-            var games = await _context.Games.Where(game => gamesId.Contains(game.Id)).Include(t => t.PlayerGameStats.Where(t => t.TeamId == championId)).ToListAsync();
+            var games = await _gameRepository.Query()
+                .Where(game => gamesId.Contains(game.Id))
+                .Include(t => t.PlayerGameStats.Where(t => t.TeamId == championId))
+                .ToListAsync();
 
             var playerGameScores = new Dictionary<int, double>();
 
@@ -261,7 +306,10 @@ namespace NBALigaSimulation.Server.Services.PlayoffsService
             }
 
             var playerIdWithMaxGameScore = playerGameScores.OrderByDescending(kv => kv.Value).FirstOrDefault().Key;
-            var playerWithMaxGameScore = await _context.Players.Include(p => p.PlayoffsStats).Include(p => p.PlayerAwards).SingleOrDefaultAsync(p => p.Id == playerIdWithMaxGameScore);
+            var playerWithMaxGameScore = await _playerRepository.Query()
+                .Include(p => p.PlayoffsStats)
+                .Include(p => p.PlayerAwards)
+                .SingleOrDefaultAsync(p => p.Id == playerIdWithMaxGameScore);
 
             if (playerWithMaxGameScore != null)
             {
@@ -269,25 +317,25 @@ namespace NBALigaSimulation.Server.Services.PlayoffsService
                 if (playoffsStats != null)
                 {
 
-                    var award = new PlayerAwards
-                    {
-                        PlayerId = playerIdWithMaxGameScore,
-                        Player = playerWithMaxGameScore,
-                        Award = "NBA Finals MVP",
-                        Season = season.Year,
-                        Team = championTeam.Name,
-                        Ppg = playoffsStats.PtsPG,
-                        Rpg = playoffsStats.TRebPG,
-                        Apg = playoffsStats.AstPG,
-                        Spg = playoffsStats.StlPG,
-                        Bpg = playoffsStats.BlkPG
-                    };
+                        var award = new PlayerAwards
+                        {
+                            PlayerId = playerIdWithMaxGameScore,
+                            Player = playerWithMaxGameScore,
+                            Award = "NBA Finals MVP",
+                            Season = season.Year,
+                            Team = championTeam.Name,
+                            Ppg = playoffsStats.PtsPG,
+                            Rpg = playoffsStats.TRebPG,
+                            Apg = playoffsStats.AstPG,
+                            Spg = playoffsStats.StlPG,
+                            Bpg = playoffsStats.BlkPG
+                        };
 
-                    _context.Add(award);
+                        await _playerAwardsRepository.AddAsync(award);
                 }
             }
 
-            await _context.SaveChangesAsync();
+            await _playerAwardsRepository.SaveChangesAsync();
             response.Success = true;
             return response;
         }
