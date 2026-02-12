@@ -1,4 +1,5 @@
 @page "/draft"
+@using NBALigaSimulation.Client.Utilities
 
 <PageTitle>Draft</PageTitle>
 
@@ -210,7 +211,7 @@
                                                         </td>
                                                         <td>@player.Pos</td>
                                                         <td>@player.Hgt cm</td>
-                                                        <td>@player.Weight kg</td>
+                                                        <td>@Util.LbsToKg(player.Weight) kg</td>
                                                         <td>
                                                             @if (player.Ratings != null && player.Ratings.Any())
                                                             {

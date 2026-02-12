@@ -1,4 +1,4 @@
-﻿using System.Globalization;
+using System.Globalization;
 
 namespace NBALigaSimulation.Client.Utilities
 {
@@ -7,7 +7,21 @@ namespace NBALigaSimulation.Client.Utilities
 
         public static int Age(int season, int born)
         {
-            return season - born;
+            // Garante que a temporada e o ano de nascimento sejam válidos
+            if (season <= 0 || born <= 0)
+            {
+                // Se não temos dados válidos, retorna uma idade padrão baseada no ano atual
+                var currentYear = DateTime.Now.Year;
+                if (born > 0)
+                {
+                    return Math.Max(18, currentYear - born); // Mínimo de 18 anos para jogadores
+                }
+                return 20; // Idade padrão se não houver dados
+            }
+            
+            var age = season - born;
+            // Garante que a idade seja sempre positiva e razoável (entre 18 e 50 anos)
+            return Math.Max(18, Math.Min(50, age));
         }
 
         public static int InchesToCm(double inches)

@@ -53,6 +53,32 @@
                             }
                         </span>
                     </li>
+                    @if (_player.Contract != null)
+                    {
+                        <li class="bio-list-item">
+                            <span class="title">Contract</span>
+                            <span class="value">
+                                @{
+                                    var contractAmount = FormatContractAmount(_player.Contract.Amount);
+                                    var contractExp = _player.Contract.Exp;
+                                    var yearsRemaining = contractExp - _season;
+                                    
+                                    if (yearsRemaining > 0)
+                                    {
+                                        <span>$@contractAmount/yr • Expires @contractExp (@yearsRemaining year@(yearsRemaining > 1 ? "s" : "") remaining)</span>
+                                    }
+                                    else if (yearsRemaining == 0)
+                                    {
+                                        <span>$@contractAmount/yr • <span class="text-warning">Expires @contractExp (this season)</span></span>
+                                    }
+                                    else
+                                    {
+                                        <span>$@contractAmount/yr • <span class="text-danger">Expired @contractExp</span></span>
+                                    }
+                                }
+                            </span>
+                        </li>
+                    }
                 </ul>
             </div>
             

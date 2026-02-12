@@ -23,13 +23,33 @@ public partial class PlayerRating
     
      protected override async Task OnInitializedAsync()
      {
-
-         _season = int.Parse(await LocalStorage.GetItemAsync<string>("season"));
+         // Sempre usa a temporada atual do sistema para cálculos de contrato e idade
+         try
+         {
+             var seasonStr = await LocalStorage.GetItemAsync<string>("season");
+             if (!string.IsNullOrEmpty(seasonStr) && int.TryParse(seasonStr, out int parsedSeason))
+             {
+                 _season = parsedSeason;
+             }
+             else
+             {
+                 // Se não houver temporada no localStorage, usa o ano atual
+                 _season = DateTime.Now.Year;
+             }
+         }
+         catch
+         {
+             _season = DateTime.Now.Year;
+         }
          
          if (_player != null)
          {
              _rating = _player.Ratings.LastOrDefault();
-             _season = _rating.Season;
+             // Se não houver rating, usa a temporada atual
+             if (_rating == null)
+             {
+                 _rating = new PlayerRatingDto { Season = _season };
+             }
          }
          
             var Options = new ChartJsOptions()
@@ -169,6 +189,21 @@ public partial class PlayerRating
              default:
                  return "Athlete";
          }
+     }
+
+     private string FormatContractAmount(int amount)
+     {
+         if (amount >= 1000000)
+         {
+             double millions = amount / 1000000.0;
+             return millions.ToString("0.##", System.Globalization.CultureInfo.InvariantCulture) + "M";
+         }
+         else if (amount >= 1000)
+         {
+             double thousands = amount / 1000.0;
+             return thousands.ToString("0.##", System.Globalization.CultureInfo.InvariantCulture) + "K";
+         }
+         return amount.ToString();
      }
     
 }
