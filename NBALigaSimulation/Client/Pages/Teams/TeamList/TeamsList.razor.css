@@ -1,38 +1,51 @@
-.teams-container {
-    padding: 1.5rem;
+.teams-page {
     max-width: 1200px;
     margin: 0 auto;
-    animation: fadeInUp 0.5s ease;
 }
 
-.conference-section {
-    margin-bottom: 3rem;
-}
-
-.conference-title {
-    font-size: 1.75rem;
-    font-weight: 800;
-    color: #222;
-    margin-bottom: 1.5rem;
+.teams-header {
     padding-bottom: 0.5rem;
-    border-bottom: 2px solid var(--primary-color);
+    border-bottom: 2px solid #e5e7eb;
+}
+
+.teams-header h1 {
+    font-weight: 700;
+    color: var(--bs-body-color, #212529);
+}
+
+.teams-section-card {
+    background-color: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    overflow: hidden;
+    margin-top: 1.5rem;
+    padding: 1.5rem;
+}
+
+.teams-section-title {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #1a1a2e;
+    margin-bottom: 1.25rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid #e5e7eb;
     display: inline-block;
 }
 
 .teams-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-    gap: 1.5rem;
+    gap: 1.25rem;
 }
 
 .team-card {
-    background: white;
-    border-radius: 16px;
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.05);
-    padding: 1.5rem;
+    background: #f8f9fa;
+    border-radius: 12px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+    padding: 1.25rem;
     text-align: center;
     cursor: pointer;
-    transition: all 0.3s ease;
+    transition: all 0.25s ease;
     text-decoration: none;
     color: inherit;
     display: flex;
@@ -43,23 +56,26 @@
 }
 
 .team-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.1);
+    background: #ffffff;
+    transform: translateY(-4px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+    border-color: #e5e7eb;
 }
 
 .team-card img {
-    height: 80px;
-    width: 80px;
-    margin-bottom: 1rem;
-    transition: transform 0.3s ease;
+    height: 72px;
+    width: 72px;
+    margin-bottom: 0.75rem;
+    object-fit: contain;
+    transition: transform 0.25s ease;
 }
 
 .team-card:hover img {
-    transform: scale(1.1);
+    transform: scale(1.08);
 }
 
 .team-name {
-    font-size: 1rem;
+    font-size: 0.95rem;
     font-weight: 600;
     color: #333;
 }
@@ -71,8 +87,8 @@
     }
 
     .team-card img {
-        height: 60px;
-        width: 60px;
+        height: 56px;
+        width: 56px;
     }
 }
 

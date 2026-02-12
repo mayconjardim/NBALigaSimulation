@@ -1,158 +1,170 @@
-.draft-picks-container {
-    padding: 1.5rem;
+.picks-page {
     max-width: 900px;
     margin: 0 auto;
-    animation: fadeInUp 0.5s ease;
 }
 
-.page-title {
-    font-size: 1.75rem;
-    font-weight: 800;
-    color: #222;
-    margin-bottom: 1.5rem;
+.picks-header {
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid #e5e7eb;
 }
 
-.filter-bar {
+.picks-header h1 {
+    font-weight: 700;
+    color: var(--bs-body-color, #212529);
+}
+
+.picks-year-nav {
     display: flex;
-    gap: 1rem;
-    margin-bottom: 1.5rem;
-    padding: 1rem;
-    background-color: #f8f9fa;
-    border-radius: 12px;
     flex-wrap: wrap;
-    align-items: center;
-}
-
-.filter-group {
-    display: flex;
-    flex-direction: column;
-    gap: 0.25rem;
-    flex-grow: 1;
-}
-
-.filter-group label {
-    font-size: 0.75rem;
-    font-weight: 600;
-    color: #6c757d;
-    text-transform: uppercase;
-}
-
-.form-select {
-    padding: 0.5rem 1rem;
-    border-radius: 8px;
-    border: 1px solid #ced4da;
-    background-color: white;
-    font-weight: 500;
-    width: 100%;
-}
-
-.year-navigator {
-    display: flex;
-    justify-content: center;
     gap: 0.5rem;
-    margin-bottom: 1.5rem;
-    flex-wrap: wrap;
 }
 
-.year-button {
+.picks-year-btn {
     background-color: #f1f3f5;
     border: none;
     border-radius: 8px;
     padding: 0.5rem 1rem;
     font-weight: 600;
+    font-size: 0.9rem;
     cursor: pointer;
     transition: all 0.2s ease;
+    color: #495057;
 }
 
-.year-button:hover {
+.picks-year-btn:hover {
     background-color: #e9ecef;
+    color: #212529;
 }
 
-.year-button.active {
-    background-color: var(--primary-color);
+.picks-year-btn.active {
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
     color: white;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
 }
 
-.draft-picks-table-wrapper {
-    background: white;
-    border-radius: 16px;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+.picks-filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+}
+
+.picks-filter-select {
+    max-width: 220px;
+    border-radius: 8px;
+    border: 1px solid #dee2e6;
+}
+
+.picks-table-container {
+    background-color: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
     overflow: hidden;
+    margin-top: 1rem;
 }
 
-.draft-picks-table {
+.picks-table {
+    margin: 0;
+    border-collapse: separate;
+    border-spacing: 0;
     width: 100%;
-    border-collapse: collapse;
+    text-align: center;
 }
 
-.draft-picks-table th {
-    background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+.picks-table thead {
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
     color: white;
-    font-size: 0.75rem;
+}
+
+.picks-table thead th {
+    padding: 1rem 0.75rem;
     font-weight: 600;
-    text-align: center;
-    padding: 1rem 0.5rem;
+    font-size: 0.8rem;
     text-transform: uppercase;
     letter-spacing: 0.5px;
+    white-space: nowrap;
+    border: none;
 }
 
-.draft-picks-table td {
+.picks-table tbody td {
+    padding: 0.875rem 0.75rem;
     font-size: 0.9rem;
-    font-weight: 500;
-    text-align: center;
-    padding: 1rem 0.5rem;
-    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
-    transition: background-color 0.3s ease;
     vertical-align: middle;
+    border-bottom: 1px solid #f0f0f0;
 }
 
-.draft-picks-table tr:last-child td {
+.picks-table tbody tr:last-child td {
     border-bottom: none;
 }
 
-.draft-picks-table tr:hover td {
+.picks-table tbody tr:nth-child(even) {
     background-color: #f8f9fa;
 }
 
-.draft-picks-table img {
-    height: 32px;
+.picks-table tbody tr:nth-child(odd) {
+    background-color: #ffffff;
+}
+
+.picks-table tbody tr:hover td {
+    background-color: #e9ecef;
+}
+
+.picks-round-badge {
+    display: inline-block;
+    min-width: 2.5rem;
+    padding: 0.25rem 0.5rem;
+    border-radius: 6px;
+    font-weight: 600;
+    font-size: 0.85rem;
+    background-color: #e9ecef;
+    color: #495057;
+}
+
+.picks-team-cell {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+}
+
+.picks-team-logo {
     width: 32px;
+    height: 32px;
+    object-fit: contain;
+    flex-shrink: 0;
+}
+
+.picks-team-logo:hover {
+    transform: scale(1.08);
     transition: transform 0.2s ease;
 }
 
-.draft-picks-table img:hover {
-    transform: scale(1.1);
+.picks-team-name {
+    font-weight: 500;
+    color: #333;
+}
+
+.picks-empty {
+    border-radius: 12px;
+}
+
+.table-responsive {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
 }
 
 @media (max-width: 768px) {
-    .draft-picks-container {
-        padding: 1rem 0.5rem;
+    .picks-table thead th {
+        font-size: 0.75rem;
+        padding: 0.75rem 0.5rem;
     }
-    
-    .draft-picks-table th {
-        font-size: 0.65rem;
-        padding: 0.75rem 0.25rem;
-    }
-    
-    .draft-picks-table td {
-        font-size: 0.8rem;
-        padding: 0.75rem 0.25rem;
-    }
-    
-    .draft-picks-table img {
-        height: 24px;
-        width: 24px;
-    }
-}
 
-@keyframes fadeInUp {
-    from {
-        opacity: 0;
-        transform: translateY(20px);
+    .picks-table tbody td {
+        font-size: 0.85rem;
+        padding: 0.75rem 0.5rem;
     }
-    to {
-        opacity: 1;
-        transform: translateY(0);
+
+    .picks-team-logo {
+        width: 28px;
+        height: 28px;
     }
 }

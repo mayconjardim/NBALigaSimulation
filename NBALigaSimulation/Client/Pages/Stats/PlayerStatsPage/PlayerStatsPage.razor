@@ -5,29 +5,31 @@
 @inject NavigationManager NavigationManager
 
 
-@if (_playerStats != null) 
+@if (_playerStats != null)
 {
-    <div class="container">
-        
-        <div class="filters">
-            <select class="form-select" @onchange="HandlePositionChange" >
-                <option value="">Filtrar por uma posição</option>
+    <div class="stats-page container py-4">
+        <div class="stats-header mb-4">
+            <h1 class="h3 mb-1"><i class="bi bi-bar-chart me-2"></i>Estatísticas</h1>
+            <p class="text-muted mb-0">Média de jogadores por temporada</p>
+        </div>
+
+        <div class="stats-filters mb-3">
+            <select class="form-select stats-filter-select" @onchange="HandlePositionChange">
+                <option value="">Todas as posições</option>
                 @foreach (string pos in positions)
                 {
                     <option value="@pos">@pos</option>
                 }
             </select>
-            
-             <select class="form-select" @onchange="HandleYearChange">
-                 <option value="">Filtrar por Season</option>
-                 @foreach (var year in _seasonsList)
-                 {
-                     <option value="@year.Year">@year.Year</option>
-                 }
-             </select>
-            
-            <select class="form-select" @onchange="HandleSizeChange">
-                 <option value="">Limite da lista</option>
+            <select class="form-select stats-filter-select" @onchange="HandleYearChange">
+                <option value="">Todas as temporadas</option>
+                @foreach (var year in _seasonsList)
+                {
+                    <option value="@year.Year">@year.Year</option>
+                }
+            </select>
+            <select class="form-select stats-filter-select" @onchange="HandleSizeChange">
+                <option value="">Limite da lista</option>
                 @foreach (var item in limit)
                 {
                     <option value="@item">@item</option>
@@ -35,14 +37,13 @@
             </select>
         </div>
 
-
-        <div class="table-responsive">
-            <table class="table" id="statsTable">
-                <thead>
-                <tr>
-                    <th>PLAYER</th>
-                    <th>NAME</th>
-                    <th>TEAM</th>
+        <div class="stats-table-container">
+            <div class="table-responsive">
+                <table class="table stats-table" id="statsTable">
+                    <thead>
+                        <tr>
+                            <th class="col-player">JOGADOR</th>
+                            <th>TIME</th>
                           
                     <th @onclick='() => SortTable("GP")'>GP
                         <i class="bi @GetSortIcon("GP")"></i>
@@ -92,7 +93,7 @@
                         <i class="bi @GetSortIcon("FG%")"></i>
                     </th>
                              
-                    <th @onclick='() => SortTable("FT%")'>FT%%
+                    <th @onclick='() => SortTable("FT%")'>FT%
                         <i class="bi @GetSortIcon("FT%")"></i>
                     </th>
                          
@@ -104,48 +105,47 @@
                         <i class="bi @GetSortIcon("TS%")"></i>
                     </th>
                             
-                </tr>
-                </thead>
-                <tbody>
-                @foreach (var stats in _playerStats)
-                {
-                    <tr>
-                        <td>
-                            <div class="player-pic @stats.TeamAbrv">
-                                <img src=@($"{stats.ImgUrl}") alt="Team logo" width="35">
-                            </div>
-                        </td>
-                        <td><a href="@($"players/{stats.PlayerId}")"> @stats.Name </a><span>@stats.Pos</span></td>
-                        <td><img src=@($"../Images/Logos/{stats.TeamAbrv}.svg") alt="Team logo" width="25">
-                        </td>
-                        <td >@stats.Games</td>
-                        <td>@stats.MinPG</td>
-                        <td >@stats.PtsPG</td>
-                        <td>@stats.AstPG</td>
-                        <td>@stats.TRebPG</td>
-                        <td>@stats.ORebPG</td>
-                        <td>@stats.DRebPG</td>
-                        <td>@stats.StlPG</td>
-                        <td>@stats.BlkPG</td>
-                        <td>@stats.TovPG</td>
-                        <td>@stats.PfPG</td>
-                        <td>@stats.FgPct</td>
-                        <td>@stats.FtPct</td>
-                        <td>@stats.TpPct</td>
-                        <td>@stats.TrueShooting</td>
-                    </tr>
-                }
-                </tbody>
-            </table>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    @foreach (var stats in _playerStats)
+                    {
+                        <tr>
+                            <td class="col-player">
+                                <div class="stats-player-cell">
+                                    <img src="@(string.IsNullOrEmpty(stats.ImgUrl) ? "Images/Utils/blank.png" : stats.ImgUrl)" alt="" class="stats-player-thumb" />
+                                    <a href="@($"players/{stats.PlayerId}")" class="stats-player-name">@stats.Name</a>
+                                    <span class="stats-player-pos">@stats.Pos</span>
+                                </div>
+                            </td>
+                            <td><img src="@($"../Images/Logos/{stats.TeamAbrv}.svg")" alt="" class="stats-team-logo" /></td>
+                            <td>@stats.Games</td>
+                            <td>@stats.MinPG</td>
+                            <td>@stats.PtsPG</td>
+                            <td>@stats.AstPG</td>
+                            <td>@stats.TRebPG</td>
+                            <td>@stats.ORebPG</td>
+                            <td>@stats.DRebPG</td>
+                            <td>@stats.StlPG</td>
+                            <td>@stats.BlkPG</td>
+                            <td>@stats.TovPG</td>
+                            <td>@stats.PfPG</td>
+                            <td>@stats.FgPct</td>
+                            <td>@stats.FtPct</td>
+                            <td>@stats.TpPct</td>
+                            <td>@stats.TrueShooting</td>
+                        </tr>
+                    }
+                    </tbody>
+                </table>
+            </div>
         </div>
 
-        <div class="d-flex justify-content-center">
+        <div class="d-flex justify-content-center mt-4">
             <Pagination ActivePageNumber="_currentPage"
                         TotalPages="@_statsResponse.Pages"
                         PageChanged="ChangePage" />
         </div>
-
-        
     </div>
 }
 else

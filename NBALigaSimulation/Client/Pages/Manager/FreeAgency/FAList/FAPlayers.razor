@@ -6,35 +6,37 @@
 
 <CascadingAuthenticationState>
     <AuthorizeView>
-    <div class="container">
+    <div class="fa-page container py-4">
+        <div class="fa-header mb-4">
+            <h1 class="h3 mb-1"><i class="bi bi-person-plus me-2"></i>Free Agents</h1>
+            <p class="text-muted mb-0">Jogadores disponíveis para contratação</p>
+        </div>
 
-        <div class="filters">
-            <select class="form-select" @onchange="HandlePositionChange" >
-                <option value="">Filtrar por uma posição</option>
+        <div class="fa-filters mb-3">
+            <select class="form-select fa-filter-select" @onchange="HandlePositionChange">
+                <option value="">Todas as posições</option>
                 @foreach (string pos in positions)
                 {
-                <option value="@pos">@pos</option>
+                    <option value="@pos">@pos</option>
                 }
             </select>
-
-            <select class="form-select" @onchange="HandleSizeChange">
+            <select class="form-select fa-filter-select" @onchange="HandleSizeChange">
                 <option value="">Limite da lista</option>
                 @foreach (var item in limit)
                 {
-                <option value="@item">@item</option>
+                    <option value="@item">@item</option>
                 }
             </select>
         </div>
-       
-        <div class="fa-players">
+
         @if (_faPlayers != null)
         {
-            
-             <div class="table-responsive">
-            <table class="table" id="statsTable">
-                <thead>
-                <tr>
-                    <th style="text-align: center">PLAYER</th>
+            <div class="fa-table-container">
+                <div class="table-responsive">
+                    <table class="table fa-table">
+                        <thead>
+                            <tr>
+                                <th class="col-player">JOGADOR</th>
                     <th>AGE</th>
                     <th>EXP</th>
 
@@ -104,55 +106,55 @@
                         <i class="bi @GetSortIcon("REB")"></i>
                     </th>
 
-                </tr>
-                </thead>
-                <tbody>
-                @foreach (var player in _faPlayers)
-                {
-                    @if (player.Ratings != null)
-                    {
-                        <tr>
-                            <td style="text-align: left">
-                                <div class="player-pic @player.TeamAbrv">
-                                    <a href="@("faoffer/" + player.Id)"> <i class="bi bi-person-add" style="color: green; font-size: 1.5rem; margin-right: 0.5rem; vertical-align: middle"></i></a> 
-                                    <img src=@($"{player.ImgUrl}") alt="Team logo" width="35" style="margin-left: 0.8rem">
-                                   <a href="@($"players/{player.Id}")"> @player.Name </a>, <span>@player.Pos</span>
-                                </div>
-                            </td>
-                            <td>@Util.Age(@player.Ratings.LastOrDefault().Season, player.Born.Year)</td>
-                            <td>@player.Ratings.Count</td>
-                            <td>@player.Ratings.LastOrDefault()?.CalculateOvr</td>
-                            <td>@player.Ratings.LastOrDefault()?.Pot</td>
-                            <td>@player.Ratings.LastOrDefault()?.Hgt</td>
-                            <td>@player.Ratings.LastOrDefault()?.Stre</td>
-                            <td>@player.Ratings.LastOrDefault()?.Spd</td>
-                            <td>@player.Ratings.LastOrDefault()?.Jmp</td>
-                            <td>@player.Ratings.LastOrDefault()?.Endu</td>
-                            <td>@player.Ratings.LastOrDefault()?.Ins</td>
-                            <td>@player.Ratings.LastOrDefault()?.Dnk</td>
-                            <td>@player.Ratings.LastOrDefault()?.Ft</td>
-                            <td>@player.Ratings.LastOrDefault()?.Fg</td>
-                            <td>@player.Ratings.LastOrDefault()?.Tp</td>
-                            <td>@player.Ratings.LastOrDefault()?.Oiq</td>
-                            <td>@player.Ratings.LastOrDefault()?.Diq</td>
-                            <td>@player.Ratings.LastOrDefault()?.Drb</td>
-                            <td>@player.Ratings.LastOrDefault()?.Pss</td>
-                            <td>@player.Ratings.LastOrDefault()?.Reb</td>
-                        </tr>
-                    }
-                }
-                </tbody>
-            </table>
-        </div>
-            
-            
-            
+                            </tr>
+                        </thead>
+                        <tbody>
+                        @foreach (var player in _faPlayers)
+                        {
+                            @if (player.Ratings != null)
+                            {
+                                <tr>
+                                    <td class="col-player">
+                                        <div class="fa-player-cell">
+                                            <a href="@("faoffer/" + player.Id)" class="fa-offer-link" title="Fazer oferta"><i class="bi bi-person-add"></i></a>
+                                            <img src="@(string.IsNullOrEmpty(player.ImgUrl) ? "Images/Utils/blank.png" : player.ImgUrl)" alt="" class="fa-player-thumb" />
+                                            <a href="@($"players/{player.Id}")" class="fa-player-name">@player.Name</a>
+                                            <span class="fa-player-pos">@player.Pos</span>
+                                        </div>
+                                    </td>
+                                    <td>@Util.Age(@player.Ratings.LastOrDefault().Season, player.Born.Year)</td>
+                                    <td>@player.Ratings.Count</td>
+                                    <td><span class="badge @Util.GetBadgeClass(player.Ratings.LastOrDefault()?.CalculateOvr ?? 0)">@(player.Ratings.LastOrDefault()?.CalculateOvr)</span></td>
+                                    <td><span class="badge @Util.GetBadgeClass(player.Ratings.LastOrDefault()?.Pot ?? 0)">@(player.Ratings.LastOrDefault()?.Pot)</span></td>
+                                    <td>@player.Ratings.LastOrDefault()?.Hgt</td>
+                                    <td>@player.Ratings.LastOrDefault()?.Stre</td>
+                                    <td>@player.Ratings.LastOrDefault()?.Spd</td>
+                                    <td>@player.Ratings.LastOrDefault()?.Jmp</td>
+                                    <td>@player.Ratings.LastOrDefault()?.Endu</td>
+                                    <td>@player.Ratings.LastOrDefault()?.Ins</td>
+                                    <td>@player.Ratings.LastOrDefault()?.Dnk</td>
+                                    <td>@player.Ratings.LastOrDefault()?.Ft</td>
+                                    <td>@player.Ratings.LastOrDefault()?.Fg</td>
+                                    <td>@player.Ratings.LastOrDefault()?.Tp</td>
+                                    <td>@player.Ratings.LastOrDefault()?.Oiq</td>
+                                    <td>@player.Ratings.LastOrDefault()?.Diq</td>
+                                    <td>@player.Ratings.LastOrDefault()?.Drb</td>
+                                    <td>@player.Ratings.LastOrDefault()?.Pss</td>
+                                    <td>@player.Ratings.LastOrDefault()?.Reb</td>
+                                </tr>
+                            }
+                        }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         }
         else
         {
-            <p>Nenhum FA player disponivel</p>
+            <div class="fa-empty alert alert-secondary">
+                <i class="bi bi-people me-2"></i>Nenhum free agent disponível.
+            </div>
         }
-        </div>
     </div>
     </AuthorizeView>
 </CascadingAuthenticationState>

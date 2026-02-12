@@ -4,58 +4,75 @@
 
 @if (_filteredPicks != null)
 {
-    <div class="draft-picks-container">
+    <div class="picks-page container py-4">
+        <div class="picks-header mb-4">
+            <h1 class="h3 mb-1"><i class="bi bi-list-ol me-2"></i>Picks do Draft</h1>
+            <p class="text-muted mb-0">Distribuição das escolhas por temporada, rodada e time</p>
+        </div>
 
-        <div class="year-navigator">
+        <div class="picks-year-nav mb-3">
             @foreach (var year in _availableYears)
             {
-                <button @onclick="() => SelectYear(year)" class="year-button @(year == _selectedYear ? "active" : "")">
+                <button type="button" @onclick="() => SelectYear(year)" class="picks-year-btn @(year == _selectedYear ? "active" : "")">
                     @year
                 </button>
             }
         </div>
 
-        <div class="filter-bar">
-            <div class="filter-group">
-                <label for="round-select">Round</label>
-                <select id="round-select" class="form-select" @onchange="SelectRound">
-                    <option value="1">1ª Rodada</option>
-                    <option value="2">2ª Rodada</option>
-                </select>
-            </div>
-            <div class="filter-group">
-                <label for="team-select">Time</label>
-                <select id="team-select" class="form-select" @onchange="SelectTeam">
-                    <option value="0">Todos os Times</option>
-                    @foreach (var team in _availableTeams)
-                    {
-                        <option value="@team.Id">@team.Name</option>
-                    }
-                </select>
+        <div class="picks-filters mb-3">
+            <select id="round-select" class="form-select picks-filter-select" value="@_selectedRound" @onchange="SelectRound">
+                <option value="1">1ª Rodada</option>
+                <option value="2">2ª Rodada</option>
+            </select>
+            <select id="team-select" class="form-select picks-filter-select" @onchange="SelectTeam">
+                <option value="0">Todos os times</option>
+                @foreach (var team in _availableTeams)
+                {
+                    <option value="@team.Id">@team.Name</option>
+                }
+            </select>
+        </div>
+
+        <div class="picks-table-container">
+            <div class="table-responsive">
+                <table class="table picks-table">
+                    <thead>
+                        <tr>
+                            <th>RODADA</th>
+                            <th>TIME</th>
+                            <th>ORIGINAL</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var pick in _filteredPicks)
+                        {
+                            <tr>
+                                <td><span class="picks-round-badge">@pick.Roundª</span></td>
+                                <td>
+                                    <div class="picks-team-cell">
+                                        <img src="@($"../Images/Logos/{pick.TeamName}.svg")" alt="" class="picks-team-logo" />
+                                        <span class="picks-team-name">@pick.TeamName</span>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="picks-team-cell">
+                                        <img src="@($"../Images/Logos/{pick.Original}.svg")" alt="" class="picks-team-logo" />
+                                        <span class="picks-team-name">@pick.Original</span>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
             </div>
         </div>
 
-        <div class="draft-picks-table-wrapper">
-            <table class="draft-picks-table">
-                <thead>
-                    <tr>
-                        <th>Round</th>
-                        <th>Time</th>
-                        <th>Original</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (var pick in _filteredPicks)
-                    {
-                        <tr>
-                            <td>@pick.Round</td>
-                            <td><img src=@($"../Images/Logos/{pick.TeamName}.svg") alt="@pick.TeamName logo" /></td>
-                            <td><img src=@($"../Images/Logos/{pick.Original}.svg") alt="@pick.Original logo" /></td>
-                        </tr>
-                    }
-                </tbody>
-            </table>
-        </div>
+        @if (!_filteredPicks.Any())
+        {
+            <div class="picks-empty alert alert-secondary mt-3">
+                <i class="bi bi-inbox me-2"></i>Nenhum pick encontrado para os filtros selecionados.
+            </div>
+        }
     </div>
 }
 else

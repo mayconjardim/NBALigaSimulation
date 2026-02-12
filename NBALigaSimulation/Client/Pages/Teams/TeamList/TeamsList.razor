@@ -4,27 +4,32 @@
 
 @if (_teams.Any())
 {
-    <div class="teams-container">
-        <div class="conference-section">
-            <h2 class="conference-title">Conferência Leste</h2>
+    <div class="teams-page container py-4">
+        <div class="teams-header mb-4">
+            <h1 class="h3 mb-1"><i class="bi bi-trophy me-2"></i>Times</h1>
+            <p class="text-muted mb-0">Conferência Leste e Oeste</p>
+        </div>
+
+        <div class="teams-section-card">
+            <h2 class="teams-section-title">Conferência Leste</h2>
             <div class="teams-grid">
                 @foreach (var team in _east)
                 {
                     <div class="team-card" @onclick="() => NavigateToTeamPage(team.Id)">
-                        <img src=@($"../Images/Logos/{team.Abrv}.svg") alt="@team.Name logo">
+                        <img src="@($"../Images/Logos/{team.Abrv}.svg")" alt="@team.Name logo" />
                         <span class="team-name">@team.Name</span>
                     </div>
                 }
             </div>
         </div>
-        
-        <div class="conference-section">
-            <h2 class="conference-title">Conferência Oeste</h2>
+
+        <div class="teams-section-card">
+            <h2 class="teams-section-title">Conferência Oeste</h2>
             <div class="teams-grid">
                 @foreach (var team in _west)
                 {
                     <div class="team-card" @onclick="() => NavigateToTeamPage(team.Id)">
-                        <img src=@($"../Images/Logos/{team.Abrv}.svg") alt="@team.Name logo">
+                        <img src="@($"../Images/Logos/{team.Abrv}.svg")" alt="@team.Name logo" />
                         <span class="team-name">@team.Name</span>
                     </div>
                 }

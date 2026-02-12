@@ -1,65 +1,166 @@
-.filters {
+.stats-page {
+    max-width: 1600px;
+    margin: 0 auto;
+}
+
+.stats-header {
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid #e5e7eb;
+}
+
+.stats-header h1 {
+    font-weight: 700;
+    color: var(--bs-body-color, #212529);
+}
+
+.stats-filters {
     display: flex;
-   flex-direction: row;
+    flex-wrap: wrap;
+    gap: 0.75rem;
 }
 
-.form-select {
-    margin: 0.625rem;
+.stats-filter-select {
+    max-width: 220px;
+    border-radius: 8px;
+    border: 1px solid #dee2e6;
 }
 
-table {
-    background-color: var(--white);
+.stats-table-container {
+    background-color: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    overflow: hidden;
+    margin-top: 1rem;
+}
+
+.stats-table {
+    margin: 0;
+    border-collapse: separate;
+    border-spacing: 0;
     width: 100%;
     text-align: center;
-    margin: 0.625rem 0;
-}
-table caption {
-    color: #212529;
-    font-weight: 900;
 }
 
-table th {
-    font-size: 0.625rem;
+.stats-table thead {
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+    color: white;
+}
+
+.stats-table thead th {
+    padding: 1rem 0.6rem;
+    font-weight: 600;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    white-space: nowrap;
+    border: none;
+    cursor: pointer;
+    user-select: none;
+}
+
+.stats-table thead th:hover {
+    background: rgba(255, 255, 255, 0.08);
+}
+
+.stats-table thead .col-player {
+    text-align: left;
+    padding-left: 1rem;
+    min-width: 220px;
+    position: sticky;
+    left: 0;
+    z-index: 20;
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+}
+
+.stats-table tbody td {
+    padding: 0.75rem 0.6rem;
+    font-size: 0.875rem;
+    vertical-align: middle;
+    border-bottom: 1px solid #f0f0f0;
     white-space: nowrap;
 }
 
-table td {
-    font-size: 0.8rem;
-    white-space: nowrap
+.stats-table tbody tr:last-child td {
+    border-bottom: none;
 }
 
-table span {
-    font-size: 0.6rem;
-    color: grey;
-    margin: 0.100rem;
+.stats-table tbody tr:nth-child(even) {
+    background-color: #f8f9fa;
 }
 
-
-table{
-    border-radius: 10px;
+.stats-table tbody tr:nth-child(odd) {
+    background-color: #ffffff;
 }
 
-tr:nth-child(even) {
-    background-color: #FBFBFB;
+.stats-table tbody tr:hover td {
+    background-color: #e9ecef;
 }
 
-a {
+.stats-table tbody tr:hover .col-player {
+    background-color: #e9ecef;
+}
+
+.stats-table .col-player {
+    position: sticky;
+    left: 0;
+    background-color: inherit;
+    z-index: 10;
+    min-width: 220px;
+    text-align: left;
+    padding-left: 1rem;
+    box-shadow: 2px 0 4px rgba(0, 0, 0, 0.04);
+}
+
+.stats-table tbody tr:nth-child(even) .col-player {
+    background-color: #f8f9fa;
+}
+
+.stats-table tbody tr:nth-child(odd) .col-player {
+    background-color: #ffffff;
+}
+
+.stats-player-cell {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.stats-player-thumb {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    object-fit: cover;
+    flex-shrink: 0;
+}
+
+.stats-player-name {
+    font-weight: 500;
+    color: var(--bs-primary, #0d6efd);
     text-decoration: none;
 }
 
-.player-pic {
-    background-repeat: no-repeat;
-    background-position: center;
-    background-size: cover;
+.stats-player-name:hover {
+    text-decoration: underline;
 }
 
-.player-pic img {
-    border-radius: 50%;
-    object-fit: cover; 
+.stats-player-pos {
+    color: #6c757d;
+    font-size: 0.8em;
+}
+
+.stats-team-logo {
+    width: 28px;
+    height: 28px;
+    object-fit: contain;
+}
+
+.table-responsive {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
 }
 
 .page-item.active .page-link {
-    background-color: #007bff !important;
-    border-color: #007bff !important;
+    background-color: var(--primary-color, #0d6efd) !important;
+    border-color: var(--primary-color, #0d6efd) !important;
     color: #fff !important;
 }
