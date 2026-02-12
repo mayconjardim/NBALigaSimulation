@@ -112,7 +112,8 @@ namespace NBALigaSimulation.Server.Services.AuthService
             List<Claim> claims = new List<Claim>
             {
                  new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
-                 new Claim(ClaimTypes.Name, user.Username)
+                 new Claim(ClaimTypes.Name, user.Username),
+                 new Claim("IsAdmin", (user.IsAdmin == true).ToString())
             };
 
             var key = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes

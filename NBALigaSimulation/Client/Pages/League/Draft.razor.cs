@@ -45,12 +45,24 @@ public partial class Draft : ComponentBase
 
     private DraftDto? _selectedPick = null;
     private int? _userTeamId = null;
+    private bool _isAdmin = false;
 
     protected override async Task OnInitializedAsync()
     {
         await LoadUserTeamId();
+        await LoadIsAdmin();
         await LoadData();
         _loadingInitial = false;
+    }
+
+    private async Task LoadIsAdmin()
+    {
+        try
+        {
+            if (await LocalStorage.ContainKeyAsync("_isAdmin"))
+                _isAdmin = await LocalStorage.GetItemAsync<bool>("_isAdmin");
+        }
+        catch { _isAdmin = false; }
     }
 
     private async Task LoadUserTeamId()
@@ -92,6 +104,24 @@ public partial class Draft : ComponentBase
     {
         if (_userTeamId == null) return false;
         return pick.TeamId == _userTeamId;
+    }
+
+    /// <summary>Pick atual = primeira vaga vazia em ordem.</summary>
+    private DraftDto? GetCurrentPick()
+    {
+        return _draft
+            .Where(d => string.IsNullOrEmpty(d.PlayerName))
+            .OrderBy(d => d.Pick)
+            .FirstOrDefault();
+    }
+
+    /// <summary>Mostra o botão "Escolher" somente para ADMIN na pick atual; ou para o usuário quando é a vez do time dele.</summary>
+    private bool CanShowSelectButton(DraftDto pick)
+    {
+        if (!string.IsNullOrEmpty(pick.PlayerName)) return false;
+        var current = GetCurrentPick();
+        if (current == null || current.Pick != pick.Pick) return false;
+        return _isAdmin || IsUserTurn(pick);
     }
 
     private async Task LoadData()
@@ -290,9 +320,9 @@ public partial class Draft : ComponentBase
         public string WinPct { get; set; } = string.Empty;
     }
 
-    private async Task LoadDraftPool()
+    private async Task LoadDraftPool(bool forceReload = false)
     {
-        if (_draftPool.Any()) return;
+        if (!forceReload && _draftPool.Any()) return;
 
         _draftPoolLoading = true;
         StateHasChanged();
@@ -429,7 +459,7 @@ public partial class Draft : ComponentBase
         _modalSearch = "";
         _modalSortColumn = "POT";
         _modalSortDescending = true;
-        await LoadDraftPool();
+        await LoadDraftPool(forceReload: true);
         StateHasChanged();
     }
 

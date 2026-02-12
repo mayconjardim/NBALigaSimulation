@@ -1,4 +1,4 @@
-﻿using NBALigaSimulation.Shared.Dtos.Drafts;
+using NBALigaSimulation.Shared.Dtos.Drafts;
 using NBALigaSimulation.Shared.Models.Utils;
 
 namespace NBALigaSimulation.Server.Services.DraftService
@@ -11,6 +11,6 @@ namespace NBALigaSimulation.Server.Services.DraftService
         Task<ServiceResponse<bool>> GenerateLottery();
         Task<ServiceResponse<bool>> GenerateDraft();
         Task<ServiceResponse<bool>> SelectDraftedPlayer(DraftPlayerDto request);
-
+        Task<ServiceResponse<bool>> FinalizeDraft();
     }
 }

@@ -291,6 +291,22 @@ public partial class Admin
         }, "GenerateDraftLotteryAndDraft");
     }
 
+    private async Task FinalizeDraft()
+    {
+        await ExecuteAction(async () =>
+        {
+            var response = await DraftService.FinalizeDraft();
+            if (response.Success)
+            {
+                await ShowMessage(response.Message ?? "Draft finalizado. Jogadores restantes enviados para free agency.", "success");
+            }
+            else
+            {
+                await ShowMessage($"Erro ao finalizar draft: {response.Message}", "error");
+            }
+        }, "FinalizeDraft");
+    }
+
     private async Task GeneratePlayoffsFirstRound()
     {
         await ExecuteAction(async () =>

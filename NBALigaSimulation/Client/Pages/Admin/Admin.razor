@@ -259,6 +259,25 @@
                                 </button>
                             </td>
                         </tr>
+
+                        <!-- 12. Finalizar Draft -->
+                        <tr>
+                            <td><strong>12</strong></td>
+                            <td>
+                                <i class="bi bi-people-fill text-success me-2"></i>
+                                <strong>Finalizar Draft</strong>
+                            </td>
+                            <td>Envia todos os jogadores que sobraram no draft pool para free agency (TeamId 21)</td>
+                            <td>
+                                <button class="btn btn-outline-success btn-sm w-100" @onclick="FinalizeDraft" disabled="@_isLoading">
+                                    @if (_isLoading && _loadingAction == "FinalizeDraft")
+                                    {
+                                        <span class="spinner-border spinner-border-sm me-2"></span>
+                                    }
+                                    Executar
+                                </button>
+                            </td>
+                        </tr>
                     </tbody>
                     </table>
                 </div>

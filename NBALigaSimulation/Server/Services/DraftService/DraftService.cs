@@ -345,5 +345,34 @@ namespace NBALigaSimulation.Server.Services.DraftService
             }
         }
 
+        private const int DraftPoolTeamId = 22;
+        private const int FreeAgentsTeamId = 21;
+
+        public async Task<ServiceResponse<bool>> FinalizeDraft()
+        {
+            var response = new ServiceResponse<bool>();
+            try
+            {
+                var playersInDraftPool = await _playerRepository.Query()
+                    .Where(p => p.TeamId == DraftPoolTeamId)
+                    .ToListAsync();
+
+                foreach (var player in playersInDraftPool)
+                {
+                    player.TeamId = FreeAgentsTeamId;
+                }
+
+                await _playerRepository.SaveChangesAsync();
+                response.Success = true;
+                response.Message = $"{playersInDraftPool.Count} jogador(es) do draft pool enviado(s) para free agency.";
+                return response;
+            }
+            catch (Exception ex)
+            {
+                response.Success = false;
+                response.Message = $"Erro ao finalizar draft: {ex.Message}";
+                return response;
+            }
+        }
     }
 }

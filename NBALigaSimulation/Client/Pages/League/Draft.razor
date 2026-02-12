@@ -126,7 +126,7 @@
                                                 <td class="col-action">
                                                     @if (string.IsNullOrEmpty(pick.PlayerName))
                                                     {
-                                                        @if (IsUserTurn(pick))
+                                                        @if (CanShowSelectButton(pick))
                                                         {
                                                             <button class="btn btn-sm btn-outline-primary" @onclick="() => OpenPlayerSelectModal(pick)" disabled="@_isSelecting">
                                                                 <i class="bi bi-plus-circle me-1"></i>Escolher

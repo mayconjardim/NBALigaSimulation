@@ -141,5 +141,24 @@ public class DraftService : IDraftService
             };
         }
     }
+
+    public async Task<ServiceResponse<bool>> FinalizeDraft()
+    {
+        try
+        {
+            var payload = new { };
+            var httpResponse = await _http.PostAsJsonAsync("api/draft/finalize", payload);
+            var result = await httpResponse.Content.ReadFromJsonAsync<ServiceResponse<bool>>();
+            if (result == null)
+                return new ServiceResponse<bool> { Success = false, Message = "Resposta inválida do servidor." };
+            if (!httpResponse.IsSuccessStatusCode)
+                result.Success = false;
+            return result;
+        }
+        catch (Exception ex)
+        {
+            return new ServiceResponse<bool> { Success = false, Message = $"Erro ao finalizar draft: {ex.Message}" };
+        }
+    }
 }
 

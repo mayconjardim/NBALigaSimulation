@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using NBALigaSimulation.Shared.Dtos.Drafts;
 using NBALigaSimulation.Shared.Models.Utils;
 using Swashbuckle.AspNetCore.Annotations;
@@ -9,12 +11,13 @@ namespace NBALigaSimulation.Server.Controllers
     [ApiController]
     public class DraftController : ControllerBase
     {
-
         private readonly IDraftService _draftService;
+        private readonly ITeamService _teamService;
 
-        public DraftController(IDraftService draftService)
+        public DraftController(IDraftService draftService, ITeamService teamService)
         {
             _draftService = draftService;
+            _teamService = teamService;
         }
 
         [HttpGet]
@@ -63,9 +66,34 @@ namespace NBALigaSimulation.Server.Controllers
             return Ok(result);
         }
 
+        [HttpPost("finalize")]
+        [Authorize]
+        public async Task<ActionResult<ServiceResponse<bool>>> FinalizeDraft()
+        {
+            var isAdminClaim = User.FindFirst("IsAdmin")?.Value;
+            var isAdmin = string.Equals(isAdminClaim, "True", StringComparison.OrdinalIgnoreCase);
+            if (!isAdmin)
+                return StatusCode(403, new ServiceResponse<bool> { Success = false, Message = "Apenas o admin pode finalizar o draft." });
+
+            var result = await _draftService.FinalizeDraft();
+            if (!result.Success)
+                return BadRequest(result);
+            return Ok(result);
+        }
+
         [HttpPut("select")]
+        [Authorize]
         public async Task<ActionResult<ServiceResponse<bool>>> SelectDraftedPlayer(DraftPlayerDto request)
         {
+            var isAdminClaim = User.FindFirst("IsAdmin")?.Value;
+            var isAdmin = string.Equals(isAdminClaim, "True", StringComparison.OrdinalIgnoreCase);
+            if (!isAdmin)
+            {
+                var teamResult = await _teamService.GetTeamByLoggedUser();
+                if (!teamResult.Success || teamResult.Data == null || teamResult.Data.Id != request.TeamId)
+                    return StatusCode(403, new ServiceResponse<bool> { Success = false, Message = "Apenas o admin pode escolher para outros times, ou o dono do time na sua vez." });
+            }
+
             var response = await _draftService.SelectDraftedPlayer(request);
 
             if (!response.Success)

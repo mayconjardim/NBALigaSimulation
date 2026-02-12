@@ -10,5 +10,6 @@ public interface IDraftService
     Task<ServiceResponse<bool>> GenerateLottery();
     Task<ServiceResponse<bool>> GenerateDraft();
     Task<ServiceResponse<bool>> SelectDraftedPlayer(DraftPlayerDto request);
+    Task<ServiceResponse<bool>> FinalizeDraft();
 }
 
