@@ -78,7 +78,8 @@ namespace NBALigaSimulation.Server.Profiles
                   opt.MapFrom(src => src.PlayerGameStats.Where(p => p.TeamId == src.AwayTeamId).ToList()));
 
             CreateMap<PlayerGameStats, PlayerGameStatsDto>()
-                .ForMember(dest => dest.ImgUrl, opt => opt.MapFrom(src => src.Player != null ? src.Player.ImgUrl : ""));
+                .ForMember(dest => dest.ImgUrl, opt => opt.MapFrom(src => src.Player != null ? src.Player.ImgUrl : ""))
+                .ForMember(dest => dest.Week, opt => opt.MapFrom(src => src.Game != null ? src.Game.Week ?? "" : ""));
             CreateMap<GameCompleteDto, Game>();
             CreateMap<CreateGameDto, GameCompleteDto>().ReverseMap();
             CreateMap<CreateGameDto, Game>().ReverseMap();

@@ -18,7 +18,7 @@
                 @foreach (var stats in _gameLogs)
                 {
                     <tr>
-                        <td>@stats.GameDate.ToShortDateString()</td>
+                        <td>@(string.IsNullOrEmpty(stats.Week) ? "—" : stats.Week)</td>
                         <td ><img src=@($"../Images/Logos/{stats.OppAbrev}.svg") alt="Team logo" width="25"> </td>
                         <td>@Util.FormatNumber(@stats.Min)</td>
                         <td>@stats.Fg-@stats.Fga</td>

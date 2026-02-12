@@ -12,6 +12,8 @@ namespace NBALigaSimulation.Shared.Dtos.Players
         public int TeamId { get; set; }
         public int GameId { get; set; }
         public DateTime GameDate { get; set; }
+        /// <summary>Rodada/semana do jogo (ex: "1", "2"). Vem do Game.Week.</summary>
+        public string Week { get; set; } = string.Empty;
         public string OppAbrev { get; set; } = string.Empty;
         public int Gs { get; set; }
         public double Min { get; set; }

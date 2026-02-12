@@ -262,10 +262,26 @@
                             <thead class="table-light sticky-top">
                                 <tr>
                                     <th style="width:50px;"></th>
-                                    <th>Nome</th>
-                                    <th style="width:60px;">Pos</th>
-                                    <th style="width:80px;">OVR</th>
-                                    <th style="width:80px;">Pot</th>
+                                    <th>
+                                        <button type="button" class="btn btn-link btn-sm p-0 text-dark text-decoration-none fw-normal" @onclick='() => SetModalSort("Nome")'>
+                                            Nome @(_modalSortColumn == "Nome" ? (_modalSortDescending ? " ▼" : " ▲") : "")
+                                        </button>
+                                    </th>
+                                    <th style="width:60px;">
+                                        <button type="button" class="btn btn-link btn-sm p-0 text-dark text-decoration-none fw-normal" @onclick='() => SetModalSort("Pos")'>
+                                            Pos @(_modalSortColumn == "Pos" ? " ▸" : "")
+                                        </button>
+                                    </th>
+                                    <th style="width:80px;">
+                                        <button type="button" class="btn btn-link btn-sm p-0 text-dark text-decoration-none fw-normal" @onclick='() => SetModalSort("OVR")'>
+                                            OVR @(_modalSortColumn == "OVR" ? (_modalSortDescending ? " ▼" : " ▲") : "")
+                                        </button>
+                                    </th>
+                                    <th style="width:80px;">
+                                        <button type="button" class="btn btn-link btn-sm p-0 text-dark text-decoration-none fw-normal" @onclick='() => SetModalSort("POT")'>
+                                            Pot @(_modalSortColumn == "POT" ? (_modalSortDescending ? " ▼" : " ▲") : "")
+                                        </button>
+                                    </th>
                                     <th style="width:100px;">Ação</th>
                                 </tr>
                             </thead>

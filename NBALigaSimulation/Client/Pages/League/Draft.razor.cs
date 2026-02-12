@@ -40,6 +40,8 @@ public partial class Draft : ComponentBase
     private List<PlayerCompleteDto> _draftPool = new();
     private string _draftPoolSearch = "";
     private string _modalSearch = "";
+    private string _modalSortColumn = "POT";
+    private bool _modalSortDescending = true;
 
     private DraftDto? _selectedPick = null;
     private int? _userTeamId = null;
@@ -333,15 +335,50 @@ public partial class Draft : ComponentBase
     {
         get
         {
-            if (string.IsNullOrWhiteSpace(_modalSearch))
-                return _draftPool;
-
-            var search = _modalSearch.ToLower();
-            return _draftPool.Where(p =>
-                p.Name.ToLower().Contains(search) ||
-                p.Pos.ToLower().Contains(search)
-            ).ToList();
+            IEnumerable<PlayerCompleteDto> list = _draftPool;
+            if (!string.IsNullOrWhiteSpace(_modalSearch))
+            {
+                var search = _modalSearch.ToLower();
+                list = list.Where(p =>
+                    (p.Name != null && p.Name.ToLower().Contains(search)) ||
+                    (p.Pos != null && p.Pos.ToLower().Contains(search))
+                );
+            }
+            return ApplyModalSort(list).ToList();
         }
+    }
+
+    private IEnumerable<PlayerCompleteDto> ApplyModalSort(IEnumerable<PlayerCompleteDto> list)
+    {
+        return _modalSortColumn switch
+        {
+            "Nome" => _modalSortDescending
+                ? list.OrderByDescending(p => p.Name, StringComparer.OrdinalIgnoreCase)
+                : list.OrderBy(p => p.Name, StringComparer.OrdinalIgnoreCase),
+            "Pos" => list.OrderBy(p => p.Pos ?? "").ThenByDescending(p => GetPot(p)).ThenBy(p => p.Name),
+            "OVR" => _modalSortDescending
+                ? list.OrderByDescending(p => GetOvr(p)).ThenBy(p => p.Name)
+                : list.OrderBy(p => GetOvr(p)).ThenBy(p => p.Name),
+            "POT" => _modalSortDescending
+                ? list.OrderByDescending(p => GetPot(p)).ThenBy(p => p.Name)
+                : list.OrderBy(p => GetPot(p)).ThenBy(p => p.Name),
+            _ => list.OrderByDescending(p => GetPot(p)).ThenBy(p => p.Name)
+        };
+    }
+
+    private static int GetOvr(PlayerCompleteDto p) => p.Ratings?.FirstOrDefault()?.CalculateOvr ?? 0;
+    private static int GetPot(PlayerCompleteDto p) => p.Ratings?.FirstOrDefault()?.Pot ?? 0;
+
+    private void SetModalSort(string column)
+    {
+        if (_modalSortColumn == column)
+            _modalSortDescending = !_modalSortDescending;
+        else
+        {
+            _modalSortColumn = column;
+            _modalSortDescending = column == "POT" || column == "OVR";
+        }
+        StateHasChanged();
     }
 
     private async Task ExecuteAsync(Func<Task> action, string actionName)
@@ -390,6 +427,8 @@ public partial class Draft : ComponentBase
     {
         _selectedPick = pick;
         _modalSearch = "";
+        _modalSortColumn = "POT";
+        _modalSortDescending = true;
         await LoadDraftPool();
         StateHasChanged();
     }

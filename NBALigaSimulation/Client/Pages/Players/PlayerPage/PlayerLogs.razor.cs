@@ -11,7 +11,7 @@ public partial class PlayerLogs
 
     private List<PlayerGameStatsDto> _gameLogs;
 
-    string[] _headings = { "DATE", "OPP", "MIN", "FG", "3PT", "FT", "OFF", "REB", "AST", "TO", "STL", "BLK", "PF", "PTS" };
+    string[] _headings = { "Rodada", "OPP", "MIN", "FG", "3PT", "FT", "OFF", "REB", "AST", "TO", "STL", "BLK", "PF", "PTS" };
     
     protected override void OnInitialized()
     {
