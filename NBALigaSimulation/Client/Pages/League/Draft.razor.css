@@ -48,6 +48,27 @@
     font-size: 0.9rem;
 }
 
+.lottery-details {
+    border-top: 1px solid #e5e7eb;
+    padding-top: 0.5rem;
+    margin-top: 0.5rem;
+}
+
+.lottery-details .small {
+    font-size: 0.75rem;
+    line-height: 1.4;
+}
+
+.lottery-details .text-success {
+    color: #10b981 !important;
+    font-weight: 500;
+}
+
+.lottery-details .text-danger {
+    color: #ef4444 !important;
+    font-weight: 500;
+}
+
 /* Draft table */
 .draft-table-card .card-header {
     background-color: #f8fafc;

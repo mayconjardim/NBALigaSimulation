@@ -2,6 +2,7 @@ using Blazored.LocalStorage;
 using Microsoft.AspNetCore.Components;
 using NBALigaSimulation.Shared.Dtos.Drafts;
 using NBALigaSimulation.Shared.Dtos.Players;
+using NBALigaSimulation.Shared.Dtos.Teams;
 
 namespace NBALigaSimulation.Client.Pages.League;
 
@@ -10,6 +11,7 @@ public partial class Draft : ComponentBase
     [Inject] public IDraftService DraftService { get; set; }
     [Inject] public IPlayerService PlayerService { get; set; }
     [Inject] public ILocalStorageService LocalStorage { get; set; }
+    [Inject] public IStatsService StatsService { get; set; }
 
     private bool _loadingInitial = true;
     private bool _isLoading = false;
@@ -32,6 +34,7 @@ public partial class Draft : ComponentBase
 
     private DraftLotteryDto? _lottery;
     private List<DraftDto> _draft = new();
+    private List<LotteryTeamInfo> _lotteryTeamsInfo = new();
 
     private bool _draftPoolLoading = false;
     private List<PlayerCompleteDto> _draftPool = new();
@@ -99,6 +102,7 @@ public partial class Draft : ComponentBase
             if (lotteryResponse != null && lotteryResponse.Success)
             {
                 _lottery = lotteryResponse.Data;
+                await LoadLotteryInfo();
             }
 
             var draftResponse = await DraftService.GetLastDraft();
@@ -116,6 +120,172 @@ public partial class Draft : ComponentBase
             _draft = new List<DraftDto>();
             Console.WriteLine($"Erro ao carregar dados do draft: {ex.Message}");
         }
+    }
+
+    private async Task LoadLotteryInfo()
+    {
+        if (_lottery == null) return;
+
+        try
+        {
+            var season = int.Parse(await LocalStorage.GetItemAsync<string>("season"));
+            var statsResponse = await StatsService.GetAllTeamRegularStats(season, false, null);
+            
+            if (statsResponse?.Success == true && statsResponse.Data != null)
+            {
+                // Replica a lógica do backend: pega os 4 piores por ConfRank, depois ordena por WinPct
+                var lotteryTeams = statsResponse.Data
+                    .OrderByDescending(t => t.ConfRank) // Piores rankings primeiro
+                    .Take(4)
+                    .OrderByDescending(t => double.Parse(t.WinPct, System.Globalization.CultureInfo.InvariantCulture)) // Pior WinPct primeiro
+                    .ToList();
+
+                Console.WriteLine($"[Draft] Encontrados {lotteryTeams.Count} times para loteria:");
+                foreach (var team in lotteryTeams)
+                {
+                    Console.WriteLine($"  - {team.TeamAbrv} (ID: {team.TeamId}, WinPct: {team.WinPct})");
+                }
+
+                // Chances baseadas nas bolas de loteria
+                var lotteryBalls = new[] { 250, 199, 156, 119 };
+                var totalBalls = lotteryBalls.Sum();
+
+                _lotteryTeamsInfo = new List<LotteryTeamInfo>();
+
+                // IDs e abreviações dos times da loteria para busca
+                var lotteryTeamIds = new[] { _lottery.FirstTeamId, _lottery.SecondTeamId, _lottery.ThirdTeamId, _lottery.FourthTeamId };
+                var lotteryTeamAbrvs = new[] { _lottery.FirstTeam, _lottery.SecondTeam, _lottery.ThirdTeam, _lottery.FourthTeam };
+
+                Console.WriteLine($"[Draft] Buscando times da loteria:");
+                Console.WriteLine($"  IDs: {string.Join(", ", lotteryTeamIds)}");
+                Console.WriteLine($"  Abrvs: {string.Join(", ", lotteryTeamAbrvs)}");
+
+                // Busca TODOS os times da loteria nas stats completas (não só os 4 piores)
+                var allLotteryTeamsInStats = statsResponse.Data
+                    .Where(t => lotteryTeamIds.Contains(t.TeamId) || 
+                               (t.TeamAbrv != null && lotteryTeamAbrvs.Any(abr => t.TeamAbrv.Equals(abr, StringComparison.OrdinalIgnoreCase))))
+                    .OrderByDescending(t => double.Parse(t.WinPct, System.Globalization.CultureInfo.InvariantCulture))
+                    .ToList();
+
+                Console.WriteLine($"[Draft] Encontrados {allLotteryTeamsInStats.Count} times da loteria nas stats:");
+                foreach (var team in allLotteryTeamsInStats)
+                {
+                    Console.WriteLine($"  - {team.TeamAbrv} (ID: {team.TeamId}, WinPct: {team.WinPct})");
+                }
+
+                // Mapeia os times da loteria para suas informações
+                var lotteryOrder = new[]
+                {
+                    (_lottery.FirstTeam, _lottery.FirstTeamId, 1),
+                    (_lottery.SecondTeam, _lottery.SecondTeamId, 2),
+                    (_lottery.ThirdTeam, _lottery.ThirdTeamId, 3),
+                    (_lottery.FourthTeam, _lottery.FourthTeamId, 4)
+                };
+
+                for (int i = 0; i < lotteryOrder.Length; i++)
+                {
+                    var (teamAbrv, teamId, finalPosition) = lotteryOrder[i];
+                    Console.WriteLine($"[Draft] Processando: {teamAbrv} (ID: {teamId}) -> Pick {finalPosition}");
+                    
+                    // Busca o time nas stats completas primeiro
+                    var teamStat = allLotteryTeamsInStats.FirstOrDefault(t => 
+                        t.TeamId == teamId || 
+                        (t.TeamAbrv != null && t.TeamAbrv.Equals(teamAbrv, StringComparison.OrdinalIgnoreCase)));
+                    
+                    // Se não encontrou, busca nos 4 piores
+                    if (teamStat == null)
+                    {
+                        teamStat = lotteryTeams.FirstOrDefault(t => 
+                            t.TeamId == teamId || 
+                            (t.TeamAbrv != null && t.TeamAbrv.Equals(teamAbrv, StringComparison.OrdinalIgnoreCase)));
+                    }
+                    
+                    if (teamStat != null)
+                    {
+                        // Calcula a posição original baseada no WinPct comparado com todos os times da loteria
+                        // Ordena todos os times da loteria por WinPct (pior primeiro)
+                        var allLotteryOrdered = allLotteryTeamsInStats
+                            .OrderByDescending(t => double.Parse(t.WinPct, System.Globalization.CultureInfo.InvariantCulture))
+                            .ToList();
+                        
+                        var originalPosition = allLotteryOrdered.IndexOf(teamStat);
+                        if (originalPosition == -1)
+                        {
+                            // Se não encontrou em allLotteryOrdered, tenta em lotteryTeams
+                            originalPosition = lotteryTeams.IndexOf(teamStat);
+                        }
+                        originalPosition += 1; // Converte para 1-based (1º, 2º, 3º, 4º pior)
+                        
+                        // Garante que está entre 1 e 4
+                        if (originalPosition < 1 || originalPosition > 4)
+                        {
+                            // Se não está entre 1-4, calcula baseado no WinPct
+                            var teamWinPct = double.Parse(teamStat.WinPct, System.Globalization.CultureInfo.InvariantCulture);
+                            var worseTeams = allLotteryOrdered.Count(t => 
+                                double.Parse(t.WinPct, System.Globalization.CultureInfo.InvariantCulture) > teamWinPct);
+                            originalPosition = worseTeams + 1;
+                            if (originalPosition > 4) originalPosition = 4;
+                            if (originalPosition < 1) originalPosition = 1;
+                        }
+                        
+                        var chance = (lotteryBalls[originalPosition - 1] * 100.0 / totalBalls);
+                        
+                        // Na loteria: menor número = melhor pick
+                        // Se finalPosition < originalPosition = SUBIU (melhorou)
+                        // Se finalPosition > originalPosition = DESCEU (piorou)
+                        var moved = originalPosition - finalPosition; // Positivo = subiu, negativo = desceu
+
+                        Console.WriteLine($"[Draft] Encontrado: {teamAbrv} - Original: {originalPosition}º pior, Final: {finalPosition}º pick, Movido: {moved}, Chance: {chance:F1}%");
+
+                        _lotteryTeamsInfo.Add(new LotteryTeamInfo
+                        {
+                            TeamAbrv = teamAbrv,
+                            TeamName = teamStat.TeamName,
+                            TeamId = teamId,
+                            OriginalPosition = originalPosition,
+                            FinalPosition = finalPosition,
+                            Chance = chance,
+                            Moved = moved,
+                            WinPct = teamStat.WinPct
+                        });
+                    }
+                    else
+                    {
+                        // Se não encontrou nas stats, adiciona mesmo assim com dados básicos
+                        Console.WriteLine($"[Draft] AVISO: Time não encontrado nas stats: {teamAbrv} (ID: {teamId})");
+                        _lotteryTeamsInfo.Add(new LotteryTeamInfo
+                        {
+                            TeamAbrv = teamAbrv,
+                            TeamName = teamAbrv,
+                            TeamId = teamId,
+                            OriginalPosition = 0,
+                            FinalPosition = finalPosition,
+                            Chance = 0,
+                            Moved = 0,
+                            WinPct = "0.000"
+                        });
+                    }
+                }
+                
+                Console.WriteLine($"[Draft] Total de times processados: {_lotteryTeamsInfo.Count}");
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Erro ao carregar informações da loteria: {ex.Message}");
+        }
+    }
+
+    private class LotteryTeamInfo
+    {
+        public string TeamAbrv { get; set; } = string.Empty;
+        public string TeamName { get; set; } = string.Empty;
+        public int TeamId { get; set; }
+        public int OriginalPosition { get; set; }
+        public int FinalPosition { get; set; }
+        public double Chance { get; set; }
+        public int Moved { get; set; }
+        public string WinPct { get; set; } = string.Empty;
     }
 
     private async Task LoadDraftPool()
