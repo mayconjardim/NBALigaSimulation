@@ -46,7 +46,6 @@ public partial class Rotation
 
     string GetOptionLabel(double value)
     {
-
         switch (value)
         {
             case 0.0:
@@ -62,6 +61,21 @@ public partial class Rotation
             default:
                 return "+++";
         }
+    }
+
+    string FormatContractAmount(int amount)
+    {
+        if (amount >= 1000000)
+        {
+            double millions = amount / 1000000.0;
+            return millions.ToString("0.##", System.Globalization.CultureInfo.InvariantCulture) + "M";
+        }
+        else if (amount >= 1000)
+        {
+            double thousands = amount / 1000.0;
+            return thousands.ToString("0.##", System.Globalization.CultureInfo.InvariantCulture) + "K";
+        }
+        return amount.ToString();
     }
     private async Task ChangeRosterOrder(PlayerCompleteDto player)
     {

@@ -11,90 +11,131 @@
 {
 <CascadingAuthenticationState>
    <AuthorizeView>
-
-      <div class="container">
-
-         <div class="gameplans">
-            <div class="gameplan">
-               <h5>PACE</h5>
-               <select class="form-select" bind="@_gameplan.Pace" @onchange="@(e => UpdateGameplan(e.Value, "PACE"))">
-                  <option selected hidden="">@GetGPace(_gameplan.Pace)</option>
-                  @foreach (var option in GPaceOptions)
-                  {
-                     <option value="@option">@GetGPace(option)</option>
-                  }
-               </select>
-            </div>
-
-            <div class="gameplan">
-               <h5>MOTION</h5>
-               <select class="form-select" bind="@_gameplan.Motion" @onchange="@(e => UpdateGameplan(e.Value, "MOTION"))">
-                  <option selected hidden="">@GetGPace(_gameplan.Motion)</option>
-                  @foreach (var option in GPaceOptions)
-                  {
-                     <option value="@option">@GetGPace(option)</option>
-                  }
-               </select>
-            </div>
-
-            <div class="gameplan">
-               <h5>FOCUS</h5>
-               <select class="form-select" bind="@_gameplan.Focus" @onchange="@(e => UpdateGameplan(e.Value, "FOCUS"))">
-                  <option selected hidden="">@GetFocus(_gameplan.Focus)</option>
-                  @foreach (var option in GPaceOptions)
-                  {
-                     <option value="@option">@GetFocus(option)</option>
-                  }
-               </select>
-            </div>
-
-            <div class="gameplan">
-               <h5>DEFENSE</h5>
-               <select class="form-select" bind="@_gameplan.Defense" @onchange="@(e => UpdateGameplan(e.Value, "DEFENSE"))">
-                  <option selected hidden="">@GetDefense(_gameplan.Defense)</option>
-                  @foreach (var option in DefenseOptions)
-                  {
-                     <option value="@option">@GetDefense(option)</option>
-                  }
-               </select>
-            </div>
-            
-         </div>
-
-         <div class="key border">
-            <div class="container">
-               <div class="row justify-content-center">
-                  <div class="col-md-4">
-                     <div class="card">
-                        <div class="card-body">
-                           <h5 class="card-title">Jogadores Chave</h5>
-                           <ul class="list-group">
-                              @foreach (var player in _team.Players)
-                              {
-                              <li class="list-group-item d-flex justify-content-between align-items-center">
-                                 <input type="checkbox" @bind="player.KeyPlayer" @onclick="() => HandleCheckboxKeyChange()" />
-                                 <span>@player.Name</span>
-                              </li>
-                              @if (_team.Players.Count(p => p.KeyPlayer) >= 3 && player.KeyPlayer)
-                              {
-                              player.KeyPlayer = false;
-                              }
-                              }
-                           </ul>
-                           <div class="d-grid gap-2 d-md-flex justify-content-md-center mt-3">
-                              <button class="btn btn-outline-primary" style="margin: 10px;" disabled="@(!isDirtySaveKeyPlayers)" @onclick="SaveKeyPlayers">Salvar Jogadores Chave</button>
-                           </div>
-                        </div>
-                     </div>
-                  </div>
+      <div class="gameplan-page container py-4">
+         <div class="gameplan-header mb-4">
+            <div class="d-flex align-items-center gap-3">
+               <img src="@($"../Images/Logos/{_team.Abrv}.svg")" alt="@_team.Name" class="gameplan-team-logo" />
+               <div>
+                  <h1 class="h3 mb-1">@_team.Name</h1>
+                  <p class="text-muted mb-0">Gameplan e Estratégia</p>
                </div>
             </div>
          </div>
 
+         <div class="gameplan-settings-container mb-5">
+            <h2 class="section-title mb-4">Configurações de Jogo</h2>
+            <div class="gameplan-grid">
+               <div class="gameplan-card">
+                  <div class="gameplan-card-header">
+                     <i class="bi bi-speedometer2"></i>
+                     <h5>PACE</h5>
+                  </div>
+                  <select class="form-select gameplan-select" bind="@_gameplan.Pace" @onchange="@(e => UpdateGameplan(e.Value, "PACE"))">
+                     <option selected hidden="">@GetGPace(_gameplan.Pace)</option>
+                     @foreach (var option in GPaceOptions)
+                     {
+                        <option value="@option">@GetGPace(option)</option>
+                     }
+                  </select>
+                  <p class="gameplan-description">Velocidade do jogo ofensivo</p>
+               </div>
 
+               <div class="gameplan-card">
+                  <div class="gameplan-card-header">
+                     <i class="bi bi-arrow-repeat"></i>
+                     <h5>MOTION</h5>
+                  </div>
+                  <select class="form-select gameplan-select" bind="@_gameplan.Motion" @onchange="@(e => UpdateGameplan(e.Value, "MOTION"))">
+                     <option selected hidden="">@GetGPace(_gameplan.Motion)</option>
+                     @foreach (var option in GPaceOptions)
+                     {
+                        <option value="@option">@GetGPace(option)</option>
+                     }
+                  </select>
+                  <p class="gameplan-description">Movimentação da bola</p>
+               </div>
+
+               <div class="gameplan-card">
+                  <div class="gameplan-card-header">
+                     <i class="bi bi-bullseye"></i>
+                     <h5>FOCUS</h5>
+                  </div>
+                  <select class="form-select gameplan-select" bind="@_gameplan.Focus" @onchange="@(e => UpdateGameplan(e.Value, "FOCUS"))">
+                     <option selected hidden="">@GetFocus(_gameplan.Focus)</option>
+                     @foreach (var option in GPaceOptions)
+                     {
+                        <option value="@option">@GetFocus(option)</option>
+                     }
+                  </select>
+                  <p class="gameplan-description">Foco da ofensiva</p>
+               </div>
+
+               <div class="gameplan-card">
+                  <div class="gameplan-card-header">
+                     <i class="bi bi-shield-check"></i>
+                     <h5>DEFENSE</h5>
+                  </div>
+                  <select class="form-select gameplan-select" bind="@_gameplan.Defense" @onchange="@(e => UpdateGameplan(e.Value, "DEFENSE"))">
+                     <option selected hidden="">@GetDefense(_gameplan.Defense)</option>
+                     @foreach (var option in DefenseOptions)
+                     {
+                        <option value="@option">@GetDefense(option)</option>
+                     }
+                  </select>
+                  <p class="gameplan-description">Sistema defensivo</p>
+               </div>
+            </div>
+         </div>
+
+         <div class="key-players-container">
+            <h2 class="section-title mb-4">Jogadores Chave</h2>
+            <div class="key-players-card">
+               <div class="key-players-header">
+                  <i class="bi bi-star-fill"></i>
+                  <h5>Selecione até 3 jogadores chave</h5>
+               </div>
+               <div class="key-players-list">
+                  @foreach (var player in _team.Players.OrderBy(p => p.Name))
+                  {
+                     var keyCount = _team.Players.Count(p => p.KeyPlayer);
+                     var isDisabled = keyCount >= 3 && !player.KeyPlayer;
+                     
+                     <div class="key-player-item @(isDisabled ? "disabled" : "")">
+                        <label class="key-player-checkbox">
+                           <input type="checkbox" 
+                                  @bind="player.KeyPlayer" 
+                                  disabled="@isDisabled"
+                                  @onclick="() => HandleCheckboxKeyChange()" />
+                           <span class="player-name">@player.Name</span>
+                           @if (player.KeyPlayer)
+                           {
+                              <span class="badge badge-key">Chave</span>
+                           }
+                        </label>
+                     </div>
+                     @if (_team.Players.Count(p => p.KeyPlayer) >= 3 && player.KeyPlayer)
+                     {
+                        player.KeyPlayer = false;
+                     }
+                  }
+               </div>
+               <div class="key-players-footer">
+                  <button class="btn btn-save-key-players" 
+                          disabled="@(!isDirtySaveKeyPlayers)" 
+                          @onclick="SaveKeyPlayers">
+                     <i class="bi bi-check-circle"></i>
+                     Salvar Jogadores Chave
+                  </button>
+                  <p class="key-players-hint">
+                     @{
+                        var currentKeyCount = _team.Players.Count(p => p.KeyPlayer);
+                     }
+                     @currentKeyCount de 3 jogadores selecionados
+                  </p>
+               </div>
+            </div>
+         </div>
       </div>
-
    </AuthorizeView>
 </CascadingAuthenticationState>
-
 }

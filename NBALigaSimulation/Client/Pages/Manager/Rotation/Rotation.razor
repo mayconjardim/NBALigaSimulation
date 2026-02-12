@@ -12,86 +12,127 @@
 {
 <CascadingAuthenticationState>
   <AuthorizeView>
-    <div class="container">
-      
-      <div class="title"><h5></h5></div>
+    <div class="rotation-page container py-4">
+      <div class="rotation-header mb-4">
+        <div class="d-flex align-items-center gap-3">
+          <img src="@($"../Images/Logos/{_team.Abrv}.svg")" alt="@_team.Name" class="rotation-team-logo" />
+          <div>
+            <h1 class="h3 mb-1">@_team.Name</h1>
+            <p class="text-muted mb-0">Rotação e Controle de Minutos</p>
+          </div>
+        </div>
+      </div>
 
-      <div class="table-responsive">
-        <table class="table" id="statsTable">
-          <thead>
-          <tr>
-            <td style="background-color: white">NAME
-              <i class="bi bi-question-square-fill " style="margin-left: 5px" type="button"  data-bs-toggle="modal" data-bs-target="#sub"></i>
-              </td>
-            <td>POS</td>
-            <td>AGE</td>
-            <td>OVR</td>
-            <td>POT</td>
-            <td>CONTRACT</td>
-            <td>GP</td>
-            <td>MIN</td>
-            <td>PPG</td>
-            <td>RPG</td>
-            <td>APG</td>
-            <td>TS%</td>
-            <td style="display: flex">PT
-              <i class="bi bi-question-square-fill " style="margin-left: 5px" type="button"  data-bs-toggle="modal" data-bs-target="#rotation"></i>
-              </td>
-          </tr>
-          </thead>
-          <tbody>
-          @foreach (var player in _players  )
-          {
+      <div class="rotation-table-container">
+        <div class="table-responsive">
+          <table class="table rotation-table">
+            <thead>
             <tr>
-              <td style="text-align: left; background-color: white">
-                @if (_players.IndexOf(player) < 5)
-                {
-                  <button class="btn" style="background-color: var(--primary-color); color: white; font-size: 0.650rem;" @onclick="(e) => ChangeRosterOrder(player)">TIT</button>
-                  <a href="@($"players/{player.Id}")" style="margin-left: 5px;">@Util.NomeAbvr(player.Name)</a>
-                }
-                else
-                {
-                  <button  class="btn btn-secondary" style="font-size: 0.650rem;" @onclick="(e) => ChangeRosterOrder(player)">RES</button>
-                  <a href="@($"players/{player.Id}")" style="margin-left: 5px;">@Util.NomeAbvr(player.Name)</a>
-                }
-              </td>
-              <td>@player.Pos</td>
-              <td>@Util.Age(_season, player.Born.Year)</td>
-              <td>
-                @(player.Ratings?.LastOrDefault()?.CalculateOvr.ToString() ?? "-")
-              </td>
-              <td>
-                @(player.Ratings?.LastOrDefault()?.Pot.ToString() ?? "-")
-              </td>
-              <td>$6.80M até 2014</td>
-              <td>
-                @(player.RegularStats?.LastOrDefault()?.Games.ToString() ?? "-")
-              </td>
-              <td>@(player.RegularStats?.LastOrDefault()?.MinPG.ToString() ?? "-")</td>
-              <td>@(player.RegularStats?.LastOrDefault()?.PtsPG.ToString() ?? "-")</td>
-              <td>@(player.RegularStats?.LastOrDefault()?.TRebPG.ToString() ?? "-")</td>
-              <td>@(player.RegularStats?.LastOrDefault()?.AstPG.ToString() ?? "-")</td>
-              <td>@(player.RegularStats?.LastOrDefault()?.TrueShooting.ToString() ?? "-")</td>
-              <td >
-                <select style="background: @Util.GetPtBackground(player.PtModifier)" class="form-select form-select-sm" id="ptModifierSelect" bind="@player.PtModifier" @onchange="@(e => UpdatePtModifier(e.Value, player.Id))">
-                  <option selected hidden>@GetOptionLabel(@player.PtModifier)</option>
-                  @foreach (var pt in PtOptions)
-                  {
-                    <option value="@pt">@GetOptionLabel(pt)</option>
-                  }
-                </select>
-
-              </td>
+              <th class="col-name">
+                <div class="d-flex align-items-center gap-2">
+                  <span>JOGADOR</span>
+                  <i class="bi bi-question-circle text-muted" style="cursor: help; font-size: 0.9rem;" data-bs-toggle="modal" data-bs-target="#sub"></i>
+                </div>
+              </th>
+              <th>POS</th>
+              <th>IDADE</th>
+              <th>OVR</th>
+              <th>POT</th>
+              <th>CONTRATO</th>
+              <th>J</th>
+              <th>MIN</th>
+              <th>PTS</th>
+              <th>REB</th>
+              <th>AST</th>
+              <th>TS%</th>
+              <th>
+                <div class="d-flex align-items-center gap-2">
+                  <span>MIN</span>
+                  <i class="bi bi-question-circle text-muted" style="cursor: help; font-size: 0.9rem;" data-bs-toggle="modal" data-bs-target="#rotation"></i>
+                </div>
+              </th>
             </tr>
-            @if (_players.IndexOf(player) == 4)
+            </thead>
+            <tbody>
+            @foreach (var player in _players.OrderBy(p => p.RosterOrder))
             {
-              <tr class="thin-border"> 
-                <td colspan="14" style="height: 1px"></td>
+              var playerIndex = _players.OrderBy(p => p.RosterOrder).ToList().IndexOf(player);
+              var isStarter = playerIndex < 5;
+              var isSelected = player1Selected?.Id == player.Id || player2Selected?.Id == player.Id;
+              
+              <tr class="@(isSelected ? "row-selected" : "") @(isStarter ? "row-starter" : "row-bench")">
+                <td class="col-name">
+                  <div class="d-flex align-items-center gap-2">
+                    <button class="btn-roster @(isStarter ? "btn-starter" : "btn-bench") @(isSelected ? "btn-selected" : "")" 
+                            @onclick="(e) => ChangeRosterOrder(player)"
+                            title="@(isStarter ? "Titular" : "Reserva")">
+                      @(isStarter ? "TIT" : "RES")
+                    </button>
+                    <a href="@($"players/{player.Id}")" class="player-name-link">@Util.NomeAbvr(player.Name)</a>
+                  </div>
+                </td>
+                <td><span class="badge badge-pos">@player.Pos</span></td>
+                <td>@Util.Age(_season, player.Born.Year)</td>
+                <td>
+                  @if (player.Ratings?.LastOrDefault() != null)
+                  {
+                    <span class="badge @Util.GetBadgeClass(player.Ratings.LastOrDefault().CalculateOvr)">@player.Ratings.LastOrDefault().CalculateOvr</span>
+                  }
+                  else
+                  {
+                    <span class="text-muted">—</span>
+                  }
+                </td>
+                <td>
+                  @if (player.Ratings?.LastOrDefault() != null)
+                  {
+                    <span class="badge @Util.GetBadgeClass(player.Ratings.LastOrDefault().Pot)">@player.Ratings.LastOrDefault().Pot</span>
+                  }
+                  else
+                  {
+                    <span class="text-muted">—</span>
+                  }
+                </td>
+                <td class="contract-cell">
+                  @if (player.Contract != null)
+                  {
+                    <span class="contract-text">$@FormatContractAmount(player.Contract.Amount)</span>
+                    <span class="contract-exp">até @player.Contract.Exp</span>
+                  }
+                  else
+                  {
+                    <span class="text-muted">—</span>
+                  }
+                </td>
+                <td>@(player.RegularStats?.LastOrDefault()?.Games.ToString() ?? "—")</td>
+                <td>@(player.RegularStats?.LastOrDefault()?.MinPG ?? "—")</td>
+                <td>@(player.RegularStats?.LastOrDefault()?.PtsPG ?? "—")</td>
+                <td>@(player.RegularStats?.LastOrDefault()?.TRebPG ?? "—")</td>
+                <td>@(player.RegularStats?.LastOrDefault()?.AstPG ?? "—")</td>
+                <td>@(player.RegularStats?.LastOrDefault()?.TrueShooting ?? "—")</td>
+                <td>
+                  <select class="form-select form-select-sm pt-select" 
+                          style="background: @Util.GetPtBackground(player.PtModifier); min-width: 60px;" 
+                          bind="@player.PtModifier" 
+                          @onchange="@(e => UpdatePtModifier(e.Value, player.Id))">
+                    <option selected hidden>@GetOptionLabel(@player.PtModifier)</option>
+                    @foreach (var pt in PtOptions)
+                    {
+                      <option value="@pt">@GetOptionLabel(pt)</option>
+                    }
+                  </select>
+                </td>
               </tr>
+              @if (playerIndex == 4)
+              {
+                <tr class="row-divider">
+                  <td colspan="13"></td>
+                </tr>
+              }
             }
-          }
-          </tbody>
-        </table>
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
 

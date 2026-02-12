@@ -1,8 +1,274 @@
-.gameplans {
-    display: flex;
-    justify-content: center;
-    flex-wrap: wrap;
+.gameplan-page {
+    max-width: 1400px;
+    margin: 0 auto;
 }
-.gameplan{
-    margin: 1rem;
+
+.gameplan-header {
+    padding: 1.5rem 0;
+    border-bottom: 2px solid #e5e7eb;
+}
+
+.gameplan-team-logo {
+    width: 60px;
+    height: 60px;
+    object-fit: contain;
+}
+
+.section-title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #1a1a2e;
+    margin-bottom: 1.5rem;
+}
+
+.gameplan-settings-container {
+    background-color: #ffffff;
+    border-radius: 12px;
+    padding: 2rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.gameplan-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5rem;
+}
+
+.gameplan-card {
+    background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
+    padding: 1.5rem;
+    transition: all 0.3s ease;
+}
+
+.gameplan-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+    border-color: var(--primary-color);
+}
+
+.gameplan-card-header {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+}
+
+.gameplan-card-header i {
+    font-size: 1.5rem;
+    color: var(--primary-color);
+}
+
+.gameplan-card-header h5 {
+    margin: 0;
+    font-weight: 600;
+    color: #1a1a2e;
+    font-size: 1.1rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.gameplan-select {
+    border: 2px solid #e5e7eb;
+    border-radius: 8px;
+    padding: 0.75rem;
+    font-size: 1rem;
+    font-weight: 500;
+    transition: all 0.2s ease;
+    background-color: white;
+}
+
+.gameplan-select:hover {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(var(--primary-color-rgb), 0.1);
+}
+
+.gameplan-select:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(var(--primary-color-rgb), 0.2);
+    outline: none;
+}
+
+.gameplan-description {
+    margin-top: 0.75rem;
+    margin-bottom: 0;
+    font-size: 0.85rem;
+    color: #6c757d;
+    font-style: italic;
+}
+
+.key-players-container {
+    margin-top: 2rem;
+}
+
+.key-players-card {
+    background-color: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    overflow: hidden;
+}
+
+.key-players-header {
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+    color: white;
+    padding: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.key-players-header i {
+    font-size: 1.5rem;
+    color: #ffc107;
+}
+
+.key-players-header h5 {
+    margin: 0;
+    font-weight: 600;
+    font-size: 1.1rem;
+}
+
+.key-players-list {
+    padding: 1.5rem;
+    max-height: 500px;
+    overflow-y: auto;
+}
+
+.key-player-item {
+    padding: 0.75rem 0;
+    border-bottom: 1px solid #f0f0f0;
+    transition: background-color 0.2s ease;
+}
+
+.key-player-item:last-child {
+    border-bottom: none;
+}
+
+.key-player-item:hover:not(.disabled) {
+    background-color: #f8f9fa;
+    border-radius: 6px;
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+}
+
+.key-player-item.disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.key-player-checkbox {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    cursor: pointer;
+    margin: 0;
+    width: 100%;
+}
+
+.key-player-checkbox input[type="checkbox"] {
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+    accent-color: var(--primary-color);
+}
+
+.key-player-checkbox input[type="checkbox"]:disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+}
+
+.player-name {
+    flex: 1;
+    font-weight: 500;
+    color: #212529;
+}
+
+.badge-key {
+    background-color: #ffc107;
+    color: #212529;
+    font-weight: 600;
+    padding: 0.25rem 0.5rem;
+    border-radius: 4px;
+    font-size: 0.75rem;
+}
+
+.key-players-footer {
+    padding: 1.5rem;
+    background-color: #f8f9fa;
+    border-top: 1px solid #e5e7eb;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.btn-save-key-players {
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    padding: 0.75rem 2rem;
+    border-radius: 8px;
+    font-weight: 600;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.btn-save-key-players:hover:not(:disabled) {
+    background-color: var(--primary-color);
+    opacity: 0.9;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.btn-save-key-players:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.btn-save-key-players i {
+    font-size: 1.1rem;
+}
+
+.key-players-hint {
+    margin: 0;
+    font-size: 0.85rem;
+    color: #6c757d;
+    font-weight: 500;
+}
+
+/* Scrollbar personalizado para a lista de jogadores */
+.key-players-list::-webkit-scrollbar {
+    width: 8px;
+}
+
+.key-players-list::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 4px;
+}
+
+.key-players-list::-webkit-scrollbar-thumb {
+    background: #c1c1c1;
+    border-radius: 4px;
+}
+
+.key-players-list::-webkit-scrollbar-thumb:hover {
+    background: #a8a8a8;
+}
+
+@media (max-width: 768px) {
+    .gameplan-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .gameplan-card {
+        padding: 1rem;
+    }
+    
+    .key-players-list {
+        max-height: 400px;
+    }
 }
