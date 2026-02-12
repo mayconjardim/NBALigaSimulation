@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc;
 using NBALigaSimulation.Shared.Dtos.Players;
 using NBALigaSimulation.Shared.Models.Utils;
 using Newtonsoft.Json.Linq;
@@ -96,9 +96,15 @@ namespace NBALigaSimulation.Server.Controllers
         }
 
         [HttpPost("multi")]
-        public async Task<ActionResult<ServiceResponse<bool>>> CreatePlayers(List<CreatePlayersDto> playersDto)
+        public async Task<ActionResult<ServiceResponse<bool>>> CreatePlayers(List<CreatePlayerDto> playersDto)
         {
             return Ok(await _playerService.CreatePlayers(playersDto));
+        }
+
+        [HttpPost("import-bbgm")]
+        public async Task<ActionResult<ServiceResponse<bool>>> ImportBBGMPlayers(BBGMImportDto bbgmData)
+        {
+            return Ok(await _playerService.ImportBBGMPlayers(bbgmData));
         }
 
         [HttpPut("rosterorder")]

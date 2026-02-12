@@ -15,28 +15,60 @@ public class DraftService : IDraftService
 
     public async Task<ServiceResponse<List<DraftDto>>> GetLastDraft()
     {
-        var response = await _http.GetFromJsonAsync<ServiceResponse<List<DraftDto>>>("api/draft");
-        return response;
+        try
+        {
+            var response = await _http.GetFromJsonAsync<ServiceResponse<List<DraftDto>>>("api/draft");
+            return response ?? new ServiceResponse<List<DraftDto>> 
+            { 
+                Success = false, 
+                Message = "Resposta inválida do servidor.",
+                Data = new List<DraftDto>()
+            };
+        }
+        catch (Exception ex)
+        {
+            return new ServiceResponse<List<DraftDto>> 
+            { 
+                Success = false, 
+                Message = $"Erro ao buscar draft: {ex.Message}",
+                Data = new List<DraftDto>()
+            };
+        }
     }
 
     public async Task<ServiceResponse<DraftLotteryDto>> GetLastLottery()
     {
-        // Trata 404 (sem loteria ainda) sem quebrar o app
-        var httpResponse = await _http.GetAsync("api/draft/lotto");
+        try
+        {
+            // Trata 404 (sem loteria ainda) sem quebrar o app
+            var httpResponse = await _http.GetAsync("api/draft/lotto");
 
-        if (!httpResponse.IsSuccessStatusCode)
+            if (!httpResponse.IsSuccessStatusCode)
+            {
+                return new ServiceResponse<DraftLotteryDto>
+                {
+                    Success = false,
+                    Message = "Ainda não existe loteria gerada para o draft atual."
+                };
+            }
+
+            var response = await httpResponse.Content
+                .ReadFromJsonAsync<ServiceResponse<DraftLotteryDto>>();
+
+            return response ?? new ServiceResponse<DraftLotteryDto>
+            {
+                Success = false,
+                Message = "Resposta inválida do servidor."
+            };
+        }
+        catch (Exception ex)
         {
             return new ServiceResponse<DraftLotteryDto>
             {
                 Success = false,
-                Message = "Ainda não existe loteria gerada para o draft atual."
+                Message = $"Erro ao buscar loteria: {ex.Message}"
             };
         }
-
-        var response = await httpResponse.Content
-            .ReadFromJsonAsync<ServiceResponse<DraftLotteryDto>>();
-
-        return response;
     }
 
     public async Task<ServiceResponse<bool>> GenerateLottery()
@@ -79,9 +111,35 @@ public class DraftService : IDraftService
 
     public async Task<ServiceResponse<bool>> SelectDraftedPlayer(DraftPlayerDto request)
     {
-        var httpResponse = await _http.PutAsJsonAsync("api/draft/select", request);
-        var result = await httpResponse.Content.ReadFromJsonAsync<ServiceResponse<bool>>();
-        return result;
+        try
+        {
+            var httpResponse = await _http.PutAsJsonAsync("api/draft/select", request);
+            var result = await httpResponse.Content.ReadFromJsonAsync<ServiceResponse<bool>>();
+            
+            if (result == null)
+            {
+                return new ServiceResponse<bool> 
+                { 
+                    Success = false, 
+                    Message = "Resposta inválida do servidor." 
+                };
+            }
+            
+            if (!httpResponse.IsSuccessStatusCode)
+            {
+                result.Success = false;
+            }
+            
+            return result;
+        }
+        catch (Exception ex)
+        {
+            return new ServiceResponse<bool> 
+            { 
+                Success = false, 
+                Message = $"Erro ao selecionar jogador: {ex.Message}" 
+            };
+        }
     }
 }
 

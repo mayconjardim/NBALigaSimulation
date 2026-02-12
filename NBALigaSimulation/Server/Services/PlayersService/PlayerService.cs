@@ -9,6 +9,7 @@ using NBALigaSimulation.Shared.Models.Utils;
 using NBALigaSimulation.Shared.Models.Teams;
 using Newtonsoft.Json.Linq;
 using Player = NBALigaSimulation.Shared.Models.Players.Player;
+using Born = NBALigaSimulation.Shared.Models.Players.Born;
 
 namespace NBALigaSimulation.Server.Services.PlayersService
 {
@@ -82,7 +83,7 @@ namespace NBALigaSimulation.Server.Services.PlayersService
             return response;
         }
 
-   public async Task<ServiceResponse<bool>> CreatePlayers(List<CreatePlayersDto> playersDto)
+   public async Task<ServiceResponse<bool>> CreatePlayers(List<CreatePlayerDto> playersDto)
 {
     ServiceResponse<bool> response = new ServiceResponse<bool>();
 
@@ -110,23 +111,99 @@ namespace NBALigaSimulation.Server.Services.PlayersService
 
         // Adiciona todos os jogadores de uma vez
         await _playerRepository.AddRangeAsync(players);
-        await _playerRepository.SaveChangesAsync(); // Salva as mudanças no banco
+        await _playerRepository.SaveChangesAsync();
 
         response.Data = true;
         response.Success = true;
-        response.Message = "Jogadores criados com sucesso!";
+        response.Message = $"Jogadores criados com sucesso! Total: {players.Count} jogador(es).";
     }
     catch (Exception ex)
     {
-        // Captura erros do banco de dados
         response.Data = false;
         response.Success = false;
         response.Message = $"Erro ao criar jogadores: {ex.Message}";
-        // Aqui você pode logar a exceção, se necessário
     }
 
     return response;
 }
+
+        public async Task<ServiceResponse<bool>> ImportBBGMPlayers(BBGMImportDto bbgmData)
+        {
+            var response = new ServiceResponse<bool>();
+
+            if (bbgmData?.Players == null || !bbgmData.Players.Any())
+            {
+                response.Success = false;
+                response.Message = "Nenhum jogador encontrado no JSON do BBGM.";
+                return response;
+            }
+
+            try
+            {
+                var createPlayerDtos = new List<CreatePlayerDto>();
+
+                foreach (var bbgmPlayer in bbgmData.Players)
+                {
+                    // Se tid == -2, vai para o draft pool (TeamId = 22)
+                    int teamId = bbgmPlayer.Tid == -2 ? 22 : bbgmPlayer.Tid;
+
+                    var createDto = new CreatePlayerDto
+                    {
+                        Id = 0, // Sempre 0 para novos jogadores
+                        Name = $"{bbgmPlayer.FirstName} {bbgmPlayer.LastName}".Trim(),
+                        Pos = bbgmPlayer.Pos ?? "",
+                        College = bbgmPlayer.College ?? "",
+                        Hgt = bbgmPlayer.Hgt,
+                        Weight = bbgmPlayer.Weight,
+                        ImgUrl = bbgmPlayer.ImgURL ?? "",
+                        TeamId = teamId,
+                        Born = bbgmPlayer.Born != null ? new Born
+                        {
+                            Year = bbgmPlayer.Born.Year,
+                            Loc = bbgmPlayer.Born.Loc ?? ""
+                        } : new Born { Year = 1990, Loc = "" },
+                        Ratings = bbgmPlayer.Ratings?.Select(r => new PlayerRatingDto
+                        {
+                            Hgt = r.Hgt,
+                            Stre = r.Stre,
+                            Spd = r.Spd,
+                            Jmp = r.Jmp,
+                            Endu = r.Endu,
+                            Ins = r.Ins,
+                            Dnk = r.Dnk,
+                            Ft = r.Ft,
+                            Fg = r.Fg,
+                            Tp = r.Tp,
+                            Diq = r.Diq,
+                            Oiq = r.Oiq,
+                            Drb = r.Drb,
+                            Pss = r.Pss,
+                            Reb = r.Reb,
+                            Pot = r.Pot
+                        }).ToList() ?? new List<PlayerRatingDto>()
+                    };
+
+                    createPlayerDtos.Add(createDto);
+                }
+
+                // Usa o método CreatePlayers existente
+                var createResponse = await CreatePlayers(createPlayerDtos);
+                
+                response.Success = createResponse.Success;
+                response.Message = createResponse.Success 
+                    ? $"Importados {createPlayerDtos.Count} jogador(es) do BBGM. {createResponse.Message}"
+                    : createResponse.Message;
+                response.Data = createResponse.Success;
+
+                return response;
+            }
+            catch (Exception ex)
+            {
+                response.Success = false;
+                response.Message = $"Erro ao importar jogadores do BBGM: {ex.Message}";
+                return response;
+            }
+        }
 
         
         public async Task<ServiceResponse<List<PlayerSimpleDto>>> GetAllSimplePlayers()

@@ -250,58 +250,98 @@ namespace NBALigaSimulation.Server.Services.DraftService
 
         public async Task<ServiceResponse<bool>> SelectDraftedPlayer(DraftPlayerDto request)
         {
+            Console.WriteLine($"[BACKEND] SelectDraftedPlayer iniciado - PlayerId: {request?.PlayerId}, TeamId: {request?.TeamId}, Pick: {request?.Pick}");
 
             var response = new ServiceResponse<bool>();
-            var season = await _seasonRepository.Query()
-                .OrderBy(s => s.Year)
-                .LastOrDefaultAsync();
-
-            var player = await _playerRepository.Query()
-                .Where(p => p.Id == request.PlayerId)
-                .FirstOrDefaultAsync();
-
-            var draft = await _draftRepository.Query()
-                .Where(d => d.Pick == request.Pick && d.TeamId == request.TeamId && d.Season == season.Year)
-                .FirstOrDefaultAsync();
-
+            
             try
             {
+                Console.WriteLine("[BACKEND] Buscando temporada...");
+                var season = await _seasonRepository.Query()
+                    .OrderBy(s => s.Year)
+                    .LastOrDefaultAsync();
 
-                if (draft != null && player != null)
+                if (season == null)
                 {
-
-                    draft.Player = player;
-                    draft.PlayerId = request.PlayerId;
-                    draft.DateTime = DateTime.Now;
-
-                    player.TeamId = request.TeamId;
-                    player.Draft = new PlayerDraft
-                    {
-                        Pick = request.Pick,
-                        Round = request.Round,
-                        Team = request.Team,
-                        Year = request.Year
-                    };
-
-                    player.Contract = DraftUtils.RookieContracts(request.Pick, season.Year);
+                    Console.WriteLine("[BACKEND] ERRO: Temporada não encontrada");
+                    response.Success = false;
+                    response.Message = "Nenhuma temporada encontrada.";
+                    return response;
                 }
+                Console.WriteLine($"[BACKEND] Temporada encontrada: {season.Year}");
 
+                Console.WriteLine($"[BACKEND] Buscando jogador com ID: {request.PlayerId}");
+                var player = await _playerRepository.Query()
+                    .Where(p => p.Id == request.PlayerId)
+                    .FirstOrDefaultAsync();
+
+                if (player == null)
+                {
+                    Console.WriteLine($"[BACKEND] ERRO: Jogador não encontrado - ID: {request.PlayerId}");
+                    response.Success = false;
+                    response.Message = "Jogador não encontrado.";
+                    return response;
+                }
+                Console.WriteLine($"[BACKEND] Jogador encontrado: {player.Name} (ID: {player.Id})");
+
+                Console.WriteLine($"[BACKEND] Buscando draft - Pick: {request.Pick}, TeamId: {request.TeamId}, Season: {season.Year}");
+                var draft = await _draftRepository.Query()
+                    .Where(d => d.Pick == request.Pick && d.TeamId == request.TeamId && d.Season == season.Year)
+                    .FirstOrDefaultAsync();
+
+                if (draft == null)
+                {
+                    Console.WriteLine($"[BACKEND] ERRO: Draft não encontrado - Pick: {request.Pick}, TeamId: {request.TeamId}, Season: {season.Year}");
+                    response.Success = false;
+                    response.Message = "Pick do draft não encontrado.";
+                    return response;
+                }
+                Console.WriteLine($"[BACKEND] Draft encontrado - Pick: {draft.Pick}, TeamId: {draft.TeamId}");
+
+                Console.WriteLine("[BACKEND] Atribuindo jogador ao draft...");
+                draft.Player = player;
+                draft.PlayerId = request.PlayerId;
+                draft.DateTime = DateTime.Now;
+
+                Console.WriteLine("[BACKEND] Atualizando informações do jogador...");
+                player.TeamId = request.TeamId;
+                player.Draft = new PlayerDraft
+                {
+                    Pick = request.Pick,
+                    Round = request.Round,
+                    Team = request.Team ?? string.Empty,
+                    Year = request.Year
+                };
+
+                Console.WriteLine($"[BACKEND] Criando contrato - Pick: {request.Pick}, Season: {season.Year}");
+                player.Contract = DraftUtils.RookieContracts(request.Pick, season.Year);
+                Console.WriteLine($"[BACKEND] Contrato criado - Amount: {player.Contract?.Amount}, Exp: {player.Contract?.Exp}");
+
+                Console.WriteLine("[BACKEND] Salvando alterações no draft...");
                 await _draftRepository.SaveChangesAsync();
+                Console.WriteLine("[BACKEND] Draft salvo com sucesso");
 
+                Console.WriteLine("[BACKEND] Salvando alterações no jogador...");
+                await _playerRepository.SaveChangesAsync();
+                Console.WriteLine("[BACKEND] Jogador salvo com sucesso");
 
+                response.Success = true;
+                response.Message = $"Jogador {player.Name} selecionado no pick {request.Pick}.";
+                Console.WriteLine($"[BACKEND] SUCESSO: {response.Message}");
+                return response;
             }
             catch (Exception ex)
             {
-
+                Console.WriteLine($"[BACKEND] EXCEÇÃO: {ex.GetType().Name} - {ex.Message}");
+                Console.WriteLine($"[BACKEND] StackTrace: {ex.StackTrace}");
+                if (ex.InnerException != null)
+                {
+                    Console.WriteLine($"[BACKEND] InnerException: {ex.InnerException.Message}");
+                }
                 response.Success = false;
-                response.Message = "Não foi possivel draftar o jogador!";
+                response.Message = $"Erro ao draftar o jogador: {ex.Message}";
                 return response;
-
-
             }
-
-            response.Success = true;
-            return response;
         }
 
     }

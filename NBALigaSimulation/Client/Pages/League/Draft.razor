@@ -87,41 +87,167 @@
         @if (_draft != null && _draft.Any())
         {
             <div class="card draft-table-card">
-                <div class="card-header d-flex justify-content-between align-items-center">
-                    <strong>Draft - Temporada @_draft.First().Season</strong>
-                    <small class="text-muted">Round @string.Join(", ", _draft.Select(d => d.Round).Distinct().OrderBy(r => r))</small>
+                <div class="card-header">
+                    <ul class="nav nav-tabs card-header-tabs" role="tablist">
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link @(_activeTab == "draft" ? "active" : "")" id="draft-tab" data-bs-toggle="tab" data-bs-target="#draft-pane" type="button" role="tab" aria-controls="draft-pane" aria-selected="@(_activeTab == "draft")" @onclick='async () => await OnTabChange("draft")'>
+                                <i class="bi bi-list-ol me-1"></i>Draft
+                            </button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link @(_activeTab == "pool" ? "active" : "")" id="pool-tab" data-bs-toggle="tab" data-bs-target="#pool-pane" type="button" role="tab" aria-controls="pool-pane" aria-selected="@(_activeTab == "pool")" @onclick='async () => await OnTabChange("pool")'>
+                                <i class="bi bi-people me-1"></i>Draft Pool
+                            </button>
+                        </li>
+                    </ul>
                 </div>
                 <div class="card-body p-0">
-                    <div class="table-responsive">
-                        <table class="table draft-table mb-0">
-                            <thead>
-                                <tr>
-                                    <th class="col-pick">Pick</th>
-                                    <th class="col-round">Rnd</th>
-                                    <th class="col-team">Time</th>
-                                    <th class="col-original">Original</th>
-                                    <th class="col-player">Jogador</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach (var pick in _draft.OrderBy(d => d.Pick))
-                                {
-                                    <tr>
-                                        <td class="col-pick"><span class="pick-num">@pick.Pick</span></td>
-                                        <td class="col-round">@pick.Round</td>
-                                        <td class="col-team">
-                                            <img src="@($"../Images/Logos/{pick.TeamAbrv}.svg")" alt="@pick.TeamAbrv" class="draft-team-logo" />
-                                            <span>@pick.TeamAbrv</span>
-                                        </td>
-                                        <td class="col-original">
-                                            <img src="@($"../Images/Logos/{pick.Original}.svg")" alt="@pick.Original" class="draft-team-logo" />
-                                            <span>@pick.Original</span>
-                                        </td>
-                                        <td class="col-player">@(string.IsNullOrEmpty(pick.PlayerName) ? "—" : pick.PlayerName)</td>
-                                    </tr>
-                                }
-                            </tbody>
-                        </table>
+                    <div class="tab-content">
+                        <!-- Draft Table Tab -->
+                        <div class="tab-pane fade @(_activeTab == "draft" ? "show active" : "")" id="draft-pane" role="tabpanel" aria-labelledby="draft-tab">
+                            <div class="table-responsive">
+                                <table class="table draft-table mb-0">
+                                    <thead>
+                                        <tr>
+                                            <th class="col-pick">Pick</th>
+                                            <th class="col-round">Rnd</th>
+                                            <th class="col-team">Time</th>
+                                            <th class="col-original">Original</th>
+                                            <th class="col-player">Jogador</th>
+                                            <th class="col-action" style="width:120px;">Ação</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var pick in _draft.OrderBy(d => d.Pick))
+                                        {
+                                            <tr class="@(string.IsNullOrEmpty(pick.PlayerName) ? "pick-available" : "")">
+                                                <td class="col-pick"><span class="pick-num">@pick.Pick</span></td>
+                                                <td class="col-round">@pick.Round</td>
+                                                <td class="col-team">
+                                                    <img src="@($"../Images/Logos/{pick.TeamAbrv}.svg")" alt="@pick.TeamAbrv" class="draft-team-logo" />
+                                                    <span>@pick.TeamAbrv</span>
+                                                </td>
+                                                <td class="col-original">
+                                                    <img src="@($"../Images/Logos/{pick.Original}.svg")" alt="@pick.Original" class="draft-team-logo" />
+                                                    <span>@pick.Original</span>
+                                                </td>
+                                                <td class="col-player">
+                                                    @if (!string.IsNullOrEmpty(pick.PlayerName))
+                                                    {
+                                                        <a href="players/@pick.PlayerId" class="player-link">@pick.PlayerName</a>
+                                                    }
+                                                    else
+                                                    {
+                                                        <span class="text-muted">—</span>
+                                                    }
+                                                </td>
+                                                <td class="col-action">
+                                                    @if (string.IsNullOrEmpty(pick.PlayerName))
+                                                    {
+                                                        @if (IsUserTurn(pick))
+                                                        {
+                                                            <button class="btn btn-sm btn-outline-primary" @onclick="() => OpenPlayerSelectModal(pick)" disabled="@_isSelecting">
+                                                                <i class="bi bi-plus-circle me-1"></i>Escolher
+                                                            </button>
+                                                        }
+                                                        else if (IsUserPick(pick))
+                                                        {
+                                                            <span class="text-muted small">Aguardando sua vez...</span>
+                                                        }
+                                                        else
+                                                        {
+                                                            <span class="text-muted small">Aguardando...</span>
+                                                        }
+                                                    }
+                                                    else
+                                                    {
+                                                        <span class="badge bg-success"><i class="bi bi-check-circle me-1"></i>Escolhido</span>
+                                                    }
+                                                </td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <!-- Draft Pool Tab -->
+                        <div class="tab-pane fade @(_activeTab == "pool" ? "show active" : "")" id="pool-pane" role="tabpanel" aria-labelledby="pool-tab">
+                            @if (_draftPoolLoading)
+                            {
+                                <div class="text-center py-4">
+                                    <div class="spinner-border text-primary" role="status"></div>
+                                </div>
+                            }
+                            else if (_draftPool != null && _draftPool.Any())
+                            {
+                                <div class="p-3">
+                                    <div class="mb-3">
+                                        <input type="text" class="form-control form-control-sm" placeholder="Buscar jogador..." @bind="_draftPoolSearch" @bind:event="oninput" />
+                                    </div>
+                                    <div class="table-responsive">
+                                        <table class="table table-sm table-hover mb-0">
+                                            <thead class="table-light">
+                                                <tr>
+                                                    <th style="width:50px;"></th>
+                                                    <th>Nome</th>
+                                                    <th style="width:60px;">Pos</th>
+                                                    <th style="width:80px;">Altura</th>
+                                                    <th style="width:80px;">Peso</th>
+                                                    <th style="width:80px;">OVR</th>
+                                                    <th style="width:80px;">Pot</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @foreach (var player in _filteredDraftPool)
+                                                {
+                                                    <tr>
+                                                        <td>
+                                                            <img src="@(string.IsNullOrEmpty(player.ImgUrl) ? "../Images/Utils/blank.png" : player.ImgUrl)" alt="@player.Name" class="draft-pool-thumb" />
+                                                        </td>
+                                                        <td>
+                                                            <a href="players/@player.Id" class="text-decoration-none">@player.Name</a>
+                                                        </td>
+                                                        <td>@player.Pos</td>
+                                                        <td>@player.Hgt cm</td>
+                                                        <td>@player.Weight kg</td>
+                                                        <td>
+                                                            @if (player.Ratings != null && player.Ratings.Any())
+                                                            {
+                                                                <span class="badge bg-primary">@player.Ratings.First().CalculateOvr</span>
+                                                            }
+                                                            else
+                                                            {
+                                                                <span class="text-muted">—</span>
+                                                            }
+                                                        </td>
+                                                        <td>
+                                                            @if (player.Ratings != null && player.Ratings.Any())
+                                                            {
+                                                                <span class="badge bg-secondary">@player.Ratings.First().Pot</span>
+                                                            }
+                                                            else
+                                                            {
+                                                                <span class="text-muted">—</span>
+                                                            }
+                                                        </td>
+                                                    </tr>
+                                                }
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <div class="mt-2 text-muted small">
+                                        Total: @_filteredDraftPool.Count jogador(es) disponível(is)
+                                    </div>
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="p-4 text-center text-muted">
+                                    <p>Nenhum jogador disponível no draft pool.</p>
+                                </div>
+                            }
+                        </div>
                     </div>
                 </div>
             </div>
@@ -135,3 +261,83 @@
     }
 </div>
 
+<!-- Modal para selecionar jogador -->
+@if (_selectedPick != null)
+{
+    <div class="modal fade show" style="display:block;" tabindex="-1" role="dialog" id="playerSelectModal">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Escolher Jogador - Pick @_selectedPick.Pick</h5>
+                    <button type="button" class="btn-close" @onclick="ClosePlayerSelectModal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <input type="text" class="form-control" placeholder="Buscar jogador..." @bind="_modalSearch" @bind:event="oninput" />
+                    </div>
+                    <div class="table-responsive" style="max-height:400px; overflow-y:auto;">
+                        <table class="table table-sm table-hover">
+                            <thead class="table-light sticky-top">
+                                <tr>
+                                    <th style="width:50px;"></th>
+                                    <th>Nome</th>
+                                    <th style="width:60px;">Pos</th>
+                                    <th style="width:80px;">OVR</th>
+                                    <th style="width:80px;">Pot</th>
+                                    <th style="width:100px;">Ação</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var player in _filteredModalPlayers)
+                                {
+                                    <tr>
+                                        <td>
+                                            <img src="@(string.IsNullOrEmpty(player.ImgUrl) ? "../Images/Utils/blank.png" : player.ImgUrl)" alt="@player.Name" class="draft-pool-thumb" />
+                                        </td>
+                                        <td>
+                                            <a href="players/@player.Id" target="_blank" class="text-decoration-none">@player.Name</a>
+                                        </td>
+                                        <td>@player.Pos</td>
+                                        <td>
+                                            @if (player.Ratings != null && player.Ratings.Any())
+                                            {
+                                                <span class="badge bg-primary">@player.Ratings.First().CalculateOvr</span>
+                                            }
+                                            else
+                                            {
+                                                <span class="text-muted">—</span>
+                                            }
+                                        </td>
+                                        <td>
+                                            @if (player.Ratings != null && player.Ratings.Any())
+                                            {
+                                                <span class="badge bg-secondary">@player.Ratings.First().Pot</span>
+                                            }
+                                            else
+                                            {
+                                                <span class="text-muted">—</span>
+                                            }
+                                        </td>
+                                        <td>
+                                            <button class="btn btn-sm btn-primary" @onclick="() => SelectPlayer(player)" disabled="@_isSelecting">
+                                                @if (_isSelecting && _selectingPlayerId == player.Id)
+                                                {
+                                                    <span class="spinner-border spinner-border-sm me-1"></span>
+                                                }
+                                                Escolher
+                                            </button>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" @onclick="ClosePlayerSelectModal">Cancelar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-backdrop fade show"></div>
+}

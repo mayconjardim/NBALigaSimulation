@@ -175,11 +175,11 @@ namespace NBALigaSimulation.Server.Profiles
             CreateMap<DraftLottery, DraftLotteryDto>().ReverseMap();
             CreateMap<Draft, DraftDto>()
                 .ForMember(dest => dest.PlayerName, opt => 
-                    opt.MapFrom(src => src.Player.Name))
+                    opt.MapFrom(src => src.Player != null ? src.Player.Name : string.Empty))
                 .ForMember(dest => dest.TeamAbrv, opt => 
-                    opt.MapFrom(src => src.Team.Abrv))
+                    opt.MapFrom(src => src.Team != null ? src.Team.Abrv : string.Empty))
                 .ForMember(dest => dest.TeamName, opt => 
-                    opt.MapFrom(src => src.Team.Name));
+                    opt.MapFrom(src => src.Team != null ? src.Team.Name : string.Empty));
 
             CreateMap<DraftDto, Draft>();
 

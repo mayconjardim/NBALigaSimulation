@@ -138,6 +138,68 @@
     text-decoration: underline;
 }
 
+.draft-table .col-action {
+    text-align: center;
+}
+
+.draft-table .pick-available {
+    background-color: #fef3c7;
+}
+
+.draft-table .pick-available:hover {
+    background-color: #fde68a;
+}
+
+.draft-pool-thumb {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    object-fit: cover;
+    background: #eee;
+}
+
+.modal-content {
+    border-radius: 12px;
+    border: none;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+}
+
+.modal-header {
+    border-bottom: 1px solid #e5e7eb;
+    padding: 1rem 1.5rem;
+}
+
+.modal-body {
+    padding: 1.5rem;
+}
+
+.modal-footer {
+    border-top: 1px solid #e5e7eb;
+    padding: 1rem 1.5rem;
+}
+
+.card-header-tabs {
+    border-bottom: none;
+    margin-bottom: 0;
+}
+
+.card-header-tabs .nav-link {
+    border: none;
+    color: #64748b;
+    padding: 0.75rem 1rem;
+}
+
+.card-header-tabs .nav-link:hover {
+    color: var(--bs-primary);
+    background-color: transparent;
+}
+
+.card-header-tabs .nav-link.active {
+    color: var(--bs-primary);
+    background-color: transparent;
+    border-bottom: 2px solid var(--bs-primary);
+}
+
 @media (max-width: 768px) {
     .lottery-logo {
         width: 28px;
@@ -151,5 +213,10 @@
 
     .draft-table {
         font-size: 0.8rem;
+    }
+
+    .draft-pool-thumb {
+        width: 24px;
+        height: 24px;
     }
 }

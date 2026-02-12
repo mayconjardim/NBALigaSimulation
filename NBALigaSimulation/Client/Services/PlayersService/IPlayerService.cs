@@ -13,7 +13,7 @@ public interface IPlayerService
     Task<ServiceResponse<bool>> UpdatePlayerPtModifier(int playerId, double newPtModifier);
     Task<ServiceResponse<PageableResponse<PlayerCompleteDto>>> GetAllFaPlayers(int currentPage, int pageSize,
         int season, bool isAscending, string sortedColumn, string position = null);
-    
+    Task<ServiceResponse<List<PlayerCompleteDto>>> GetAllDraftPlayers();
     Task<ServiceResponse<PlayerCompleteDto>> EditPlayer(CreatePlayerDto request);
 
 

@@ -82,6 +82,12 @@ public class PlayerService : IPlayerService
         return result;
     }
     
+    public async Task<ServiceResponse<List<PlayerCompleteDto>>> GetAllDraftPlayers()
+    {
+        var result = await _http.GetFromJsonAsync<ServiceResponse<List<PlayerCompleteDto>>>("api/players/draft");
+        return result ?? new ServiceResponse<List<PlayerCompleteDto>> { Success = false, Message = "Erro ao buscar jogadores do draft." };
+    }
+
     public async Task<ServiceResponse<PlayerCompleteDto>> EditPlayer(CreatePlayerDto playerDto)
     {
         var response = await _http.PostAsJsonAsync("api/players/edit-player", playerDto);
