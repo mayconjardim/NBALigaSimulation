@@ -1,0 +1,23 @@
+@using NBALigaSimulation.Shared.Dtos.Players
+
+@if (_rating != null)
+{
+    <div class="scouting-card">
+        <h3 class="scouting-header">Scouting</h3>
+        <div class="scouting-content">
+            @if (!string.IsNullOrWhiteSpace(_rating.ScoutReport))
+            {
+                <p class="scouting-text">@_rating.ScoutReport</p>
+            }
+            else
+            {
+                <p class="scouting-empty text-muted">Nenhum relatório de scouting disponível para esta temporada.</p>
+            }
+        </div>
+    </div>
+}
+
+@code {
+    [Parameter]
+    public PlayerRatingDto _rating { get; set; }
+}

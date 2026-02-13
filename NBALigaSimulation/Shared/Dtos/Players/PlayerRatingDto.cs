@@ -1,4 +1,4 @@
-﻿using NBALigaSimulation.Shared.Engine.Utils;
+using NBALigaSimulation.Shared.Engine.Utils;
 
 namespace NBALigaSimulation.Shared.Dtos.Players
 {
@@ -23,6 +23,8 @@ namespace NBALigaSimulation.Shared.Dtos.Players
         public int Spd { get; set; }
         public int Stre { get; set; }
         public int Tp { get; set; }
+
+        public string? ScoutReport { get; set; }
 
         public int CalculateOvr
         {

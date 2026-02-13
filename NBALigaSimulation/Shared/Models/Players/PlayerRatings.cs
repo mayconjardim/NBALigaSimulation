@@ -26,6 +26,7 @@ namespace NBALigaSimulation.Shared.Models.Players
         public int Spd { get; set; }
         public int Stre { get; set; }
         public int Tp { get; set; }
+        public string? ScoutReport { get; set; }
 
         public int CalculateOvr
         {

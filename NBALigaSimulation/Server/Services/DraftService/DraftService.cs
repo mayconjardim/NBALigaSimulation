@@ -273,6 +273,7 @@ namespace NBALigaSimulation.Server.Services.DraftService
                 Console.WriteLine($"[BACKEND] Buscando jogador com ID: {request.PlayerId}");
                 var player = await _playerRepository.Query()
                     .Where(p => p.Id == request.PlayerId)
+                    .Include(p => p.Ratings)
                     .FirstOrDefaultAsync();
 
                 if (player == null)
@@ -305,6 +306,12 @@ namespace NBALigaSimulation.Server.Services.DraftService
 
                 Console.WriteLine("[BACKEND] Atualizando informações do jogador...");
                 player.TeamId = request.TeamId;
+                var latestRating = player.Ratings?.OrderByDescending(r => r.Season).FirstOrDefault();
+                if (latestRating != null)
+                {
+                    var pos = string.IsNullOrWhiteSpace(player.Pos) ? "SF" : player.Pos;
+                    latestRating.ScoutReport = NBALigaSimulation.Shared.Engine.Scouting.ScoutingReportGenerator.Generate(latestRating, pos, player.Born?.Year);
+                }
                 player.Draft = new PlayerDraft
                 {
                     Pick = request.Pick,

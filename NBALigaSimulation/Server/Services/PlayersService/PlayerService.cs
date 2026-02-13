@@ -78,6 +78,13 @@ namespace NBALigaSimulation.Server.Services.PlayersService
             await _playerRepository.AddAsync(player);
             await _playerRepository.SaveChangesAsync();
 
+            var pos = string.IsNullOrWhiteSpace(player.Pos) ? "SF" : player.Pos;
+            foreach (var rating in player.Ratings ?? new List<PlayerRatings>())
+            {
+                rating.ScoutReport = NBALigaSimulation.Shared.Engine.Scouting.ScoutingReportGenerator.Generate(rating, pos, player.Born?.Year);
+            }
+            await _playerRepository.SaveChangesAsync();
+
             response.Success = true;
             response.Data = _mapper.Map<PlayerCompleteDto>(player);
             return response;
@@ -111,6 +118,17 @@ namespace NBALigaSimulation.Server.Services.PlayersService
 
         // Adiciona todos os jogadores de uma vez
         await _playerRepository.AddRangeAsync(players);
+        await _playerRepository.SaveChangesAsync();
+
+        // Gera relatório de scouting para cada rating de cada jogador
+        foreach (var player in players)
+        {
+            var pos = string.IsNullOrWhiteSpace(player.Pos) ? "SF" : player.Pos;
+            foreach (var rating in player.Ratings)
+            {
+                rating.ScoutReport = NBALigaSimulation.Shared.Engine.Scouting.ScoutingReportGenerator.Generate(rating, pos, player.Born?.Year);
+            }
+        }
         await _playerRepository.SaveChangesAsync();
 
         response.Data = true;
@@ -464,6 +482,39 @@ namespace NBALigaSimulation.Server.Services.PlayersService
             return response;  
            
         }
-        
+
+        public async Task<ServiceResponse<bool>> RegenerateAllScoutReports()
+        {
+            var response = new ServiceResponse<bool>();
+            try
+            {
+                var players = await _playerRepository.Query()
+                    .Include(p => p.Ratings)
+                    .ToListAsync();
+
+                int ratingsCount = 0;
+                foreach (var player in players)
+                {
+                    var pos = string.IsNullOrWhiteSpace(player.Pos) ? "SF" : player.Pos;
+                    foreach (var rating in player.Ratings ?? new List<PlayerRatings>())
+                    {
+                        rating.ScoutReport = NBALigaSimulation.Shared.Engine.Scouting.ScoutingReportGenerator.Generate(rating, pos, player.Born?.Year);
+                        ratingsCount++;
+                    }
+                }
+
+                await _playerRepository.SaveChangesAsync();
+                response.Success = true;
+                response.Data = true;
+                response.Message = $"Scout reports gerados para {players.Count} jogador(es) ({ratingsCount} rating(s)).";
+            }
+            catch (Exception ex)
+            {
+                response.Success = false;
+                response.Data = false;
+                response.Message = $"Erro ao gerar scout reports: {ex.Message}";
+            }
+            return response;
+        }
     }
 }

@@ -161,5 +161,11 @@ namespace NBALigaSimulation.Server.Controllers
 
         }
 
+        [HttpPost("regenerate-scout-reports")]
+        public async Task<ActionResult<ServiceResponse<bool>>> RegenerateAllScoutReports()
+        {
+            var result = await _playerService.RegenerateAllScoutReports();
+            return Ok(result);
+        }
     }
 }

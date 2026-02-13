@@ -205,7 +205,7 @@ namespace NBALigaSimulation.Server.Services.SeasonService
             foreach (Player player in players)
             {
                 var newRatings = TcUtils.TrainingCamp(player, season);
-
+                newRatings.ScoutReport = NBALigaSimulation.Shared.Engine.Scouting.ScoutingReportGenerator.Generate(newRatings, player.Pos ?? "SF", player.Born?.Year);
                 player.Ratings.Add(newRatings);
             }
 
