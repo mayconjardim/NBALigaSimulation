@@ -2,128 +2,134 @@ using Microsoft.AspNetCore.Components;
 using NBALigaSimulation.Shared.Dtos.FA;
 using NBALigaSimulation.Shared.Dtos.Players;
 using NBALigaSimulation.Shared.Dtos.Teams;
+using NBALigaSimulation.Shared.Engine.Finance;
 
 namespace NBALigaSimulation.Client.Pages.Manager.FreeAgency.FAOffer;
 
-public partial class FAOffer 
+public partial class FAOffer
 {
-    
     [Parameter]
     public int Id { get; set; }
-    
+
     private PlayerCompleteDto? player = null;
     private TeamCompleteDto? team = null;
-    private int capSpace = 100000000;
     private int _contract = 0;
     private int _years = 1;
     private int _season;
-    
     private string message = string.Empty;
+    private string? ValidationError = null;
+    private bool Sending = false;
+
+    private int SalaryCap => SalaryCapConstants.SalaryCap;
+    private int MinSalary => player == null ? 0 : SalaryCapConstants.GetMinSalaryForFreeAgent(YearsExperience);
+    private int MaxSalary => player == null ? 0 : SalaryCapConstants.GetMaxSalaryForFreeAgent(YearsExperience);
+    private int MaxYears => SalaryCapConstants.MaxContractYearsOtherTeam;
+
+    private int YearsExperience => player?.Ratings?.Count ?? 0;
+
+    private decimal GetTeamTotalSalary()
+    {
+        if (team?.Players == null) return 0;
+        return team.Players
+            .Where(p => p.Contract != null && p.Contract.Amount > 0)
+            .Sum(p => p.Contract!.Amount);
+    }
+
+    private int CapSpaceAvailable => Math.Max(0, SalaryCap - (int)GetTeamTotalSalary());
+
+    private static string FormatMoney(int value)
+    {
+        if (value >= 1_000_000)
+            return $"${value / 1_000_000}M";
+        if (value >= 1_000)
+            return $"${value / 1_000}K";
+        return $"${value}";
+    }
 
     protected override async Task OnInitializedAsync()
     {
-        message = "Carregando Jogador...";
-
-        _season = int.Parse(await LocalStorage.GetItemAsync<string>("season"));
+        message = "Carregando...";
+        var seasonStr = await LocalStorage.GetItemAsync<string>("season");
+        _season = string.IsNullOrEmpty(seasonStr) ? DateTime.Now.Year : int.Parse(seasonStr);
 
         var result = await PlayerService.GetPlayerById(Id);
         var teamResult = await TeamService.GetTeamByUser();
-        if (result.Success)
+
+        if (!teamResult.Success || teamResult.Data == null)
         {
-            if (result.Data?.TeamId == 21)
-            {
-                team = teamResult.Data;
-                player = result.Data;
-            }
-            else
-            {
-                message = "Não é possivel enviar proposta pra esse jogador!";
-            }
+            message = "Time do usuário não encontrado.";
+            return;
         }
-        else
+        team = teamResult.Data;
+
+        if (!result.Success || result.Data == null)
         {
-            message = result.Message;
+            message = result.Message ?? "Jogador não encontrado.";
+            return;
         }
+
+        if (result.Data.TeamId != 21)
+        {
+            message = "Só é possível fazer oferta a jogadores em free agency (FA).";
+            return;
+        }
+        player = result.Data;
+        message = string.Empty;
+        _years = Math.Clamp(_years, 1, MaxYears);
+        _contract = MinSalary;
     }
-    
-      private decimal GetTeamTotalSalary()
+
+    private void SetMinContract()
+    {
+        _contract = MinSalary;
+        _years = 1;
+        ValidationError = null;
+    }
+
+    private void SetMaxContract()
+    {
+        _contract = MaxSalary;
+        _years = MaxYears;
+        ValidationError = null;
+    }
+
+    private bool Validate(out string error)
+    {
+        if (_contract < MinSalary)
         {
-            if (team.Players.Any(p => p.Contract != null && p.Contract.Amount != null))
-            {
-                return team.Players.Where(p => p.Contract != null && p.Contract.Amount != null)
-                    .Sum(p => p.Contract.Amount);
-            }
-
-            return 0;
-        }
-
-        private int GetMinContract(int age)
-        {
-            switch (age)
-            {
-                case var _ when age < 21:
-                    return 900000;
-                case var _ when age < 24:
-                    return 1500000;
-                case var _ when age < 27:
-                    return 1800000;
-                case var _ when age < 30:
-                    return 2000000;
-                default:
-                    return 2500000;
-            }
-        }
-
-        private int GetMaxContract(int age)
-        {
-            switch (age)
-            {
-                case var _ when age < 26:
-                    return 25000000;
-                case var _ when age < 30:
-                    return 30000000;
-                default:
-                    return 35000000;
-            }
-        }
-
-
-        private bool HasCap(int contract)
-        {
-
-            if ((GetTeamTotalSalary() + contract) > capSpace)
-            {
-                return true;
-            }
-
+            error = $"Valor mínimo para este jogador (EXP {YearsExperience}): {FormatMoney(MinSalary)}.";
             return false;
         }
-
-        public async Task MinContractAsync()
+        if (_contract > MaxSalary)
         {
-            int minContract = GetMinContract((_season - player.Born.Year));
-            _years = 1;
-            _contract = minContract;
-            await SendFAOffer();
+            error = $"Valor máximo para este jogador (EXP {YearsExperience}): {FormatMoney(MaxSalary)}.";
+            return false;
         }
-
-        public async Task MaxContractAsync()
+        if (_years < 1 || _years > MaxYears)
         {
-            int maxContract = GetMaxContract((_season - player.Born.Year));
-            _years = 4;
-            _contract = maxContract;
-            await SendFAOffer();
+            error = $"Anos devem ser entre 1 e {MaxYears}.";
+            return false;
         }
-
-        public async Task PersonalizedContractAsync()
+        if (GetTeamTotalSalary() + _contract > SalaryCap)
         {
-            if (_contract > 0 && _years >= 1)
-            {
-                await SendFAOffer();
-            }
+            error = "O time não tem cap space para esta oferta.";
+            return false;
         }
+        error = string.Empty;
+        return true;
+    }
 
-        private async Task SendFAOffer()
+    private async Task SendOffer()
+    {
+        if (player == null || team == null) return;
+        if (!Validate(out var err))
+        {
+            ValidationError = err;
+            return;
+        }
+        ValidationError = null;
+        Sending = true;
+        try
         {
             var faOffer = new FAOfferDto
             {
@@ -134,21 +140,15 @@ public partial class FAOffer
                 Years = _years,
                 Season = _season
             };
-
-
             var faResponse = await FAService.CreateOffer(faOffer);
-
             if (faResponse.Success)
-            {
-                //Snackbar.Add("Proposta enviada com sucesso!", Severity.Success);
                 NavigationManager.NavigateTo("/freeagency");
-            }
             else
-            {
-                //Snackbar.Add("Proposta não foi enviada!", Severity.Success);
-            }
-
+                ValidationError = faResponse.Message ?? "Erro ao enviar oferta.";
         }
-
-
+        finally
+        {
+            Sending = false;
+        }
+    }
 }

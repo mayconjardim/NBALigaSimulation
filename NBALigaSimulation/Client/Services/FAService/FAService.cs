@@ -71,4 +71,21 @@ public class FAService : IFAService
             return response;
         }
 
+        public async Task<ServiceResponse<FASimulateRoundResultDto>> SimulateFARound(int? seasonYear = null)
+        {
+            var url = "api/fa/simulate-round";
+            if (seasonYear.HasValue)
+                url += "?season=" + seasonYear.Value;
+            var result = await _http.PostAsync(url, null);
+            if (result.IsSuccessStatusCode)
+            {
+                var data = await result.Content.ReadFromJsonAsync<ServiceResponse<FASimulateRoundResultDto>>();
+                return data ?? new ServiceResponse<FASimulateRoundResultDto> { Success = false };
+            }
+            return new ServiceResponse<FASimulateRoundResultDto>
+            {
+                Success = false,
+                Message = "Falha ao simular rodada. Status: " + result.StatusCode
+            };
+        }
 }

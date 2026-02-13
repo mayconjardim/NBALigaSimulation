@@ -4,6 +4,7 @@ using NBALigaSimulation.Client.Services.GameService;
 using NBALigaSimulation.Client.Services.SeasonsService;
 using NBALigaSimulation.Client.Services.DraftService;
 using NBALigaSimulation.Client.Services.PlayoffsService;
+using NBALigaSimulation.Client.Services.FAService;
 using NBALigaSimulation.Shared.Dtos.Games;
 using NBALigaSimulation.Shared.Dtos.Seasons;
 using System.Linq;
@@ -385,5 +386,31 @@ public partial class Admin
                 await ShowMessage($"Erro ao finalizar playoffs: {response.Message}", "error");
             }
         }, "EndPlayoffs");
+    }
+
+    private async Task SimulateFARound()
+    {
+        await ExecuteAction(async () =>
+        {
+            int? seasonYear = _currentSeason?.Year;
+            if (!seasonYear.HasValue)
+            {
+                var seasonStr = await LocalStorage.GetItemAsync<string>("season");
+                if (!string.IsNullOrEmpty(seasonStr) && int.TryParse(seasonStr, out int y))
+                    seasonYear = y;
+            }
+            var response = await FAService.SimulateFARound(seasonYear);
+            if (response.Success && response.Data != null)
+            {
+                var msg = response.Data.Message;
+                if (response.Data.Signings?.Count > 0)
+                    msg += " " + string.Join("; ", response.Data.Signings.Select(s => $"{s.PlayerName} → {s.TeamName}"));
+                await ShowMessage(msg, "success");
+            }
+            else
+            {
+                await ShowMessage(response.Message ?? "Erro ao simular rodada FA.", "error");
+            }
+        }, "SimulateFARound");
     }
 }

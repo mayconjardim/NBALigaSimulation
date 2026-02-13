@@ -9,5 +9,5 @@ public interface IFAService
     Task<ServiceResponse<FAOfferDto>> CreateOffer(FAOfferDto offerDto);
     Task<ServiceResponse<List<FAOfferDto>>> GetOffersByTeamId();
     Task<ServiceResponse<bool>> DeleteOffer(int offerId);
-    
+    Task<ServiceResponse<FASimulateRoundResultDto>> SimulateFARound(int? seasonYear = null);
 }

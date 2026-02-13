@@ -3,11 +3,13 @@
 @using NBALigaSimulation.Client.Services.GameService
 @using NBALigaSimulation.Client.Services.DraftService
 @using NBALigaSimulation.Client.Services.PlayoffsService
+@using NBALigaSimulation.Client.Services.FAService
 @using Blazored.LocalStorage
 @inject ISeasonService SeasonService
 @inject IGameService GameService
 @inject IDraftService DraftService
 @inject IPlayoffsService PlayoffsService
+@inject IFAService FAService
 @inject ILocalStorageService LocalStorage
 @inject IJSRuntime JSRuntime
 @inject NavigationManager NavigationManager
@@ -61,9 +63,28 @@
                             </td>
                         </tr>
 
-                        <!-- 2. Gerar Training Camp -->
+                        <!-- 2. Simular rodada Free Agency -->
                         <tr>
                             <td><strong>2</strong></td>
+                            <td>
+                                <i class="bi bi-person-plus text-primary me-2"></i>
+                                <strong>Simular rodada Free Agency</strong>
+                            </td>
+                            <td>Processa ofertas pendentes: cada jogador aceita a melhor oferta (uma por jogador)</td>
+                            <td>
+                                <button class="btn btn-outline-primary btn-sm w-100" @onclick="SimulateFARound" disabled="@_isLoading">
+                                    @if (_isLoading && _loadingAction == "SimulateFARound")
+                                    {
+                                        <span class="spinner-border spinner-border-sm me-2"></span>
+                                    }
+                                    Executar
+                                </button>
+                            </td>
+                        </tr>
+
+                        <!-- 3. Gerar Training Camp -->
+                        <tr>
+                            <td><strong>3</strong></td>
                             <td>
                                 <i class="bi bi-graph-up-arrow text-success me-2"></i>
                                 <strong>Gerar Training Camp</strong>
@@ -80,9 +101,9 @@
                             </td>
                         </tr>
 
-                        <!-- 3. Gerar Cronograma -->
+                        <!-- 4. Gerar Cronograma -->
                         <tr>
-                            <td><strong>3</strong></td>
+                            <td><strong>4</strong></td>
                             <td>
                                 <i class="bi bi-calendar-plus text-info me-2"></i>
                                 <strong>Gerar Cronograma</strong>
@@ -99,9 +120,9 @@
                             </td>
                         </tr>
 
-                        <!-- 4. Simular Próxima Rodada -->
+                        <!-- 5. Simular Próxima Rodada -->
                         <tr>
-                            <td><strong>4</strong></td>
+                            <td><strong>5</strong></td>
                             <td>
                                 <i class="bi bi-arrow-right-circle text-warning me-2"></i>
                                 <strong>Simular Próxima Rodada</strong>
@@ -118,9 +139,9 @@
                             </td>
                         </tr>
 
-                        <!-- 5. Simular Playoffs por Rodada -->
+                        <!-- 6. Simular Playoffs por Rodada -->
                         <tr>
-                            <td><strong>5</strong></td>
+                            <td><strong>6</strong></td>
                             <td>
                                 <i class="bi bi-trophy text-danger me-2"></i>
                                 <strong>Simular Playoffs</strong>
@@ -146,9 +167,9 @@
                             </td>
                         </tr>
                         
-                        <!-- 6. Gerar Playoffs (1ª Rodada) -->
+                        <!-- 7. Gerar Playoffs (1ª Rodada) -->
                         <tr>
-                            <td><strong>6</strong></td>
+                            <td><strong>7</strong></td>
                             <td>
                                 <i class="bi bi-brackets text-info me-2"></i>
                                 <strong>Gerar Playoffs - 1ª Rodada</strong>
@@ -165,9 +186,9 @@
                             </td>
                         </tr>
 
-                        <!-- 7. Gerar Playoffs - Semis de Conferência -->
+                        <!-- 8. Gerar Playoffs - Semis de Conferência -->
                         <tr>
-                            <td><strong>7</strong></td>
+                            <td><strong>8</strong></td>
                             <td>
                                 <i class="bi bi-brackets text-primary me-2"></i>
                                 <strong>Gerar Playoffs - Semis de Conferência</strong>
@@ -184,9 +205,9 @@
                             </td>
                         </tr>
 
-                        <!-- 8. Gerar Playoffs - Finais de Conferência -->
+                        <!-- 9. Gerar Playoffs - Finais de Conferência -->
                         <tr>
-                            <td><strong>8</strong></td>
+                            <td><strong>9</strong></td>
                             <td>
                                 <i class="bi bi-brackets text-warning me-2"></i>
                                 <strong>Gerar Playoffs - Finais de Conferência</strong>
@@ -203,9 +224,9 @@
                             </td>
                         </tr>
 
-                        <!-- 9. Gerar Playoffs - Finais da NBA -->
+                        <!-- 10. Gerar Playoffs - Finais da NBA -->
                         <tr>
-                            <td><strong>9</strong></td>
+                            <td><strong>10</strong></td>
                             <td>
                                 <i class="bi bi-trophy-fill text-danger me-2"></i>
                                 <strong>Gerar Playoffs - Finais da NBA</strong>
@@ -222,9 +243,9 @@
                             </td>
                         </tr>
 
-                        <!-- 10. Finalizar Playoffs -->
+                        <!-- 11. Finalizar Playoffs -->
                         <tr>
-                            <td><strong>10</strong></td>
+                            <td><strong>11</strong></td>
                             <td>
                                 <i class="bi bi-flag-checkered text-success me-2"></i>
                                 <strong>Finalizar Playoffs</strong>
@@ -240,10 +261,10 @@
                                 </button>
                             </td>
                         </tr>
-                        
-                        <!-- 11. Gerar Loteria e Draft -->
+
+                        <!-- 12. Gerar Loteria e Draft -->
                         <tr>
-                            <td><strong>11</strong></td>
+                            <td><strong>12</strong></td>
                             <td>
                                 <i class="bi bi-shuffle text-primary me-2"></i>
                                 <strong>Gerar Loteria e Draft</strong>
@@ -260,9 +281,9 @@
                             </td>
                         </tr>
 
-                        <!-- 12. Finalizar Draft -->
+                        <!-- 13. Finalizar Draft -->
                         <tr>
-                            <td><strong>12</strong></td>
+                            <td><strong>13</strong></td>
                             <td>
                                 <i class="bi bi-people-fill text-success me-2"></i>
                                 <strong>Finalizar Draft</strong>

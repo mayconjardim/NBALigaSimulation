@@ -9,21 +9,90 @@
 <CascadingAuthenticationState>
 <AuthorizeView>
 @if (player != null && team != null)
- {
-  <div class="container-fluid">
-   
-   <div class="d-flex justify-content-center">
-    <button type="button" class="btn fa-central">FA Central</button>
+{
+  <div class="container-fluid py-4">
+   <div class="d-flex justify-content-between align-items-center mb-4">
+    <a href="/freeagency" class="btn btn-outline-secondary"><i class="bi bi-arrow-left me-1"></i> FA Central</a>
+    <h2 class="h5 mb-0">Fazer oferta</h2>
    </div>
-   
-   <div class="player">
-    <div class="player-name">
-     <p class="align-middle">@player.Name</p>
+
+   <div class="row">
+    <div class="col-md-5">
+     <div class="card mb-3">
+      <div class="card-body">
+       <div class="d-flex align-items-center gap-3">
+        <img src="@(string.IsNullOrEmpty(player.ImgUrl) ? "Images/Utils/blank.png" : player.ImgUrl)" alt="" class="rounded" style="width:64px;height:64px;object-fit:cover" />
+        <div>
+         <h5 class="mb-0">@player.Name</h5>
+         <span class="text-muted">@player.Pos</span>
+         @if (player.Ratings != null && player.Ratings.Any())
+         {
+          <div class="mt-1">
+           <span class="badge bg-primary me-1">OVR @(player.Ratings.LastOrDefault()?.CalculateOvr)</span>
+           <span class="badge bg-secondary">POT @(player.Ratings.LastOrDefault()?.Pot)</span>
+          </div>
+         }
+        </div>
+       </div>
+      </div>
+     </div>
+     <div class="card">
+      <div class="card-header bg-light">Cap space do time</div>
+      <div class="card-body">
+       <p class="mb-0">Salário total: <strong>@FormatMoney((int)GetTeamTotalSalary())</strong></p>
+       <p class="mb-0">Cap space: <strong>@FormatMoney(CapSpaceAvailable)</strong></p>
+       <p class="text-muted small mb-0">Cap da liga: @FormatMoney(SalaryCap)</p>
+      </div>
+     </div>
     </div>
-    
+    <div class="col-md-7">
+     <div class="card">
+      <div class="card-header bg-light">Proposta</div>
+      <div class="card-body">
+       @if (!string.IsNullOrEmpty(message))
+       {
+        <div class="alert alert-warning mb-3">@message</div>
+       }
+       <div class="mb-3">
+        <label class="form-label">Valor por ano (US$)</label>
+        <input type="number" class="form-control" @bind="_contract" min="0" step="100000" />
+        <small class="text-muted">Mín: @FormatMoney(MinSalary) — Máx: @FormatMoney(MaxSalary)</small>
+       </div>
+       <div class="mb-3">
+        <label class="form-label">Anos</label>
+        <input type="number" class="form-control" @bind="_years" min="1" max="@MaxYears" />
+        <small class="text-muted">Máximo @MaxYears anos para free agents</small>
+       </div>
+       <div class="d-flex flex-wrap gap-2 mb-3">
+        <button type="button" class="btn btn-outline-primary" @onclick="SetMinContract">Mínimo</button>
+        <button type="button" class="btn btn-outline-primary" @onclick="SetMaxContract">Máximo</button>
+       </div>
+       @if (ValidationError != null)
+       {
+        <div class="alert alert-danger mb-3">@ValidationError</div>
+       }
+       <div class="d-flex gap-2">
+        <button type="button" class="btn btn-primary" @onclick="SendOffer" disabled="@(Sending)">@(Sending ? "Enviando..." : "Enviar oferta")</button>
+        <a href="/freeagency" class="btn btn-secondary">Cancelar</a>
+       </div>
+      </div>
+     </div>
+    </div>
    </div>
-   
   </div>
- }
+}
+else if (!string.IsNullOrEmpty(message))
+{
+  <div class="container py-4">
+   <div class="alert alert-warning">@message</div>
+   <a href="/freeagency" class="btn btn-outline-secondary">Voltar à Free Agency</a>
+  </div>
+}
+else
+{
+  <div class="container py-4">
+   <p>Carregando...</p>
+  </div>
+}
 </AuthorizeView>
 </CascadingAuthenticationState>

@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using NBALigaSimulation.Shared.Dtos.FA;
 using NBALigaSimulation.Shared.Dtos.Trades;
@@ -58,6 +58,14 @@ namespace NBALigaSimulation.Server.Controllers
 
             return Ok();
         }
-    }
 
+        [HttpPost("simulate-round")]
+        public async Task<ActionResult<ServiceResponse<FASimulateRoundResultDto>>> SimulateFARound([FromQuery] int? season)
+        {
+            var result = await _faService.SimulateFARound(season);
+            if (!result.Success)
+                return BadRequest(result.Message);
+            return Ok(result);
+        }
+    }
 }
