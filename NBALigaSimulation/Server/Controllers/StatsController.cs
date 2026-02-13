@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc;
 using NBALigaSimulation.Shared.Dtos.Players;
 using NBALigaSimulation.Shared.Dtos.Teams;
 using NBALigaSimulation.Shared.Models.Utils;
@@ -49,6 +49,20 @@ namespace NBALigaSimulation.Server.Controllers
 		{
 			var result = await _statsService.GetAllTeamRegularStatsRank();
 			return Ok(result);
+		}
+
+		[HttpGet("players/{playerId:int}/regular-stats")]
+		public async Task<ActionResult<ServiceResponse<List<PlayerRegularStatsDto>>>> GetPlayerRegularStatsByPlayerId(int playerId)
+		{
+			try
+			{
+				var result = await _statsService.GetPlayerRegularStatsByPlayerId(playerId);
+				return Ok(result);
+			}
+			catch (Exception ex)
+			{
+				return StatusCode(500, new ServiceResponse<List<PlayerRegularStatsDto>> { Success = false, Message = ex.Message });
+			}
 		}
 
 		[HttpGet("players")]

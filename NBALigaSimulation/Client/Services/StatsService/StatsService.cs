@@ -15,6 +15,11 @@ public class StatsService : IStatsService
         _http = http;
     }
 
+    public async Task<ServiceResponse<List<PlayerRegularStatsDto>>> GetPlayerRegularStatsByPlayerId(int playerId)
+    {
+        return await _http.GetFromJsonAsync<ServiceResponse<List<PlayerRegularStatsDto>>>($"api/stats/players/{playerId}/regular-stats");
+    }
+
     public async Task<ServiceResponse<PageableResponse<PlayerRegularStatsDto>>> GetAllPlayerRegularStats(int page, int pageSize, int season,
         bool isAscending, string position, string stat = null)
     {

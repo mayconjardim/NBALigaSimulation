@@ -47,7 +47,7 @@
                         @foreach (var pick in _filteredPicks)
                         {
                             <tr>
-                                <td><span class="picks-round-badge">@pick.Roundª</span></td>
+                                <td><span class="picks-round-badge">@(pick.Round)ª</span></td>
                                 <td>
                                     <div class="picks-team-cell">
                                         <img src="@($"../Images/Logos/{pick.TeamName}.svg")" alt="" class="picks-team-logo" />

@@ -107,6 +107,27 @@ namespace NBALigaSimulation.Server.Services.StatsService
 		    return response;
 		}
 
+		public async Task<ServiceResponse<List<PlayerRegularStatsDto>>> GetPlayerRegularStatsByPlayerId(int playerId)
+		{
+			var response = new ServiceResponse<List<PlayerRegularStatsDto>>();
+			try
+			{
+				var stats = await _playerRegularStatsRepository.Query()
+					.Where(s => s.PlayerId == playerId)
+					.Include(s => s.Player)
+					.OrderBy(s => s.Season)
+					.ToListAsync();
+				response.Data = _mapper.Map<List<PlayerRegularStatsDto>>(stats);
+				response.Success = true;
+			}
+			catch (Exception ex)
+			{
+				response.Success = false;
+				response.Message = ex.Message;
+			}
+			return response;
+		}
+
 		public async Task<ServiceResponse<List<TeamRegularStatsDto>>> GetAllTeamRegularStats(int season, bool isAscending, string stat = null)
 		{
 			 var response = new ServiceResponse<List<TeamRegularStatsDto>>();

@@ -84,6 +84,21 @@ public partial class Draft : ComponentBase
         }
     }
 
+    private async Task<int> GetCurrentSeasonAsync()
+    {
+        try
+        {
+            if (await LocalStorage.ContainKeyAsync("season"))
+            {
+                var seasonStr = await LocalStorage.GetItemAsync<string>("season");
+                if (int.TryParse(seasonStr, out int season))
+                    return season;
+            }
+        }
+        catch { }
+        return DateTime.Now.Year;
+    }
+
     private bool IsUserTurn(DraftDto pick)
     {
         if (_userTeamId == null) return false;
@@ -130,11 +145,26 @@ public partial class Draft : ComponentBase
         {
             _message = string.Empty;
 
+            var currentSeason = await GetCurrentSeasonAsync();
             var lotteryResponse = await DraftService.GetLastLottery();
-            if (lotteryResponse != null && lotteryResponse.Success)
+            if (lotteryResponse != null && lotteryResponse.Success && lotteryResponse.Data != null)
             {
-                _lottery = lotteryResponse.Data;
-                await LoadLotteryInfo();
+                var lottery = lotteryResponse.Data;
+                if (lottery.Season == currentSeason)
+                {
+                    _lottery = lottery;
+                    await LoadLotteryInfo();
+                }
+                else
+                {
+                    _lottery = null;
+                    _lotteryTeamsInfo = new List<LotteryTeamInfo>();
+                }
+            }
+            else
+            {
+                _lottery = null;
+                _lotteryTeamsInfo = new List<LotteryTeamInfo>();
             }
 
             var draftResponse = await DraftService.GetLastDraft();
