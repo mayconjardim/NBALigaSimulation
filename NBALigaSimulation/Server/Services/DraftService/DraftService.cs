@@ -320,8 +320,8 @@ namespace NBALigaSimulation.Server.Services.DraftService
                     Year = request.Year
                 };
 
-                Console.WriteLine($"[BACKEND] Criando contrato - Pick: {request.Pick}, Season: {season.Year}");
-                player.Contract = DraftUtils.RookieContracts(request.Pick, season.Year);
+                Console.WriteLine($"[BACKEND] Criando contrato - Pick: {request.Pick}, Round: {request.Round}, Season: {season.Year}");
+                player.Contract = DraftUtils.RookieContracts(request.Pick, season.Year, request.Round);
                 player.Contract.PlayerId = player.Id; // Define o PlayerId para o contrato
                 Console.WriteLine($"[BACKEND] Contrato criado - PlayerId: {player.Contract.PlayerId}, Amount: {player.Contract?.Amount}, Exp: {player.Contract?.Exp}");
 

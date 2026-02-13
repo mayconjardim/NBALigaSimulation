@@ -1,3 +1,4 @@
+using NBALigaSimulation.Shared.Engine.Finance;
 using NBALigaSimulation.Shared.Models;
 using NBALigaSimulation.Shared.Models.Drafts;
 using NBALigaSimulation.Shared.Models.Players;
@@ -142,29 +143,19 @@ namespace NBALigaSimulation.Shared.Engine.Utils
             return newDraft;
         }
 
-        public static PlayerContract RookieContracts(int pick, int season)
+        public static PlayerContract RookieContracts(int pick, int season, int round = 1)
         {
-            PlayerContract playerContract = new PlayerContract();
-            Dictionary<int, int> contractAmounts = new Dictionary<int, int>
+            var playerContract = new PlayerContract();
+            if (round == 2)
             {
-                { 1, 7000000 }, { 2, 6700000 }, { 3, 6400000 }, { 4, 5100000 }, { 5, 4800000 },
-                { 6, 4500000 }, { 7, 4200000 }, { 8, 3900000 }, { 9, 3600000 }, { 10, 3300000 },
-                { 11, 3100000 }, { 12, 2900000 }, { 13, 2700000 }, { 14, 2500000 }, { 15, 2300000 },
-                { 16, 2100000 }, { 17, 1900000 }, { 18, 1700000 }, { 19, 1500000 }, { 20, 1300000 },
-                { 21, 1200000 }, { 22, 1100000 }
-            };
-
-            if (contractAmounts.ContainsKey(pick))
-            {
-                playerContract.Amount = contractAmounts[pick];
-                playerContract.Exp = season + 4;
+                playerContract.Amount = RookieScale.GetSecondRoundSalary(pick);
+                playerContract.Exp = season + RookieScale.SecondRoundContractYears;
             }
             else
             {
-                playerContract.Amount = 900000;
-                playerContract.Exp = season + 2;
+                playerContract.Amount = RookieScale.GetFirstYearSalary(pick);
+                playerContract.Exp = season + RookieScale.FirstRoundContractYears;
             }
-
             return playerContract;
         }
 
