@@ -1,0 +1,80 @@
+@using NBALigaSimulation.Client.Utilities
+@inject NavigationManager NavigationManager
+
+@using NBALigaSimulation.Shared.Engine.Finance
+@if (Team?.Players != null && Team.Players.Count > 0)
+{
+    <div class="container">
+        <div class="table-responsive">
+            <table class="table table-hover contracts-table">
+            <thead class="table-dark">
+                <tr>
+                    <th class="col-player">JOGADOR</th>
+                    <th>POS</th>
+                    <th>CUR</th>
+                    <th>POT</th>
+                    <th>IDADE</th>
+                    <th class="text-end">@_season</th>
+                    <th class="text-end">@(_season + 1)</th>
+                    <th class="text-end">@(_season + 2)</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var player in Team.Players.OrderBy(p => p.RosterOrder).ThenBy(p => p.Name))
+                {
+                    <tr>
+                        <td class="col-player">
+                            <a href="@($"players/{player.Id}")" class="d-flex align-items-center gap-2 text-decoration-none text-dark">
+                                <img src="@(string.IsNullOrEmpty(player.ImgUrl) ? "Images/Utils/blank.png" : player.ImgUrl)" alt="" class="rounded" style="width:36px;height:36px;object-fit:cover" />
+                                <span>@player.Name</span>
+                            </a>
+                        </td>
+                        <td>@player.Pos</td>
+                        <td><span class="badge @Util.GetBadgeClass(player.Ratings?.LastOrDefault()?.CalculateOvr ?? 0)">@(player.Ratings?.LastOrDefault()?.CalculateOvr ?? 0)</span></td>
+                        <td><span class="badge @Util.GetBadgeClass(player.Ratings?.LastOrDefault()?.Pot ?? 0)">@(player.Ratings?.LastOrDefault()?.Pot ?? 0)</span></td>
+                        <td>@Util.Age(_season, player.Born.Year)</td>
+                        <td class="text-end">@SalaryForYear(player.Contract, _season)</td>
+                        <td class="text-end">@SalaryForYear(player.Contract, _season + 1)</td>
+                        <td class="text-end">@SalaryForYear(player.Contract, _season + 2)</td>
+                    </tr>
+                }
+            </tbody>
+            <tfoot>
+                <tr class="table-secondary fw-bold">
+                    <td colspan="5" class="text-end">TOTAL (jogadores ativos)</td>
+                    <td class="text-end">@FormatMoneyFull(TotalForYear(_season))</td>
+                    <td class="text-end">@FormatMoneyFull(TotalForYear(_season + 1))</td>
+                    <td class="text-end">@FormatMoneyFull(TotalForYear(_season + 2))</td>
+                </tr>
+                <tr class="table-light">
+                    <td colspan="5" class="text-end">Cap</td>
+                    <td class="text-end">
+                        @if (OverCapForYear(_season) > 0)
+                        { <span class="text-danger">(@FormatMoneyFull(OverCapForYear(_season)) acima)</span> }
+                        else
+                        { <span class="text-success">(@FormatMoneyFull(CapSpaceForYear(_season)) de espaço)</span> }
+                    </td>
+                    <td class="text-end">
+                        @if (OverCapForYear(_season + 1) > 0)
+                        { <span class="text-danger">(@FormatMoneyFull(OverCapForYear(_season + 1)) acima)</span> }
+                        else
+                        { <span class="text-success">(@FormatMoneyFull(CapSpaceForYear(_season + 1)) de espaço)</span> }
+                    </td>
+                    <td class="text-end">
+                        @if (OverCapForYear(_season + 2) > 0)
+                        { <span class="text-danger">(@FormatMoneyFull(OverCapForYear(_season + 2)) acima)</span> }
+                        else
+                        { <span class="text-success">(@FormatMoneyFull(CapSpaceForYear(_season + 2)) de espaço)</span> }
+                    </td>
+                </tr>
+            </tfoot>
+            </table>
+        </div>
+    </div>
+}
+else
+{
+    <div class="container text-center p-4">
+        <p class="text-muted">Nenhum jogador no elenco.</p>
+    </div>
+}

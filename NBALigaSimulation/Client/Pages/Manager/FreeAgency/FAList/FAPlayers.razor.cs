@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Components;
+using NBALigaSimulation.Shared.Dtos.FA;
 using NBALigaSimulation.Shared.Dtos.Players;
 
 namespace NBALigaSimulation.Client.Pages.Manager.FreeAgency.FAList;
@@ -6,7 +7,7 @@ namespace NBALigaSimulation.Client.Pages.Manager.FreeAgency.FAList;
 public partial class FAPlayers
 {
     private List<PlayerCompleteDto> _faPlayers;
-    private List<PlayerRatingDto> _playersRatings;
+    private List<FAOfferDto> _myOffers;
     private int _season;
     private string sortedColumn = "OVR";
     private bool isAscending = true;
@@ -14,28 +15,61 @@ public partial class FAPlayers
     private int _currentPage = 1;
     private int _pageSize = 50;
     public string _position = string.Empty;
+    private int? _removingOfferId = null;
 
     List<string> positions = new List<string> { "C", "FC", "PF", "F", "SF", "GF", "G", "SG", "PG", "ALL" };
     List<int> limit = new List<int> { 10, 25, 50};
+
+    private static string FormatMoney(int value)
+    {
+        if (value >= 1_000_000)
+        {
+            double m = value / 1_000_000.0;
+            return m == Math.Floor(m) ? $"${(int)m}M" : $"${m:F1}M";
+        }
+        if (value >= 1_000)
+        {
+            double k = value / 1_000.0;
+            return k == Math.Floor(k) ? $"${(int)k}K" : $"${k:F1}K";
+        }
+        return $"${value}";
+    }
     
     protected override async Task OnInitializedAsync()
     {
         message = "Carregando FA...";
-            
-        _season = int.Parse(await LocalStorage.GetItemAsync<string>("season"));   
-            
-        var result = await PlayerService.GetAllFaPlayers(_currentPage, _pageSize, _season, isAscending, sortedColumn, _position);
-        
-        if (!result.Success)
-        {
-            message = result.Message;
-        }
-        else
-        {
-            _faPlayers = result.Data.Response;
-  
-        }
+        var seasonStr = await LocalStorage.GetItemAsync<string>("season");
+        _season = string.IsNullOrEmpty(seasonStr) ? DateTime.Now.Year : int.Parse(seasonStr);
 
+        var faResult = await PlayerService.GetAllFaPlayers(_currentPage, _pageSize, _season, isAscending, sortedColumn, _position);
+        if (faResult.Success && faResult.Data?.Response != null)
+            _faPlayers = faResult.Data.Response;
+        else
+            message = faResult.Message ?? "";
+
+        var offersResult = await FAService.GetOffersByTeamId();
+        _myOffers = offersResult.Success && offersResult.Data != null ? offersResult.Data : new List<FAOfferDto>();
+    }
+
+    private async Task RemoveOffer(int offerId)
+    {
+        if (_removingOfferId.HasValue) return;
+        _removingOfferId = offerId;
+        StateHasChanged();
+        try
+        {
+            var result = await FAService.DeleteOffer(offerId);
+            if (result.Success)
+            {
+                var refresh = await FAService.GetOffersByTeamId();
+                _myOffers = (refresh.Success && refresh.Data != null) ? refresh.Data : new List<FAOfferDto>();
+            }
+        }
+        finally
+        {
+            _removingOfferId = null;
+            StateHasChanged();
+        }
     }
     
     private string GetSortIcon(string columnName)

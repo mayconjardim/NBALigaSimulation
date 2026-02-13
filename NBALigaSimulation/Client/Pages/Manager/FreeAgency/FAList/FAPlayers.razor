@@ -1,7 +1,9 @@
 @page "/freeagency"
 @using NBALigaSimulation.Client.Utilities
+@using NBALigaSimulation.Shared.Dtos.FA
 @attribute [Authorize]
 @inject IPlayerService PlayerService
+@inject IFAService FAService
 @inject ILocalStorageService LocalStorage
 
 <CascadingAuthenticationState>
@@ -11,6 +13,62 @@
             <h1 class="h3 mb-1"><i class="bi bi-person-plus me-2"></i>Free Agents</h1>
             <p class="text-muted mb-0">Jogadores disponíveis para contratação</p>
         </div>
+
+        <div class="card mb-4">
+            <div class="card-header bg-light d-flex justify-content-between align-items-center">
+                <span><i class="bi bi-send me-2"></i>Minhas ofertas</span>
+            </div>
+            <div class="card-body p-0">
+                @if (_myOffers != null && _myOffers.Count > 0)
+                {
+                    <div class="table-responsive">
+                        <table class="table table-sm table-hover mb-0">
+                            <thead>
+                                <tr>
+                                    <th>Jogador</th>
+                                    <th>Valor/ano</th>
+                                    <th>Anos</th>
+                                    <th>Status</th>
+                                    <th style="width:90px;"></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var offer in _myOffers)
+                                {
+                                    var offerId = offer.Id;
+                                    <tr>
+                                        <td><a href="@($"players/{offer.PlayerId}")">@offer.PlayerName</a></td>
+                                        <td>@FormatMoney(offer.Amount)</td>
+                                        <td>@offer.Years</td>
+                                        <td>
+                                            @if (offer.Response == null)
+                                            { <span class="badge bg-warning text-dark">Pendente</span> }
+                                            else if (offer.Response == true)
+                                            { <span class="badge bg-success">Aceita</span> }
+                                            else
+                                            { <span class="badge bg-secondary">Recusada</span> }
+                                        </td>
+                                        <td>
+                                            @if (offer.Response == null)
+                                            {
+                                                <button type="button" class="btn btn-outline-danger btn-sm" @onclick="@(async () => await RemoveOffer(offerId))" disabled="@(_removingOfferId == offerId)" title="Excluir oferta">
+                                                    @if (_removingOfferId == offerId) { <span class="spinner-border spinner-border-sm"></span> } else { <i class="bi bi-trash"></i> }
+                                                </button>
+                                            }
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                }
+                else
+                {
+                    <p class="text-muted mb-0 p-3">Nenhuma oferta enviada.</p>
+                }
+            </div>
+        </div>
+
         <div class="fa-filters mb-3">
             <select class="form-select fa-filter-select" @onchange="HandlePositionChange">
                 <option value="">Todas as posições</option>

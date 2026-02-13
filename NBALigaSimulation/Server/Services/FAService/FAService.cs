@@ -47,6 +47,7 @@ namespace NBALigaSimulation.Server.Services.FAService
             {
                 var player = await _playerRepository.Query()
                     .Include(p => p.Ratings)
+                    .Include(p => p.RegularStats)
                     .FirstOrDefaultAsync(p => p.Id == offerDto.PlayerId);
                 if (player == null)
                 {
@@ -64,7 +65,9 @@ namespace NBALigaSimulation.Server.Services.FAService
                 int exp = player.Ratings?.Count ?? 0;
                 int minAmount = SalaryCapConstants.GetMinSalaryForFreeAgent(exp);
                 int maxAmount = SalaryCapConstants.GetMaxSalaryForFreeAgent(exp);
-                int maxYears = SalaryCapConstants.MaxContractYearsOtherTeam;
+                var lastStat = player.RegularStats?.OrderByDescending(s => s.Season).FirstOrDefault();
+                bool isCurrentTeam = lastStat != null && lastStat.TeamId == offerDto.TeamId;
+                int maxYears = SalaryCapConstants.GetMaxContractYears(isCurrentTeam);
 
                 if (offerDto.Amount < minAmount || offerDto.Amount > maxAmount)
                 {

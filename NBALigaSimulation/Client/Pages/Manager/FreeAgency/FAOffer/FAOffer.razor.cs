@@ -23,7 +23,15 @@ public partial class FAOffer
     private int SalaryCap => SalaryCapConstants.SalaryCap;
     private int MinSalary => player == null ? 0 : SalaryCapConstants.GetMinSalaryForFreeAgent(YearsExperience);
     private int MaxSalary => player == null ? 0 : SalaryCapConstants.GetMaxSalaryForFreeAgent(YearsExperience);
-    private int MaxYears => SalaryCapConstants.MaxContractYearsOtherTeam;
+
+    /// <summary>Último time do jogador (pelo season stats). Se for o mesmo que o ofertante, pode oferecer 5 anos (preferência NBA).</summary>
+    private int? LastTeamIdFromStats => player?.RegularStats?
+        .OrderByDescending(s => s.Season)
+        .FirstOrDefault()?.TeamId;
+
+    private int MaxYears => (LastTeamIdFromStats.HasValue && LastTeamIdFromStats.Value == team?.Id)
+        ? SalaryCapConstants.MaxContractYearsCurrentTeam
+        : SalaryCapConstants.MaxContractYearsOtherTeam;
 
     private int YearsExperience => player?.Ratings?.Count ?? 0;
 
@@ -40,9 +48,15 @@ public partial class FAOffer
     private static string FormatMoney(int value)
     {
         if (value >= 1_000_000)
-            return $"${value / 1_000_000}M";
+        {
+            double m = value / 1_000_000.0;
+            return m == Math.Floor(m) ? $"${(int)m}M" : $"${m:F1}M";
+        }
         if (value >= 1_000)
-            return $"${value / 1_000}K";
+        {
+            double k = value / 1_000.0;
+            return k == Math.Floor(k) ? $"${(int)k}K" : $"${k:F1}K";
+        }
         return $"${value}";
     }
 
