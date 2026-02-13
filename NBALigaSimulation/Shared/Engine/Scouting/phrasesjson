@@ -1,0 +1,594 @@
+{
+  "Ins": {
+    "VeryWeak": [
+      "Finaliza perto do aro com muita dificuldade...",
+      "Jogo de garrafão muito limitado...",
+      "Sofre para pontuar em qualquer situação de curta distância...",
+      "Finalização no aro é uma fraqueza evidente...",
+      "Quase não consegue converter perto da cesta..."
+    ],
+    "BelowAverage": [
+      "Consegue pontuar no garrafão, mas sem consistência...",
+      "Ataque à cesta ainda abaixo do desejado...",
+      "Finaliza no aro em momentos, mas perde muitas chances fáceis...",
+      "Jogo interno em desenvolvimento, ainda previsível...",
+      "Precisa de muito espaço para ser eficiente perto do aro..."
+    ],
+    "Average": [
+      "Ataque interno funcional, ainda sem grande impacto...",
+      "Consegue finalizar no aro quando há espaço...",
+      "Jogo de garrafão adequado, nem ponto forte nem fraqueza...",
+      "Finalização perto da cesta dentro do esperado...",
+      "Converte em situações favoráveis, sem dominar..."
+    ],
+    "Good": [
+      "Boa presença perto da cesta, aproveita espaços...",
+      "Finalização no garrafão é um trunfo...",
+      "Consegue pontuar no aro com regularidade...",
+      "Jogo interno acima da média, exige atenção da defesa...",
+      "Bom finalizador quando chega perto do aro..."
+    ],
+    "Elite": [
+      "Dominante no aro, finaliza com força e controle...",
+      "Elite em finalização perto da cesta...",
+      "Quase imbatível em situações de garrafão...",
+      "Finalização no aro de alto nível, decisivo em jogadas internas...",
+      "Um dos melhores finalizadores perto do aro da liga..."
+    ]
+  },
+  "Pss": {
+    "VeryWeak": [
+      "Passe muito limitado, dificulta o jogo coletivo...",
+      "Visão de jogo e distribuição bem abaixo da média...",
+      "Perde jogadas por decisões ruins na hora de passar...",
+      "Passe é uma limitação clara para o time...",
+      "Quase não cria oportunidades para os companheiros..."
+    ],
+    "BelowAverage": [
+      "Passe inconsistente, perde boas assistências...",
+      "Ainda evolui na leitura e na entrega da bola...",
+      "Às vezes acerta, mas muitas jogadas morrem no pé...",
+      "Distribuição abaixo do ideal para a posição...",
+      "Visão de jogo em desenvolvimento..."
+    ],
+    "Average": [
+      "Passe funcional, cumpre o básico na circulação...",
+      "Consegue distribuir sem ser um diferencial...",
+      "Passe adequado, não atrapalha nem surpreende...",
+      "Entrega a bola no tempo certo na maior parte das vezes...",
+      "Leitura de passe mediana, cumpre o esquema..."
+    ],
+    "Good": [
+      "Boa visão de jogo e passe no tempo certo...",
+      "Sabe encontrar companheiros em boa posição...",
+      "Passe é um trunfo, cria boas jogadas...",
+      "Distribuição acima da média, facilita o ataque...",
+      "Timing de passe muito bom, aproveita espaços..."
+    ],
+    "Elite": [
+      "Passe de elite, cria jogadas para todo o time...",
+      "Distribuição e timing de passe de alto nível...",
+      "Um dos melhores passadores, visão de jogo excepcional...",
+      "Passe decisivo em jogadas importantes...",
+      "Elite na leitura e na entrega da bola..."
+    ]
+  },
+  "Drb": {
+    "VeryWeak": [
+      "Drible muito limitado, perde a bola sob pressão...",
+      "Dificuldade para criar jogadas com a bola na mão...",
+      "Controle de bola bem abaixo do esperado...",
+      "Sofre contra marcação forte, perde a posse fácil...",
+      "Drible é uma fraqueza evidente..."
+    ],
+    "BelowAverage": [
+      "Drible frágil, sofre contra defesas intensas...",
+      "Ainda falta segurança para conduzir a bola...",
+      "Conduz em situações calmas, mas perde sob pressão...",
+      "Criação com a bola na mão limitada...",
+      "Drible em desenvolvimento..."
+    ],
+    "Average": [
+      "Drible suficiente para não travar o ataque...",
+      "Conduz a bola sem ser um criador de jogadas...",
+      "Controle de bola adequado, nem ponto forte nem fraqueza...",
+      "Consegue levar a bola sem grandes sustos...",
+      "Drible funcional para o que a posição exige..."
+    ],
+    "Good": [
+      "Bom controle de bola e capacidade de criar...",
+      "Consegue quebrar defesas com o drible...",
+      "Drible acima da média, cria vantagens...",
+      "Seguro com a bola na mão, sabe quando atacar...",
+      "Criação ofensiva é um trunfo..."
+    ],
+    "Elite": [
+      "Drible de elite, domina a bola em qualquer situação...",
+      "Criação ofensiva de alto nível com a bola na mão...",
+      "Um dos melhores dribladores, quase impossível de tirar a bola...",
+      "Drible decisivo em jogadas de ataque...",
+      "Controle de bola de elite, quebra defesas sozinho..."
+    ]
+  },
+  "Oiq": {
+    "VeryWeak": [
+      "Leitura ofensiva muito fraca, decisões ruins...",
+      "Bola ofensiva bem abaixo do esperado...",
+      "Se perde fácil no ataque, escolhas erradas...",
+      "QI ofensivo é uma limitação clara...",
+      "Decisões ruins atrapalham o time constantemente..."
+    ],
+    "BelowAverage": [
+      "Ainda toma muitas decisões erradas no ataque...",
+      "QI ofensivo em desenvolvimento...",
+      "Às vezes acerta a jogada, mas erra em momentos decisivos...",
+      "Leitura de jogo ofensiva abaixo do ideal...",
+      "Precisa evoluir nas escolhas com a bola..."
+    ],
+    "Average": [
+      "Entende o básico do ataque, sem grandes erros...",
+      "Decisões ofensivas adequadas na maior parte do tempo...",
+      "QI ofensivo mediano, cumpre o que o esquema pede...",
+      "Não atrapalha o ataque, mas também não surpreende...",
+      "Leitura ofensiva funcional..."
+    ],
+    "Good": [
+      "Boa leitura de jogo e escolhas no ataque...",
+      "Sabe quando atacar, passar ou segurar...",
+      "Decisões ofensivas acima da média...",
+      "QI ofensivo é um trunfo, raramente erra a jogada...",
+      "Leitura de situação muito boa no ataque..."
+    ],
+    "Elite": [
+      "QI ofensivo de elite, sempre na jogada certa...",
+      "Leitura e decisão ofensiva de alto nível...",
+      "Um dos mais inteligentes em quadra no ataque...",
+      "Decisões decisivas em momentos importantes...",
+      "Bola ofensiva de elite, parece ler o jogo antes de acontecer..."
+    ]
+  },
+  "Spd": {
+    "VeryWeak": [
+      "Velocidade muito limitada, perde em transição...",
+      "Falta de explosão e ritmo no jogo...",
+      "Um dos mais lentos em quadra...",
+      "Sofre contra times que correm...",
+      "Velocidade é uma desvantagem clara..."
+    ],
+    "BelowAverage": [
+      "Ainda lento para o padrão da posição...",
+      "Velocidade abaixo do desejado em aberturas...",
+      "Corre, mas não acompanha os mais rápidos...",
+      "Explosão limitada em transição...",
+      "Ritmo de jogo em desenvolvimento..."
+    ],
+    "Average": [
+      "Velocidade adequada, acompanha o jogo...",
+      "Não é lento, mas também não é um diferencial...",
+      "Ritmo mediano, cumpre em transição...",
+      "Velocidade suficiente para a posição...",
+      "Explosão adequada, sem ser ponto forte..."
+    ],
+    "Good": [
+      "Boa velocidade e capacidade de correr a quadra...",
+      "Explosão e ritmo ajudam no ataque e na defesa...",
+      "Um dos mais rápidos quando precisa...",
+      "Velocidade é um trunfo em transição...",
+      "Corre bem a quadra e aproveita contra-ataques..."
+    ],
+    "Elite": [
+      "Velocidade de elite, domina em transição...",
+      "Um dos mais rápidos em quadra...",
+      "Explosão excepcional, quase imbatível correndo...",
+      "Ritmo de jogo de alto nível...",
+      "Velocidade decisiva em jogadas de transição..."
+    ]
+  },
+  "Reb": {
+    "VeryWeak": [
+      "Rebote muito fraco, quase não disputa...",
+      "Presença no rebote bem abaixo da média...",
+      "Perde disputas que outros ganhariam...",
+      "Quase não aparece nas tabelas...",
+      "Rebote é uma fraqueza evidente..."
+    ],
+    "BelowAverage": [
+      "Ainda perde muitos rebotes que poderia pegar...",
+      "Falta posicionamento e vontade no rebote...",
+      "Disputa, mas perde mais do que ganha...",
+      "Presença no aro abaixo do ideal...",
+      "Rebote em desenvolvimento..."
+    ],
+    "Average": [
+      "Rebote funcional, pega o que está ao alcance...",
+      "Contribui no rebote sem ser dominante...",
+      "Presença mediana nas tabelas...",
+      "Consegue pegar rebotes quando está bem posicionado...",
+      "Rebote adequado para a posição..."
+    ],
+    "Good": [
+      "Bom reboteiro, ajuda a fechar a defesa...",
+      "Sabe se posicionar e disputar a bola no aro...",
+      "Presença constante no rebote...",
+      "Rebote é um trunfo, especialmente defensivo...",
+      "Disputa bem as tabelas e ganha muitas bolas..."
+    ],
+    "Elite": [
+      "Rebote de elite, domina as tabelas...",
+      "Presença constante no rebote ofensivo e defensivo...",
+      "Um dos melhores reboteiros em quadra...",
+      "Quase não perde rebote quando está na área...",
+      "Domínio total no aro nas disputas de bola..."
+    ]
+  },
+  "Stre": {
+    "VeryWeak": [
+      "Força física muito limitada, perde disputas...",
+      "Sofre em contato no garrafão...",
+      "É empurrado com facilidade...",
+      "Força bem abaixo do esperado para o jogo interno...",
+      "Corpo a corpo é uma desvantagem clara..."
+    ],
+    "BelowAverage": [
+      "Ainda falta corpo para as disputas internas...",
+      "Força abaixo do ideal para o jogo no aro...",
+      "Aguenta pouco contato, perde posição...",
+      "Força física em desenvolvimento...",
+      "Sofre contra pivôs e jogadores mais fortes..."
+    ],
+    "Average": [
+      "Força adequada, segura em contato leve...",
+      "Não domina, mas não é empurrado com facilidade...",
+      "Força mediana para a posição...",
+      "Aguenta o jogo físico na maior parte do tempo...",
+      "Corpo a corpo funcional..."
+    ],
+    "Good": [
+      "Boa força, aguenta o jogo físico...",
+      "Presença no garrafão e nas disputas...",
+      "Força é um trunfo no interior...",
+      "Não perde posição fácil em contato...",
+      "Um dos mais fortes quando a jogada é no aro..."
+    ],
+    "Elite": [
+      "Força de elite, domina no corpo a corpo...",
+      "Um dos mais fortes em quadra no jogo interno...",
+      "Quase imbatível em disputas de força...",
+      "Presença física decisiva no garrafão...",
+      "Força excepcional, ninguém empurra..."
+    ]
+  },
+  "Hgt": {
+    "VeryWeak": [
+      "Altura muito limitada para a posição...",
+      "Desvantagem clara no jogo perto do aro...",
+      "Muito baixo para o que se exige no interior...",
+      "Sofre contra jogadores mais altos...",
+      "Altura é uma limitação evidente..."
+    ],
+    "BelowAverage": [
+      "Ainda baixo para o que se espera no interior...",
+      "Altura abaixo do ideal para o aro...",
+      "Tamanho limita o jogo no garrafão...",
+      "Desvantagem em disputas altas...",
+      "Altura em desvantagem contra a maioria..."
+    ],
+    "Average": [
+      "Altura adequada, não é vantagem nem desvantagem...",
+      "Tamanho mediano para a posição...",
+      "Altura dentro do esperado...",
+      "Não é alto nem baixo para o padrão...",
+      "Tamanho funcional para o que a posição pede..."
+    ],
+    "Good": [
+      "Boa altura, ajuda no rebote e na finalização...",
+      "Presença no aro por causa do tamanho...",
+      "Altura é um trunfo em disputas...",
+      "Um dos mais altos quando está em quadra...",
+      "Tamanho favorece no jogo perto do aro..."
+    ],
+    "Elite": [
+      "Altura de elite, domina no aro...",
+      "Um dos mais altos em quadra, grande vantagem...",
+      "Presença física excepcional...",
+      "Altura decisiva em rebotes e finalizações...",
+      "Dominante no aro por causa do tamanho..."
+    ]
+  },
+  "Tp": {
+    "VeryWeak": [
+      "Arremesso de 3 muito limitado...",
+      "Quase não é opção de fora do arco...",
+      "Não deve ser deixado aberto, mas não é ameaça real...",
+      "Arremesso de longa distância é uma fraqueza...",
+      "Quase não converte de 3..."
+    ],
+    "BelowAverage": [
+      "Arremesso de 3 inconsistente, perde boas chances...",
+      "Ainda evolui como atirador de longa distância...",
+      "Acerta às vezes, mas não é confiável...",
+      "Porcentagem de 3 abaixo do ideal...",
+      "Arremesso de 3 em desenvolvimento..."
+    ],
+    "Average": [
+      "Consegue acertar o 3 quando está aberto...",
+      "Arremesso de 3 funcional, sem ser letal...",
+      "Atirador de 3 mediano...",
+      "Não é especialista, mas pode punir se deixado...",
+      "Porcentagem de 3 adequada..."
+    ],
+    "Good": [
+      "Bom atirador de 3, estica a defesa...",
+      "Precisa ser marcado na linha de 3...",
+      "Arremesso de 3 é um trunfo...",
+      "Confiável de longa distância...",
+      "Um dos melhores atiradores de 3 do time..."
+    ],
+    "Elite": [
+      "Arremesso de 3 de elite, ameaça constante...",
+      "Um dos melhores atiradores de longa distância...",
+      "Quase não erra quando está aberto...",
+      "Arremesso de 3 decisivo em jogadas importantes...",
+      "Elite na linha de 3, defesa não pode relaxar..."
+    ]
+  },
+  "Diq": {
+    "VeryWeak": [
+      "Leitura defensiva muito fraca, se perde fácil...",
+      "Bola defensiva bem abaixo do esperado...",
+      "Decisões defensivas ruins atrapalham o time...",
+      "Se perde em rotações e ajudas...",
+      "QI defensivo é uma limitação clara..."
+    ],
+    "BelowAverage": [
+      "Ainda toma decisões erradas na defesa...",
+      "QI defensivo em desenvolvimento...",
+      "Às vezes acerta posição, mas erra em momentos decisivos...",
+      "Leitura defensiva abaixo do ideal...",
+      "Precisa evoluir em rotação e ajuda..."
+    ],
+    "Average": [
+      "Entende o básico defensivo, cumpre o esquema...",
+      "Decisões defensivas adequadas na maior parte do tempo...",
+      "QI defensivo mediano...",
+      "Não é furo, mas também não surpreende na defesa...",
+      "Leitura defensiva funcional..."
+    ],
+    "Good": [
+      "Boa leitura defensiva e posicionamento...",
+      "Sabe quando ajudar, trocar e recuperar...",
+      "Decisões defensivas acima da média...",
+      "QI defensivo é um trunfo...",
+      "Quase sempre no lugar certo na defesa..."
+    ],
+    "Elite": [
+      "QI defensivo de elite, sempre no lugar certo...",
+      "Leitura e decisão defensiva de alto nível...",
+      "Um dos mais inteligentes em quadra na defesa...",
+      "Antecipa jogadas e corta passes...",
+      "Bola defensiva de elite, parece ler o ataque antes de acontecer..."
+    ]
+  },
+  "Mid": {
+    "VeryWeak": [
+      "Arremesso de média distância muito limitado...",
+      "Quase não é opção entre o aro e a linha de 3...",
+      "Arremesso de 2 é uma fraqueza...",
+      "Não converte de média com consistência...",
+      "Entre o aro e o 3 quase não ameaça..."
+    ],
+    "BelowAverage": [
+      "Média distância inconsistente, perde boas chances...",
+      "Ainda evolui no arremesso intermediário...",
+      "Acerta às vezes de média, mas não é confiável...",
+      "Arremesso de 2 em desenvolvimento...",
+      "Porcentagem de média abaixo do ideal..."
+    ],
+    "Average": [
+      "Consegue acertar de média quando está aberto...",
+      "Arremesso de 2 funcional, sem ser diferencial...",
+      "Média distância adequada...",
+      "Não é especialista, mas pode pontuar de 2...",
+      "Arremesso intermediário mediano..."
+    ],
+    "Good": [
+      "Bom de média distância, amplia o ataque...",
+      "Eficiente no arremesso de 2 pontos...",
+      "Média distância é um trunfo...",
+      "Confiável no arremesso intermediário...",
+      "Estica a defesa com o arremesso de 2..."
+    ],
+    "Elite": [
+      "Média distância de elite, mortífero no meio...",
+      "Um dos melhores no arremesso intermediário...",
+      "Quase não erra de média quando está aberto...",
+      "Arremesso de 2 decisivo em jogadas importantes...",
+      "Elite entre o aro e a linha de 3..."
+    ]
+  },
+  "Dnk": {
+    "VeryWeak": [
+      "Enterrada muito limitada, quase não finaliza de cima do aro...",
+      "Dunk é uma fraqueza evidente...",
+      "Sofre para finalizar em situações de enterrada...",
+      "Pouca capacidade de finalizar no aro com autoridade...",
+      "Quase não consegue enterrar..."
+    ],
+    "BelowAverage": [
+      "Enterrada inconsistente, perde chances fáceis...",
+      "Ainda evolui em finalizações acima do aro...",
+      "Consegue enterrar às vezes, mas não é confiável...",
+      "Dunk em desenvolvimento...",
+      "Finalização no aro por cima abaixo do ideal..."
+    ],
+    "Average": [
+      "Consegue enterrar quando tem espaço...",
+      "Enterrada funcional, sem ser diferencial...",
+      "Finaliza de cima do aro quando a situação permite...",
+      "Dunk adequado para a posição...",
+      "Nem ponto forte nem fraqueza em enterradas..."
+    ],
+    "Good": [
+      "Boa capacidade de enterrada, finaliza com autoridade...",
+      "Dunk é um trunfo em transição...",
+      "Consegue finalizar por cima do aro com regularidade...",
+      "Enterrada acima da média...",
+      "Ameaça constante quando chega no aro com espaço..."
+    ],
+    "Elite": [
+      "Enterrada de elite, domina finalizações acima do aro...",
+      "Um dos melhores finalizadores de cima do aro...",
+      "Dunk decisivo em jogadas de transição...",
+      "Quase imbatível quando vai para cima do aro...",
+      "Elite em finalizações com autoridade..."
+    ]
+  },
+  "Endu": {
+    "VeryWeak": [
+      "Resistência muito limitada, cai de produção no fim...",
+      "Fôlego bem abaixo do esperado...",
+      "Não aguenta minutos pesados...",
+      "Condicionamento é uma fraqueza evidente...",
+      "Sofre quando o ritmo do jogo sobe..."
+    ],
+    "BelowAverage": [
+      "Resistência inconsistente, some no segundo tempo...",
+      "Ainda evolui no condicionamento...",
+      "Aguenta pouco tempo em ritmo alto...",
+      "Fôlego abaixo do ideal para muitos minutos...",
+      "Resistência em desenvolvimento..."
+    ],
+    "Average": [
+      "Resistência adequada, aguenta o jogo inteiro...",
+      "Condicionamento funcional...",
+      "Não é diferencial, mas não é problema...",
+      "Fôlego suficiente para a posição...",
+      "Aguenta minutos sem cair de produção..."
+    ],
+    "Good": [
+      "Boa resistência, mantém o nível o jogo todo...",
+      "Condicionamento é um trunfo...",
+      "Aguenta ritmo alto por muitos minutos...",
+      "Um dos mais preparados fisicamente...",
+      "Fôlego acima da média..."
+    ],
+    "Elite": [
+      "Resistência de elite, não cansa...",
+      "Condicionamento excepcional, aguenta qualquer ritmo...",
+      "Pode jogar minutos pesados sem perder eficiência...",
+      "Fôlego de elite...",
+      "Um dos mais resistentes em quadra..."
+    ]
+  },
+  "Ft": {
+    "VeryWeak": [
+      "Lance livre muito limitado, perde pontos fáceis...",
+      "Porcentagem de lances livres bem abaixo da média...",
+      "Não é confiável na linha da falta...",
+      "Lance livre é uma fraqueza evidente...",
+      "Sofre em finais de jogo quando vai à linha..."
+    ],
+    "BelowAverage": [
+      "Lance livre inconsistente, perde jogadas decisivas...",
+      "Ainda evolui na linha da falta...",
+      "Acerta às vezes, mas não é confiável...",
+      "Porcentagem de FT abaixo do ideal...",
+      "Lance livre em desenvolvimento..."
+    ],
+    "Average": [
+      "Consegue acertar o lance livre quando precisa...",
+      "Lance livre funcional, sem ser diferencial...",
+      "Porcentagem adequada na linha da falta...",
+      "Não é especialista, mas converte o esperado...",
+      "Confiável em lances livres na maior parte do tempo..."
+    ],
+    "Good": [
+      "Bom de lance livre, confiável no fim do jogo...",
+      "Porcentagem de FT acima da média...",
+      "Lance livre é um trunfo em jogadas decisivas...",
+      "Converte quando vai à linha...",
+      "Um dos mais confiáveis na linha da falta do time..."
+    ],
+    "Elite": [
+      "Lance livre de elite, quase não erra...",
+      "Um dos melhores da liga na linha da falta...",
+      "Decisivo em finais de jogo por causa do FT...",
+      "Porcentagem de lance livre excepcional...",
+      "Elite na linha da falta..."
+    ]
+  },
+  "Jmp": {
+    "VeryWeak": [
+      "Impulso muito limitado, quase não disputa no alto...",
+      "Explosão vertical bem abaixo do esperado...",
+      "Não alcança em disputas de rebote e bloqueio...",
+      "Impulso é uma fraqueza evidente...",
+      "Sofre em jogadas que exigem ir alto..."
+    ],
+    "BelowAverage": [
+      "Impulso inconsistente, perde disputas no ar...",
+      "Ainda evolui na explosão vertical...",
+      "Consegue ir alto às vezes, mas não é confiável...",
+      "Impulso abaixo do ideal para a posição...",
+      "Explosão vertical em desenvolvimento..."
+    ],
+    "Average": [
+      "Impulso adequado, disputa no alto quando precisa...",
+      "Explosão vertical funcional...",
+      "Não é diferencial, mas não é desvantagem...",
+      "Consegue ir alto em rebotes e finalizações...",
+      "Impulso dentro do esperado para a posição..."
+    ],
+    "Good": [
+      "Bom impulso, disputa bem no ar...",
+      "Explosão vertical é um trunfo...",
+      "Consegue ir mais alto que a maioria nas disputas...",
+      "Impulso acima da média...",
+      "Presença no alto em rebotes e bloqueios..."
+    ],
+    "Elite": [
+      "Impulso de elite, domina disputas no ar...",
+      "Um dos mais explosivos verticalmente em quadra...",
+      "Quase imbatível em jogadas que exigem ir alto...",
+      "Explosão vertical excepcional...",
+      "Elite no impulso, decisivo em rebotes e bloqueios..."
+    ]
+  },
+  "Pot": {
+    "VeryWeak": [
+      "Potencial muito limitado, teto baixo...",
+      "Pouca margem para evolução...",
+      "Já está perto do limite do que pode ser...",
+      "Potencial é uma limitação clara...",
+      "Dificilmente vai evoluir muito daqui pra frente..."
+    ],
+    "BelowAverage": [
+      "Potencial modesto, evolução limitada...",
+      "Ainda pode melhorar um pouco, mas teto não é alto...",
+      "Margem de crescimento abaixo do ideal...",
+      "Potencial em desenvolvimento...",
+      "Teto provavelmente mediano..."
+    ],
+    "Average": [
+      "Potencial adequado, pode evoluir com trabalho...",
+      "Teto mediano, espaço para crescer...",
+      "Não é estrela em potencial, mas pode melhorar...",
+      "Margem de evolução dentro do esperado...",
+      "Potencial funcional..."
+    ],
+    "Good": [
+      "Bom potencial, teto alto...",
+      "Pode evoluir muito com os anos...",
+      "Potencial é um trunfo para o futuro...",
+      "Margem de crescimento acima da média...",
+      "Um dos jogadores com mais teto no time..."
+    ],
+    "Elite": [
+      "Potencial de elite, teto de estrela...",
+      "Pode virar um dos melhores da liga...",
+      "Evolução esperada é excepcional...",
+      "Um dos maiores potenciais em quadra...",
+      "Elite em potencial, futuro brilhante pela frente..."
+    ]
+  }
+}
