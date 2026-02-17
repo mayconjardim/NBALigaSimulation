@@ -14,22 +14,22 @@
 
     @if (_isLoggedIn)
     {
-        <div class="card mb-4">
-            <div class="card-header bg-light d-flex justify-content-between align-items-center">
+        <div class="card mb-4 offers-card">
+            <div class="card-header offers-card-header d-flex justify-content-between align-items-center">
                 <span><i class="bi bi-send me-2"></i>Minhas ofertas</span>
             </div>
             <div class="card-body p-0">
                 @if (_myOffers != null && _myOffers.Count > 0)
                 {
                     <div class="table-responsive">
-                        <table class="table table-sm table-hover mb-0">
+                        <table class="table table-sm mb-0 offers-table">
                             <thead>
                                 <tr>
-                                    <th>Jogador</th>
-                                    <th>Valor/ano</th>
-                                    <th>Anos</th>
-                                    <th>Status</th>
-                                    <th style="width:90px;"></th>
+                                    <th class="col-player">Jogador</th>
+                                    <th class="col-value">Valor/ano</th>
+                                    <th class="col-years">Anos</th>
+                                    <th class="col-status">Status</th>
+                                    <th class="col-actions"></th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -37,21 +37,21 @@
                                 {
                                     var offerId = offer.Id;
                                     <tr>
-                                        <td><a href="@($"players/{offer.PlayerId}")">@offer.PlayerName</a></td>
-                                        <td>@FormatMoney(offer.Amount)</td>
-                                        <td>@offer.Years</td>
-                                        <td>
+                                        <td class="col-player"><a href="@($"players/{offer.PlayerId}")" class="offers-player-link">@offer.PlayerName</a></td>
+                                        <td class="col-value text-end">@FormatMoney(offer.Amount)</td>
+                                        <td class="col-years text-center">@offer.Years</td>
+                                        <td class="col-status">
                                             @if (offer.Response == null)
-                                            { <span class="badge bg-warning text-dark">Pendente</span> }
+                                            { <span class="badge offers-badge offers-badge-pending">Pendente</span> }
                                             else if (offer.Response == true)
-                                            { <span class="badge bg-success">Aceita</span> }
+                                            { <span class="badge offers-badge offers-badge-accepted">Aceita</span> }
                                             else
-                                            { <span class="badge bg-secondary">Recusada</span> }
+                                            { <span class="badge offers-badge offers-badge-declined">Recusada</span> }
                                         </td>
-                                        <td>
+                                        <td class="col-actions text-end">
                                             @if (offer.Response == null)
                                             {
-                                                <button type="button" class="btn btn-outline-danger btn-sm" @onclick="@(async () => await RemoveOffer(offerId))" disabled="@(_removingOfferId == offerId)" title="Excluir oferta">
+                                                <button type="button" class="btn btn-outline-danger btn-sm offers-btn-remove" @onclick="@(async () => await RemoveOffer(offerId))" disabled="@(_removingOfferId == offerId)" title="Excluir oferta">
                                                     @if (_removingOfferId == offerId) { <span class="spinner-border spinner-border-sm"></span> } else { <i class="bi bi-trash"></i> }
                                                 </button>
                                             }
@@ -64,7 +64,7 @@
                 }
                 else
                 {
-                    <p class="text-muted mb-0 p-3">Nenhuma oferta enviada.</p>
+                    <p class="text-muted mb-0 p-4 text-center">Nenhuma oferta enviada.</p>
                 }
             </div>
         </div>

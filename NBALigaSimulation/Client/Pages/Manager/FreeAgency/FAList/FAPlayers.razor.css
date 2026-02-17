@@ -173,3 +173,103 @@
     overflow-x: auto;
     -webkit-overflow-scrolling: touch;
 }
+
+/* --- Minhas ofertas --- */
+.offers-card {
+    border: none;
+    border-radius: 12px;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+    overflow: hidden;
+}
+
+.offers-card-header {
+    background-color: #135EB8;
+    color: white;
+    font-weight: 600;
+    padding: 0.875rem 1.25rem;
+    border: none;
+}
+
+.offers-table {
+    margin: 0;
+    border-collapse: separate;
+    border-spacing: 0;
+}
+
+.offers-table thead th {
+    background-color: #135EB8;
+    color: white;
+    font-weight: 600;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    padding: 0.75rem 1rem;
+    border: none;
+}
+
+.offers-table thead .col-player { text-align: left; }
+.offers-table thead .col-value { text-align: right; }
+.offers-table thead .col-years { text-align: center; }
+.offers-table thead .col-status { text-align: left; }
+.offers-table thead .col-actions { width: 90px; text-align: right; }
+
+.offers-table tbody td {
+    padding: 0.875rem 1rem;
+    font-size: 0.9rem;
+    vertical-align: middle;
+    border-bottom: 1px solid #eee;
+}
+
+.offers-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.offers-table tbody tr:nth-child(even) {
+    background-color: #f8fafc;
+}
+
+.offers-table tbody tr:nth-child(odd) {
+    background-color: #fff;
+}
+
+.offers-table tbody tr:hover {
+    background-color: #eef2f7;
+}
+
+.offers-player-link {
+    font-weight: 500;
+    color: #135EB8;
+    text-decoration: none;
+}
+
+.offers-player-link:hover {
+    text-decoration: underline;
+    color: #0d4a94;
+}
+
+.offers-badge {
+    font-size: 0.75rem;
+    font-weight: 600;
+    padding: 0.35em 0.7em;
+    border-radius: 6px;
+}
+
+.offers-badge-pending {
+    background-color: #fff3cd;
+    color: #856404;
+}
+
+.offers-badge-accepted {
+    background-color: #198754;
+    color: white;
+}
+
+.offers-badge-declined {
+    background-color: #6c757d;
+    color: white;
+}
+
+.offers-btn-remove {
+    border-radius: 6px;
+    padding: 0.25rem 0.5rem;
+}
