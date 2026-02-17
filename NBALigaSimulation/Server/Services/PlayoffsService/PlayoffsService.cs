@@ -403,11 +403,27 @@ namespace NBALigaSimulation.Server.Services.PlayoffsService
 
 
             var championTeam = await _teamRepository.Query()
+                .Include(t => t.Players)
+                .ThenInclude(p => p.AwardCounts)
                 .OrderBy(t => t.Id)
                 .LastOrDefaultAsync(t => t.Id == championId);
             if (championTeam != null)
             {
                 championTeam.Championships += 1;
+                
+                // Atualizar TitlesWon para todos os jogadores do time campeão
+                foreach (var player in championTeam.Players)
+                {
+                    if (player.AwardCounts == null)
+                    {
+                        player.AwardCounts = new PlayerAwardCounts
+                        {
+                            PlayerId = player.Id,
+                            Player = player
+                        };
+                    }
+                    player.AwardCounts.TitlesWon += 1;
+                }
             }
 
             var gamesList = playoffs.SelectMany(t => t.PlayoffGames).ToList();
@@ -480,6 +496,7 @@ namespace NBALigaSimulation.Server.Services.PlayoffsService
 
             await _playerAwardsRepository.SaveChangesAsync();
             await _playerRepository.SaveChangesAsync();
+            await _teamRepository.SaveChangesAsync();
             response.Success = true;
             return response;
         }

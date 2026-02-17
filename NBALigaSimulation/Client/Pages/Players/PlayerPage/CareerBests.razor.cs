@@ -22,6 +22,7 @@ public partial class CareerBests
     private int DPOY { get; set; }
     private int ROY { get; set; }
     private int SixthManOfTheYear { get; set; }
+    private int TitlesWon { get; set; }
 
     protected override void OnInitialized()
     {
@@ -38,6 +39,7 @@ public partial class CareerBests
             DPOY = _player.AwardCounts.DPOY;
             ROY = _player.AwardCounts.ROY;
             SixthManOfTheYear = _player.AwardCounts.SixthManOfTheYear;
+            TitlesWon = _player.AwardCounts.TitlesWon;
         }
 
         // Contar Finals MVP dos PlayerAwards
