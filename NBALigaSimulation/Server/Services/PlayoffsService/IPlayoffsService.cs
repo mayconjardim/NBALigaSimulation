@@ -7,6 +7,7 @@ namespace NBALigaSimulation.Server.Services.PlayoffsService
     {
 
         Task<ServiceResponse<List<PlayoffsDto>>> GetPlayoffs();
+        Task<ServiceResponse<List<PlayoffsDto>>> GetPlayoffsBySeason(int season);
         Task<ServiceResponse<PlayoffsDto>> GetPlayoffsById(int Id);
         Task<ServiceResponse<bool>> GeneratePlayoffs();
         Task<ServiceResponse<bool>> Generate2Round();

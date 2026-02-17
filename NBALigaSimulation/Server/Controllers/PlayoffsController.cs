@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc;
 using NBALigaSimulation.Server.Services.PlayoffsService;
 using NBALigaSimulation.Shared.Dtos.Playoffs;
 using NBALigaSimulation.Shared.Models.Utils;
@@ -23,7 +23,13 @@ namespace NBALigaSimulation.Server.Controllers
         {
             var result = await _playoffsService.GetPlayoffs();
             return Ok(result);
+        }
 
+        [HttpGet("season/{season:int}")]
+        public async Task<ActionResult<ServiceResponse<List<PlayoffsDto>>>> GetPlayoffsBySeason(int season)
+        {
+            var result = await _playoffsService.GetPlayoffsBySeason(season);
+            return Ok(result);
         }
 
         [HttpGet("{playoffsId}")]

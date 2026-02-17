@@ -103,6 +103,46 @@ namespace NBALigaSimulation.Server.Services.PlayoffsService
             return response;
         }
 
+        public async Task<ServiceResponse<List<PlayoffsDto>>> GetPlayoffsBySeason(int seasonYear)
+        {
+            var response = new ServiceResponse<List<PlayoffsDto>>();
+            var playoffs = await _playoffsRepository.Query()
+                .Where(p => p.Season == seasonYear)
+                .Include(p => p.TeamOne)
+                .Include(p => p.TeamTwo)
+                .Include(p => p.PlayoffGames)
+                .ThenInclude(pg => pg.Game)
+                .ThenInclude(g => g.TeamGameStats)
+                .ToListAsync();
+
+            if (playoffs == null || playoffs.Count == 0)
+            {
+                response.Success = true;
+                response.Data = new List<PlayoffsDto>();
+                return response;
+            }
+
+            response.Data = _mapper.Map<List<PlayoffsDto>>(playoffs);
+            foreach (var dto in response.Data)
+            {
+                var serie = playoffs.FirstOrDefault(p => p.Id == dto.Id);
+                if (serie?.PlayoffGames == null) continue;
+                int winsOne = 0, winsTwo = 0;
+                foreach (var pg in serie.PlayoffGames.Where(pg => pg.Game != null && pg.Game.Happened))
+                {
+                    var g = pg.Game;
+                    var ptsOne = g.TeamGameStats?.Where(s => s.TeamId == serie.TeamOneId).Sum(s => s.Pts) ?? 0;
+                    var ptsTwo = g.TeamGameStats?.Where(s => s.TeamId == serie.TeamTwoId).Sum(s => s.Pts) ?? 0;
+                    if (ptsOne > ptsTwo) winsOne++;
+                    else if (ptsTwo > ptsOne) winsTwo++;
+                }
+                dto.WinsTeamOne = winsOne;
+                dto.WinsTeamTwo = winsTwo;
+                dto.Complete = winsOne >= 4 || winsTwo >= 4;
+            }
+            return response;
+        }
+
         public async Task<ServiceResponse<PlayoffsDto>> GetPlayoffsById(int Id)
         {
             var response = new ServiceResponse<PlayoffsDto>();

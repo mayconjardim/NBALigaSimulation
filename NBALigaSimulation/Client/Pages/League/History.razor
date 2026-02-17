@@ -1,0 +1,402 @@
+@page "/history"
+@using NBALigaSimulation.Client.Utilities
+@using NBALigaSimulation.Shared.Dtos.League
+@using NBALigaSimulation.Shared.Dtos.Playoffs
+@using NBALigaSimulation.Shared.Dtos.Players
+@using NBALigaSimulation.Shared.Dtos.Teams
+@inject ILeagueService LeagueService
+@inject IStatsService StatsService
+@inject IPlayoffsService PlayoffsService
+
+<PageTitle>História da Liga - NBALIGA</PageTitle>
+
+<div class="history-page container py-4">
+    <div class="history-header mb-4">
+        <h1 class="h3 mb-1"><i class="bi bi-journal-bookmark me-2"></i>História da Liga</h1>
+        <p class="text-muted mb-0">Escolha uma temporada para ver todos os dados: campeão, vice, awards e classificação.</p>
+    </div>
+
+    @if (_loading)
+    {
+        <div class="text-center py-5">
+            <div class="spinner-border text-primary" role="status"></div>
+            <p class="mt-2 text-muted">Carregando...</p>
+        </div>
+    }
+    else if (_list == null || !_list.Any())
+    {
+        <div class="alert alert-info">
+            <i class="bi bi-info-circle me-2"></i>
+            Nenhum histórico de temporada concluída ainda.
+        </div>
+    }
+    else
+    {
+        <div class="mb-4">
+            <label class="form-label fw-semibold">Temporada</label>
+            <select class="form-select history-season-select" @bind="_selectedSeason" @bind:after="OnSeasonSelected">
+                <option value="">— Selecione o ano —</option>
+                @foreach (var s in _list.Select(x => x.Season).Distinct().OrderByDescending(x => x))
+                {
+                    <option value="@s">@s</option>
+                }
+            </select>
+        </div>
+
+        @if (_selectedSeasonInt.HasValue)
+        {
+            var row = _list.FirstOrDefault(x => x.Season == _selectedSeasonInt.Value);
+            if (row != null)
+            {
+                <div class="history-season-content">
+                    <h4 class="mb-4">Temporada @row.Season</h4>
+
+                    <div class="row g-4 mb-4">
+                        <div class="col-md-6">
+                            <div class="history-card">
+                                <h5 class="history-card-title"><i class="bi bi-trophy me-2"></i>Campeão</h5>
+                                @if (row.ChampionTeamId.HasValue)
+                                {
+                                    <a href="@($"teams/{row.ChampionTeamId}")" class="text-decoration-none d-flex align-items-center gap-2 mb-2">
+                                        <img src="@($"Images/Logos/{row.ChampionTeamAbrv}.svg")" alt="" class="history-logo" />
+                                        <span class="fw-semibold">@row.ChampionTeamName</span>
+                                        @if (row.ChampionConfRank.HasValue)
+                                        {
+                                            <span class="history-conf-rank">@Util.GetOrdinal(row.ChampionConfRank.Value) na conferência</span>
+                                        }
+                                    </a>
+                                    <p class="mb-0 text-muted small">
+                                        Temporada regular: <strong>@(string.IsNullOrEmpty(row.ChampionRegularRecord) ? "—" : row.ChampionRegularRecord)</strong>
+                                        @if (!string.IsNullOrEmpty(row.ChampionPlayoffRecord))
+                                        {
+                                            <span> · Playoffs: <strong>@row.ChampionPlayoffRecord</strong></span>
+                                        }
+                                    </p>
+                                }
+                                else
+                                {
+                                    <span class="text-muted">—</span>
+                                }
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="history-card">
+                                <h5 class="history-card-title"><i class="bi bi-trophy-fill me-2"></i>Vice-campeão</h5>
+                                @if (row.RunnerUpTeamId.HasValue)
+                                {
+                                    <a href="@($"teams/{row.RunnerUpTeamId}")" class="text-decoration-none d-flex align-items-center gap-2 mb-2">
+                                        <img src="@($"Images/Logos/{row.RunnerUpTeamAbrv}.svg")" alt="" class="history-logo" />
+                                        <span class="fw-semibold">@row.RunnerUpTeamName</span>
+                                        @if (row.RunnerUpConfRank.HasValue)
+                                        {
+                                            <span class="history-conf-rank">@Util.GetOrdinal(row.RunnerUpConfRank.Value) na conferência</span>
+                                        }
+                                    </a>
+                                    <p class="mb-0 text-muted small">
+                                        Temporada regular: <strong>@(string.IsNullOrEmpty(row.RunnerUpRegularRecord) ? "—" : row.RunnerUpRegularRecord)</strong>
+                                        @if (!string.IsNullOrEmpty(row.RunnerUpPlayoffRecord))
+                                        {
+                                            <span> · Playoffs: <strong>@row.RunnerUpPlayoffRecord</strong></span>
+                                        }
+                                    </p>
+                                }
+                                else
+                                {
+                                    <span class="text-muted">—</span>
+                                }
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="history-card mb-4">
+                        <h5 class="history-card-title"><i class="bi bi-award me-2"></i>Prêmios</h5>
+                        <div class="row g-3">
+                            @{
+                                var mvp = GetAward(row.Awards, "MVP");
+                                var dpoy = GetAward(row.Awards, "DPOY");
+                                var roy = GetAward(row.Awards, "ROY");
+                                var sixth = GetAward(row.Awards, "Sixth Man of the Year");
+                                var fmvp = GetAward(row.Awards, "NBA Finals MVP");
+                            }
+                            @if (mvp != null) { <div class="col-sm-6 col-md"><span class="text-muted small">MVP:</span> <a href="players/@mvp.PlayerId" class="text-decoration-none">@mvp.PlayerName</a></div> }
+                            @if (dpoy != null) { <div class="col-sm-6 col-md"><span class="text-muted small">DPOY:</span> <a href="players/@dpoy.PlayerId" class="text-decoration-none">@dpoy.PlayerName</a></div> }
+                            @if (roy != null) { <div class="col-sm-6 col-md"><span class="text-muted small">ROY:</span> <a href="players/@roy.PlayerId" class="text-decoration-none">@roy.PlayerName</a></div> }
+                            @if (sixth != null) { <div class="col-sm-6 col-md"><span class="text-muted small">6º homem:</span> <a href="players/@sixth.PlayerId" class="text-decoration-none">@sixth.PlayerName</a></div> }
+                            @if (fmvp != null) { <div class="col-sm-6 col-md"><span class="text-muted small">Finals MVP:</span> <a href="players/@fmvp.PlayerId" class="text-decoration-none">@fmvp.PlayerName</a></div> }
+                            @if (mvp == null && dpoy == null && roy == null && sixth == null && fmvp == null)
+                            {
+                                <div class="col"><span class="text-muted">Nenhum prêmio registrado para esta temporada.</span></div>
+                            }
+                        </div>
+                    </div>
+
+                    <div class="history-card">
+                        <ul class="nav nav-tabs history-tabs mb-3">
+                            <li class="nav-item">
+                                <button type="button" class="nav-link @(_activeTab == "standings" ? "active" : "")" @onclick='() => OnTabSelect("standings")'>
+                                    <i class="bi bi-table me-1"></i>Classificação
+                                </button>
+                            </li>
+                            <li class="nav-item">
+                                <button type="button" class="nav-link @(_activeTab == "playoffs" ? "active" : "")" @onclick='() => OnTabSelect("playoffs")'>
+                                    <i class="bi bi-trophy me-1"></i>Playoffs
+                                </button>
+                            </li>
+                            <li class="nav-item">
+                                <button type="button" class="nav-link @(_activeTab == "regular" ? "active" : "")" @onclick='() => OnTabSelect("regular")'>
+                                    <i class="bi bi-bar-chart me-1"></i>Stats (Regular)
+                                </button>
+                            </li>
+                            <li class="nav-item">
+                                <button type="button" class="nav-link @(_activeTab == "playoffs-stats" ? "active" : "")" @onclick='() => OnTabSelect("playoffs-stats")'>
+                                    <i class="bi bi-graph-up me-1"></i>Stats (Playoffs)
+                                </button>
+                            </li>
+                        </ul>
+
+                        @if (_activeTab == "standings")
+                        {
+                            @if (_standingsLoading)
+                            {
+                                <p class="text-muted mb-0">Carregando...</p>
+                            }
+                            else if (_standings != null && _standings.Any())
+                            {
+                                <div class="table-responsive">
+                                    <table class="table table-sm history-standings-table">
+                                        <thead>
+                                            <tr>
+                                                <th>Time</th>
+                                                <th class="text-center">Conf.</th>
+                                                <th class="text-end">W-L</th>
+                                                <th class="text-end">PCT</th>
+                                                <th class="text-end">Playoffs</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach (var t in _standings)
+                                            {
+                                                <tr>
+                                                    <td>
+                                                        <a href="@($"teams/{t.TeamId}")" class="text-decoration-none d-flex align-items-center gap-2">
+                                                            <img src="@($"Images/Logos/{t.TeamAbrv}.svg")" alt="" class="history-logo-sm" />
+                                                            @t.TeamRegion @t.TeamName
+                                                        </a>
+                                                    </td>
+                                                    <td class="text-center">@t.TeamConference</td>
+                                                    <td class="text-end">@t.Wins-@t.Losses</td>
+                                                    <td class="text-end">@t.WinPct</td>
+                                                    <td class="text-end">@(t.PlayoffWins > 0 || t.PlayoffLosses > 0 ? $"{t.PlayoffWins}-{t.PlayoffLosses}" : "—")</td>
+                                                </tr>
+                                            }
+                                        </tbody>
+                                    </table>
+                                </div>
+                            }
+                            else
+                            {
+                                <p class="text-muted mb-0">Nenhum dado de classificação para esta temporada.</p>
+                            }
+                        }
+                        else if (_activeTab == "playoffs")
+                        {
+                            @if (_playoffsLoading)
+                            {
+                                <p class="text-muted mb-0">Carregando playoffs...</p>
+                            }
+                            else if (_playoffs != null && _playoffs.Any())
+                            {
+                                var seriesByRound = GroupPlayoffsByRound(_playoffs);
+                                @foreach (var round in RoundsOrder)
+                                {
+                                    var seriesInRound = seriesByRound.GetValueOrDefault(round.Key);
+                                    if (seriesInRound == null || !seriesInRound.Any()) continue;
+                                    <div class="mb-3">
+                                        <h6 class="text-muted small mb-2">@round.Value</h6>
+                                        @foreach (var serie in seriesInRound.OrderBy(s => s.SeriesId))
+                                        {
+                                            <div class="d-flex align-items-center justify-content-between py-2 border-bottom history-playoff-row">
+                                                <a href="@($"teams/{serie.TeamOneId}")" class="text-decoration-none d-flex align-items-center gap-2">
+                                                    <img src="@($"Images/Logos/{serie.teamOneAbrv}.svg")" alt="" class="history-logo-sm" />
+                                                    <span class="fw-semibold">@serie.teamOneName</span>
+                                                    <span class="text-muted">(@serie.WinsTeamOne)</span>
+                                                </a>
+                                                <span class="text-muted px-2">x</span>
+                                                <a href="@($"teams/{serie.TeamTwoId}")" class="text-decoration-none d-flex align-items-center gap-2">
+                                                    <span class="text-muted">(@serie.WinsTeamTwo)</span>
+                                                    <span class="fw-semibold">@serie.teamTwoName</span>
+                                                    <img src="@($"Images/Logos/{serie.teamTwoAbrv}.svg")" alt="" class="history-logo-sm" />
+                                                </a>
+                                            </div>
+                                        }
+                                    </div>
+                                }
+                            }
+                            else
+                            {
+                                <p class="text-muted mb-0">Nenhum playoff encontrado para esta temporada.</p>
+                            }
+                        }
+                        else if (_activeTab == "regular")
+                        {
+                            @if (_playerRegularLoading)
+                            {
+                                <p class="text-muted mb-0">Carregando estatísticas...</p>
+                            }
+                            else if (_regularStatsResponse?.Response != null && _regularStatsResponse.Response.Any())
+                            {
+                                <div class="history-stats-filters mb-3 d-flex flex-wrap gap-2 align-items-center">
+                                    <select class="form-select form-select-sm history-filter-select" @onchange="HandleRegularPositionChange">
+                                        <option value="">Todas as posições</option>
+                                        @foreach (var pos in Positions)
+                                        {
+                                            <option value="@pos" selected="@(_positionRegular == pos)">@pos</option>
+                                        }
+                                    </select>
+                                    <select class="form-select form-select-sm history-filter-select" @onchange="HandleRegularPageSizeChange">
+                                        @foreach (var size in PageSizeOptions)
+                                        {
+                                            <option value="@size" selected="@(_pageSizeRegular == size)">@size por página</option>
+                                        }
+                                    </select>
+                                </div>
+                                <div class="table-responsive">
+                                    <table class="table table-sm history-stats-table">
+                                        <thead>
+                                            <tr>
+                                                <th class="col-player">Jogador</th>
+                                                <th>Time</th>
+                                                <th class="text-end sortable" @onclick='() => SortRegularColumn("GP")'>GP <i class="bi @GetRegularSortIcon("GP")"></i></th>
+                                                <th class="text-end sortable" @onclick='() => SortRegularColumn("MIN")'>MPG <i class="bi @GetRegularSortIcon("MIN")"></i></th>
+                                                <th class="text-end sortable" @onclick='() => SortRegularColumn("PPG")'>PPG <i class="bi @GetRegularSortIcon("PPG")"></i></th>
+                                                <th class="text-end sortable" @onclick='() => SortRegularColumn("APG")'>APG <i class="bi @GetRegularSortIcon("APG")"></i></th>
+                                                <th class="text-end sortable" @onclick='() => SortRegularColumn("RPG")'>RPG <i class="bi @GetRegularSortIcon("RPG")"></i></th>
+                                                <th class="text-end sortable" @onclick='() => SortRegularColumn("ORB")'>ORB <i class="bi @GetRegularSortIcon("ORB")"></i></th>
+                                                <th class="text-end sortable" @onclick='() => SortRegularColumn("DRB")'>DRB <i class="bi @GetRegularSortIcon("DRB")"></i></th>
+                                                <th class="text-end sortable" @onclick='() => SortRegularColumn("SPG")'>SPG <i class="bi @GetRegularSortIcon("SPG")"></i></th>
+                                                <th class="text-end sortable" @onclick='() => SortRegularColumn("BPG")'>BPG <i class="bi @GetRegularSortIcon("BPG")"></i></th>
+                                                <th class="text-end sortable" @onclick='() => SortRegularColumn("FG%")'>FG% <i class="bi @GetRegularSortIcon("FG%")"></i></th>
+                                                <th class="text-end sortable" @onclick='() => SortRegularColumn("FT%")'>FT% <i class="bi @GetRegularSortIcon("FT%")"></i></th>
+                                                <th class="text-end sortable" @onclick='() => SortRegularColumn("3P%")'>3P% <i class="bi @GetRegularSortIcon("3P%")"></i></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach (var p in _regularStatsResponse.Response)
+                                            {
+                                                <tr>
+                                                    <td class="col-player"><a href="players/@p.PlayerId" class="text-decoration-none">@p.Name</a> <span class="text-muted small">@p.Pos</span></td>
+                                                    <td>@p.TeamAbrv</td>
+                                                    <td class="text-end">@p.Games</td>
+                                                    <td class="text-end">@p.MinPG</td>
+                                                    <td class="text-end">@p.PtsPG</td>
+                                                    <td class="text-end">@p.AstPG</td>
+                                                    <td class="text-end">@p.TRebPG</td>
+                                                    <td class="text-end">@p.ORebPG</td>
+                                                    <td class="text-end">@p.DRebPG</td>
+                                                    <td class="text-end">@p.StlPG</td>
+                                                    <td class="text-end">@p.BlkPG</td>
+                                                    <td class="text-end">@p.FgPct</td>
+                                                    <td class="text-end">@p.FtPct</td>
+                                                    <td class="text-end">@p.TpPct</td>
+                                                </tr>
+                                            }
+                                        </tbody>
+                                    </table>
+                                </div>
+                                @if (_regularStatsResponse.Pages > 1)
+                                {
+                                    <div class="d-flex justify-content-center mt-3">
+                                        <Pagination ActivePageNumber="_currentPageRegular"
+                                                    TotalPages="@_regularStatsResponse.Pages"
+                                                    PageChanged="ChangePageRegular" />
+                                    </div>
+                                }
+                            }
+                            else
+                            {
+                                <p class="text-muted mb-0">Nenhuma estatística da temporada regular para esta temporada.</p>
+                            }
+                        }
+                        else if (_activeTab == "playoffs-stats")
+                        {
+                            @if (_playerPlayoffsLoading)
+                            {
+                                <p class="text-muted mb-0">Carregando estatísticas dos playoffs...</p>
+                            }
+                            else if (_playerPlayoffsStats != null && _playerPlayoffsStats.Any())
+                            {
+                                <div class="history-stats-filters mb-3 d-flex flex-wrap gap-2 align-items-center">
+                                    <select class="form-select form-select-sm history-filter-select" @onchange="HandlePlayoffsPageSizeChange">
+                                        @foreach (var size in PageSizeOptions)
+                                        {
+                                            <option value="@size" selected="@(_pageSizePlayoffs == size)">@size por página</option>
+                                        }
+                                    </select>
+                                </div>
+                                <div class="table-responsive">
+                                    <table class="table table-sm history-stats-table">
+                                        <thead>
+                                            <tr>
+                                                <th class="col-player">Jogador</th>
+                                                <th>Time</th>
+                                                <th class="text-end sortable" @onclick='() => SortPlayoffsColumn("GP")'>GP <i class="bi @GetPlayoffsSortIcon("GP")"></i></th>
+                                                <th class="text-end sortable" @onclick='() => SortPlayoffsColumn("MIN")'>MPG <i class="bi @GetPlayoffsSortIcon("MIN")"></i></th>
+                                                <th class="text-end sortable" @onclick='() => SortPlayoffsColumn("PPG")'>PPG <i class="bi @GetPlayoffsSortIcon("PPG")"></i></th>
+                                                <th class="text-end sortable" @onclick='() => SortPlayoffsColumn("APG")'>APG <i class="bi @GetPlayoffsSortIcon("APG")"></i></th>
+                                                <th class="text-end sortable" @onclick='() => SortPlayoffsColumn("RPG")'>RPG <i class="bi @GetPlayoffsSortIcon("RPG")"></i></th>
+                                                <th class="text-end sortable" @onclick='() => SortPlayoffsColumn("ORB")'>ORB <i class="bi @GetPlayoffsSortIcon("ORB")"></i></th>
+                                                <th class="text-end sortable" @onclick='() => SortPlayoffsColumn("DRB")'>DRB <i class="bi @GetPlayoffsSortIcon("DRB")"></i></th>
+                                                <th class="text-end sortable" @onclick='() => SortPlayoffsColumn("SPG")'>SPG <i class="bi @GetPlayoffsSortIcon("SPG")"></i></th>
+                                                <th class="text-end sortable" @onclick='() => SortPlayoffsColumn("BPG")'>BPG <i class="bi @GetPlayoffsSortIcon("BPG")"></i></th>
+                                                <th class="text-end sortable" @onclick='() => SortPlayoffsColumn("FG%")'>FG% <i class="bi @GetPlayoffsSortIcon("FG%")"></i></th>
+                                                <th class="text-end sortable" @onclick='() => SortPlayoffsColumn("FT%")'>FT% <i class="bi @GetPlayoffsSortIcon("FT%")"></i></th>
+                                                <th class="text-end sortable" @onclick='() => SortPlayoffsColumn("3P%")'>3P% <i class="bi @GetPlayoffsSortIcon("3P%")"></i></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach (var p in GetPlayoffsStatsPage())
+                                            {
+                                                <tr>
+                                                    <td class="col-player"><a href="players/@p.PlayerId" class="text-decoration-none">@p.Name</a></td>
+                                                    <td>@p.TeamAbrv</td>
+                                                    <td class="text-end">@p.Games</td>
+                                                    <td class="text-end">@p.MinPG</td>
+                                                    <td class="text-end">@p.PtsPG</td>
+                                                    <td class="text-end">@p.AstPG</td>
+                                                    <td class="text-end">@p.TRebPG</td>
+                                                    <td class="text-end">@p.ORebPG</td>
+                                                    <td class="text-end">@p.DRebPG</td>
+                                                    <td class="text-end">@p.StlPG</td>
+                                                    <td class="text-end">@p.BlkPG</td>
+                                                    <td class="text-end">@p.FgPct</td>
+                                                    <td class="text-end">@p.FtPct</td>
+                                                    <td class="text-end">@p.TpPct</td>
+                                                </tr>
+                                            }
+                                        </tbody>
+                                    </table>
+                                </div>
+                                @if (GetPlayoffsStatsTotalPages() > 1)
+                                {
+                                    <div class="d-flex justify-content-center mt-3">
+                                        <Pagination ActivePageNumber="_currentPagePlayoffs"
+                                                    TotalPages="@GetPlayoffsStatsTotalPages()"
+                                                    PageChanged="ChangePagePlayoffs" />
+                                    </div>
+                                }
+                            }
+                            else
+                            {
+                                <p class="text-muted mb-0">Nenhuma estatística de playoffs para esta temporada.</p>
+                            }
+                        }
+                    </div>
+                </div>
+            }
+        }
+        else
+        {
+            <p class="text-muted">Selecione uma temporada acima para ver os dados.</p>
+        }
+    }
+</div>

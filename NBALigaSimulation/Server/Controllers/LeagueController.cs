@@ -1,5 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc;
 using NBALigaSimulation.Server.Services.LeagueService;
+using NBALigaSimulation.Shared.Dtos.League;
 using NBALigaSimulation.Shared.Dtos.Teams;
 using NBALigaSimulation.Shared.Models.Utils;
 
@@ -32,5 +33,13 @@ namespace NBALigaSimulation.Server.Controllers
 
         }
 
+        [HttpGet("history")]
+        public async Task<ActionResult<ServiceResponse<List<SeasonHistoryDto>>>> GetSeasonHistory()
+        {
+            var result = await _leagueService.GetSeasonHistory();
+            if (!result.Success)
+                return BadRequest(result);
+            return Ok(result);
+        }
     }
 }

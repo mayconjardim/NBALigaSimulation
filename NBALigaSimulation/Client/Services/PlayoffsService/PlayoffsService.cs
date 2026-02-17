@@ -19,6 +19,12 @@ public class PlayoffsService : IPlayoffsService
         return response;
     }
 
+    public async Task<ServiceResponse<List<PlayoffsDto>>> GetPlayoffsBySeason(int season)
+    {
+        var response = await _http.GetFromJsonAsync<ServiceResponse<List<PlayoffsDto>>>($"api/playoffs/season/{season}");
+        return response;
+    }
+
     public async Task<ServiceResponse<bool>> GenerateFirstRound()
     {
         var httpResponse = await _http.PostAsJsonAsync("api/playoffs/generate", new { });

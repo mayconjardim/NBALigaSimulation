@@ -37,12 +37,14 @@ namespace NBALigaSimulation.Server.Controllers
 			}
 		}
 
-		[HttpGet("playoffs/teams")]
-		public async Task<ActionResult<ServiceResponse<List<TeamPlayoffsStatsDto>>>> GetAllTeamPlayoffsStats()
-		{
-			var result = await _statsService.GetAllTeamPlayoffsStats();
-			return Ok(result);
-		}
+        [HttpGet("playoffs/teams")]
+        public async Task<ActionResult<ServiceResponse<List<TeamPlayoffsStatsDto>>>> GetAllTeamPlayoffsStats([FromQuery] int? season)
+        {
+            var result = season.HasValue
+                ? await _statsService.GetAllTeamPlayoffsStatsBySeason(season.Value)
+                : await _statsService.GetAllTeamPlayoffsStats();
+            return Ok(result);
+        }
 
 		[HttpGet("teams/ranks")]
 		public async Task<ActionResult<ServiceResponse<List<TeamRegularStatsDto>>>> GetAllTeamRegularStatsRank()
@@ -87,9 +89,11 @@ namespace NBALigaSimulation.Server.Controllers
 
 
 		[HttpGet("playoffs/players")]
-		public async Task<ActionResult<ServiceResponse<List<PlayerRegularStatsDto>>>> GetAllPlayerPlayoffsStats()
+		public async Task<ActionResult<ServiceResponse<List<PlayerPlayoffsStatsDto>>>> GetAllPlayerPlayoffsStats([FromQuery] int? season)
 		{
-			var result = await _statsService.GetAllPlayerPlayoffsStats();
+			var result = season.HasValue
+				? await _statsService.GetAllPlayerPlayoffsStatsBySeason(season.Value)
+				: await _statsService.GetAllPlayerPlayoffsStats();
 			return Ok(result);
 		}
 

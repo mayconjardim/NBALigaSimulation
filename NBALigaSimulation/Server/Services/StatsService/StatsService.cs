@@ -264,6 +264,17 @@ namespace NBALigaSimulation.Server.Services.StatsService
 			return response;
 		}
 
+		public async Task<ServiceResponse<List<TeamPlayoffsStatsDto>>> GetAllTeamPlayoffsStatsBySeason(int season)
+		{
+			var teamStatsList = await _teamPlayoffsStatsRepository.Query()
+				.Where(t => t.Season == season)
+				.Include(t => t.Team)
+				.ToListAsync();
+			return new ServiceResponse<List<TeamPlayoffsStatsDto>>
+			{
+				Data = _mapper.Map<List<TeamPlayoffsStatsDto>>(teamStatsList)
+			};
+		}
 
 		public async Task<ServiceResponse<List<TeamRegularStatsRankDto>>> GetAllTeamRegularStatsRank()
 		{
@@ -303,6 +314,17 @@ namespace NBALigaSimulation.Server.Services.StatsService
 			};
 
 			return response;
+		}
+
+		public async Task<ServiceResponse<List<PlayerPlayoffsStatsDto>>> GetAllPlayerPlayoffsStatsBySeason(int season)
+		{
+			var playerStatsList = await _playerPlayoffsStatsRepository.Query()
+				.Where(t => t.Season == season && t.Min > 5)
+				.ToListAsync();
+			return new ServiceResponse<List<PlayerPlayoffsStatsDto>>
+			{
+				Data = _mapper.Map<List<PlayerPlayoffsStatsDto>>(playerStatsList)
+			};
 		}
 
 		public async Task<ServiceResponse<bool>> CleanStats()

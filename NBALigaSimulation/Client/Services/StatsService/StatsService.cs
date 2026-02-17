@@ -58,5 +58,9 @@ public class StatsService : IStatsService
         var result = await _http.GetFromJsonAsync<ServiceResponse<List<TeamRegularStatsRankDto>>>($"api/stats/teams/ranks");
         return result;
     }
-    
+
+    public async Task<ServiceResponse<List<PlayerPlayoffsStatsDto>>> GetAllPlayerPlayoffsStatsBySeason(int season)
+    {
+        return await _http.GetFromJsonAsync<ServiceResponse<List<PlayerPlayoffsStatsDto>>>($"api/stats/playoffs/players?season={season}");
+    }
 }
