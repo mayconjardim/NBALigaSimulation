@@ -14,15 +14,18 @@ namespace NBALigaSimulation.Server.Services.SeasonService
     {
         private readonly ISeasonRepository _seasonRepository;
         private readonly IGenericRepository<TeamDraftPicks> _draftPickRepository;
+        private readonly IFAService _faService;
         private readonly IMapper _mapper;
 
         public SeasonService(
             ISeasonRepository seasonRepository,
             IGenericRepository<TeamDraftPicks> draftPickRepository,
+            IFAService faService,
             IMapper mapper)
         {
             _seasonRepository = seasonRepository;
             _draftPickRepository = draftPickRepository;
+            _faService = faService;
             _mapper = mapper;
         }
 
@@ -93,6 +96,8 @@ namespace NBALigaSimulation.Server.Services.SeasonService
 
             await _seasonRepository.AddAsync(season);
             await _seasonRepository.SaveChangesAsync();
+
+            await _faService.DeleteOffersBySeason(LastSeason.Year);
 
             List<Team> teams = await _seasonRepository.GetHumanTeamsAsync();
 

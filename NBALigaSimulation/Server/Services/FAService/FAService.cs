@@ -120,32 +120,32 @@ namespace NBALigaSimulation.Server.Services.FAService
         public async Task<ServiceResponse<List<FAOfferDto>>> GetOffersByTeamId()
         {
             var response = new ServiceResponse<List<FAOfferDto>>();
-
-            var userId = _authService.GetUserId();
-            var user = await _userRepository.Query()
-                .FirstOrDefaultAsync(u => u.Id == userId);
             int? teamId = null;
 
-            if (user != null)
+            try
             {
-                teamId = user.TeamId;
+                var userId = _authService.GetUserId();
+                var user = await _userRepository.Query()
+                    .FirstOrDefaultAsync(u => u.Id == userId);
+                if (user != null)
+                    teamId = user.TeamId;
+            }
+            catch
+            {
+                // Usuário não autenticado: retorna lista vazia
+                response.Success = true;
+                response.Data = new List<FAOfferDto>();
+                return response;
             }
 
-            List<FAOffer> offers = await _offerRepository.Query()
+            var offers = await _offerRepository.Query()
                 .Include(p => p.Player)
                 .OrderByDescending(o => o.DateCreated)
                 .Where(o => o.TeamId == teamId)
                 .ToListAsync();
 
-            if (offers == null)
-            {
-                response.Success = false;
-                response.Message = $"As ofertas com time de Id {teamId} não existem!";
-            }
-            else
-            {
-                response.Data = _mapper.Map<List<FAOfferDto>>(offers);
-            }
+            response.Success = true;
+            response.Data = offers != null ? _mapper.Map<List<FAOfferDto>>(offers) : new List<FAOfferDto>();
 
             return response;
         }
@@ -172,6 +172,30 @@ namespace NBALigaSimulation.Server.Services.FAService
             {
                 response.Success = false;
                 response.Message = "Ocorreu um erro ao excluir a oferta: " + ex.Message;
+            }
+            return response;
+        }
+
+        public async Task<ServiceResponse<int>> DeleteOffersBySeason(int seasonYear)
+        {
+            var response = new ServiceResponse<int>();
+            try
+            {
+                var toRemove = await _offerRepository.Query()
+                    .Where(o => o.Season == seasonYear)
+                    .ToListAsync();
+                var count = toRemove.Count;
+                foreach (var offer in toRemove)
+                    _offerRepository.Remove(offer);
+                await _offerRepository.SaveChangesAsync();
+                response.Success = true;
+                response.Data = count;
+                response.Message = count > 0 ? $"{count} oferta(s) removida(s) da temporada {seasonYear}." : "Nenhuma oferta para remover.";
+            }
+            catch (Exception ex)
+            {
+                response.Success = false;
+                response.Message = "Erro ao remover ofertas: " + ex.Message;
             }
             return response;
         }

@@ -8,7 +8,7 @@ using NBALigaSimulation.Shared.Models.SeasonPlayoffs;
 using NBALigaSimulation.Shared.Models.Seasons;
 using NBALigaSimulation.Shared.Models.Teams;
 using NBALigaSimulation.Shared.Models.Utils;
-
+using NBALigaSimulation.Server.Services.FAService;
 
 namespace NBALigaSimulation.Server.Services.PlayoffsService
 {
@@ -22,6 +22,7 @@ namespace NBALigaSimulation.Server.Services.PlayoffsService
         private readonly IGenericRepository<Team> _teamRepository;
         private readonly IGenericRepository<Player> _playerRepository;
         private readonly IGenericRepository<PlayerAwards> _playerAwardsRepository;
+        private readonly IFAService _faService;
         private readonly IMapper _mapper;
 
         public PlayoffsService(
@@ -32,6 +33,7 @@ namespace NBALigaSimulation.Server.Services.PlayoffsService
             IGenericRepository<Team> teamRepository,
             IGenericRepository<Player> playerRepository,
             IGenericRepository<PlayerAwards> playerAwardsRepository,
+            IFAService faService,
             IMapper mapper)
         {
             _seasonRepository = seasonRepository;
@@ -41,6 +43,7 @@ namespace NBALigaSimulation.Server.Services.PlayoffsService
             _teamRepository = teamRepository;
             _playerRepository = playerRepository;
             _playerAwardsRepository = playerAwardsRepository;
+            _faService = faService;
             _mapper = mapper;
         }
 
@@ -165,6 +168,8 @@ namespace NBALigaSimulation.Server.Services.PlayoffsService
             var playoffs = PlayoffsUtils.Generate1stRound(teamsEast, teamsWest, season.Year);
             Console.WriteLine($"[GeneratePlayoffs] Séries de 1ª rodada geradas: {playoffs.Count}");
             season.RegularCompleted = true;
+
+            await _faService.DeleteOffersBySeason(season.Year);
 
             // 1) Persistir Playoffs primeiro para obter Ids
             await _playoffsRepository.AddRangeAsync(playoffs);

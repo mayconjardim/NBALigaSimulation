@@ -32,18 +32,12 @@ namespace NBALigaSimulation.Server.Controllers
         }
 
         [HttpGet("teams")]
-        public async Task<ActionResult<ServiceResponse<TradeDto>>> GetOffersByTeamId()
+        public async Task<ActionResult<ServiceResponse<List<FAOfferDto>>>> GetOffersByTeamId()
         {
-
             var result = await _faService.GetOffersByTeamId();
-
             if (!result.Success)
-            {
                 return NotFound(result);
-            }
-
             return Ok(result);
-
         }
 
         [HttpDelete("{offerId}")]

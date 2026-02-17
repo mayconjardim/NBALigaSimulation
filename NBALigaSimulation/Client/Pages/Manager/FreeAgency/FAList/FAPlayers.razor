@@ -1,19 +1,19 @@
 @page "/freeagency"
 @using NBALigaSimulation.Client.Utilities
 @using NBALigaSimulation.Shared.Dtos.FA
-@attribute [Authorize]
 @inject IPlayerService PlayerService
 @inject IFAService FAService
 @inject ILocalStorageService LocalStorage
+@inject AuthenticationStateProvider AuthStateProvider
 
-<CascadingAuthenticationState>
-    <AuthorizeView>
-    <div class="fa-page container py-4">
-        <div class="fa-header mb-4">
-            <h1 class="h3 mb-1"><i class="bi bi-person-plus me-2"></i>Free Agents</h1>
-            <p class="text-muted mb-0">Jogadores disponíveis para contratação</p>
-        </div>
+<div class="fa-page container py-4">
+    <div class="fa-header mb-4">
+        <h1 class="h3 mb-1"><i class="bi bi-person-plus me-2"></i>Free Agents</h1>
+        <p class="text-muted mb-0">Jogadores disponíveis para contratação</p>
+    </div>
 
+    @if (_isLoggedIn)
+    {
         <div class="card mb-4">
             <div class="card-header bg-light d-flex justify-content-between align-items-center">
                 <span><i class="bi bi-send me-2"></i>Minhas ofertas</span>
@@ -68,104 +68,55 @@
                 }
             </div>
         </div>
+    }
 
-        <div class="fa-filters mb-3">
-            <select class="form-select fa-filter-select" @onchange="HandlePositionChange">
-                <option value="">Todas as posições</option>
-                @foreach (string pos in positions)
-                {
-                    <option value="@pos">@pos</option>
-                }
-            </select>
-            <select class="form-select fa-filter-select" @onchange="HandleSizeChange">
-                <option value="">Limite da lista</option>
-                @foreach (var item in limit)
-                {
-                    <option value="@item">@item</option>
-                }
-            </select>
-        </div>
+    <div class="fa-filters mb-3">
+        <select class="form-select fa-filter-select" @onchange="HandlePositionChange">
+            <option value="">Todas as posições</option>
+            @foreach (string pos in positions)
+            {
+                <option value="@pos">@pos</option>
+            }
+        </select>
+        <select class="form-select fa-filter-select" @onchange="HandleSizeChange">
+            <option value="">Limite da lista</option>
+            @foreach (var item in limit)
+            {
+                <option value="@item">@item</option>
+            }
+        </select>
+    </div>
 
-        @if (_faPlayers != null)
-        {
-            <div class="fa-table-container">
-                <div class="table-responsive">
-                    <table class="table fa-table">
-                        <thead>
-                            <tr>
-                                <th class="col-player">JOGADOR</th>
-                    <th>AGE</th>
-                    <th>EXP</th>
-
-                    <th @onclick='() => SortTable("OVR")'>OVR
-                        <i class="bi @GetSortIcon("OVR")"></i>
-                    </th>
-
-                    <th @onclick='() => SortTable("POT")'>POT
-                        <i class="bi @GetSortIcon("POT")"></i>
-                    </th>
-
-                    <th @onclick='() => SortTable("HGT")'>HGT
-                        <i class="bi @GetSortIcon("HGT")"></i>
-                    </th>
-
-                    <th @onclick='() => SortTable("STR")'>STR
-                        <i class="bi @GetSortIcon("STR")"></i>
-                    </th>
-
-                    <th @onclick='() => SortTable("SPD")'>SPD
-                        <i class="bi @GetSortIcon("SPD")"></i>
-                    </th>
-
-                    <th @onclick='() => SortTable("JMP")'>JMP
-                        <i class="bi @GetSortIcon("JMP")"></i>
-                    </th>
-
-                    <th @onclick='() => SortTable("END")'>END
-                        <i class="bi @GetSortIcon("END")"></i>
-                    </th>
-
-                    <th @onclick='() => SortTable("INS")'>INS
-                        <i class="bi @GetSortIcon("INS")"></i>
-                    </th>
-
-                    <th @onclick='() => SortTable("DNK")'>DNK
-                        <i class="bi @GetSortIcon("DNK")"></i>
-                    </th>
-
-                    <th @onclick='() => SortTable("FT")'>FT
-                        <i class="bi @GetSortIcon("FT")"></i>
-                    </th>
-
-                    <th @onclick='() => SortTable("2PT")'>2PT
-                        <i class="bi @GetSortIcon("2PT")"></i>
-                    </th>
-
-                    <th @onclick='() => SortTable("3PT")'>3PT
-                        <i class="bi @GetSortIcon("3PT")"></i>
-                    </th>
-
-                    <th @onclick='() => SortTable("OIQ")'>OIQ
-                        <i class="bi @GetSortIcon("OIQ")"></i>
-                    </th>
-                    <th @onclick='() => SortTable("DIQ")'>DIQ
-                        <i class="bi @GetSortIcon("DIQ")"></i>
-                    </th>
-                    <th @onclick='() => SortTable("DRB")'>DRB
-                        <i class="bi @GetSortIcon("DRB")"></i>
-                    </th>
-
-                    <th @onclick='() => SortTable("PSS")'>PSS
-                        <i class="bi @GetSortIcon("PSS")"></i>
-                    </th>
-
-                    <th @onclick='() => SortTable("REB")'>REB
-                        <i class="bi @GetSortIcon("REB")"></i>
-                    </th>
-
-                            </tr>
-                        </thead>
-                        <tbody>
+    @if (_faPlayers != null)
+    {
+        <div class="fa-table-container">
+            <div class="table-responsive">
+                <table class="table fa-table">
+                    <thead>
+                        <tr>
+                            <th class="col-player">JOGADOR</th>
+                            <th>AGE</th>
+                            <th>EXP</th>
+                            <th @onclick='() => SortTable("OVR")'>OVR <i class="bi @GetSortIcon("OVR")"></i></th>
+                            <th @onclick='() => SortTable("POT")'>POT <i class="bi @GetSortIcon("POT")"></i></th>
+                            <th @onclick='() => SortTable("HGT")'>HGT <i class="bi @GetSortIcon("HGT")"></i></th>
+                            <th @onclick='() => SortTable("STR")'>STR <i class="bi @GetSortIcon("STR")"></i></th>
+                            <th @onclick='() => SortTable("SPD")'>SPD <i class="bi @GetSortIcon("SPD")"></i></th>
+                            <th @onclick='() => SortTable("JMP")'>JMP <i class="bi @GetSortIcon("JMP")"></i></th>
+                            <th @onclick='() => SortTable("END")'>END <i class="bi @GetSortIcon("END")"></i></th>
+                            <th @onclick='() => SortTable("INS")'>INS <i class="bi @GetSortIcon("INS")"></i></th>
+                            <th @onclick='() => SortTable("DNK")'>DNK <i class="bi @GetSortIcon("DNK")"></i></th>
+                            <th @onclick='() => SortTable("FT")'>FT <i class="bi @GetSortIcon("FT")"></i></th>
+                            <th @onclick='() => SortTable("2PT")'>2PT <i class="bi @GetSortIcon("2PT")"></i></th>
+                            <th @onclick='() => SortTable("3PT")'>3PT <i class="bi @GetSortIcon("3PT")"></i></th>
+                            <th @onclick='() => SortTable("OIQ")'>OIQ <i class="bi @GetSortIcon("OIQ")"></i></th>
+                            <th @onclick='() => SortTable("DIQ")'>DIQ <i class="bi @GetSortIcon("DIQ")"></i></th>
+                            <th @onclick='() => SortTable("DRB")'>DRB <i class="bi @GetSortIcon("DRB")"></i></th>
+                            <th @onclick='() => SortTable("PSS")'>PSS <i class="bi @GetSortIcon("PSS")"></i></th>
+                            <th @onclick='() => SortTable("REB")'>REB <i class="bi @GetSortIcon("REB")"></i></th>
+                        </tr>
+                    </thead>
+                    <tbody>
                         @foreach (var player in _faPlayers)
                         {
                             @if (player.Ratings != null)
@@ -173,7 +124,10 @@
                                 <tr>
                                     <td class="col-player">
                                         <div class="fa-player-cell">
-                                            <a href="@("faoffer/" + player.Id)" class="fa-offer-link" title="Fazer oferta"><i class="bi bi-person-add"></i></a>
+                                            @if (_isLoggedIn)
+                                            {
+                                                <a href="@("faoffer/" + player.Id)" class="fa-offer-link" title="Fazer oferta"><i class="bi bi-person-add"></i></a>
+                                            }
                                             <img src="@(string.IsNullOrEmpty(player.ImgUrl) ? "Images/Utils/blank.png" : player.ImgUrl)" alt="" class="fa-player-thumb" />
                                             <a href="@($"players/{player.Id}")" class="fa-player-name">@player.Name</a>
                                             <span class="fa-player-pos">@player.Pos</span>
@@ -201,17 +155,15 @@
                                 </tr>
                             }
                         }
-                        </tbody>
-                    </table>
-                </div>
+                    </tbody>
+                </table>
             </div>
-        }
-        else
-        {
-            <div class="fa-empty alert alert-secondary">
-                <i class="bi bi-people me-2"></i>Nenhum free agent disponível.
-            </div>
-        }
-    </div>
-    </AuthorizeView>
-</CascadingAuthenticationState>
+        </div>
+    }
+    else
+    {
+        <div class="fa-empty alert alert-secondary">
+            <i class="bi bi-people me-2"></i>Nenhum free agent disponível.
+        </div>
+    }
+</div>

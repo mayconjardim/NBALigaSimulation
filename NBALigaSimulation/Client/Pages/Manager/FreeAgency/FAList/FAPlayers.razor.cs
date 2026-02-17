@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Authorization;
 using NBALigaSimulation.Shared.Dtos.FA;
 using NBALigaSimulation.Shared.Dtos.Players;
 
@@ -9,6 +10,7 @@ public partial class FAPlayers
     private List<PlayerCompleteDto> _faPlayers;
     private List<FAOfferDto> _myOffers;
     private int _season;
+    private bool _isLoggedIn;
     private string sortedColumn = "OVR";
     private bool isAscending = true;
     private string message = string.Empty;
@@ -38,6 +40,9 @@ public partial class FAPlayers
     protected override async Task OnInitializedAsync()
     {
         message = "Carregando FA...";
+        var authState = await AuthStateProvider.GetAuthenticationStateAsync();
+        _isLoggedIn = authState.User?.Identity?.IsAuthenticated ?? false;
+
         var seasonStr = await LocalStorage.GetItemAsync<string>("season");
         _season = string.IsNullOrEmpty(seasonStr) ? DateTime.Now.Year : int.Parse(seasonStr);
 
@@ -47,8 +52,15 @@ public partial class FAPlayers
         else
             message = faResult.Message ?? "";
 
-        var offersResult = await FAService.GetOffersByTeamId();
-        _myOffers = offersResult.Success && offersResult.Data != null ? offersResult.Data : new List<FAOfferDto>();
+        if (_isLoggedIn)
+        {
+            var offersResult = await FAService.GetOffersByTeamId();
+            _myOffers = offersResult.Success && offersResult.Data != null ? offersResult.Data : new List<FAOfferDto>();
+        }
+        else
+        {
+            _myOffers = new List<FAOfferDto>();
+        }
     }
 
     private async Task RemoveOffer(int offerId)
