@@ -18,6 +18,10 @@ public partial class CareerBests
     private int TripleDoubles { get; set; }
     private int PlayerOfTheGame { get; set; }
     private int FinalsMVP { get; set; }
+    private int MVP { get; set; }
+    private int DPOY { get; set; }
+    private int ROY { get; set; }
+    private int SixthManOfTheYear { get; set; }
 
     protected override void OnInitialized()
     {
@@ -30,6 +34,10 @@ public partial class CareerBests
         if (_player?.AwardCounts != null)
         {
             PlayerOfTheGame = _player.AwardCounts.PlayerOfTheGame;
+            MVP = _player.AwardCounts.MVP;
+            DPOY = _player.AwardCounts.DPOY;
+            ROY = _player.AwardCounts.ROY;
+            SixthManOfTheYear = _player.AwardCounts.SixthManOfTheYear;
         }
 
         // Contar Finals MVP dos PlayerAwards

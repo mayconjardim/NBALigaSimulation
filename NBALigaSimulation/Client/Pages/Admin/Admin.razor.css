@@ -89,6 +89,45 @@
     z-index: 9999;
 }
 
+.loading-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.75);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10000;
+    backdrop-filter: blur(4px);
+}
+
+.loading-content {
+    background: linear-gradient(135deg, #135EB8 0%, #0d47a1 100%);
+    border-radius: 16px;
+    padding: 3rem 4rem;
+    text-align: center;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    max-width: 500px;
+    animation: fadeIn 0.3s ease-in;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: scale(0.9);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+.loading-content .spinner-border {
+    border-width: 4px;
+}
+
 @media (max-width: 768px) {
     .admin-container {
         padding: 1.25rem;
@@ -105,5 +144,10 @@
     .admin-table thead th,
     .admin-table tbody td {
         padding: 0.75rem 0.5rem;
+    }
+
+    .loading-content {
+        padding: 2rem 1.5rem;
+        margin: 1rem;
     }
 }

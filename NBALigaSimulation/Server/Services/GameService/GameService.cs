@@ -513,28 +513,45 @@ namespace NBALigaSimulation.Server.Services.GameService
                 .OrderBy(s => s.Id)
                 .LastOrDefaultAsync();
 
+            if (season == null)
+            {
+                response.Success = false;
+                response.Message = "Temporada não encontrada.";
+                return response;
+            }
+
+            // Busca apenas jogos da temporada regular (Type == 0) que ainda não foram simulados
             List<Game> games = await _gameRepository.Query()
                 .Include(p => p.HomeTeam.Players.OrderBy(p => p.RosterOrder)).ThenInclude(p => p.Ratings)
                 .Include(p => p.AwayTeam.Players.OrderBy(p => p.RosterOrder)).ThenInclude(p => p.Ratings)
+                .Include(p => p.HomeTeam.Players.OrderBy(p => p.RosterOrder)).ThenInclude(p => p.AwardCounts)
+                .Include(p => p.AwayTeam.Players.OrderBy(p => p.RosterOrder)).ThenInclude(p => p.AwardCounts)
                 .Include(t => t.HomeTeam.Gameplan)
                 .Include(t => t.AwayTeam.Gameplan)
                 .Include(p => p.HomeTeam.TeamRegularStats)
                 .Include(p => p.AwayTeam.TeamRegularStats)
                 .Include(p => p.HomeTeam.Players.OrderBy(p => p.RosterOrder)).ThenInclude(p => p.RegularStats)
                 .Include(p => p.AwayTeam.Players.OrderBy(p => p.RosterOrder)).ThenInclude(p => p.RegularStats)
-                .Where(g => g.Happened == false)
+                .Where(g => g.Happened == false && g.SeasonId == season.Id && g.Type == 0)
                 .ToListAsync();
+
+            if (games.Count == 0)
+            {
+                response.Success = false;
+                response.Message = "Não há jogos da temporada regular para simular.";
+                return response;
+            }
 
             foreach (Game game in games)
             {
                 game.Season = season;
 
-                if (SimulationUtils.ArePlayersInCorrectOrder(game.HomeTeam.Players))
+                if (!SimulationUtils.ArePlayersInCorrectOrder(game.HomeTeam.Players))
                 {
                     SimulationUtils.AdjustRosterOrder(game.HomeTeam.Players);
                 }
 
-                if (SimulationUtils.ArePlayersInCorrectOrder(game.AwayTeam.Players))
+                if (!SimulationUtils.ArePlayersInCorrectOrder(game.AwayTeam.Players))
                 {
                     SimulationUtils.AdjustRosterOrder(game.AwayTeam.Players);
                 }
@@ -544,11 +561,9 @@ namespace NBALigaSimulation.Server.Services.GameService
                 GameSimulation.Sim(game);
                 game.Happened = true;
 
-
                 try
                 {
-                    UpdateStandings();
-                    await _teamRegularStatsRepository.SaveChangesAsync();
+                    await _gameRepository.SaveChangesAsync();
                 }
                 catch (Exception ex)
                 {
@@ -561,6 +576,7 @@ namespace NBALigaSimulation.Server.Services.GameService
                 {
                     SimulationUtils.UpdateTeamStats(game);
                     SimulationUtils.UpdatePlayerGames(game);
+                    SimulationUtils.UpdatePlayerOfTheGame(game);
                     News news = SimulationUtils.NewGenerator(game);
                     await _newsRepository.AddAsync(news);
                     await _newsRepository.SaveChangesAsync();
@@ -571,12 +587,12 @@ namespace NBALigaSimulation.Server.Services.GameService
                     response.Message = $"Erro ao salvar alterações para o jogo com ID {game.Id}: {ex.Message}";
                     return response;
                 }
-
             }
 
             await UpdateStandings();
             response.Success = true;
             response.Data = true;
+            response.Message = $"{games.Count} jogos da temporada regular foram simulados com sucesso.";
             return response;
 
         }

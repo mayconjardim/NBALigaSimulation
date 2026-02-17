@@ -87,6 +87,7 @@ public partial class Admin
         _isLoading = true;
         _loadingAction = actionName;
         _message = string.Empty;
+        StateHasChanged(); // Força atualização imediata da UI
 
         try
         {
@@ -101,6 +102,7 @@ public partial class Admin
         {
             _isLoading = false;
             _loadingAction = string.Empty;
+            StateHasChanged(); // Força atualização após finalizar
         }
     }
 
@@ -241,8 +243,8 @@ public partial class Admin
         }
 
         await ExecuteAction(async () =>
-        {
-            var response = await GameService.SimAll();
+            {
+                var response = await GameService.SimAll();
             if (response.Success)
             {
                 await ShowMessage($"Todos os jogos foram simulados! {response.Message}", "success");

@@ -123,6 +123,13 @@ namespace NBALigaSimulation.Server.Services.AwardsService
                     await AwardPlayer(sixthManWinner, "Sixth Man of the Year", season);
                 }
 
+                // Calcular Rookie of the Year
+                var royWinner = await CalculateROY(eligiblePlayers, season, teamStatsList);
+                if (royWinner != null)
+                {
+                    await AwardPlayer(royWinner, "ROY", season);
+                }
+
                 await _playerAwardsRepository.SaveChangesAsync();
                 await _playerRepository.SaveChangesAsync();
 
@@ -337,6 +344,16 @@ namespace NBALigaSimulation.Server.Services.AwardsService
             var stats = player.RegularStats.FirstOrDefault(s => s.Season == season);
             if (stats == null) return;
 
+            // Verificar se o award já existe para evitar duplicatas
+            var existingAward = await _playerAwardsRepository.Query()
+                .FirstOrDefaultAsync(a => a.PlayerId == player.Id && a.Award == awardName && a.Season == season);
+
+            if (existingAward != null)
+            {
+                // Award já existe, não criar duplicata nem incrementar contador
+                return;
+            }
+
             // Criar registro em PlayerAwards
             var award = new PlayerAwards
             {
@@ -354,7 +371,7 @@ namespace NBALigaSimulation.Server.Services.AwardsService
 
             await _playerAwardsRepository.AddAsync(award);
 
-            // Atualizar PlayerAwardCounts
+            // Atualizar PlayerAwardCounts apenas se o award não existia
             if (player.AwardCounts == null)
             {
                 player.AwardCounts = new PlayerAwardCounts
@@ -375,7 +392,91 @@ namespace NBALigaSimulation.Server.Services.AwardsService
                 case "Sixth Man of the Year":
                     player.AwardCounts.SixthManOfTheYear += 1;
                     break;
+                case "ROY":
+                    player.AwardCounts.ROY += 1;
+                    break;
             }
+        }
+
+        private async Task<Player?> CalculateROY(List<Player> players, int season, List<TeamRegularStats> teamStatsList)
+        {
+            var royScores = new List<(Player Player, double Score)>();
+
+            foreach (var player in players)
+            {
+                var stats = player.RegularStats.FirstOrDefault(s => s.Season == season);
+                if (stats == null || stats.Games == 0) continue;
+
+                // Verificar elegibilidade: deve ter jogado pelo menos 50 jogos
+                if (stats.Games < 50) continue;
+
+                // Verificar se é rookie: deve ter sido draftado
+                // Um jogador só é rookie se foi draftado na temporada atual OU na temporada anterior mas nunca jogou antes
+                bool isRookie = false;
+                
+                if (player.Draft != null)
+                {
+                    // Se foi draftado na temporada atual, é rookie
+                    if (player.Draft.Year == season)
+                    {
+                        isRookie = true;
+                    }
+                    // Se foi draftado na temporada anterior mas nunca jogou antes, também é rookie
+                    else if (player.Draft.Year == season - 1)
+                    {
+                        var previousSeasons = player.RegularStats.Where(s => s.Season < season && s.Games > 0).ToList();
+                        if (previousSeasons.Count == 0)
+                        {
+                            isRookie = true;
+                        }
+                    }
+                }
+                // Se não tem draft, NÃO é rookie (apenas jogadores draftados podem ser rookies)
+
+                if (!isRookie) continue;
+
+                // Calcular médias por jogo
+                double pts = (double)stats.Pts / stats.Games;
+                double reb = (double)stats.Trb / stats.Games;
+                double ast = (double)stats.Ast / stats.Games;
+                double stl = (double)stats.Stl / stats.Games;
+                double blk = (double)stats.Blk / stats.Games;
+                double tov = (double)stats.Tov / stats.Games;
+                double mpg = stats.Min / stats.Games; // Minutos por jogo
+
+                // Calcular TS%
+                double tsPct = CalculateTrueShooting(stats);
+
+                // Buscar seed do time
+                var teamStats = teamStatsList.FirstOrDefault(ts => ts.TeamId == player.TeamId);
+                int seed = teamStats?.ConfRank ?? 99;
+
+                // Calcular ROY Score base
+                double royScore = (pts * 1.2)
+                    + (reb * 1.0)
+                    + (ast * 1.4)
+                    + (stl * 2.5)
+                    + (blk * 2.0)
+                    - (tov * 1.8);
+
+                // MinutesBonus
+                if (mpg < 15) royScore -= 15;
+                else if (mpg >= 15 && mpg <= 25) royScore += 5;
+                else if (mpg > 30) royScore += 10;
+
+                // EfficiencyBonus
+                if (tsPct > 58) royScore += 6;
+                else if (tsPct < 50) royScore -= 6;
+
+                // TeamContextBonus
+                if (seed <= 6) royScore += 5;
+                else if (seed >= 12) royScore -= 3;
+
+                royScores.Add((player, royScore));
+            }
+
+            var winner = royScores.OrderByDescending(x => x.Score).FirstOrDefault();
+            return winner.Player;
         }
     }
 }

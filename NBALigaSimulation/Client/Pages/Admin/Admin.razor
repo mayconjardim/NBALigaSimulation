@@ -141,6 +141,36 @@
                             </td>
                         </tr>
 
+                        <!-- 5.5. Simular Todos os Jogos da Temporada Regular -->
+                        <tr class="@(_isLoading && _loadingAction == "SimAll" ? "table-warning" : "")">
+                            <td><strong>5.5</strong></td>
+                            <td>
+                                <i class="bi bi-fast-forward-circle text-danger me-2"></i>
+                                <strong>Simular Todos os Jogos da Temporada Regular</strong>
+                                @if (_isLoading && _loadingAction == "SimAll")
+                                {
+                                    <span class="badge bg-warning text-dark ms-2">
+                                        <span class="spinner-border spinner-border-sm me-1"></span>
+                                        Executando...
+                                    </span>
+                                }
+                            </td>
+                            <td>Simula todos os jogos restantes da temporada regular de uma vez (pode demorar muito tempo)</td>
+                            <td>
+                                <button class="btn btn-danger btn-sm w-100" @onclick="SimAll" disabled="@_isLoading">
+                                    @if (_isLoading && _loadingAction == "SimAll")
+                                    {
+                                        <span class="spinner-border spinner-border-sm me-2"></span>
+                                        <span>Processando...</span>
+                                    }
+                                    else
+                                    {
+                                        <span>Executar</span>
+                                    }
+                                </button>
+                            </td>
+                        </tr>
+
                         <!-- 6. Simular Playoffs por Rodada -->
                         <tr>
                             <td><strong>6</strong></td>
@@ -353,6 +383,21 @@
         </div>
     }
 </div>
+
+<!-- Overlay de Loading para SimAll -->
+@if (_isLoading && _loadingAction == "SimAll")
+{
+    <div class="loading-overlay">
+        <div class="loading-content">
+            <div class="spinner-border text-primary mb-3" style="width: 3rem; height: 3rem;" role="status">
+                <span class="visually-hidden">Carregando...</span>
+            </div>
+            <h5 class="text-white mb-2">Simulando Jogos da Temporada Regular</h5>
+            <p class="text-white-50 mb-0">Por favor, aguarde... Esta operação pode levar alguns minutos.</p>
+            <p class="text-white-50 small mt-2">Não feche esta página enquanto a simulação estiver em andamento.</p>
+        </div>
+    </div>
+}
 
 @if (!string.IsNullOrEmpty(_message))
 {
