@@ -45,27 +45,19 @@
                         <tr>
                             <td>
                                 <span>PTS</span>
-                                @if(!string.IsNullOrEmpty(_stats.PtsPG)) {
-                                    @Util.FormatStat(Convert.ToDouble(_stats.PtsPG, CultureInfo.InvariantCulture))
-                                }
+                                @if (double.TryParse(_stats.PtsPG, NumberStyles.Any, CultureInfo.InvariantCulture, out var ptsVal)) { @Util.FormatStat(ptsVal) } else if (!string.IsNullOrEmpty(_stats.PtsPG)) { @_stats.PtsPG }
                             </td>
                             <td>
                                 <span>REB</span>
-                                @if(!string.IsNullOrEmpty(_stats.TRebPG)) {
-                                    @Util.FormatStat(Convert.ToDouble(_stats.TRebPG, CultureInfo.InvariantCulture))
-                                }
+                                @if (double.TryParse(_stats.TRebPG, NumberStyles.Any, CultureInfo.InvariantCulture, out var rebVal)) { @Util.FormatStat(rebVal) } else if (!string.IsNullOrEmpty(_stats.TRebPG)) { @_stats.TRebPG }
                             </td>
                             <td>
                                 <span>AST</span>
-                                @if(!string.IsNullOrEmpty(_stats.AstPG)) {
-                                    @Util.FormatStat(Convert.ToDouble(_stats.AstPG, CultureInfo.InvariantCulture))
-                                }
+                                @if (double.TryParse(_stats.AstPG, NumberStyles.Any, CultureInfo.InvariantCulture, out var astVal)) { @Util.FormatStat(astVal) } else if (!string.IsNullOrEmpty(_stats.AstPG)) { @_stats.AstPG }
                             </td>
                             <td>
                                 <span>FG%</span>
-                                @if(!string.IsNullOrEmpty(_stats.FgPct)) {
-                                    @Util.FormatStat(Convert.ToDouble(_stats.FgPct, CultureInfo.InvariantCulture), "F1")
-                                }
+                                @if (double.TryParse(_stats.FgPct, NumberStyles.Any, CultureInfo.InvariantCulture, out var fgVal)) { @Util.FormatStat(fgVal, "F1") } else if (!string.IsNullOrEmpty(_stats.FgPct)) { @_stats.FgPct }
                             </td>
                         </tr>
                         </tbody>

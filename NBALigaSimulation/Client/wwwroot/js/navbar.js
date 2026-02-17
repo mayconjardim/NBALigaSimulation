@@ -33,6 +33,23 @@ window.fecharmodal = function () {
     }
 };
 
+// Ao fechar o modal de login, move o foco para evitar aviso aria-hidden (elemento focado não pode estar em ancestor com aria-hidden)
+(function setupLoginModalFocus() {
+    var triggerElement = null;
+    document.addEventListener('show.bs.modal', function (e) {
+        if (e.target.id === 'loginModel')
+            triggerElement = e.relatedTarget || document.querySelector('[data-bs-target="#loginModel"]');
+    });
+    document.addEventListener('hidden.bs.modal', function (e) {
+        if (e.target.id === 'loginModel') {
+            if (triggerElement && typeof triggerElement.focus === 'function') {
+                try { triggerElement.focus(); } catch (_) {}
+            }
+            triggerElement = null;
+        }
+    });
+})();
+
 // Adicionar animações suaves aos links do menu
 document.addEventListener('DOMContentLoaded', function() {
     // Adicionar efeito de hover nos dropdowns
