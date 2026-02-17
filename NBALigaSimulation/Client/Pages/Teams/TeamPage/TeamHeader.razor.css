@@ -69,6 +69,23 @@
     opacity: 0.9;
 }
 
+.team-gm {
+    font-size: 0.95rem;
+    font-weight: 500;
+    margin-top: 0.25rem;
+    opacity: 0.9;
+}
+
+.team-gm-link {
+    color: #ffd700;
+    text-decoration: none;
+    margin-left: 0.25rem;
+}
+
+.team-gm-link:hover {
+    text-decoration: underline;
+}
+
 .team-header-stats {
     flex-shrink: 0;
 }

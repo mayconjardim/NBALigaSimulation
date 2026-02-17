@@ -21,7 +21,8 @@ public partial class TeamHeader
     private string oppg = string.Empty;
     private int oppgRank;
     private int winPctRank;
-    
+    private string _gmUsername = string.Empty;
+
     protected override async Task OnInitializedAsync()
     {
         var result = await StatsService.GetAllTeamRegularStatsRank();
@@ -49,6 +50,17 @@ public partial class TeamHeader
                 winPctRank = sortedStats.Where(t => t.Conference == _team.Conference).OrderByDescending(t => Convert.ToDouble(t.WinPct)).ToList().FindIndex(t => t.TeamId == _team.Id) + 1;
 
             }
+        }
+
+        try
+        {
+            var gmResult = await GmService.GetProfileByTeamId(_team.Id);
+            if (gmResult.Success && gmResult.Data != null && !string.IsNullOrEmpty(gmResult.Data.Username))
+                _gmUsername = gmResult.Data.Username;
+        }
+        catch
+        {
+            _gmUsername = string.Empty;
         }
     }
    

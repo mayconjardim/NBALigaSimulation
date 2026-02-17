@@ -1,5 +1,6 @@
 @using NBALigaSimulation.Client.Utilities
 @inject IStatsService StatsService
+@inject IGmService GmService
 @if (_team != null)
 {
     
@@ -17,7 +18,13 @@
                     <h3>@_team.Region @_team.Name</h3>
                     @if (_stats != null)
                     {
-                      <p>@(_stats.HomeWins + _stats.RoadWins) - @(_stats.HomeLosses + _stats.RoadLosses) | @(Util.GetOrdinal(winPctRank)) in @_team.Conference </p>
+                        <p>@(_stats.HomeWins + _stats.RoadWins) - @(_stats.HomeLosses + _stats.RoadLosses) | @(Util.GetOrdinal(winPctRank)) in @_team.Conference</p>
+                    }
+                    @if (!string.IsNullOrEmpty(_gmUsername))
+                    {
+                        <p class="team-gm">
+                            GM: <a href="@($"/gm/team/{_team.Id}")" class="team-gm-link">@_gmUsername</a>
+                        </p>
                     }
                 </div>
             

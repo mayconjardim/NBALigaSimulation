@@ -24,6 +24,7 @@ using Microsoft.Extensions.DependencyInjection.Extensions;
 using NBALigaSimulation.Server.Services.LeagueService;
 using NBALigaSimulation.Server.Services.PlayoffsService;
 using NBALigaSimulation.Server.Services.AwardsService;
+using NBALigaSimulation.Server.Services.GmService;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -68,6 +69,7 @@ builder.Services.AddScoped<IDraftService, DraftService>();
 builder.Services.AddScoped<INewsService, NewsService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IAwardsService, AwardsService>();
+builder.Services.AddScoped<IGmService, GmService>();
 
 builder.Services.AddScoped<ISeasonRepository, SeasonRepository>();
 builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));

@@ -1,0 +1,94 @@
+.gm-page {
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.gm-header {
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid #e5e7eb;
+}
+
+.gm-header h1 {
+    font-weight: 700;
+    color: #212529;
+}
+
+.gm-card {
+    border: none;
+    border-radius: 12px;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+    overflow: hidden;
+}
+
+.gm-card-header {
+    background-color: #135EB8;
+    color: white;
+    font-weight: 600;
+    padding: 0.875rem 1.25rem;
+    border: none;
+}
+
+.gm-team-logo {
+    width: 64px;
+    height: 64px;
+    object-fit: contain;
+}
+
+.gm-stats {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+}
+
+.gm-stat-box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 0.75rem 1.25rem;
+    background: #f8f9fa;
+    border-radius: 10px;
+    min-width: 90px;
+}
+
+.gm-stat-value {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #135EB8;
+}
+
+.gm-stat-label {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: #6c757d;
+    margin-top: 0.25rem;
+}
+
+.gm-table {
+    margin: 0;
+}
+
+.gm-table thead th {
+    background-color: #135EB8;
+    color: white;
+    font-weight: 600;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    padding: 0.65rem 0.75rem;
+    border: none;
+}
+
+.gm-table tbody td {
+    padding: 0.65rem 0.75rem;
+    font-size: 0.9rem;
+    border-bottom: 1px solid #eee;
+}
+
+.gm-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.gm-table tbody tr:nth-child(even) {
+    background-color: #f8f9fa;
+}

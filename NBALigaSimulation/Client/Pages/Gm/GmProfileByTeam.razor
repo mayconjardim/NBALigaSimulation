@@ -1,0 +1,102 @@
+@page "/gm/team/{TeamId:int}"
+@using NBALigaSimulation.Shared.Dtos.Gm
+@inject IGmService GmService
+
+<PageTitle>Perfil GM - @(_profile?.TeamName ?? "NBALIGA")</PageTitle>
+
+<div class="container py-4 gm-page">
+    <div class="gm-header mb-4">
+        <h1 class="h3 mb-1"><i class="bi bi-person-badge me-2"></i>Perfil do GM</h1>
+        <p class="text-muted mb-0">Histórico do General Manager do time</p>
+    </div>
+
+    @if (_profile == null && !_loadFailed)
+    {
+        <div class="text-center py-5">
+            <div class="spinner-border text-primary" role="status"></div>
+            <p class="mt-2 text-muted">Carregando perfil...</p>
+        </div>
+    }
+    else if (_loadFailed)
+    {
+        <div class="alert alert-warning">
+            <i class="bi bi-exclamation-triangle me-2"></i>
+            Este time não possui GM associado ou o perfil não foi encontrado.
+        </div>
+        <p class="mb-0"><a href="javascript:history.back()" class="text-decoration-none">Voltar</a></p>
+    }
+    else if (_profile != null)
+    {
+        <div class="card gm-card mb-4">
+            <div class="card-header gm-card-header">
+                <span><i class="bi bi-person-vcard me-2"></i>@_profile.Username</span>
+            </div>
+            <div class="card-body">
+                @if (_profile.TeamId == null)
+                {
+                    <p class="text-muted mb-0">GM sem time associado.</p>
+                }
+                else
+                {
+                    <div class="gm-info d-flex flex-wrap align-items-center gap-4 mb-4">
+                        <div class="d-flex align-items-center gap-3">
+                            <img src="@($"Images/Logos/{_profile.TeamAbrv}.svg")" alt="@_profile.TeamName" class="gm-team-logo" />
+                            <div>
+                                <h2 class="h5 mb-0">@_profile.TeamRegion @_profile.TeamName</h2>
+                                <a href="@($"teams/{_profile.TeamId}")" class="text-decoration-none small">Ver time</a>
+                            </div>
+                        </div>
+                        <div class="gm-stats d-flex flex-wrap gap-4">
+                            <div class="gm-stat-box">
+                                <span class="gm-stat-value">@_profile.Championships</span>
+                                <span class="gm-stat-label">Títulos</span>
+                            </div>
+                            <div class="gm-stat-box">
+                                <span class="gm-stat-value">@_profile.TotalWins-@_profile.TotalLosses</span>
+                                <span class="gm-stat-label">Record (W-L)</span>
+                            </div>
+                            <div class="gm-stat-box">
+                                <span class="gm-stat-value">@_profile.TotalWinPct</span>
+                                <span class="gm-stat-label">Win%</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    @if (_profile.SeasonRecords != null && _profile.SeasonRecords.Count > 0)
+                    {
+                        <h5 class="mb-3"><i class="bi bi-calendar3 me-2"></i>Record por temporada</h5>
+                        <div class="table-responsive">
+                            <table class="table table-sm gm-table">
+                                <thead>
+                                    <tr>
+                                        <th>Temporada</th>
+                                        <th class="text-end">W-L</th>
+                                        <th class="text-end">Jogos</th>
+                                        <th class="text-end">Win%</th>
+                                        <th class="text-end">Playoffs (W-L)</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var rec in _profile.SeasonRecords)
+                                    {
+                                        <tr>
+                                            <td>@rec.Season</td>
+                                            <td class="text-end">@rec.Wins-@rec.Losses</td>
+                                            <td class="text-end">@rec.Games</td>
+                                            <td class="text-end">@rec.WinPct</td>
+                                            <td class="text-end">@rec.PlayoffWins-@rec.PlayoffLosses</td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    }
+                    else
+                    {
+                        <p class="text-muted mb-0">Nenhuma temporada disputada ainda.</p>
+                    }
+                }
+            </div>
+        </div>
+    }
+</div>
