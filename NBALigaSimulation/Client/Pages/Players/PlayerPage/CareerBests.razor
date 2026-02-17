@@ -6,13 +6,13 @@
 {
     <div class="career-bests-grid">
         <ul class="bests-list">
-            <li><span>Points</span> <strong>34</strong></li>
-            <li><span>Assists</span> <strong>15</strong></li>
-            <li><span>Rebounds</span> <strong>9</strong></li>
-            <li><span>Blocks</span> <strong>2</strong></li>
-            <li><span>Steals</span> <strong>7</strong></li>
-            <li><span>Double Doubles</span> <strong>13</strong></li>
-            <li><span>Triple Doubles</span> <strong>0</strong></li>
+            <li><span>Points</span> <strong>@MaxPoints</strong></li>
+            <li><span>Assists</span> <strong>@MaxAssists</strong></li>
+            <li><span>Rebounds</span> <strong>@MaxRebounds</strong></li>
+            <li><span>Blocks</span> <strong>@MaxBlocks</strong></li>
+            <li><span>Steals</span> <strong>@MaxSteals</strong></li>
+            <li><span>Double Doubles</span> <strong>@DoubleDoubles</strong></li>
+            <li><span>Triple Doubles</span> <strong>@TripleDoubles</strong></li>
         </ul>
         <ul class="achievements-list">
             <li><span>All Star Games</span> <strong>0</strong></li>
@@ -27,10 +27,4 @@
 else
 {
     <p>No career bests & achievements information available.</p>
-}
-
-
-@code {
-    [Parameter]
-    public PlayerCompleteDto _player { get; set; }
 } 
