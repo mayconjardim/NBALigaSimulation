@@ -76,6 +76,32 @@ namespace NBALigaSimulation.Server.Services.GameService
             return response;
         }
 
+        public async Task<ServiceResponse<List<GameCompleteDto>>> GetGamesBetweenTeams(int teamAId, int teamBId)
+        {
+            var response = new ServiceResponse<List<GameCompleteDto>>();
+            try
+            {
+                var games = await _gameRepository.Query()
+                    .Where(g =>
+                        (g.HomeTeamId == teamAId && g.AwayTeamId == teamBId) ||
+                        (g.HomeTeamId == teamBId && g.AwayTeamId == teamAId))
+                    .OrderByDescending(g => g.GameDate)
+                    .Include(p => p.Season)
+                    .Include(p => p.HomeTeam)
+                    .Include(p => p.AwayTeam)
+                    .Include(p => p.TeamGameStats)
+                    .ToListAsync();
+                response.Data = _mapper.Map<List<GameCompleteDto>>(games);
+                response.Success = true;
+            }
+            catch (Exception ex)
+            {
+                response.Success = false;
+                response.Message = $"Erro ao buscar jogos entre os times: {ex.Message}";
+            }
+            return response;
+        }
+
         public async Task<ServiceResponse<GameCompleteDto>> CreateGame(CreateGameDto request)
         {
             ServiceResponse<GameCompleteDto> response = new ServiceResponse<GameCompleteDto>();

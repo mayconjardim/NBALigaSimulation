@@ -1,0 +1,116 @@
+@page "/headtohead"
+@using NBALigaSimulation.Shared.Dtos.Games
+@using NBALigaSimulation.Shared.Dtos.Teams
+@inject IGameService GameService
+@inject ITeamService TeamService
+@inject NavigationManager NavigationManager
+
+<PageTitle>Head to Head</PageTitle>
+
+<div class="headtohead-page">
+    <div class="headtohead-header">
+        <h1><i class="bi bi-arrow-left-right me-2"></i>Head to Head</h1>
+        <p class="text-muted">Confronte dois times e veja o histórico de jogos</p>
+    </div>
+
+    <div class="headtohead-filters card shadow-sm">
+        <div class="card-body">
+            <div class="row g-3 align-items-end">
+                <div class="col-md-4">
+                    <label class="form-label">Time A</label>
+                    <select class="form-select" @bind="_teamAId">
+                        <option value="">Selecione um time</option>
+                        @foreach (var t in _teams)
+                        {
+                            <option value="@t.Id">@t.Region @t.Name (@t.Abrv)</option>
+                        }
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">Time B</label>
+                    <select class="form-select" @bind="_teamBId">
+                        <option value="">Selecione um time</option>
+                        @foreach (var t in _teams)
+                        {
+                            <option value="@t.Id">@t.Region @t.Name (@t.Abrv)</option>
+                        }
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <button class="btn btn-primary w-100" @onclick="LoadHeadToHead" disabled="@(!_teamAId.HasValue || !_teamBId.HasValue || _teamAId == _teamBId)">
+                        <i class="bi bi-search me-2"></i>Ver confronto
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @if (_loaded)
+    {
+        <div class="headtohead-record card shadow-sm mt-4">
+            <div class="card-body text-center py-4">
+                <h2 class="h4 mb-0">
+                    <img src="@($"../Images/Logos/{_teamAAbrv}.svg")" alt="@_teamAAbrv" class="h2h-logo" />
+                    <span class="mx-3">@_winsA - @_winsB</span>
+                    <img src="@($"../Images/Logos/{_teamBAbrv}.svg")" alt="@_teamBAbrv" class="h2h-logo" />
+                </h2>
+                <p class="text-muted mb-0 mt-2">@_teamAAbrv vs @_teamBAbrv (total de @_games.Count jogos)</p>
+            </div>
+        </div>
+
+        <div class="headtohead-table card shadow-sm mt-4">
+            <div class="card-body">
+                <h5 class="card-title mb-3"><i class="bi bi-list-ul me-2"></i>Histórico de jogos</h5>
+                @if (_games.Any())
+                {
+                    <div class="table-responsive">
+                        <table class="table table-hover h2h-table">
+                            <thead>
+                                <tr>
+                                    <th>Temporada</th>
+                                    <th>Casa</th>
+                                    <th>Visitante</th>
+                                    <th>Placar</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var game in _games)
+                                {
+                                    <tr>
+                                        <td>@game.Season</td>
+                                        <td>
+                                            <img src="@($"../Images/Logos/{game.HomeTeam}.svg")" alt="@game.HomeTeam" class="h2h-logo-sm" />
+                                            @game.HomeTeam
+                                        </td>
+                                        <td>
+                                            <img src="@($"../Images/Logos/{game.AwayTeam}.svg")" alt="@game.AwayTeam" class="h2h-logo-sm" />
+                                            @game.AwayTeam
+                                        </td>
+                                        <td>
+                                            <span class="@GetScoreClass(game) fw-bold">@game.AwayTeamScore - @game.HomeTeamScore</span>
+                                        </td>
+                                        <td>
+                                            <a href="/game/@game.Id" class="btn btn-sm btn-outline-primary">Box Score</a>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                }
+                else
+                {
+                    <p class="text-muted mb-0">Nenhum jogo disputado entre estes times.</p>
+                }
+            </div>
+        </div>
+    }
+    else if (_teams.Any())
+    {
+        <div class="text-center text-muted py-5">
+            <i class="bi bi-arrow-left-right display-4"></i>
+            <p class="mt-2">Selecione dois times e clique em "Ver confronto".</p>
+        </div>
+    }
+</div>

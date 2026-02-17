@@ -93,6 +93,15 @@ namespace NBALigaSimulation.Server.Controllers
 			}
 		}
 
+		[HttpGet("headtohead")]
+		public async Task<ActionResult<ServiceResponse<List<GameCompleteDto>>>> GetGamesBetweenTeams([FromQuery] int teamA, [FromQuery] int teamB)
+		{
+			var result = await _gameService.GetGamesBetweenTeams(teamA, teamB);
+			if (!result.Success)
+				return BadRequest(result);
+			return Ok(result);
+		}
+
 		[HttpPut("update/date/playoffs")]
 		public async Task<ActionResult<ServiceResponse<bool>>> SimGameByDatePlayoffs()
 		{

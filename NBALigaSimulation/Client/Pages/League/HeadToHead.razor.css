@@ -1,0 +1,62 @@
+.headtohead-page {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 1.5rem 1rem;
+}
+
+.headtohead-header {
+    margin-bottom: 1.5rem;
+}
+
+.headtohead-header h1 {
+    font-weight: 700;
+    color: var(--bs-body-color);
+}
+
+.headtohead-filters .card-body {
+    padding: 1.25rem;
+}
+
+.h2h-logo {
+    width: 48px;
+    height: 48px;
+    object-fit: contain;
+    vertical-align: middle;
+}
+
+.h2h-logo-sm {
+    width: 28px;
+    height: 28px;
+    object-fit: contain;
+    margin-right: 0.5rem;
+    vertical-align: middle;
+}
+
+.h2h-table thead th {
+    background-color: #135EB8;
+    color: white;
+    font-weight: 600;
+    font-size: 0.85rem;
+    padding: 0.75rem;
+}
+
+.h2h-table tbody td {
+    padding: 0.75rem;
+    vertical-align: middle;
+}
+
+.text-win {
+    color: #28a745;
+}
+
+.text-loss {
+    color: #dc3545;
+}
+
+.headtohead-record .card-body {
+    padding: 1.5rem;
+}
+
+.headtohead-table .card-body {
+    padding: 1.25rem;
+}

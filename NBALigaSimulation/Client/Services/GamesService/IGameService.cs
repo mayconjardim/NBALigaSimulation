@@ -7,6 +7,7 @@ public interface IGameService
 {
     
     Task<ServiceResponse<List<GameCompleteDto>>> GetGamesByTeamId(int teamId);
+    Task<ServiceResponse<List<GameCompleteDto>>> GetGamesBetweenTeams(int teamAId, int teamBId);
     Task<ServiceResponse<List<GameCompleteDto>>> GetAllGames();
     Task<ServiceResponse<GameCompleteDto>> GetGameById(int gameId);
     Task<GameCompleteDto> CreateGame(CreateGameDto game);
