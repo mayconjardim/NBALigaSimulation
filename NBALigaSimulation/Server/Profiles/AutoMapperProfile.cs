@@ -53,7 +53,23 @@ namespace NBALigaSimulation.Server.Profiles
             
             CreateMap<PlayerContract, PlayerContractDto>().ReverseMap();
 
-            CreateMap<PlayerAwards, PlayerAwardsDto>().ReverseMap();
+            CreateMap<PlayerAwards, PlayerAwardsDto>()
+                .ForMember(dest => dest.PlayerName, opt => opt.MapFrom(src => src.Player != null ? src.Player.Name : ""))
+                .AfterMap((src, dest) =>
+                {
+                    if (double.TryParse(src.Ppg, System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture, out var ppg))
+                        dest.Ppg = ppg;
+                    if (double.TryParse(src.Rpg, System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture, out var rpg))
+                        dest.Rpg = rpg;
+                    if (double.TryParse(src.Apg, System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture, out var apg))
+                        dest.Apg = apg;
+                    if (double.TryParse(src.Spg, System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture, out var spg))
+                        dest.Spg = spg;
+                    if (double.TryParse(src.Bpg, System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture, out var bpg))
+                        dest.Bpg = bpg;
+                })
+                .ReverseMap();
+            CreateMap<PlayerAwardCounts, PlayerAwardCountsDto>().ReverseMap();
 
             CreateMap<Team, TeamSimpleDto>();
             CreateMap<Team, TeamSimpleWithPlayersDto>().ReverseMap();

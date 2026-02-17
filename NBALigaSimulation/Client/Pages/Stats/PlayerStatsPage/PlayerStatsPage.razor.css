@@ -42,7 +42,7 @@
 }
 
 .stats-table thead {
-    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+    background-color: #135EB8;
     color: white;
 }
 
@@ -69,7 +69,7 @@
     position: sticky;
     left: 0;
     z-index: 20;
-    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+    background-color: #135EB8;
 }
 
 .stats-table tbody td {

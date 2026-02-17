@@ -47,6 +47,7 @@ namespace NBALigaSimulation.Server.Services.PlayersService
                     .Include(p => p.Stats).ThenInclude(s => s.Game)
                     .Include(p => p.PlayoffsStats)
                     .Include(p => p.PlayerAwards)
+                    .Include(p => p.AwardCounts)
                     .FirstOrDefaultAsync();
 
                 if (player == null) 

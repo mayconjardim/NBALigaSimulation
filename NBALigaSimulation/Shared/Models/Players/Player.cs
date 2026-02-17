@@ -1,4 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+using System.ComponentModel.DataAnnotations.Schema;
 using NBALigaSimulation.Shared.Models.Teams;
 
 namespace NBALigaSimulation.Shared.Models.Players
@@ -26,6 +26,7 @@ namespace NBALigaSimulation.Shared.Models.Players
         public List<PlayerRegularStats> RegularStats { get; set; } = new List<PlayerRegularStats>();
         public List<PlayerPlayoffsStats> PlayoffsStats { get; set; } = new List<PlayerPlayoffsStats>();
         public List<PlayerAwards> PlayerAwards { get; set; } = new List<PlayerAwards>();
+        public PlayerAwardCounts? AwardCounts { get; set; }
 
         [NotMapped]
         public PlayerCompositeRating CompositeRating { get; set; }

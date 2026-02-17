@@ -29,7 +29,7 @@
 }
 
 .rotation-table thead {
-    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+    background-color: #135EB8;
     color: white;
 }
 
@@ -65,7 +65,7 @@
 }
 
 .rotation-table thead .col-name {
-    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+    background-color: #135EB8;
     z-index: 20;
 }
 

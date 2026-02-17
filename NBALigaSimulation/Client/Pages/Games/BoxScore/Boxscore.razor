@@ -46,11 +46,15 @@
                     <tbody>
                         @foreach (var row in game.AwayPlayerGameStats.Select((value, index) => new { Value = value, Index = index }))
                         {
-                            <tr class="@(row.Index < 5 ? "starter" : "bench")">
+                            <tr class="@(row.Index < 5 ? "starter" : "bench") @(IsPlayerOfTheGame(row.Value) ? "player-of-the-game" : "")">
                                 <td class="col-name">
                                     <img src="@(string.IsNullOrEmpty(row.Value.ImgUrl) ? "Images/Utils/blank.png" : row.Value.ImgUrl)" alt="@row.Value.Name" class="player-thumb" />
                                     <a href="players/@row.Value.PlayerId" class="player-link">@row.Value.Name</a>
                                     <span class="player-pos">@row.Value.Pos</span>
+                                    @if (IsPlayerOfTheGame(row.Value))
+                                    {
+                                        <span class="potg-badge">⭐ POTG</span>
+                                    }
                                 </td>
                                 <td>@Format(row.Value.Min)</td>
                                 <td>@row.Value.Pts</td>
@@ -127,11 +131,15 @@
                     <tbody>
                         @foreach (var row in game.HomePlayerGameStats.Select((value, index) => new { Value = value, Index = index }))
                         {
-                            <tr class="@(row.Index < 5 ? "starter" : "bench")">
+                            <tr class="@(row.Index < 5 ? "starter" : "bench") @(IsPlayerOfTheGame(row.Value) ? "player-of-the-game" : "")">
                                 <td class="col-name">
                                     <img src="@(string.IsNullOrEmpty(row.Value.ImgUrl) ? "Images/Utils/blank.png" : row.Value.ImgUrl)" alt="@row.Value.Name" class="player-thumb" />
                                     <a href="players/@row.Value.PlayerId" class="player-link">@row.Value.Name</a>
                                     <span class="player-pos">@row.Value.Pos</span>
+                                    @if (IsPlayerOfTheGame(row.Value))
+                                    {
+                                        <span class="potg-badge">⭐ POTG</span>
+                                    }
                                 </td>
                                 <td>@Format(row.Value.Min)</td>
                                 <td>@row.Value.Pts</td>

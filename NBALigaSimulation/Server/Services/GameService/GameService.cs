@@ -271,6 +271,8 @@ namespace NBALigaSimulation.Server.Services.GameService
                 .Include(p => p.AwayTeam.TeamRegularStats)
                 .Include(p => p.HomeTeam.Players.OrderBy(p => p.RosterOrder)).ThenInclude(p => p.RegularStats)
                 .Include(p => p.AwayTeam.Players.OrderBy(p => p.RosterOrder)).ThenInclude(p => p.RegularStats)
+                .Include(p => p.HomeTeam.Players.OrderBy(p => p.RosterOrder)).ThenInclude(p => p.AwardCounts)
+                .Include(p => p.AwayTeam.Players.OrderBy(p => p.RosterOrder)).ThenInclude(p => p.AwardCounts)
                 .Where(g => g.GameDate == firstUnsimulatedDate && !g.Happened)
                 .Include(t => t.HomeTeam.Gameplan)
                  .Include(t => t.AwayTeam.Gameplan)
@@ -312,6 +314,7 @@ namespace NBALigaSimulation.Server.Services.GameService
                 {
                     SimulationUtils.UpdateTeamStats(game);
                     SimulationUtils.UpdatePlayerGames(game);
+                    SimulationUtils.UpdatePlayerOfTheGame(game);
                     News news = SimulationUtils.NewGenerator(game);
                     await _newsRepository.AddAsync(news);
 
@@ -415,6 +418,7 @@ namespace NBALigaSimulation.Server.Services.GameService
 
                         SimulationUtils.UpdateTeamStats(game);
                         SimulationUtils.UpdatePlayerGames(game);
+                        SimulationUtils.UpdatePlayerOfTheGame(game);
                         News news = SimulationUtils.NewGenerator(game);
                         await _newsRepository.AddAsync(news);
                         await _newsRepository.SaveChangesAsync();
@@ -600,6 +604,8 @@ namespace NBALigaSimulation.Server.Services.GameService
                 .Include(p => p.AwayTeam.TeamRegularStats)
                 .Include(p => p.HomeTeam.Players.OrderBy(p => p.RosterOrder)).ThenInclude(p => p.RegularStats)
                 .Include(p => p.AwayTeam.Players.OrderBy(p => p.RosterOrder)).ThenInclude(p => p.RegularStats)
+                .Include(p => p.HomeTeam.Players.OrderBy(p => p.RosterOrder)).ThenInclude(p => p.AwardCounts)
+                .Include(p => p.AwayTeam.Players.OrderBy(p => p.RosterOrder)).ThenInclude(p => p.AwardCounts)
                 .Include(t => t.HomeTeam.Gameplan)
                 .Include(t => t.AwayTeam.Gameplan)
                 .Where(g => g.Week == roundNumber.ToString() && !g.Happened && g.SeasonId == season.Id)
@@ -644,25 +650,26 @@ namespace NBALigaSimulation.Server.Services.GameService
 
                 try
                 {
-                    SimulationUtils.UpdateTeamStats(game);
-                    SimulationUtils.UpdatePlayerGames(game);
-                    News news = SimulationUtils.NewGenerator(game);
-                    await _newsRepository.AddAsync(news);
-                    await _newsRepository.SaveChangesAsync();
+                        SimulationUtils.UpdateTeamStats(game);
+                        SimulationUtils.UpdatePlayerGames(game);
+                        SimulationUtils.UpdatePlayerOfTheGame(game);
+                        News news = SimulationUtils.NewGenerator(game);
+                        await _newsRepository.AddAsync(news);
+                        await _newsRepository.SaveChangesAsync();
+                    }
+                    catch (Exception ex)
+                    {
+                        response.Success = false;
+                        response.Message = $"Erro ao salvar alterações para o jogo com ID {game.Id}: {ex.Message}";
+                        return response;
+                    }
                 }
-                catch (Exception ex)
-                {
-                    response.Success = false;
-                    response.Message = $"Erro ao salvar alterações para o jogo com ID {game.Id}: {ex.Message}";
-                    return response;
-                }
-            }
 
-            await UpdateStandings();
-            response.Success = true;
-            response.Data = true;
-            response.Message = $"Rodada {roundNumber} simulada com sucesso! {games.Count} jogos processados.";
-            return response;
+                await UpdateStandings();
+                response.Success = true;
+                response.Data = true;
+                response.Message = $"Rodada {roundNumber} simulada com sucesso! {games.Count} jogos processados.";
+                return response;
         }
 
         public async Task<ServiceResponse<bool>> SimPlayoffsByRound(int playoffRound)
@@ -730,6 +737,8 @@ namespace NBALigaSimulation.Server.Services.GameService
                     .Include(p => p.AwayTeam.TeamPlayoffsStats)
                     .Include(p => p.HomeTeam.Players.OrderBy(p => p.RosterOrder)).ThenInclude(p => p.PlayoffsStats)
                     .Include(p => p.AwayTeam.Players.OrderBy(p => p.RosterOrder)).ThenInclude(p => p.PlayoffsStats)
+                    .Include(p => p.HomeTeam.Players.OrderBy(p => p.RosterOrder)).ThenInclude(p => p.AwardCounts)
+                    .Include(p => p.AwayTeam.Players.OrderBy(p => p.RosterOrder)).ThenInclude(p => p.AwardCounts)
                     .Include(t => t.HomeTeam.Gameplan)
                     .Include(t => t.AwayTeam.Gameplan)
                     .Where(g => gameIds.Contains(g.Id) && !g.Happened && g.Type == 1)
@@ -812,6 +821,7 @@ namespace NBALigaSimulation.Server.Services.GameService
                                 await _playoffsRepository.SaveChangesAsync();
                                 SimulationUtils.UpdateTeamStats(game);
                                 SimulationUtils.UpdatePlayerGames(game);
+                                SimulationUtils.UpdatePlayerOfTheGame(game);
                                 var gameNews = SimulationUtils.NewGenerator(game);
                                 await _newsRepository.AddAsync(gameNews);
                                 await _newsRepository.SaveChangesAsync();
@@ -833,6 +843,7 @@ namespace NBALigaSimulation.Server.Services.GameService
 
                         SimulationUtils.UpdateTeamStats(game);
                         SimulationUtils.UpdatePlayerGames(game);
+                        SimulationUtils.UpdatePlayerOfTheGame(game);
                         News news = SimulationUtils.NewGenerator(game);
                         await _newsRepository.AddAsync(news);
                         await _newsRepository.SaveChangesAsync();

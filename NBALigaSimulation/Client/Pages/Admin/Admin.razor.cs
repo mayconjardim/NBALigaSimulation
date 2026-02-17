@@ -5,6 +5,7 @@ using NBALigaSimulation.Client.Services.SeasonsService;
 using NBALigaSimulation.Client.Services.DraftService;
 using NBALigaSimulation.Client.Services.PlayoffsService;
 using NBALigaSimulation.Client.Services.FAService;
+using NBALigaSimulation.Client.Services.AwardsService;
 using NBALigaSimulation.Shared.Dtos.Games;
 using NBALigaSimulation.Shared.Dtos.Seasons;
 using System.Linq;
@@ -412,5 +413,35 @@ public partial class Admin
                 await ShowMessage(response.Message ?? "Erro ao simular rodada FA.", "error");
             }
         }, "SimulateFARound");
+    }
+
+    private async Task GenerateAwards()
+    {
+        await ExecuteAction(async () =>
+        {
+            int? seasonYear = _currentSeason?.Year;
+            if (!seasonYear.HasValue)
+            {
+                var seasonStr = await LocalStorage.GetItemAsync<string>("season");
+                if (!string.IsNullOrEmpty(seasonStr) && int.TryParse(seasonStr, out int y))
+                    seasonYear = y;
+            }
+
+            if (!seasonYear.HasValue)
+            {
+                await ShowMessage("Não foi possível determinar a temporada atual.", "error");
+                return;
+            }
+
+            var response = await AwardsService.GenerateAwards(seasonYear.Value);
+            if (response.Success)
+            {
+                await ShowMessage($"Awards gerados com sucesso para a temporada {seasonYear}!", "success");
+            }
+            else
+            {
+                await ShowMessage($"Erro ao gerar awards: {response.Message}", "error");
+            }
+        }, "GenerateAwards");
     }
 }

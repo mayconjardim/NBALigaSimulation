@@ -29,6 +29,7 @@ namespace NBALigaSimulation.Server.Data
         public DbSet<PlayerPlayoffsStats> PlayerPlayoffsStats { get; set; }
         public DbSet<PlayerContract> PlayerContracts { get; set; }
         public DbSet<PlayerAwards> PlayerAwards { get; set; }
+        public DbSet<PlayerAwardCounts> PlayerAwardCounts { get; set; }
         public DbSet<Season> Seasons { get; set; }
         public DbSet<User> Users { get; set; }
         public DbSet<Trade> Trades { get; set; }
@@ -117,6 +118,12 @@ namespace NBALigaSimulation.Server.Data
              .HasMany(p => p.PlayerAwards)
              .WithOne(g => g.Player)
              .HasForeignKey(g => g.PlayerId);
+
+            modelBuilder.Entity<Player>()
+             .HasOne(p => p.AwardCounts)
+             .WithOne(a => a.Player)
+             .HasForeignKey<PlayerAwardCounts>(a => a.PlayerId)
+             .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<Team>(entity =>
             {

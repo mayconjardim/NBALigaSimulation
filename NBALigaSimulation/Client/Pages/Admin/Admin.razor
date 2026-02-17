@@ -4,12 +4,14 @@
 @using NBALigaSimulation.Client.Services.DraftService
 @using NBALigaSimulation.Client.Services.PlayoffsService
 @using NBALigaSimulation.Client.Services.FAService
+@using NBALigaSimulation.Client.Services.AwardsService
 @using Blazored.LocalStorage
 @inject ISeasonService SeasonService
 @inject IGameService GameService
 @inject IDraftService DraftService
 @inject IPlayoffsService PlayoffsService
 @inject IFAService FAService
+@inject IAwardsService AwardsService
 @inject ILocalStorageService LocalStorage
 @inject IJSRuntime JSRuntime
 @inject NavigationManager NavigationManager
@@ -167,9 +169,28 @@
                             </td>
                         </tr>
                         
-                        <!-- 7. Gerar Playoffs (1ª Rodada) -->
+                        <!-- 7. Gerar Awards -->
                         <tr>
                             <td><strong>7</strong></td>
+                            <td>
+                                <i class="bi bi-trophy text-warning me-2"></i>
+                                <strong>Gerar Awards</strong>
+                            </td>
+                            <td>Gera os prêmios da temporada (MVP, DPOY, Sixth Man of the Year)</td>
+                            <td>
+                                <button class="btn btn-warning btn-sm w-100" @onclick="GenerateAwards" disabled="@_isLoading">
+                                    @if (_isLoading && _loadingAction == "GenerateAwards")
+                                    {
+                                        <span class="spinner-border spinner-border-sm me-2"></span>
+                                    }
+                                    Executar
+                                </button>
+                            </td>
+                        </tr>
+
+                        <!-- 8. Gerar Playoffs (1ª Rodada) -->
+                        <tr>
+                            <td><strong>8</strong></td>
                             <td>
                                 <i class="bi bi-brackets text-info me-2"></i>
                                 <strong>Gerar Playoffs - 1ª Rodada</strong>
@@ -186,9 +207,9 @@
                             </td>
                         </tr>
 
-                        <!-- 8. Gerar Playoffs - Semis de Conferência -->
+                        <!-- 9. Gerar Playoffs - Semis de Conferência -->
                         <tr>
-                            <td><strong>8</strong></td>
+                            <td><strong>9</strong></td>
                             <td>
                                 <i class="bi bi-brackets text-primary me-2"></i>
                                 <strong>Gerar Playoffs - Semis de Conferência</strong>
@@ -205,9 +226,9 @@
                             </td>
                         </tr>
 
-                        <!-- 9. Gerar Playoffs - Finais de Conferência -->
+                        <!-- 10. Gerar Playoffs - Finais de Conferência -->
                         <tr>
-                            <td><strong>9</strong></td>
+                            <td><strong>10</strong></td>
                             <td>
                                 <i class="bi bi-brackets text-warning me-2"></i>
                                 <strong>Gerar Playoffs - Finais de Conferência</strong>
@@ -224,9 +245,9 @@
                             </td>
                         </tr>
 
-                        <!-- 10. Gerar Playoffs - Finais da NBA -->
+                        <!-- 11. Gerar Playoffs - Finais da NBA -->
                         <tr>
-                            <td><strong>10</strong></td>
+                            <td><strong>11</strong></td>
                             <td>
                                 <i class="bi bi-trophy-fill text-danger me-2"></i>
                                 <strong>Gerar Playoffs - Finais da NBA</strong>
@@ -243,9 +264,9 @@
                             </td>
                         </tr>
 
-                        <!-- 11. Finalizar Playoffs -->
+                        <!-- 12. Finalizar Playoffs -->
                         <tr>
-                            <td><strong>11</strong></td>
+                            <td><strong>12</strong></td>
                             <td>
                                 <i class="bi bi-flag-checkered text-success me-2"></i>
                                 <strong>Finalizar Playoffs</strong>
@@ -262,9 +283,9 @@
                             </td>
                         </tr>
 
-                        <!-- 12. Gerar Loteria e Draft -->
+                        <!-- 13. Gerar Loteria e Draft -->
                         <tr>
-                            <td><strong>12</strong></td>
+                            <td><strong>13</strong></td>
                             <td>
                                 <i class="bi bi-shuffle text-primary me-2"></i>
                                 <strong>Gerar Loteria e Draft</strong>

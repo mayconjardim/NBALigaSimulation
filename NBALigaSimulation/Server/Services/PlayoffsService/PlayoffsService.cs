@@ -440,6 +440,7 @@ namespace NBALigaSimulation.Server.Services.PlayoffsService
             var playerWithMaxGameScore = await _playerRepository.Query()
                 .Include(p => p.PlayoffsStats)
                 .Include(p => p.PlayerAwards)
+                .Include(p => p.AwardCounts)
                 .SingleOrDefaultAsync(p => p.Id == playerIdWithMaxGameScore);
 
             if (playerWithMaxGameScore != null)
@@ -463,10 +464,22 @@ namespace NBALigaSimulation.Server.Services.PlayoffsService
                         };
 
                         await _playerAwardsRepository.AddAsync(award);
+
+                        // Atualizar PlayerAwardCounts
+                        if (playerWithMaxGameScore.AwardCounts == null)
+                        {
+                            playerWithMaxGameScore.AwardCounts = new PlayerAwardCounts
+                            {
+                                PlayerId = playerWithMaxGameScore.Id,
+                                Player = playerWithMaxGameScore
+                            };
+                        }
+                        // Nota: Não há campo específico para Finals MVP em AwardCounts, mas podemos adicionar depois se necessário
                 }
             }
 
             await _playerAwardsRepository.SaveChangesAsync();
+            await _playerRepository.SaveChangesAsync();
             response.Success = true;
             return response;
         }

@@ -1,4 +1,4 @@
-﻿using NBALigaSimulation.Shared.Models;
+using NBALigaSimulation.Shared.Models;
 using NBALigaSimulation.Shared.Models.GameNews;
 using NBALigaSimulation.Shared.Models.Games;
 using NBALigaSimulation.Shared.Models.Players;
@@ -310,6 +310,59 @@ namespace NBALigaSimulation.Shared.Engine.Utils
                     {
                         playoffStats.Games += 1;
                     }
+                }
+            }
+        }
+
+        public static void UpdatePlayerOfTheGame(Game game)
+        {
+            // Combinar todas as estatísticas de jogadores do jogo
+            var allPlayerStats = new List<PlayerGameStats>();
+            
+            foreach (var player in game.HomeTeam.Players)
+            {
+                var gameStat = player.Stats.Find(s => s.GameId == game.Id);
+                if (gameStat != null)
+                {
+                    allPlayerStats.Add(gameStat);
+                }
+            }
+            
+            foreach (var player in game.AwayTeam.Players)
+            {
+                var gameStat = player.Stats.Find(s => s.GameId == game.Id);
+                if (gameStat != null)
+                {
+                    allPlayerStats.Add(gameStat);
+                }
+            }
+
+            if (!allPlayerStats.Any()) return;
+
+            // Encontrar o jogador com o maior GameScore
+            var playerWithMaxGameScore = allPlayerStats
+                .OrderByDescending(s => s.GameScore)
+                .FirstOrDefault();
+
+            if (playerWithMaxGameScore != null)
+            {
+                var player = game.HomeTeam.Players.FirstOrDefault(p => p.Id == playerWithMaxGameScore.PlayerId)
+                    ?? game.AwayTeam.Players.FirstOrDefault(p => p.Id == playerWithMaxGameScore.PlayerId);
+
+                if (player != null)
+                {
+                    // Inicializar AwardCounts se não existir
+                    if (player.AwardCounts == null)
+                    {
+                        player.AwardCounts = new PlayerAwardCounts
+                        {
+                            PlayerId = player.Id,
+                            Player = player
+                        };
+                    }
+
+                    // Incrementar Player of the Game
+                    player.AwardCounts.PlayerOfTheGame += 1;
                 }
             }
         }

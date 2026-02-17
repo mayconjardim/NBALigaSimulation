@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Components;
+using NBALigaSimulation.Client.Services.GameService;
 using NBALigaSimulation.Shared.Dtos.Players;
 
 namespace NBALigaSimulation.Client.Pages.Players.PlayerPage;
@@ -15,12 +16,26 @@ public partial class CareerBests
     private int MaxSteals { get; set; }
     private int DoubleDoubles { get; set; }
     private int TripleDoubles { get; set; }
+    private int PlayerOfTheGame { get; set; }
+    private int FinalsMVP { get; set; }
 
     protected override void OnInitialized()
     {
         if (_player?.Stats != null && _player.Stats.Any())
         {
             CalculateCareerBests();
+        }
+        
+        // Usar dados salvos do banco
+        if (_player?.AwardCounts != null)
+        {
+            PlayerOfTheGame = _player.AwardCounts.PlayerOfTheGame;
+        }
+
+        // Contar Finals MVP dos PlayerAwards
+        if (_player?.PlayerAwards != null)
+        {
+            FinalsMVP = _player.PlayerAwards.Count(a => a.Award == "NBA Finals MVP");
         }
     }
 
@@ -57,4 +72,5 @@ public partial class CareerBests
             }
         }
     }
+
 }

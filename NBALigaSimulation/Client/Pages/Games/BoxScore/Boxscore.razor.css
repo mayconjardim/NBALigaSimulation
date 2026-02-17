@@ -11,7 +11,7 @@
     justify-content: center;
     gap: 1.5rem;
     padding: 1.25rem;
-    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+    background-color: #135EB8;
     border-radius: 12px;
     margin-bottom: 1.5rem;
     flex-wrap: wrap;
@@ -190,6 +190,29 @@
     font-size: 0.75rem;
     color: #888;
     font-weight: 400;
+}
+
+.potg-badge {
+    display: inline-block;
+    margin-left: 0.5rem;
+    padding: 0.15rem 0.5rem;
+    background: linear-gradient(135deg, #ffd700 0%, #ffed4e 100%);
+    color: #333;
+    font-size: 0.7rem;
+    font-weight: 700;
+    border-radius: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    box-shadow: 0 2px 4px rgba(255, 215, 0, 0.3);
+}
+
+.player-of-the-game {
+    background-color: #fff9e6 !important;
+    border-left: 3px solid #ffd700;
+}
+
+.player-of-the-game:hover {
+    background-color: #fff5d6 !important;
 }
 
 .boxscore-loading {

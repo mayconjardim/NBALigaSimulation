@@ -14,7 +14,7 @@
 }
 
 .draftpicks-table th {
-    background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+    background-color: #135EB8;
     color: white;
     font-size: 0.75rem;
     font-weight: 600;

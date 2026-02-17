@@ -1,4 +1,4 @@
-﻿using System.ComponentModel;
+using System.ComponentModel;
 using NBALigaSimulation.Shared.Models.Players;
 using Newtonsoft.Json;
 
@@ -29,7 +29,8 @@ namespace NBALigaSimulation.Shared.Dtos.Players
         
         [JsonProperty("GameLogs")]
         public List<PlayerGameStatsDto> Stats { get; set; } 
-        public List<PlayerAwardsDto> PlayerAwards { get; set; } 
+        public List<PlayerAwardsDto> PlayerAwards { get; set; }
+        public PlayerAwardCountsDto? AwardCounts { get; set; }
 
     }
 }
