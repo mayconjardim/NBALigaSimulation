@@ -1,0 +1,91 @@
+@inject IStatsService StatsService
+@inject ILocalStorageService LocalStorage
+
+@if (_loaded)
+{
+    <div class="leaderboards-section container">
+        <div class="leaderboards-grid">
+            <div class="leaderboard-card">
+                <h3 class="leaderboard-card-title"><i class="bi bi-basketball me-1"></i>Pontos (PPG)</h3>
+                <div class="leaderboard-list">
+                    @if (_topScorers != null && _topScorers.Any())
+                    {
+                        @foreach (var (player, index) in _topScorers.Select((p, i) => (p, i)))
+                        {
+                            <a href="players/@player.PlayerId" class="leaderboard-row @(index == 0 ? "leaderboard-first" : "")">
+                                <span class="leaderboard-rank">@(index + 1)</span>
+                                <img src="@(string.IsNullOrEmpty(player.ImgUrl) ? "Images/Utils/blank.png" : player.ImgUrl)" alt="" class="leaderboard-avatar" />
+                                <span class="leaderboard-name">@player.Name</span>
+                                <span class="leaderboard-team">@player.TeamAbrv</span>
+                                <span class="leaderboard-value">@player.PtsPG</span>
+                            </a>
+                        }
+                    }
+                    else
+                    {
+                        <p class="leaderboard-empty text-muted">Nenhum dado nesta temporada.</p>
+                    }
+                </div>
+                <a href="/stats" class="leaderboard-link">Ver todas as estatísticas</a>
+            </div>
+            <div class="leaderboard-card">
+                <h3 class="leaderboard-card-title"><i class="bi bi-collection me-1"></i>Rebotes (RPG)</h3>
+                <div class="leaderboard-list">
+                    @if (_topRebounds != null && _topRebounds.Any())
+                    {
+                        @foreach (var (player, index) in _topRebounds.Select((p, i) => (p, i)))
+                        {
+                            <a href="players/@player.PlayerId" class="leaderboard-row @(index == 0 ? "leaderboard-first" : "")">
+                                <span class="leaderboard-rank">@(index + 1)</span>
+                                <img src="@(string.IsNullOrEmpty(player.ImgUrl) ? "Images/Utils/blank.png" : player.ImgUrl)" alt="" class="leaderboard-avatar" />
+                                <span class="leaderboard-name">@player.Name</span>
+                                <span class="leaderboard-team">@player.TeamAbrv</span>
+                                <span class="leaderboard-value">@player.TRebPG</span>
+                            </a>
+                        }
+                    }
+                    else
+                    {
+                        <p class="leaderboard-empty text-muted">Nenhum dado nesta temporada.</p>
+                    }
+                </div>
+                <a href="/stats" class="leaderboard-link">Ver todas as estatísticas</a>
+            </div>
+            <div class="leaderboard-card">
+                <h3 class="leaderboard-card-title"><i class="bi bi-send me-1"></i>Assistências (APG)</h3>
+                <div class="leaderboard-list">
+                    @if (_topAssists != null && _topAssists.Any())
+                    {
+                        @foreach (var (player, index) in _topAssists.Select((p, i) => (p, i)))
+                        {
+                            <a href="players/@player.PlayerId" class="leaderboard-row @(index == 0 ? "leaderboard-first" : "")">
+                                <span class="leaderboard-rank">@(index + 1)</span>
+                                <img src="@(string.IsNullOrEmpty(player.ImgUrl) ? "Images/Utils/blank.png" : player.ImgUrl)" alt="" class="leaderboard-avatar" />
+                                <span class="leaderboard-name">@player.Name</span>
+                                <span class="leaderboard-team">@player.TeamAbrv</span>
+                                <span class="leaderboard-value">@player.AstPG</span>
+                            </a>
+                        }
+                    }
+                    else
+                    {
+                        <p class="leaderboard-empty text-muted">Nenhum dado nesta temporada.</p>
+                    }
+                </div>
+                <a href="/stats" class="leaderboard-link">Ver todas as estatísticas</a>
+            </div>
+        </div>
+    </div>
+}
+else if (!string.IsNullOrEmpty(_message))
+{
+    <div class="container py-3">
+        <p class="text-muted">@_message</p>
+    </div>
+}
+else
+{
+    <div class="loading-container">
+        <Loading></Loading>
+    </div>
+}

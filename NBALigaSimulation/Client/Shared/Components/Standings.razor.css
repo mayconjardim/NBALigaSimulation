@@ -269,6 +269,23 @@ table img:hover {
     animation-delay: 0.2s;
 }
 
+.standings-footer {
+    text-align: center;
+    margin-top: 1rem;
+}
+
+.standings-link {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--primary-color, #03173d);
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+.standings-link:hover {
+    color: var(--secondary-color, #0a2d6b);
+}
+
 /* Loading state */
 .loading-container {
     display: flex;
