@@ -37,15 +37,15 @@ public static class CourtActions
                         }
                     }
 
-                    if (teams[t].Players[p].Stats.Find(s => s.GameId == game.Id)?.Pf < 6)
+                    if (teams[t].Players[p].IsInjured || teams[t].Players[p].Stats.Find(s => s.GameId == game.Id)?.Pf >= 6)
+                    {
+                        ovrs[p] = double.NegativeInfinity;
+                    }
+                    else
                     {
                         ovrs[p] = teams[t].Players[p].Ratings.LastOrDefault().CalculateOvr * PlayerActions.Fatigue(teams[t].Players[p].Stats.Find(s => 
                                       s.GameId == game.Id).Energy) *
                               teams[t].Players[p].PtModifier * RandomUtils.RandomUniform(0.9, 1.1);
-                    }
-                    else
-                    {
-                        ovrs[p] = double.NegativeInfinity;
                     }
                 }
                 int i = 0;

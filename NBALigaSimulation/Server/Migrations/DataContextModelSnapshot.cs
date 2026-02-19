@@ -213,6 +213,12 @@ namespace NBALigaSimulation.Server.Migrations
                     b.Property<string>("ImgUrl")
                         .HasColumnType("TEXT");
 
+                    b.Property<int?>("InjuryGamesRemaining")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("InjuryType")
+                        .HasColumnType("TEXT");
+
                     b.Property<bool>("KeyPlayer")
                         .HasColumnType("INTEGER");
 

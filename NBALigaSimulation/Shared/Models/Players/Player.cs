@@ -20,6 +20,8 @@ namespace NBALigaSimulation.Shared.Models.Players
         public double PtModifier { get; set; }
         public int RosterOrder { get; set; }
         public bool KeyPlayer { get; set; } = false;
+        public string? InjuryType { get; set; }
+        public int? InjuryGamesRemaining { get; set; }
         public PlayerContract? Contract { get; set; }
         public List<PlayerRatings> Ratings { get; set; } = new List<PlayerRatings>();
         public List<PlayerGameStats> Stats { get; set; } = new List<PlayerGameStats>();
@@ -30,6 +32,10 @@ namespace NBALigaSimulation.Shared.Models.Players
 
         [NotMapped]
         public PlayerCompositeRating CompositeRating { get; set; }
+
+        /// <summary>True quando o jogador está lesionado (tem tipo de lesão e jogos restantes &gt; 0).</summary>
+        [NotMapped]
+        public bool IsInjured => !string.IsNullOrEmpty(InjuryType) && (InjuryGamesRemaining ?? 0) > 0;
 
     }
 }

@@ -1,4 +1,5 @@
 using NBALigaSimulation.Shared.Engine.GameSim.CourtManager;
+using NBALigaSimulation.Shared.Engine.GameSim.InjuryManager;
 using NBALigaSimulation.Shared.Engine.GameSim.OffenseManager;
 using NBALigaSimulation.Shared.Engine.GameSim.PlayerManager;
 using NBALigaSimulation.Shared.Engine.GameSim.ProbabilityManager;
@@ -54,9 +55,17 @@ public static class PossessionActions
                     }
     
                     PlayerActions.UpdatePlayingTime(game, Teams, PlayersOnCourt);
-    
-                    //Injuries();
-    
+
+                    bool newInjury = InjuryActions.CheckAndApplyInjuries(game, Teams, PlayersOnCourt);
+                    if (newInjury)
+                    {
+                        substitutions = CourtActions.UpdatePlayersOnCourt(game, Teams, PlayersOnCourt);
+                        if (substitutions)
+                        {
+                            CourtActions.UpdateSynergy(game, Teams, PlayersOnCourt);
+                        }
+                    }
+
                     if (i % game.SubsEveryN == 0)
                     {
                         substitutions = CourtActions.UpdatePlayersOnCourt(game, Teams, PlayersOnCourt);
