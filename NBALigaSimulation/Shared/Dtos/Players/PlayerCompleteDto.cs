@@ -21,6 +21,8 @@ namespace NBALigaSimulation.Shared.Dtos.Players
 
         [JsonProperty("RosterOrder")]
         public int RosterOrder { get; set; }
+        public string? InjuryType { get; set; }
+        public int? InjuryGamesRemaining { get; set; }
         public PlayerDraft? Draft { get; set; }
         public PlayerContractDto? Contract { get; set; }
         public List<PlayerRatingDto> Ratings { get; set; } 

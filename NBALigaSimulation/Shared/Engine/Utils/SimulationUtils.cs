@@ -416,6 +416,57 @@ namespace NBALigaSimulation.Shared.Engine.Utils
                 Players[i].RosterOrder = i;
         }
 
+        /// <summary>
+        /// Decrementa InjuryGamesRemaining em 1 para todos os jogadores lesionados dos times do jogo.
+        /// Quando chegar a 0, limpa InjuryType e InjuryGamesRemaining.
+        /// </summary>
+        public static void DecrementInjuryGamesRemaining(Game game)
+        {
+            foreach (var player in game.HomeTeam?.Players ?? Enumerable.Empty<Player>())
+            {
+                if ((player.InjuryGamesRemaining ?? 0) > 0)
+                {
+                    player.InjuryGamesRemaining--;
+                    if (player.InjuryGamesRemaining <= 0)
+                    {
+                        player.InjuryType = null;
+                        player.InjuryGamesRemaining = null;
+                    }
+                }
+            }
+            foreach (var player in game.AwayTeam?.Players ?? Enumerable.Empty<Player>())
+            {
+                if ((player.InjuryGamesRemaining ?? 0) > 0)
+                {
+                    player.InjuryGamesRemaining--;
+                    if (player.InjuryGamesRemaining <= 0)
+                    {
+                        player.InjuryType = null;
+                        player.InjuryGamesRemaining = null;
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// Aplica recuperação de lesões na off-season: desconta gamesToDeduct (padrão 30) do InjuryGamesRemaining.
+        /// Se chegar a 0 ou menos, o jogador fica apto. Ex: 45 jogos restantes → 15 na próxima temporada.
+        /// </summary>
+        public static void ApplyOffSeasonInjuryRecovery(List<Player> players, int gamesToDeduct = 30)
+        {
+            foreach (var player in players)
+            {
+                if ((player.InjuryGamesRemaining ?? 0) <= 0) continue;
+
+                player.InjuryGamesRemaining -= gamesToDeduct;
+                if (player.InjuryGamesRemaining <= 0)
+                {
+                    player.InjuryType = null;
+                    player.InjuryGamesRemaining = null;
+                }
+            }
+        }
+
         public static void UpdateStandings(List<Team> teams, int season)
         {
             List<TeamRegularStats> eastTeams = teams.Where(t => t.Conference == "East")

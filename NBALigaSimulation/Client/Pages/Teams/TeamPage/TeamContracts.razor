@@ -27,6 +27,13 @@
                             <a href="@($"players/{player.Id}")" class="d-flex align-items-center gap-2 text-decoration-none text-dark">
                                 <img src="@(string.IsNullOrEmpty(player.ImgUrl) ? "Images/Utils/blank.png" : player.ImgUrl)" alt="" class="rounded" style="width:36px;height:36px;object-fit:cover" />
                                 <span>@player.Name</span>
+                                @if (!string.IsNullOrEmpty(player.InjuryType) && (player.InjuryGamesRemaining ?? 0) > 0)
+                                {
+                                    <span class="injury-badge-inline" title="@player.InjuryType">
+                                        <i class="bi bi-bandaid-fill text-danger small"></i>
+                                        <span class="small text-muted">@(player.InjuryGamesRemaining) J</span>
+                                    </span>
+                                }
                             </a>
                         </td>
                         <td>@player.Pos</td>

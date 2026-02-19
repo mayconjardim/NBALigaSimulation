@@ -72,6 +72,19 @@
     text-overflow: ellipsis;
 }
 
+.player-card-v3 .injury-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    font-size: 0.65rem;
+    color: rgba(255, 255, 255, 0.95);
+    white-space: nowrap;
+}
+
+.player-card-v3 .injury-badge .bi-bandaid-fill {
+    flex-shrink: 0;
+}
+
 .player-card-v3 .team-logo-container {
     background-color: rgba(255, 255, 255, 0.9);
     border-radius: 50%;

@@ -69,6 +69,13 @@
                       @(isStarter ? "TIT" : "RES")
                     </button>
                     <a href="@($"players/{player.Id}")" class="player-name-link">@Util.NomeAbvr(player.Name)</a>
+                    @if (!string.IsNullOrEmpty(player.InjuryType) && (player.InjuryGamesRemaining ?? 0) > 0)
+                    {
+                      <span class="injury-badge-inline ms-1" title="@player.InjuryType">
+                        <i class="bi bi-bandaid-fill text-danger small"></i>
+                        <span class="small">@(player.InjuryGamesRemaining) J</span>
+                      </span>
+                    }
                   </div>
                 </td>
                 <td><span class="badge badge-pos">@player.Pos</span></td>

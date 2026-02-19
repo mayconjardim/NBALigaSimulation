@@ -75,6 +75,19 @@
     filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5));
 }
 
+.player-header-card-info .player-injury-info {
+    font-size: 1rem;
+    opacity: 0.95;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+
+.player-header-card-info .player-injury-info .text-danger {
+    color: #ff6b6b !important;
+}
+
 .player-header-stats {
     flex-shrink: 0;
     align-self: flex-end;

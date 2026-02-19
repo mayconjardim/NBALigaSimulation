@@ -158,6 +158,7 @@ namespace NBALigaSimulation.Server.Services.GameService
 			await _gameRepository.SaveChangesAsync();
 
             GameSimulation.Sim(game);
+            SimulationUtils.DecrementInjuryGamesRemaining(game);
 
             await _gameRepository.SaveChangesAsync();
 
@@ -197,6 +198,7 @@ namespace NBALigaSimulation.Server.Services.GameService
                 }
 
                 GameSimulation.Sim(game);
+                SimulationUtils.DecrementInjuryGamesRemaining(game);
 
                 await _gameRepository.SaveChangesAsync();
             }
@@ -322,7 +324,7 @@ namespace NBALigaSimulation.Server.Services.GameService
 
                 GameSimulation.Sim(game);
                 game.Happened = true;
-
+                SimulationUtils.DecrementInjuryGamesRemaining(game);
 
                 try
                 {
@@ -586,6 +588,7 @@ namespace NBALigaSimulation.Server.Services.GameService
 
                 GameSimulation.Sim(game);
                 game.Happened = true;
+                SimulationUtils.DecrementInjuryGamesRemaining(game);
 
                 try
                 {
@@ -678,6 +681,7 @@ namespace NBALigaSimulation.Server.Services.GameService
 
                 GameSimulation.Sim(game);
                 game.Happened = true;
+                SimulationUtils.DecrementInjuryGamesRemaining(game);
 
                 try
                 {
@@ -814,6 +818,7 @@ namespace NBALigaSimulation.Server.Services.GameService
 
                     GameSimulation.Sim(game);
                     game.Happened = true;
+                    SimulationUtils.DecrementInjuryGamesRemaining(game);
 
                     // A simulação preenche team.Stats; sincroniza para game.TeamGameStats para UpdateTeamStats/UpdatePlayerGames
                     foreach (var s in game.HomeTeam.Stats.Where(s => s.GameId == game.Id))

@@ -15,8 +15,15 @@
 
                 <div class="card-content">
                     <div class="card-top">
-                        <div class="player-nameplate">
+                        <div class="player-nameplate d-flex align-items-center gap-2">
                             <h4>@player.Name</h4>
+                            @if (!string.IsNullOrEmpty(player.InjuryType) && (player.InjuryGamesRemaining ?? 0) > 0)
+                            {
+                                <span class="injury-badge" title="@player.InjuryType">
+                                    <i class="bi bi-bandaid-fill text-danger"></i>
+                                    <span>@(player.InjuryGamesRemaining ?? 0) jogos fora</span>
+                                </span>
+                            }
                         </div>
                     </div>
                 </div>

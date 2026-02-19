@@ -99,6 +99,10 @@ namespace NBALigaSimulation.Server.Services.SeasonService
 
             await _faService.DeleteOffersBySeason(LastSeason.Year);
 
+            List<Player> players = await _seasonRepository.GetPlayersWithRatingsAsync();
+            SimulationUtils.ApplyOffSeasonInjuryRecovery(players, 30);
+            await _seasonRepository.SaveChangesAsync();
+
             List<Team> teams = await _seasonRepository.GetHumanTeamsAsync();
 
             foreach (Team team in teams)

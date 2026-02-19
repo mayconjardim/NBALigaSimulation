@@ -27,6 +27,15 @@
                         <span class="badge @Util.GetBadgeClass(_ratings.CalculateOvr)">@_ratings.CalculateOvr</span>
                         <span class="badge @Util.GetBadgeClass(_ratings.Pot)">@_ratings.Pot</span>
                     </p>
+                    @if (!string.IsNullOrEmpty(_player.InjuryType) && (_player.InjuryGamesRemaining ?? 0) > 0)
+                    {
+                        <p class="player-injury-info mb-0 mt-1">
+                            <i class="bi bi-bandaid-fill text-danger me-1"></i>
+                            <strong>Lesão:</strong> @_player.InjuryType
+                            <span>&bull;</span>
+                            <span>@(_player.InjuryGamesRemaining) jogos fora</span>
+                        </p>
+                    }
                 </div>
             
             </div>
