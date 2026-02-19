@@ -366,25 +366,54 @@ namespace NBALigaSimulation.Shared.Engine.Utils
                 }
             }
         }
+        /// <summary>
+        /// Verifica se a rotação está correta: RosterOrder sequencial (0,1,2,...) e jogadores lesionados ao final,
+        /// para que os titulares (índices 0–4) sejam sempre aptos.
+        /// </summary>
         public static bool ArePlayersInCorrectOrder(List<Player> Players)
         {
             for (int i = 0; i < Players.Count; i++)
             {
                 if (Players[i].RosterOrder != i)
-                {
                     return false;
+            }
+
+            // Lesionados devem estar ao final da lista (nenhum lesionado com índice menor que um apto)
+            int firstInjured = -1;
+            for (int i = 0; i < Players.Count; i++)
+            {
+                if (Players[i].IsInjured)
+                {
+                    firstInjured = i;
+                    break;
+                }
+            }
+            if (firstInjured >= 0)
+            {
+                for (int i = firstInjured + 1; i < Players.Count; i++)
+                {
+                    if (!Players[i].IsInjured)
+                        return false;
                 }
             }
 
             return true;
         }
 
+        /// <summary>
+        /// Ajusta a rotação: aptos primeiro (mantendo ordem relativa), lesionados ao final; depois reatribui RosterOrder 0,1,2,...
+        /// e reordena a lista para que os índices 0–4 correspondam aos titulares aptos.
+        /// </summary>
         public static void AdjustRosterOrder(List<Player> Players)
         {
+            var sorted = Players
+                .OrderBy(p => p.IsInjured)
+                .ThenBy(p => p.RosterOrder)
+                .ToList();
+            Players.Clear();
+            Players.AddRange(sorted);
             for (int i = 0; i < Players.Count; i++)
-            {
                 Players[i].RosterOrder = i;
-            }
         }
 
         public static void UpdateStandings(List<Team> teams, int season)
