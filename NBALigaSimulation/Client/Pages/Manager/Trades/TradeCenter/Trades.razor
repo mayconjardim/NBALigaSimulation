@@ -5,83 +5,72 @@
 <CascadingAuthenticationState>
 <AuthorizeView>
 <div class="container py-4">
- <div class="d-flex justify-content-between align-items-center mb-4">
-  <h4 class="mb-0">Trade Center</h4>
+ <div class="trade-center-header">
+  <div>
+   <h4 class="mb-1">Trade Center</h4>
+   <p class="trade-center-subtitle mb-0">Recebidas e enviadas em um único feed</p>
+  </div>
   <a href="/trades/create" class="btn btn-success"><i class="bi bi-plus-lg me-1"></i>Iniciar Troca</a>
  </div>
 
  @if (!string.IsNullOrEmpty(Message))
  {
-  <p class="text-muted">@Message</p>
+  <div class="alert alert-warning">@Message</div>
  }
  else
  {
-  <h5 class="mb-3">Minhas Propostas</h5>
-  <ul class="nav nav-tabs mb-3" role="tablist">
-   <li class="nav-item">
-    <button class="nav-link active" type="button" data-bs-toggle="tab" data-bs-target="#recebidas">Recebidas (@Received.Count)</button>
-   </li>
-   <li class="nav-item">
-    <button class="nav-link" type="button" data-bs-toggle="tab" data-bs-target="#enviadas">Enviadas (@Sent.Count)</button>
-   </li>
-  </ul>
-
-  <div class="tab-content">
-   <div class="tab-pane fade show active" id="recebidas">
-    @if (Received.Count == 0)
-    {
-     <p class="text-muted">Nenhuma proposta recebida.</p>
-    }
-    else
-    {
-     <div class="list-group">
-      @foreach (var t in Received)
-      {
-       <a href="@($"/tradeoffer/{t.Id}")" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center py-3">
-        <div class="d-flex align-items-center gap-3">
-         <img src="@($"Images/Logos/{t.TeamOneName}.svg")" alt="" style="width:28px;height:28px" />
-         <span class="fw-semibold">@t.TeamOneName</span>
-         <i class="bi bi-arrow-right text-muted"></i>
-         <img src="@($"Images/Logos/{t.TeamTwoName}.svg")" alt="" style="width:28px;height:28px" />
-         <span class="fw-semibold">@t.TeamTwoName</span>
-        </div>
-        <div class="d-flex align-items-center gap-2">
-         <span class="badge @StatusBadge(t.Response)">@StatusText(t.Response)</span>
-         <small class="text-muted">@t.DateCreated.ToString("dd/MM/yyyy HH:mm")</small>
-        </div>
-       </a>
-      }
-     </div>
-    }
+  <div class="trade-stats-row">
+   <div class="trade-stat-card">
+    <div class="trade-stat-label">Total</div>
+    <div class="trade-stat-value">@TradesFeed.Count</div>
    </div>
-   <div class="tab-pane fade" id="enviadas">
-    @if (Sent.Count == 0)
-    {
-     <p class="text-muted">Nenhuma proposta enviada.</p>
-    }
-    else
-    {
-     <div class="list-group">
-      @foreach (var t in Sent)
-      {
-       <a href="@($"/tradeoffer/{t.Id}")" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center py-3">
-        <div class="d-flex align-items-center gap-3">
-         <img src="@($"Images/Logos/{t.TeamOneName}.svg")" alt="" style="width:28px;height:28px" />
-         <span class="fw-semibold">@t.TeamOneName</span>
-         <i class="bi bi-arrow-right text-muted"></i>
-         <img src="@($"Images/Logos/{t.TeamTwoName}.svg")" alt="" style="width:28px;height:28px" />
-         <span class="fw-semibold">@t.TeamTwoName</span>
-        </div>
-        <div class="d-flex align-items-center gap-2">
-         <span class="badge @StatusBadge(t.Response)">@StatusText(t.Response)</span>
-         <small class="text-muted">@t.DateCreated.ToString("dd/MM/yyyy HH:mm")</small>
-        </div>
-       </a>
-      }
-     </div>
-    }
+   <div class="trade-stat-card">
+    <div class="trade-stat-label">Recebidas</div>
+    <div class="trade-stat-value">@Received.Count</div>
+   </div>
+   <div class="trade-stat-card">
+    <div class="trade-stat-label">Enviadas</div>
+    <div class="trade-stat-value">@Sent.Count</div>
+   </div>
+   <div class="trade-stat-card trade-stat-warning">
+    <div class="trade-stat-label">Pendentes para ação</div>
+    <div class="trade-stat-value">@PendingReceivedCount</div>
    </div>
   </div>
+
+  @if (TradesFeed.Count == 0)
+  {
+   <div class="trade-empty-state">
+    <i class="bi bi-inbox fs-2"></i>
+    <p class="mb-0 mt-2">Nenhuma proposta encontrada.</p>
+   </div>
+  }
+  else
+  {
+   <div class="trade-feed">
+    @foreach (var t in TradesFeed)
+    {
+     <a href="@($"/tradeoffer/{t.Id}")" class="trade-feed-item @(NeedsAction(t) ? "trade-feed-item-highlight" : string.Empty)">
+      <div class="trade-feed-left">
+       <img src="@($"Images/Logos/{t.TeamOneName}.svg")" alt="@t.TeamOneName" class="trade-team-logo" />
+       <span class="trade-team-name">@t.TeamOneName</span>
+       <i class="bi bi-arrow-right text-muted"></i>
+       <img src="@($"Images/Logos/{t.TeamTwoName}.svg")" alt="@t.TeamTwoName" class="trade-team-logo" />
+       <span class="trade-team-name">@t.TeamTwoName</span>
+      </div>
+      <div class="trade-feed-right">
+       <span class="trade-badge @DirectionBadge(t, MyTeamId)">@DirectionText(t, MyTeamId)</span>
+       <span class="trade-badge @StatusBadge(t.Response)">@StatusText(t.Response)</span>
+       @if (NeedsAction(t))
+       {
+        <span class="trade-badge trade-badge-action">Ação necessária</span>
+       }
+       <small class="trade-date">@t.DateCreated.ToString("dd/MM/yyyy HH:mm")</small>
+      </div>
+     </a>
+    }
+   </div>
+  }
  }
 </div>
 </AuthorizeView>

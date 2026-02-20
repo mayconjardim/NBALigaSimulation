@@ -1,184 +1,165 @@
-.trade-header-yellow {
-  padding: 0.75rem 1rem;
-  margin-bottom: 1rem;
-  border: 1px solid var(--bs-border-color, #dee2e6);
-  border-radius: 0.5rem;
+.trade-center-header {
   display: flex;
-  align-items: center;
   justify-content: space-between;
-  flex-wrap: wrap;
-  gap: 0.5rem;
-}
-
-.trade-salary-match {
-  display: flex;
   align-items: center;
-  gap: 0.5rem;
-  font-weight: 700;
-  font-size: 1.1rem;
-}
-
-.trade-header-btns {
-  display: flex;
-  gap: 0.5rem;
-}
-
-.trade-panel-blue,
-.trade-panel-red {
-  background: transparent;
-  color: inherit;
-  border: 1px solid var(--bs-border-color, #dee2e6);
-  border-radius: 0.5rem;
-  overflow: hidden;
+  gap: 1rem;
   margin-bottom: 1rem;
 }
 
-.trade-panel-header {
-  padding: 0.75rem 1rem;
-  font-weight: 700;
-  font-size: 1rem;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
+.trade-center-subtitle {
+  color: var(--bs-secondary-color, #6c757d);
+  font-size: 0.92rem;
 }
 
-.trade-panel-sub {
-  padding: 0 1rem 0.5rem;
-  font-size: 0.85rem;
+.trade-stats-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+.trade-stat-card {
+  border: 1px solid var(--bs-border-color, #dee2e6);
+  border-radius: 0.75rem;
+  padding: 0.75rem 0.9rem;
+  background: var(--bs-light, #f8f9fa);
+}
+
+.trade-stat-warning {
+  border-color: var(--bs-danger, #dc3545);
+  background: rgba(220, 53, 69, 0.08);
+}
+
+.trade-stat-label {
+  font-size: 0.8rem;
   color: var(--bs-secondary-color, #6c757d);
 }
 
-.trade-table {
-  width: 100%;
-  border-collapse: collapse;
-  font-size: 0.8rem;
+.trade-stat-value {
+  font-size: 1.25rem;
+  font-weight: 700;
+  line-height: 1.2;
 }
 
-.trade-table th {
-  background: var(--bs-light, #f8f9fa);
-  padding: 0.5rem 0.4rem;
-  text-align: left;
-  font-weight: 600;
-  border-bottom: 1px solid var(--bs-border-color, #dee2e6);
-}
-
-.trade-table td {
-  padding: 0.35rem 0.4rem;
-  border-bottom: 1px solid var(--bs-border-color-translucent, rgba(0,0,0,.075));
-}
-
-.trade-table tbody tr:hover {
-  background: var(--bs-light, rgba(0,0,0,.03));
-}
-
-.trade-table .col-foto {
-  width: 36px;
-}
-
-.trade-table .col-offer {
-  width: 40px;
+.trade-empty-state {
+  border: 1px dashed var(--bs-border-color, #dee2e6);
+  border-radius: 0.75rem;
+  padding: 2rem 1rem;
   text-align: center;
+  color: var(--bs-secondary-color, #6c757d);
 }
 
-.trade-table .col-pos {
-  width: 36px;
-}
-
-.trade-table .col-age {
-  width: 36px;
-  text-align: center;
-}
-
-.trade-table .col-cur,
-.trade-table .col-fut {
-  width: 24px;
-  text-align: center;
-}
-
-.trade-rating-square {
-  display: inline-block;
-  width: 14px;
-  height: 14px;
-  border-radius: 2px;
-  vertical-align: middle;
-}
-
-.trade-team-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(70px, 1fr));
-  gap: 0.75rem;
-  padding: 1rem;
-}
-
-.trade-team-logo-btn {
+.trade-feed {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  gap: 0.25rem;
-  padding: 0.5rem;
-  border: 2px solid #ddd;
-  border-radius: 0.5rem;
-  background: white;
-  cursor: pointer;
-  transition: all 0.2s;
+  gap: 0.7rem;
 }
 
-.trade-team-logo-btn:hover {
-  border-color: var(--bs-primary, #094ecb);
-  background: #f8f9fa;
-}
-
-.trade-team-logo-btn.selected {
-  border-color: var(--bs-primary, #094ecb);
-  background: #e7f0ff;
-  box-shadow: 0 0 0 2px rgba(9, 78, 203, 0.3);
-}
-
-.trade-team-logo-btn img {
-  width: 48px;
-  height: 48px;
-  object-fit: contain;
-}
-
-.trade-choose-panel {
-  background: transparent;
+.trade-feed-item {
   border: 1px solid var(--bs-border-color, #dee2e6);
-  border-radius: 0.5rem;
-  padding: 1rem;
+  border-radius: 0.75rem;
+  padding: 0.9rem 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  text-decoration: none;
+  color: inherit;
+  transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
+  background: #fff;
 }
 
-.trade-choose-title {
-  font-weight: 700;
-  font-size: 1.1rem;
-  margin-bottom: 0.5rem;
+.trade-feed-item:hover {
+  transform: translateY(-1px);
+  border-color: var(--bs-primary, #0d6efd);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
 }
 
-.trade-choose-sub {
-  font-size: 0.9rem;
-  color: var(--bs-secondary-color, #6c757d);
-  margin-bottom: 1rem;
+.trade-feed-item-highlight {
+  border-color: var(--bs-danger, #dc3545);
+  box-shadow: 0 0 0 2px rgba(220, 53, 69, 0.2);
 }
 
-.trade-scroll {
-  max-height: 520px;
-  overflow-y: auto;
-}
-
-.trade-draft-row {
-  border-top: 1px solid var(--bs-border-color, #dee2e6);
-  padding: 0.5rem 0.4rem;
+.trade-feed-left {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: 0.45rem;
+  min-width: 0;
 }
 
-.trade-draft-row input {
+.trade-team-logo {
+  width: 28px;
+  height: 28px;
+  object-fit: contain;
   flex-shrink: 0;
 }
 
-.trade-submit-row {
-  margin-top: 1rem;
+.trade-team-name {
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.trade-feed-right {
   display: flex;
-  gap: 0.5rem;
+  align-items: center;
+  gap: 0.45rem;
   flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+.trade-badge {
+  padding: 0.2rem 0.45rem;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.trade-badge-received {
+  color: var(--bs-primary, #0d6efd);
+  background: rgba(13, 110, 253, 0.14);
+}
+
+.trade-badge-sent {
+  color: var(--bs-secondary-color, #6c757d);
+  background: rgba(108, 117, 125, 0.14);
+}
+
+.trade-badge-pending {
+  color: var(--bs-danger, #dc3545);
+  background: rgba(220, 53, 69, 0.14);
+}
+
+.trade-badge-accepted {
+  color: var(--bs-success, #198754);
+  background: rgba(25, 135, 84, 0.14);
+}
+
+.trade-badge-rejected {
+  color: var(--bs-secondary-color, #6c757d);
+  background: rgba(108, 117, 125, 0.14);
+}
+
+.trade-badge-action {
+  color: var(--bs-danger, #dc3545);
+  background: rgba(220, 53, 69, 0.14);
+}
+
+.trade-date {
+  color: var(--bs-secondary-color, #6c757d);
+  font-size: 0.8rem;
+}
+
+@media (max-width: 991px) {
+  .trade-feed-item {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .trade-feed-right {
+    justify-content: flex-start;
+  }
+
+  .trade-team-name {
+    white-space: normal;
+  }
 }
