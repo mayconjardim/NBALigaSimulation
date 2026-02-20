@@ -32,12 +32,32 @@ public partial class TradeCreate
     private List<TeamDraftPickDto> MyPicks => MyTeam?.DraftPicks ?? new();
     private List<TeamDraftPickDto> PartnerPicks => PartnerTeam?.DraftPicks ?? new();
 
-    private int MyCapSpace => Math.Max(0, SalaryCapConstants.SalaryCap - (MyTeam?.Players?.Where(p => p.Contract != null && p.Contract.Amount > 0).Sum(p => p.Contract!.Amount) ?? 0));
-    private int PartnerCapSpace => Math.Max(0, SalaryCapConstants.SalaryCap - (PartnerTeam?.Players?.Where(p => p.Contract != null && p.Contract.Amount > 0).Sum(p => p.Contract!.Amount) ?? 0));
+    private int MyTeamSalary => MyTeam?.Players?.Where(p => p.Contract != null && p.Contract.Amount > 0).Sum(p => p.Contract!.Amount) ?? 0;
+    private int PartnerTeamSalary => PartnerTeam?.Players?.Where(p => p.Contract != null && p.Contract.Amount > 0).Sum(p => p.Contract!.Amount) ?? 0;
+
+    private int MyCapSpace => Math.Max(0, SalaryCapConstants.SalaryCap - MyTeamSalary);
+    private int PartnerCapSpace => Math.Max(0, SalaryCapConstants.SalaryCap - PartnerTeamSalary);
 
     private int MySelectedSalary => MyPlayers.Where(p => SelectedPlayerIds.Contains(p.Id)).Sum(p => p.Contract?.Amount ?? 0);
     private int PartnerSelectedSalary => PartnerPlayers.Where(p => SelectedPlayerIds.Contains(p.Id)).Sum(p => p.Contract?.Amount ?? 0);
     private int SalaryMatch => MySelectedSalary - PartnerSelectedSalary;
+
+    private int MyCapSpaceAfter => SalaryCapConstants.SalaryCap - (MyTeamSalary - MySelectedSalary + PartnerSelectedSalary);
+    private int PartnerCapSpaceAfter => SalaryCapConstants.SalaryCap - (PartnerTeamSalary - PartnerSelectedSalary + MySelectedSalary);
+
+    private bool CapSpaceViolated => MyCapSpaceAfter < 0 || PartnerCapSpaceAfter < 0;
+    private string? CapSpaceViolationMessage
+    {
+        get
+        {
+            var parts = new List<string>();
+            if (MyCapSpaceAfter < 0)
+                parts.Add($"seu time (@MyTeam?.Name) ultrapassaria o teto em {FormatMoneyFull(-MyCapSpaceAfter)}");
+            if (PartnerCapSpaceAfter < 0)
+                parts.Add($"{PartnerTeam?.Name} ultrapassaria o teto em {FormatMoneyFull(-PartnerCapSpaceAfter)}");
+            return parts.Count > 0 ? "Esta proposta não é possível: " + string.Join("; ", parts) + "." : null;
+        }
+    }
 
     private static string FormatMoneyFull(int value) => $"${value:N0}";
     private static string SalaryWithYears(PlayerContractDto? c, int season)
@@ -122,6 +142,11 @@ public partial class TradeCreate
         if (!HasMyAssets || !HasPartnerAssets)
         {
             ValidationError = "A proposta deve incluir pelo menos um jogador ou pick de cada time.";
+            return;
+        }
+        if (CapSpaceViolated)
+        {
+            ValidationError = CapSpaceViolationMessage ?? "A proposta ultrapassaria o teto salarial.";
             return;
         }
 

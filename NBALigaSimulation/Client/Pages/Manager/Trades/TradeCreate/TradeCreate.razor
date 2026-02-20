@@ -91,6 +91,16 @@
    }
    else
    {
+    @if (CapSpaceViolated)
+    {
+     <div class="alert alert-danger d-flex align-items-center gap-2 mb-3">
+      <i class="bi bi-exclamation-triangle-fill fs-4"></i>
+      <div>
+       <strong>Proposta inviável</strong>
+       <p class="mb-0 small">@CapSpaceViolationMessage</p>
+      </div>
+     </div>
+    }
     <div class="tradecreate-header-yellow">
      <div class="tradecreate-salary-match">
       <i class="bi bi-currency-dollar"></i>
@@ -110,7 +120,8 @@
         <span>@MyTeam.Name Envia</span>
        </div>
        <div class="tradecreate-summary">
-        Total: @FormatMoneyFull(MySelectedSalary) | Cap Space: @FormatMoneyFull(MyCapSpace)
+        <div>Total selecionado: @FormatMoneyFull(MySelectedSalary) | Cap Space: @FormatMoneyFull(MyCapSpace)</div>
+        <div class="@(MyCapSpaceAfter < 0 ? "text-danger fw-semibold" : "text-success")">Cap Space depois da troca: @FormatMoneyFull(MyCapSpaceAfter)</div>
        </div>
        <div class="tradecreate-scroll">
         <table class="tradecreate-table">
@@ -159,7 +170,8 @@
         <span>@PartnerTeam.Name Envia</span>
        </div>
        <div class="tradecreate-summary">
-        Total: @FormatMoneyFull(PartnerSelectedSalary) | Cap Space: @FormatMoneyFull(PartnerCapSpace)
+        <div>Total selecionado: @FormatMoneyFull(PartnerSelectedSalary) | Cap Space: @FormatMoneyFull(PartnerCapSpace)</div>
+        <div class="@(PartnerCapSpaceAfter < 0 ? "text-danger fw-semibold" : "text-success")">Cap Space depois da troca: @FormatMoneyFull(PartnerCapSpaceAfter)</div>
        </div>
        <div class="tradecreate-scroll">
         <table class="tradecreate-table">
@@ -204,7 +216,7 @@
     </div>
 
     <div class="tradecreate-submit-row">
-     <button type="button" class="btn btn-success" @onclick="SubmitTrade" disabled="@Sending">@(Sending ? "Enviando..." : "Enviar proposta")</button>
+     <button type="button" class="btn btn-success" @onclick="SubmitTrade" disabled="@(Sending || CapSpaceViolated)">@(Sending ? "Enviando..." : CapSpaceViolated ? "Proposta inviável (ultrapassa teto)" : "Enviar proposta")</button>
      <button type="button" class="btn btn-secondary" @onclick="SwapTeam">Trocar Time</button>
      <a href="/trades" class="btn btn-outline-secondary">Cancelar</a>
     </div>

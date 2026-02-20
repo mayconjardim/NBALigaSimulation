@@ -95,15 +95,15 @@ namespace NBALigaSimulation.Client.Utilities
         {
             switch (number)
             {
-                case int n when n > 85:
+                case int n when n > 80:
                     return "rating-roxo";
-                case int n when n > 75:
+                case int n when n > 60:
                     return "rating-azul";
-                case int n when n > 65:
+                case int n when n > 50:
                     return "rating-verde";
-                case int n when n > 55:
+                case int n when n > 40:
                     return "rating-amarelo";
-                case int n when n > 45:
+                case int n when n > 30:
                     return "rating-laranja";
                 default:
                     return "rating-vermelho";
