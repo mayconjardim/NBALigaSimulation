@@ -151,9 +151,9 @@ namespace NBALigaSimulation.Server.Profiles
 
             CreateMap<Trade, TradeDto>()
                .ForMember(dest => dest.TeamOneName, opt => 
-                   opt.MapFrom(src => src.TeamOne.Abrv))
+                   opt.MapFrom(src => src.TeamOne != null ? src.TeamOne.Abrv : ""))
                .ForMember(dest => dest.TeamTwoName, opt => 
-                   opt.MapFrom(src => src.TeamTwo.Abrv));
+                   opt.MapFrom(src => src.TeamTwo != null ? src.TeamTwo.Abrv : ""));
 
             CreateMap<TradePlayer, TradePlayerDto>().ReverseMap();
             CreateMap<TradeCreateDto, Trade>().ReverseMap();

@@ -60,6 +60,6 @@ public partial class TeamContracts
     {
         if (contract == null || contract.Amount <= 0 || contract.Exp < year)
             return "-";
-        return FormatMoney(contract.Amount);
+        return FormatMoneyFull(contract.Amount);
     }
 }

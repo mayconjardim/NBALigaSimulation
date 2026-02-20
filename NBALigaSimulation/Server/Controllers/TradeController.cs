@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc;
 using NBALigaSimulation.Shared.Dtos.Trades;
 using NBALigaSimulation.Shared.Models.Utils;
 
@@ -26,46 +26,30 @@ namespace NBALigaSimulation.Server.Controllers
         }
 
         [HttpGet("teams")]
-        public async Task<ActionResult<ServiceResponse<TradeDto>>> GetTradeByTeamId()
+        public async Task<ActionResult<ServiceResponse<List<TradeDto>>>> GetTradeByTeamId()
         {
-
             var result = await _tradeService.GetTradesByTeamId();
-
-            if (!result.Success)
-            {
-                return NotFound(result);
-            }
-
             return Ok(result);
-
         }
 
         [HttpGet("{tradeId}")]
         public async Task<ActionResult<ServiceResponse<TradeDto>>> GetTradeById(int tradeId)
         {
-
             var result = await _tradeService.GetTradeById(tradeId);
-
-            if (!result.Success)
-            {
-                return NotFound(result);
-            }
-
             return Ok(result);
-
         }
 
         [HttpPost]
-        public async Task<ActionResult> CreateTrade(TradeCreateDto tradeDto)
+        public async Task<ActionResult<ServiceResponse<TradeDto>>> CreateTrade(TradeCreateDto tradeDto)
         {
             var response = await _tradeService.CreateTrade(tradeDto);
 
             if (!response.Success)
             {
-                return BadRequest(response.Message);
+                return BadRequest(response);
             }
 
-            return Ok(response.Data);
+            return Ok(response);
         }
 
         [HttpDelete("{id}")]

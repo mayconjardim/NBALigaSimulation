@@ -1,0 +1,225 @@
+@page "/trades/create"
+@attribute [Authorize]
+@using NBALigaSimulation.Client.Utilities
+@using NBALigaSimulation.Shared.Engine.Finance
+@inject IAuthService AuthService
+
+<CascadingAuthenticationState>
+<AuthorizeView>
+@if (MyTeam != null)
+{
+  <div class="container-fluid py-4">
+   <div class="d-flex justify-content-between align-items-center mb-4">
+    <h4 class="mb-0">Iniciar Troca</h4>
+    <a href="/trades" class="btn btn-outline-secondary btn-sm"><i class="bi bi-arrow-left me-1"></i>Voltar ao Trade Center</a>
+   </div>
+
+   @if (!string.IsNullOrEmpty(ValidationError))
+   {
+    <div class="alert alert-danger py-2 mb-2">@ValidationError</div>
+   }
+
+   @if (PartnerTeam == null)
+   {
+    <div class="row g-3">
+     <div class="col-lg-7">
+      <div class="tradecreate-panel-blue">
+       <div class="tradecreate-header">
+        <img src="@($"Images/Logos/{MyTeam.Abrv}.svg")" alt="" style="width:28px;height:28px" />
+        <span>@MyTeam.Name</span>
+       </div>
+       <div class="tradecreate-summary">
+        Cap Space: @FormatMoneyFull(MyCapSpace)
+       </div>
+       <div class="tradecreate-sends-header">Minha Oferta</div>
+       <div class="tradecreate-scroll">
+        <table class="tradecreate-table">
+         <thead>
+          <tr>
+           <th class="col-foto">Foto</th>
+           <th class="col-offer">OFERTA</th>
+           <th class="col-pos">POS</th>
+           <th>JOGADOR</th>
+           <th class="col-age">IDADE</th>
+           <th class="col-cur">CUR</th>
+           <th class="col-fut">FUT</th>
+           <th>SALÁRIO</th>
+          </tr>
+         </thead>
+         <tbody>
+          @foreach (var p in MyPlayers)
+          {
+           <tr>
+            <td class="col-foto"><img src="@(string.IsNullOrEmpty(p.ImgUrl) ? "Images/Utils/blank.png" : p.ImgUrl)" alt="" class="rounded-circle" style="width:32px;height:32px;object-fit:cover" /></td>
+            <td class="col-offer"><input type="checkbox" checked="@SelectedPlayerIds.Contains(p.Id)" @onclick="() => TogglePlayer(p.Id)" /></td>
+            <td class="col-pos">@p.Pos</td>
+            <td>@p.Name</td>
+            <td class="col-age">@Util.Age(_season, p.Born?.Year ?? _season - 25)</td>
+            <td class="col-cur"><span class="tradecreate-rating @Util.GetBadgeClass(p.Ratings?.LastOrDefault()?.CalculateOvr ?? 0)"></span></td>
+            <td class="col-fut"><span class="tradecreate-rating @Util.GetBadgeClass(p.Ratings?.LastOrDefault()?.Pot ?? 0)"></span></td>
+            <td>@SalaryWithYears(p.Contract, _season)</td>
+           </tr>
+          }
+         </tbody>
+        </table>
+        @foreach (var pick in MyPicks.OrderBy(x => x.Year).ThenBy(x => x.Round))
+        {
+         <div class="tradecreate-draft-row">
+          <input type="checkbox" checked="@SelectedPickIds.Contains(pick.Id)" @onclick="() => TogglePick(pick.Id)" />
+          <span class="tradecreate-pick-badge">@(pick.Round == 1 ? "1ª Rodada" : "2ª Rodada") @pick.Year @pick.Original</span>
+         </div>
+        }
+       </div>
+      </div>
+     </div>
+     <div class="col-lg-5">
+      <div class="tradecreate-choose-panel">
+       <div class="tradecreate-choose-title">Escolha o Time</div>
+       <div class="tradecreate-choose-sub">Selecione um time para negociar</div>
+       <div class="tradecreate-team-grid">
+        @foreach (var t in AllTeams)
+        {
+         <button type="button" class="tradecreate-team-btn" @onclick="() => SelectTeam(t.Id)">
+          <img src="@($"Images/Logos/{t.Abrv}.svg")" alt="@t.Abrv" />
+          <span style="font-size:0.7rem">@t.Abrv</span>
+         </button>
+        }
+       </div>
+      </div>
+     </div>
+    </div>
+   }
+   else
+   {
+    <div class="tradecreate-header-yellow">
+     <div class="tradecreate-salary-match">
+      <i class="bi bi-currency-dollar"></i>
+      <span>Salary Match: @FormatMoneyFull(Math.Abs(SalaryMatch))@(SalaryMatch >= 0 ? "" : " (déficit)")</span>
+     </div>
+     <div class="d-flex gap-2">
+      <button type="button" class="btn btn-primary btn-sm" @onclick="ResetOffer"><i class="bi bi-arrow-counterclockwise me-1"></i>Resetar Oferta</button>
+      <button type="button" class="btn btn-outline-dark btn-sm" @onclick="SwapTeam"><i class="bi bi-arrow-left-right me-1"></i>Trocar Time</button>
+     </div>
+    </div>
+
+    <div class="row g-3">
+     <div class="col-lg-6">
+      <div class="tradecreate-panel-blue">
+       <div class="tradecreate-header">
+        <img src="@($"Images/Logos/{MyTeam.Abrv}.svg")" alt="" style="width:28px;height:28px" />
+        <span>@MyTeam.Name Envia</span>
+       </div>
+       <div class="tradecreate-summary">
+        Total: @FormatMoneyFull(MySelectedSalary) | Cap Space: @FormatMoneyFull(MyCapSpace)
+       </div>
+       <div class="tradecreate-scroll">
+        <table class="tradecreate-table">
+         <thead>
+          <tr>
+           <th class="col-foto">Foto</th>
+           <th class="col-offer">OFERTA</th>
+           <th class="col-pos">POS</th>
+           <th>JOGADOR</th>
+           <th class="col-age">IDADE</th>
+           <th class="col-cur">CUR</th>
+           <th class="col-fut">FUT</th>
+           <th>SALÁRIO</th>
+          </tr>
+         </thead>
+         <tbody>
+          @foreach (var p in MyPlayers)
+          {
+           <tr>
+            <td class="col-foto"><img src="@(string.IsNullOrEmpty(p.ImgUrl) ? "Images/Utils/blank.png" : p.ImgUrl)" alt="" class="rounded-circle" style="width:32px;height:32px;object-fit:cover" /></td>
+            <td class="col-offer"><input type="checkbox" checked="@SelectedPlayerIds.Contains(p.Id)" @onclick="() => TogglePlayer(p.Id)" /></td>
+            <td class="col-pos">@p.Pos</td>
+            <td>@p.Name</td>
+            <td class="col-age">@Util.Age(_season, p.Born?.Year ?? _season - 25)</td>
+            <td class="col-cur"><span class="tradecreate-rating @Util.GetBadgeClass(p.Ratings?.LastOrDefault()?.CalculateOvr ?? 0)"></span></td>
+            <td class="col-fut"><span class="tradecreate-rating @Util.GetBadgeClass(p.Ratings?.LastOrDefault()?.Pot ?? 0)"></span></td>
+            <td>@SalaryWithYears(p.Contract, _season)</td>
+           </tr>
+          }
+         </tbody>
+        </table>
+        @foreach (var pick in MyPicks.OrderBy(x => x.Year).ThenBy(x => x.Round))
+        {
+         <div class="tradecreate-draft-row">
+          <input type="checkbox" checked="@SelectedPickIds.Contains(pick.Id)" @onclick="() => TogglePick(pick.Id)" />
+          <span class="tradecreate-pick-badge">@(pick.Round == 1 ? "1ª Rodada" : "2ª Rodada") @pick.Year @pick.Original</span>
+         </div>
+        }
+       </div>
+      </div>
+     </div>
+     <div class="col-lg-6">
+      <div class="tradecreate-panel-red">
+       <div class="tradecreate-header">
+        <img src="@($"Images/Logos/{PartnerTeam.Abrv}.svg")" alt="" style="width:28px;height:28px" />
+        <span>@PartnerTeam.Name Envia</span>
+       </div>
+       <div class="tradecreate-summary">
+        Total: @FormatMoneyFull(PartnerSelectedSalary) | Cap Space: @FormatMoneyFull(PartnerCapSpace)
+       </div>
+       <div class="tradecreate-scroll">
+        <table class="tradecreate-table">
+         <thead>
+          <tr>
+           <th class="col-foto">Foto</th>
+           <th class="col-offer">OFERTA</th>
+           <th class="col-pos">POS</th>
+           <th>JOGADOR</th>
+           <th class="col-age">IDADE</th>
+           <th class="col-cur">CUR</th>
+           <th class="col-fut">FUT</th>
+           <th>SALÁRIO</th>
+          </tr>
+         </thead>
+         <tbody>
+          @foreach (var p in PartnerPlayers)
+          {
+           <tr>
+            <td class="col-foto"><img src="@(string.IsNullOrEmpty(p.ImgUrl) ? "Images/Utils/blank.png" : p.ImgUrl)" alt="" class="rounded-circle" style="width:32px;height:32px;object-fit:cover" /></td>
+            <td class="col-offer"><input type="checkbox" checked="@SelectedPlayerIds.Contains(p.Id)" @onclick="() => TogglePlayer(p.Id)" /></td>
+            <td class="col-pos">@p.Pos</td>
+            <td>@p.Name</td>
+            <td class="col-age">@Util.Age(_season, p.Born?.Year ?? _season - 25)</td>
+            <td class="col-cur"><span class="tradecreate-rating @Util.GetBadgeClass(p.Ratings?.LastOrDefault()?.CalculateOvr ?? 0)"></span></td>
+            <td class="col-fut"><span class="tradecreate-rating @Util.GetBadgeClass(p.Ratings?.LastOrDefault()?.Pot ?? 0)"></span></td>
+            <td>@SalaryWithYears(p.Contract, _season)</td>
+           </tr>
+          }
+         </tbody>
+        </table>
+        @foreach (var pick in PartnerPicks.OrderBy(x => x.Year).ThenBy(x => x.Round))
+        {
+         <div class="tradecreate-draft-row">
+          <input type="checkbox" checked="@SelectedPickIds.Contains(pick.Id)" @onclick="() => TogglePick(pick.Id)" />
+          <span class="tradecreate-pick-badge">@(pick.Round == 1 ? "1ª Rodada" : "2ª Rodada") @pick.Year @pick.Original</span>
+         </div>
+        }
+       </div>
+      </div>
+     </div>
+    </div>
+
+    <div class="tradecreate-submit-row">
+     <button type="button" class="btn btn-success" @onclick="SubmitTrade" disabled="@Sending">@(Sending ? "Enviando..." : "Enviar proposta")</button>
+     <button type="button" class="btn btn-secondary" @onclick="SwapTeam">Trocar Time</button>
+     <a href="/trades" class="btn btn-outline-secondary">Cancelar</a>
+    </div>
+   }
+  </div>
+}
+else if (!string.IsNullOrEmpty(Message))
+{
+  <div class="container py-4">
+   <div class="alert alert-warning">@Message</div>
+  </div>
+}
+else
+{
+  <div class="container py-4"><p>Carregando...</p></div>
+}
+</AuthorizeView>
+</CascadingAuthenticationState>

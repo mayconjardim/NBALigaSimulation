@@ -1,0 +1,155 @@
+@page "/tradeoffer/{Id:int}"
+@attribute [Authorize]
+@using NBALigaSimulation.Client.Utilities
+@using NBALigaSimulation.Shared.Dtos.Players
+@using NBALigaSimulation.Shared.Dtos.Teams
+@inject IAuthService AuthService
+
+<CascadingAuthenticationState>
+<AuthorizeView>
+@if (Trade != null)
+{
+  <div class="container-fluid py-4">
+   <div class="d-flex justify-content-between align-items-center mb-4">
+    <a href="/trades" class="btn btn-outline-secondary"><i class="bi bi-arrow-left me-1"></i>Voltar ao Trade Center</a>
+    <span class="badge @(Trade.Response == null ? "bg-warning" : Trade.Response == true ? "bg-success" : "bg-secondary")">@StatusText(Trade.Response)</span>
+   </div>
+
+   @if (!string.IsNullOrEmpty(ActionError))
+   {
+    <div class="alert alert-danger mb-3">@ActionError</div>
+   }
+
+   <div class="row g-3">
+    <div class="col-lg-6">
+     <div class="tradeoffer-panel-blue">
+      <div class="tradeoffer-header">
+       <img src="@($"Images/Logos/{Trade.TeamOneName}.svg")" alt="" style="width:32px;height:32px" />
+       <span>@Trade.TeamOneName</span>
+       @if (IsProposer) { <span class="badge bg-light text-dark ms-2">Seu time</span> }
+      </div>
+      <div class="tradeoffer-summary">
+       <div class="tradeoffer-summary-row"><span>Cap Space:</span><span>@FormatMoney(CapSpaceOne)</span></div>
+       <div class="tradeoffer-summary-row"><span>Saída:</span><span>@FormatMoney(OutgoingOne)</span></div>
+       <div class="tradeoffer-summary-row"><span>Entrada:</span><span>@FormatMoney(OutgoingTwo)</span></div>
+       <div class="tradeoffer-summary-row tradeoffer-after"><span>Cap Space depois da troca:</span><span>@FormatMoney(CapSpaceOneAfter)</span></div>
+      </div>
+      <div class="tradeoffer-sends-header">@Trade.TeamOneName Envia</div>
+      <div class="px-1">
+       <table class="tradeoffer-table">
+        <thead>
+         <tr>
+          <th class="col-foto">Foto</th>
+          <th class="col-pos">Pos</th>
+          <th>Jogador</th>
+          <th class="col-age">Age</th>
+          <th class="col-cur">Cur</th>
+          <th class="col-fut">Fut</th>
+          <th>Salário</th>
+         </tr>
+        </thead>
+        <tbody>
+         @foreach (var p in (Trade.Players?.Where(x => x.TeamId == Trade.TeamOneId) ?? Enumerable.Empty<PlayerCompleteDto>()).ToList())
+         {
+          <tr>
+           <td class="col-foto"><img src="@(string.IsNullOrEmpty(p.ImgUrl) ? "Images/Utils/blank.png" : p.ImgUrl)" alt="" class="rounded-circle" style="width:32px;height:32px;object-fit:cover" /></td>
+           <td class="col-pos">@p.Pos</td>
+           <td>@p.Name</td>
+           <td class="col-age">@Util.Age(_season, p.Born?.Year ?? _season - 25)</td>
+           <td class="col-cur"><span class="tradeoffer-rating @Util.GetBadgeClass(p.Ratings?.LastOrDefault()?.CalculateOvr ?? 0)"></span></td>
+           <td class="col-fut"><span class="tradeoffer-rating @Util.GetBadgeClass(p.Ratings?.LastOrDefault()?.Pot ?? 0)"></span></td>
+           <td>@SalaryWithYears(p.Contract, _season)</td>
+          </tr>
+         }
+        </tbody>
+       </table>
+       <div class="tradeoffer-picks">
+        @foreach (var pick in (Trade.DraftPicks?.Where(x => x.TeamId == Trade.TeamOneId) ?? Enumerable.Empty<TeamDraftPickDto>()).ToList())
+        {
+         <span class="tradeoffer-pick-badge">@(pick.Round == 1 ? "1ª Rodada" : "2ª Rodada") @pick.Year @pick.Original</span>
+        }
+       </div>
+      </div>
+     </div>
+    </div>
+    <div class="col-lg-6">
+     <div class="tradeoffer-panel-red">
+      <div class="tradeoffer-header">
+       <img src="@($"Images/Logos/{Trade.TeamTwoName}.svg")" alt="" style="width:32px;height:32px" />
+       <span>@Trade.TeamTwoName</span>
+       @if (IsReceiver) { <span class="badge bg-light text-dark ms-2">Seu time</span> }
+      </div>
+      <div class="tradeoffer-summary">
+       <div class="tradeoffer-summary-row"><span>Cap Space:</span><span>@FormatMoney(CapSpaceTwo)</span></div>
+       <div class="tradeoffer-summary-row"><span>Saída:</span><span>@FormatMoney(OutgoingTwo)</span></div>
+       <div class="tradeoffer-summary-row"><span>Entrada:</span><span>@FormatMoney(OutgoingOne)</span></div>
+       <div class="tradeoffer-summary-row tradeoffer-after"><span>Cap Space depois da troca:</span><span>@FormatMoney(CapSpaceTwoAfter)</span></div>
+      </div>
+      <div class="tradeoffer-sends-header">@Trade.TeamTwoName Envia</div>
+      <div class="px-1">
+       <table class="tradeoffer-table">
+        <thead>
+         <tr>
+          <th class="col-foto">Foto</th>
+          <th class="col-pos">Pos</th>
+          <th>Jogador</th>
+          <th class="col-age">Age</th>
+          <th class="col-cur">Cur</th>
+          <th class="col-fut">Fut</th>
+          <th>Salário</th>
+         </tr>
+        </thead>
+        <tbody>
+         @foreach (var p in (Trade.Players?.Where(x => x.TeamId == Trade.TeamTwoId) ?? Enumerable.Empty<PlayerCompleteDto>()).ToList())
+         {
+          <tr>
+           <td class="col-foto"><img src="@(string.IsNullOrEmpty(p.ImgUrl) ? "Images/Utils/blank.png" : p.ImgUrl)" alt="" class="rounded-circle" style="width:32px;height:32px;object-fit:cover" /></td>
+           <td class="col-pos">@p.Pos</td>
+           <td>@p.Name</td>
+           <td class="col-age">@Util.Age(_season, p.Born?.Year ?? _season - 25)</td>
+           <td class="col-cur"><span class="tradeoffer-rating @Util.GetBadgeClass(p.Ratings?.LastOrDefault()?.CalculateOvr ?? 0)"></span></td>
+           <td class="col-fut"><span class="tradeoffer-rating @Util.GetBadgeClass(p.Ratings?.LastOrDefault()?.Pot ?? 0)"></span></td>
+           <td>@SalaryWithYears(p.Contract, _season)</td>
+          </tr>
+         }
+        </tbody>
+       </table>
+       <div class="tradeoffer-picks">
+        @foreach (var pick in (Trade.DraftPicks?.Where(x => x.TeamId == Trade.TeamTwoId) ?? Enumerable.Empty<TeamDraftPickDto>()).ToList())
+        {
+         <span class="tradeoffer-pick-badge">@(pick.Round == 1 ? "1ª Rodada" : "2ª Rodada") @pick.Year @pick.Original</span>
+        }
+       </div>
+      </div>
+     </div>
+    </div>
+   </div>
+
+   <div class="mt-4">
+    @if (CanRespond)
+    {
+     <button type="button" class="btn btn-success" @onclick="AcceptTrade" disabled="@Processing">Aceitar</button>
+     <button type="button" class="btn btn-danger ms-2" @onclick="RejectTrade" disabled="@Processing">Rejeitar</button>
+    }
+    else if (IsProposer && Trade.Response == null)
+    {
+     <button type="button" class="btn btn-outline-danger" @onclick="DeleteTrade" disabled="@Processing">Excluir proposta</button>
+    }
+   </div>
+  </div>
+}
+else if (!string.IsNullOrEmpty(Message))
+{
+  <div class="container py-4">
+   <div class="alert alert-warning">@Message</div>
+   <a href="/trades" class="btn btn-outline-secondary"><i class="bi bi-arrow-left me-1"></i>Voltar ao Trade Center</a>
+  </div>
+}
+else
+{
+  <div class="container py-4">
+   <p>Carregando...</p>
+  </div>
+}
+</AuthorizeView>
+</CascadingAuthenticationState>

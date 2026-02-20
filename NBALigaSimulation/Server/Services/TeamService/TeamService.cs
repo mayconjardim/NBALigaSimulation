@@ -108,9 +108,18 @@ namespace NBALigaSimulation.Server.Services.TeamService
         [Authorize]
         public async Task<ServiceResponse<TeamCompleteDto>> GetTeamByLoggedUser()
         {
-
             var response = new ServiceResponse<TeamCompleteDto>();
-            var userId = _authService.GetUserId();
+            int userId;
+            try
+            {
+                userId = _authService.GetUserId();
+            }
+            catch
+            {
+                response.Success = false;
+                response.Message = "Usuário não autenticado.";
+                return response;
+            }
 
             var user = await _userRepository.Query()
                 .FirstOrDefaultAsync(u => u.Id == userId);
@@ -132,13 +141,13 @@ namespace NBALigaSimulation.Server.Services.TeamService
             }
 
            var team = await _teamRepository.Query()
-            .Include(t => t.Players.OrderBy(p => p.RosterOrder))
+            .Include(t => t.Players)
                 .ThenInclude(p => p.Ratings)
-            .Include(t => t.Gameplan)
             .Include(t => t.Players)
                 .ThenInclude(p => p.RegularStats)
             .Include(t => t.Players)
                 .ThenInclude(p => p.Contract)
+            .Include(t => t.Gameplan)
             .Include(t => t.DraftPicks)
             .FirstOrDefaultAsync(t => t.Id == teamId);
 

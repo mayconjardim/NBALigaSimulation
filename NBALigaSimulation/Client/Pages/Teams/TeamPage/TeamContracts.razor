@@ -17,6 +17,8 @@
                     <th class="text-end">@_season</th>
                     <th class="text-end">@(_season + 1)</th>
                     <th class="text-end">@(_season + 2)</th>
+                    <th class="text-end">@(_season + 3)</th>
+                    <th class="text-end">@(_season + 4)</th>
                 </tr>
             </thead>
             <tbody>
@@ -43,6 +45,8 @@
                         <td class="text-end">@SalaryForYear(player.Contract, _season)</td>
                         <td class="text-end">@SalaryForYear(player.Contract, _season + 1)</td>
                         <td class="text-end">@SalaryForYear(player.Contract, _season + 2)</td>
+                        <td class="text-end">@SalaryForYear(player.Contract, _season + 3)</td>
+                        <td class="text-end">@SalaryForYear(player.Contract, _season + 4)</td>
                     </tr>
                 }
             </tbody>
@@ -52,6 +56,8 @@
                     <td class="text-end">@FormatMoneyFull(TotalForYear(_season))</td>
                     <td class="text-end">@FormatMoneyFull(TotalForYear(_season + 1))</td>
                     <td class="text-end">@FormatMoneyFull(TotalForYear(_season + 2))</td>
+                    <td class="text-end">@FormatMoneyFull(TotalForYear(_season + 3))</td>
+                    <td class="text-end">@FormatMoneyFull(TotalForYear(_season + 4))</td>
                 </tr>
                 <tr class="table-light">
                     <td colspan="5" class="text-end">Cap</td>
@@ -72,6 +78,18 @@
                         { <span class="text-danger">(@FormatMoneyFull(OverCapForYear(_season + 2)) acima)</span> }
                         else
                         { <span class="text-success">(@FormatMoneyFull(CapSpaceForYear(_season + 2)) de espaço)</span> }
+                    </td>
+                    <td class="text-end">
+                        @if (OverCapForYear(_season + 3) > 0)
+                        { <span class="text-danger">(@FormatMoneyFull(OverCapForYear(_season + 3)) acima)</span> }
+                        else
+                        { <span class="text-success">(@FormatMoneyFull(CapSpaceForYear(_season + 3)) de espaço)</span> }
+                    </td>
+                    <td class="text-end">
+                        @if (OverCapForYear(_season + 4) > 0)
+                        { <span class="text-danger">(@FormatMoneyFull(OverCapForYear(_season + 4)) acima)</span> }
+                        else
+                        { <span class="text-success">(@FormatMoneyFull(CapSpaceForYear(_season + 4)) de espaço)</span> }
                     </td>
                 </tr>
             </tfoot>

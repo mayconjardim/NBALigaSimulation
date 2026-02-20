@@ -1,4 +1,5 @@
 using Microsoft.JSInterop;
+using NBALigaSimulation.Client.Services.TradesService;
 using NBALigaSimulation.Shared.Dtos.Teams;
 using NBALigaSimulation.Shared.Models.Users;
 
@@ -8,6 +9,7 @@ public partial class NavMenu
 {
     protected List<TeamSimpleDto> _east;
     protected bool _isLogged = false;
+    protected int PendingTradesCount { get; set; }
     protected bool _isAdmin = false;
     private UserLogin user = new();
     private string userTeam = string.Empty;
@@ -33,6 +35,7 @@ public partial class NavMenu
         {
             userTeam = await LocalStorage.GetItemAsync<string>("team");
             userName = await LocalStorage.GetItemAsync<string>("username");
+            await LoadPendingTradesCount();
         }
       
         var response = await SeasonService.GetLastSeason();
@@ -90,5 +93,14 @@ public partial class NavMenu
     {
         await JSRuntime.InvokeVoidAsync("fecharmodal");
     }
-    
+
+    private async Task LoadPendingTradesCount()
+    {
+        var result = await TradeService.GetTradeByTeamId();
+        if (result.Success && result.Data != null)
+        {
+            var teamId = await LocalStorage.GetItemAsync<int>("teamId");
+            PendingTradesCount = result.Data.Count(t => t.TeamTwoId == teamId && t.Response == null);
+        }
+    }
 }

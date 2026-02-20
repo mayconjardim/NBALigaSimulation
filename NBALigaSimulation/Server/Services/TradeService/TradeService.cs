@@ -57,31 +57,36 @@ namespace NBALigaSimulation.Server.Services.TradeService
         {
             var response = new ServiceResponse<List<TradeDto>>();
 
-            var userId = _authService.GetUserId();
-            var user = await _userRepository.Query()
-                .FirstOrDefaultAsync(u => u.Id == userId);
-            int? teamId = null;
-
-            if (user != null)
+            try
             {
-                teamId = user.TeamId;
+                int? teamId = null;
+                try
+                {
+                    var userId = _authService.GetUserId();
+                    var user = await _userRepository.Query()
+                        .FirstOrDefaultAsync(u => u.Id == userId);
+                    if (user != null)
+                        teamId = user.TeamId;
+                }
+                catch
+                {
+                    teamId = null;
+                }
+
+                List<Trade> trades = await _tradeRepository.Query()
+                    .OrderByDescending(o => o.DateCreated)
+                    .Where(p => p.TeamOneId == teamId || p.TeamTwoId == teamId)
+                    .Include(t => t.TeamOne)
+                    .Include(t => t.TeamTwo)
+                    .ToListAsync();
+
+                response.Data = trades != null ? _mapper.Map<List<TradeDto>>(trades) : new List<TradeDto>();
+                response.Success = true;
             }
-
-            List<Trade> trades = await _tradeRepository.Query()
-                .OrderByDescending(o => o.DateCreated)
-                .Where(p => p.TeamOneId == teamId || p.TeamTwoId == teamId)
-                .Include(t => t.TeamOne)
-                .Include(t => t.TeamTwo)
-                .ToListAsync();
-
-            if (trades == null)
+            catch (Exception ex)
             {
                 response.Success = false;
-                response.Message = $"A trade com time de Id {teamId} não existe!";
-            }
-            else
-            {
-                response.Data = _mapper.Map<List<TradeDto>>(trades);
+                response.Message = $"Erro ao buscar trades: {ex.Message}";
             }
 
             return response;
@@ -147,8 +152,10 @@ namespace NBALigaSimulation.Server.Services.TradeService
             {
 
                 Trade trade = _mapper.Map<Trade>(tradeDto);
+                trade.TradePlayers ??= new List<TradePlayer>();
+                trade.TradePicks ??= new List<TradePicks>();
 
-                foreach (var player in tradeDto.Players)
+                foreach (var player in tradeDto.Players ?? new List<PlayerCompleteDto>())
                 {
                     trade.TradePlayers.Add(new TradePlayer
                     {
@@ -157,12 +164,7 @@ namespace NBALigaSimulation.Server.Services.TradeService
                     });
                 }
 
-                if (trade.TradePicks == null)
-                {
-                    trade.TradePicks = new List<TradePicks>();
-                }
-
-                foreach (var picks in tradeDto.DraftPicks)
+                foreach (var picks in tradeDto.DraftPicks ?? new List<TeamDraftPickDto>())
                 {
                     trade.TradePicks.Add(new TradePicks
                     {

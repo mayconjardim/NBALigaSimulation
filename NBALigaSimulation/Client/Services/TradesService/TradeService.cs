@@ -90,15 +90,19 @@ public class TradeService : ITradeService
         public async Task<ServiceResponse<bool>> UpdateTrade(TradeDto dto)
         {
             var result = await _http.PutAsJsonAsync($"api/trades/update/", dto);
-            bool success = result.IsSuccessStatusCode;
-            var response = new ServiceResponse<bool>
+            if (result.IsSuccessStatusCode)
             {
-                Success = success,
-                Data = success,
-                Message = success ? "Trade updated successfully." : "Failed to update trade."
-            };
-
-            return response;
+                return new ServiceResponse<bool> { Success = true, Data = true };
+            }
+            try
+            {
+                var err = await result.Content.ReadFromJsonAsync<ServiceResponse<bool>>();
+                return new ServiceResponse<bool> { Success = false, Message = err?.Message ?? "Erro ao atualizar trade." };
+            }
+            catch
+            {
+                return new ServiceResponse<bool> { Success = false, Message = "Erro ao atualizar trade." };
+            }
         }
 
 }

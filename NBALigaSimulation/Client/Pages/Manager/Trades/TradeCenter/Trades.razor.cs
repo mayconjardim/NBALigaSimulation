@@ -1,46 +1,44 @@
+using Microsoft.AspNetCore.Components;
+using NBALigaSimulation.Client.Services.TeamsService;
+using NBALigaSimulation.Client.Services.TradesService;
 using NBALigaSimulation.Shared.Dtos.Trades;
 
 namespace NBALigaSimulation.Client.Pages.Manager.Trades.TradeCenter;
 
 public partial class Trades
 {
-    
-    private List<TradeDto> trades = new List<TradeDto>();
-    
-    private string message = string.Empty;
-    
-    string[] headings = { "INIT", "WITH", "STATUS", "REMOVE"};
-    
+    [Inject] private ITradeService TradeService { get; set; } = null!;
+    [Inject] private ITeamService TeamService { get; set; } = null!;
+
+    private List<TradeDto> AllTrades { get; set; } = new();
+    private int? MyTeamId { get; set; }
+    private string Message { get; set; } = "Carregando...";
+
+    private List<TradeDto> Received => AllTrades.Where(t => t.TeamTwoId == MyTeamId).OrderByDescending(t => t.DateCreated).ToList();
+    private List<TradeDto> Sent => AllTrades.Where(t => t.TeamOneId == MyTeamId).OrderByDescending(t => t.DateCreated).ToList();
+
     protected override async Task OnInitializedAsync()
     {
-        message = "Carregando Trocas...";
+        var teamResult = await TeamService.GetTeamByUser();
+        if (teamResult.Success && teamResult.Data != null)
+            MyTeamId = teamResult.Data.Id;
 
         var result = await TradeService.GetTradeByTeamId();
-        if (!result.Success)
-        {
-            message = result.Message;
-        }
-        else
-        {
-            trades = result.Data;
-        }
+        if (result.Success && result.Data != null)
+            AllTrades = result.Data;
+
+        Message = string.Empty;
     }
-    
-    private async Task DeleteTradeOffer(int tradeId)
+
+    private static string StatusBadge(bool? response)
     {
-           
-        var tradeResponse = await TradeService.DeleteTrade(tradeId);
+        if (response == null) return "bg-warning";
+        return response == true ? "bg-success" : "bg-secondary";
+    }
 
-        if (tradeResponse.Success)
-        {
-            //Snackbar.Add("Proposta deletade com sucesso!", Severity.Success);
-            trades.RemoveAll(t => t.Id == tradeId);
-            StateHasChanged();
-        }
-        else
-        {
-           // Snackbar.Add("Proposta não foi deleta!", Severity.Error);
-
-        }
+    private static string StatusText(bool? response)
+    {
+        if (response == null) return "Pendente";
+        return response == true ? "Aceita" : "Rejeitada";
     }
 }

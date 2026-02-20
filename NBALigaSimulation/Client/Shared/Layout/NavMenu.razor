@@ -4,7 +4,8 @@
 @inject NavigationManager NavigationManager
 @inject ISeasonService SeasonService
 @inject IAuthService AuthService
-@inject IJSRuntime JSRuntime;
+@inject IJSRuntime JSRuntime
+@inject ITradeService TradeService
 
 
 <nav class="navbar navbar-expand-lg">
@@ -147,8 +148,12 @@
                                 <i class="bi bi-gear me-2"></i>Verificar Gameplan
                             </a></li>
                         <li class="list-group-item">
-                            <a href="/trades" class="list-group-item list-group-item-action" aria-current="true" @onclick="FecharMOdal" >
-                                <i class="bi bi-arrow-left-right me-2"></i>Trade Center
+                            <a href="/trades" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center" aria-current="true" @onclick="FecharMOdal" >
+                                <span><i class="bi bi-arrow-left-right me-2"></i>Trade Center</span>
+                                @if (PendingTradesCount > 0)
+                                {
+                                    <span class="badge bg-warning text-dark">@PendingTradesCount</span>
+                                }
                             </a></li>
                         <li class="list-group-item">
                             <a href="/freeagency" class="list-group-item list-group-item-action" aria-current="true" @onclick="FecharMOdal" >

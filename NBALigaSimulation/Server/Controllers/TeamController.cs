@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc;
 using NBALigaSimulation.Shared.Dtos.Players;
 using NBALigaSimulation.Shared.Dtos.Teams;
 using NBALigaSimulation.Shared.Models.Utils;
@@ -77,16 +77,8 @@ namespace NBALigaSimulation.Server.Controllers
         [HttpGet("GetTeamByLoggedUser")]
         public async Task<ActionResult<ServiceResponse<TeamCompleteDto>>> GetTeamByLoggedUser()
         {
-
             var result = await _teamService.GetTeamByLoggedUser();
-
-            if (!result.Success)
-            {
-                return NotFound(result);
-            }
-
             return Ok(result);
-
         }
 
         [HttpPut("{teamId}/gameplan")]

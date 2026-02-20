@@ -1,0 +1,133 @@
+/* Cores do projeto: azul (primary) e vermelho (danger) */
+.tradeoffer-panel-blue .tradeoffer-header {
+  background: var(--bs-primary, #094ecb);
+  color: white;
+}
+
+.tradeoffer-panel-red .tradeoffer-header {
+  background: var(--bs-danger, #dc3545);
+  color: white;
+}
+
+.tradeoffer-panel-blue,
+.tradeoffer-panel-red {
+  border: 1px solid var(--bs-border-color, #dee2e6);
+  border-radius: 0.5rem;
+  overflow: hidden;
+  margin-bottom: 1rem;
+}
+
+.tradeoffer-header {
+  padding: 0.75rem 1rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.tradeoffer-summary {
+  padding: 0.75rem 1rem;
+  font-size: 0.9rem;
+  background: var(--bs-light, #f8f9fa);
+  border-bottom: 1px solid var(--bs-border-color, #dee2e6);
+}
+
+.tradeoffer-summary-row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 0.25rem;
+}
+
+.tradeoffer-summary-row:last-child {
+  margin-bottom: 0;
+}
+
+.tradeoffer-after {
+  color: var(--bs-success, #198754);
+  font-weight: 600;
+}
+
+.tradeoffer-sends-header {
+  padding: 0.5rem 1rem;
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+
+.tradeoffer-panel-blue .tradeoffer-sends-header {
+  background: rgba(9, 78, 203, 0.1);
+}
+
+.tradeoffer-panel-red .tradeoffer-sends-header {
+  background: rgba(220, 53, 69, 0.1);
+}
+
+.tradeoffer-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.85rem;
+}
+
+.tradeoffer-table th {
+  padding: 0.5rem 0.5rem;
+  text-align: left;
+  font-weight: 600;
+  font-size: 0.75rem;
+  color: var(--bs-secondary-color, #6c757d);
+  border-bottom: 1px solid var(--bs-border-color, #dee2e6);
+}
+
+.tradeoffer-table td {
+  padding: 0.4rem 0.5rem;
+  border-bottom: 1px solid var(--bs-border-color-translucent, rgba(0,0,0,.075));
+}
+
+.tradeoffer-table .col-foto {
+  width: 40px;
+}
+
+.tradeoffer-table .col-pos {
+  width: 40px;
+}
+
+.tradeoffer-table .col-age {
+  width: 36px;
+  text-align: center;
+}
+
+.tradeoffer-table .col-cur,
+.tradeoffer-table .col-fut {
+  width: 28px;
+  text-align: center;
+}
+
+.tradeoffer-rating {
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  border-radius: 2px;
+  vertical-align: middle;
+}
+
+.tradeoffer-picks {
+  padding: 0.5rem 1rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.tradeoffer-pick-badge {
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.25rem;
+  font-size: 0.8rem;
+  font-weight: 500;
+}
+
+.tradeoffer-panel-blue .tradeoffer-pick-badge {
+  background: rgba(220, 53, 69, 0.15);
+  color: var(--bs-danger, #dc3545);
+}
+
+.tradeoffer-panel-red .tradeoffer-pick-badge {
+  background: rgba(9, 78, 203, 0.15);
+  color: var(--bs-primary, #094ecb);
+}

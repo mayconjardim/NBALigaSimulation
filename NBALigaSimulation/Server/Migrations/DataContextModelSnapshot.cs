@@ -893,6 +893,9 @@ namespace NBALigaSimulation.Server.Migrations
 
                     b.HasIndex("TeamId");
 
+                    b.HasIndex("Original", "Year", "Round")
+                        .IsUnique();
+
                     b.ToTable("TeamDraftPicks");
                 });
 

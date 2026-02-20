@@ -146,6 +146,17 @@ namespace NBALigaSimulation.Server.Controllers
             return Ok(response);
         }
 
+        /// <summary>
+        /// Gera contratos para todos os jogadores em times, baseado em rating, respeitando o salary cap (para testes).
+        /// </summary>
+        [HttpPost("contracts-for-test")]
+        public async Task<ActionResult> GenerateContractsForTest()
+        {
+            var response = await _playerService.GenerateContractsForTest();
+            if (!response.Success) return BadRequest(response);
+            return Ok(response);
+        }
+
         [HttpGet("searchsuggestion/{searchText}")]
         public async Task<ActionResult<ServiceResponse<List<PlayerSimpleDto>>>> GetPlayersSearchSuggestions(string searchText)
         {

@@ -1,41 +1,184 @@
-.trade-container {
-    display: flex;
-    align-content: center;
-    flex-direction: column;
+.trade-header-yellow {
+  padding: 0.75rem 1rem;
+  margin-bottom: 1rem;
+  border: 1px solid var(--bs-border-color, #dee2e6);
+  border-radius: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.5rem;
 }
 
-.fa-central{
-    margin: 1rem;
-    background: var(--primary-color);
-    color: white;
+.trade-salary-match {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 700;
+  font-size: 1.1rem;
 }
 
-table {
-    background-color: var(--white);
-    width: 100%;
-    text-align: center;
-    margin: 0.625rem;
-    border-collapse: collapse;
-    -webkit-border-radius: 0.625rem;
-    -moz-border-radius: 0.625rem;
-    border-radius: 0.625rem;
-    overflow: hidden;
+.trade-header-btns {
+  display: flex;
+  gap: 0.5rem;
 }
 
-table td{
-    padding: 0 0.825rem;
-}
-table tbody td {
-    font-size: 0.625rem;
-    font-weight: 600;
-}
-
-table thead {
-    background: var(--primary-color);
-}
-table thead th {
-    font-size: 0.625rem;
-    font-weight: 800;
-    color: var(--white);
+.trade-panel-blue,
+.trade-panel-red {
+  background: transparent;
+  color: inherit;
+  border: 1px solid var(--bs-border-color, #dee2e6);
+  border-radius: 0.5rem;
+  overflow: hidden;
+  margin-bottom: 1rem;
 }
 
+.trade-panel-header {
+  padding: 0.75rem 1rem;
+  font-weight: 700;
+  font-size: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.trade-panel-sub {
+  padding: 0 1rem 0.5rem;
+  font-size: 0.85rem;
+  color: var(--bs-secondary-color, #6c757d);
+}
+
+.trade-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.8rem;
+}
+
+.trade-table th {
+  background: var(--bs-light, #f8f9fa);
+  padding: 0.5rem 0.4rem;
+  text-align: left;
+  font-weight: 600;
+  border-bottom: 1px solid var(--bs-border-color, #dee2e6);
+}
+
+.trade-table td {
+  padding: 0.35rem 0.4rem;
+  border-bottom: 1px solid var(--bs-border-color-translucent, rgba(0,0,0,.075));
+}
+
+.trade-table tbody tr:hover {
+  background: var(--bs-light, rgba(0,0,0,.03));
+}
+
+.trade-table .col-foto {
+  width: 36px;
+}
+
+.trade-table .col-offer {
+  width: 40px;
+  text-align: center;
+}
+
+.trade-table .col-pos {
+  width: 36px;
+}
+
+.trade-table .col-age {
+  width: 36px;
+  text-align: center;
+}
+
+.trade-table .col-cur,
+.trade-table .col-fut {
+  width: 24px;
+  text-align: center;
+}
+
+.trade-rating-square {
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  border-radius: 2px;
+  vertical-align: middle;
+}
+
+.trade-team-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(70px, 1fr));
+  gap: 0.75rem;
+  padding: 1rem;
+}
+
+.trade-team-logo-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.5rem;
+  border: 2px solid #ddd;
+  border-radius: 0.5rem;
+  background: white;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.trade-team-logo-btn:hover {
+  border-color: var(--bs-primary, #094ecb);
+  background: #f8f9fa;
+}
+
+.trade-team-logo-btn.selected {
+  border-color: var(--bs-primary, #094ecb);
+  background: #e7f0ff;
+  box-shadow: 0 0 0 2px rgba(9, 78, 203, 0.3);
+}
+
+.trade-team-logo-btn img {
+  width: 48px;
+  height: 48px;
+  object-fit: contain;
+}
+
+.trade-choose-panel {
+  background: transparent;
+  border: 1px solid var(--bs-border-color, #dee2e6);
+  border-radius: 0.5rem;
+  padding: 1rem;
+}
+
+.trade-choose-title {
+  font-weight: 700;
+  font-size: 1.1rem;
+  margin-bottom: 0.5rem;
+}
+
+.trade-choose-sub {
+  font-size: 0.9rem;
+  color: var(--bs-secondary-color, #6c757d);
+  margin-bottom: 1rem;
+}
+
+.trade-scroll {
+  max-height: 520px;
+  overflow-y: auto;
+}
+
+.trade-draft-row {
+  border-top: 1px solid var(--bs-border-color, #dee2e6);
+  padding: 0.5rem 0.4rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.trade-draft-row input {
+  flex-shrink: 0;
+}
+
+.trade-submit-row {
+  margin-top: 1rem;
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}

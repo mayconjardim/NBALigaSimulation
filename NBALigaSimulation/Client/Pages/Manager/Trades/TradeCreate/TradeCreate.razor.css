@@ -1,0 +1,197 @@
+/* Mesmo estilo do TradeOffer - cores azul e vermelho */
+.tradecreate-panel-blue .tradecreate-header {
+  background: var(--bs-primary, #094ecb);
+  color: white;
+}
+
+.tradecreate-panel-red .tradecreate-header {
+  background: var(--bs-danger, #dc3545);
+  color: white;
+}
+
+.tradecreate-panel-blue,
+.tradecreate-panel-red {
+  border: 1px solid var(--bs-border-color, #dee2e6);
+  border-radius: 0.5rem;
+  overflow: hidden;
+  margin-bottom: 1rem;
+}
+
+.tradecreate-header {
+  padding: 0.75rem 1rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.tradecreate-summary {
+  padding: 0.75rem 1rem;
+  font-size: 0.9rem;
+  background: var(--bs-light, #f8f9fa);
+  border-bottom: 1px solid var(--bs-border-color, #dee2e6);
+}
+
+.tradecreate-sends-header {
+  padding: 0.5rem 1rem;
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+
+.tradecreate-panel-blue .tradecreate-sends-header {
+  background: rgba(9, 78, 203, 0.1);
+}
+
+.tradecreate-panel-red .tradecreate-sends-header {
+  background: rgba(220, 53, 69, 0.1);
+}
+
+.tradecreate-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.85rem;
+}
+
+.tradecreate-table th {
+  padding: 0.5rem 0.5rem;
+  text-align: left;
+  font-weight: 600;
+  font-size: 0.75rem;
+  color: var(--bs-secondary-color, #6c757d);
+  border-bottom: 1px solid var(--bs-border-color, #dee2e6);
+}
+
+.tradecreate-table td {
+  padding: 0.4rem 0.5rem;
+  border-bottom: 1px solid var(--bs-border-color-translucent, rgba(0,0,0,.075));
+}
+
+.tradecreate-table .col-foto { width: 40px; }
+.tradecreate-table .col-offer { width: 40px; text-align: center; }
+.tradecreate-table .col-pos { width: 40px; }
+.tradecreate-table .col-age { width: 36px; text-align: center; }
+.tradecreate-table .col-cur,
+.tradecreate-table .col-fut { width: 28px; text-align: center; }
+
+.tradecreate-rating {
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  border-radius: 2px;
+  vertical-align: middle;
+}
+
+.tradecreate-scroll {
+  max-height: 520px;
+  overflow-y: auto;
+}
+
+.tradecreate-draft-row {
+  border-top: 1px solid var(--bs-border-color, #dee2e6);
+  padding: 0.5rem 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.tradecreate-draft-row input {
+  flex-shrink: 0;
+}
+
+.tradecreate-panel-blue .tradecreate-pick-badge {
+  background: rgba(220, 53, 69, 0.15);
+  color: var(--bs-danger, #dc3545);
+}
+
+.tradecreate-panel-red .tradecreate-pick-badge {
+  background: rgba(9, 78, 203, 0.15);
+  color: var(--bs-primary, #094ecb);
+}
+
+.tradecreate-pick-badge {
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.25rem;
+  font-size: 0.8rem;
+  font-weight: 500;
+}
+
+.tradecreate-picks {
+  padding: 0.5rem 1rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.tradecreate-header-yellow {
+  padding: 0.75rem 1rem;
+  margin-bottom: 1rem;
+  background: rgba(255, 193, 7, 0.15);
+  border: 1px solid rgba(255, 193, 7, 0.4);
+  border-radius: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.tradecreate-salary-match {
+  font-weight: 700;
+  font-size: 1rem;
+}
+
+.tradecreate-choose-panel {
+  border: 1px solid var(--bs-border-color, #dee2e6);
+  border-radius: 0.5rem;
+  padding: 1rem;
+  background: var(--bs-light, #f8f9fa);
+}
+
+.tradecreate-choose-title {
+  font-weight: 700;
+  font-size: 1.1rem;
+  margin-bottom: 0.25rem;
+}
+
+.tradecreate-choose-sub {
+  font-size: 0.9rem;
+  color: var(--bs-secondary-color, #6c757d);
+  margin-bottom: 1rem;
+}
+
+.tradecreate-team-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(70px, 1fr));
+  gap: 0.75rem;
+}
+
+.tradecreate-team-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.5rem;
+  border: 2px solid var(--bs-border-color, #dee2e6);
+  border-radius: 0.5rem;
+  background: white;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.tradecreate-team-btn:hover {
+  border-color: var(--bs-primary, #094ecb);
+  background: rgba(9, 78, 203, 0.05);
+}
+
+.tradecreate-team-btn img {
+  width: 48px;
+  height: 48px;
+  object-fit: contain;
+}
+
+.tradecreate-submit-row {
+  margin-top: 1rem;
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}

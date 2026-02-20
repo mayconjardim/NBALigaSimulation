@@ -138,6 +138,10 @@ namespace NBALigaSimulation.Server.Data
             .WithOne(dp => dp.Team)
             .HasForeignKey(dp => dp.TeamId);
 
+            modelBuilder.Entity<TeamDraftPicks>()
+                .HasIndex(dp => new { dp.Original, dp.Year, dp.Round })
+                .IsUnique();
+
             modelBuilder.Entity<Team>()
             .HasOne(p => p.Gameplan)
             .WithOne(g => g.Team)

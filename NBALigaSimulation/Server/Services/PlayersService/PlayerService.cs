@@ -424,6 +424,38 @@ namespace NBALigaSimulation.Server.Services.PlayersService
             return response;
         }
 
+        /// <summary>
+        /// Gera contratos para todos os jogadores em times (não FA/draft), baseado em rating, respeitando o salary cap.
+        /// Para testes de trocas, FA, etc.
+        /// </summary>
+        public async Task<ServiceResponse<bool>> GenerateContractsForTest()
+        {
+            var response = new ServiceResponse<bool>();
+
+            var season = await _seasonRepository.Query()
+                .OrderBy(s => s.Id)
+                .LastOrDefaultAsync();
+            if (season == null)
+            {
+                response.Success = false;
+                response.Message = "Temporada não encontrada.";
+                return response;
+            }
+
+            var players = await _playerRepository.Query()
+                .Include(p => p.Ratings)
+                .Include(p => p.Contract)
+                .Where(p => p.TeamId != 21 && p.TeamId != 22)
+                .ToListAsync();
+
+            ContractTestUtils.AssignContractsForTest(players, season.Year);
+
+            await _playerRepository.SaveChangesAsync();
+            response.Success = true;
+            response.Message = $"Contratos gerados para {players.Count} jogadores, respeitando o cap.";
+            return response;
+        }
+
         public async Task<ServiceResponse<PlayerCompleteDto>> EditPlayer(CreatePlayerDto playerDto)
         {
             var player = await _playerRepository.Query()
