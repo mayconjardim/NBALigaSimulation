@@ -12,6 +12,7 @@ namespace NBALigaSimulation.Server.Services.PlayersService
         Task<ServiceResponse<PageableResponse<PlayerCompleteDto>>> GetAllFaPlayers(int currentPage, int pageSize,
             int season, bool isAscending, string sortedColumn, string position = null);
         Task<ServiceResponse<List<PlayerCompleteDto>>> GetAllDraftPlayers();
+        Task<ServiceResponse<List<PlayerCompleteDto>>> GetExpiringPlayers(int season);
         Task<ServiceResponse<PlayerCompleteDto>> CreatePlayer(CreatePlayerDto request);
         Task<ServiceResponse<bool>> CreatePlayers(List<CreatePlayerDto> playersDto);
         Task<ServiceResponse<bool>> ImportBBGMPlayers(BBGMImportDto bbgmData);

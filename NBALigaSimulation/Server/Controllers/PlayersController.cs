@@ -76,6 +76,15 @@ namespace NBALigaSimulation.Server.Controllers
 
         }
 
+        [HttpGet("expiring")]
+        public async Task<ActionResult<ServiceResponse<List<PlayerCompleteDto>>>> GetExpiringPlayers([FromQuery] int season)
+        {
+            var result = await _playerService.GetExpiringPlayers(season);
+            if (!result.Success)
+                return StatusCode(500, result);
+            return Ok(result);
+        }
+
         [HttpPost]
         public async Task<ActionResult<ServiceResponse<PlayerCompleteDto>>> CreatePlayer(CreatePlayerDto request)
         {

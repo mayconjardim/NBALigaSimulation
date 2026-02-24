@@ -119,7 +119,7 @@
                     <tbody>
                         @foreach (var player in _faPlayers)
                         {
-                            @if (player.Ratings != null)
+                            @if (player.Ratings != null && player.Ratings.Any())
                             {
                                 <tr>
                                     <td class="col-player">

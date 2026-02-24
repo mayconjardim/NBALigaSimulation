@@ -336,6 +336,40 @@ namespace NBALigaSimulation.Server.Services.PlayersService
             return response;
         }
 
+        /// <summary>
+        /// Jogadores cujo contrato expira na temporada atual (Contract.Exp == season).
+        /// Exclui FA (TeamId 21) e Draft (TeamId 22).
+        /// </summary>
+        public async Task<ServiceResponse<List<PlayerCompleteDto>>> GetExpiringPlayers(int season)
+        {
+            var response = new ServiceResponse<List<PlayerCompleteDto>>();
+            try
+            {
+                var players = await _playerRepository.Query()
+                    .Where(p => p.TeamId != 21 && p.TeamId != 22 && p.Contract != null && p.Contract.Exp == season)
+                    .Include(p => p.Team)
+                    .Include(p => p.Ratings)
+                    .Include(p => p.Contract)
+                    .ToListAsync();
+
+                var ordered = players
+                    .OrderBy(p => p.Team?.Name)
+                    .ThenByDescending(p => p.Ratings.OrderByDescending(r => r.Season).FirstOrDefault()?.CalculateOvr ?? 0)
+                    .ThenBy(p => p.Name)
+                    .ToList();
+
+                response.Data = _mapper.Map<List<PlayerCompleteDto>>(ordered);
+                response.Success = true;
+            }
+            catch (Exception ex)
+            {
+                response.Success = false;
+                response.Message = $"Erro ao buscar jogadores expirantes: {ex.Message}";
+            }
+
+            return response;
+        }
+
         public async Task<ServiceResponse<bool>> UpdateRosterOrder(List<PlayerCompleteDto> updatedPlayerList)
         {
             var response = new ServiceResponse<bool>();

@@ -1,0 +1,147 @@
+.fa-page {
+    max-width: 1600px;
+    margin: 0 auto;
+}
+
+.fa-header {
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid #e5e7eb;
+}
+
+.fa-header h1 {
+    font-weight: 700;
+    color: var(--bs-body-color, #212529);
+}
+
+.fa-table-container {
+    background-color: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    overflow: hidden;
+    margin-top: 1rem;
+}
+
+.fa-table {
+    margin: 0;
+    border-collapse: separate;
+    border-spacing: 0;
+    width: 100%;
+    text-align: center;
+}
+
+.fa-table thead {
+    background-color: #135EB8;
+    color: white;
+}
+
+.fa-table thead th {
+    padding: 1rem 0.6rem;
+    font-weight: 600;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    white-space: nowrap;
+    border: none;
+    user-select: none;
+}
+
+.fa-table thead .col-player {
+    text-align: left;
+    padding-left: 1rem;
+    min-width: 220px;
+    position: sticky;
+    left: 0;
+    z-index: 20;
+    background-color: #135EB8;
+}
+
+.fa-table tbody td {
+    padding: 0.75rem 0.6rem;
+    font-size: 0.875rem;
+    vertical-align: middle;
+    border-bottom: 1px solid #f0f0f0;
+    white-space: nowrap;
+}
+
+.fa-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.fa-table tbody tr:nth-child(even) {
+    background-color: #f8f9fa;
+}
+
+.fa-table tbody tr:nth-child(odd) {
+    background-color: #ffffff;
+}
+
+.fa-table tbody tr:hover td {
+    background-color: #e9ecef;
+}
+
+.fa-table tbody tr:hover .col-player {
+    background-color: #e9ecef;
+}
+
+.fa-table .col-player {
+    position: sticky;
+    left: 0;
+    background-color: inherit;
+    z-index: 10;
+    min-width: 220px;
+    text-align: left;
+    padding-left: 1rem;
+    box-shadow: 2px 0 4px rgba(0, 0, 0, 0.04);
+}
+
+.fa-table tbody tr:nth-child(even) .col-player {
+    background-color: #f8f9fa;
+}
+
+.fa-table tbody tr:nth-child(odd) .col-player {
+    background-color: #ffffff;
+}
+
+.fa-player-cell {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.fa-player-thumb {
+    width: 32px;
+    height: 32px;
+    object-fit: contain;
+    flex-shrink: 0;
+}
+
+.fa-player-name {
+    font-weight: 500;
+    color: var(--bs-primary, #0d6efd);
+    text-decoration: none;
+}
+
+.fa-player-name:hover {
+    text-decoration: underline;
+}
+
+.fa-player-pos {
+    color: #6c757d;
+    font-size: 0.8em;
+}
+
+.fa-table .badge {
+    font-size: 0.8rem;
+    font-weight: 600;
+    min-width: 2rem;
+}
+
+.fa-empty {
+    border-radius: 12px;
+    margin-top: 1rem;
+}
+
+.table-responsive {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+}

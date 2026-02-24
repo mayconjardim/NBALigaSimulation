@@ -14,6 +14,7 @@ public interface IPlayerService
     Task<ServiceResponse<PageableResponse<PlayerCompleteDto>>> GetAllFaPlayers(int currentPage, int pageSize,
         int season, bool isAscending, string sortedColumn, string position = null);
     Task<ServiceResponse<List<PlayerCompleteDto>>> GetAllDraftPlayers();
+    Task<ServiceResponse<List<PlayerCompleteDto>>> GetExpiringPlayers(int season);
     Task<ServiceResponse<PlayerCompleteDto>> EditPlayer(CreatePlayerDto request);
 
 
