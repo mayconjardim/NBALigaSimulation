@@ -47,9 +47,9 @@ jobs:
               dotnet restore
               dotnet build -c Release
 
-              echo 'Rodando Server em background...';
+              echo 'Rodando Server em background com nohup...';
               cd ../Server
-              dotnet run > server.log 2>&1 &
+              nohup dotnet run > server.log 2>&1 &
 
               echo 'Deploy concluído dentro do container!'
             "
