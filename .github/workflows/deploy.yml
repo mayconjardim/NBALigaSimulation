@@ -20,6 +20,8 @@ jobs:
           script: |
             echo "Entrando no container para atualizar código e rodar Server..."
             docker exec nb-dotnet-dev-1 bash -c "
+              set -e   # Para falhar se algum comando der erro
+              
               echo 'Indo para raiz do projeto...';
               cd /app/NBALigaSimulation;
 
@@ -29,14 +31,24 @@ jobs:
               echo 'Parando Server antigo...';
               pkill -f 'dotnet .*Server' || true;
 
-              echo 'Indo para Server project...';
+              echo 'Limpando build antigo...';
               cd NBALigaSimulation/Server;
+              dotnet clean
+              rm -rf bin obj
 
-              echo 'Restaurando e buildando...';
-              dotnet restore;
-              dotnet build;
+              echo 'Restaurando e buildando Server...';
+              dotnet restore
+              dotnet build
+
+              echo 'Buildando Client Blazor...';
+              cd ../Client
+              dotnet clean
+              rm -rf bin obj
+              dotnet restore
+              dotnet build -c Release
 
               echo 'Rodando Server em background...';
+              cd ../Server
               dotnet run > server.log 2>&1 &
 
               echo 'Deploy concluído dentro do container!'
