@@ -1,4 +1,4 @@
-﻿using NBALigaSimulation.Shared.Models.Players;
+using NBALigaSimulation.Shared.Models.Players;
 using NBALigaSimulation.Shared.Models.Teams;
 
 namespace NBALigaSimulation.Shared.Models.FA
@@ -15,7 +15,7 @@ namespace NBALigaSimulation.Shared.Models.FA
         public int Amount { get; set; }
         public int Years { get; set; }
         public bool? Response { get; set; }
-        public DateTime DateCreated { get; set; } = DateTime.Now;
+        public DateTime DateCreated { get; set; } = DateTime.UtcNow;
            
     }
 }

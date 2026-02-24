@@ -1,11 +1,11 @@
-﻿using NBALigaSimulation.Shared.Models.Teams;
+using NBALigaSimulation.Shared.Models.Teams;
 
 namespace NBALigaSimulation.Shared.Models.Trades
 {
     public class Trade
     {
         public int Id { get; set; }
-        public DateTime DateCreated { get; set; } = DateTime.Now;
+        public DateTime DateCreated { get; set; } = DateTime.UtcNow;
         public int TeamOneId { get; set; }
         public Team TeamOne { get; set; }
 
@@ -16,7 +16,7 @@ namespace NBALigaSimulation.Shared.Models.Trades
         public List<TradePicks> TradePicks { get; set; }
 
         public bool? Response { get; set; } = null;
-        public DateTime LastModified { get; set; } = DateTime.Now;
+        public DateTime LastModified { get; set; } = DateTime.UtcNow;
 
     }
 }

@@ -152,6 +152,8 @@ namespace NBALigaSimulation.Server.Services.TradeService
             {
 
                 Trade trade = _mapper.Map<Trade>(tradeDto);
+                trade.DateCreated = DateTime.UtcNow;
+                trade.LastModified = DateTime.UtcNow;
                 trade.TradePlayers ??= new List<TradePlayer>();
                 trade.TradePicks ??= new List<TradePicks>();
 
@@ -160,7 +162,7 @@ namespace NBALigaSimulation.Server.Services.TradeService
                     trade.TradePlayers.Add(new TradePlayer
                     {
                         PlayerId = player.Id,
-                        TradePlayerId = trade.Id
+                        Trade = trade
                     });
                 }
 
@@ -169,7 +171,7 @@ namespace NBALigaSimulation.Server.Services.TradeService
                     trade.TradePicks.Add(new TradePicks
                     {
                         DraftPickId = picks.Id,
-                        TradePickId = trade.Id
+                        Trade = trade
                     });
                 }
 

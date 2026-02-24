@@ -302,7 +302,7 @@ namespace NBALigaSimulation.Server.Services.DraftService
                 Console.WriteLine("[BACKEND] Atribuindo jogador ao draft...");
                 draft.Player = player;
                 draft.PlayerId = request.PlayerId;
-                draft.DateTime = DateTime.Now;
+                draft.DateTime = DateTime.UtcNow;
 
                 Console.WriteLine("[BACKEND] Atualizando informações do jogador...");
                 player.TeamId = request.TeamId;
