@@ -15,16 +15,16 @@ jobs:
         with:
           host: ${{ secrets.VPS_HOST }}
           username: ${{ secrets.VPS_USER }}
-          password: ${{ secrets.VPS }} 
+          password: ${{ secrets.VPS }}
           port: 22
           script: |
             echo "Entrando no container para atualizar código e rodar Server..."
 
-            # Atualiza código dentro do container
+            # Atualiza o código dentro do container
             docker exec nb-dotnet-dev-1 git -C /app/NBALigaSimulation pull origin master
 
-            # Mata o server antigo (se houver algum processo rodando)
-            docker exec nb-dotnet-dev-1 sh -c "kill \$(pgrep -f 'dotnet .*Server') || true"
+            # Mata o server antigo
+            docker exec nb-dotnet-dev-1 pkill -f 'dotnet .*Server' || true
 
-            # Roda o Server exatamente como você faz manualmente
+            # Roda o Server exatamente como manual
             docker exec nb-dotnet-dev-1 dotnet run --project /app/NBALigaSimulation/NBALigaSimulation/Server/
