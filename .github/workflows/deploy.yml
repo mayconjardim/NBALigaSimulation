@@ -15,7 +15,7 @@ jobs:
         with:
           host: ${{ secrets.VPS_HOST }}
           username: ${{ secrets.VPS_USER }}
-           password: ${{ secrets.VPS }} 
+          password: ${{ secrets.VPS }} 
           port: 22
           script: |
             echo "Entrando no container para atualizar código e rodar Server..."
