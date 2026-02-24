@@ -13,8 +13,8 @@ jobs:
       - name: Deploy dentro do container
         uses: appleboy/ssh-action@v0.1.9
         with:
-          host: 200.179.25.100
-          username: microware
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USER }}
            password: ${{ secrets.VPS }} 
           port: 22
           script: |
