@@ -1,0 +1,108 @@
+@page "/expiring-contracts"
+@using NBALigaSimulation.Client.Utilities
+@inject IPlayerService PlayerService
+@inject ILocalStorageService LocalStorage
+
+<div class="fa-page container py-4">
+    <div class="fa-header mb-4">
+        <h1 class="h3 mb-1"><i class="bi bi-calendar-x me-2"></i>Contratos expirando</h1>
+        <p class="text-muted mb-0">Jogadores com contrato expirando na temporada @_season</p>
+    </div>
+
+    @if (_loading)
+    {
+        <p class="text-muted"><span class="spinner-border spinner-border-sm me-2"></span>Carregando...</p>
+    }
+    else if (_players != null && _players.Count > 0)
+    {
+        <div class="fa-table-container">
+            <div class="table-responsive">
+                <table class="table fa-table">
+                    <thead>
+                        <tr>
+                            <th class="col-player">JOGADOR</th>
+                            <th>TIME</th>
+                            <th>IDADE</th>
+                            <th>EXP</th>
+                            <th>OVR</th>
+                            <th>POT</th>
+                            <th>HGT</th>
+                            <th>STR</th>
+                            <th>SPD</th>
+                            <th>JMP</th>
+                            <th>END</th>
+                            <th>INS</th>
+                            <th>DNK</th>
+                            <th>FT</th>
+                            <th>2PT</th>
+                            <th>3PT</th>
+                            <th>OIQ</th>
+                            <th>DIQ</th>
+                            <th>DRB</th>
+                            <th>PSS</th>
+                            <th>REB</th>
+                            <th class="text-end">VALOR/ANO</th>
+                            <th>EXPIRA</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var player in _players)
+                        {
+                            @if (player.Ratings != null && player.Ratings.Any())
+                            {
+                                var lastRating = player.Ratings.LastOrDefault();
+                                <tr>
+                                    <td class="col-player">
+                                        <div class="fa-player-cell">
+                                            <img src="@(string.IsNullOrEmpty(player.ImgUrl) ? "Images/Utils/blank.png" : player.ImgUrl)" alt="" class="fa-player-thumb" />
+                                            <a href="@($"players/{player.Id}")" class="fa-player-name">@player.Name</a>
+                                            <span class="fa-player-pos">@player.Pos</span>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        @if (player.TeamId > 0 && !string.IsNullOrEmpty(player.TeamName))
+                                        {
+                                            <a href="@($"teams/{player.TeamId}")" class="text-decoration-none">@player.TeamName</a>
+                                        }
+                                        else
+                                        {
+                                            <span class="text-muted">-</span>
+                                        }
+                                    </td>
+                                    <td>@Util.Age(lastRating.Season, player.Born?.Year ?? _season - 25)</td>
+                                    <td>@player.Ratings.Count</td>
+                                    <td><span class="badge @Util.GetBadgeClass(lastRating?.CalculateOvr ?? 0)">@(lastRating?.CalculateOvr)</span></td>
+                                    <td><span class="badge @Util.GetBadgeClass(lastRating?.Pot ?? 0)">@(lastRating?.Pot)</span></td>
+                                    <td>@lastRating?.Hgt</td>
+                                    <td>@lastRating?.Stre</td>
+                                    <td>@lastRating?.Spd</td>
+                                    <td>@lastRating?.Jmp</td>
+                                    <td>@lastRating?.Endu</td>
+                                    <td>@lastRating?.Ins</td>
+                                    <td>@lastRating?.Dnk</td>
+                                    <td>@lastRating?.Ft</td>
+                                    <td>@lastRating?.Fg</td>
+                                    <td>@lastRating?.Tp</td>
+                                    <td>@lastRating?.Oiq</td>
+                                    <td>@lastRating?.Diq</td>
+                                    <td>@lastRating?.Drb</td>
+                                    <td>@lastRating?.Pss</td>
+                                    <td>@lastRating?.Reb</td>
+                                    <td class="text-end">@(player.Contract != null ? FormatMoney(player.Contract.Amount) : "-")</td>
+                                    <td><span class="text-warning">@_season</span></td>
+                                </tr>
+                            }
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    }
+    else
+    {
+        <div class="fa-empty alert alert-secondary">
+            <i class="bi bi-calendar-check me-2"></i>Nenhum jogador com contrato expirando em @_season.
+        </div>
+    }
+</div>
+

@@ -85,6 +85,15 @@ namespace NBALigaSimulation.Server.Controllers
             return Ok(result);
         }
 
+        [HttpGet("injured")]
+        public async Task<ActionResult<ServiceResponse<List<PlayerCompleteDto>>>> GetInjuredPlayers()
+        {
+            var result = await _playerService.GetInjuredPlayers();
+            if (!result.Success)
+                return StatusCode(500, result);
+            return Ok(result);
+        }
+
         [HttpPost]
         public async Task<ActionResult<ServiceResponse<PlayerCompleteDto>>> CreatePlayer(CreatePlayerDto request)
         {

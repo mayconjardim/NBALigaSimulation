@@ -13,6 +13,7 @@ namespace NBALigaSimulation.Server.Services.PlayersService
             int season, bool isAscending, string sortedColumn, string position = null);
         Task<ServiceResponse<List<PlayerCompleteDto>>> GetAllDraftPlayers();
         Task<ServiceResponse<List<PlayerCompleteDto>>> GetExpiringPlayers(int season);
+        Task<ServiceResponse<List<PlayerCompleteDto>>> GetInjuredPlayers();
         Task<ServiceResponse<PlayerCompleteDto>> CreatePlayer(CreatePlayerDto request);
         Task<ServiceResponse<bool>> CreatePlayers(List<CreatePlayerDto> playersDto);
         Task<ServiceResponse<bool>> ImportBBGMPlayers(BBGMImportDto bbgmData);

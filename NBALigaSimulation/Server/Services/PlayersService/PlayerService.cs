@@ -364,7 +364,40 @@ namespace NBALigaSimulation.Server.Services.PlayersService
             catch (Exception ex)
             {
                 response.Success = false;
-                response.Message = $"Erro ao buscar jogadores expirantes: {ex.Message}";
+                response.Message = $"Erro ao buscar jogadores com contrato expirando: {ex.Message}";
+            }
+
+            return response;
+        }
+
+        /// <summary>
+        /// Jogadores atualmente lesionados (InjuryType preenchido e InjuryGamesRemaining > 0).
+        /// </summary>
+        public async Task<ServiceResponse<List<PlayerCompleteDto>>> GetInjuredPlayers()
+        {
+            var response = new ServiceResponse<List<PlayerCompleteDto>>();
+            try
+            {
+                var players = await _playerRepository.Query()
+                    .Where(p => !string.IsNullOrEmpty(p.InjuryType) && (p.InjuryGamesRemaining ?? 0) > 0)
+                    .Include(p => p.Team)
+                    .Include(p => p.Ratings)
+                    .Include(p => p.Contract)
+                    .ToListAsync();
+
+                var ordered = players
+                    .OrderBy(p => p.Team?.Name)
+                    .ThenByDescending(p => p.Ratings.OrderByDescending(r => r.Season).FirstOrDefault()?.CalculateOvr ?? 0)
+                    .ThenBy(p => p.Name)
+                    .ToList();
+
+                response.Data = _mapper.Map<List<PlayerCompleteDto>>(ordered);
+                response.Success = true;
+            }
+            catch (Exception ex)
+            {
+                response.Success = false;
+                response.Message = $"Erro ao buscar jogadores lesionados: {ex.Message}";
             }
 
             return response;

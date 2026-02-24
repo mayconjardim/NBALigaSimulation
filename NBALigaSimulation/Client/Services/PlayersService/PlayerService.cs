@@ -91,7 +91,13 @@ public class PlayerService : IPlayerService
     public async Task<ServiceResponse<List<PlayerCompleteDto>>> GetExpiringPlayers(int season)
     {
         var result = await _http.GetFromJsonAsync<ServiceResponse<List<PlayerCompleteDto>>>($"api/players/expiring?season={season}");
-        return result ?? new ServiceResponse<List<PlayerCompleteDto>> { Success = false, Message = "Erro ao buscar jogadores expirantes." };
+        return result ?? new ServiceResponse<List<PlayerCompleteDto>> { Success = false, Message = "Erro ao buscar jogadores com contrato expirando." };
+    }
+
+    public async Task<ServiceResponse<List<PlayerCompleteDto>>> GetInjuredPlayers()
+    {
+        var result = await _http.GetFromJsonAsync<ServiceResponse<List<PlayerCompleteDto>>>("api/players/injured");
+        return result ?? new ServiceResponse<List<PlayerCompleteDto>> { Success = false, Message = "Erro ao buscar jogadores lesionados." };
     }
 
     public async Task<ServiceResponse<PlayerCompleteDto>> EditPlayer(CreatePlayerDto playerDto)

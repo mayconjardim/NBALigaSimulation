@@ -15,6 +15,7 @@ public interface IPlayerService
         int season, bool isAscending, string sortedColumn, string position = null);
     Task<ServiceResponse<List<PlayerCompleteDto>>> GetAllDraftPlayers();
     Task<ServiceResponse<List<PlayerCompleteDto>>> GetExpiringPlayers(int season);
+    Task<ServiceResponse<List<PlayerCompleteDto>>> GetInjuredPlayers();
     Task<ServiceResponse<PlayerCompleteDto>> EditPlayer(CreatePlayerDto request);
 
 
