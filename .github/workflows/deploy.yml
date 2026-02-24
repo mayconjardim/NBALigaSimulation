@@ -19,37 +19,12 @@ jobs:
           port: 22
           script: |
             echo "Entrando no container para atualizar código e rodar Server..."
-            docker exec nb-dotnet-dev-1 bash -c "
-              set -e   # Para falhar se algum comando der erro
-              
-              echo 'Indo para raiz do projeto...';
-              cd /app/NBALigaSimulation;
-
-              echo 'Fazendo git pull...';
-              git pull origin master;
-
-              echo 'Parando Server antigo...';
-              pkill -f 'dotnet .*Server' || true;
-
-              echo 'Limpando build antigo...';
-              cd NBALigaSimulation/Server;
-              dotnet clean
-              rm -rf bin obj
-
-              echo 'Restaurando e buildando Server...';
-              dotnet restore
-              dotnet build
-
-              echo 'Buildando Client Blazor...';
-              cd ../Client
-              dotnet clean
-              rm -rf bin obj
-              dotnet restore
-              dotnet build -c Release
-
-              echo 'Rodando Server em background com nohup...';
-              cd ../Server
-              nohup dotnet run > server.log 2>&1 &
-
-              echo 'Deploy concluído dentro do container!'
-            "
+            
+            # Atualiza código dentro do container
+            docker exec nb-dotnet-dev-1 git -C /app/NBALigaSimulation pull origin master
+            
+            # Mata o server antigo
+            docker exec nb-dotnet-dev-1 pkill -f 'dotnet .*Server' || true
+            
+            # Roda o Projeto
+            docker exec -it nb-dotnet-dev-1 dotnet run --project /app/NBALigaSimulation/NBALigaSimulation/Server/
