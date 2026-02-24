@@ -43,7 +43,6 @@ namespace NBALigaSimulation.Server.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-
             modelBuilder.Entity<User>()
             .HasOne(u => u.Team)
             .WithOne()
@@ -160,7 +159,7 @@ namespace NBALigaSimulation.Server.Data
             modelBuilder.Entity<Trade>(entity =>
            {
                entity.HasKey(t => t.Id);
-               entity.Property(t => t.DateCreated).HasDefaultValueSql("GETDATE()");
+               entity.Property(t => t.DateCreated).HasDefaultValueSql("CURRENT_TIMESTAMP");
 
                entity.HasOne(t => t.TeamOne)
                    .WithMany()
@@ -255,7 +254,6 @@ namespace NBALigaSimulation.Server.Data
                     .HasForeignKey(d => d.PlayerId)
                     .OnDelete(DeleteBehavior.SetNull);
             });
-
         }
     }
 }

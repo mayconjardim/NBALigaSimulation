@@ -25,20 +25,29 @@ using NBALigaSimulation.Server.Services.LeagueService;
 using NBALigaSimulation.Server.Services.PlayoffsService;
 using NBALigaSimulation.Server.Services.AwardsService;
 using NBALigaSimulation.Server.Services.GmService;
+using EFCore.NamingConventions;
 
 var builder = WebApplication.CreateBuilder(args);
 
 StaticWebAssetsLoader.UseStaticWebAssets(builder.Environment, builder.Configuration);
 
+// Log da connection string (senha mascarada) para conferir qual banco está sendo usado
+var connStr = builder.Configuration["ConnectionStrings:NbaligaDBConnectionString"];
+if (!string.IsNullOrEmpty(connStr))
+{
+    var masked = System.Text.RegularExpressions.Regex.Replace(connStr, @"Password=[^;]*", "Password=***");
+    Console.WriteLine($"[DB] Connection: {masked}");
+}
+
 // Add services to the container.
 
 builder.Services.AddDbContext<DataContext>(DbContextOptions =>
-          DbContextOptions.UseSqlite(builder.Configuration["ConnectionStrings:NbaligaDBConnectionString"]));
+          DbContextOptions.UseNpgsql(builder.Configuration["ConnectionStrings:NbaligaDBConnectionString"])
+              .UseLowerCaseNamingConvention());
 
 builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();
 
-// Configuração CORS para acesso pela rede LAN
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowAll", policy =>
@@ -96,6 +105,22 @@ CultureInfo.DefaultThreadCurrentCulture = cultureInfo;
 CultureInfo.DefaultThreadCurrentUICulture = cultureInfo;
 
 var app = builder.Build();
+
+// Diagnóstico: confere se o banco tem dados (mesma conexão que a API usa)
+using (var scope = app.Services.CreateScope())
+{
+    try
+    {
+        var ctx = scope.ServiceProvider.GetRequiredService<DataContext>();
+        var teamsCount = ctx.Teams.Count();
+        var seasonsCount = ctx.Seasons.Count();
+        Console.WriteLine($"[DB] Ao iniciar - Teams: {teamsCount}, Seasons: {seasonsCount}");
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine($"[DB] Erro ao testar conexão: {ex.Message}");
+    }
+}
 
 app.UseSwaggerUI();
 
