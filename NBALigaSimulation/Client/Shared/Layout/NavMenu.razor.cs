@@ -14,6 +14,7 @@ public partial class NavMenu
     private UserLogin user = new();
     private string userTeam = string.Empty;
     private string userName = string.Empty;
+    private int _season;
 
     
     protected override async Task OnInitializedAsync()
@@ -41,7 +42,13 @@ public partial class NavMenu
         var response = await SeasonService.GetLastSeason();
         if (response.Success)
         {
+            _season = response.Data.Year;
             await LocalStorage.SetItemAsync("season", response.Data.Year.ToString());
+        }
+        else
+        {
+            var seasonStr = await LocalStorage.GetItemAsync<string>("season");
+            _season = int.TryParse(seasonStr, out var s) ? s : DateTime.Now.Year;
         }
     }
 

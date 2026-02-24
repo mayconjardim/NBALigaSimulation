@@ -1,4 +1,4 @@
-﻿.navbar {
+.navbar {
     background: linear-gradient(135deg, #0d47a1 0%, #1565c0 100%);
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
     backdrop-filter: blur(10px);
@@ -35,6 +35,17 @@
 
 .navbar-brand:hover img {
     transform: rotate(10deg);
+}
+
+.navbar-season {
+    margin-top: 0.15rem;
+    font-size: 0.6rem;
+    font-weight: 400;
+    color: rgba(255, 255, 255, 0.7);
+    text-transform: none;
+    letter-spacing: 0.2px;
+    display: inline-flex;
+    align-items: center;
 }
 
 .nav-item a {
