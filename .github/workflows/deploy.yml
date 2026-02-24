@@ -1,0 +1,43 @@
+name: CI/CD Deploy NBA Liga Simulation
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Deploy dentro do container
+        uses: appleboy/ssh-action@v0.1.9
+        with:
+          host: 200.179.25.100
+          username: microware
+           password: ${{ secrets.VPS }} 
+          port: 22
+          script: |
+            echo "Entrando no container para atualizar código e rodar Server..."
+            docker exec nb-dotnet-dev-1 bash -c "
+              echo 'Indo para raiz do projeto...';
+              cd /app/NBALigaSimulation;
+
+              echo 'Fazendo git pull...';
+              git pull origin master;
+
+              echo 'Parando Server antigo...';
+              pkill -f 'dotnet .*Server' || true;
+
+              echo 'Indo para Server project...';
+              cd NBALigaSimulation/Server;
+
+              echo 'Restaurando e buildando...';
+              dotnet restore;
+              dotnet build;
+
+              echo 'Rodando Server em background...';
+              dotnet run > server.log 2>&1 &
+
+              echo 'Deploy concluído dentro do container!'
+            "
