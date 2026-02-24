@@ -19,6 +19,7 @@ namespace NBALigaSimulation.Server.Services.StatsService
 		private readonly IGenericRepository<PlayerPlayoffsStats> _playerPlayoffsStatsRepository;
 		private readonly IGenericRepository<PlayerGameStats> _playerGameStatsRepository;
 		private readonly IGenericRepository<Season> _seasonRepository;
+		private readonly IGenericRepository<Team> _teamRepository;
 		private readonly IMapper _mapper;
 
 		public StatsService(
@@ -28,6 +29,7 @@ namespace NBALigaSimulation.Server.Services.StatsService
 			IGenericRepository<PlayerPlayoffsStats> playerPlayoffsStatsRepository,
 			IGenericRepository<PlayerGameStats> playerGameStatsRepository,
 			IGenericRepository<Season> seasonRepository,
+			IGenericRepository<Team> teamRepository,
 			IMapper mapper)
 		{
 			_playerRegularStatsRepository = playerRegularStatsRepository;
@@ -36,6 +38,7 @@ namespace NBALigaSimulation.Server.Services.StatsService
 			_playerPlayoffsStatsRepository = playerPlayoffsStatsRepository;
 			_playerGameStatsRepository = playerGameStatsRepository;
 			_seasonRepository = seasonRepository;
+			_teamRepository = teamRepository;
 			_mapper = mapper;
 		}
 		
@@ -229,6 +232,112 @@ namespace NBALigaSimulation.Server.Services.StatsService
 					 .ToListAsync();
 
 				 var teamStats = _mapper.Map<List<TeamRegularStatsDto>>(stats);
+
+				 // Se não há jogos na temporada, exibir todos os times com 0-0 para não ficar vazio
+				 if (teamStats == null || !teamStats.Any())
+				 {
+					 var teams = await _teamRepository.Query().ToListAsync();
+					 var eastOrdered = teams.Where(t => t.Conference == "East").OrderBy(t => t.Region).ToList();
+					 var westOrdered = teams.Where(t => t.Conference == "West").OrderBy(t => t.Region).ToList();
+					 var list = new List<TeamRegularStatsDto>();
+					 for (var i = 0; i < eastOrdered.Count; i++)
+					 {
+						 var t = eastOrdered[i];
+						 list.Add(new TeamRegularStatsDto
+						 {
+							 Id = 0,
+							 TeamId = t.Id,
+							 TeamName = t.Name,
+							 TeamRegion = t.Region,
+							 TeamAbrv = t.Abrv,
+							 TeamConference = t.Conference,
+							 Season = season,
+							 ConfRank = i + 1,
+							 Streak = 0,
+							 HomeWins = 0,
+							 HomeLosses = 0,
+							 RoadWins = 0,
+							 RoadLosses = 0,
+							 PlayoffWins = 0,
+							 PlayoffLosses = 0,
+							 Points = 0,
+							 AllowedPoints = 0,
+							 Steals = 0,
+							 AllowedStealS = 0,
+							 Fouls = 0,
+							 AllowedFouls = 0,
+							 Rebounds = 0,
+							 AllowedRebounds = 0,
+							 Assists = 0,
+							 AllowedAssists = 0,
+							 Blocks = 0,
+							 AllowedBlocks = 0,
+							 Turnovers = 0,
+							 AllowedTurnovers = 0,
+							 FGA = 0,
+							 FGM = 0,
+							 AllowedFGA = 0,
+							 AllowedFGM = 0,
+							 TPA = 0,
+							 TPM = 0,
+							 Allowed3PA = 0,
+							 Allowed3PM = 0,
+							 FTM = 0,
+							 FTA = 0,
+							 AllowedFTM = 0,
+							 AllowedFTA = 0
+						 });
+					 }
+					 for (var i = 0; i < westOrdered.Count; i++)
+					 {
+						 var t = westOrdered[i];
+						 list.Add(new TeamRegularStatsDto
+						 {
+							 Id = 0,
+							 TeamId = t.Id,
+							 TeamName = t.Name,
+							 TeamRegion = t.Region,
+							 TeamAbrv = t.Abrv,
+							 TeamConference = t.Conference,
+							 Season = season,
+							 ConfRank = i + 1,
+							 Streak = 0,
+							 HomeWins = 0,
+							 HomeLosses = 0,
+							 RoadWins = 0,
+							 RoadLosses = 0,
+							 PlayoffWins = 0,
+							 PlayoffLosses = 0,
+							 Points = 0,
+							 AllowedPoints = 0,
+							 Steals = 0,
+							 AllowedStealS = 0,
+							 Fouls = 0,
+							 AllowedFouls = 0,
+							 Rebounds = 0,
+							 AllowedRebounds = 0,
+							 Assists = 0,
+							 AllowedAssists = 0,
+							 Blocks = 0,
+							 AllowedBlocks = 0,
+							 Turnovers = 0,
+							 AllowedTurnovers = 0,
+							 FGA = 0,
+							 FGM = 0,
+							 AllowedFGA = 0,
+							 AllowedFGM = 0,
+							 TPA = 0,
+							 TPM = 0,
+							 Allowed3PA = 0,
+							 Allowed3PM = 0,
+							 FTM = 0,
+							 FTA = 0,
+							 AllowedFTM = 0,
+							 AllowedFTA = 0
+						 });
+					 }
+					 teamStats = list;
+				 }
 
 				 response.Data = teamStats;
 				 response.Message = "Stats carregadas com sucesso!";

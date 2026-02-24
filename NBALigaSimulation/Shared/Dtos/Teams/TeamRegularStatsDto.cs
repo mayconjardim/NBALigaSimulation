@@ -1,4 +1,4 @@
-﻿using System.Globalization;
+using System.Globalization;
 namespace NBALigaSimulation.Shared.Dtos.Teams
 {
     public class TeamRegularStatsDto
@@ -88,6 +88,7 @@ namespace NBALigaSimulation.Shared.Dtos.Teams
             get
             {
                 int games = (HomeWins + HomeLosses + RoadWins + RoadLosses);
+                if (games == 0) return ".000";
                 double winPct = (double)(HomeWins + RoadWins) / games;
                 return winPct.ToString(".000", CultureInfo.InvariantCulture);
             }
@@ -98,6 +99,7 @@ namespace NBALigaSimulation.Shared.Dtos.Teams
             get
             {
                 int games = HomeWins + HomeLosses + RoadWins + RoadLosses;
+                if (games == 0) return "0.0";
                 double pf = (double)Points / games;
                 return pf.ToString("0.0", CultureInfo.InvariantCulture);
             }
@@ -108,6 +110,7 @@ namespace NBALigaSimulation.Shared.Dtos.Teams
             get
             {
                 int games = HomeWins + HomeLosses + RoadWins + RoadLosses;
+                if (games == 0) return "0.0";
                 double pa = (double)AllowedPoints / games;
                 return pa.ToString("0.0", CultureInfo.InvariantCulture);
             }
@@ -118,6 +121,7 @@ namespace NBALigaSimulation.Shared.Dtos.Teams
             get
             {
                 int games = HomeWins + HomeLosses + RoadWins + RoadLosses;
+                if (games == 0) return "0.0";
                 double diff = (double)(Points - AllowedPoints) / games;
                 return diff.ToString("0.0", CultureInfo.InvariantCulture);
             }
@@ -128,6 +132,7 @@ namespace NBALigaSimulation.Shared.Dtos.Teams
             get
             {
                 int games = HomeWins + HomeLosses + RoadWins + RoadLosses;
+                if (games == 0) return "0.0";
                 double diff = (double)Points / games;
                 return diff.ToString("0.0", CultureInfo.InvariantCulture);
             }
@@ -138,6 +143,7 @@ namespace NBALigaSimulation.Shared.Dtos.Teams
             get
             {
                 int games = HomeWins + HomeLosses + RoadWins + RoadLosses;
+                if (games == 0) return "0.0";
                 double diff = (double)AllowedPoints / games;
                 return diff.ToString("0.0", CultureInfo.InvariantCulture);
             }
@@ -148,6 +154,7 @@ namespace NBALigaSimulation.Shared.Dtos.Teams
             get
             {
                 int games = HomeWins + HomeLosses + RoadWins + RoadLosses;
+                if (games == 0) return "0.0";
                 double diff = (double)AllowedRebounds / games;
                 return diff.ToString("0.0", CultureInfo.InvariantCulture);
             }
@@ -158,6 +165,7 @@ namespace NBALigaSimulation.Shared.Dtos.Teams
             get
             {
                 int games = HomeWins + HomeLosses + RoadWins + RoadLosses;
+                if (games == 0) return "0.0";
                 double diff = (double)AllowedAssists / games;
                 return diff.ToString("0.0", CultureInfo.InvariantCulture);
             }
@@ -168,6 +176,7 @@ namespace NBALigaSimulation.Shared.Dtos.Teams
             get
             {
                 int games = HomeWins + HomeLosses + RoadWins + RoadLosses;
+                if (games == 0) return "0.0";
                 double diff = (double)AllowedStealS / games;
                 return diff.ToString("0.0", CultureInfo.InvariantCulture);
             }
@@ -178,6 +187,7 @@ namespace NBALigaSimulation.Shared.Dtos.Teams
             get
             {
                 int games = HomeWins + HomeLosses + RoadWins + RoadLosses;
+                if (games == 0) return "0.0";
                 double diff = (double)AllowedBlocks / games;
                 return diff.ToString("0.0", CultureInfo.InvariantCulture);
             }
@@ -188,6 +198,7 @@ namespace NBALigaSimulation.Shared.Dtos.Teams
             get
             {
                 int games = HomeWins + HomeLosses + RoadWins + RoadLosses;
+                if (games == 0) return "0.0";
                 double diff = (double)AllowedTurnovers / games;
                 return diff.ToString("0.0", CultureInfo.InvariantCulture);
             }
@@ -198,6 +209,7 @@ namespace NBALigaSimulation.Shared.Dtos.Teams
             get
             {
                 int games = HomeWins + HomeLosses + RoadWins + RoadLosses;
+                if (games == 0) return "0.0";
                 double diff = (double)AllowedFouls / games;
                 return diff.ToString("0.0", CultureInfo.InvariantCulture);
             }
@@ -208,6 +220,7 @@ namespace NBALigaSimulation.Shared.Dtos.Teams
             get
             {
                 int games = HomeWins + HomeLosses + RoadWins + RoadLosses;
+                if (games == 0) return "0.0";
                 double diff = (double)Fouls / games;
                 return diff.ToString("0.0", CultureInfo.InvariantCulture);
             }
@@ -218,6 +231,7 @@ namespace NBALigaSimulation.Shared.Dtos.Teams
             get
             {
                 int games = HomeWins + HomeLosses + RoadWins + RoadLosses;
+                if (games == 0) return "0.0";
                 double diff = (double)Rebounds / games;
                 return diff.ToString("0.0", CultureInfo.InvariantCulture);
             }
@@ -228,6 +242,7 @@ namespace NBALigaSimulation.Shared.Dtos.Teams
             get
             {
                 int games = HomeWins + HomeLosses + RoadWins + RoadLosses;
+                if (games == 0) return "0.0";
                 double diff = (double)Assists / games;
                 return diff.ToString("0.0", CultureInfo.InvariantCulture);
             }
@@ -238,6 +253,7 @@ namespace NBALigaSimulation.Shared.Dtos.Teams
             get
             {
                 int games = HomeWins + HomeLosses + RoadWins + RoadLosses;
+                if (games == 0) return "0.0";
                 double diff = (double)Blocks / games;
                 return diff.ToString("0.0", CultureInfo.InvariantCulture);
             }
@@ -248,6 +264,7 @@ namespace NBALigaSimulation.Shared.Dtos.Teams
             get
             {
                 int games = HomeWins + HomeLosses + RoadWins + RoadLosses;
+                if (games == 0) return "0.0";
                 double diff = (double)Steals / games;
                 return diff.ToString("0.0", CultureInfo.InvariantCulture);
             }
@@ -258,6 +275,7 @@ namespace NBALigaSimulation.Shared.Dtos.Teams
             get
             {
                 int games = HomeWins + HomeLosses + RoadWins + RoadLosses;
+                if (games == 0) return "0.0";
                 double diff = (double)Turnovers / games;
                 return diff.ToString("0.0", CultureInfo.InvariantCulture);
             }
@@ -268,6 +286,7 @@ namespace NBALigaSimulation.Shared.Dtos.Teams
             get
             {
                 int games = HomeWins + HomeLosses + RoadWins + RoadLosses;
+                if (games == 0) return "0.0";
                 double diff = (double)FGM / games;
                 return diff.ToString("0.0", CultureInfo.InvariantCulture);
             }
@@ -277,6 +296,7 @@ namespace NBALigaSimulation.Shared.Dtos.Teams
             get
             {
                 int games = HomeWins + HomeLosses + RoadWins + RoadLosses;
+                if (games == 0) return "0.0";
                 double diff = (double)FGA / games;
                 return diff.ToString("0.0", CultureInfo.InvariantCulture);
             }
@@ -301,6 +321,7 @@ namespace NBALigaSimulation.Shared.Dtos.Teams
             get
             {
                 int games = HomeWins + HomeLosses + RoadWins + RoadLosses;
+                if (games == 0) return "0.0";
                 double diff = (double)TPM / games;
                 return diff.ToString("0.0", CultureInfo.InvariantCulture);
             }
@@ -310,6 +331,7 @@ namespace NBALigaSimulation.Shared.Dtos.Teams
             get
             {
                 int games = HomeWins + HomeLosses + RoadWins + RoadLosses;
+                if (games == 0) return "0.0";
                 double diff = (double)TPA / games;
                 return diff.ToString("0.0", CultureInfo.InvariantCulture);
             }
@@ -334,6 +356,7 @@ namespace NBALigaSimulation.Shared.Dtos.Teams
             get
             {
                 int games = HomeWins + HomeLosses + RoadWins + RoadLosses;
+                if (games == 0) return "0.0";
                 double diff = (double)FTM / games;
                 return diff.ToString("0.0", CultureInfo.InvariantCulture);
             }
@@ -343,6 +366,7 @@ namespace NBALigaSimulation.Shared.Dtos.Teams
             get
             {
                 int games = HomeWins + HomeLosses + RoadWins + RoadLosses;
+                if (games == 0) return "0.0";
                 double diff = (double)FTA / games;
                 return diff.ToString("0.0", CultureInfo.InvariantCulture);
             }
@@ -367,6 +391,7 @@ namespace NBALigaSimulation.Shared.Dtos.Teams
             get
             {
                 int games = HomeWins + HomeLosses + RoadWins + RoadLosses;
+                if (games == 0) return "0.0";
                 double per = (1.0 / games) * ((Points * 85.910) + (Rebounds * 53.840) + (Assists * 34.677) + (Steals * 53.840) + (Blocks * 53.840) - (FGA * 39.190) - (FTA * 20.091) - (Turnovers * 53.840));
                 double stat = per / 100;
                 return stat.ToString("0.0", CultureInfo.InvariantCulture);
@@ -378,6 +403,7 @@ namespace NBALigaSimulation.Shared.Dtos.Teams
             get
             {
                 int games = HomeWins + HomeLosses + RoadWins + RoadLosses;
+                if (games == 0) return "0.0";
                 double per = (1.0 / games) * ((AllowedPoints * 85.910) + (AllowedRebounds * 53.840) + (AllowedAssists * 34.677) + (AllowedStealS * 53.840) + (AllowedBlocks * 53.840) - (AllowedFGA * 39.190) - (AllowedFTA * 20.091) - (AllowedTurnovers * 53.840));
                 double stat = per / 100;
                 return stat.ToString("0.0", CultureInfo.InvariantCulture);
