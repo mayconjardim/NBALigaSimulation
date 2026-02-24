@@ -23,8 +23,10 @@ jobs:
             # Atualiza o código dentro do container
             docker exec nb-dotnet-dev-1 git -C /app/NBALigaSimulation pull origin master
 
-            # Mata o server antigo
+            # Mata o server antigo (se estiver rodando)
             docker exec nb-dotnet-dev-1 pkill -f 'dotnet .*Server' || true
 
-            # Roda o Server exatamente como manual
-            docker exec nb-dotnet-dev-1 dotnet run --project /app/NBALigaSimulation/NBALigaSimulation/Server/
+            # Roda o Server em background com nohup, logs em server.log
+            docker exec nb-dotnet-dev-1 sh -c "nohup dotnet run --project /app/NBALigaSimulation/NBALigaSimulation/Server/ > /app/NBALigaSimulation/server.log 2>&1 &"
+
+            echo "Deploy concluído! Server iniciado em background dentro do container."
