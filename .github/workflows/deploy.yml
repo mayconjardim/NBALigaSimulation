@@ -19,12 +19,12 @@ jobs:
           port: 22
           script: |
             echo "Entrando no container para atualizar código e rodar Server..."
-            
+
             # Atualiza código dentro do container
             docker exec nb-dotnet-dev-1 git -C /app/NBALigaSimulation pull origin master
-            
-            # Mata o server antigo
-            docker exec nb-dotnet-dev-1 pkill -f 'dotnet .*Server' || true
-            
-            # Roda o Projeto
-            docker exec -it nb-dotnet-dev-1 dotnet run --project /app/NBALigaSimulation/NBALigaSimulation/Server/
+
+            # Mata o server antigo (se houver algum processo rodando)
+            docker exec nb-dotnet-dev-1 sh -c "kill \$(pgrep -f 'dotnet .*Server') || true"
+
+            # Roda o Server exatamente como você faz manualmente
+            docker exec nb-dotnet-dev-1 dotnet run --project /app/NBALigaSimulation/NBALigaSimulation/Server/
