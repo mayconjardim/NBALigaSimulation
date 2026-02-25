@@ -1,32 +1,76 @@
 @page "/finances"
 @inject ITeamService TeamService
 
-<div class="container">
-    @if (teams != null )
-    {
+<div class="fin-page container py-4">
+    <div class="fin-header mb-4">
+        <h1 class="h3 mb-1"><i class="bi bi-cash-coin me-2"></i>Finanças da Liga</h1>
+        <p class="text-muted mb-0">
+            Payroll total e espaço no salary cap (cap: $@capSpace.ToString("N0"))
+        </p>
+    </div>
 
-        <table>
-            <thead>
-            <tr>
-                @foreach (var h in headings)
-                {
-                    <th>@h</th>
-                }
-            </tr>
-            </thead>
-            <tbody>
-            @foreach (var team in teams)
-            {
-                if (team.Players.Any(p => p.Contract != null && p.Contract.Amount >= 0))
-                {
-                    <tr>
-                        <td><img src=@($"../Images/Logos/{team.Abrv}.svg") Style="vertical-align: middle; background: none" alt="Team logo" width="25">@team.Region @team.Name</td>
-                        <td>$@team.Players.Sum(player => player.Contract.Amount).ToString("N0")</td>
-                        <td>$@((capSpace - team.Players.Sum(player => player.Contract.Amount)).ToString("N0"))</td>
-                    </tr>
-                }
-            }
-            </tbody>
-        </table>
+    @if (teams == null)
+    {
+        @if (!string.IsNullOrEmpty(message))
+        {
+            <p class="text-muted">@message</p>
+        }
+        else
+        {
+            <p class="text-muted">
+                <span class="spinner-border spinner-border-sm me-2"></span>
+                Carregando...
+            </p>
+        }
+    }
+    else if (teams.Any(t => t.Players.Any(p => p.Contract != null && p.Contract.Amount >= 0)))
+    {
+        <div class="fin-table-container">
+            <div class="table-responsive">
+                <table class="table fin-table">
+                    <thead>
+                        <tr>
+                            <th class="col-team">TIME</th>
+                            <th>PAYROLL</th>
+                            <th>SPACE</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var team in teams)
+                        {
+                            if (team.Players.Any(p => p.Contract != null && p.Contract.Amount >= 0))
+                            {
+                                var payroll = team.Players
+                                    .Where(p => p.Contract != null && p.Contract.Amount >= 0)
+                                    .Sum(player => player.Contract!.Amount);
+                                var space = capSpace - payroll;
+
+                                <tr>
+                                    <td class="col-team">
+                                        <div class="fin-team-cell">
+                                            <img src="@($"../Images/Logos/{team.Abrv}.svg")"
+                                                 alt="@team.Abrv"
+                                                 class="fin-team-logo" />
+                                            <span class="fin-team-name">@team.Region @team.Name</span>
+                                        </div>
+                                    </td>
+                                    <td>$@payroll.ToString("N0")</td>
+                                    <td class="@(space >= 0 ? "fin-cap-positive" : "fin-cap-negative")">
+                                        $@space.ToString("N0")
+                                    </td>
+                                </tr>
+                            }
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    }
+    else
+    {
+        <div class="alert alert-secondary">
+            <i class="bi bi-info-circle me-2"></i>
+            Nenhum dado de folha salarial disponível.
+        </div>
     }
 </div>

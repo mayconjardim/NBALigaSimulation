@@ -1,28 +1,103 @@
-table {
-    background-color: var(--white);
-    width: 100%;
-    text-align: center;
-    margin: 0.625rem;
-    border-collapse: collapse;
-    -webkit-border-radius: 0.625rem;
-    -moz-border-radius: 0.625rem;
-    border-radius: 0.625rem;
-    overflow: hidden;
+/* Página de Finanças - estilo semelhante a /expiring-contracts */
+
+.fin-page {
+    max-width: 1000px;
+    margin: 0 auto;
 }
 
-table td{
-    padding: 0 0.825rem;
+.fin-header {
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid #e5e7eb;
 }
-table tbody td {
-    font-size: 0.625rem;
+
+.fin-header h1 {
+    font-weight: 700;
+    color: var(--bs-body-color, #212529);
+}
+
+.fin-table-container {
+    background-color: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    overflow: hidden;
+    margin-top: 1rem;
+}
+
+.fin-table {
+    margin: 0;
+    border-collapse: separate;
+    border-spacing: 0;
+    width: 100%;
+    text-align: center;
+}
+
+.fin-table thead {
+    background-color: #135EB8;
+    color: white;
+}
+
+.fin-table thead th {
+    padding: 1rem 0.6rem;
+    font-weight: 600;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    white-space: nowrap;
+    border: none;
+}
+
+.fin-table thead .col-team {
+    text-align: left;
+    padding-left: 1rem;
+}
+
+.fin-table tbody td {
+    padding: 0.75rem 0.6rem;
+    font-size: 0.875rem;
+    vertical-align: middle;
+    border-bottom: 1px solid #f0f0f0;
+    white-space: nowrap;
+}
+
+.fin-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.fin-table tbody tr:nth-child(even) {
+    background-color: #f8f9fa;
+}
+
+.fin-table tbody tr:nth-child(odd) {
+    background-color: #ffffff;
+}
+
+.fin-table tbody tr:hover td {
+    background-color: #e9ecef;
+}
+
+.fin-team-cell {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.fin-team-logo {
+    width: 25px;
+    height: 25px;
+    object-fit: contain;
+    flex-shrink: 0;
+}
+
+.fin-team-name {
+    font-weight: 500;
+}
+
+.fin-cap-positive {
+    color: #198754;
     font-weight: 600;
 }
 
-table thead {
-    background: var(--primary-color);
-}
-table thead th {
-    font-size: 0.625rem;
-    font-weight: 800;
-    color: var(--white);
+.fin-cap-negative {
+    color: #dc3545;
+    font-weight: 600;
 }
