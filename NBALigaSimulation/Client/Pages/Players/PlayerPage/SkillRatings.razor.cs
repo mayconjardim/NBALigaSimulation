@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Components;
+using NBALigaSimulation.Client.Utilities;
 using NBALigaSimulation.Shared.Dtos.Players;
 
 namespace NBALigaSimulation.Client.Pages.Players.PlayerPage;
@@ -35,16 +36,5 @@ public partial class SkillRatings
         }
     }
 
-    private string GetRatingBarClass(int rating)
-    {
-        return rating switch
-        {
-            > 95 => "rating-elite",
-            > 85 => "rating-high",
-            > 75 => "rating-medium-high",
-            > 65 => "rating-medium",
-            > 50 => "rating-medium-low",
-            _ => "rating-low"
-        };
-    }
+    private string GetRatingBarClass(int rating) => Util.GetBadgeClass(rating);
 } 

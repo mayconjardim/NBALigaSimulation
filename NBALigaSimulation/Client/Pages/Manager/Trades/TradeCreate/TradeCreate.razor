@@ -53,7 +53,7 @@
             <td class="col-foto"><img src="@(string.IsNullOrEmpty(p.ImgUrl) ? "Images/Utils/blank.png" : p.ImgUrl)" alt="" class="rounded-circle" style="width:32px;height:32px;object-fit:cover" /></td>
             <td class="col-offer"><input type="checkbox" checked="@SelectedPlayerIds.Contains(p.Id)" @onclick="() => TogglePlayer(p.Id)" /></td>
             <td class="col-pos">@p.Pos</td>
-            <td>@p.Name</td>
+            <td><a href="@($"players/{p.Id}")" class="text-decoration-none">@p.Name</a></td>
             <td class="col-age">@Util.Age(_season, p.Born?.Year ?? _season - 25)</td>
             <td class="col-cur"><span class="tradecreate-rating @Util.GetBadgeClass(p.Ratings?.LastOrDefault()?.CalculateOvr ?? 0)"></span></td>
             <td class="col-fut"><span class="tradecreate-rating @Util.GetBadgeClass(p.Ratings?.LastOrDefault()?.Pot ?? 0)"></span></td>
@@ -144,7 +144,7 @@
             <td class="col-foto"><img src="@(string.IsNullOrEmpty(p.ImgUrl) ? "Images/Utils/blank.png" : p.ImgUrl)" alt="" class="rounded-circle" style="width:32px;height:32px;object-fit:cover" /></td>
             <td class="col-offer"><input type="checkbox" checked="@SelectedPlayerIds.Contains(p.Id)" @onclick="() => TogglePlayer(p.Id)" /></td>
             <td class="col-pos">@p.Pos</td>
-            <td>@p.Name</td>
+            <td><a href="@($"players/{p.Id}")" class="text-decoration-none">@p.Name</a></td>
             <td class="col-age">@Util.Age(_season, p.Born?.Year ?? _season - 25)</td>
             <td class="col-cur"><span class="tradecreate-rating @Util.GetBadgeClass(p.Ratings?.LastOrDefault()?.CalculateOvr ?? 0)"></span></td>
             <td class="col-fut"><span class="tradecreate-rating @Util.GetBadgeClass(p.Ratings?.LastOrDefault()?.Pot ?? 0)"></span></td>
@@ -194,7 +194,7 @@
             <td class="col-foto"><img src="@(string.IsNullOrEmpty(p.ImgUrl) ? "Images/Utils/blank.png" : p.ImgUrl)" alt="" class="rounded-circle" style="width:32px;height:32px;object-fit:cover" /></td>
             <td class="col-offer"><input type="checkbox" checked="@SelectedPlayerIds.Contains(p.Id)" @onclick="() => TogglePlayer(p.Id)" /></td>
             <td class="col-pos">@p.Pos</td>
-            <td>@p.Name</td>
+            <td><a href="@($"players/{p.Id}")" class="text-decoration-none">@p.Name</a></td>
             <td class="col-age">@Util.Age(_season, p.Born?.Year ?? _season - 25)</td>
             <td class="col-cur"><span class="tradecreate-rating @Util.GetBadgeClass(p.Ratings?.LastOrDefault()?.CalculateOvr ?? 0)"></span></td>
             <td class="col-fut"><span class="tradecreate-rating @Util.GetBadgeClass(p.Ratings?.LastOrDefault()?.Pot ?? 0)"></span></td>
