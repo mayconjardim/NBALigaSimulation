@@ -1,8 +1,9 @@
 using AutoMapper;
-using Microsoft.EntityFrameworkCore; 
+using Microsoft.EntityFrameworkCore;
 using NBALigaSimulation.Shared.Dtos.Players;
 using NBALigaSimulation.Shared.Dtos.Teams;
 using NBALigaSimulation.Shared.Dtos.Trades;
+using NBALigaSimulation.Shared.Models.GameNews;
 using NBALigaSimulation.Shared.Models.Trades;
 using NBALigaSimulation.Shared.Models.Players;
 using NBALigaSimulation.Shared.Models.Teams;
@@ -18,6 +19,7 @@ namespace NBALigaSimulation.Server.Services.TradeService
         private readonly IGenericRepository<Team> _teamRepository;
         private readonly IGenericRepository<TeamDraftPicks> _draftPickRepository;
         private readonly IGenericRepository<User> _userRepository;
+        private readonly IGenericRepository<News> _newsRepository;
         private readonly IMapper _mapper;
         private readonly IAuthService _authService;
 
@@ -27,6 +29,7 @@ namespace NBALigaSimulation.Server.Services.TradeService
             IGenericRepository<Team> teamRepository,
             IGenericRepository<TeamDraftPicks> draftPickRepository,
             IGenericRepository<User> userRepository,
+            IGenericRepository<News> newsRepository,
             IMapper mapper,
             IAuthService authService)
         {
@@ -35,6 +38,7 @@ namespace NBALigaSimulation.Server.Services.TradeService
             _teamRepository = teamRepository;
             _draftPickRepository = draftPickRepository;
             _userRepository = userRepository;
+            _newsRepository = newsRepository;
             _mapper = mapper;
             _authService = authService;
         }
@@ -266,6 +270,23 @@ namespace NBALigaSimulation.Server.Services.TradeService
             {
                 await _tradeRepository.SaveChangesAsync();
                 await UpdateRosterOrderAfterTrade(TeamOne.Id, TeamTwo.Id);
+
+                if (dto.Response == true && TeamOne != null && TeamTwo != null)
+                {
+                    var teamOneName = TeamOne.Name ?? "Time A";
+                    var teamTwoName = TeamTwo.Name ?? "Time B";
+                    var tradeNews = new News
+                    {
+                        Type = NewsType.Trade,
+                        Title = $"Trade aprovado: {teamOneName} e {teamTwoName} fecham acordo.",
+                        Summary = $"{teamOneName} x {teamTwoName} — troca confirmada.",
+                        LinkEntityType = "tradeoffer",
+                        LinkEntityId = trade.Id
+                    };
+                    await _newsRepository.AddAsync(tradeNews);
+                    await _newsRepository.SaveChangesAsync();
+                }
+
                 response.Success = true;
                 response.Data = true;
             }

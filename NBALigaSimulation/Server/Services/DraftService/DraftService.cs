@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using NBALigaSimulation.Shared.Engine.Utils;
 using NBALigaSimulation.Shared.Dtos.Drafts;
 using NBALigaSimulation.Shared.Models.Drafts;
+using NBALigaSimulation.Shared.Models.GameNews;
 using NBALigaSimulation.Shared.Models.Players;
 using NBALigaSimulation.Shared.Models.Seasons;
 using NBALigaSimulation.Shared.Models.Teams;
@@ -12,7 +13,6 @@ namespace NBALigaSimulation.Server.Services.DraftService
 {
     public class DraftService : IDraftService
     {
-
         private readonly IGenericRepository<DraftLottery> _draftLotteryRepository;
         private readonly IGenericRepository<Draft> _draftRepository;
         private readonly IGenericRepository<Season> _seasonRepository;
@@ -20,6 +20,7 @@ namespace NBALigaSimulation.Server.Services.DraftService
         private readonly IGenericRepository<Team> _teamRepository;
         private readonly IGenericRepository<TeamDraftPicks> _draftPickRepository;
         private readonly IGenericRepository<Player> _playerRepository;
+        private readonly IGenericRepository<News> _newsRepository;
         private readonly IMapper _mapper;
 
         public DraftService(
@@ -30,6 +31,7 @@ namespace NBALigaSimulation.Server.Services.DraftService
             IGenericRepository<Team> teamRepository,
             IGenericRepository<TeamDraftPicks> draftPickRepository,
             IGenericRepository<Player> playerRepository,
+            IGenericRepository<News> newsRepository,
             IMapper mapper)
         {
             _draftLotteryRepository = draftLotteryRepository;
@@ -39,6 +41,7 @@ namespace NBALigaSimulation.Server.Services.DraftService
             _teamRepository = teamRepository;
             _draftPickRepository = draftPickRepository;
             _playerRepository = playerRepository;
+            _newsRepository = newsRepository;
             _mapper = mapper;
         }
 
@@ -332,6 +335,18 @@ namespace NBALigaSimulation.Server.Services.DraftService
                 Console.WriteLine("[BACKEND] Salvando alterações no jogador...");
                 await _playerRepository.SaveChangesAsync();
                 Console.WriteLine("[BACKEND] Jogador salvo com sucesso");
+
+                var teamName = string.IsNullOrEmpty(request.Team) ? "Time" : request.Team;
+                var draftNews = new News
+                {
+                    Type = NewsType.Draft,
+                    Title = $"{teamName} seleciona {player.Name} no pick #{request.Pick} do Draft.",
+                    Summary = $"Draft #{request.Pick} — {player.Name} → {teamName}.",
+                    LinkEntityType = "players",
+                    LinkEntityId = player.Id
+                };
+                await _newsRepository.AddAsync(draftNews);
+                await _newsRepository.SaveChangesAsync();
 
                 response.Success = true;
                 response.Message = $"Jogador {player.Name} selecionado no pick {request.Pick}.";

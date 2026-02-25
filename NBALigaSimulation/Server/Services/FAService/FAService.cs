@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using NBALigaSimulation.Shared.Dtos.FA;
 using NBALigaSimulation.Shared.Engine.Finance;
 using NBALigaSimulation.Shared.Models.FA;
+using NBALigaSimulation.Shared.Models.GameNews;
 using NBALigaSimulation.Shared.Models.Players;
 using NBALigaSimulation.Shared.Models.Users;
 using NBALigaSimulation.Shared.Models.Utils;
@@ -18,6 +19,7 @@ namespace NBALigaSimulation.Server.Services.FAService
         private readonly IGenericRepository<User> _userRepository;
         private readonly IGenericRepository<Player> _playerRepository;
         private readonly IGenericRepository<PlayerContract> _contractRepository;
+        private readonly IGenericRepository<News> _newsRepository;
         private readonly ISeasonRepository _seasonRepository;
         private readonly IMapper _mapper;
         private readonly IAuthService _authService;
@@ -27,6 +29,7 @@ namespace NBALigaSimulation.Server.Services.FAService
             IGenericRepository<User> userRepository,
             IGenericRepository<Player> playerRepository,
             IGenericRepository<PlayerContract> contractRepository,
+            IGenericRepository<News> newsRepository,
             ISeasonRepository seasonRepository,
             IMapper mapper,
             IAuthService authService)
@@ -35,6 +38,7 @@ namespace NBALigaSimulation.Server.Services.FAService
             _userRepository = userRepository;
             _playerRepository = playerRepository;
             _contractRepository = contractRepository;
+            _newsRepository = newsRepository;
             _seasonRepository = seasonRepository;
             _mapper = mapper;
             _authService = authService;
@@ -246,16 +250,28 @@ namespace NBALigaSimulation.Server.Services.FAService
                     }
                     player.TeamId = best.TeamId;
 
+                    var teamName = best.Team?.Name ?? "Time";
                     signings.Add(new FASigningDto
                     {
                         PlayerName = player.Name,
-                        TeamName = best.Team?.Name ?? "",
+                        TeamName = teamName,
                         Amount = best.Amount,
                         Years = best.Years
                     });
+
+                    var faNews = new News
+                    {
+                        Type = NewsType.FA,
+                        Title = $"{player.Name} assina com {teamName}.",
+                        Summary = $"Free agency — {player.Name} → {teamName} ({best.Years} anos).",
+                        LinkEntityType = "players",
+                        LinkEntityId = player.Id
+                    };
+                    await _newsRepository.AddAsync(faNews);
                 }
 
                 await _offerRepository.SaveChangesAsync();
+                await _newsRepository.SaveChangesAsync();
                 await _playerRepository.SaveChangesAsync();
                 await _contractRepository.SaveChangesAsync();
 

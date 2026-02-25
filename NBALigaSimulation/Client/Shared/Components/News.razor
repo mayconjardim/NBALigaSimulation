@@ -1,30 +1,58 @@
 @page "/news"
 @inject INewsService NewsService
 
-@if (news != null)
-{
-    <div class="news-container-compact">
-        <div class="news-header">
-            <span class="news-header-title">Últimas Notícias</span>
-            <a href="/news" class="news-header-more">Ver mais</a>
-        </div>
-        <ul class="news-list">
+<div class="news-page">
+    <div class="news-page-header">
+        <h1 class="news-page-title"><i class="bi bi-newspaper me-2"></i>Notícias da Liga</h1>
+        <p class="news-page-subtitle">Jogos, trades, draft e free agency</p>
+    </div>
+
+    @if (news != null)
+    {
+        <div class="news-container-compact news-container-page">
+            <div class="news-header">
+                <span class="news-header-title">Últimas notícias</span>
+            </div>
+            <ul class="news-list">
             @foreach (var n in news)
             {
                 <li class="news-item">
-                    <a href="@($"players/{n.GameId}")" title="@n.Title">
-                        <div class="team-logo-news @n.Winner"></div>
-                        <span class="news-title">@n.Title</span>
+                    <a href="@n.LinkUrl" class="news-card-link" title="@n.Title">
+                        <div class="news-card">
+                            @if (!string.IsNullOrEmpty(n.ImageUrl))
+                            {
+                                <div class="news-card-image" style="background-image: url('@n.ImageUrl');"></div>
+                            }
+                            else if (n.Type == 0 && !string.IsNullOrEmpty(n.Winner))
+                            {
+                                <div class="news-card-image news-card-image-placeholder team-logo-news @n.Winner"></div>
+                            }
+                            else
+                            {
+                                <div class="news-card-image news-card-image-placeholder news-card-image-icon">
+                                    <span class="news-type-icon">@GetNewsTypeIcon(n)</span>
+                                </div>
+                            }
+                            <div class="news-card-body">
+                                <span class="news-badge @GetNewsTypeCssClass(n)">@GetNewsTypeLabel(n)</span>
+                                <span class="news-title">@n.Title</span>
+                                @if (!string.IsNullOrEmpty(n.Summary))
+                                {
+                                    <p class="news-summary">@n.Summary</p>
+                                }
+                            </div>
+                        </div>
                     </a>
                 </li>
             }
-        </ul>
-    </div>
-}
-else
-{
-    <div class="loading-container">
-        <Loading></Loading>
-    </div>
-}
+            </ul>
+        </div>
+    }
+    else
+    {
+        <div class="loading-container">
+            <Loading></Loading>
+        </div>
+    }
+</div>
 

@@ -524,11 +524,19 @@ namespace NBALigaSimulation.Shared.Engine.Utils
             var randomIndex = random.Next(titleTemplates.Count);
             var selectedTitle = titleTemplates[randomIndex];
 
+            string summary = homeTeamStats.Pts > awayTeamStats.Pts
+                ? $"{game.HomeTeam.Name} {homeTeamStats.Pts} x {awayTeamStats.Pts} {game.AwayTeam.Name}"
+                : $"{game.AwayTeam.Name} {awayTeamStats.Pts} x {homeTeamStats.Pts} {game.HomeTeam.Name}";
+
             var news = new News
             {
+                Type = NewsType.Game,
                 GameId = game.Id,
                 Title = selectedTitle,
-                Winner = winAbrv
+                Summary = summary,
+                Winner = winAbrv,
+                LinkEntityType = "game",
+                LinkEntityId = game.Id
             };
             return news;
         }
