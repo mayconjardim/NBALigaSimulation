@@ -216,6 +216,12 @@ namespace NBALigaSimulation.Server.Services.TradeService
                 return response;
             }
 
+            // Listas para descrever a troca nas notícias
+            var playersToTeamOne = new List<Player>();
+            var playersToTeamTwo = new List<Player>();
+            var picksToTeamOne = new List<TeamDraftPicks>();
+            var picksToTeamTwo = new List<TeamDraftPicks>();
+
             if (dto.Response == true)
             {
                 trade.Response = true;
@@ -228,6 +234,9 @@ namespace NBALigaSimulation.Server.Services.TradeService
                         .FirstOrDefaultAsync(p => p.Id == player.PlayerId);
                     if (playerDb.TeamId == trade.TeamOneId)
                     {
+                        // Vai do Time 1 para o Time 2
+                        playersToTeamTwo.Add(playerDb);
+
                         playerDb.TeamId = trade.TeamTwoId;
                         playerDb.PtModifier = 1;
                         playerDb.RosterOrder = TeamTwo.Players.Count + randomNumber;
@@ -235,6 +244,9 @@ namespace NBALigaSimulation.Server.Services.TradeService
                     }
                     else if (playerDb.TeamId == trade.TeamTwoId)
                     {
+                        // Vai do Time 2 para o Time 1
+                        playersToTeamOne.Add(playerDb);
+
                         playerDb.TeamId = trade.TeamOneId;
                         playerDb.PtModifier = 1;
                         playerDb.RosterOrder = TeamOne.Players.Count + randomNumber;
@@ -249,11 +261,17 @@ namespace NBALigaSimulation.Server.Services.TradeService
                         .FirstOrDefaultAsync(p => p.Id == pick.DraftPickId);
                     if (pickDb.TeamId == trade.TeamOneId)
                     {
+                        // Pick sai do Time 1 e vai para o Time 2
+                        picksToTeamTwo.Add(pickDb);
+
                         pickDb.TeamId = trade.TeamTwoId;
 
                     }
                     else if (pickDb.TeamId == trade.TeamTwoId)
                     {
+                        // Pick sai do Time 2 e vai para o Time 1
+                        picksToTeamOne.Add(pickDb);
+
                         pickDb.TeamId = trade.TeamOneId;
                     }
 
@@ -275,11 +293,44 @@ namespace NBALigaSimulation.Server.Services.TradeService
                 {
                     var teamOneName = TeamOne.Name ?? "Time A";
                     var teamTwoName = TeamTwo.Name ?? "Time B";
+
+                    string FormatPlayerList(List<Player> players) =>
+                        players.Count == 0
+                            ? "nenhum jogador"
+                            : string.Join(", ", players.Select(p => p.Name));
+
+                    string FormatPickList(List<TeamDraftPicks> picks)
+                    {
+                        if (picks.Count == 0) return string.Empty;
+                        return string.Join(", ", picks.Select(p =>
+                            $"{p.Year} {(p.Round == 1 ? "1ª rodada" : "2ª rodada")} ({p.Original})"));
+                    }
+
+                    var teamOneParts = new List<string>();
+                    var teamTwoParts = new List<string>();
+
+                    if (playersToTeamOne.Count > 0)
+                        teamOneParts.Add(FormatPlayerList(playersToTeamOne));
+                    if (picksToTeamOne.Count > 0)
+                        teamOneParts.Add(FormatPickList(picksToTeamOne));
+
+                    if (playersToTeamTwo.Count > 0)
+                        teamTwoParts.Add(FormatPlayerList(playersToTeamTwo));
+                    if (picksToTeamTwo.Count > 0)
+                        teamTwoParts.Add(FormatPickList(picksToTeamTwo));
+
+                    var teamOneReceives = teamOneParts.Count > 0
+                        ? string.Join("; ", teamOneParts)
+                        : "nenhum ativo";
+                    var teamTwoReceives = teamTwoParts.Count > 0
+                        ? string.Join("; ", teamTwoParts)
+                        : "nenhum ativo";
+
                     var tradeNews = new News
                     {
                         Type = NewsType.Trade,
                         Title = $"Trade aprovado: {teamOneName} e {teamTwoName} fecham acordo.",
-                        Summary = $"{teamOneName} x {teamTwoName} — troca confirmada.",
+                        Summary = $"{teamOneName} recebe: {teamOneReceives}. {teamTwoName} recebe: {teamTwoReceives}.",
                         LinkEntityType = "tradeoffer",
                         LinkEntityId = trade.Id
                     };
