@@ -25,6 +25,13 @@
     margin: 0;
 }
 
+.news-page-message {
+    padding: 1.5rem;
+    background: #f8f9fa;
+    border-radius: 12px;
+    text-align: center;
+}
+
 .news-container-compact {
     background: white;
     border-radius: 16px;

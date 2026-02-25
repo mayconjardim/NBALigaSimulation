@@ -7,7 +7,7 @@
         <p class="news-page-subtitle">Jogos, trades, draft e free agency</p>
     </div>
 
-    @if (news != null)
+    @if (news != null && news.Count > 0)
     {
         <div class="news-container-compact news-container-page">
             <div class="news-header">
@@ -46,6 +46,12 @@
                 </li>
             }
             </ul>
+        </div>
+    }
+    else if (!string.IsNullOrEmpty(message) && message != "Carregando notícias...")
+    {
+        <div class="news-page-message">
+            <p class="text-muted">@message</p>
         </div>
     }
     else

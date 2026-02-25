@@ -13,10 +13,13 @@ public partial class News
         message = "Carregando notícias...";
         var result = await NewsService.GetAllNews();
         if (!result.Success)
-            message = result.Message;
+        {
+            message = result.Message ?? "Não foi possível carregar as notícias.";
+            news = new List<NewsDto>();
+        }
         else
         {
-            news = result.Data.OrderByDescending(n => n.Id).Take(15).ToList();
+            news = result.Data?.OrderByDescending(n => n.Id).Take(15).ToList() ?? new List<NewsDto>();
         }
     }
 
