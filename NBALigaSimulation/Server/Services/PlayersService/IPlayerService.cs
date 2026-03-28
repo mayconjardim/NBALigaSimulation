@@ -25,5 +25,6 @@ namespace NBALigaSimulation.Server.Services.PlayersService
         Task<ServiceResponse<PlayerCompleteDto>> EditPlayer(CreatePlayerDto request);
         Task<ServiceResponse<bool>> RegenerateAllScoutReports();
         Task<ServiceResponse<bool>> HandleExpiredContractsAsync(int nextSeasonYear);
+        Task<ServiceResponse<bool>> HandleOffSeasonRecoveryAsync(int healingAmount);
     }
 }

@@ -649,5 +649,30 @@ namespace NBALigaSimulation.Server.Services.PlayersService
                 return response;
             }
         }
+
+        public async Task<ServiceResponse<bool>> HandleOffSeasonRecoveryAsync(int healingAmount)
+        {
+            var response = new ServiceResponse<bool>();
+            try
+            {
+                // Busca jogadores com os ratings para aplicar a recuperação (lógica do SeasonRepository)
+                List<Player> players = await _seasonRepository.GetPlayersWithRatingsAsync();
+                
+                // Aplica a recuperação usando SimulationUtils
+                SimulationUtils.ApplyOffSeasonInjuryRecovery(players, healingAmount);
+                
+                await _seasonRepository.SaveChangesAsync();
+                
+                response.Success = true;
+                response.Message = $"Recuperação de off-season aplicada a {players.Count} jogadores.";
+                return response;
+            }
+            catch (Exception ex)
+            {
+                response.Success = false;
+                response.Message = $"Erro ao aplicar recuperação de off-season: {ex.Message}";
+                return response;
+            }
+        }
     }
 }

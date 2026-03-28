@@ -105,9 +105,7 @@ namespace NBALigaSimulation.Server.Services.SeasonService
 
             await _faService.DeleteOffersBySeason(LastSeason.Year);
 
-            List<Player> players = await _seasonRepository.GetPlayersWithRatingsAsync();
-            SimulationUtils.ApplyOffSeasonInjuryRecovery(players, 30);
-            await _seasonRepository.SaveChangesAsync();
+            await _playerService.HandleOffSeasonRecoveryAsync(30);
 
             await _playerService.HandleExpiredContractsAsync(season.Year);
 
