@@ -15,7 +15,7 @@ public partial class ExpiringContracts
         var seasonStr = await LocalStorage.GetItemAsync<string>("season");
         _season = string.IsNullOrEmpty(seasonStr) ? DateTime.Now.Year : int.Parse(seasonStr);
 
-        var result = await PlayerService.GetExpiringPlayers(_season);
+        var result = await PlayerContractService.GetExpiringPlayers(_season);
         _players = result.Success && result.Data != null ? result.Data : new List<PlayerCompleteDto>();
         _loading = false;
     }

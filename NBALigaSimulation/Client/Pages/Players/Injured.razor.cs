@@ -15,7 +15,7 @@ public partial class Injured
         var seasonStr = await LocalStorage.GetItemAsync<string>("season");
         _season = string.IsNullOrEmpty(seasonStr) ? DateTime.Now.Year : int.Parse(seasonStr);
 
-        var result = await PlayerService.GetInjuredPlayers();
+        var result = await PlayerEvolutionService.GetInjuredPlayers();
         _players = result.Success && result.Data != null ? result.Data : new List<PlayerCompleteDto>();
         _loading = false;
     }

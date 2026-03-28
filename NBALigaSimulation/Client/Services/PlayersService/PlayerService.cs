@@ -6,7 +6,6 @@ namespace NBALigaSimulation.Client.Services.PlayersService;
 
 public class PlayerService : IPlayerService
 {
-    
     private readonly HttpClient _http;
 
     public PlayerService(HttpClient http)
@@ -17,7 +16,7 @@ public class PlayerService : IPlayerService
     public async Task<ServiceResponse<PlayerCompleteDto>> GetPlayerById(int playerId)
     {
         var response = await _http.GetFromJsonAsync<ServiceResponse<PlayerCompleteDto>>($"api/players/{playerId}");
-        if (response.Success == false)
+        if (response == null || response.Success == false)
         {
             return new ServiceResponse<PlayerCompleteDto>() { Message = "Jogador não encontrado!" };
         }
@@ -42,22 +41,19 @@ public class PlayerService : IPlayerService
     public async Task<ServiceResponse<List<PlayerSimpleDto>>> GetPlayersSearchSuggestions(string searchText)
     {
         var result = await _http.GetFromJsonAsync<ServiceResponse<List<PlayerSimpleDto>>>($"api/players/searchsuggestion/{searchText}");
-        return result;
+        return result ?? new ServiceResponse<List<PlayerSimpleDto>> { Success = false, Message = "Erro ao buscar sugestões." };
     }
 
     public async Task<ServiceResponse<List<PlayerSimpleDto>>> GetAllSimplePlayers()
     {
         var result = await _http.GetFromJsonAsync<ServiceResponse<List<PlayerSimpleDto>>>($"api/players/simple");
-        return result;
+        return result ?? new ServiceResponse<List<PlayerSimpleDto>> { Success = false, Message = "Erro ao buscar jogadores." };
     }
 
     public async Task<ServiceResponse<bool>> UpdatePlayerPtModifier(int playerId, double newPtModifier)
     {
-
         var result = await _http.PutAsJsonAsync($"api/players/{playerId}/ptmodifier", newPtModifier);
-
         bool success = result.IsSuccessStatusCode;
-
         var response = new ServiceResponse<bool>
         {
             Success = success,
@@ -69,8 +65,8 @@ public class PlayerService : IPlayerService
     }
     
     public async Task<ServiceResponse<PageableResponse<PlayerCompleteDto>>> GetAllFaPlayers(int currentPage, int pageSize, int season, bool isAscending, string sortedColumn,
-        string position = null){
-        
+        string position = null)
+    {
         var url = $"api/players/FAPlayers?page={currentPage}&pageSize={pageSize}&season={season}&isAscending={isAscending}&sortedColumn={sortedColumn}";
 
         if (!string.IsNullOrEmpty(position))
@@ -79,25 +75,13 @@ public class PlayerService : IPlayerService
         }  
 
         var result = await _http.GetFromJsonAsync<ServiceResponse<PageableResponse<PlayerCompleteDto>>>(url);
-        return result;
+        return result ?? new ServiceResponse<PageableResponse<PlayerCompleteDto>> { Success = false, Message = "Erro ao buscar Free Agents." };
     }
     
     public async Task<ServiceResponse<List<PlayerCompleteDto>>> GetAllDraftPlayers()
     {
         var result = await _http.GetFromJsonAsync<ServiceResponse<List<PlayerCompleteDto>>>("api/players/draft");
         return result ?? new ServiceResponse<List<PlayerCompleteDto>> { Success = false, Message = "Erro ao buscar jogadores do draft." };
-    }
-
-    public async Task<ServiceResponse<List<PlayerCompleteDto>>> GetExpiringPlayers(int season)
-    {
-        var result = await _http.GetFromJsonAsync<ServiceResponse<List<PlayerCompleteDto>>>($"api/players/expiring?season={season}");
-        return result ?? new ServiceResponse<List<PlayerCompleteDto>> { Success = false, Message = "Erro ao buscar jogadores com contrato expirando." };
-    }
-
-    public async Task<ServiceResponse<List<PlayerCompleteDto>>> GetInjuredPlayers()
-    {
-        var result = await _http.GetFromJsonAsync<ServiceResponse<List<PlayerCompleteDto>>>("api/players/injured");
-        return result ?? new ServiceResponse<List<PlayerCompleteDto>> { Success = false, Message = "Erro ao buscar jogadores lesionados." };
     }
 
     public async Task<ServiceResponse<PlayerCompleteDto>> EditPlayer(CreatePlayerDto playerDto)
@@ -116,5 +100,4 @@ public class PlayerService : IPlayerService
         var result = await response.Content.ReadFromJsonAsync<ServiceResponse<PlayerCompleteDto>>();
         return result ?? new ServiceResponse<PlayerCompleteDto> { Success = false, Message = "Erro ao receber a resposta do servidor." };
     }
-    
 }
