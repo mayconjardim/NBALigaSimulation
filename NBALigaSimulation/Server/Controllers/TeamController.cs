@@ -20,47 +20,27 @@ namespace NBALigaSimulation.Server.Controllers
         [HttpGet("{teamId}")]
         public async Task<ActionResult<ServiceResponse<TeamCompleteDto>>> GetTeamById(int teamId)
         {
+            var result = await _teamService.GetTeamById(teamId);
 
-            try
+            if (!result.Success)
             {
-                var result = await _teamService.GetTeamById(teamId);
-
-                if (!result.Success)
-                {
-                    return NotFound(result);
-                }
-
-                return Ok(result);
-            }
-            catch (ArgumentException ex) 
-            {
-                return StatusCode(500, ex.Message); 
+                return NotFound(result);
             }
 
+            return Ok(result);
         }
 
         [HttpGet]
         public async Task<ActionResult<ServiceResponse<List<TeamSimpleDto>>>> GetAllTeams()
         {
-            try
-            {
-                var result = await _teamService.GetAllTeams();
+            var result = await _teamService.GetAllTeams();
 
-                if (!result.Success)
-                {
-                    return NotFound(result);
-                }
-
-                return Ok(result);
-            }
-            catch (Exception ex)
+            if (!result.Success)
             {
-                return StatusCode(500, new ServiceResponse<List<TeamSimpleDto>>
-                {
-                    Success = false,
-                    Message = $"Ocorreu um erro ao buscar todos os times: {ex.Message}"
-                });
+                return BadRequest(result);
             }
+
+            return Ok(result);
         }
 
 

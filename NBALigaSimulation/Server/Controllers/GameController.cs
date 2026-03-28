@@ -76,21 +76,14 @@ namespace NBALigaSimulation.Server.Controllers
 		[HttpGet("teams/{teamId}")]
 		public async Task<ActionResult<ServiceResponse<List<GameCompleteDto>>>> GetGamesByTeamId(int teamId)
 		{
-			try
-			{
-				var result = await _gameService.GetGamesByTeamId(teamId);
+			var result = await _gameService.GetGamesByTeamId(teamId);
 
-				if (!result.Success)
-				{
-					return NotFound(result);
-				}
-
-				return Ok(result);
-			}
-			catch (Exception ex)
+			if (!result.Success)
 			{
-				return StatusCode(500, $"Ocorreu um erro ao buscar os jogos para o Time com o ID {teamId}: {ex.Message}");
+				return NotFound(result);
 			}
+
+			return Ok(result);
 		}
 
 		[HttpGet("headtohead")]

@@ -19,29 +19,17 @@ namespace NBALigaSimulation.Server.Controllers
         [HttpGet]
         public async Task<ActionResult<ServiceResponse<List<PlayerAwardsDto>>>> GetAllAwards()
         {
-            try
-            {
-                var result = await _awardsService.GetAllAwards();
-                return Ok(result);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, new ServiceResponse<List<PlayerAwardsDto>> { Success = false, Message = ex.Message });
-            }
+            var result = await _awardsService.GetAllAwards();
+            if (!result.Success) return BadRequest(result);
+            return Ok(result);
         }
 
         [HttpPost("generate/{season:int}")]
         public async Task<ActionResult<ServiceResponse<bool>>> GenerateAwards(int season)
         {
-            try
-            {
-                var result = await _awardsService.GenerateAwards(season);
-                return Ok(result);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, new ServiceResponse<bool> { Success = false, Message = ex.Message });
-            }
+            var result = await _awardsService.GenerateAwards(season);
+            if (!result.Success) return BadRequest(result);
+            return Ok(result);
         }
     }
 }

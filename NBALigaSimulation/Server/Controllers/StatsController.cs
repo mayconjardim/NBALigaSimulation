@@ -20,21 +20,14 @@ namespace NBALigaSimulation.Server.Controllers
 		[HttpGet("teams")]
 		public async Task<ActionResult<ServiceResponse<List<TeamRegularStatsDto>>>> GetAllTeamRegularStats(int season, bool isAscending, string stat = null)
 		{
-			try
-			{
-				var result = await _statsService.GetAllTeamRegularStats(season, isAscending, stat);
+			var result = await _statsService.GetAllTeamRegularStats(season, isAscending, stat);
 
-				if (!result.Success)
-				{
-					return StatusCode(500, result);
-				}
-
-				return Ok(result);
-			}
-			catch (Exception ex)
+			if (!result.Success)
 			{
-				return StatusCode(500, new ServiceResponse<PageableResponse<TeamRegularStatsDto>> { Success = false, Message = ex.Message });
+				return BadRequest(result);
 			}
+
+			return Ok(result);
 		}
 
         [HttpGet("playoffs/teams")]
@@ -56,35 +49,22 @@ namespace NBALigaSimulation.Server.Controllers
 		[HttpGet("players/{playerId:int}/regular-stats")]
 		public async Task<ActionResult<ServiceResponse<List<PlayerRegularStatsDto>>>> GetPlayerRegularStatsByPlayerId(int playerId)
 		{
-			try
-			{
-				var result = await _statsService.GetPlayerRegularStatsByPlayerId(playerId);
-				return Ok(result);
-			}
-			catch (Exception ex)
-			{
-				return StatusCode(500, new ServiceResponse<List<PlayerRegularStatsDto>> { Success = false, Message = ex.Message });
-			}
+			var result = await _statsService.GetPlayerRegularStatsByPlayerId(playerId);
+			if (!result.Success) return BadRequest(result);
+			return Ok(result);
 		}
 
 		[HttpGet("players")]
 		public async Task<ActionResult<ServiceResponse<PageableResponse<PlayerRegularStatsDto>>>> GetAllPlayerRegularStats(int page, int pageSize, int season, bool isAscending, string position, string stat = null)
 		{
-			try
-			{
-				var result = await _statsService.GetAllPlayerRegularStats(page, pageSize, season, isAscending, position, stat);
+			var result = await _statsService.GetAllPlayerRegularStats(page, pageSize, season, isAscending, position, stat);
 
-				if (!result.Success)
-				{
-					return StatusCode(500, result);
-				}
-
-				return Ok(result);
-			}
-			catch (Exception ex)
+			if (!result.Success)
 			{
-				return StatusCode(500, new ServiceResponse<PageableResponse<PlayerRegularStatsDto>> { Success = false, Message = ex.Message });
+				return BadRequest(result);
 			}
+
+			return Ok(result);
 		}
 
 
