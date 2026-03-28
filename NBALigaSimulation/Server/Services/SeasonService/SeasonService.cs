@@ -186,25 +186,17 @@ namespace NBALigaSimulation.Server.Services.SeasonService
                 return response;
             }
 
-            List<Player> players = await _seasonRepository.GetPlayersWithRatingsAsync();
+            var tcResponse = await _playerService.GenerateTrainingCampAsync(season);
 
-            if (players.Any(p => p.Ratings.Where(s => s.Season == season.Year).Any()))
+            if (!tcResponse.Success)
             {
                 response.Success = false;
-                response.Message = "TrainingCamp já realizado!";
+                response.Message = tcResponse.Message;
                 return response;
             }
 
-            foreach (Player player in players)
-            {
-                var newRatings = TcUtils.TrainingCamp(player, season);
-                newRatings.ScoutReport = NBALigaSimulation.Shared.Engine.Scouting.ScoutingReportGenerator.Generate(newRatings, player.Pos ?? "SF", player.Born?.Year);
-                player.Ratings.Add(newRatings);
-            }
-
-            await _seasonRepository.SaveChangesAsync();
-
             response.Success = true;
+            response.Message = tcResponse.Message;
             response.Data = _mapper.Map<CompleteSeasonDto>(season);
 
             return response;

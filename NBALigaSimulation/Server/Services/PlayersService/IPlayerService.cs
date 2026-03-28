@@ -26,5 +26,6 @@ namespace NBALigaSimulation.Server.Services.PlayersService
         Task<ServiceResponse<bool>> RegenerateAllScoutReports();
         Task<ServiceResponse<bool>> HandleExpiredContractsAsync(int nextSeasonYear);
         Task<ServiceResponse<bool>> HandleOffSeasonRecoveryAsync(int healingAmount);
+        Task<ServiceResponse<bool>> GenerateTrainingCampAsync(Season season);
     }
 }

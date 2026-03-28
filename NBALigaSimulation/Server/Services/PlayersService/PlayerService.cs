@@ -674,5 +674,41 @@ namespace NBALigaSimulation.Server.Services.PlayersService
                 return response;
             }
         }
+
+        public async Task<ServiceResponse<bool>> GenerateTrainingCampAsync(Season season)
+        {
+            var response = new ServiceResponse<bool>();
+
+            try
+            {
+                List<Player> players = await _seasonRepository.GetPlayersWithRatingsAsync();
+
+                if (players.Any(p => p.Ratings.Where(s => s.Season == season.Year).Any()))
+                {
+                    response.Success = false;
+                    response.Message = "TrainingCamp já realizado!";
+                    return response;
+                }
+
+                foreach (Player player in players)
+                {
+                    var newRatings = TcUtils.TrainingCamp(player, season);
+                    newRatings.ScoutReport = NBALigaSimulation.Shared.Engine.Scouting.ScoutingReportGenerator.Generate(newRatings, player.Pos ?? "SF", player.Born?.Year);
+                    player.Ratings.Add(newRatings);
+                }
+
+                await _seasonRepository.SaveChangesAsync();
+
+                response.Success = true;
+                response.Message = "TrainingCamp gerado com sucesso para todos os jogadores!";
+                return response;
+            }
+            catch (Exception ex)
+            {
+                response.Success = false;
+                response.Message = $"Erro ao gerar TrainingCamp: {ex.Message}";
+                return response;
+            }
+        }
     }
 }
