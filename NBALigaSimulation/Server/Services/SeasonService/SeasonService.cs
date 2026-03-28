@@ -1,5 +1,6 @@
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
+using NBALigaSimulation.Server.Services.DraftService;
 using NBALigaSimulation.Shared.Dtos.Seasons;
 using NBALigaSimulation.Shared.Engine.Schedule;
 using NBALigaSimulation.Shared.Engine.Utils;
@@ -13,23 +14,21 @@ namespace NBALigaSimulation.Server.Services.SeasonService
 {
     public class SeasonService : ISeasonService
     {
-        private const int FreeAgentsTeamId = 21;
-
         private readonly ISeasonRepository _seasonRepository;
-        private readonly IGenericRepository<TeamDraftPicks> _draftPickRepository;
+        private readonly IDraftService _draftService;
         private readonly IGenericRepository<Player> _playerRepository;
         private readonly IFAService _faService;
         private readonly IMapper _mapper;
 
         public SeasonService(
             ISeasonRepository seasonRepository,
-            IGenericRepository<TeamDraftPicks> draftPickRepository,
+            IDraftService draftService,
             IGenericRepository<Player> playerRepository,
             IFAService faService,
             IMapper mapper)
         {
             _seasonRepository = seasonRepository;
-            _draftPickRepository = draftPickRepository;
+            _draftService = draftService;
             _playerRepository = playerRepository;
             _faService = faService;
             _mapper = mapper;
@@ -111,52 +110,16 @@ namespace NBALigaSimulation.Server.Services.SeasonService
 
             var expiredContractPlayers = await _playerRepository.Query()
                 .Include(p => p.Contract)
-                .Where(p => p.TeamId != FreeAgentsTeamId && p.Contract != null && p.Contract.Exp < season.Year)
+                .Where(p => p.TeamId != GlobalConstants.FreeAgentsTeamId && p.Contract != null && p.Contract.Exp < season.Year)
                 .ToListAsync();
             foreach (var player in expiredContractPlayers)
             {
-                player.TeamId = FreeAgentsTeamId;
+                player.TeamId = GlobalConstants.FreeAgentsTeamId;
             }
             if (expiredContractPlayers.Count > 0)
                 await _playerRepository.SaveChangesAsync();
 
-            List<Team> teams = await _seasonRepository.GetHumanTeamsAsync();
-
-            var existingPicks = await _draftPickRepository.Query()
-                .Select(dp => new { dp.Original, dp.Year, dp.Round })
-                .ToListAsync();
-            var existingSet = existingPicks.Select(p => (p.Original, p.Year, p.Round)).ToHashSet();
-
-            const int yearsAhead = 4;
-            var picksToAdd = new List<TeamDraftPicks>();
-
-            foreach (Team team in teams)
-            {
-                for (int y = 1; y <= yearsAhead; y++)
-                {
-                    int draftYear = season.Year + y;
-                    for (int round = 1; round <= 2; round++)
-                    {
-                        if (!existingSet.Contains((team.Abrv, draftYear, round)))
-                        {
-                            picksToAdd.Add(new TeamDraftPicks
-                            {
-                                TeamId = team.Id,
-                                Original = team.Abrv,
-                                Year = draftYear,
-                                Round = round
-                            });
-                            existingSet.Add((team.Abrv, draftYear, round));
-                        }
-                    }
-                }
-            }
-
-            if (picksToAdd.Count > 0)
-            {
-                await _draftPickRepository.AddRangeAsync(picksToAdd);
-                await _draftPickRepository.SaveChangesAsync();
-            }
+            await _draftService.GenerateFuturePicks(season.Year);
 
             response.Message = $"Temporada criada com sucesso!";
             response.Success = true;

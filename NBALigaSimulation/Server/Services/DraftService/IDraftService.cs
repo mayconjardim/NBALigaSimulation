@@ -12,5 +12,6 @@ namespace NBALigaSimulation.Server.Services.DraftService
         Task<ServiceResponse<bool>> GenerateDraft();
         Task<ServiceResponse<bool>> SelectDraftedPlayer(DraftPlayerDto request);
         Task<ServiceResponse<bool>> FinalizeDraft();
+        Task<ServiceResponse<bool>> GenerateFuturePicks(int currentSeasonYear);
     }
 }

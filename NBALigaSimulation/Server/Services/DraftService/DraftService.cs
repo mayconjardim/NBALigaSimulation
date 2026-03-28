@@ -367,21 +367,18 @@ namespace NBALigaSimulation.Server.Services.DraftService
             }
         }
 
-        private const int DraftPoolTeamId = 22;
-        private const int FreeAgentsTeamId = 21;
-
         public async Task<ServiceResponse<bool>> FinalizeDraft()
         {
             var response = new ServiceResponse<bool>();
             try
             {
                 var playersInDraftPool = await _playerRepository.Query()
-                    .Where(p => p.TeamId == DraftPoolTeamId)
+                    .Where(p => p.TeamId == GlobalConstants.DraftPoolTeamId)
                     .ToListAsync();
 
                 foreach (var player in playersInDraftPool)
                 {
-                    player.TeamId = FreeAgentsTeamId;
+                    player.TeamId = GlobalConstants.FreeAgentsTeamId;
                 }
 
                 await _playerRepository.SaveChangesAsync();
@@ -393,6 +390,64 @@ namespace NBALigaSimulation.Server.Services.DraftService
             {
                 response.Success = false;
                 response.Message = $"Erro ao finalizar draft: {ex.Message}";
+                return response;
+            }
+        }
+
+        public async Task<ServiceResponse<bool>> GenerateFuturePicks(int currentSeasonYear)
+        {
+            var response = new ServiceResponse<bool>();
+
+            try
+            {
+                var humanTeams = await _teamRepository.Query()
+                    .Where(t => t.IsHuman == true)
+                    .ToListAsync();
+
+                var existingPicks = await _draftPickRepository.Query()
+                    .Select(dp => new { dp.Original, dp.Year, dp.Round })
+                    .ToListAsync();
+
+                var existingSet = existingPicks.Select(p => (p.Original, p.Year, p.Round)).ToHashSet();
+
+                var picksToAdd = new List<TeamDraftPicks>();
+
+                foreach (var team in humanTeams)
+                {
+                    for (int y = 1; y <= GlobalConstants.DraftPicksYearsAhead; y++)
+                    {
+                        int draftYear = currentSeasonYear + y;
+                        for (int round = 1; round <= GlobalConstants.DraftRounds; round++)
+                        {
+                            if (!existingSet.Contains((team.Abrv, draftYear, round)))
+                            {
+                                picksToAdd.Add(new TeamDraftPicks
+                                {
+                                    TeamId = team.Id,
+                                    Original = team.Abrv,
+                                    Year = draftYear,
+                                    Round = round
+                                });
+                                existingSet.Add((team.Abrv, draftYear, round));
+                            }
+                        }
+                    }
+                }
+
+                if (picksToAdd.Count > 0)
+                {
+                    await _draftPickRepository.AddRangeAsync(picksToAdd);
+                    await _draftPickRepository.SaveChangesAsync();
+                }
+
+                response.Success = true;
+                response.Message = $"{picksToAdd.Count} novas escolhas de draft geradas para os próximos {GlobalConstants.DraftPicksYearsAhead} anos.";
+                return response;
+            }
+            catch (Exception ex)
+            {
+                response.Success = false;
+                response.Message = $"Erro ao gerar picks futuros: {ex.Message}";
                 return response;
             }
         }
