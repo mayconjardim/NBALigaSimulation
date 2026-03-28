@@ -1,7 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using NBALigaSimulation.Shared.Dtos.Players;
 using NBALigaSimulation.Shared.Models.Utils;
-using Newtonsoft.Json.Linq;
 
 namespace NBALigaSimulation.Server.Controllers
 {
@@ -10,10 +9,20 @@ namespace NBALigaSimulation.Server.Controllers
     public class PlayersController : ControllerBase
     {
         private readonly IPlayerService _playerService;
+        private readonly IPlayerContractService _playerContractService;
+        private readonly IPlayerImportService _playerImportService;
+        private readonly IPlayerEvolutionService _playerEvolutionService;
 
-        public PlayersController(IPlayerService playerService)
+        public PlayersController(
+            IPlayerService playerService,
+            IPlayerContractService playerContractService,
+            IPlayerImportService playerImportService,
+            IPlayerEvolutionService playerEvolutionService)
         {
             _playerService = playerService;
+            _playerContractService = playerContractService;
+            _playerImportService = playerImportService;
+            _playerEvolutionService = playerEvolutionService;
         }
         
         [HttpGet("{playerId}")]
@@ -35,8 +44,6 @@ namespace NBALigaSimulation.Server.Controllers
                 return StatusCode(500, ex.Message); 
             }
         }
-        
- 
         
         [HttpGet("simple")]
         public async Task<ActionResult<ServiceResponse<List<PlayerSimpleDto>>>> GetAllSimplePlayers()
@@ -70,16 +77,14 @@ namespace NBALigaSimulation.Server.Controllers
         [HttpGet("draft")]
         public async Task<ActionResult<ServiceResponse<List<PlayerSimpleDto>>>> GetAllDraftPlayers()
         {
-
             var result = await _playerService.GetAllDraftPlayers();
             return Ok(result);
-
         }
 
         [HttpGet("expiring")]
         public async Task<ActionResult<ServiceResponse<List<PlayerCompleteDto>>>> GetExpiringPlayers([FromQuery] int season)
         {
-            var result = await _playerService.GetExpiringPlayers(season);
+            var result = await _playerContractService.GetExpiringPlayers(season);
             if (!result.Success)
                 return StatusCode(500, result);
             return Ok(result);
@@ -88,7 +93,7 @@ namespace NBALigaSimulation.Server.Controllers
         [HttpGet("injured")]
         public async Task<ActionResult<ServiceResponse<List<PlayerCompleteDto>>>> GetInjuredPlayers()
         {
-            var result = await _playerService.GetInjuredPlayers();
+            var result = await _playerEvolutionService.GetInjuredPlayers();
             if (!result.Success)
                 return StatusCode(500, result);
             return Ok(result);
@@ -97,7 +102,7 @@ namespace NBALigaSimulation.Server.Controllers
         [HttpPost]
         public async Task<ActionResult<ServiceResponse<PlayerCompleteDto>>> CreatePlayer(CreatePlayerDto request)
         {
-            return Ok(await _playerService.CreatePlayer(request));
+            return Ok(await _playerImportService.CreatePlayer(request));
         }
         
         [HttpPost("edit-player")]
@@ -116,13 +121,13 @@ namespace NBALigaSimulation.Server.Controllers
         [HttpPost("multi")]
         public async Task<ActionResult<ServiceResponse<bool>>> CreatePlayers(List<CreatePlayerDto> playersDto)
         {
-            return Ok(await _playerService.CreatePlayers(playersDto));
+            return Ok(await _playerImportService.CreatePlayers(playersDto));
         }
 
         [HttpPost("import-bbgm")]
         public async Task<ActionResult<ServiceResponse<bool>>> ImportBBGMPlayers(BBGMImportDto bbgmData)
         {
-            return Ok(await _playerService.ImportBBGMPlayers(bbgmData));
+            return Ok(await _playerImportService.ImportBBGMPlayers(bbgmData));
         }
 
         [HttpPut("rosterorder")]
@@ -154,7 +159,7 @@ namespace NBALigaSimulation.Server.Controllers
         [HttpPost("contracts")]
         public async Task<ActionResult> GenerateContracts()
         {
-            var response = await _playerService.GenerateContracts();
+            var response = await _playerContractService.GenerateContracts();
 
             if (!response.Success)
             {
@@ -164,13 +169,10 @@ namespace NBALigaSimulation.Server.Controllers
             return Ok(response);
         }
 
-        /// <summary>
-        /// Gera contratos para todos os jogadores em times, baseado em rating, respeitando o salary cap (para testes).
-        /// </summary>
         [HttpPost("contracts-for-test")]
         public async Task<ActionResult> GenerateContractsForTest()
         {
-            var response = await _playerService.GenerateContractsForTest();
+            var response = await _playerContractService.GenerateContractsForTest();
             if (!response.Success) return BadRequest(response);
             return Ok(response);
         }
@@ -178,7 +180,6 @@ namespace NBALigaSimulation.Server.Controllers
         [HttpGet("searchsuggestion/{searchText}")]
         public async Task<ActionResult<ServiceResponse<List<PlayerSimpleDto>>>> GetPlayersSearchSuggestions(string searchText)
         {
-
             var result = await _playerService.GetPlayersSearchSuggestions(searchText);
 
             if (!result.Success)
@@ -187,13 +188,12 @@ namespace NBALigaSimulation.Server.Controllers
             }
 
             return Ok(result);
-
         }
 
         [HttpPost("regenerate-scout-reports")]
         public async Task<ActionResult<ServiceResponse<bool>>> RegenerateAllScoutReports()
         {
-            var result = await _playerService.RegenerateAllScoutReports();
+            var result = await _playerEvolutionService.RegenerateAllScoutReports();
             return Ok(result);
         }
     }

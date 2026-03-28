@@ -66,6 +66,9 @@ builder.Services.AddSwaggerGen(c =>
 builder.Services.AddAutoMapper(typeof(Program).Assembly);
 
 builder.Services.AddScoped<IPlayerService, PlayerService>();
+builder.Services.AddScoped<IPlayerContractService, PlayerContractService>();
+builder.Services.AddScoped<IPlayerImportService, PlayerImportService>();
+builder.Services.AddScoped<IPlayerEvolutionService, PlayerEvolutionService>();
 builder.Services.AddScoped<ITeamService, TeamService>();
 builder.Services.AddScoped<IGameService, GameService>();
 builder.Services.AddScoped<ISeasonService, SeasonService>();

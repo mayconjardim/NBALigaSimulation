@@ -1,34 +1,23 @@
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
-using NBALigaSimulation.Client.Pages.Players.PlayerPage;
 using NBALigaSimulation.Shared.Dtos.Players;
-using NBALigaSimulation.Shared.Engine.Utils;
 using NBALigaSimulation.Shared.Models.Players;
-using NBALigaSimulation.Shared.Models.Seasons;
-using NBALigaSimulation.Shared.Models.Utils;
 using NBALigaSimulation.Shared.Models.Teams;
-using Newtonsoft.Json.Linq;
+using NBALigaSimulation.Shared.Models.Utils;
 using Player = NBALigaSimulation.Shared.Models.Players.Player;
-using Born = NBALigaSimulation.Shared.Models.Players.Born;
 
 namespace NBALigaSimulation.Server.Services.PlayersService
 {
     public class PlayerService : IPlayerService
     {
         private readonly IGenericRepository<Player> _playerRepository;
-        private readonly IGenericRepository<Team> _teamRepository;
-        private readonly ISeasonRepository _seasonRepository;
         private readonly IMapper _mapper;
 
         public PlayerService(
             IGenericRepository<Player> playerRepository,
-            IGenericRepository<Team> teamRepository,
-            ISeasonRepository seasonRepository,
             IMapper mapper)
         {
             _playerRepository = playerRepository;
-            _teamRepository = teamRepository;
-            _seasonRepository = seasonRepository;
             _mapper = mapper;
         }
         
@@ -68,163 +57,7 @@ namespace NBALigaSimulation.Server.Services.PlayersService
 
             return response;
         }
-        
-        public async Task<ServiceResponse<PlayerCompleteDto>> CreatePlayer(CreatePlayerDto request)
-        {
 
-            ServiceResponse<PlayerCompleteDto> response = new ServiceResponse<PlayerCompleteDto>();
-
-            Player player = _mapper.Map<Player>(request);
-
-            await _playerRepository.AddAsync(player);
-            await _playerRepository.SaveChangesAsync();
-
-            var pos = string.IsNullOrWhiteSpace(player.Pos) ? "SF" : player.Pos;
-            foreach (var rating in player.Ratings ?? new List<PlayerRatings>())
-            {
-                rating.ScoutReport = NBALigaSimulation.Shared.Engine.Scouting.ScoutingReportGenerator.Generate(rating, pos, player.Born?.Year);
-            }
-            await _playerRepository.SaveChangesAsync();
-
-            response.Success = true;
-            response.Data = _mapper.Map<PlayerCompleteDto>(player);
-            return response;
-        }
-
-   public async Task<ServiceResponse<bool>> CreatePlayers(List<CreatePlayerDto> playersDto)
-{
-    ServiceResponse<bool> response = new ServiceResponse<bool>();
-
-    // Validação de entrada
-    if (playersDto == null || !playersDto.Any())
-    {
-        response.Success = false;
-        response.Message = "Nenhum jogador foi fornecido para criação.";
-        return response;
-    }
-
-    try
-    {
-        List<Player> players = new List<Player>();
-
-        // Mapeamento dos DTOs para entidades
-        foreach (var playerDto in playersDto)
-        {
-            if (await _teamRepository.Query().AnyAsync(t => t.Id == playerDto.TeamId))
-            {
-                Player player = _mapper.Map<Player>(playerDto);
-                players.Add(player);
-            }
-        }
-
-        // Adiciona todos os jogadores de uma vez
-        await _playerRepository.AddRangeAsync(players);
-        await _playerRepository.SaveChangesAsync();
-
-        // Gera relatório de scouting para cada rating de cada jogador
-        foreach (var player in players)
-        {
-            var pos = string.IsNullOrWhiteSpace(player.Pos) ? "SF" : player.Pos;
-            foreach (var rating in player.Ratings)
-            {
-                rating.ScoutReport = NBALigaSimulation.Shared.Engine.Scouting.ScoutingReportGenerator.Generate(rating, pos, player.Born?.Year);
-            }
-        }
-        await _playerRepository.SaveChangesAsync();
-
-        response.Data = true;
-        response.Success = true;
-        response.Message = $"Jogadores criados com sucesso! Total: {players.Count} jogador(es).";
-    }
-    catch (Exception ex)
-    {
-        response.Data = false;
-        response.Success = false;
-        response.Message = $"Erro ao criar jogadores: {ex.Message}";
-    }
-
-    return response;
-}
-
-        public async Task<ServiceResponse<bool>> ImportBBGMPlayers(BBGMImportDto bbgmData)
-        {
-            var response = new ServiceResponse<bool>();
-
-            if (bbgmData?.Players == null || !bbgmData.Players.Any())
-            {
-                response.Success = false;
-                response.Message = "Nenhum jogador encontrado no JSON do BBGM.";
-                return response;
-            }
-
-            try
-            {
-                var createPlayerDtos = new List<CreatePlayerDto>();
-
-                foreach (var bbgmPlayer in bbgmData.Players)
-                {
-                    // Se tid == -2, vai para o draft pool (TeamId = 22)
-                    int teamId = bbgmPlayer.Tid == -2 ? 22 : bbgmPlayer.Tid;
-
-                    var createDto = new CreatePlayerDto
-                    {
-                        Id = 0, // Sempre 0 para novos jogadores
-                        Name = $"{bbgmPlayer.FirstName} {bbgmPlayer.LastName}".Trim(),
-                        Pos = bbgmPlayer.Pos ?? "",
-                        College = bbgmPlayer.College ?? "",
-                        Hgt = bbgmPlayer.Hgt,
-                        Weight = bbgmPlayer.Weight,
-                        ImgUrl = bbgmPlayer.ImgURL ?? "",
-                        TeamId = teamId,
-                        Born = bbgmPlayer.Born != null ? new Born
-                        {
-                            Year = bbgmPlayer.Born.Year,
-                            Loc = bbgmPlayer.Born.Loc ?? ""
-                        } : new Born { Year = 1990, Loc = "" },
-                        Ratings = bbgmPlayer.Ratings?.Select(r => new PlayerRatingDto
-                        {
-                            Hgt = r.Hgt,
-                            Stre = r.Stre,
-                            Spd = r.Spd,
-                            Jmp = r.Jmp,
-                            Endu = r.Endu,
-                            Ins = r.Ins,
-                            Dnk = r.Dnk,
-                            Ft = r.Ft,
-                            Fg = r.Fg,
-                            Tp = r.Tp,
-                            Diq = r.Diq,
-                            Oiq = r.Oiq,
-                            Drb = r.Drb,
-                            Pss = r.Pss,
-                            Reb = r.Reb,
-                            Pot = r.Pot
-                        }).ToList() ?? new List<PlayerRatingDto>()
-                    };
-
-                    createPlayerDtos.Add(createDto);
-                }
-
-                // Usa o método CreatePlayers existente
-                var createResponse = await CreatePlayers(createPlayerDtos);
-                
-                response.Success = createResponse.Success;
-                response.Message = createResponse.Success 
-                    ? $"Importados {createPlayerDtos.Count} jogador(es) do BBGM. {createResponse.Message}"
-                    : createResponse.Message;
-                response.Data = createResponse.Success;
-
-                return response;
-            }
-            catch (Exception ex)
-            {
-                response.Success = false;
-                response.Message = $"Erro ao importar jogadores do BBGM: {ex.Message}";
-                return response;
-            }
-        }
-
-        
         public async Task<ServiceResponse<List<PlayerSimpleDto>>> GetAllSimplePlayers()
         {
             var players = await _playerRepository.GetAllAsync();
@@ -336,73 +169,6 @@ namespace NBALigaSimulation.Server.Services.PlayersService
             return response;
         }
 
-        /// <summary>
-        /// Jogadores cujo contrato expira na temporada atual (Contract.Exp == season).
-        /// Exclui FA (TeamId 21) e Draft (TeamId 22).
-        /// </summary>
-        public async Task<ServiceResponse<List<PlayerCompleteDto>>> GetExpiringPlayers(int season)
-        {
-            var response = new ServiceResponse<List<PlayerCompleteDto>>();
-            try
-            {
-                var players = await _playerRepository.Query()
-                    .Where(p => p.TeamId != 21 && p.TeamId != 22 && p.Contract != null && p.Contract.Exp == season)
-                    .Include(p => p.Team)
-                    .Include(p => p.Ratings)
-                    .Include(p => p.Contract)
-                    .ToListAsync();
-
-                var ordered = players
-                    .OrderBy(p => p.Team?.Name)
-                    .ThenByDescending(p => p.Ratings.OrderByDescending(r => r.Season).FirstOrDefault()?.CalculateOvr ?? 0)
-                    .ThenBy(p => p.Name)
-                    .ToList();
-
-                response.Data = _mapper.Map<List<PlayerCompleteDto>>(ordered);
-                response.Success = true;
-            }
-            catch (Exception ex)
-            {
-                response.Success = false;
-                response.Message = $"Erro ao buscar jogadores com contrato expirando: {ex.Message}";
-            }
-
-            return response;
-        }
-
-        /// <summary>
-        /// Jogadores atualmente lesionados (InjuryType preenchido e InjuryGamesRemaining > 0).
-        /// </summary>
-        public async Task<ServiceResponse<List<PlayerCompleteDto>>> GetInjuredPlayers()
-        {
-            var response = new ServiceResponse<List<PlayerCompleteDto>>();
-            try
-            {
-                var players = await _playerRepository.Query()
-                    .Where(p => !string.IsNullOrEmpty(p.InjuryType) && (p.InjuryGamesRemaining ?? 0) > 0)
-                    .Include(p => p.Team)
-                    .Include(p => p.Ratings)
-                    .Include(p => p.Contract)
-                    .ToListAsync();
-
-                var ordered = players
-                    .OrderBy(p => p.Team?.Name)
-                    .ThenByDescending(p => p.Ratings.OrderByDescending(r => r.Season).FirstOrDefault()?.CalculateOvr ?? 0)
-                    .ThenBy(p => p.Name)
-                    .ToList();
-
-                response.Data = _mapper.Map<List<PlayerCompleteDto>>(ordered);
-                response.Success = true;
-            }
-            catch (Exception ex)
-            {
-                response.Success = false;
-                response.Message = $"Erro ao buscar jogadores lesionados: {ex.Message}";
-            }
-
-            return response;
-        }
-
         public async Task<ServiceResponse<bool>> UpdateRosterOrder(List<PlayerCompleteDto> updatedPlayerList)
         {
             var response = new ServiceResponse<bool>();
@@ -465,64 +231,6 @@ namespace NBALigaSimulation.Server.Services.PlayersService
             return response;
         }
 
-        public async Task<ServiceResponse<bool>> GenerateContracts()
-        {
-            var response = new ServiceResponse<bool>();
-
-            List<Player> players = await _playerRepository.Query()
-                .OrderBy(p => p.Id)
-                .Include(p => p.Ratings)
-                .ToListAsync();
-
-            Season season = await _seasonRepository.Query()
-                .OrderBy(s => s.Id)
-                .LastOrDefaultAsync();
-
-            foreach (Player player in players)
-            {
-                var contract = ArrayHelper.GenContract(player, season, true, true, false);
-                player.Contract = contract;
-            }
-
-            await _playerRepository.SaveChangesAsync();
-            response.Success = true;
-            response.Message = "Contracts generated successfully.";
-
-            return response;
-        }
-
-        /// <summary>
-        /// Gera contratos para todos os jogadores em times (não FA/draft), baseado em rating, respeitando o salary cap.
-        /// Para testes de trocas, FA, etc.
-        /// </summary>
-        public async Task<ServiceResponse<bool>> GenerateContractsForTest()
-        {
-            var response = new ServiceResponse<bool>();
-
-            var season = await _seasonRepository.Query()
-                .OrderBy(s => s.Id)
-                .LastOrDefaultAsync();
-            if (season == null)
-            {
-                response.Success = false;
-                response.Message = "Temporada não encontrada.";
-                return response;
-            }
-
-            var players = await _playerRepository.Query()
-                .Include(p => p.Ratings)
-                .Include(p => p.Contract)
-                .Where(p => p.TeamId != 21 && p.TeamId != 22)
-                .ToListAsync();
-
-            ContractTestUtils.AssignContractsForTest(players, season.Year);
-
-            await _playerRepository.SaveChangesAsync();
-            response.Success = true;
-            response.Message = $"Contratos gerados para {players.Count} jogadores, respeitando o cap.";
-            return response;
-        }
-
         public async Task<ServiceResponse<PlayerCompleteDto>> EditPlayer(CreatePlayerDto playerDto)
         {
             var player = await _playerRepository.Query()
@@ -581,134 +289,6 @@ namespace NBALigaSimulation.Server.Services.PlayersService
             response.Data = _mapper.Map<List<PlayerSimpleDto>>(players);
             return response;  
            
-        }
-
-        public async Task<ServiceResponse<bool>> RegenerateAllScoutReports()
-        {
-            var response = new ServiceResponse<bool>();
-            try
-            {
-                var players = await _playerRepository.Query()
-                    .Include(p => p.Ratings)
-                    .ToListAsync();
-
-                int ratingsCount = 0;
-                foreach (var player in players)
-                {
-                    var pos = string.IsNullOrWhiteSpace(player.Pos) ? "SF" : player.Pos;
-                    foreach (var rating in player.Ratings ?? new List<PlayerRatings>())
-                    {
-                        rating.ScoutReport = NBALigaSimulation.Shared.Engine.Scouting.ScoutingReportGenerator.Generate(rating, pos, player.Born?.Year);
-                        ratingsCount++;
-                    }
-                }
-
-                await _playerRepository.SaveChangesAsync();
-                response.Success = true;
-                response.Data = true;
-                response.Message = $"Scout reports gerados para {players.Count} jogador(es) ({ratingsCount} rating(s)).";
-            }
-            catch (Exception ex)
-            {
-                response.Success = false;
-                response.Data = false;
-                response.Message = $"Erro ao gerar scout reports: {ex.Message}";
-            }
-            return response;
-        }
-
-        public async Task<ServiceResponse<bool>> HandleExpiredContractsAsync(int nextSeasonYear)
-        {
-            var response = new ServiceResponse<bool>();
-
-            try
-            {
-                var expiredContractPlayers = await _playerRepository.Query()
-                    .Include(p => p.Contract)
-                    .Where(p => p.TeamId != GlobalConstants.FreeAgentsTeamId && p.Contract != null && p.Contract.Exp < nextSeasonYear)
-                    .ToListAsync();
-
-                foreach (var player in expiredContractPlayers)
-                {
-                    player.TeamId = GlobalConstants.FreeAgentsTeamId;
-                }
-
-                if (expiredContractPlayers.Count > 0)
-                {
-                    await _playerRepository.SaveChangesAsync();
-                }
-
-                response.Success = true;
-                response.Message = $"{expiredContractPlayers.Count} jogadores com contratos expirados movidos para a agência livre.";
-                return response;
-            }
-            catch (Exception ex)
-            {
-                response.Success = false;
-                response.Message = $"Erro ao processar contratos expirados: {ex.Message}";
-                return response;
-            }
-        }
-
-        public async Task<ServiceResponse<bool>> HandleOffSeasonRecoveryAsync(int healingAmount)
-        {
-            var response = new ServiceResponse<bool>();
-            try
-            {
-                // Busca jogadores com os ratings para aplicar a recuperação (lógica do SeasonRepository)
-                List<Player> players = await _seasonRepository.GetPlayersWithRatingsAsync();
-                
-                // Aplica a recuperação usando SimulationUtils
-                SimulationUtils.ApplyOffSeasonInjuryRecovery(players, healingAmount);
-                
-                await _seasonRepository.SaveChangesAsync();
-                
-                response.Success = true;
-                response.Message = $"Recuperação de off-season aplicada a {players.Count} jogadores.";
-                return response;
-            }
-            catch (Exception ex)
-            {
-                response.Success = false;
-                response.Message = $"Erro ao aplicar recuperação de off-season: {ex.Message}";
-                return response;
-            }
-        }
-
-        public async Task<ServiceResponse<bool>> GenerateTrainingCampAsync(Season season)
-        {
-            var response = new ServiceResponse<bool>();
-
-            try
-            {
-                List<Player> players = await _seasonRepository.GetPlayersWithRatingsAsync();
-
-                if (players.Any(p => p.Ratings.Where(s => s.Season == season.Year).Any()))
-                {
-                    response.Success = false;
-                    response.Message = "TrainingCamp já realizado!";
-                    return response;
-                }
-
-                foreach (Player player in players)
-                {
-                    var newRatings = TcUtils.TrainingCamp(player, season);
-                    newRatings.ScoutReport = NBALigaSimulation.Shared.Engine.Scouting.ScoutingReportGenerator.Generate(newRatings, player.Pos ?? "SF", player.Born?.Year);
-                    player.Ratings.Add(newRatings);
-                }
-
-                await _seasonRepository.SaveChangesAsync();
-
-                response.Success = true;
-                response.Message = "TrainingCamp gerado com sucesso para todos os jogadores!";
-                return response;
-            }
-            catch (Exception ex)
-            {
-                response.Success = false;
-                response.Message = $"Erro ao gerar TrainingCamp: {ex.Message}";
-                return response;
-            }
         }
     }
 }

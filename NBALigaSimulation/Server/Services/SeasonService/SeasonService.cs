@@ -18,6 +18,8 @@ namespace NBALigaSimulation.Server.Services.SeasonService
         private readonly ISeasonRepository _seasonRepository;
         private readonly IDraftService _draftService;
         private readonly IPlayerService _playerService;
+        private readonly IPlayerContractService _playerContractService;
+        private readonly IPlayerEvolutionService _playerEvolutionService;
         private readonly IFAService _faService;
         private readonly IMapper _mapper;
 
@@ -25,12 +27,16 @@ namespace NBALigaSimulation.Server.Services.SeasonService
             ISeasonRepository seasonRepository,
             IDraftService draftService,
             IPlayerService playerService,
+            IPlayerContractService playerContractService,
+            IPlayerEvolutionService playerEvolutionService,
             IFAService faService,
             IMapper mapper)
         {
             _seasonRepository = seasonRepository;
             _draftService = draftService;
             _playerService = playerService;
+            _playerContractService = playerContractService;
+            _playerEvolutionService = playerEvolutionService;
             _faService = faService;
             _mapper = mapper;
         }
@@ -105,9 +111,9 @@ namespace NBALigaSimulation.Server.Services.SeasonService
 
             await _faService.DeleteOffersBySeason(LastSeason.Year);
 
-            await _playerService.HandleOffSeasonRecoveryAsync(30);
+            await _playerEvolutionService.HandleOffSeasonRecoveryAsync(30);
 
-            await _playerService.HandleExpiredContractsAsync(season.Year);
+            await _playerContractService.HandleExpiredContractsAsync(season.Year);
 
             await _draftService.GenerateFuturePicks(season.Year);
 
@@ -186,7 +192,7 @@ namespace NBALigaSimulation.Server.Services.SeasonService
                 return response;
             }
 
-            var tcResponse = await _playerService.GenerateTrainingCampAsync(season);
+            var tcResponse = await _playerEvolutionService.GenerateTrainingCampAsync(season);
 
             if (!tcResponse.Success)
             {
