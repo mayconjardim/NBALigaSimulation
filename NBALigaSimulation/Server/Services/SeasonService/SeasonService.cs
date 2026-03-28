@@ -1,6 +1,7 @@
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using NBALigaSimulation.Server.Services.DraftService;
+using NBALigaSimulation.Server.Services.PlayersService;
 using NBALigaSimulation.Shared.Dtos.Seasons;
 using NBALigaSimulation.Shared.Engine.Schedule;
 using NBALigaSimulation.Shared.Engine.Utils;
@@ -16,20 +17,20 @@ namespace NBALigaSimulation.Server.Services.SeasonService
     {
         private readonly ISeasonRepository _seasonRepository;
         private readonly IDraftService _draftService;
-        private readonly IGenericRepository<Player> _playerRepository;
+        private readonly IPlayerService _playerService;
         private readonly IFAService _faService;
         private readonly IMapper _mapper;
 
         public SeasonService(
             ISeasonRepository seasonRepository,
             IDraftService draftService,
-            IGenericRepository<Player> playerRepository,
+            IPlayerService playerService,
             IFAService faService,
             IMapper mapper)
         {
             _seasonRepository = seasonRepository;
             _draftService = draftService;
-            _playerRepository = playerRepository;
+            _playerService = playerService;
             _faService = faService;
             _mapper = mapper;
         }
@@ -108,16 +109,7 @@ namespace NBALigaSimulation.Server.Services.SeasonService
             SimulationUtils.ApplyOffSeasonInjuryRecovery(players, 30);
             await _seasonRepository.SaveChangesAsync();
 
-            var expiredContractPlayers = await _playerRepository.Query()
-                .Include(p => p.Contract)
-                .Where(p => p.TeamId != GlobalConstants.FreeAgentsTeamId && p.Contract != null && p.Contract.Exp < season.Year)
-                .ToListAsync();
-            foreach (var player in expiredContractPlayers)
-            {
-                player.TeamId = GlobalConstants.FreeAgentsTeamId;
-            }
-            if (expiredContractPlayers.Count > 0)
-                await _playerRepository.SaveChangesAsync();
+            await _playerService.HandleExpiredContractsAsync(season.Year);
 
             await _draftService.GenerateFuturePicks(season.Year);
 

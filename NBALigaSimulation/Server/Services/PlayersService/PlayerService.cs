@@ -616,5 +616,38 @@ namespace NBALigaSimulation.Server.Services.PlayersService
             }
             return response;
         }
+
+        public async Task<ServiceResponse<bool>> HandleExpiredContractsAsync(int nextSeasonYear)
+        {
+            var response = new ServiceResponse<bool>();
+
+            try
+            {
+                var expiredContractPlayers = await _playerRepository.Query()
+                    .Include(p => p.Contract)
+                    .Where(p => p.TeamId != GlobalConstants.FreeAgentsTeamId && p.Contract != null && p.Contract.Exp < nextSeasonYear)
+                    .ToListAsync();
+
+                foreach (var player in expiredContractPlayers)
+                {
+                    player.TeamId = GlobalConstants.FreeAgentsTeamId;
+                }
+
+                if (expiredContractPlayers.Count > 0)
+                {
+                    await _playerRepository.SaveChangesAsync();
+                }
+
+                response.Success = true;
+                response.Message = $"{expiredContractPlayers.Count} jogadores com contratos expirados movidos para a agência livre.";
+                return response;
+            }
+            catch (Exception ex)
+            {
+                response.Success = false;
+                response.Message = $"Erro ao processar contratos expirados: {ex.Message}";
+                return response;
+            }
+        }
     }
 }
