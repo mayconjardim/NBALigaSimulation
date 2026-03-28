@@ -1,6 +1,7 @@
 using System.Net.Http.Json;
 using NBALigaSimulation.Shared.Dtos.Playoffs;
 using NBALigaSimulation.Shared.Models.Utils;
+using NBALigaSimulation.Client.Utilities;
 
 namespace NBALigaSimulation.Client.Services.PlayoffsService;
 
@@ -15,49 +16,37 @@ public class PlayoffsService : IPlayoffsService
 
     public async Task<ServiceResponse<List<PlayoffsDto>>> GetPlayoffs()
     {
-        var response = await _http.GetFromJsonAsync<ServiceResponse<List<PlayoffsDto>>>("api/playoffs");
-        return response;
+        return await _http.SafeGetAsync<List<PlayoffsDto>>("api/playoffs");
     }
 
     public async Task<ServiceResponse<List<PlayoffsDto>>> GetPlayoffsBySeason(int season)
     {
-        var response = await _http.GetFromJsonAsync<ServiceResponse<List<PlayoffsDto>>>($"api/playoffs/season/{season}");
-        return response;
+        return await _http.SafeGetAsync<List<PlayoffsDto>>($"api/playoffs/season/{season}");
     }
 
     public async Task<ServiceResponse<bool>> GenerateFirstRound()
     {
-        var httpResponse = await _http.PostAsJsonAsync("api/playoffs/generate", new { });
-        var result = await httpResponse.Content.ReadFromJsonAsync<ServiceResponse<bool>>();
-        return result;
+        return await _http.SafePostAsync<object, bool>("api/playoffs/generate", new { });
     }
 
     public async Task<ServiceResponse<bool>> GenerateSecondRound()
     {
-        var httpResponse = await _http.PostAsJsonAsync("api/playoffs/generate/confsemis", new { });
-        var result = await httpResponse.Content.ReadFromJsonAsync<ServiceResponse<bool>>();
-        return result;
+        return await _http.SafePostAsync<object, bool>("api/playoffs/generate/confsemis", new { });
     }
 
     public async Task<ServiceResponse<bool>> GenerateThirdRound()
     {
-        var httpResponse = await _http.PostAsJsonAsync("api/playoffs/generate/conffinals", new { });
-        var result = await httpResponse.Content.ReadFromJsonAsync<ServiceResponse<bool>>();
-        return result;
+        return await _http.SafePostAsync<object, bool>("api/playoffs/generate/conffinals", new { });
     }
 
     public async Task<ServiceResponse<bool>> GenerateFourthRound()
     {
-        var httpResponse = await _http.PostAsJsonAsync("api/playoffs/generate/finals", new { });
-        var result = await httpResponse.Content.ReadFromJsonAsync<ServiceResponse<bool>>();
-        return result;
+        return await _http.SafePostAsync<object, bool>("api/playoffs/generate/finals", new { });
     }
 
     public async Task<ServiceResponse<bool>> EndPlayoffs()
     {
-        var httpResponse = await _http.PostAsJsonAsync("api/playoffs/end", new { });
-        var result = await httpResponse.Content.ReadFromJsonAsync<ServiceResponse<bool>>();
-        return result;
+        return await _http.SafePostAsync<object, bool>("api/playoffs/end", new { });
     }
 }
 

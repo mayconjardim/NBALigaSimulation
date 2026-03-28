@@ -1,6 +1,7 @@
 using System.Net.Http.Json;
 using NBALigaSimulation.Shared.Dtos.Players;
 using NBALigaSimulation.Shared.Models.Utils;
+using NBALigaSimulation.Client.Utilities;
 
 namespace NBALigaSimulation.Client.Services.PlayersService;
 
@@ -15,53 +16,27 @@ public class PlayerService : IPlayerService
 
     public async Task<ServiceResponse<PlayerCompleteDto>> GetPlayerById(int playerId)
     {
-        var response = await _http.GetFromJsonAsync<ServiceResponse<PlayerCompleteDto>>($"api/players/{playerId}");
-        if (response == null || response.Success == false)
-        {
-            return new ServiceResponse<PlayerCompleteDto>() { Message = "Jogador não encontrado!" };
-        }
-        
-        return response;
+        return await _http.SafeGetAsync<PlayerCompleteDto>($"api/players/{playerId}");
     }
 
     public async Task<ServiceResponse<bool>> UpdateRosterOrder(List<PlayerCompleteDto> updatedPlayerList)
     {
-        var result = await _http.PutAsJsonAsync("api/players/rosterorder", updatedPlayerList);
-        bool success = result.IsSuccessStatusCode;
-        var response = new ServiceResponse<bool>
-        {
-            Success = success,
-            Data = success,
-            Message = success ? "Player updated successfully." : "Failed to update game."
-        };
-
-        return response;
+        return await _http.SafePutAsync<List<PlayerCompleteDto>, bool>("api/players/rosterorder", updatedPlayerList);
     }
 
     public async Task<ServiceResponse<List<PlayerSimpleDto>>> GetPlayersSearchSuggestions(string searchText)
     {
-        var result = await _http.GetFromJsonAsync<ServiceResponse<List<PlayerSimpleDto>>>($"api/players/searchsuggestion/{searchText}");
-        return result ?? new ServiceResponse<List<PlayerSimpleDto>> { Success = false, Message = "Erro ao buscar sugestões." };
+        return await _http.SafeGetAsync<List<PlayerSimpleDto>>($"api/players/searchsuggestion/{searchText}");
     }
 
     public async Task<ServiceResponse<List<PlayerSimpleDto>>> GetAllSimplePlayers()
     {
-        var result = await _http.GetFromJsonAsync<ServiceResponse<List<PlayerSimpleDto>>>($"api/players/simple");
-        return result ?? new ServiceResponse<List<PlayerSimpleDto>> { Success = false, Message = "Erro ao buscar jogadores." };
+        return await _http.SafeGetAsync<List<PlayerSimpleDto>>("api/players/simple");
     }
 
     public async Task<ServiceResponse<bool>> UpdatePlayerPtModifier(int playerId, double newPtModifier)
     {
-        var result = await _http.PutAsJsonAsync($"api/players/{playerId}/ptmodifier", newPtModifier);
-        bool success = result.IsSuccessStatusCode;
-        var response = new ServiceResponse<bool>
-        {
-            Success = success,
-            Data = success,
-            Message = success ? "Player updated successfully." : "Failed to update player."
-        };
-
-        return response;
+        return await _http.SafePutAsync<double, bool>($"api/players/{playerId}/ptmodifier", newPtModifier);
     }
     
     public async Task<ServiceResponse<PageableResponse<PlayerCompleteDto>>> GetAllFaPlayers(int currentPage, int pageSize, int season, bool isAscending, string sortedColumn,
@@ -74,30 +49,16 @@ public class PlayerService : IPlayerService
             url += $"&position={Uri.EscapeDataString(position)}";
         }  
 
-        var result = await _http.GetFromJsonAsync<ServiceResponse<PageableResponse<PlayerCompleteDto>>>(url);
-        return result ?? new ServiceResponse<PageableResponse<PlayerCompleteDto>> { Success = false, Message = "Erro ao buscar Free Agents." };
+        return await _http.SafeGetAsync<PageableResponse<PlayerCompleteDto>>(url);
     }
     
     public async Task<ServiceResponse<List<PlayerCompleteDto>>> GetAllDraftPlayers()
     {
-        var result = await _http.GetFromJsonAsync<ServiceResponse<List<PlayerCompleteDto>>>("api/players/draft");
-        return result ?? new ServiceResponse<List<PlayerCompleteDto>> { Success = false, Message = "Erro ao buscar jogadores do draft." };
+        return await _http.SafeGetAsync<List<PlayerCompleteDto>>("api/players/draft");
     }
 
     public async Task<ServiceResponse<PlayerCompleteDto>> EditPlayer(CreatePlayerDto playerDto)
     {
-        var response = await _http.PostAsJsonAsync("api/players/edit-player", playerDto);
-
-        if (!response.IsSuccessStatusCode)
-        {
-            return new ServiceResponse<PlayerCompleteDto>
-            {
-                Success = false,
-                Message = "Erro ao editar o jogador."
-            };
-        }
-
-        var result = await response.Content.ReadFromJsonAsync<ServiceResponse<PlayerCompleteDto>>();
-        return result ?? new ServiceResponse<PlayerCompleteDto> { Success = false, Message = "Erro ao receber a resposta do servidor." };
+        return await _http.SafePostAsync<CreatePlayerDto, PlayerCompleteDto>("api/players/edit-player", playerDto);
     }
 }

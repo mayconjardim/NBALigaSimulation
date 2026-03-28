@@ -2,6 +2,7 @@ using System.Net.Http.Json;
 using NBALigaSimulation.Shared.Dtos.Players;
 using NBALigaSimulation.Shared.Dtos.Teams;
 using NBALigaSimulation.Shared.Models.Utils;
+using NBALigaSimulation.Client.Utilities;
 
 namespace NBALigaSimulation.Client.Services.StatsService;
 
@@ -17,7 +18,7 @@ public class StatsService : IStatsService
 
     public async Task<ServiceResponse<List<PlayerRegularStatsDto>>> GetPlayerRegularStatsByPlayerId(int playerId)
     {
-        return await _http.GetFromJsonAsync<ServiceResponse<List<PlayerRegularStatsDto>>>($"api/stats/players/{playerId}/regular-stats");
+        return await _http.SafeGetAsync<List<PlayerRegularStatsDto>>($"api/stats/players/{playerId}/regular-stats");
     }
 
     public async Task<ServiceResponse<PageableResponse<PlayerRegularStatsDto>>> GetAllPlayerRegularStats(int page, int pageSize, int season,
@@ -36,7 +37,7 @@ public class StatsService : IStatsService
         }
 
 
-        return await _http.GetFromJsonAsync<ServiceResponse<PageableResponse<PlayerRegularStatsDto>>>(url);
+        return await _http.SafeGetAsync<PageableResponse<PlayerRegularStatsDto>>(url);
     }
 
     
@@ -48,19 +49,16 @@ public class StatsService : IStatsService
         {
             url += $"&stat={Uri.EscapeDataString(stat)}";
         }
-        
-        var result = await _http.GetFromJsonAsync<ServiceResponse<List<TeamRegularStatsDto>>>(url);
-        return result;
+        return await _http.SafeGetAsync<List<TeamRegularStatsDto>>(url);
     }
     
     public async Task<ServiceResponse<List<TeamRegularStatsRankDto>>> GetAllTeamRegularStatsRank()
     {
-        var result = await _http.GetFromJsonAsync<ServiceResponse<List<TeamRegularStatsRankDto>>>($"api/stats/teams/ranks");
-        return result;
+        return await _http.SafeGetAsync<List<TeamRegularStatsRankDto>>("api/stats/teams/ranks");
     }
 
     public async Task<ServiceResponse<List<PlayerPlayoffsStatsDto>>> GetAllPlayerPlayoffsStatsBySeason(int season)
     {
-        return await _http.GetFromJsonAsync<ServiceResponse<List<PlayerPlayoffsStatsDto>>>($"api/stats/playoffs/players?season={season}");
+        return await _http.SafeGetAsync<List<PlayerPlayoffsStatsDto>>($"api/stats/playoffs/players?season={season}");
     }
 }

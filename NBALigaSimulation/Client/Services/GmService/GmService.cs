@@ -1,6 +1,7 @@
 using System.Net.Http.Json;
 using NBALigaSimulation.Shared.Dtos.Gm;
 using NBALigaSimulation.Shared.Models.Utils;
+using NBALigaSimulation.Client.Utilities;
 
 namespace NBALigaSimulation.Client.Services.GmService;
 
@@ -15,13 +16,11 @@ public class GmService : IGmService
 
     public async Task<ServiceResponse<GmProfileDto>> GetMyProfile()
     {
-        var response = await _http.GetFromJsonAsync<ServiceResponse<GmProfileDto>>("api/gm/profile");
-        return response ?? new ServiceResponse<GmProfileDto> { Success = false, Message = "Resposta inválida." };
+        return await _http.SafeGetAsync<GmProfileDto>("api/gm/profile");
     }
 
     public async Task<ServiceResponse<GmProfileDto>> GetProfileByTeamId(int teamId)
     {
-        var response = await _http.GetFromJsonAsync<ServiceResponse<GmProfileDto>>($"api/gm/team/{teamId}");
-        return response ?? new ServiceResponse<GmProfileDto> { Success = false, Message = "Resposta inválida." };
+        return await _http.SafeGetAsync<GmProfileDto>($"api/gm/team/{teamId}");
     }
 }

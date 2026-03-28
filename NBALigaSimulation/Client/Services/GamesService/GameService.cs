@@ -1,6 +1,7 @@
 using System.Net.Http.Json;
 using NBALigaSimulation.Shared.Dtos.Games;
 using NBALigaSimulation.Shared.Models.Utils;
+using NBALigaSimulation.Client.Utilities;
 
 namespace NBALigaSimulation.Client.Services.GameService;
 
@@ -16,91 +17,59 @@ public class GameService : IGameService
     
     public async Task<ServiceResponse<List<GameCompleteDto>>> GetGamesByTeamId(int teamId)
     {
-        var response = await _http.GetFromJsonAsync<ServiceResponse<List<GameCompleteDto>>>($"api/games/teams/{teamId}");
-        return response;
+        return await _http.SafeGetAsync<List<GameCompleteDto>>($"api/games/teams/{teamId}");
     }
 
     public async Task<ServiceResponse<List<GameCompleteDto>>> GetGamesBetweenTeams(int teamAId, int teamBId)
     {
-        var response = await _http.GetFromJsonAsync<ServiceResponse<List<GameCompleteDto>>>($"api/games/headtohead?teamA={teamAId}&teamB={teamBId}");
-        return response ?? new ServiceResponse<List<GameCompleteDto>>();
+        return await _http.SafeGetAsync<List<GameCompleteDto>>($"api/games/headtohead?teamA={teamAId}&teamB={teamBId}");
     }
 
     public async Task<ServiceResponse<List<GameCompleteDto>>> GetAllGames()
     {
-        var result = await _http.GetFromJsonAsync<ServiceResponse<List<GameCompleteDto>>>($"api/games");
-        return result;
+        return await _http.SafeGetAsync<List<GameCompleteDto>>("api/games");
     }
 
     public string Message { get; set; } = "Carregando jogo...";
 
     public async Task<ServiceResponse<GameCompleteDto>> GetGameById(int gameId)
     {
-        var result = await _http.GetFromJsonAsync<ServiceResponse<GameCompleteDto>>($"api/games/{gameId}");
-        return result;
+        return await _http.SafeGetAsync<GameCompleteDto>($"api/games/{gameId}");
     }
 
     public async Task<GameCompleteDto> CreateGame(CreateGameDto game)
     {
-        var result = await _http.PostAsJsonAsync("api/games", game);
-
-        var newGame = (await result.Content
-            .ReadFromJsonAsync<ServiceResponse<GameCompleteDto>>()).Data;
-
-        return newGame;
+        var result = await _http.SafePostAsync<CreateGameDto, GameCompleteDto>("api/games", game);
+        return result.Data;
     }
 
     public async Task<ServiceResponse<bool>> UpdateGame(int gameId)
     {
-        var result = await _http.PutAsJsonAsync($"api/games/update/{gameId}", true);
-        bool success = result.IsSuccessStatusCode;
-        var response = new ServiceResponse<bool>
-        {
-            Success = success,
-            Data = success,
-            Message = success ? "Game updated successfully." : "Failed to update game."
-        };
-
-        return response;
+        return await _http.SafePutAsync<bool, bool>($"api/games/update/{gameId}", true);
     }
 
     public async Task<ServiceResponse<bool>> SimGameByDateRegular()
     {
-        var payload = new ServiceResponse<bool>();
-        var response = await _http.PutAsJsonAsync($"api/games/update/date/regular", payload);
-        var result = await response.Content.ReadFromJsonAsync<ServiceResponse<bool>>();
-        return result;
+        return await _http.SafePutAsync<ServiceResponse<bool>, bool>("api/games/update/date/regular", new ServiceResponse<bool>());
     }
 
     public async Task<ServiceResponse<bool>> SimGameByDatePlayoffs()
     {
-        var payload = new ServiceResponse<bool>();
-        var response = await _http.PutAsJsonAsync($"api/games/update/date/playoffs", payload);
-        var result = await response.Content.ReadFromJsonAsync<ServiceResponse<bool>>();
-        return result;
+        return await _http.SafePutAsync<ServiceResponse<bool>, bool>("api/games/update/date/playoffs", new ServiceResponse<bool>());
     }
 
     public async Task<ServiceResponse<bool>> SimGameByRound(int roundNumber)
     {
-        var payload = new ServiceResponse<bool>();
-        var response = await _http.PutAsJsonAsync($"api/games/update/round/{roundNumber}", payload);
-        var result = await response.Content.ReadFromJsonAsync<ServiceResponse<bool>>();
-        return result;
+        return await _http.SafePutAsync<ServiceResponse<bool>, bool>($"api/games/update/round/{roundNumber}", new ServiceResponse<bool>());
     }
 
     public async Task<ServiceResponse<bool>> SimPlayoffsByRound(int playoffRound)
     {
-        var payload = new ServiceResponse<bool>();
-        var response = await _http.PutAsJsonAsync($"api/games/update/playoffs/round/{playoffRound}", payload);
-        var result = await response.Content.ReadFromJsonAsync<ServiceResponse<bool>>();
-        return result;
+        return await _http.SafePutAsync<ServiceResponse<bool>, bool>($"api/games/update/playoffs/round/{playoffRound}", new ServiceResponse<bool>());
     }
 
     public async Task<ServiceResponse<bool>> SimAll()
     {
-        var payload = new ServiceResponse<bool>();
-        var response = await _http.PutAsJsonAsync($"api/games/update/date/all", payload);
-        var result = await response.Content.ReadFromJsonAsync<ServiceResponse<bool>>();
-        return result;
+        return await _http.SafePutAsync<ServiceResponse<bool>, bool>("api/games/update/date/all", new ServiceResponse<bool>());
     }
 }

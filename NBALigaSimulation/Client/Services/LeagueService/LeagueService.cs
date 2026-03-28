@@ -2,6 +2,7 @@ using System.Net.Http.Json;
 using NBALigaSimulation.Shared.Dtos.League;
 using NBALigaSimulation.Shared.Dtos.Teams;
 using NBALigaSimulation.Shared.Models.Utils;
+using NBALigaSimulation.Client.Utilities;
 
 namespace NBALigaSimulation.Client.Services.LeagueService;
 
@@ -16,13 +17,11 @@ public class LeagueService : ILeagueService
 
     public async Task<ServiceResponse<List<TeamDraftPickDto>>> GetAllDraftPicks()
     {
-        var result = await _http.GetFromJsonAsync<ServiceResponse<List<TeamDraftPickDto>>>($"api/league/picks");
-        return result;
+        return await _http.SafeGetAsync<List<TeamDraftPickDto>>("api/league/picks");
     }
 
     public async Task<ServiceResponse<List<SeasonHistoryDto>>> GetSeasonHistory()
     {
-        var result = await _http.GetFromJsonAsync<ServiceResponse<List<SeasonHistoryDto>>>("api/league/history");
-        return result ?? new ServiceResponse<List<SeasonHistoryDto>> { Success = false };
+        return await _http.SafeGetAsync<List<SeasonHistoryDto>>("api/league/history");
     }
 }

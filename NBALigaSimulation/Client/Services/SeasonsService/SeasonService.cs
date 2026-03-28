@@ -1,6 +1,7 @@
 using System.Net.Http.Json;
 using NBALigaSimulation.Shared.Dtos.Seasons;
 using NBALigaSimulation.Shared.Models.Utils;
+using NBALigaSimulation.Client.Utilities;
 
 namespace NBALigaSimulation.Client.Services.SeasonsService;
 
@@ -16,41 +17,32 @@ public class SeasonService : ISeasonService
 
     public async Task<ServiceResponse<CompleteSeasonDto>> GetLastSeason()
     {
-        var response = await _http.GetFromJsonAsync<ServiceResponse<CompleteSeasonDto>>($"api/seasons");
-        return response;
+        return await _http.SafeGetAsync<CompleteSeasonDto>("api/seasons");
     }
 
     public async Task<ServiceResponse<List<CompleteSeasonDto>>> GetALlSeason()
     {
-        var response = await _http.GetFromJsonAsync<ServiceResponse<List<CompleteSeasonDto>>>($"api/seasons/all");
-        return response;
+        return await _http.SafeGetAsync<List<CompleteSeasonDto>>("api/seasons/all");
     }
 
     public async Task<ServiceResponse<CompleteSeasonDto>> GenerateSchedule()
     {
-        var response = await _http.PutAsJsonAsync($"api/seasons/schedule", new { });
-        var result = await response.Content.ReadFromJsonAsync<ServiceResponse<CompleteSeasonDto>>();
-        return result;
+        return await _http.SafePutAsync<object, CompleteSeasonDto>("api/seasons/schedule", new { });
     }
 
     public async Task<ServiceResponse<CompleteSeasonDto>> CreateSeason()
     {
-        var response = await _http.PostAsJsonAsync($"api/seasons", new { });
-        var result = await response.Content.ReadFromJsonAsync<ServiceResponse<CompleteSeasonDto>>();
-        return result;
+        return await _http.SafePostAsync<object, CompleteSeasonDto>("api/seasons", new { });
     }
 
     public async Task<ServiceResponse<CompleteSeasonDto>> CleanSchedule()
     {
-        var response = await _http.DeleteAsync($"api/seasons/clean-schedule");
-        var result = await response.Content.ReadFromJsonAsync<ServiceResponse<CompleteSeasonDto>>();
-        return result;
+        var response = await _http.DeleteAsync("api/seasons/clean-schedule");
+        return await response.Content.ReadFromJsonAsync<ServiceResponse<CompleteSeasonDto>>() ?? new ServiceResponse<CompleteSeasonDto> { Success = false };
     }
 
     public async Task<ServiceResponse<CompleteSeasonDto>> GenerateTrainingCamp()
     {
-        var response = await _http.PostAsJsonAsync($"api/seasons/tc", new { });
-        var result = await response.Content.ReadFromJsonAsync<ServiceResponse<CompleteSeasonDto>>();
-        return result;
+        return await _http.SafePostAsync<object, CompleteSeasonDto>("api/seasons/tc", new { });
     }
 }

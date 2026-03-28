@@ -1,6 +1,7 @@
 using System.Net.Http.Json;
 using NBALigaSimulation.Shared.Dtos.Players;
 using NBALigaSimulation.Shared.Models.Utils;
+using NBALigaSimulation.Client.Utilities;
 
 namespace NBALigaSimulation.Client.Services.AwardsService
 {
@@ -15,15 +16,12 @@ namespace NBALigaSimulation.Client.Services.AwardsService
 
         public async Task<ServiceResponse<bool>> GenerateAwards(int season)
         {
-            var response = await _http.PostAsJsonAsync($"api/awards/generate/{season}", new { });
-            var result = await response.Content.ReadFromJsonAsync<ServiceResponse<bool>>();
-            return result ?? new ServiceResponse<bool> { Success = false, Message = "Erro ao gerar awards" };
+            return await _http.SafePostAsync<object, bool>($"api/awards/generate/{season}", new { });
         }
 
         public async Task<ServiceResponse<List<PlayerAwardsDto>>> GetAllAwards()
         {
-            var response = await _http.GetFromJsonAsync<ServiceResponse<List<PlayerAwardsDto>>>("api/awards");
-            return response ?? new ServiceResponse<List<PlayerAwardsDto>> { Success = false, Message = "Erro ao buscar awards" };
+            return await _http.SafeGetAsync<List<PlayerAwardsDto>>("api/awards");
         }
     }
 }
