@@ -26,6 +26,7 @@ using NBALigaSimulation.Server.Services.PlayoffsService;
 using NBALigaSimulation.Server.Services.AwardsService;
 using NBALigaSimulation.Server.Services.GmService;
 using EFCore.NamingConventions;
+using NBALigaSimulation.Server.Middlewares;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -126,6 +127,9 @@ using (var scope = app.Services.CreateScope())
 }
 
 app.UseSwaggerUI();
+
+// Middleware Global de Tratamento de Exceções
+app.UseMiddleware<GlobalExceptionMiddleware>();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

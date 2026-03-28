@@ -7,14 +7,14 @@ namespace NBALigaSimulation.Shared.Models.Players
     {
 
         public int Id { get; set; }
-        public string Name { get; set; } = string.Empty;
-        public string Pos { get; set; } = string.Empty;
+        public required string Name { get; set; }
+        public required string Pos { get; set; }
         public Born Born { get; set; }
         public PlayerDraft? Draft { get; set; }
-        public string College { get; set; } = string.Empty;
+        public required string College { get; set; }
         public int Hgt { get; set; }
         public int Weight { get; set; }
-        public string ImgUrl { get; set; } = string.Empty;
+        public required string ImgUrl { get; set; }
         public Team Team { get; set; }
         public int TeamId { get; set; }
         public double PtModifier { get; set; }

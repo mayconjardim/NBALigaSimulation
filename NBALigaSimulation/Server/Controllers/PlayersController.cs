@@ -28,21 +28,14 @@ namespace NBALigaSimulation.Server.Controllers
         [HttpGet("{playerId}")]
         public async Task<ActionResult<ServiceResponse<PlayerCompleteDto>>> GetPlayerById(int playerId)
         {
-            try
-            {
-                var result = await _playerService.GetPlayerById(playerId);
+            var result = await _playerService.GetPlayerById(playerId);
 
-                if (!result.Success)
-                {
-                    return NotFound(result);
-                }
-
-                return Ok(result);
-            }
-            catch (ArgumentException ex) 
+            if (!result.Success)
             {
-                return StatusCode(500, ex.Message); 
+                return NotFound(result);
             }
+
+            return Ok(result);
         }
         
         [HttpGet("simple")]
@@ -56,22 +49,14 @@ namespace NBALigaSimulation.Server.Controllers
         public async Task<ActionResult<ServiceResponse<PageableResponse<PlayerCompleteDto>>>> GetAllFaPlayers(int page, int pageSize, int season, bool isAscending, string sortedColumn,
             string position = null)
         {
-            try
-            {
-                var result = await _playerService.GetAllFaPlayers(page, pageSize, season, isAscending, sortedColumn, position);
+            var result = await _playerService.GetAllFaPlayers(page, pageSize, season, isAscending, sortedColumn, position);
 
-                if (!result.Success)
-                {
-                    return StatusCode(500, result);
-                }
-
-                return Ok(result);
-            }
-            catch (Exception ex)
+            if (!result.Success)
             {
-                return StatusCode(500, new ServiceResponse<PageableResponse<PlayerRegularStatsDto>> { Success = false, Message = ex.Message });
+                return BadRequest(result);
             }
 
+            return Ok(result);
         }
 
         [HttpGet("draft")]

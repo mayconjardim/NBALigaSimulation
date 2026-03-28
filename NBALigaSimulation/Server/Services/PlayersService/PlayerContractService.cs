@@ -46,7 +46,7 @@ namespace NBALigaSimulation.Server.Services.PlayersService
 
             await _playerRepository.SaveChangesAsync();
             response.Success = true;
-            response.Message = "Contracts generated successfully.";
+            response.Message = "Contratos gerados com sucesso.";
 
             return response;
         }

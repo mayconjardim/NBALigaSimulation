@@ -5,6 +5,7 @@ using NBALigaSimulation.Shared.Models.Players;
 using NBALigaSimulation.Shared.Models.Teams;
 using NBALigaSimulation.Shared.Models.Utils;
 using Player = NBALigaSimulation.Shared.Models.Players.Player;
+using NBALigaSimulation.Server.Extensions;
 
 namespace NBALigaSimulation.Server.Services.PlayersService
 {
@@ -78,55 +79,15 @@ namespace NBALigaSimulation.Server.Services.PlayersService
             {
                 
                 IQueryable<Player> query = _playerRepository.Query()
-                    .Where(p => p.TeamId == 21)
+                    .Where(p => p.TeamId == TeamConstants.FreeAgents)
                     .Include(p => p.Ratings);
 
-                List<Player> players;
-                
-                if (!string.IsNullOrEmpty(position))
-                {
-                    if (position == "ALL")
-                    {
-                        players = query.ToList();
-                    }
-                    else
-                    {
-                        players = query.Where(p => p.Pos == position).ToList(); 
-                    }
-                }
-                else
-                {
-                    players = query.ToList(); 
-                }
+                List<Player> players = string.IsNullOrEmpty(position) || position == "ALL"
+                    ? query.ToList()
+                    : query.Where(p => p.Pos == position).ToList();
 
-                var orderByExpression = players.OrderBy(p => p.Ratings.LastOrDefault()?.CalculateOvr);
-
-                if (!string.IsNullOrEmpty(sortedColumn))
-                {
-                    orderByExpression = sortedColumn switch
-                    {
-                        "OVR" => isAscending ? players.OrderByDescending(p => p.Ratings.LastOrDefault()?.CalculateOvr) : players.OrderBy(p => p.Ratings.LastOrDefault()?.CalculateOvr),
-                        "POT" => isAscending ? players.OrderByDescending(p => p.Ratings.LastOrDefault()?.Pot) : players.OrderBy(p => p.Ratings.LastOrDefault()?.Pot),
-                        "HGT" => isAscending ? players.OrderByDescending(p => p.Ratings.LastOrDefault()?.Hgt) : players.OrderBy(p => p.Ratings.LastOrDefault()?.Hgt),
-                        "STR" => isAscending ? players.OrderByDescending(p => p.Ratings.LastOrDefault()?.Stre) : players.OrderBy(p => p.Ratings.LastOrDefault()?.Stre),
-                        "SPD" => isAscending ? players.OrderByDescending(p => p.Ratings.LastOrDefault()?.Spd) : players.OrderBy(p => p.Ratings.LastOrDefault()?.Spd),
-                        "JMP" => isAscending ? players.OrderByDescending(p => p.Ratings.LastOrDefault()?.Jmp): players.OrderBy(p => p.Ratings.LastOrDefault()?.Jmp),
-                        "END" => isAscending ? players.OrderByDescending(p => p.Ratings.LastOrDefault()?.Endu) : players.OrderBy(p => p.Ratings.LastOrDefault()?.Endu),
-                        "INS" => isAscending ? players.OrderByDescending(p => p.Ratings.LastOrDefault()?.Ins) : players.OrderBy(p => p.Ratings.LastOrDefault()?.Ins),
-                        "DNK" => isAscending ? players.OrderByDescending(p => p.Ratings.LastOrDefault()?.Dnk) : players.OrderBy(p => p.Ratings.LastOrDefault()?.Dnk),
-                        "FT" => isAscending ? players.OrderByDescending(p => p.Ratings.LastOrDefault()?.Ft) : players.OrderBy(p => p.Ratings.LastOrDefault()?.Ft),
-                        "2PT" => isAscending ? players.OrderByDescending(p => p.Ratings.LastOrDefault()?.Fg) : players.OrderBy(p => p.Ratings.LastOrDefault()?.Fg),
-                        "3PT" => isAscending ? players.OrderByDescending(p => p.Ratings.LastOrDefault()?.Tp) : players.OrderBy(p => p.Ratings.LastOrDefault()?.Tp),
-                        "OIQ" => isAscending ? players.OrderByDescending(p => p.Ratings.LastOrDefault()?.Oiq) : players.OrderBy(p => p.Ratings.LastOrDefault()?.Oiq),
-                        "DIQ" => isAscending ? players.OrderByDescending(p => p.Ratings.LastOrDefault()?.Diq) : players.OrderBy(p => p.Ratings.LastOrDefault()?.Diq),
-                        "DRB" => isAscending ? players.OrderByDescending(p => p.Ratings.LastOrDefault()?.Drb) : players.OrderBy(p => p.Ratings.LastOrDefault()?.Drb),
-                        "PSS" => isAscending ? players.OrderByDescending(p => p.Ratings.LastOrDefault()?.Pss) : players.OrderBy(p => p.Ratings.LastOrDefault()?.Pss),
-                        "REB" => isAscending ? players.OrderByDescending(p => p.Ratings.LastOrDefault()?.Reb) : players.OrderBy(p => p.Ratings.LastOrDefault()?.Reb),
-                        _ => orderByExpression
-                    };
-                }
-
-                var playersFiltered = orderByExpression
+                var playersFiltered = players
+                    .ApplySorting(sortedColumn, isAscending)
                     .Skip((page - 1) * pageSize)
                     .Take(pageSize)
                     .ToList();
@@ -158,7 +119,7 @@ namespace NBALigaSimulation.Server.Services.PlayersService
         public async Task<ServiceResponse<List<PlayerCompleteDto>>> GetAllDraftPlayers()
         {
             var players = await _playerRepository.Query()
-                .Where(t => t.TeamId == 22)
+                .Where(t => t.TeamId == TeamConstants.Draft)
                 .Include(p => p.Ratings)
                 .ToListAsync();
             var response = new ServiceResponse<List<PlayerCompleteDto>>
@@ -184,7 +145,7 @@ namespace NBALigaSimulation.Server.Services.PlayersService
                     if (playerDb == null)
                     {
                         response.Success = false;
-                        response.Message = $"The player with ID {player.Id} does not exist!";
+                        response.Message = $"O Jogador com o ID {player.Id} não existe!";
                         return response;
                     }
 
@@ -194,7 +155,7 @@ namespace NBALigaSimulation.Server.Services.PlayersService
                 await _playerRepository.SaveChangesAsync();
 
                 response.Success = true;
-                response.Message = "Roster order updated successfully.";
+                response.Message = "Ordem de rotação atualizada com sucesso.";
             }
             catch (Exception ex)
             {
@@ -226,7 +187,7 @@ namespace NBALigaSimulation.Server.Services.PlayersService
 
             await _playerRepository.SaveChangesAsync();
             response.Success = true;
-            response.Message = "PtModifier updated successfully.";
+            response.Message = "Modificador de pontos (PtModifier) atualizado com sucesso.";
 
             return response;
         }
