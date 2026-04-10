@@ -10,6 +10,12 @@
 *.userosscache
 *.sln.docstates
 
+# Local AI agents/skills
+.agents/
+.skills/
+.codex
+.codex/
+
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs
 
