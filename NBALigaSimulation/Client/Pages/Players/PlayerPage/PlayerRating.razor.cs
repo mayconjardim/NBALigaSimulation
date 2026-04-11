@@ -14,10 +14,7 @@ public partial class PlayerRating
     private List<string> _badgesSkills = new List<string> { "Po", "3", "Ps", "B" };
     private List<string> _badgesPhysical = new List<string> { "Dp", "Di", "R", "A" };
     
-    ChartComponent _chartComponent;
     ChartJsConfig _chartJsConfig = null!;
-
-    ChartComponent _chartComponent2;
     ChartJsConfig _chartJsConfig2 = null!;
 
     

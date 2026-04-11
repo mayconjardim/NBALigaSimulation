@@ -32,7 +32,7 @@ namespace NBALigaSimulation.Client
                     _http.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue
                         ("Bearer", authToken.Replace("\"", ""));
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
                     await _localStorageService.RemoveItemAsync("authToken");
                     identity = new ClaimsIdentity();

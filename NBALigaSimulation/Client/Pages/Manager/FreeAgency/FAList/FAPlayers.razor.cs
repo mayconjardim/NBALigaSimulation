@@ -93,7 +93,7 @@ public partial class FAPlayers
         return string.Empty;
     }
 
-    private async void SortTable(string columnName)
+    private async Task SortTable(string columnName)
     {
         if (columnName == sortedColumn)
         {

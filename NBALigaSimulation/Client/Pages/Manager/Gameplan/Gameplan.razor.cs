@@ -14,7 +14,6 @@ public partial class Gameplan
     private TeamGameplanDto _gameplan;
     private List<PlayerCompleteDto> keyPlayers;
     private string _message;
-    private bool isDirty = false;
     private bool isDirtySaveKeyPlayers = false;
     
     [Inject] protected ToastService ToastService { get; set; } = default!;
@@ -60,7 +59,6 @@ public partial class Gameplan
 
         if (response.Success)
         {
-            isDirty = false;
             StateHasChanged();
             ToastService.Notify(new(ToastType.Success, $"{gameplan} ATUALIIZADO COM SUCESSO"));
         }
@@ -143,7 +141,6 @@ public partial class Gameplan
         
     private void HandleEventChanged(ChangeEventArgs e)
     {
-        isDirty = true;
         StateHasChanged();
     }
     

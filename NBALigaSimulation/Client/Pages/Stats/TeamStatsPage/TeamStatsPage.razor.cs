@@ -9,7 +9,6 @@ public partial class  TeamStatsPage
 
     private List<TeamRegularStatsDto> _teamStats;
     private List<CompleteSeasonDto> _seasonsList;
-    private string _stat = null;
     private string _message = string.Empty;
     private int _season = 0;
     private string sortedColumn = "WIN%";
@@ -20,7 +19,7 @@ public partial class  TeamStatsPage
         
         _season = int.Parse(await LocalStorage.GetItemAsync<string>("season"));
  
-        var result = await StatsService.GetAllTeamRegularStats(_season, isAscending, _stat);
+        var result = await StatsService.GetAllTeamRegularStats(_season, isAscending, sortedColumn);
         if (result.Success)
         {
             _teamStats = result.Data;
@@ -47,7 +46,7 @@ public partial class  TeamStatsPage
         return string.Empty;
     }
 
-    private async void SortTable(string columnName)
+    private async Task SortTable(string columnName)
     {
         if (columnName == sortedColumn)
         {

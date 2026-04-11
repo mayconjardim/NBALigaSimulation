@@ -10,7 +10,6 @@ public partial class PlayerEdit
     public PlayerCompleteDto _player { get; set; }
 
     public CreatePlayerDto _createplayer { get; set; } = new CreatePlayerDto();
-    private PlayerRatingDto _rating;
 
     private async Task HandleValidSubmit()
     {

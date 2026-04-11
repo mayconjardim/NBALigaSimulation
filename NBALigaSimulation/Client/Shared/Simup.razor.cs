@@ -9,12 +9,7 @@ namespace NBALigaSimulation.Client.Shared
     {
 
         private List<TeamSimpleDto> teams = new List<TeamSimpleDto>();
-
-        private TeamCompleteDto? homeTeam;
-        private TeamCompleteDto? awayTeam;
-
-        private GameCompleteDto games;
-        private GameCompleteDto newGame;
+        private GameCompleteDto? newGame;
 
         private int homeTeamId = 99;
         private int awayTeamId = 99;
@@ -38,22 +33,24 @@ namespace NBALigaSimulation.Client.Shared
             }
         }
 
-        private async Task OnHomeTeamSelected(ChangeEventArgs e)
+        private Task OnHomeTeamSelected(ChangeEventArgs e)
         {
-
-            if (int.TryParse(e.Value.ToString(), out var value))
+            if (int.TryParse(e.Value?.ToString(), out var value))
             {
                 homeTeamId = value;
             }
+
+            return Task.CompletedTask;
         }
         
-        private async Task OnAwayTeamSelected(ChangeEventArgs e)
+        private Task OnAwayTeamSelected(ChangeEventArgs e)
         {
-
-            if (int.TryParse(e.Value.ToString(), out var value))
+            if (int.TryParse(e.Value?.ToString(), out var value))
             {
                 awayTeamId = value;
             }
+
+            return Task.CompletedTask;
         }
         
         private async Task CreateGame()
@@ -65,17 +62,17 @@ namespace NBALigaSimulation.Client.Shared
                 AwayTeamId = awayTeamId
             };
 
-            games = await GameService.CreateGame(game);
+            var createdGame = await GameService.CreateGame(game);
 
-            if (games != null)
+            if (createdGame != null)
             {
-                int gameId = games.Id;
-                var result = await GameService.UpdateGame(gameId);
+                int gameId = createdGame.Id;
+                await GameService.UpdateGame(gameId);
             }
 
-            if (games != null)
+            if (createdGame != null)
             {
-                int gameId = games.Id;
+                int gameId = createdGame.Id;
                 var result = await GameService.GetGameById(gameId);
                 newGame = result.Data;
             }

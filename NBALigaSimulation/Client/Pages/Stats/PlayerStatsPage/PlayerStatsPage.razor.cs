@@ -13,7 +13,6 @@ public partial class PlayerStatsPage
     private List<CompleteSeasonDto> _seasonsList;
     private int _currentPage = 1;
     private int _pageSize = 50;
-    private string _stat = null;
     private string _message = string.Empty;
     private int _season = 0;
     private string sortedColumn = "PPG";
@@ -57,7 +56,7 @@ public partial class PlayerStatsPage
         return string.Empty;
     }
 
-    private async void SortTable(string columnName)
+    private async Task SortTable(string columnName)
     {
         if (columnName == sortedColumn)
         {
