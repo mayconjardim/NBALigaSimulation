@@ -27,6 +27,8 @@ using NBALigaSimulation.Server.Services.AwardsService;
 using NBALigaSimulation.Server.Services.GmService;
 using EFCore.NamingConventions;
 using NBALigaSimulation.Server.Middlewares;
+using NBALigaSimulation.Server.Features.Trades;
+using NBALigaSimulation.Server.Features.Trades.Contracts;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -74,6 +76,9 @@ builder.Services.AddScoped<ITeamService, TeamService>();
 builder.Services.AddScoped<IGameService, GameService>();
 builder.Services.AddScoped<ISeasonService, SeasonService>();
 builder.Services.AddScoped<ITradeService, TradeService>();
+builder.Services.AddScoped<ITradeQueries, TradeQueries>();
+builder.Services.AddScoped<ITradeCommands, TradeCommands>();
+builder.Services.AddScoped<ITradeProposalValidator, TradeProposalValidator>();
 builder.Services.AddScoped<IFAService, FAService>();
 builder.Services.AddScoped<IStatsService, StatsService>();
 builder.Services.AddScoped<ILeagueService, LeagueService>();
