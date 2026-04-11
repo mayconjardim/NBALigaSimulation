@@ -19,23 +19,26 @@ namespace NBALigaSimulation.Server.Controllers
         [HttpGet]
         public async Task<ActionResult<ServiceResponse<List<TradeDto>>>> GetAllTrades()
         {
-
             var result = await _tradeService.GetAllTrades();
             return Ok(result);
-
         }
 
         [HttpGet("teams")]
         public async Task<ActionResult<ServiceResponse<List<TradeDto>>>> GetTradeByTeamId()
         {
             var result = await _tradeService.GetTradesByTeamId();
-            return Ok(result);
+            return result.Success ? Ok(result) : BadRequest(result);
         }
 
         [HttpGet("{tradeId}")]
         public async Task<ActionResult<ServiceResponse<TradeDto>>> GetTradeById(int tradeId)
         {
             var result = await _tradeService.GetTradeById(tradeId);
+            if (!result.Success)
+            {
+                return NotFound(result);
+            }
+
             return Ok(result);
         }
 
@@ -53,21 +56,21 @@ namespace NBALigaSimulation.Server.Controllers
         }
 
         [HttpDelete("{id}")]
-        public async Task<ActionResult> DeleteTrade(int id)
+        public async Task<ActionResult<ServiceResponse<bool>>> DeleteTrade(int id)
         {
             var response = await _tradeService.DeleteTrade(id);
 
             if (!response.Success)
             {
-                return BadRequest(response.Message);
+                return BadRequest(response);
             }
 
-            return Ok();
+            return Ok(response);
         }
 
 
         [HttpPut("update")]
-        public async Task<IActionResult> UpdateTrade(TradeDto dto)
+        public async Task<ActionResult<ServiceResponse<bool>>> UpdateTrade(TradeDto dto)
         {
             ServiceResponse<bool> response = await _tradeService.UpdateTrade(dto);
 
