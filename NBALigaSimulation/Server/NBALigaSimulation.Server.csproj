@@ -27,7 +27,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\Client\NBALigaSimulation.Client.csproj" />
+		<ProjectReference Include="..\Client\NBALigaSimulation.Client.csproj" Condition="'$(SkipClientProjectReference)' != 'true'" />
 		<ProjectReference Include="..\Shared\NBALigaSimulation.Shared.csproj" />
 	</ItemGroup>
 

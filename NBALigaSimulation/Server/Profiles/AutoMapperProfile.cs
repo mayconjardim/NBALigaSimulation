@@ -1,5 +1,4 @@
 using AutoMapper;
-using NBALigaSimulation.Client.Pages.Players.PlayerPage;
 using NBALigaSimulation.Shared.Dtos.Drafts;
 using NBALigaSimulation.Shared.Dtos.FA;
 using NBALigaSimulation.Shared.Dtos.GameNews;

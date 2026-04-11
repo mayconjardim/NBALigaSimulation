@@ -1,4 +1,3 @@
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using NBALigaSimulation.Shared.Dtos.FA;
 using NBALigaSimulation.Shared.Models.Utils;
@@ -18,7 +17,7 @@ namespace NBALigaSimulation.Server.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<ServiceResponse<bool>>> CreateOffer(FAOfferDto offerDto)
+        public async Task<ActionResult<ServiceResponse<FAOfferDto>>> CreateOffer(FAOfferDto offerDto)
         {
             var response = await _faService.CreateOffer(offerDto);
 
