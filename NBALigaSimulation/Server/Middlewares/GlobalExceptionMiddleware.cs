@@ -4,6 +4,7 @@ using System.Text.Json;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using NBALigaSimulation.Shared.Models.Utils;
+using System.Collections.Generic;
 
 namespace NBALigaSimulation.Server.Middlewares
 {
@@ -26,7 +27,7 @@ namespace NBALigaSimulation.Server.Middlewares
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Ocorreu uma exceção não tratada na requisição HTTP.");
+                _logger.LogError(ex, "Ocorreu uma excecao nao tratada. TraceId: {TraceId}", context.TraceIdentifier);
                 await HandleExceptionAsync(context, ex);
             }
         }
@@ -34,21 +35,35 @@ namespace NBALigaSimulation.Server.Middlewares
         private static Task HandleExceptionAsync(HttpContext context, Exception exception)
         {
             context.Response.ContentType = "application/json";
-            
-            // Tratamento especial se for um ArgumentException de validação
-            if (exception is ArgumentException)
+
+            var (statusCode, errorCode, message) = exception switch
             {
-                 context.Response.StatusCode = StatusCodes.Status400BadRequest;
-            }
-            else 
-            {
-                 context.Response.StatusCode = StatusCodes.Status500InternalServerError;
-            }
+                ArgumentException => (
+                    StatusCodes.Status400BadRequest,
+                    "bad_request",
+                    exception.Message),
+                KeyNotFoundException => (
+                    StatusCodes.Status404NotFound,
+                    "not_found",
+                    exception.Message),
+                UnauthorizedAccessException => (
+                    StatusCodes.Status401Unauthorized,
+                    "unauthorized",
+                    "Acesso nao autorizado."),
+                _ => (
+                    StatusCodes.Status500InternalServerError,
+                    "internal_error",
+                    "Erro interno do servidor.")
+            };
+
+            context.Response.StatusCode = statusCode;
 
             var response = new ServiceResponse<object>
             {
                 Success = false,
-                Message = $"Erro no servidor: {exception.Message}"
+                Message = message,
+                ErrorCode = errorCode,
+                TraceId = context.TraceIdentifier
             };
 
             var options = new JsonSerializerOptions { PropertyNamingPolicy = JsonNamingPolicy.CamelCase };
