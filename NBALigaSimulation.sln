@@ -9,6 +9,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NBALigaSimulation.Server", 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NBALigaSimulation.Shared", "NBALigaSimulation\Shared\NBALigaSimulation.Shared.csproj", "{2ADF8E6E-7B70-40CD-A326-07FF3ACCA0F9}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NBALigaSimulation.Engine.Tests", "tests\NBALigaSimulation.Engine.Tests\NBALigaSimulation.Engine.Tests.csproj", "{F7D8D8B4-8D78-45B6-927D-8F4B5550AAB1}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{2ADF8E6E-7B70-40CD-A326-07FF3ACCA0F9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2ADF8E6E-7B70-40CD-A326-07FF3ACCA0F9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2ADF8E6E-7B70-40CD-A326-07FF3ACCA0F9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F7D8D8B4-8D78-45B6-927D-8F4B5550AAB1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F7D8D8B4-8D78-45B6-927D-8F4B5550AAB1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F7D8D8B4-8D78-45B6-927D-8F4B5550AAB1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F7D8D8B4-8D78-45B6-927D-8F4B5550AAB1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

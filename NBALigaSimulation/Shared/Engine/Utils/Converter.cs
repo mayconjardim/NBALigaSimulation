@@ -6,7 +6,6 @@
         public static double Composite2(Dictionary<string, double> ratings, List<string> components, List<double>? weights = null)
         {
             double r = 0;
-            double rmax = 0;
             double divideBy = 0;
 
             if (weights == null)
@@ -58,11 +57,14 @@
 
                 if (component == "50")
                 {
-                    factor = component[i];
+                    factor = 50;
                 }
                 else if (component == "ovr")
                 {
-                    factor = component[i];
+                    if (!ratings.TryGetValue("ovr", out factor) && !ratings.TryGetValue("OVR", out factor))
+                    {
+                        throw new Exception("Undefined value for rating \"ovr\"");
+                    }
                 }
                 else if (component is string ratingName)
                 {

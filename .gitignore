@@ -16,6 +16,9 @@
 .codex
 .codex/
 
+# Local documentation drafts
+docs/
+
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs
 
